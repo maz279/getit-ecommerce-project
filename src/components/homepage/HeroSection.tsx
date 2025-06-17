@@ -1,97 +1,159 @@
+
 import React, { useState, useEffect } from 'react';
+import { Sparkles, Zap, Clock, Star } from 'lucide-react';
 
 export const HeroSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
     days: 9,
     hours: 23,
-    minutes: 10
+    minutes: 10,
+    seconds: 45
   });
+
+  const [currentSlide, setCurrentSlide] = useState(0);
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1 };
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
         } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59 };
+          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
         } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59 };
+          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
         }
         return prev;
       });
-    }, 60000);
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
+  useEffect(() => {
+    const slideTimer = setInterval(() => {
+      setCurrentSlide(prev => (prev + 1) % 3);
+    }, 5000);
+
+    return () => clearInterval(slideTimer);
+  }, []);
+
+  const heroSlides = [
+    {
+      bg: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600",
+      title: "AI-Powered Shopping Experience",
+      subtitle: "Discover products tailored just for you",
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
+      title: "Flash Sale Extravaganza",
+      subtitle: "Up to 80% off on trending items",
+      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500",
+      title: "Limited Time Mega Deals",
+      subtitle: "Don't miss out on these exclusive offers",
+      image: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
+    }
+  ];
+
   return (
-    <section className="self-center w-full max-w-[1349px] mt-2.5 max-md:max-w-full">
-      <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-        <div className="w-[74%] max-md:w-full max-md:ml-0">
-          <div className="flex flex-col relative min-h-[328px] w-full pl-[25px] pr-20 pt-[67px] pb-[22px] rounded-[5px] max-md:max-w-full max-md:mt-[15px] max-md:px-5">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/cc032291cdcbc1303b6055a219dd99b0d9093fb2?placeholderIfAbsent=true"
-              alt="Flash Sale Background"
-              className="absolute h-full w-full object-cover inset-0"
-            />
-            <div className="relative text-black text-3xl font-normal max-md:ml-2">
-              Flash Sale END in
-            </div>
-            <div className="relative flex gap-1.5 text-2xl text-[rgba(224,22,43,1)] font-normal whitespace-nowrap mt-[41px] max-md:ml-[7px] max-md:mt-10">
-              <div className="flex items-stretch gap-[3px]">
-                <div className="bg-white border w-10 h-10 pt-[7px] pb-[15px] px-[13px] rounded-[50%] border-[rgba(224,22,43,1)] border-solid">
-                  {Math.floor(timeLeft.days / 10)}
+    <section className="relative overflow-hidden">
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
+          {/* Main Hero Carousel */}
+          <div className="lg:col-span-3">
+            <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
+              {heroSlides.map((slide, index) => (
+                <div
+                  key={index}
+                  className={`absolute inset-0 transition-opacity duration-1000 ${
+                    index === currentSlide ? 'opacity-100' : 'opacity-0'
+                  } ${slide.bg}`}
+                >
+                  <div className="flex items-center h-full p-8">
+                    <div className="flex-1 text-white">
+                      <div className="flex items-center gap-2 mb-4">
+                        <Sparkles className="w-6 h-6 text-yellow-300" />
+                        <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-semibold">
+                          AI Recommended
+                        </span>
+                      </div>
+                      <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                        {slide.title}
+                      </h1>
+                      <p className="text-xl mb-6 opacity-90">{slide.subtitle}</p>
+                      
+                      {/* Countdown Timer */}
+                      <div className="flex items-center gap-4 mb-6">
+                        <span className="text-lg font-semibold">Ends in:</span>
+                        <div className="flex gap-2">
+                          {Object.entries(timeLeft).map(([unit, value]) => (
+                            <div key={unit} className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-2 text-center min-w-[50px]">
+                              <div className="text-2xl font-bold">{value.toString().padStart(2, '0')}</div>
+                              <div className="text-xs uppercase">{unit}</div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      
+                      <div className="flex gap-4">
+                        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-8 py-3 rounded-full hover:from-yellow-300 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg">
+                          Shop Now
+                        </button>
+                        <button className="border-2 border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-all">
+                          Learn More
+                        </button>
+                      </div>
+                    </div>
+                    <div className="flex-1 hidden md:block">
+                      <img src={slide.image} alt="Hero" className="w-full h-80 object-cover rounded-xl" />
+                    </div>
+                  </div>
                 </div>
-                <div className="bg-white border w-10 h-10 pt-[7px] pb-[15px] px-3 rounded-[50%] border-[rgba(224,22,43,1)] border-solid">
-                  {timeLeft.days % 10}
-                </div>
+              ))}
+              
+              {/* Slide Indicators */}
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2">
+                {heroSlides.map((_, index) => (
+                  <button
+                    key={index}
+                    onClick={() => setCurrentSlide(index)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      index === currentSlide ? 'bg-white' : 'bg-white bg-opacity-50'
+                    }`}
+                  />
+                ))}
               </div>
-              <div className="text-black text-3xl">:</div>
-              <div className="flex items-stretch gap-0.5">
-                <div className="bg-white border w-[41px] h-[41px] pt-[7px] pb-[15px] px-[13px] rounded-[50%] border-[rgba(224,22,43,1)] border-solid">
-                  {Math.floor(timeLeft.hours / 10)}
-                </div>
-                <div className="bg-white border w-[41px] h-[41px] pt-[7px] pb-[15px] px-[13px] rounded-[50%] border-[rgba(224,22,43,1)] border-solid">
-                  {timeLeft.hours % 10}
-                </div>
-              </div>
-              <div className="text-black text-3xl">:</div>
-              <div className="flex items-stretch gap-[3px]">
-                <div className="bg-white border w-10 h-10 pt-[7px] pb-4 px-[13px] rounded-[50%] border-[rgba(224,22,43,1)] border-solid max-md:pr-5">
-                  {Math.floor(timeLeft.minutes / 10)}
-                </div>
-                <div className="bg-white border w-10 h-10 pt-[7px] pb-[15px] px-3 rounded-[50%] border-[rgba(224,22,43,1)] border-solid">
-                  {timeLeft.minutes % 10}
-                </div>
-              </div>
-            </div>
-            <div className="relative flex w-[271px] max-w-full items-stretch gap-5 text-base text-[rgba(224,22,43,1)] font-semibold whitespace-nowrap justify-between ml-7 mt-[7px] max-md:ml-2.5">
-              <div>Days</div>
-              <div>Hours</div>
-              <div>Minutes</div>
-            </div>
-            <button className="relative bg-[rgba(0,106,78,0.95)] text-[15px] text-white font-semibold mt-[31px] px-[11px] py-2.5 rounded-[15px] hover:bg-[rgba(0,106,78,1)] transition-colors">
-              Buy Button
-            </button>
-            <div className="relative self-center flex w-9 items-stretch gap-1.5 ml-9 mt-[19px]">
-              <div className="bg-black flex w-2 shrink-0 h-2 rounded-[50%]" />
-              <div className="bg-[rgba(160,160,160,1)] flex w-2 shrink-0 h-2 rounded-[50%]" />
-              <div className="bg-[rgba(160,160,160,1)] flex w-2 shrink-0 h-2 rounded-[50%]" />
             </div>
           </div>
-        </div>
-        <div className="w-[26%] ml-5 max-md:w-full max-md:ml-0">
-          <div className="grow mt-[5px] max-md:mt-5">
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/baf55f8fa62618c257d4667a922c7c874e06aad4?placeholderIfAbsent=true"
-              alt="Promotional Banner 1"
-              className="aspect-[2.27] object-contain w-full rounded-[5px]"
-            />
-            <img
-              src="https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/a2e7ce6079d265c828121aac0357f9a5fa080179?placeholderIfAbsent=true"
-              alt="Promotional Banner 2"
-              className="aspect-[2.27] object-contain w-full mt-[13px] rounded-[5px]"
-            />
+
+          {/* Side Banners */}
+          <div className="space-y-4">
+            <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-xl p-6 text-white h-44 flex flex-col justify-between">
+              <div>
+                <Zap className="w-8 h-8 mb-2" />
+                <h3 className="font-bold text-lg">Flash Sale</h3>
+                <p className="text-sm opacity-90">Up to 70% off</p>
+              </div>
+              <button className="bg-white text-green-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all">
+                Shop Now
+              </button>
+            </div>
+            
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white h-44 flex flex-col justify-between">
+              <div>
+                <Star className="w-8 h-8 mb-2" />
+                <h3 className="font-bold text-lg">AI Picks</h3>
+                <p className="text-sm opacity-90">Just for you</p>
+              </div>
+              <button className="bg-white text-purple-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all">
+                Explore
+              </button>
+            </div>
           </div>
         </div>
       </div>

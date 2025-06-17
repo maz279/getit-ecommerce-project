@@ -1,92 +1,82 @@
+
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
+import { ChevronLeft, ChevronRight, Zap } from 'lucide-react';
 
 export const FlashSaleSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
-    days: 9,
+    days: 0,
     hours: 23,
-    minutes: 15
+    minutes: 15,
+    seconds: 30
   });
 
   useEffect(() => {
     const timer = setInterval(() => {
       setTimeLeft(prev => {
-        if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1 };
+        if (prev.seconds > 0) {
+          return { ...prev, seconds: prev.seconds - 1 };
+        } else if (prev.minutes > 0) {
+          return { ...prev, minutes: prev.minutes - 1, seconds: 59 };
         } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59 };
+          return { ...prev, hours: prev.hours - 1, minutes: 59, seconds: 59 };
         } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59 };
+          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59, seconds: 59 };
         }
         return prev;
       });
-    }, 60000);
+    }, 1000);
 
     return () => clearInterval(timer);
   }, []);
 
-  const products = Array(10).fill({
-    image: "https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/b45f8169d769df0f3d442c08f7a0c200f348c0dd?placeholderIfAbsent=true",
-    category: "Product Category",
-    title: "Product Full Title",
-    originalPrice: "Tk. 1800.00",
-    salePrice: "Tk. 1500.00",
-    stockLeft: 5
-  });
+  const products = Array(12).fill(null).map((_, index) => ({
+    image: `https://images.unsplash.com/photo-${1523275335684 + index * 1000}-d0ca20e4086b?w=400`,
+    category: "Electronics",
+    title: `Premium Product ${index + 1} - High Quality Item`,
+    originalPrice: `$${(299 + index * 50).toFixed(2)}`,
+    salePrice: `$${(199 + index * 30).toFixed(2)}`,
+    stockLeft: Math.floor(Math.random() * 10) + 1,
+    rating: 4 + Math.random(),
+    reviews: Math.floor(Math.random() * 500) + 50,
+    discount: `${Math.floor(Math.random() * 40) + 20}% OFF`,
+    isFlashSale: true
+  }));
 
   return (
-    <section className="flex items-center gap-0.5 flex-wrap mt-[15px]">
-      <button className="bg-[rgba(32,32,107,1)] self-stretch text-sm text-white font-normal whitespace-nowrap text-center w-[22px] h-[22px] my-auto px-1.5 rounded-[50%] hover:bg-[rgba(32,32,107,0.8)] transition-colors">
-        &lt;
-      </button>
-      
-      <div className="bg-[rgba(242,242,242,1)] border self-stretch pb-[15px] rounded-[5px] border-[rgba(32,32,107,1)] border-solid max-md:max-w-full">
-        <div className="bg-[rgba(32,32,107,1)] flex w-full items-stretch gap-5 flex-wrap justify-between px-[17px] py-[13px] rounded-[5px] max-md:max-w-full">
-          <div className="text-white text-base font-bold">
-            FLASH SALE : LIMITED TIME OFFER
-          </div>
-          <div className="flex items-stretch gap-1 text-xs font-semibold">
-            <div className="text-white grow">SEE MORE</div>
-            <button className="bg-white text-[rgba(32,32,107,1)] whitespace-nowrap px-1 py-px rounded-[5px] hover:bg-gray-100 transition-colors">
-              &gt;
-            </button>
+    <section className="py-8 bg-gradient-to-r from-red-50 to-orange-50">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header */}
+        <div className="bg-gradient-to-r from-red-500 to-orange-500 rounded-2xl p-6 mb-6 text-white">
+          <div className="flex flex-col md:flex-row items-center justify-between">
+            <div className="flex items-center gap-4 mb-4 md:mb-0">
+              <div className="bg-white bg-opacity-20 p-3 rounded-full">
+                <Zap className="w-8 h-8" />
+              </div>
+              <div>
+                <h2 className="text-2xl md:text-3xl font-bold">Flash Sale</h2>
+                <p className="opacity-90">Limited time offers - Don't miss out!</p>
+              </div>
+            </div>
+            
+            {/* Countdown Timer */}
+            <div className="flex items-center gap-2">
+              <span className="text-lg font-semibold">Ends in:</span>
+              <div className="flex gap-2">
+                {Object.entries(timeLeft).map(([unit, value]) => (
+                  <div key={unit} className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-2 text-center min-w-[50px]">
+                    <div className="text-xl font-bold">{value.toString().padStart(2, '0')}</div>
+                    <div className="text-xs uppercase">{unit.slice(0, 3)}</div>
+                  </div>
+                ))}
+              </div>
+            </div>
           </div>
         </div>
-        
-        <div className="w-full mt-3 px-2 max-md:max-w-full">
-          <div className="flex w-[273px] max-w-full gap-2 text-lg text-white font-normal">
-            <div className="flex items-stretch gap-0.5">
-              <div className="text-black text-base font-bold grow my-auto">
-                END IN :
-              </div>
-              <div className="bg-[rgba(224,22,43,1)] whitespace-nowrap pt-1 pb-3.5 px-[7px] rounded-[5px]">
-                {Math.floor(timeLeft.days / 10)}
-              </div>
-              <div className="bg-[rgba(224,22,43,1)] whitespace-nowrap pt-1 pb-3.5 px-2 rounded-[5px]">
-                {timeLeft.days % 10}
-              </div>
-            </div>
-            <div className="text-[rgba(224,22,43,1)] self-stretch">:</div>
-            <div className="flex items-stretch gap-0.5 whitespace-nowrap">
-              <div className="bg-[rgba(224,22,43,1)] pt-[3px] pb-[15px] px-1.5 rounded-[5px]">
-                {Math.floor(timeLeft.hours / 10)}
-              </div>
-              <div className="bg-[rgba(224,22,43,1)] pt-[3px] pb-[15px] px-2 rounded-[5px]">
-                {timeLeft.hours % 10}
-              </div>
-            </div>
-            <div className="flex items-stretch gap-[3px] whitespace-nowrap">
-              <div className="text-[rgba(224,22,43,1)] grow">:</div>
-              <div className="bg-[rgba(224,22,43,1)] pt-1 pb-3.5 px-[9px] rounded-[5px]">
-                {Math.floor(timeLeft.minutes / 10)}
-              </div>
-              <div className="bg-[rgba(224,22,43,1)] pt-1 pb-3.5 px-2 rounded-[5px]">
-                {timeLeft.minutes % 10}
-              </div>
-            </div>
-          </div>
-          
-          <div className="flex items-stretch gap-2.5 flex-wrap mt-[13px]">
+
+        {/* Products Grid */}
+        <div className="relative">
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
             {products.map((product, index) => (
               <ProductCard
                 key={index}
@@ -96,16 +86,31 @@ export const FlashSaleSection: React.FC = () => {
                 originalPrice={product.originalPrice}
                 salePrice={product.salePrice}
                 stockLeft={product.stockLeft}
-                onAddToCart={() => console.log(`Added product ${index + 1} to cart`)}
+                rating={product.rating}
+                reviews={product.reviews}
+                discount={product.discount}
+                isFlashSale={product.isFlashSale}
+                onAddToCart={() => console.log(`Added flash sale product ${index + 1} to cart`)}
               />
             ))}
           </div>
+          
+          {/* Navigation Buttons */}
+          <button className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all">
+            <ChevronLeft className="w-6 h-6 text-gray-600" />
+          </button>
+          <button className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 bg-white shadow-lg rounded-full p-3 hover:bg-gray-50 transition-all">
+            <ChevronRight className="w-6 h-6 text-gray-600" />
+          </button>
+        </div>
+
+        {/* View All Button */}
+        <div className="text-center mt-8">
+          <button className="bg-gradient-to-r from-red-500 to-orange-500 text-white font-bold px-8 py-3 rounded-full hover:from-red-600 hover:to-orange-600 transition-all transform hover:scale-105 shadow-lg">
+            View All Flash Sale Items
+          </button>
         </div>
       </div>
-      
-      <button className="bg-[rgba(32,32,107,1)] self-stretch text-sm text-white font-normal whitespace-nowrap text-center w-[22px] h-[22px] my-auto px-1.5 rounded-[50%] hover:bg-[rgba(32,32,107,0.8)] transition-colors">
-        &gt;
-      </button>
     </section>
   );
 };

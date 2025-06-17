@@ -100,6 +100,54 @@ export const NewProductsSection: React.FC = () => {
       reviews: 167,
       discount: "29% OFF",
       badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop",
+      category: "Photography",
+      title: "DSLR Camera Lens - 50mm Prime",
+      originalPrice: "৳35,999",
+      salePrice: "৳25,999",
+      stockLeft: 5,
+      rating: 4.9,
+      reviews: 89,
+      discount: "28% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop",
+      category: "Audio",
+      title: "Professional Studio Speakers",
+      originalPrice: "৳47,999",
+      salePrice: "৳35,999",
+      stockLeft: 3,
+      rating: 4.8,
+      reviews: 67,
+      discount: "25% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1571019613540-996a8c044e55?w=300&h=300&fit=crop",
+      category: "Fitness",
+      title: "Smart Exercise Bike - Connected",
+      originalPrice: "৳119,999",
+      salePrice: "৳89,999",
+      stockLeft: 2,
+      rating: 4.6,
+      reviews: 234,
+      discount: "25% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=300&h=300&fit=crop",
+      category: "Beauty",
+      title: "LED Light Therapy Device",
+      originalPrice: "৳29,999",
+      salePrice: "৳19,999",
+      stockLeft: 8,
+      rating: 4.5,
+      reviews: 156,
+      discount: "33% OFF",
+      badge: "NEW"
     }
   ];
 
@@ -121,7 +169,7 @@ export const NewProductsSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-4">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2">
           {products.map((product, index) => (
             <ProductCard
               key={index}

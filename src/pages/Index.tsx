@@ -1,12 +1,32 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import React from 'react';
+import { Header } from '../components/homepage/Header';
+import { HeroSection } from '../components/homepage/HeroSection';
+import { QuickAccessIcons } from '../components/homepage/QuickAccessIcons';
+import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
+import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
+import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
+import { TrendingProducts } from '../components/homepage/TrendingProducts';
+import { ARShowcase } from '../components/homepage/ARShowcase';
+import { ContestSections } from '../components/homepage/ContestSections';
+import { Footer } from '../components/homepage/Footer';
 
-const Index = () => {
+const Index: React.FC = () => {
   return (
-    <div className="min-h-screen flex items-center justify-center bg-background">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-muted-foreground">Start building your amazing project here!</p>
-      </div>
+    <div className="bg-white flex flex-col overflow-hidden items-stretch min-h-screen">
+      <Header />
+      
+      <main>
+        <HeroSection />
+        <QuickAccessIcons />
+        <FeaturedCategories />
+        <FlashSaleSection />
+        <PromotionalBanners />
+        <TrendingProducts />
+        <ARShowcase />
+        <ContestSections />
+      </main>
+      
+      <Footer />
     </div>
   );
 };

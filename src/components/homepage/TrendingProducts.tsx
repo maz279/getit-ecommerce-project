@@ -1,207 +1,149 @@
-import React, { useState, useEffect } from 'react';
 
-interface TrendingProductProps {
-  image: string;
-  price: string;
-  onAddToCart?: () => void;
-}
-
-const TrendingProduct: React.FC<TrendingProductProps> = ({ image, price, onAddToCart }) => (
-  <div className="bg-white flex grow items-stretch gap-5 w-full justify-between pr-[11px] py-[7px] rounded-[5px] border-[rgba(217,217,217,1)] border-solid border-2 max-md:mt-[9px] hover:shadow-lg transition-shadow">
-    <div className="font-semibold text-center my-auto">
-      <div className="flex items-stretch gap-[13px]">
-        <div className="bg-[rgba(224,22,43,1)] text-[9px] text-white px-[9px] py-[3px] rounded-[5px]">
-          Reward Coins
-        </div>
-        <div className="text-black text-[8px] my-auto">
-          ONLY 5 LEFT
-        </div>
-      </div>
-      <img
-        src="https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/6ec185181e2a9c8f3ed5c269ffe613c4ff3b3431?placeholderIfAbsent=true"
-        alt="Trending Product"
-        className="aspect-[1.3] object-contain w-[135px] mt-3"
-      />
-    </div>
-    <div className="flex flex-col items-stretch">
-      <div className="rounded bg-[rgba(197,197,197,1)] flex flex-col justify-center w-[104px] h-[104px]">
-        <img
-          src={image}
-          alt="Product"
-          className="aspect-[1.46] object-contain w-[137px] rounded-[5px] max-md:mr-[-18px]"
-        />
-      </div>
-      <div className="text-[rgba(0,106,78,1)] text-[10px] font-semibold text-center mt-[5px]">
-        {price}
-      </div>
-      <button 
-        onClick={onAddToCart}
-        className="rounded bg-[rgba(255,215,0,1)] text-[8px] text-black font-semibold text-center mt-[7px] px-[27px] py-[3px] max-md:px-5 hover:bg-[rgba(255,215,0,0.8)] transition-colors"
-      >
-        ADD TO CART
-      </button>
-    </div>
-  </div>
-);
+import React from 'react';
+import { ProductCard } from './ProductCard';
+import { TrendingUp, ArrowRight } from 'lucide-react';
 
 export const TrendingProducts: React.FC = () => {
-  const [timeLeft, setTimeLeft] = useState({
-    days: 9,
-    hours: 23,
-    minutes: 10
-  });
-
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setTimeLeft(prev => {
-        if (prev.minutes > 0) {
-          return { ...prev, minutes: prev.minutes - 1 };
-        } else if (prev.hours > 0) {
-          return { ...prev, hours: prev.hours - 1, minutes: 59 };
-        } else if (prev.days > 0) {
-          return { ...prev, days: prev.days - 1, hours: 23, minutes: 59 };
-        }
-        return prev;
-      });
-    }, 60000);
-
-    return () => clearInterval(timer);
-  }, []);
-
-  const products = Array(6).fill({
-    image: "https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/b45f8169d769df0f3d442c08f7a0c200f348c0dd?placeholderIfAbsent=true",
-    price: "Tk. 1500.00"
-  });
+  const products = [
+    {
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+      category: "Watches",
+      title: "Smart Fitness Watch - Heart Rate Monitor",
+      originalPrice: "$199.99",
+      salePrice: "$149.99",
+      stockLeft: 8,
+      rating: 4.7,
+      reviews: 342,
+      discount: "25% OFF",
+      badge: "Trending"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+      category: "Audio",
+      title: "Premium Wireless Earbuds - Noise Cancelling",
+      originalPrice: "$179.99",
+      salePrice: "$129.99",
+      stockLeft: 12,
+      rating: 4.6,
+      reviews: 567,
+      discount: "28% OFF",
+      badge: "Hot"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop",
+      category: "Gaming",
+      title: "Wireless Gaming Mouse - RGB Lighting",
+      originalPrice: "$89.99",
+      salePrice: "$59.99",
+      stockLeft: 15,
+      rating: 4.8,
+      reviews: 234,
+      discount: "33% OFF",
+      badge: "Gaming"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop",
+      category: "Fashion",
+      title: "Polarized Sunglasses - UV400 Protection",
+      originalPrice: "$149.99",
+      salePrice: "$89.99",
+      stockLeft: 6,
+      rating: 4.5,
+      reviews: 189,
+      discount: "40% OFF",
+      badge: "Fashion"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+      category: "Sports",
+      title: "Running Shoes - Advanced Cushioning",
+      originalPrice: "$139.99",
+      salePrice: "$99.99",
+      stockLeft: 9,
+      rating: 4.7,
+      reviews: 456,
+      discount: "29% OFF",
+      badge: "Sports"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
+      category: "Home",
+      title: "Smart Coffee Maker - WiFi Enabled",
+      originalPrice: "$199.99",
+      salePrice: "$139.99",
+      stockLeft: 4,
+      rating: 4.4,
+      reviews: 178,
+      discount: "30% OFF",
+      badge: "Smart Home"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
+      category: "Tech",
+      title: "Portable Laptop Stand - Adjustable Height",
+      originalPrice: "$79.99",
+      salePrice: "$49.99",
+      stockLeft: 18,
+      rating: 4.6,
+      reviews: 298,
+      discount: "37% OFF",
+      badge: "Office"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop",
+      category: "Mobile",
+      title: "Wireless Charging Pad - Fast Charge",
+      originalPrice: "$59.99",
+      salePrice: "$39.99",
+      stockLeft: 22,
+      rating: 4.3,
+      reviews: 145,
+      discount: "33% OFF",
+      badge: "Accessories"
+    }
+  ];
 
   return (
-    <section className="flex w-full max-w-[1349px] items-stretch flex-wrap mt-[19px] max-md:max-w-full">
-      <div className="bg-white shadow-[0px_4px_4px_rgba(0,0,0,0.25)] w-fit grow shrink-0 basis-0 py-[13px] rounded-[5px] border-[rgba(242,242,242,1)] border-solid border-2 max-md:max-w-full">
-        <div className="flex w-full max-w-[1309px] items-stretch gap-5 text-xs font-semibold flex-wrap justify-between ml-3.5 mr-[13px] max-md:max-w-full max-md:mr-2.5">
-          <div className="flex items-stretch gap-2 text-[rgba(32,32,107,1)]">
-            <div className="text-base font-bold grow my-auto">
-              Trending Products
+    <section className="py-6 bg-gradient-to-br from-blue-50 via-yellow-50 to-green-50">
+      <div className="max-w-7xl mx-auto px-4">
+        {/* Header */}
+        <div className="flex items-center justify-between mb-6">
+          <div className="flex items-center gap-3">
+            <div className="bg-gradient-to-r from-blue-500 to-green-500 p-3 rounded-full">
+              <TrendingUp className="w-6 h-6 text-white" />
             </div>
-            <div className="bg-[rgba(201,201,201,1)] flex w-0.5 shrink-0 h-6" />
-            <div className="flex items-center gap-1">
-              <div className="bg-[rgba(217,217,217,1)] self-stretch flex w-[11px] shrink-0 h-[18px] my-auto rounded-[3px]" />
-              <div className="self-stretch my-auto">Promotional Text</div>
-              <div className="bg-[rgba(201,201,201,1)] self-stretch flex w-0.5 shrink-0 h-6" />
-            </div>
-            <div className="flex items-stretch gap-1 my-auto">
-              <div className="bg-[rgba(217,217,217,1)] flex w-[11px] shrink-0 h-[18px] rounded-[3px]" />
-              <div>Promotional Text</div>
+            <div>
+              <h2 className="text-2xl font-bold text-gray-800">Trending Products</h2>
+              <p className="text-gray-600">Most popular items this week</p>
             </div>
           </div>
-          <div className="flex items-stretch gap-[3px]">
-            <div className="text-[rgba(32,32,107,1)] grow">SEE MORE</div>
-            <button className="bg-[rgba(32,32,107,1)] text-white whitespace-nowrap px-[5px] py-px rounded-[5px] hover:bg-[rgba(32,32,107,0.8)] transition-colors">
-              &gt;
-            </button>
-          </div>
+          <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-green-600 transition-all font-semibold">
+            View All
+            <ArrowRight className="w-4 h-4" />
+          </button>
         </div>
-        
-        <div className="bg-[rgba(217,217,217,1)] flex shrink-0 h-0.5 mt-[7px] max-md:max-w-full" />
-        
-        <div className="ml-2.5 mr-4 mt-3 max-md:max-w-full max-md:mr-2.5">
-          <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-            <div className="w-[31%] max-md:w-full max-md:ml-0">
-              <div className="flex flex-col relative aspect-[1.223] w-full pl-[13px] pr-20 py-9 rounded-[5px] max-md:mt-[22px] max-md:pr-5">
-                <img
-                  src="https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/8aba8a2f9921abfe867963f7addb8c67ffd75281?placeholderIfAbsent=true"
-                  alt="Deal Background"
-                  className="absolute h-full w-full object-cover inset-0"
-                />
-                <div className="relative text-[rgba(224,22,43,1)] text-xl font-semibold max-md:ml-0.5">
-                  DEAL END IN
-                </div>
-                <div className="relative flex gap-1 text-lg text-white font-normal whitespace-nowrap mt-[13px]">
-                  <div className="flex items-stretch gap-0.5 mt-[5px]">
-                    <div className="bg-[rgba(224,22,43,1)] w-[29px] h-[29px] pt-[3px] pb-[13px] px-[9px] rounded-[50%]">
-                      {Math.floor(timeLeft.days / 10)}
-                    </div>
-                    <div className="bg-[rgba(224,22,43,1)] w-[29px] h-[29px] pt-[3px] pb-[13px] px-2 rounded-[50%]">
-                      {timeLeft.days % 10}
-                    </div>
-                  </div>
-                  <div className="text-[rgba(224,22,43,1)] text-3xl">:</div>
-                  <div className="flex items-stretch gap-0.5 mt-[5px]">
-                    <div className="bg-[rgba(224,22,43,1)] w-[29px] h-[29px] pt-[3px] pb-[13px] px-[9px] rounded-[50%]">
-                      {Math.floor(timeLeft.hours / 10)}
-                    </div>
-                    <div className="bg-[rgba(224,22,43,1)] w-[29px] h-[29px] pt-[3px] pb-[13px] px-[9px] rounded-[50%]">
-                      {timeLeft.hours % 10}
-                    </div>
-                  </div>
-                  <div className="text-[rgba(224,22,43,1)] text-3xl">:</div>
-                  <div className="flex items-stretch gap-0.5 mt-[5px]">
-                    <div className="bg-[rgba(224,22,43,1)] pt-1 pb-[13px] px-[9px] rounded-[50%]">
-                      {Math.floor(timeLeft.minutes / 10)}
-                    </div>
-                    <div className="bg-[rgba(224,22,43,1)] w-[30px] h-[30px] pt-1 pb-[13px] px-[9px] rounded-[50%]">
-                      {timeLeft.minutes % 10}
-                    </div>
-                  </div>
-                </div>
-                <div className="relative flex items-stretch gap-8 text-[13px] text-[rgba(224,22,43,1)] font-semibold whitespace-nowrap ml-[13px] mt-[5px] max-md:ml-2.5">
-                  <div>Days</div>
-                  <div>Hours</div>
-                  <div>Minutes</div>
-                </div>
-                <div className="relative text-black text-sm font-normal text-center self-center mt-[132px] max-md:mt-10">
-                  Banner / Picture / Video
-                </div>
-                <div className="relative self-center flex w-9 items-stretch gap-1.5 mt-[18px]">
-                  <div className="bg-black flex w-2 shrink-0 h-2 rounded-[50%]" />
-                  <div className="bg-[rgba(160,160,160,1)] flex w-2 shrink-0 h-2 rounded-[50%]" />
-                  <div className="bg-[rgba(160,160,160,1)] flex w-2 shrink-0 h-2 rounded-[50%]" />
-                </div>
-              </div>
-            </div>
-            
-            <div className="w-[69%] ml-5 max-md:w-full max-md:ml-0">
-              <div className="flex grow items-stretch flex-wrap max-md:mt-[22px]">
-                <button className="bg-[rgba(217,217,217,1)] text-sm text-black font-normal whitespace-nowrap text-center w-[22px] h-[22px] my-auto px-1.5 rounded-[50%] hover:bg-[rgba(217,217,217,0.8)] transition-colors">
-                  &lt;
-                </button>
-                
-                <div className="grow shrink-0 basis-0 w-fit max-md:max-w-full">
-                  <div className="w-full max-md:max-w-full">
-                    <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-                      {products.slice(0, 3).map((product, index) => (
-                        <div key={index} className="w-[33%] max-md:w-full max-md:ml-0">
-                          <TrendingProduct
-                            image={product.image}
-                            price={product.price}
-                            onAddToCart={() => console.log(`Added trending product ${index + 1} to cart`)}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                  
-                  <div className="w-full mt-[9px] max-md:max-w-full">
-                    <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-                      {products.slice(3, 6).map((product, index) => (
-                        <div key={index + 3} className="w-[33%] max-md:w-full max-md:ml-0">
-                          <TrendingProduct
-                            image={product.image}
-                            price={product.price}
-                            onAddToCart={() => console.log(`Added trending product ${index + 4} to cart`)}
-                          />
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+
+        {/* Products Grid */}
+        <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-4">
+          {products.map((product, index) => (
+            <ProductCard
+              key={index}
+              image={product.image}
+              category={product.category}
+              title={product.title}
+              originalPrice={product.originalPrice}
+              salePrice={product.salePrice}
+              stockLeft={product.stockLeft}
+              rating={product.rating}
+              reviews={product.reviews}
+              discount={product.discount}
+              badge={product.badge}
+              isCompact={true}
+              onAddToCart={() => console.log(`Added trending product ${index + 1} to cart`)}
+            />
+          ))}
         </div>
       </div>
-      
-      <button className="bg-[rgba(217,217,217,1)] text-sm text-black font-normal whitespace-nowrap text-center w-[22px] h-[22px] mt-[210px] px-1.5 rounded-[50%] max-md:mt-10 hover:bg-[rgba(217,217,217,0.8)] transition-colors">
-        &gt;
-      </button>
     </section>
   );
 };

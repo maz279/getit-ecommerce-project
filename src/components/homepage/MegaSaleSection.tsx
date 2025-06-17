@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
 import { Zap, Clock, Flame } from 'lucide-react';
@@ -26,21 +27,143 @@ export const MegaSaleSection: React.FC = () => {
     return () => clearInterval(timer);
   }, []);
 
-  const products = Array(12).fill(null).map((_, index) => ({
-    image: `https://images.unsplash.com/photo-${1523275335684 + index * 3000}-d0ca20e4086b?w=400`,
-    category: "Mega Sale",
-    title: `Mega Sale Product ${index + 1} - Huge Discount`,
-    originalPrice: `$${(499 + index * 60).toFixed(2)}`,
-    salePrice: `$${(199 + index * 25).toFixed(2)}`,
-    stockLeft: Math.floor(Math.random() * 5) + 1,
-    rating: 4.3 + Math.random() * 0.7,
-    reviews: Math.floor(Math.random() * 800) + 150,
-    discount: `${Math.floor(Math.random() * 50) + 40}% OFF`,
-    badge: "MEGA SALE"
-  }));
+  const products = [
+    {
+      image: "https://images.unsplash.com/photo-1588508065123-287b28e013da?w=400&h=400&fit=crop",
+      category: "Electronics",
+      title: "4K Smart TV - 55 inch Ultra HD",
+      originalPrice: "$899.99",
+      salePrice: "$549.99",
+      stockLeft: 3,
+      rating: 4.8,
+      reviews: 234,
+      discount: "39% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=400&h=400&fit=crop",
+      category: "Computers",
+      title: "Gaming Laptop - RTX Graphics",
+      originalPrice: "$1599.99",
+      salePrice: "$999.99",
+      stockLeft: 2,
+      rating: 4.9,
+      reviews: 567,
+      discount: "37% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=400&h=400&fit=crop",
+      category: "Home",
+      title: "Robot Vacuum Cleaner - Smart Navigation",
+      originalPrice: "$499.99",
+      salePrice: "$299.99",
+      stockLeft: 5,
+      rating: 4.6,
+      reviews: 345,
+      discount: "40% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1546868871-7041f2a55e12?w=400&h=400&fit=crop",
+      category: "Kitchen",
+      title: "Air Fryer XL - 8 Quart Capacity",
+      originalPrice: "$199.99",
+      salePrice: "$119.99",
+      stockLeft: 8,
+      rating: 4.7,
+      reviews: 1234,
+      discount: "40% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=400&h=400&fit=crop",
+      category: "Audio",
+      title: "Studio Monitor Speakers - Professional",
+      originalPrice: "$399.99",
+      salePrice: "$249.99",
+      stockLeft: 4,
+      rating: 4.8,
+      reviews: 189,
+      discount: "37% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=400&h=400&fit=crop",
+      category: "Photography",
+      title: "DSLR Camera - 24MP Full Frame",
+      originalPrice: "$1299.99",
+      salePrice: "$799.99",
+      stockLeft: 1,
+      rating: 4.9,
+      reviews: 456,
+      discount: "38% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=400&h=400&fit=crop",
+      category: "Sports",
+      title: "Electric Bike - 50 Mile Range",
+      originalPrice: "$1999.99",
+      salePrice: "$1299.99",
+      stockLeft: 2,
+      rating: 4.7,
+      reviews: 123,
+      discount: "35% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=400&h=400&fit=crop",
+      category: "Beauty",
+      title: "LED Light Therapy Mask - Anti-Aging",
+      originalPrice: "$299.99",
+      salePrice: "$179.99",
+      stockLeft: 7,
+      rating: 4.5,
+      reviews: 298,
+      discount: "40% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=400&h=400&fit=crop",
+      category: "Fashion",
+      title: "Designer Watch - Automatic Movement",
+      originalPrice: "$799.99",
+      salePrice: "$479.99",
+      stockLeft: 3,
+      rating: 4.8,
+      reviews: 167,
+      discount: "40% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1519947486511-46149fa0a254?w=400&h=400&fit=crop",
+      category: "Fitness",
+      title: "Smart Exercise Bike - Interactive Training",
+      originalPrice: "$1499.99",
+      salePrice: "$899.99",
+      stockLeft: 4,
+      rating: 4.6,
+      reviews: 234,
+      discount: "40% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1550009158-9ebf69173e03?w=400&h=400&fit=crop",
+      category: "Tools",
+      title: "Cordless Drill Set - 20V Battery",
+      originalPrice: "$159.99",
+      salePrice: "$99.99",
+      stockLeft: 12,
+      rating: 4.4,
+      reviews: 567,
+      discount: "37% OFF"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1586953208448-b95a79798f07?w=400&h=400&fit=crop",
+      category: "Garden",
+      title: "Robotic Lawn Mower - GPS Navigation",
+      originalPrice: "$899.99",
+      salePrice: "$549.99",
+      stockLeft: 2,
+      rating: 4.7,
+      reviews: 89,
+      discount: "39% OFF"
+    }
+  ];
 
   return (
-    <section className="py-8 bg-gradient-to-br from-red-100 via-orange-100 to-yellow-100">
+    <section className="py-6 bg-gradient-to-br from-red-100 via-orange-100 to-yellow-100">
       <div className="max-w-7xl mx-auto px-4">
         <div className="bg-gradient-to-r from-red-600 via-orange-600 to-yellow-600 rounded-2xl p-6 mb-6 text-white relative overflow-hidden">
           <div className="absolute inset-0 bg-black opacity-10"></div>
@@ -83,8 +206,8 @@ export const MegaSaleSection: React.FC = () => {
               rating={product.rating}
               reviews={product.reviews}
               discount={product.discount}
-              badge={product.badge}
               isFlashSale={true}
+              isCompact={true}
               onAddToCart={() => console.log(`Added mega sale product ${index + 1} to cart`)}
             />
           ))}

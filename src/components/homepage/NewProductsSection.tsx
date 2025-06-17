@@ -4,18 +4,104 @@ import { ProductCard } from './ProductCard';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
 export const NewProductsSection: React.FC = () => {
-  const products = Array(8).fill(null).map((_, index) => ({
-    image: `https://images.unsplash.com/photo-${1523275335684 + index * 1000}-d0ca20e4086b?w=400`,
-    category: "Electronics",
-    title: `New Product ${index + 1} - Latest Release`,
-    originalPrice: `$${(199 + index * 30).toFixed(2)}`,
-    salePrice: `$${(149 + index * 25).toFixed(2)}`,
-    stockLeft: Math.floor(Math.random() * 20) + 5,
-    rating: 4 + Math.random(),
-    reviews: Math.floor(Math.random() * 300) + 50,
-    discount: `${Math.floor(Math.random() * 30) + 15}% OFF`,
-    badge: "NEW"
-  }));
+  const products = [
+    {
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+      category: "Watches",
+      title: "Smart Fitness Watch - Heart Rate Monitor",
+      originalPrice: "$229.99",
+      salePrice: "$179.99",
+      stockLeft: 8,
+      rating: 4.7,
+      reviews: 156,
+      discount: "22% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+      category: "Audio",
+      title: "Wireless Noise Cancelling Headphones",
+      originalPrice: "$199.99",
+      salePrice: "$149.99",
+      stockLeft: 12,
+      rating: 4.6,
+      reviews: 243,
+      discount: "25% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop",
+      category: "Gaming",
+      title: "RGB Gaming Keyboard - Mechanical Keys",
+      originalPrice: "$119.99",
+      salePrice: "$89.99",
+      stockLeft: 15,
+      rating: 4.8,
+      reviews: 187,
+      discount: "25% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop",
+      category: "Fashion",
+      title: "Designer Sunglasses - UV Protection",
+      originalPrice: "$159.99",
+      salePrice: "$119.99",
+      stockLeft: 6,
+      rating: 4.5,
+      reviews: 98,
+      discount: "25% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+      category: "Sports",
+      title: "Professional Running Shoes",
+      originalPrice: "$149.99",
+      salePrice: "$109.99",
+      stockLeft: 9,
+      rating: 4.7,
+      reviews: 321,
+      discount: "27% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
+      category: "Home",
+      title: "Smart Coffee Maker - WiFi Enabled",
+      originalPrice: "$219.99",
+      salePrice: "$169.99",
+      stockLeft: 4,
+      rating: 4.4,
+      reviews: 134,
+      discount: "23% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
+      category: "Tech",
+      title: "Adjustable Laptop Stand - Ergonomic",
+      originalPrice: "$89.99",
+      salePrice: "$64.99",
+      stockLeft: 18,
+      rating: 4.6,
+      reviews: 205,
+      discount: "28% OFF",
+      badge: "NEW"
+    },
+    {
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop",
+      category: "Mobile",
+      title: "Fast Wireless Charging Pad",
+      originalPrice: "$69.99",
+      salePrice: "$49.99",
+      stockLeft: 22,
+      rating: 4.3,
+      reviews: 167,
+      discount: "29% OFF",
+      badge: "NEW"
+    }
+  ];
 
   return (
     <section className="py-8 bg-gradient-to-br from-blue-50 via-purple-50 to-pink-50">

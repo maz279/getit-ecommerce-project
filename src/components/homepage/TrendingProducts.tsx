@@ -6,11 +6,11 @@ import { TrendingUp, ArrowRight } from 'lucide-react';
 export const TrendingProducts: React.FC = () => {
   const products = [
     {
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
       category: "Watches",
       title: "Smart Fitness Watch - Heart Rate Monitor",
-      originalPrice: "$199.99",
-      salePrice: "$149.99",
+      originalPrice: "৳23,999",
+      salePrice: "৳17,999",
       stockLeft: 8,
       rating: 4.7,
       reviews: 342,
@@ -18,11 +18,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Trending"
     },
     {
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
       category: "Audio",
       title: "Premium Wireless Earbuds - Noise Cancelling",
-      originalPrice: "$179.99",
-      salePrice: "$129.99",
+      originalPrice: "৳21,599",
+      salePrice: "৳15,599",
       stockLeft: 12,
       rating: 4.6,
       reviews: 567,
@@ -30,11 +30,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Hot"
     },
     {
-      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop",
       category: "Gaming",
       title: "Wireless Gaming Mouse - RGB Lighting",
-      originalPrice: "$89.99",
-      salePrice: "$59.99",
+      originalPrice: "৳10,799",
+      salePrice: "৳7,199",
       stockLeft: 15,
       rating: 4.8,
       reviews: 234,
@@ -42,11 +42,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Gaming"
     },
     {
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
       category: "Fashion",
       title: "Polarized Sunglasses - UV400 Protection",
-      originalPrice: "$149.99",
-      salePrice: "$89.99",
+      originalPrice: "৳17,999",
+      salePrice: "৳10,799",
       stockLeft: 6,
       rating: 4.5,
       reviews: 189,
@@ -54,11 +54,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Fashion"
     },
     {
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
       category: "Sports",
       title: "Running Shoes - Advanced Cushioning",
-      originalPrice: "$139.99",
-      salePrice: "$99.99",
+      originalPrice: "৳16,799",
+      salePrice: "৳11,999",
       stockLeft: 9,
       rating: 4.7,
       reviews: 456,
@@ -66,11 +66,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Sports"
     },
     {
-      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=300&h=300&fit=crop",
       category: "Home",
       title: "Smart Coffee Maker - WiFi Enabled",
-      originalPrice: "$199.99",
-      salePrice: "$139.99",
+      originalPrice: "৳23,999",
+      salePrice: "৳16,799",
       stockLeft: 4,
       rating: 4.4,
       reviews: 178,
@@ -78,11 +78,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Smart Home"
     },
     {
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop",
       category: "Tech",
       title: "Portable Laptop Stand - Adjustable Height",
-      originalPrice: "$79.99",
-      salePrice: "$49.99",
+      originalPrice: "৳9,599",
+      salePrice: "৳5,999",
       stockLeft: 18,
       rating: 4.6,
       reviews: 298,
@@ -90,11 +90,11 @@ export const TrendingProducts: React.FC = () => {
       badge: "Office"
     },
     {
-      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop",
       category: "Mobile",
       title: "Wireless Charging Pad - Fast Charge",
-      originalPrice: "$59.99",
-      salePrice: "$39.99",
+      originalPrice: "৳7,199",
+      salePrice: "৳4,799",
       stockLeft: 22,
       rating: 4.3,
       reviews: 145,

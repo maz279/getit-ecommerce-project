@@ -77,19 +77,21 @@ export const Header: React.FC = () => {
               <MessageSquare className="w-5 h-5" />
             </button>
             
-            {/* Sign In/Sign Up Section */}
-            <div className="hidden lg:flex flex-col items-center gap-1 text-white">
-              <div className="flex items-center gap-2 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
-                <LogIn className="w-4 h-4" />
-                <span className="text-sm">Sign In</span>
-              </div>
-              <div className="flex items-center gap-2 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
-                <UserPlus className="w-4 h-4" />
-                <span className="text-sm">Sign Up</span>
+            {/* Sign In/Sign Up Section - Side by side */}
+            <div className="hidden lg:flex items-center gap-2 text-white">
+              <div className="flex items-center gap-4">
+                <div className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                  <LogIn className="w-4 h-4" />
+                  <span className="text-sm">Sign In</span>
+                </div>
+                <div className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                  <UserPlus className="w-4 h-4" />
+                  <span className="text-sm">Sign Up</span>
+                </div>
               </div>
               
               {/* Language Choice */}
-              <div className="flex items-center gap-2 text-xs mt-1">
+              <div className="flex items-center gap-2 text-xs ml-2">
                 <Globe className="w-3 h-3" />
                 <select className="bg-transparent border border-white border-opacity-30 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-white">
                   <option value="en" className="text-black">English</option>

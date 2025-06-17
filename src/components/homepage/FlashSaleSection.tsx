@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
 import { ChevronLeft, ChevronRight, Zap, Clock, Flame } from 'lucide-react';
@@ -31,11 +32,11 @@ export const FlashSaleSection: React.FC = () => {
 
   const products = [
     {
-      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
       category: "Watches",
       title: "Luxury Smart Watch - Premium Steel Band",
-      originalPrice: "$299.99",
-      salePrice: "$199.99",
+      originalPrice: "৳35,999",
+      salePrice: "৳23,999",
       stockLeft: 3,
       rating: 4.8,
       reviews: 245,
@@ -43,11 +44,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
       category: "Audio",
       title: "Wireless Noise-Canceling Headphones",
-      originalPrice: "$249.99",
-      salePrice: "$149.99",
+      originalPrice: "৳29,999",
+      salePrice: "৳17,999",
       stockLeft: 7,
       rating: 4.7,
       reviews: 892,
@@ -55,11 +56,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop",
       category: "Mobile",
       title: "Latest Smartphone - 128GB Storage",
-      originalPrice: "$799.99",
-      salePrice: "$599.99",
+      originalPrice: "৳95,999",
+      salePrice: "৳71,999",
       stockLeft: 2,
       rating: 4.9,
       reviews: 1234,
@@ -67,11 +68,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
       category: "Footwear",
       title: "Premium Running Shoes - Air Cushion",
-      originalPrice: "$159.99",
-      salePrice: "$99.99",
+      originalPrice: "৳19,199",
+      salePrice: "৳11,999",
       stockLeft: 12,
       rating: 4.6,
       reviews: 567,
@@ -79,11 +80,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
       category: "Fashion",
       title: "Designer Sunglasses - UV Protection",
-      originalPrice: "$199.99",
-      salePrice: "$119.99",
+      originalPrice: "৳23,999",
+      salePrice: "৳14,399",
       stockLeft: 8,
       rating: 4.5,
       reviews: 334,
@@ -91,11 +92,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop",
       category: "Gaming",
       title: "Wireless Gaming Controller - Pro Edition",
-      originalPrice: "$89.99",
-      salePrice: "$59.99",
+      originalPrice: "৳10,799",
+      salePrice: "৳7,199",
       stockLeft: 15,
       rating: 4.8,
       reviews: 678,
@@ -103,11 +104,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=300&h=300&fit=crop",
       category: "Home",
       title: "Smart Coffee Maker - Programmable",
-      originalPrice: "$179.99",
-      salePrice: "$119.99",
+      originalPrice: "৳21,599",
+      salePrice: "৳14,399",
       stockLeft: 5,
       rating: 4.4,
       reviews: 456,
@@ -115,11 +116,11 @@ export const FlashSaleSection: React.FC = () => {
       isFlashSale: true
     },
     {
-      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=400&h=400&fit=crop",
+      image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop",
       category: "Tech",
       title: "Ultra-Portable Laptop - 14 inch Display",
-      originalPrice: "$1299.99",
-      salePrice: "$999.99",
+      originalPrice: "৳155,999",
+      salePrice: "৳119,999",
       stockLeft: 1,
       rating: 4.9,
       reviews: 789,
@@ -163,7 +164,7 @@ export const FlashSaleSection: React.FC = () => {
           </div>
         </div>
 
-        {/* Products Grid - Smaller and More Compact */}
+        {/* Products Grid - Uniform Size */}
         <div className="relative">
           <div className="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-3">
             {products.map((product, index) => (

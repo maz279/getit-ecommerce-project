@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
-import { Zap, Clock, Fire } from 'lucide-react';
+import { Zap, Clock, Flame } from 'lucide-react';
 
 export const MegaSaleSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -48,7 +47,7 @@ export const MegaSaleSection: React.FC = () => {
           <div className="relative z-10 flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
               <div className="bg-white bg-opacity-20 p-4 rounded-full">
-                <Fire className="w-8 h-8" />
+                <Flame className="w-8 h-8" />
               </div>
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold">MEGA SALE</h2>

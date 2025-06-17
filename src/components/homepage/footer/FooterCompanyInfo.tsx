@@ -11,16 +11,19 @@ export const FooterCompanyInfo: React.FC = () => {
         </div>
         <h3 className="text-2xl font-bold">GETIT</h3>
       </div>
+      <p className="text-green-300 text-lg font-semibold mb-2">
+        Best ecommerce platform in Bangladesh
+      </p>
       <p className="text-gray-300 text-sm leading-relaxed">
-        Southeast Asia's leading multi-vendor marketplace connecting millions of buyers with trusted sellers. 
+        Bangladesh's leading multi-vendor marketplace connecting millions of buyers with trusted sellers. 
         Discover endless possibilities with secure transactions, fast delivery, and world-class customer service.
       </p>
       <div className="space-y-2">
         <p className="text-sm"><span className="font-semibold">Founded:</span> 2018</p>
-        <p className="text-sm"><span className="font-semibold">Active Markets:</span> 12 Countries</p>
-        <p className="text-sm"><span className="font-semibold">Registered Vendors:</span> 500K+</p>
-        <p className="text-sm"><span className="font-semibold">Products Listed:</span> 50M+</p>
-        <p className="text-sm"><span className="font-semibold">Daily Orders:</span> 2M+</p>
+        <p className="text-sm"><span className="font-semibold">Headquarters:</span> Dhaka, Bangladesh</p>
+        <p className="text-sm"><span className="font-semibold">Registered Vendors:</span> 50K+</p>
+        <p className="text-sm"><span className="font-semibold">Products Listed:</span> 5M+</p>
+        <p className="text-sm"><span className="font-semibold">Daily Orders:</span> 100K+</p>
       </div>
       
       {/* Trust Badges */}
@@ -31,7 +34,7 @@ export const FooterCompanyInfo: React.FC = () => {
         </div>
         <div className="flex items-center space-x-1">
           <CreditCard className="w-4 h-4 text-blue-400" />
-          <span className="text-xs">PCI Compliant</span>
+          <span className="text-xs">Secure Payment</span>
         </div>
         <div className="flex items-center space-x-1">
           <Truck className="w-4 h-4 text-orange-400" />

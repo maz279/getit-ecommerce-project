@@ -8,6 +8,8 @@ import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
 import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
 import { NewProductsSection } from '../components/homepage/NewProductsSection';
+import { RecommendedSection } from '../components/homepage/RecommendedSection';
+import { MixedProductsSection } from '../components/homepage/MixedProductsSection';
 import { Footer } from '../components/homepage/Footer';
 
 const Index: React.FC = () => {
@@ -23,6 +25,8 @@ const Index: React.FC = () => {
         <PromotionalBanners />
         <MegaSaleSection />
         <NewProductsSection />
+        <RecommendedSection />
+        <MixedProductsSection />
       </main>
       
       <Footer />

@@ -4,7 +4,7 @@ import { ProductCard } from './ProductCard';
 import { Heart, Target } from 'lucide-react';
 
 export const RecommendedSection: React.FC = () => {
-  const products = Array(8).fill(null).map((_, index) => ({
+  const products = Array(20).fill(null).map((_, index) => ({
     image: `https://images.unsplash.com/photo-${1523275335684 + index * 1500}-d0ca20e4086b?w=400`,
     category: "Recommended",
     title: `Recommended Product ${index + 1} - Perfect for You`,
@@ -35,7 +35,7 @@ export const RecommendedSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
           {products.map((product, index) => (
             <ProductCard
               key={index}

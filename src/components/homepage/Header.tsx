@@ -1,5 +1,6 @@
+
 import React, { useState } from 'react';
-import { Search, Mic, Camera, QrCode, ShoppingCart, Heart, Bell, MessageSquare, User, Globe } from 'lucide-react';
+import { Search, Mic, Camera, QrCode, ShoppingCart, Heart, Bell, MessageSquare, User, Globe, LogIn, UserPlus } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
 
 export const Header: React.FC = () => {
@@ -7,23 +8,6 @@ export const Header: React.FC = () => {
 
   return (
     <>
-      {/* Language Choice Banner */}
-      <div className="bg-gray-100 w-full py-2 px-4 border-b">
-        <div className="max-w-7xl mx-auto flex items-center justify-between">
-          <div className="flex items-center gap-2 text-sm text-gray-600">
-            <Globe className="w-4 h-4" />
-            <span>Language:</span>
-            <select className="bg-white border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500">
-              <option value="en">English</option>
-              <option value="bn">বাংলা</option>
-            </select>
-          </div>
-          <div className="text-sm text-gray-600">
-            Welcome to GETIT - Your trusted shopping partner
-          </div>
-        </div>
-      </div>
-
       <header className="bg-gradient-to-r from-blue-600 via-purple-600 to-red-500 w-full py-2 px-4 shadow-lg sticky top-0 z-50">
         <div className="max-w-7xl mx-auto flex items-center justify-between gap-4">
           {/* Mobile Menu and Logo */}
@@ -92,10 +76,25 @@ export const Header: React.FC = () => {
             <button className="relative p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all hidden md:block">
               <MessageSquare className="w-5 h-5" />
             </button>
-            <div className="hidden lg:flex items-center gap-2 text-white cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
-              <User className="w-5 h-5" />
-              <div className="text-sm">
-                <div>Sign In</div>
+            
+            {/* Sign In/Sign Up Section */}
+            <div className="hidden lg:flex flex-col items-center gap-1 text-white">
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                <LogIn className="w-4 h-4" />
+                <span className="text-sm">Sign In</span>
+              </div>
+              <div className="flex items-center gap-2 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                <UserPlus className="w-4 h-4" />
+                <span className="text-sm">Sign Up</span>
+              </div>
+              
+              {/* Language Choice */}
+              <div className="flex items-center gap-2 text-xs mt-1">
+                <Globe className="w-3 h-3" />
+                <select className="bg-transparent border border-white border-opacity-30 rounded px-1 py-0.5 text-xs focus:outline-none focus:ring-1 focus:ring-white">
+                  <option value="en" className="text-black">English</option>
+                  <option value="bn" className="text-black">বাংলা</option>
+                </select>
               </div>
             </div>
           </div>

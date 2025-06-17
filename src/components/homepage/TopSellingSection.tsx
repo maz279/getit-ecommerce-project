@@ -5,7 +5,7 @@ import { TrendingUp, Award } from 'lucide-react';
 
 export const TopSellingSection: React.FC = () => {
   const products = Array(20).fill(null).map((_, index) => ({
-    image: `https://images.unsplash.com/photo-${1523275335684 + index * 1500}-d0ca20e4086b?w=400`,
+    image: `https://images.unsplash.com/photo-${1523275335684 + index * 2000}-d0ca20e4086b?w=300&h=300&fit=crop`,
     category: "Best Seller",
     title: `Top Selling Product ${index + 1} - Customer Favorite`,
     originalPrice: `৳${((299 + index * 40) * 120).toFixed(0)}`,
@@ -35,7 +35,7 @@ export const TopSellingSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
+        <div className="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-2">
           {products.map((product, index) => (
             <ProductCard
               key={index}

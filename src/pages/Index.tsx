@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { HeroSection } from '../components/homepage/HeroSection';
@@ -6,7 +7,8 @@ import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
 import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
 import { TrendingProducts } from '../components/homepage/TrendingProducts';
-import { ARShowcase } from '../components/homepage/ARShowcase';
+import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
+import { NewProductsSection } from '../components/homepage/NewProductsSection';
 import { ContestSections } from '../components/homepage/ContestSections';
 import { Footer } from '../components/homepage/Footer';
 
@@ -22,7 +24,8 @@ const Index: React.FC = () => {
         <FlashSaleSection />
         <PromotionalBanners />
         <TrendingProducts />
-        <ARShowcase />
+        <MegaSaleSection />
+        <NewProductsSection />
         <ContestSections />
       </main>
       

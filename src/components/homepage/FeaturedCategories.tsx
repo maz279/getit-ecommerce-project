@@ -1,16 +1,36 @@
+
 import React from 'react';
+import { 
+  Smartphone, Laptop, Headphones, Camera, Watch, Gamepad2, 
+  Shirt, ShoppingBag, Home, Car, Baby, Heart,
+  Coffee, Book, Dumbbell, Paintbrush, Music, Gift
+} from 'lucide-react';
 
 interface CategoryItem {
-  image: string;
+  icon: React.ReactNode;
   name: string;
   count: number;
+  color: string;
 }
 
-const categories: CategoryItem[] = Array(11).fill({
-  image: "https://cdn.builder.io/api/v1/image/assets/c5a9e6a3346949f6969d40ed9f6f4f58/73c7389418b8a9f8e8a93dad8fb3dfb7eb050268?placeholderIfAbsent=true",
-  name: "Category",
-  count: 20
-});
+const categories: CategoryItem[] = [
+  { icon: <Smartphone className="w-8 h-8" />, name: "Electronics", count: 2847, color: "text-blue-500" },
+  { icon: <Shirt className="w-8 h-8" />, name: "Fashion", count: 1923, color: "text-pink-500" },
+  { icon: <Home className="w-8 h-8" />, name: "Home & Garden", count: 1456, color: "text-green-500" },
+  { icon: <Coffee className="w-8 h-8" />, name: "Food & Drink", count: 987, color: "text-orange-500" },
+  { icon: <Laptop className="w-8 h-8" />, name: "Computers", count: 754, color: "text-purple-500" },
+  { icon: <Car className="w-8 h-8" />, name: "Automotive", count: 623, color: "text-red-500" },
+  { icon: <Baby className="w-8 h-8" />, name: "Baby & Kids", count: 445, color: "text-yellow-500" },
+  { icon: <Dumbbell className="w-8 h-8" />, name: "Sports", count: 389, color: "text-indigo-500" },
+  { icon: <Heart className="w-8 h-8" />, name: "Health", count: 267, color: "text-rose-500" },
+  { icon: <Book className="w-8 h-8" />, name: "Books", count: 234, color: "text-teal-500" },
+  { icon: <Music className="w-8 h-8" />, name: "Music", count: 198, color: "text-cyan-500" },
+  { icon: <Gift className="w-8 h-8" />, name: "Gifts", count: 156, color: "text-emerald-500" },
+  { icon: <Camera className="w-8 h-8" />, name: "Photography", count: 143, color: "text-violet-500" },
+  { icon: <Watch className="w-8 h-8" />, name: "Watches", count: 128, color: "text-amber-500" },
+  { icon: <Gamepad2 className="w-8 h-8" />, name: "Gaming", count: 112, color: "text-lime-500" },
+  { icon: <Paintbrush className="w-8 h-8" />, name: "Art & Craft", count: 98, color: "text-fuchsia-500" }
+];
 
 export const FeaturedCategories: React.FC = () => {
   return (
@@ -36,118 +56,30 @@ export const FeaturedCategories: React.FC = () => {
           <div className="bg-[rgba(217,217,217,1)] flex shrink-0 h-0.5 max-md:max-w-full" />
           
           <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
-            <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-              <div className="w-[66%] max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-[27px] text-black font-normal whitespace-nowrap text-center flex-wrap max-md:mt-[27px]">
-                  {categories.slice(0, 7).map((category, index) => (
-                    <div key={index} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
+            <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
+              {categories.slice(0, 8).map((category, index) => (
+                <div key={index} className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-md transition-all cursor-pointer group">
+                  <div className={`${category.color} mb-2 group-hover:scale-110 transition-transform`}>
+                    {category.icon}
+                  </div>
+                  <div className="text-sm font-medium text-center text-gray-800">{category.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">({category.count})</div>
                 </div>
-              </div>
-              
-              <div className="w-[16%] ml-5 max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-3.5 text-black font-normal whitespace-nowrap text-center max-md:mt-[27px]">
-                  {categories.slice(7, 9).map((category, index) => (
-                    <div key={index + 7} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="w-[17%] ml-5 max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-[27px] text-black font-normal whitespace-nowrap text-center max-md:mt-[27px]">
-                  {categories.slice(9, 11).map((category, index) => (
-                    <div key={index + 9} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
           
           <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
-            <div className="gap-5 flex max-md:flex-col max-md:items-stretch">
-              <div className="w-[66%] max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-[27px] text-black font-normal whitespace-nowrap text-center flex-wrap max-md:mt-[27px]">
-                  {categories.slice(0, 7).map((category, index) => (
-                    <div key={`row2-${index}`} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
+            <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
+              {categories.slice(8, 16).map((category, index) => (
+                <div key={index + 8} className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-md transition-all cursor-pointer group">
+                  <div className={`${category.color} mb-2 group-hover:scale-110 transition-transform`}>
+                    {category.icon}
+                  </div>
+                  <div className="text-sm font-medium text-center text-gray-800">{category.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">({category.count})</div>
                 </div>
-              </div>
-              
-              <div className="w-[16%] ml-5 max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-3.5 text-black font-normal whitespace-nowrap text-center max-md:mt-[27px]">
-                  {categories.slice(7, 9).map((category, index) => (
-                    <div key={`row2-${index + 7}`} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              
-              <div className="w-[17%] ml-5 max-md:w-full max-md:ml-0">
-                <div className="flex grow items-stretch gap-[27px] text-black font-normal whitespace-nowrap text-center max-md:mt-[27px]">
-                  {categories.slice(9, 11).map((category, index) => (
-                    <div key={`row2-${index + 9}`} className="bg-white flex flex-col items-stretch flex-1 px-[17px] py-[11px] rounded-[5px] hover:shadow-md transition-shadow cursor-pointer">
-                      <img
-                        src={category.image}
-                        alt={category.name}
-                        className="aspect-[1.13] object-contain w-[62px]"
-                      />
-                      <div className="text-sm">{category.name}</div>
-                      <div className="rounded bg-white border self-center w-[37px] text-xs mt-1 px-[11px] border-[rgba(32,32,107,1)] border-solid">
-                        {category.count}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
+              ))}
             </div>
           </div>
         </div>

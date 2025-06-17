@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Menu, X, ChevronRight, User, Heart, ShoppingCart, Bell, MessageSquare, Search, Home, Tag, Zap, Gift, TrendingUp, Star, Package, Headphones, MapPin } from 'lucide-react';
+import { Menu, X, ChevronRight, User, Heart, ShoppingCart, Bell, MessageSquare, Search, Home, Tag, Zap, Gift, TrendingUp, Star, Package, Headphones, MapPin, LogIn, UserPlus, Globe } from 'lucide-react';
 
 export const MobileMenu: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -27,7 +27,7 @@ export const MobileMenu: React.FC = () => {
         onClick={() => setIsOpen(true)}
         className="md:hidden p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all"
       >
-        <Menu className="w-6 h-6" />
+        <Menu className="w-5 h-5" />
       </button>
 
       {/* Mobile Menu Overlay */}
@@ -36,7 +36,7 @@ export const MobileMenu: React.FC = () => {
           <div className="fixed inset-0 bg-black bg-opacity-50" onClick={() => setIsOpen(false)} />
           
           {/* Menu Content */}
-          <div className="fixed top-0 left-0 w-80 h-full bg-white shadow-xl overflow-y-auto">
+          <div className="fixed top-0 left-0 w-80 max-w-[85vw] h-full bg-white shadow-xl overflow-y-auto">
             {/* Header */}
             <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-red-500 p-4">
               <div className="flex items-center justify-between">
@@ -53,14 +53,50 @@ export const MobileMenu: React.FC = () => {
                   <X className="w-5 h-5" />
                 </button>
               </div>
-              
-              {/* User Section */}
-              <div className="mt-4 flex items-center gap-3 text-white">
-                <User className="w-8 h-8" />
-                <div>
-                  <div className="font-semibold">Sign In</div>
-                  <div className="text-sm opacity-80">Join for exclusive deals</div>
+            </div>
+
+            {/* Search Bar for Mobile */}
+            <div className="p-4 border-b">
+              <div className="bg-gray-100 rounded-full overflow-hidden">
+                <div className="flex items-center">
+                  <select className="px-3 py-2 border-r border-gray-200 text-sm focus:outline-none bg-transparent">
+                    <option>All</option>
+                    <option>Electronics</option>
+                    <option>Fashion</option>
+                    <option>Home</option>
+                  </select>
+                  <input
+                    type="search"
+                    placeholder="Search products..."
+                    className="flex-1 px-3 py-2 text-sm focus:outline-none bg-transparent"
+                  />
+                  <button className="bg-gradient-to-r from-orange-400 to-yellow-400 p-2 rounded-r-full">
+                    <Search className="w-4 h-4 text-white" />
+                  </button>
                 </div>
+              </div>
+            </div>
+
+            {/* Sign In/Sign Up Section */}
+            <div className="p-4 border-b">
+              <div className="grid grid-cols-2 gap-3">
+                <button className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-all">
+                  <LogIn className="w-4 h-4" />
+                  <span className="text-sm font-medium">Sign In</span>
+                </button>
+                <button className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-all">
+                  <UserPlus className="w-4 h-4" />
+                  <span className="text-sm font-medium">Sign Up</span>
+                </button>
+              </div>
+              
+              {/* Language Choice */}
+              <div className="flex items-center justify-center gap-2 mt-3 p-2 bg-gray-50 rounded-lg">
+                <Globe className="w-4 h-4 text-gray-600" />
+                <select className="bg-transparent border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:ring-1 focus:ring-blue-500">
+                  <option value="en">English</option>
+                  <option value="bn">বাংলা</option>
+                </select>
               </div>
             </div>
 

@@ -33,7 +33,7 @@ export const HeroSection: React.FC = () => {
 
   useEffect(() => {
     const slideTimer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 3);
+      setCurrentSlide(prev => (prev + 1) % 7);
     }, 5000);
 
     return () => clearInterval(slideTimer);
@@ -57,6 +57,30 @@ export const HeroSection: React.FC = () => {
       title: "Limited Time Mega Deals",
       subtitle: "Don't miss out on these exclusive offers",
       image: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-purple-600 via-pink-600 to-red-500",
+      title: "Premium Electronics Collection",
+      subtitle: "Latest smartphones, laptops & gadgets",
+      image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500",
+      title: "Smart Home Revolution",
+      subtitle: "Transform your home with AI technology",
+      image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500",
+      title: "Fashion Forward Collection",
+      subtitle: "Trending styles for every season",
+      image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
+      title: "Health & Fitness Essentials",
+      subtitle: "Everything for your wellness journey",
+      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800"
     }
   ];
 

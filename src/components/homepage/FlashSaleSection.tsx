@@ -1,7 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
 import { ProductCard } from './ProductCard';
-import { ChevronLeft, ChevronRight, Zap, Clock, Fire } from 'lucide-react';
+import { ChevronLeft, ChevronRight, Zap, Clock, Flame } from 'lucide-react';
 
 export const FlashSaleSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -137,7 +136,7 @@ export const FlashSaleSection: React.FC = () => {
           <div className="flex flex-col md:flex-row items-center justify-between">
             <div className="flex items-center gap-4 mb-4 md:mb-0">
               <div className="bg-yellow-400 bg-opacity-20 p-3 rounded-full animate-pulse">
-                <Fire className="w-8 h-8 text-yellow-300" />
+                <Flame className="w-8 h-8 text-yellow-300" />
               </div>
               <div>
                 <h2 className="text-3xl md:text-4xl font-bold flex items-center gap-2">

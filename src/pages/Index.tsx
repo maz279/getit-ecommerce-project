@@ -6,10 +6,8 @@ import { QuickAccessIcons } from '../components/homepage/QuickAccessIcons';
 import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
 import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
-import { TrendingProducts } from '../components/homepage/TrendingProducts';
 import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
 import { NewProductsSection } from '../components/homepage/NewProductsSection';
-import { ContestSections } from '../components/homepage/ContestSections';
 import { Footer } from '../components/homepage/Footer';
 
 const Index: React.FC = () => {
@@ -23,10 +21,8 @@ const Index: React.FC = () => {
         <FeaturedCategories />
         <FlashSaleSection />
         <PromotionalBanners />
-        <TrendingProducts />
         <MegaSaleSection />
         <NewProductsSection />
-        <ContestSections />
       </main>
       
       <Footer />

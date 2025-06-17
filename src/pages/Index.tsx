@@ -9,7 +9,7 @@ import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
 import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
 import { NewProductsSection } from '../components/homepage/NewProductsSection';
 import { RecommendedSection } from '../components/homepage/RecommendedSection';
-import { MixedProductsSection } from '../components/homepage/MixedProductsSection';
+import { TopSellingSection } from '../components/homepage/TopSellingSection';
 import { Footer } from '../components/homepage/Footer';
 
 const Index: React.FC = () => {
@@ -26,7 +26,7 @@ const Index: React.FC = () => {
         <MegaSaleSection />
         <NewProductsSection />
         <RecommendedSection />
-        <MixedProductsSection />
+        <TopSellingSection />
       </main>
       
       <Footer />

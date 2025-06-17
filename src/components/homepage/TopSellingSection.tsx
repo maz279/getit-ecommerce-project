@@ -4,16 +4,16 @@ import { ProductCard } from './ProductCard';
 import { TrendingUp, Award } from 'lucide-react';
 
 export const TopSellingSection: React.FC = () => {
-  const products = Array(6).fill(null).map((_, index) => ({
-    image: `https://images.unsplash.com/photo-${1523275335684 + index * 2000}-d0ca20e4086b?w=400`,
+  const products = Array(20).fill(null).map((_, index) => ({
+    image: `https://images.unsplash.com/photo-${1523275335684 + index * 1500}-d0ca20e4086b?w=400`,
     category: "Best Seller",
     title: `Top Selling Product ${index + 1} - Customer Favorite`,
-    originalPrice: `$${(399 + index * 50).toFixed(2)}`,
-    salePrice: `$${(299 + index * 40).toFixed(2)}`,
-    stockLeft: Math.floor(Math.random() * 8) + 2,
-    rating: 4.5 + Math.random() * 0.5,
-    reviews: Math.floor(Math.random() * 1000) + 200,
-    discount: `${Math.floor(Math.random() * 25) + 15}% OFF`,
+    originalPrice: `$${(299 + index * 40).toFixed(2)}`,
+    salePrice: `$${(199 + index * 35).toFixed(2)}`,
+    stockLeft: Math.floor(Math.random() * 15) + 3,
+    rating: 4.2 + Math.random() * 0.8,
+    reviews: Math.floor(Math.random() * 500) + 100,
+    discount: `${Math.floor(Math.random() * 35) + 20}% OFF`,
     badge: "#1 SELLER"
   }));
 
@@ -35,7 +35,7 @@ export const TopSellingSection: React.FC = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 xl:grid-cols-6 gap-3">
           {products.map((product, index) => (
             <ProductCard
               key={index}
@@ -49,6 +49,7 @@ export const TopSellingSection: React.FC = () => {
               reviews={product.reviews}
               discount={product.discount}
               badge={product.badge}
+              isCompact={true}
               onAddToCart={() => console.log(`Added top selling product ${index + 1} to cart`)}
             />
           ))}

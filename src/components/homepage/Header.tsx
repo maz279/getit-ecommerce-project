@@ -5,6 +5,7 @@ import { MobileMenu } from './MobileMenu';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
+  const [showMobileSearch, setShowMobileSearch] = useState(false);
 
   return (
     <>
@@ -21,8 +22,8 @@ export const Header: React.FC = () => {
             </div>
           </div>
 
-          {/* Search Bar - Hidden on small screens */}
-          <div className="hidden sm:flex flex-1 max-w-2xl">
+          {/* Desktop Search Bar */}
+          <div className="hidden md:flex flex-1 max-w-2xl">
             <div className="bg-white rounded-full shadow-lg overflow-hidden w-full">
               <div className="flex items-center">
                 <select className="px-2 py-2 md:px-4 md:py-3 border-r border-gray-200 text-xs md:text-sm focus:outline-none">
@@ -39,13 +40,13 @@ export const Header: React.FC = () => {
                   className="flex-1 px-2 py-2 md:px-4 md:py-3 text-xs md:text-sm focus:outline-none"
                 />
                 <div className="flex items-center gap-1 md:gap-2 px-1 md:px-3">
-                  <button className="p-1 hover:bg-gray-100 rounded hidden md:block">
+                  <button className="p-1 hover:bg-gray-100 rounded">
                     <Mic className="w-4 h-4 text-gray-600" />
                   </button>
-                  <button className="p-1 hover:bg-gray-100 rounded hidden md:block">
+                  <button className="p-1 hover:bg-gray-100 rounded">
                     <Camera className="w-4 h-4 text-gray-600" />
                   </button>
-                  <button className="p-1 hover:bg-gray-100 rounded hidden lg:block">
+                  <button className="p-1 hover:bg-gray-100 rounded">
                     <QrCode className="w-4 h-4 text-gray-600" />
                   </button>
                   <button className="bg-gradient-to-r from-orange-400 to-yellow-400 p-1.5 md:p-2 rounded-r-full hover:from-orange-500 hover:to-yellow-500 transition-all">
@@ -57,7 +58,10 @@ export const Header: React.FC = () => {
           </div>
 
           {/* Mobile Search Button */}
-          <button className="sm:hidden p-1.5 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all">
+          <button 
+            onClick={() => setShowMobileSearch(!showMobileSearch)}
+            className="md:hidden p-1.5 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all"
+          >
             <Search className="w-4 h-4" />
           </button>
 
@@ -101,6 +105,43 @@ export const Header: React.FC = () => {
             </div>
           </div>
         </div>
+
+        {/* Mobile Search Bar - Expandable */}
+        {showMobileSearch && (
+          <div className="md:hidden mt-3 px-2">
+            <div className="bg-white rounded-full shadow-lg overflow-hidden w-full">
+              <div className="flex items-center">
+                <select className="px-3 py-2 border-r border-gray-200 text-sm focus:outline-none">
+                  <option>All</option>
+                  <option>Electronics</option>
+                  <option>Fashion</option>
+                  <option>Home</option>
+                </select>
+                <input
+                  type="search"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="flex-1 px-3 py-2 text-sm focus:outline-none"
+                />
+                <div className="flex items-center gap-1 px-2">
+                  <button className="p-1.5 hover:bg-gray-100 rounded-full">
+                    <Mic className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 hover:bg-gray-100 rounded-full">
+                    <Camera className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="p-1.5 hover:bg-gray-100 rounded-full">
+                    <QrCode className="w-4 h-4 text-gray-600" />
+                  </button>
+                  <button className="bg-gradient-to-r from-orange-400 to-yellow-400 p-2 rounded-r-full hover:from-orange-500 hover:to-yellow-500 transition-all ml-1">
+                    <Search className="w-4 h-4 text-white" />
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
 
         {/* Navigation - Hidden on small screens */}
         <nav className="max-w-7xl mx-auto items-center justify-between mt-2 hidden md:flex">

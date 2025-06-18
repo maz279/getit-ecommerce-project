@@ -11,6 +11,7 @@ import { NewProductsSection } from '../components/homepage/NewProductsSection';
 import { RecommendedSection } from '../components/homepage/RecommendedSection';
 import { TopSellingSection } from '../components/homepage/TopSellingSection';
 import { Footer } from '../components/homepage/Footer';
+import { OfferPopup } from '../components/homepage/OfferPopup';
 
 const Index: React.FC = () => {
   return (
@@ -30,6 +31,7 @@ const Index: React.FC = () => {
       </main>
       
       <Footer />
+      <OfferPopup />
     </div>
   );
 };

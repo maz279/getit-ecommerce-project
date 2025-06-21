@@ -1,13 +1,12 @@
-
 import React, { useState } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
+import { CategoryList } from '../components/categories/CategoryList';
+import { CategoryBreadcrumb } from '../components/categories/CategoryBreadcrumb';
+import { categoriesData } from '@/data/categoriesData';
 import { 
-  Smartphone, Laptop, Headphones, Camera, Watch, Gamepad2, 
-  Shirt, ShoppingBag, Home, Car, Baby, Heart,
-  Coffee, Book, Dumbbell, Paintbrush, Music, Gift,
-  Filter, Grid3X3, List, ChevronDown, Star, MapPin, Truck
+  Filter, Grid3X3, List, Star, MapPin, Truck
 } from 'lucide-react';
 
 interface CategoryItem {
@@ -83,15 +82,63 @@ const sampleProducts: ProductInfo[] = [
 ];
 
 const Categories: React.FC = () => {
-  const [searchParams] = useSearchParams();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const navigate = useNavigate();
   const selectedCategory = searchParams.get('category');
+  const selectedSubcategory = searchParams.get('subcategory');
+  const selectedSubSubcategory = searchParams.get('subsubcategory');
+  
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
 
-  const filteredCategories = selectedCategory 
-    ? categories.filter(cat => cat.slug === selectedCategory)
-    : categories;
+  const handleCategorySelect = (categoryId?: string, subcategoryId?: string, subSubcategoryId?: string) => {
+    const params = new URLSearchParams();
+    if (categoryId) params.set('category', categoryId);
+    if (subcategoryId) params.set('subcategory', subcategoryId);
+    if (subSubcategoryId) params.set('subsubcategory', subSubcategoryId);
+    setSearchParams(params);
+  };
+
+  const getCurrentCategoryData = () => {
+    if (!selectedCategory) return null;
+    return categoriesData.find(cat => cat.id === selectedCategory);
+  };
+
+  const getCurrentSubcategoryData = () => {
+    const category = getCurrentCategoryData();
+    if (!category || !selectedSubcategory) return null;
+    return category.subcategories[selectedSubcategory];
+  };
+
+  const getCurrentTitle = () => {
+    const category = getCurrentCategoryData();
+    const subcategory = getCurrentSubcategoryData();
+    
+    if (selectedSubSubcategory) {
+      return selectedSubSubcategory;
+    } else if (subcategory) {
+      return `${subcategory.name} (${subcategory.nameBn})`;
+    } else if (category) {
+      return `${category.name} (${category.nameBn})`;
+    }
+    return 'All Categories';
+  };
+
+  const getTotalProducts = () => {
+    if (selectedSubSubcategory) {
+      const subcategory = getCurrentSubcategoryData();
+      const subSubcat = subcategory?.subcategories.find(s => s.name === selectedSubSubcategory);
+      return subSubcat?.count || 0;
+    } else if (selectedSubcategory) {
+      const subcategory = getCurrentSubcategoryData();
+      return subcategory?.subcategories.reduce((sum, sub) => sum + sub.count, 0) || 0;
+    } else if (selectedCategory) {
+      const category = getCurrentCategoryData();
+      return category?.count || 0;
+    }
+    return categoriesData.reduce((sum, cat) => sum + cat.count, 0);
+  };
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -99,41 +146,21 @@ const Categories: React.FC = () => {
       
       <div className="max-w-7xl mx-auto px-4 py-8">
         {/* Breadcrumb */}
-        <nav className="text-sm breadcrumbs mb-6">
-          <div className="flex items-center gap-2 text-gray-600">
-            <span>Home</span>
-            <span>/</span>
-            <span className="text-blue-600 font-medium">Categories</span>
-            {selectedCategory && (
-              <>
-                <span>/</span>
-                <span className="text-blue-600 font-medium capitalize">{selectedCategory.replace('-', ' ')}</span>
-              </>
-            )}
-          </div>
-        </nav>
+        <CategoryBreadcrumb 
+          selectedCategory={selectedCategory || undefined}
+          selectedSubcategory={selectedSubcategory || undefined}
+          selectedSubSubcategory={selectedSubSubcategory || undefined}
+          onNavigate={handleCategorySelect}
+        />
 
         <div className="flex gap-6">
-          {/* Sidebar */}
+          {/* Enhanced Sidebar */}
           <div className="w-1/4 hidden lg:block">
-            <div className="bg-white rounded-lg shadow-sm p-6">
-              <h3 className="font-bold text-lg mb-4 text-gray-800">All Categories</h3>
-              <div className="space-y-3">
-                {categories.map((category) => (
-                  <div key={category.slug} className="flex items-center justify-between p-3 hover:bg-gray-50 rounded-lg cursor-pointer transition-colors">
-                    <div className="flex items-center gap-3">
-                      <div className={category.color}>
-                        {category.icon}
-                      </div>
-                      <div>
-                        <div className="font-medium text-gray-800">{category.name}</div>
-                      </div>
-                    </div>
-                    <span className="text-sm text-gray-500">({category.count})</span>
-                  </div>
-                ))}
-              </div>
-            </div>
+            <CategoryList 
+              onCategorySelect={handleCategorySelect}
+              selectedCategory={selectedCategory || undefined}
+              selectedSubcategory={selectedSubcategory || undefined}
+            />
 
             {/* Filters */}
             <div className="bg-white rounded-lg shadow-sm p-6 mt-6">
@@ -191,18 +218,18 @@ const Categories: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <div>
                   <h1 className="text-2xl font-bold text-gray-800">
-                    {selectedCategory ? `${selectedCategory.replace('-', ' ')} Products` : 'All Categories'}
+                    {getCurrentTitle()}
                   </h1>
                   <p className="text-gray-600 mt-1">
                     {selectedCategory 
-                      ? `Discover amazing ${selectedCategory.replace('-', ' ')} products from trusted vendors across Bangladesh`
+                      ? `Discover amazing products from trusted vendors across Bangladesh`
                       : 'Explore all product categories from verified vendors across Bangladesh'
                     }
                   </p>
                 </div>
                 <div className="text-right">
                   <div className="text-2xl font-bold text-blue-600">
-                    {filteredCategories.reduce((sum, cat) => sum + cat.count, 0).toLocaleString()}
+                    {getTotalProducts().toLocaleString()}
                   </div>
                   <div className="text-sm text-gray-500">Products Available</div>
                 </div>
@@ -255,14 +282,19 @@ const Categories: React.FC = () => {
             {/* Category Grid or Product Results */}
             {!selectedCategory ? (
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                {categories.map((category) => (
-                  <div key={category.slug} className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer">
+                {categoriesData.map((category) => (
+                  <div 
+                    key={category.id} 
+                    className="bg-white rounded-lg shadow-sm p-6 hover:shadow-md transition-shadow cursor-pointer"
+                    onClick={() => handleCategorySelect(category.id)}
+                  >
                     <div className="flex items-center gap-4 mb-4">
                       <div className={`${category.color} p-3 bg-gray-50 rounded-lg`}>
                         {category.icon}
                       </div>
                       <div>
                         <h3 className="font-bold text-lg text-gray-800">{category.name}</h3>
+                        <p className="text-sm text-gray-500">{category.nameBn}</p>
                       </div>
                     </div>
                     

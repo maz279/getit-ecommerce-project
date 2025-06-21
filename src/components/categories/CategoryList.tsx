@@ -2,7 +2,11 @@
 import React, { useState } from 'react';
 import { 
   ChevronDown, ChevronRight, Sparkles, Crown, Shirt, Users, Baby, Heart, 
-  Zap, Star, ShoppingBag, Footprints, Package, Plus, Dumbbell, Watch 
+  Zap, Star, ShoppingBag, Footprints, Package, Plus, Dumbbell, Watch,
+  Monitor, Camera, Headphones, Gamepad2, Cpu, HardDrive, Keyboard,
+  Mouse, Printer, Wifi, Speaker, Tv, Smartphone, Tablet, Home,
+  Sofa, Bed, Lamp, UtensilsCrossed, Coffee, Scissors, Thermometer,
+  Bath, Flower, TreePine, Hammer, Wrench, Archive, FolderOpen
 } from 'lucide-react';
 import { categoriesData, MainCategory, SubCategory } from '@/data/categoriesData';
 
@@ -15,14 +19,27 @@ interface CategoryListProps {
 
 // Icon mappings for subcategories
 const subcategoryIcons: { [key: string]: React.ReactNode } = {
+  // Fashion & Apparel
   'womens-fashion': <Crown className="w-4 h-4 text-pink-500" />,
   'mens-fashion': <Shirt className="w-4 h-4 text-blue-500" />,
   'kids-fashion': <Baby className="w-4 h-4 text-purple-500" />,
   'footwear': <Footprints className="w-4 h-4 text-brown-500" />,
   'bags-luggage': <ShoppingBag className="w-4 h-4 text-indigo-500" />,
-  'mobile-tablets': <Zap className="w-4 h-4 text-purple-500" />,
-  'computers': <Star className="w-4 h-4 text-green-500" />,
-  'furniture': <Heart className="w-4 h-4 text-orange-500" />
+  
+  // Electronics
+  'mobile-tablets': <Smartphone className="w-4 h-4 text-blue-500" />,
+  'computers': <Monitor className="w-4 h-4 text-gray-600" />,
+  'audio-video': <Headphones className="w-4 h-4 text-purple-500" />,
+  'gaming': <Gamepad2 className="w-4 h-4 text-red-500" />,
+  'appliances': <Zap className="w-4 h-4 text-yellow-500" />,
+  
+  // Home & Garden
+  'furniture': <Sofa className="w-4 h-4 text-brown-500" />,
+  'home-decor': <Lamp className="w-4 h-4 text-orange-500" />,
+  'kitchen-dining': <UtensilsCrossed className="w-4 h-4 text-red-500" />,
+  'bedding-bath': <Bath className="w-4 h-4 text-blue-500" />,
+  'garden-outdoor': <Flower className="w-4 h-4 text-green-500" />,
+  'storage-organization': <Archive className="w-4 h-4 text-gray-500" />
 };
 
 // Icon mappings for sub-subcategories
@@ -58,15 +75,68 @@ const subSubcategoryIcons: { [key: string]: React.ReactNode } = {
   'Luggage': <Package className="w-3 h-3 text-gray-400" />,
   'Wallets & Accessories': <Watch className="w-3 h-3 text-brown-400" />,
   
-  // Electronics
-  'Smartphones': <Zap className="w-3 h-3 text-blue-400" />,
-  'Tablets': <Star className="w-3 h-3 text-purple-400" />,
-  'Laptops': <Crown className="w-3 h-3 text-green-400" />,
-  'Desktops': <Sparkles className="w-3 h-3 text-red-400" />,
+  // Electronics - Mobile & Tablets
+  'Smartphones': <Smartphone className="w-3 h-3 text-blue-400" />,
+  'Tablets': <Tablet className="w-3 h-3 text-purple-400" />,
+  'Mobile Accessories': <Package className="w-3 h-3 text-green-400" />,
+  'Smartwatches & Wearables': <Watch className="w-3 h-3 text-red-400" />,
   
-  // Home & Garden
-  'Living Room': <Heart className="w-3 h-3 text-orange-400" />,
-  'Bedroom': <Users className="w-3 h-3 text-pink-400" />
+  // Electronics - Computers
+  'Laptops': <Monitor className="w-3 h-3 text-gray-400" />,
+  'Desktop Computers': <Cpu className="w-3 h-3 text-blue-400" />,
+  'Computer Components': <HardDrive className="w-3 h-3 text-red-400" />,
+  'Computer Accessories': <Keyboard className="w-3 h-3 text-green-400" />,
+  
+  // Electronics - Audio & Video
+  'Headphones & Earphones': <Headphones className="w-3 h-3 text-purple-400" />,
+  'Speakers & Sound Systems': <Speaker className="w-3 h-3 text-blue-400" />,
+  'Cameras & Photography': <Camera className="w-3 h-3 text-green-400" />,
+  'TVs & Displays': <Tv className="w-3 h-3 text-red-400" />,
+  
+  // Electronics - Gaming
+  'Gaming Consoles': <Gamepad2 className="w-3 h-3 text-red-400" />,
+  'Gaming Accessories': <Mouse className="w-3 h-3 text-blue-400" />,
+  'PC Gaming': <Monitor className="w-3 h-3 text-green-400" />,
+  
+  // Electronics - Appliances
+  'Kitchen Appliances': <Coffee className="w-3 h-3 text-brown-400" />,
+  'Cleaning Appliances': <Zap className="w-3 h-3 text-blue-400" />,
+  'Personal Care Appliances': <Scissors className="w-3 h-3 text-pink-400" />,
+  
+  // Home & Garden - Furniture
+  'Living Room Furniture': <Sofa className="w-3 h-3 text-brown-400" />,
+  'Bedroom Furniture': <Bed className="w-3 h-3 text-blue-400" />,
+  'Dining Room Furniture': <UtensilsCrossed className="w-3 h-3 text-red-400" />,
+  'Office Furniture': <Monitor className="w-3 h-3 text-gray-400" />,
+  'Outdoor Furniture': <TreePine className="w-3 h-3 text-green-400" />,
+  
+  // Home & Garden - Home Decor
+  'Wall Decor': <Star className="w-3 h-3 text-yellow-400" />,
+  'Decorative Accessories': <Heart className="w-3 h-3 text-pink-400" />,
+  'Lighting': <Lamp className="w-3 h-3 text-orange-400" />,
+  'Window Treatments': <Home className="w-3 h-3 text-blue-400" />,
+  
+  // Home & Garden - Kitchen & Dining
+  'Cookware': <UtensilsCrossed className="w-3 h-3 text-red-400" />,
+  'Kitchen Tools & Gadgets': <Scissors className="w-3 h-3 text-blue-400" />,
+  'Dinnerware': <Coffee className="w-3 h-3 text-brown-400" />,
+  'Food Storage': <Package className="w-3 h-3 text-green-400" />,
+  
+  // Home & Garden - Bedding & Bath
+  'Bedding': <Bed className="w-3 h-3 text-blue-400" />,
+  'Bath Towels & Linens': <Bath className="w-3 h-3 text-teal-400" />,
+  'Bathroom Accessories': <Thermometer className="w-3 h-3 text-purple-400" />,
+  
+  // Home & Garden - Garden & Outdoor
+  'Gardening Tools': <Hammer className="w-3 h-3 text-brown-400" />,
+  'Plants & Seeds': <Flower className="w-3 h-3 text-green-400" />,
+  'Planters & Pots': <TreePine className="w-3 h-3 text-orange-400" />,
+  'Outdoor Decor': <Star className="w-3 h-3 text-yellow-400" />,
+  
+  // Home & Garden - Storage & Organization
+  'Closet Organization': <Archive className="w-3 h-3 text-gray-400" />,
+  'Storage Furniture': <Package className="w-3 h-3 text-blue-400" />,
+  'Garage & Utility': <Wrench className="w-3 h-3 text-red-400" />
 };
 
 export const CategoryList: React.FC<CategoryListProps> = ({

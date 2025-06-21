@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
-import { Zap, Clock, Fire, ShoppingCart } from 'lucide-react';
+import { Zap, Clock, Flame, ShoppingCart } from 'lucide-react';
 
 const FlashSale: React.FC = () => {
   return (
@@ -15,7 +14,7 @@ const FlashSale: React.FC = () => {
           <div className="max-w-7xl mx-auto px-4 text-center">
             <div className="flex justify-center items-center gap-2 mb-4">
               <Zap className="w-8 h-8" />
-              <Fire className="w-8 h-8" />
+              <Flame className="w-8 h-8" />
               <Zap className="w-8 h-8" />
             </div>
             <h1 className="text-4xl md:text-6xl font-bold mb-4">Flash Sale</h1>

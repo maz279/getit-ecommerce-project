@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { ChevronDown, ChevronRight } from 'lucide-react';
+import { ChevronDown, ChevronRight, Sparkles, Crown, Shirt, Users, Baby, Heart, Zap, Star } from 'lucide-react';
 import { categoriesData, MainCategory, SubCategory } from '@/data/categoriesData';
 
 interface CategoryListProps {
@@ -8,6 +8,33 @@ interface CategoryListProps {
   selectedCategory?: string;
   selectedSubcategory?: string;
 }
+
+// Icon mappings for subcategories
+const subcategoryIcons: { [key: string]: React.ReactNode } = {
+  'womens-fashion': <Crown className="w-4 h-4 text-pink-500" />,
+  'mens-fashion': <Shirt className="w-4 h-4 text-blue-500" />,
+  'mobile-tablets': <Zap className="w-4 h-4 text-purple-500" />,
+  'computers': <Star className="w-4 h-4 text-green-500" />,
+  'furniture': <Heart className="w-4 h-4 text-orange-500" />
+};
+
+// Icon mappings for sub-subcategories
+const subSubcategoryIcons: { [key: string]: React.ReactNode } = {
+  'Traditional Wear': <Sparkles className="w-3 h-3 text-red-400" />,
+  'Salwar Kameez': <Heart className="w-3 h-3 text-pink-400" />,
+  'Kurti & Tops': <Star className="w-3 h-3 text-purple-400" />,
+  'Western Wear': <Crown className="w-3 h-3 text-blue-400" />,
+  'Islamic Wear': <Users className="w-3 h-3 text-green-400" />,
+  'Innerwear & Sleepwear': <Baby className="w-3 h-3 text-orange-400" />,
+  'Maternity Wear': <Heart className="w-3 h-3 text-teal-400" />,
+  'Smartphones': <Zap className="w-3 h-3 text-blue-400" />,
+  'Tablets': <Star className="w-3 h-3 text-purple-400" />,
+  'Laptops': <Crown className="w-3 h-3 text-green-400" />,
+  'Desktops': <Sparkles className="w-3 h-3 text-red-400" />,
+  'Living Room': <Heart className="w-3 h-3 text-orange-400" />,
+  'Bedroom': <Users className="w-3 h-3 text-pink-400" />,
+  'Ethnic & Fusion': <Sparkles className="w-3 h-3 text-indigo-400" />
+};
 
 export const CategoryList: React.FC<CategoryListProps> = ({
   onCategorySelect,
@@ -86,7 +113,8 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                         toggleSubcategory(subcatId);
                       }}
                     >
-                      <div>
+                      <div className="flex items-center gap-2">
+                        {subcategoryIcons[subcatId] || <Star className="w-4 h-4 text-gray-400" />}
                         <div className="font-medium text-sm text-gray-700">{subcategory.name}</div>
                       </div>
                       <div className="flex items-center gap-2">
@@ -111,7 +139,8 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                             onClick={() => onCategorySelect(category.id, subcatId, subSubcat.name)}
                           >
                             <div className="flex items-center justify-between">
-                              <div>
+                              <div className="flex items-center gap-2">
+                                {subSubcategoryIcons[subSubcat.name] || <Sparkles className="w-3 h-3 text-gray-400" />}
                                 <div className="font-medium text-sm text-gray-600">{subSubcat.name}</div>
                               </div>
                               <span className="text-xs text-gray-400">({subSubcat.count})</span>

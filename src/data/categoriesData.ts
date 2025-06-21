@@ -23,6 +23,7 @@ export interface MainCategory {
   };
 }
 
+import React from 'react';
 import { 
   Shirt, ShoppingBag, Home, Car, Baby, Heart,
   Coffee, Book, Dumbbell, Paintbrush, Music, Gift,
@@ -34,7 +35,7 @@ export const categoriesData: MainCategory[] = [
     id: 'fashion',
     name: 'Fashion & Apparel',
     nameBn: 'ফ্যাশন ও পোশাক',
-    icon: <Shirt className="w-8 h-8" />,
+    icon: React.createElement(Shirt, { className: "w-8 h-8" }),
     color: 'text-red-500',
     count: 5847,
     featured: true,
@@ -162,7 +163,7 @@ export const categoriesData: MainCategory[] = [
     id: 'electronics',
     name: 'Electronics',
     nameBn: 'ইলেকট্রনিক্স',
-    icon: <Smartphone className="w-8 h-8" />,
+    icon: React.createElement(Smartphone, { className: "w-8 h-8" }),
     color: 'text-blue-500',
     count: 2847,
     featured: true,
@@ -209,7 +210,7 @@ export const categoriesData: MainCategory[] = [
     id: 'home-garden',
     name: 'Home & Garden',
     nameBn: 'বাড়ি ও বাগান',
-    icon: <Home className="w-8 h-8" />,
+    icon: React.createElement(Home, { className: "w-8 h-8" }),
     color: 'text-green-500',
     count: 1456,
     featured: true,

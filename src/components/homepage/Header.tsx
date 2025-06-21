@@ -1,11 +1,22 @@
 
 import React, { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { Search, Mic, Camera, QrCode, ShoppingCart, Heart, Bell, MessageSquare, User, Globe, LogIn, UserPlus } from 'lucide-react';
 import { MobileMenu } from './MobileMenu';
+import { useAuth } from '@/context/AuthContext';
+import { useCart } from '@/context/CartContext';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [showMobileSearch, setShowMobileSearch] = useState(false);
+  const { user, userProfile, signOut } = useAuth();
+  const { state: cartState } = useCart();
+  const navigate = useNavigate();
+
+  const handleSignOut = async () => {
+    await signOut();
+    navigate('/');
+  };
 
   return (
     <>
@@ -14,12 +25,12 @@ export const Header: React.FC = () => {
           {/* Mobile Menu and Logo */}
           <div className="flex items-center gap-1 sm:gap-2">
             <MobileMenu />
-            <div className="flex items-center">
+            <Link to="/" className="flex items-center">
               <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-yellow-400 rounded-lg flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-sm sm:text-xl">G</span>
               </div>
               <span className="text-white font-bold text-sm sm:text-xl ml-1 sm:ml-2 hidden xs:block">GETIT</span>
-            </div>
+            </Link>
           </div>
 
           {/* Desktop Search Bar */}
@@ -70,10 +81,14 @@ export const Header: React.FC = () => {
             <button className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all">
               <Heart className="w-4 h-4" />
             </button>
-            <button className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all">
+            <Link to="/cart" className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all">
               <ShoppingCart className="w-4 h-4" />
-              <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-xs">3</span>
-            </button>
+              {cartState.itemCount > 0 && (
+                <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center text-xs">
+                  {cartState.itemCount}
+                </span>
+              )}
+            </Link>
             <button className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all hidden sm:block">
               <Bell className="w-4 h-4" />
             </button>
@@ -81,18 +96,30 @@ export const Header: React.FC = () => {
               <MessageSquare className="w-4 h-4" />
             </button>
             
-            {/* Sign In/Sign Up Section - Side by side */}
+            {/* Auth Section */}
             <div className="hidden lg:flex items-center gap-2 text-white">
-              <div className="flex items-center gap-3">
-                <div className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
-                  <LogIn className="w-4 h-4" />
-                  <span className="text-sm">Sign In</span>
+              {user ? (
+                <div className="flex items-center gap-3">
+                  <span className="text-sm">Hello, {userProfile?.full_name}</span>
+                  <button 
+                    onClick={handleSignOut}
+                    className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all"
+                  >
+                    <span className="text-sm">Sign Out</span>
+                  </button>
                 </div>
-                <div className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
-                  <UserPlus className="w-4 h-4" />
-                  <span className="text-sm">Sign Up</span>
+              ) : (
+                <div className="flex items-center gap-3">
+                  <Link to="/auth/login" className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                    <LogIn className="w-4 h-4" />
+                    <span className="text-sm">Sign In</span>
+                  </Link>
+                  <Link to="/auth/register" className="flex items-center gap-1 cursor-pointer hover:bg-white hover:bg-opacity-20 rounded-lg px-2 py-1 transition-all">
+                    <UserPlus className="w-4 h-4" />
+                    <span className="text-sm">Sign Up</span>
+                  </Link>
                 </div>
-              </div>
+              )}
               
               {/* Language Choice */}
               <div className="flex items-center gap-2 text-xs ml-2">
@@ -146,13 +173,13 @@ export const Header: React.FC = () => {
         {/* Navigation - Hidden on small screens */}
         <nav className="max-w-7xl mx-auto items-center justify-between mt-2 hidden md:flex">
           <div className="flex items-center gap-3 lg:gap-6 text-white text-sm">
-            <div className="bg-yellow-400 text-black font-semibold px-3 py-1 lg:px-4 lg:py-1 rounded-full hover:bg-yellow-300 transition-all cursor-pointer">
+            <Link to="/categories" className="bg-yellow-400 text-black font-semibold px-3 py-1 lg:px-4 lg:py-1 rounded-full hover:bg-yellow-300 transition-all cursor-pointer">
               Categories
-            </div>
-            <span className="hover:text-yellow-300 cursor-pointer transition-all">Flash Sale</span>
-            <span className="hover:text-yellow-300 cursor-pointer transition-all hidden lg:block">AI Recommendations</span>
-            <span className="hover:text-yellow-300 cursor-pointer transition-all">Deals</span>
-            <span className="hover:text-yellow-300 cursor-pointer transition-all hidden lg:block">New Arrivals</span>
+            </Link>
+            <Link to="/flash-sale" className="hover:text-yellow-300 cursor-pointer transition-all">Flash Sale</Link>
+            <Link to="/ai-recommendations" className="hover:text-yellow-300 cursor-pointer transition-all hidden lg:block">AI Recommendations</Link>
+            <Link to="/deals" className="hover:text-yellow-300 cursor-pointer transition-all">Deals</Link>
+            <Link to="/new-arrivals" className="hover:text-yellow-300 cursor-pointer transition-all hidden lg:block">New Arrivals</Link>
           </div>
           <div className="flex items-center gap-2 text-white text-xs">
             <span className="w-4 h-4 bg-white rounded"></span>

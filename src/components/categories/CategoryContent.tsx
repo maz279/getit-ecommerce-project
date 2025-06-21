@@ -27,6 +27,25 @@ interface ProductInfo {
   freeShipping: boolean;
 }
 
+interface SubCategory {
+  name: string;
+  count: number;
+  items?: string[];
+}
+
+interface CategoryData {
+  name: string;
+  subcategories: SubCategory[];
+}
+
+interface MainCategoryData {
+  id: string;
+  name: string;
+  subcategories: {
+    [key: string]: CategoryData;
+  };
+}
+
 interface CategoryContentProps {
   selectedCategory?: string;
   selectedSubcategory?: string;
@@ -35,8 +54,8 @@ interface CategoryContentProps {
   onCategorySelect: (categoryId: string) => void;
   getCurrentItems: () => string[];
   sampleProducts: ProductInfo[];
-  getCategoryData: () => any;
-  getSubcategoryData: () => any;
+  getCategoryData: () => MainCategoryData | null;
+  getSubcategoryData: () => CategoryData | null;
 }
 
 export const CategoryContent: React.FC<CategoryContentProps> = ({
@@ -77,7 +96,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
           <div className="border-b px-6 py-4">
             <TabsList className="w-full justify-start overflow-x-auto">
               <TabsTrigger value="all" className="whitespace-nowrap">All Products</TabsTrigger>
-              {subSubcategories.map((subSub: any) => (
+              {subSubcategories.map((subSub: SubCategory) => (
                 <TabsTrigger 
                   key={subSub.name} 
                   value={subSub.name}
@@ -94,7 +113,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
               <ProductList products={sampleProducts} viewMode={viewMode} />
             </TabsContent>
             
-            {subSubcategories.map((subSub: any) => (
+            {subSubcategories.map((subSub: SubCategory) => (
               <TabsContent key={subSub.name} value={subSub.name}>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
@@ -116,7 +135,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
 
   // If we have a category but no subcategory, show tabs for subcategories
   if (selectedCategory && categoryData) {
-    const subcategories = Object.values(categoryData.subcategories || {});
+    const subcategories = Object.values(categoryData.subcategories || {}) as CategoryData[];
     
     return (
       <div className="bg-white rounded-lg shadow-sm">
@@ -124,7 +143,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
           <div className="border-b px-6 py-4">
             <TabsList className="w-full justify-start overflow-x-auto">
               <TabsTrigger value="all" className="whitespace-nowrap">All Products</TabsTrigger>
-              {subcategories.map((sub: any) => (
+              {subcategories.map((sub: CategoryData) => (
                 <TabsTrigger 
                   key={sub.name} 
                   value={sub.name}
@@ -141,19 +160,19 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
               <ProductList products={sampleProducts} viewMode={viewMode} />
             </TabsContent>
             
-            {subcategories.map((sub: any) => (
+            {subcategories.map((sub: CategoryData) => (
               <TabsContent key={sub.name} value={sub.name}>
                 <div className="space-y-4">
                   <div className="flex items-center justify-between">
                     <h3 className="text-lg font-semibold text-gray-800">{sub.name}</h3>
                     <span className="text-sm text-gray-500">
-                      {sub.subcategories?.reduce((total: number, subSub: any) => total + subSub.count, 0) || 0} products available
+                      {sub.subcategories?.reduce((total: number, subSub: SubCategory) => total + subSub.count, 0) || 0} products available
                     </span>
                   </div>
                   
                   {sub.subcategories && sub.subcategories.length > 0 ? (
                     <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-                      {sub.subcategories.map((subSub: any) => (
+                      {sub.subcategories.map((subSub: SubCategory) => (
                         <div key={subSub.name} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer">
                           <h4 className="font-medium text-gray-800 mb-1">{subSub.name}</h4>
                           <p className="text-sm text-gray-600">{subSub.count} items</p>

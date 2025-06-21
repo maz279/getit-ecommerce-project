@@ -100,7 +100,10 @@ export const Header: React.FC = () => {
               <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-yellow-400 rounded-lg flex items-center justify-center shadow-lg">
                 <span className="text-white font-bold text-xs sm:text-sm">G</span>
               </div>
-              <span className="text-white font-bold text-sm sm:text-lg">GETIT</span>
+              <div className="flex flex-col">
+                <span className="text-white font-bold text-sm sm:text-lg leading-tight">GETIT</span>
+                <span className="text-yellow-200 text-xs hidden sm:block leading-tight">Shop Smart, Ship Fast, Pay Easy</span>
+              </div>
             </Link>
           </div>
 

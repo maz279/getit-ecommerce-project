@@ -66,38 +66,44 @@ export const Security: React.FC = () => {
       </div>
 
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
-        {securityStats.map((stat, index) => (
-          <div key={index} className="bg-white rounded-xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
-            <stat.icon className={`w-8 h-8 mx-auto mb-3 ${stat.color}`} />
-            <div className="text-3xl font-bold text-gray-800 mb-1">{stat.value}</div>
-            <div className="text-sm text-gray-600">{stat.label}</div>
-          </div>
-        ))}
+        {securityStats.map((stat, index) => {
+          const IconComponent = stat.icon;
+          return (
+            <div key={index} className="bg-white rounded-xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
+              <IconComponent className={`w-8 h-8 mx-auto mb-3 ${stat.color}`} />
+              <div className="text-3xl font-bold text-gray-800 mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-600">{stat.label}</div>
+            </div>
+          );
+        })}
       </div>
 
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-12">
         <div className="flex flex-wrap">
-          {securityFeatures.map((feature, index) => (
-            <button
-              key={index}
-              onClick={() => setActiveFeature(index)}
-              className={`flex-1 min-w-0 p-6 text-left transition-all duration-300 ${
-                activeFeature === index 
-                  ? 'bg-blue-50 border-b-2 border-blue-600' 
-                  : 'hover:bg-gray-50'
-              }`}
-            >
-              <div className="flex items-center space-x-3">
-                <div className={`p-2 rounded-lg bg-gradient-to-r ${feature.color}`}>
-                  <feature.icon className="w-5 h-5 text-white" />
+          {securityFeatures.map((feature, index) => {
+            const FeatureIcon = feature.icon;
+            return (
+              <button
+                key={index}
+                onClick={() => setActiveFeature(index)}
+                className={`flex-1 min-w-0 p-6 text-left transition-all duration-300 ${
+                  activeFeature === index 
+                    ? 'bg-blue-50 border-b-2 border-blue-600' 
+                    : 'hover:bg-gray-50'
+                }`}
+              >
+                <div className="flex items-center space-x-3">
+                  <div className={`p-2 rounded-lg bg-gradient-to-r ${feature.color}`}>
+                    <FeatureIcon className="w-5 h-5 text-white" />
+                  </div>
+                  <div>
+                    <div className="font-semibold text-gray-800">{feature.title}</div>
+                    <div className="text-sm text-gray-600">{feature.description}</div>
+                  </div>
                 </div>
-                <div>
-                  <div className="font-semibold text-gray-800">{feature.title}</div>
-                  <div className="text-sm text-gray-600">{feature.description}</div>
-                </div>
-              </div>
-            </button>
-          ))}
+              </button>
+            );
+          })}
         </div>
 
         <div className="p-8">
@@ -124,7 +130,9 @@ export const Security: React.FC = () => {
               <div className="relative">
                 <div className={`w-full h-64 bg-gradient-to-br ${securityFeatures[activeFeature].color} rounded-xl flex items-center justify-center relative overflow-hidden`}>
                   <div className="absolute inset-0 bg-black/10"></div>
-                  <securityFeatures[activeFeature].icon className="w-24 h-24 text-white relative z-10" />
+                  {React.createElement(securityFeatures[activeFeature].icon, {
+                    className: "w-24 h-24 text-white relative z-10"
+                  })}
                   
                   <div className="absolute top-4 left-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
                   <div className="absolute top-12 right-8 w-1 h-1 bg-white/40 rounded-full animate-pulse delay-100"></div>

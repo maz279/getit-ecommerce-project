@@ -6,9 +6,9 @@ import { Footer } from '../components/homepage/Footer';
 import { CategoryList } from '../components/categories/CategoryList';
 import { CategoryBreadcrumb } from '../components/categories/CategoryBreadcrumb';
 import { CategoryGrid } from '../components/categories/CategoryGrid';
-import { ProductGrid } from '../components/categories/ProductGrid';
 import { CategoryFilters } from '../components/categories/CategoryFilters';
 import { CategoryHeader } from '../components/categories/CategoryHeader';
+import { CategoryTabs } from '../components/categories/CategoryTabs';
 import { categoriesData } from '@/data/categoriesData';
 
 interface VendorInfo {
@@ -37,23 +37,23 @@ interface ProductInfo {
 const sampleProducts: ProductInfo[] = [
   {
     id: '1',
-    name: 'Samsung Galaxy A54 5G',
-    price: 45000,
-    originalPrice: 50000,
+    name: 'Cotton Saree - Traditional Design',
+    price: 2500,
+    originalPrice: 3000,
     rating: 4.5,
     reviews: 156,
-    vendor: { id: '1', name: 'Tech Zone BD', rating: 4.8, location: 'Dhaka', products: 250, verified: true },
+    vendor: { id: '1', name: 'Fashion House BD', rating: 4.8, location: 'Dhaka', products: 250, verified: true },
     image: '/placeholder.svg',
-    discount: 10,
+    discount: 17,
     freeShipping: true
   },
   {
     id: '2',
-    name: 'Cotton Punjabi for Men',
-    price: 1500,
+    name: 'Embroidered Salwar Kameez',
+    price: 1800,
     rating: 4.2,
     reviews: 89,
-    vendor: { id: '2', name: 'Fashion House', rating: 4.6, location: 'Chittagong', products: 180, verified: true },
+    vendor: { id: '2', name: 'Ethnic Wear', rating: 4.6, location: 'Chittagong', products: 180, verified: true },
     image: '/placeholder.svg',
     freeShipping: false
   }
@@ -68,6 +68,7 @@ const Categories: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
+  const [activeTab, setActiveTab] = useState('products');
 
   const handleCategorySelect = (categoryId?: string, subcategoryId?: string, subSubcategoryId?: string) => {
     const params = new URLSearchParams();
@@ -138,7 +139,7 @@ const Categories: React.FC = () => {
 
         <div className="flex gap-6">
           {/* Enhanced Sidebar */}
-          <div className="w-1/4 hidden lg:block">
+          <div className="w-1/5 hidden lg:block">
             <CategoryList 
               onCategorySelect={handleCategorySelect}
               selectedCategory={selectedCategory || undefined}
@@ -148,7 +149,7 @@ const Categories: React.FC = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
+          <div className="w-3/5">
             {/* Header Section */}
             <CategoryHeader
               title={getCurrentTitle()}
@@ -166,8 +167,37 @@ const Categories: React.FC = () => {
             {!selectedCategory ? (
               <CategoryGrid onCategorySelect={handleCategorySelect} />
             ) : (
-              <ProductGrid products={sampleProducts} viewMode={viewMode} />
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-4'}>
+                  {sampleProducts.map((product) => (
+                    <div key={product.id} className={`border rounded-lg hover:shadow-md transition-shadow ${viewMode === 'list' ? 'flex gap-4 p-4' : 'p-4'}`}>
+                      <div className={viewMode === 'list' ? 'w-24 h-24 flex-shrink-0' : 'aspect-square mb-4'}>
+                        <img src={product.image} alt={product.name} className="w-full h-full object-cover rounded" />
+                      </div>
+                      
+                      <div className="flex-1">
+                        <h3 className="font-medium text-gray-800 mb-2">{product.name}</h3>
+                        <div className="text-lg font-bold text-blue-600">৳{product.price.toLocaleString()}</div>
+                        {product.originalPrice && (
+                          <div className="text-sm text-gray-500 line-through">৳{product.originalPrice.toLocaleString()}</div>
+                        )}
+                        <div className="text-sm text-gray-600 mt-1">{product.vendor.name}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             )}
+          </div>
+
+          {/* Right Sidebar with Tabs */}
+          <div className="w-1/5 hidden xl:block">
+            <CategoryTabs 
+              activeTab={activeTab}
+              onTabChange={setActiveTab}
+              products={sampleProducts}
+              category={getCurrentCategoryData()}
+            />
           </div>
         </div>
       </div>

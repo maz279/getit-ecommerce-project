@@ -1,11 +1,10 @@
-
 import React, { useState, useEffect } from 'react';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/homepage/ProductCard';
-import { Star, Gift, Clock, Zap, Heart, ShoppingBag, Phone, MessageCircle, Users, Award, Truck, Globe, DollarSign, Camera, Target, Crown, Sparkles, Flame, CheckCircle, ArrowRight, Eye, Plus } from 'lucide-react';
+import { Star, Gift, Clock, Zap, Heart, ShoppingBag, Phone, MessageCircle, Users, Award, Truck, Globe, DollarSign, Camera, Target, Crown, Sparkles, Flame, CheckCircle, ArrowRight, Eye, Plus, Smartphone, Bot, MapPin, Bell, BarChart3, Download, Mic } from 'lucide-react';
 
 const Products: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -245,6 +244,87 @@ const Products: React.FC = () => {
       goal: "5,000 Children Across Bangladesh",
       progress: 82,
       currentCount: "4,123 children helped"
+    }
+  ];
+
+  const mobileAppFeatures = [
+    {
+      category: "App-Exclusive EID Offers",
+      icon: "📱",
+      features: [
+        {
+          title: "Flash Sales Every Hour",
+          description: "App-only 60% off deals with push notifications",
+          details: ["First 100 users get extra 10% off", "Instant alert notifications", "Hourly surprise deals"]
+        },
+        {
+          title: "App-Exclusive Products",
+          description: "Limited edition EID collections available only on mobile",
+          details: ["Designer collaborations", "Celebrity endorsed items", "Pre-launch product access"]
+        },
+        {
+          title: "Mobile Banking Bonuses", 
+          description: "Extra 2% cashback on app payments",
+          details: ["Faster bKash/Nagad checkout", "Biometric payment security", "One-tap payment setup"]
+        },
+        {
+          title: "Priority Delivery",
+          description: "App users get delivery preference",
+          details: ["Real-time delivery tracking", "GPS-based delivery updates", "Delivery time slot selection"]
+        }
+      ]
+    },
+    {
+      category: "Smart Features for EID Shopping",
+      icon: "🌟",
+      features: [
+        {
+          title: "Visual Search & AR Try-On",
+          description: "Take photo to find similar products",
+          details: ["AR fitting for clothes and accessories", "Color matching with your wardrobe", "Style recommendations based on photos"]
+        },
+        {
+          title: "Voice Shopping in Bengali",
+          description: "Shop using voice commands in Bengali",
+          details: ["Natural language processing", "Accent recognition for regional Bengali", "Voice-to-text search capabilities"]
+        },
+        {
+          title: "Location-Based Services",
+          description: "Find nearby pickup points and local vendors",
+          details: ["Area-specific delivery times", "Regional price comparisons", "Local vendor recommendations"]
+        },
+        {
+          title: "AI Shopping Assistant - Nila",
+          description: "Your personal shopping companion",
+          details: ["Budget planning and suggestions", "Size and style matching", "EID timeline planning"]
+        }
+      ]
+    },
+    {
+      category: "App User Benefits",
+      icon: "🏆", 
+      features: [
+        {
+          title: "VIP Member Privileges",
+          description: "Early access to EID sales and priority support",
+          details: ["Exclusive member pricing", "Birthday and anniversary offers", "Priority customer support"]
+        },
+        {
+          title: "Loyalty Points Program",
+          description: "Earn 1 point per ৳10 spent",
+          details: ["Bonus points for app usage", "Redeem points for discounts", "Special EID point multipliers"]
+        },
+        {
+          title: "Smart Notifications",
+          description: "Personalized deal alerts and updates",
+          details: ["Back-in-stock notifications", "Price drop alerts", "EID reminder notifications"]
+        },
+        {
+          title: "Personal Shopping Analytics",
+          description: "Spending insights and trends analysis",
+          details: ["Category-wise purchase analysis", "Budget tracking and alerts", "EID shopping progress tracking"]
+        }
+      ]
     }
   ];
 
@@ -513,6 +593,133 @@ const Products: React.FC = () => {
               </Card>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* Mobile App Promotion */}
+      <section className="py-12 bg-gradient-to-br from-blue-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              📱 GetIt Mobile App - EID Special Features
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Download className="w-4 h-4" />
+              Download App
+            </Button>
+          </div>
+
+          {/* App Download Banner */}
+          <Card className="mb-8 bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white border-none shadow-xl">
+            <CardContent className="p-8">
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-center">
+                <div>
+                  <h3 className="text-3xl font-bold mb-4">📱 Available only on GetIt Mobile App</h3>
+                  <p className="text-xl mb-6">Experience the future of EID shopping with exclusive mobile features</p>
+                  <div className="flex gap-4">
+                    <Button size="lg" className="bg-white text-blue-600 hover:bg-gray-100 font-bold">
+                      <Download className="w-5 h-5 mr-2" />
+                      📱 Download Android
+                    </Button>
+                    <Button size="lg" variant="outline" className="border-2 border-white text-white hover:bg-white hover:text-blue-600 font-bold">
+                      <Download className="w-5 h-5 mr-2" />
+                      🍎 Download iOS
+                    </Button>
+                  </div>
+                </div>
+                <div className="text-center">
+                  <Smartphone className="w-32 h-32 mx-auto mb-4 text-yellow-300" />
+                  <p className="text-lg font-semibold">Join 2M+ Happy Users</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Mobile App Features */}
+          <div className="space-y-8">
+            {mobileAppFeatures.map((section, sectionIndex) => (
+              <div key={sectionIndex}>
+                <div className="flex justify-between items-center mb-6">
+                  <h3 className="text-2xl font-bold text-gray-800 flex items-center gap-3">
+                    <span className="text-3xl">{section.icon}</span>
+                    {section.category}
+                  </h3>
+                  <Button variant="outline" className="flex items-center gap-2">
+                    <Eye className="w-4 h-4" />
+                    View All Features
+                  </Button>
+                </div>
+                
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                  {section.features.map((feature, featureIndex) => (
+                    <Card key={featureIndex} className="border-2 border-blue-200 hover:border-blue-400 transform hover:scale-105 transition-all shadow-lg">
+                      <CardContent className="p-6">
+                        <div className="text-center mb-4">
+                          {feature.title.includes("Flash Sales") && <Zap className="w-8 h-8 mx-auto mb-2 text-yellow-500" />}
+                          {feature.title.includes("Exclusive Products") && <Star className="w-8 h-8 mx-auto mb-2 text-purple-500" />}
+                          {feature.title.includes("Banking") && <DollarSign className="w-8 h-8 mx-auto mb-2 text-green-500" />}
+                          {feature.title.includes("Delivery") && <Truck className="w-8 h-8 mx-auto mb-2 text-blue-500" />}
+                          {feature.title.includes("Visual Search") && <Camera className="w-8 h-8 mx-auto mb-2 text-red-500" />}
+                          {feature.title.includes("Voice") && <Mic className="w-8 h-8 mx-auto mb-2 text-orange-500" />}
+                          {feature.title.includes("Location") && <MapPin className="w-8 h-8 mx-auto mb-2 text-teal-500" />}
+                          {feature.title.includes("AI") && <Bot className="w-8 h-8 mx-auto mb-2 text-indigo-500" />}
+                          {feature.title.includes("VIP") && <Crown className="w-8 h-8 mx-auto mb-2 text-yellow-500" />}
+                          {feature.title.includes("Loyalty") && <Gift className="w-8 h-8 mx-auto mb-2 text-pink-500" />}
+                          {feature.title.includes("Notifications") && <Bell className="w-8 h-8 mx-auto mb-2 text-blue-500" />}
+                          {feature.title.includes("Analytics") && <BarChart3 className="w-8 h-8 mx-auto mb-2 text-green-500" />}
+                          
+                          <h4 className="font-bold text-gray-800 mb-2">{feature.title}</h4>
+                          <p className="text-sm text-gray-600 mb-3">{feature.description}</p>
+                        </div>
+                        
+                        <div className="space-y-2 mb-4">
+                          {feature.details.map((detail, detailIndex) => (
+                            <div key={detailIndex} className="flex items-start gap-2 text-xs text-gray-600">
+                              <CheckCircle className="w-3 h-3 mt-0.5 text-green-500" />
+                              <span>{detail}</span>
+                            </div>
+                          ))}
+                        </div>
+                        
+                        <Button variant="outline" className="w-full border-blue-500 text-blue-600 hover:bg-blue-50">
+                          Try Feature
+                        </Button>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+
+          {/* App Benefits Summary */}
+          <Card className="mt-8 bg-gradient-to-r from-green-100 to-blue-100 border-2 border-green-200">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">🎯 Why Choose GetIt Mobile App?</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div>
+                  <h4 className="font-bold text-2xl text-blue-600">50%</h4>
+                  <p className="text-sm text-gray-600">Faster Checkout</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-2xl text-green-600">৳200</h4>
+                  <p className="text-sm text-gray-600">Average Extra Savings</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-2xl text-purple-600">24/7</h4>
+                  <p className="text-sm text-gray-600">Smart Shopping Assistant</p>
+                </div>
+              </div>
+              <div className="text-center mt-6">
+                <div className="flex gap-2 justify-center">
+                  <Button className="bg-blue-500 hover:bg-blue-600">📱 Download Now</Button>
+                  <Button variant="outline">🎯 Try Smart Features</Button>
+                  <Button variant="outline">🤖 Meet Nila</Button>
+                  <Button variant="outline">📍 Find Nearby</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 

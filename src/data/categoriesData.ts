@@ -44,6 +44,7 @@ import { gardenOutdoorData } from './categories/gardenOutdoorData';
 import { securitySafetyData } from './categories/securitySafetyData';
 import { wholesaleBulkData } from './categories/wholesaleBulkData';
 import { secondHandData } from './categories/secondHandData';
+import { localSpecialtiesData } from './categories/localSpecialtiesData';
 
 export const categoriesData: MainCategory[] = [
   fashionData,
@@ -69,5 +70,6 @@ export const categoriesData: MainCategory[] = [
   gardenOutdoorData,
   securitySafetyData,
   wholesaleBulkData,
-  secondHandData
+  secondHandData,
+  localSpecialtiesData
 ];

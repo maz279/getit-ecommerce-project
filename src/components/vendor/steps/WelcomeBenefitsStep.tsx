@@ -96,6 +96,14 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
     updateData({ vendorType: type });
   };
 
+  const handleStartJourney = () => {
+    // If no vendor type selected, default to individual and proceed
+    if (!data.vendorType) {
+      handleVendorTypeSelect('individual');
+    }
+    onNext();
+  };
+
   return (
     <div className="space-y-8">
       {/* Hero Section */}
@@ -109,7 +117,11 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
           </span>
         </div>
         
-        <Button size="lg" className="mb-6 text-lg py-3 px-8">
+        <Button 
+          size="lg" 
+          className="mb-6 text-lg py-3 px-8"
+          onClick={handleStartJourney}
+        >
           🏪 Start Your Business Journey
         </Button>
         

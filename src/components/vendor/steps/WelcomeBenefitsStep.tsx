@@ -102,12 +102,17 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
       <div className="text-center">
         <h2 className="text-4xl font-bold text-gray-800 mb-4">🚀 Become a GetIt Vendor</h2>
         <p className="text-xl text-gray-600 mb-6">Join Bangladesh's Fastest Growing Marketplace</p>
-        <div className="flex items-center justify-center gap-2 text-gray-500 mb-4">
+        <div className="flex items-center justify-center gap-2 text-gray-500 mb-6">
           <span className="flex items-center gap-1">
             <span className="text-2xl">🇧🇩</span>
             Already 5,000+ successful vendors serving millions of customers across Bangladesh
           </span>
         </div>
+        
+        <Button size="lg" className="mb-6 text-lg py-3 px-8">
+          🏪 Start Your Business Journey
+        </Button>
+        
         <div className="bg-blue-50 p-4 rounded-lg inline-block">
           <p className="text-blue-800 font-medium">⭐ "GetIt changed my business completely" - Rashida Khan</p>
         </div>
@@ -146,6 +151,14 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
             </Card>
           ))}
         </div>
+        
+        {/* Main testimonial */}
+        <div className="mt-6 bg-green-50 p-6 rounded-lg">
+          <p className="text-center text-green-800 font-medium italic">
+            "GetIt provided everything I needed to grow my electronics business. The customer support in Bengali is excellent!"
+          </p>
+          <p className="text-center text-green-600 font-semibold mt-2">- Md. Karim, TechZone BD</p>
+        </div>
       </div>
 
       {/* Platform Statistics */}
@@ -172,7 +185,9 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
 
       {/* Vendor Type Selection */}
       <div>
-        <h3 className="text-2xl font-bold text-center mb-6">Choose Your Vendor Type</h3>
+        <h3 className="text-2xl font-bold text-center mb-6">Ready to Get Started?</h3>
+        <p className="text-center text-gray-600 mb-6">Choose Your Vendor Type:</p>
+        
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {vendorTypes.map((type) => {
             const Icon = type.icon;
@@ -213,18 +228,41 @@ export const WelcomeBenefitsStep: React.FC<WelcomeBenefitsStepProps> = ({ data, 
         
         <div className="mt-6 text-center">
           <p className="text-gray-600 mb-4">💡 Not sure? Start with Individual and upgrade later</p>
+          
+          <div className="flex justify-center gap-4">
+            <Button 
+              onClick={() => {
+                handleVendorTypeSelect('individual');
+                onNext();
+              }}
+              variant="outline"
+              className="min-w-[200px]"
+            >
+              Continue as Individual
+            </Button>
+            <Button 
+              onClick={() => {
+                handleVendorTypeSelect('small-business');
+                onNext();
+              }}
+              className="min-w-[200px]"
+            >
+              Continue as Business
+            </Button>
+          </div>
         </div>
       </div>
 
-      <div className="flex justify-center">
-        <Button 
-          onClick={onNext} 
-          disabled={!data.vendorType}
-          className="min-w-[200px] text-lg py-3"
-        >
-          Continue with {data.vendorType ? vendorTypes.find(t => t.id === data.vendorType)?.title : 'Selection'}
-        </Button>
-      </div>
+      {data.vendorType && (
+        <div className="flex justify-center">
+          <Button 
+            onClick={onNext} 
+            className="min-w-[200px] text-lg py-3"
+          >
+            Continue with {vendorTypes.find(t => t.id === data.vendorType)?.title}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

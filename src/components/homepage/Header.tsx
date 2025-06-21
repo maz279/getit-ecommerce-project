@@ -12,7 +12,7 @@ export const Header: React.FC = () => {
   const [language, setLanguage] = useState('EN');
 
   const toggleLanguage = () => {
-    setLanguage(language === 'EN' ? 'বাং' : 'EN');
+    setLanguage(language === 'EN' ? 'BD' : 'EN');
   };
 
   return (
@@ -26,7 +26,7 @@ export const Header: React.FC = () => {
           {/* Mobile Menu and Logo */}
           <div className="flex items-center gap-1 sm:gap-2">
             <MobileMenu />
-            <Logo />
+            <Logo language={language} />
           </div>
 
           {/* Search Bar */}
@@ -35,10 +35,11 @@ export const Header: React.FC = () => {
             setSearchQuery={setSearchQuery}
             showMobileSearch={showMobileSearch}
             setShowMobileSearch={setShowMobileSearch}
+            language={language}
           />
 
           {/* Action Icons */}
-          <ActionIcons />
+          <ActionIcons language={language} />
         </div>
       </header>
     </>

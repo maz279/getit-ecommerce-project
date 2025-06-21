@@ -4,15 +4,32 @@ import { Link } from 'react-router-dom';
 import { ShoppingCart, Heart, Bell } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
 
-export const ActionIcons: React.FC = () => {
+interface ActionIconsProps {
+  language: string;
+}
+
+export const ActionIcons: React.FC<ActionIconsProps> = ({ language }) => {
   const { state: cartState } = useCart();
+
+  const content = {
+    EN: {
+      wishlist: "Wishlist",
+      items: "items"
+    },
+    BD: {
+      wishlist: "পছন্দের তালিকা",
+      items: "আইটেম"
+    }
+  };
+
+  const currentContent = content[language as keyof typeof content];
 
   return (
     <div className="flex items-center gap-1 sm:gap-3">
       <Link to="/wishlist" className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all group">
         <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
         <span className="hidden lg:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-          Wishlist
+          {currentContent.wishlist}
         </span>
       </Link>
       
@@ -24,7 +41,7 @@ export const ActionIcons: React.FC = () => {
           </span>
         )}
         <div className="hidden lg:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          ৳{cartState.total} - {cartState.itemCount} items
+          ৳{cartState.total} - {cartState.itemCount} {currentContent.items}
         </div>
       </Link>
       

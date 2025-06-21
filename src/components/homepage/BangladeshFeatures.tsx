@@ -49,7 +49,7 @@ export const BangladeshFeatures: React.FC = () => {
                 <div>✅ All Major Credit Cards</div>
                 <div>✅ Bank Transfer</div>
                 <div className="mt-3 text-green-300 font-semibold">
-                  ৳500+ orders get FREE shipping!
+                  500+ orders get FREE shipping!
                 </div>
               </div>
             </div>
@@ -69,7 +69,7 @@ export const BangladeshFeatures: React.FC = () => {
                 <div>💬 Live Chat 24/7</div>
                 <div>🕒 Call Center: 9AM-11PM</div>
                 <div className="text-yellow-300 font-semibold">
-                  Bangla & English Support
+                  English & Bengali Support
                 </div>
               </div>
             </div>

@@ -13,7 +13,6 @@ import {
 interface CategoryItem {
   icon: React.ReactNode;
   name: string;
-  nameBn: string;
   count: number;
   color: string;
   slug: string;
@@ -43,18 +42,18 @@ interface ProductInfo {
 }
 
 const categories: CategoryItem[] = [
-  { icon: <Smartphone className="w-8 h-8" />, name: "Electronics", nameBn: "ইলেকট্রনিক্স", count: 2847, color: "text-blue-500", slug: "electronics", featured: true },
-  { icon: <Shirt className="w-8 h-8" />, name: "Fashion", nameBn: "ফ্যাশন", count: 1923, color: "text-red-500", slug: "fashion", featured: true },
-  { icon: <Home className="w-8 h-8" />, name: "Home & Garden", nameBn: "বাড়ি ও বাগান", count: 1456, color: "text-green-500", slug: "home-garden", featured: true },
-  { icon: <Coffee className="w-8 h-8" />, name: "Food & Drink", nameBn: "খাদ্য ও পানীয়", count: 987, color: "text-yellow-600", slug: "food-drink", featured: false },
-  { icon: <Laptop className="w-8 h-8" />, name: "Computers", nameBn: "কম্পিউটার", count: 754, color: "text-blue-600", slug: "computers", featured: true },
-  { icon: <Car className="w-8 h-8" />, name: "Automotive", nameBn: "অটোমোবাইল", count: 623, color: "text-red-600", slug: "automotive", featured: false },
-  { icon: <Baby className="w-8 h-8" />, name: "Baby & Kids", nameBn: "শিশু ও কিশোর", count: 445, color: "text-yellow-500", slug: "baby-kids", featured: true },
-  { icon: <Dumbbell className="w-8 h-8" />, name: "Sports", nameBn: "ক্রীড়া", count: 389, color: "text-blue-700", slug: "sports", featured: false },
-  { icon: <Heart className="w-8 h-8" />, name: "Health", nameBn: "স্বাস্থ্য", count: 267, color: "text-red-400", slug: "health", featured: true },
-  { icon: <Book className="w-8 h-8" />, name: "Books", nameBn: "বই", count: 234, color: "text-green-600", slug: "books", featured: false },
-  { icon: <Music className="w-8 h-8" />, name: "Music", nameBn: "সঙ্গীত", count: 198, color: "text-blue-400", slug: "music", featured: false },
-  { icon: <Gift className="w-8 h-8" />, name: "Gifts", nameBn: "উপহার", count: 156, color: "text-green-400", slug: "gifts", featured: true },
+  { icon: <Smartphone className="w-8 h-8" />, name: "Electronics", count: 2847, color: "text-blue-500", slug: "electronics", featured: true },
+  { icon: <Shirt className="w-8 h-8" />, name: "Fashion", count: 1923, color: "text-red-500", slug: "fashion", featured: true },
+  { icon: <Home className="w-8 h-8" />, name: "Home & Garden", count: 1456, color: "text-green-500", slug: "home-garden", featured: true },
+  { icon: <Coffee className="w-8 h-8" />, name: "Food & Drink", count: 987, color: "text-yellow-600", slug: "food-drink", featured: false },
+  { icon: <Laptop className="w-8 h-8" />, name: "Computers", count: 754, color: "text-blue-600", slug: "computers", featured: true },
+  { icon: <Car className="w-8 h-8" />, name: "Automotive", count: 623, color: "text-red-600", slug: "automotive", featured: false },
+  { icon: <Baby className="w-8 h-8" />, name: "Baby & Kids", count: 445, color: "text-yellow-500", slug: "baby-kids", featured: true },
+  { icon: <Dumbbell className="w-8 h-8" />, name: "Sports", count: 389, color: "text-blue-700", slug: "sports", featured: false },
+  { icon: <Heart className="w-8 h-8" />, name: "Health", count: 267, color: "text-red-400", slug: "health", featured: true },
+  { icon: <Book className="w-8 h-8" />, name: "Books", count: 234, color: "text-green-600", slug: "books", featured: false },
+  { icon: <Music className="w-8 h-8" />, name: "Music", count: 198, color: "text-blue-400", slug: "music", featured: false },
+  { icon: <Gift className="w-8 h-8" />, name: "Gifts", count: 156, color: "text-green-400", slug: "gifts", featured: true },
 ];
 
 // Sample product data for demonstration
@@ -128,7 +127,6 @@ const Categories: React.FC = () => {
                       </div>
                       <div>
                         <div className="font-medium text-gray-800">{category.name}</div>
-                        <div className="text-sm text-gray-500">{category.nameBn}</div>
                       </div>
                     </div>
                     <span className="text-sm text-gray-500">({category.count})</span>
@@ -265,7 +263,6 @@ const Categories: React.FC = () => {
                       </div>
                       <div>
                         <h3 className="font-bold text-lg text-gray-800">{category.name}</h3>
-                        <p className="text-gray-600 text-sm">{category.nameBn}</p>
                       </div>
                     </div>
                     

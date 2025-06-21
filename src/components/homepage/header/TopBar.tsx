@@ -18,6 +18,33 @@ export const TopBar: React.FC<TopBarProps> = ({ language, toggleLanguage }) => {
     navigate('/');
   };
 
+  const content = {
+    EN: {
+      hotline: "Hotline: 16263 (24/7 Customer Support)",
+      location: "Dhaka, Bangladesh",
+      becomeVendor: "Become a Vendor",
+      trackOrder: "Track Order",
+      helpCenter: "Help Center",
+      myAccount: "My Account",
+      logout: "Logout",
+      login: "Login",
+      register: "Register"
+    },
+    BD: {
+      hotline: "হটলাইন: ১৬২৬৩ (২৪/৭ গ্রাহক সেবা)",
+      location: "ঢাকা, বাংলাদেশ",
+      becomeVendor: "বিক্রেতা হন",
+      trackOrder: "অর্ডার ট্র্যাক করুন",
+      helpCenter: "সহায়তা কেন্দ্র",
+      myAccount: "আমার অ্যাকাউন্ট",
+      logout: "লগআউট",
+      login: "লগইন",
+      register: "নিবন্ধন"
+    }
+  };
+
+  const currentContent = content[language as keyof typeof content];
+
   return (
     <div className="bg-gray-800 text-white py-2 px-4 text-xs hidden md:block">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
@@ -25,55 +52,55 @@ export const TopBar: React.FC<TopBarProps> = ({ language, toggleLanguage }) => {
         <div className="flex items-center gap-6">
           <div className="flex items-center gap-2">
             <Phone className="w-3 h-3" />
-            <span>Hotline: 16263 (24/7 Customer Support)</span>
+            <span>{currentContent.hotline}</span>
           </div>
           <div className="flex items-center gap-2">
             <MapPin className="w-3 h-3" />
-            <span>Dhaka, Bangladesh</span>
+            <span>{currentContent.location}</span>
           </div>
           <button 
             onClick={toggleLanguage}
             className="flex items-center gap-2 hover:text-yellow-300 transition-colors"
           >
             <Globe className="w-3 h-3" />
-            <span>{language} | {language === 'EN' ? 'বাং' : 'EN'}</span>
+            <span>{language === 'EN' ? 'English | বাংলা' : 'ইংরেজি | বাংলা'}</span>
           </button>
         </div>
 
         {/* Right Side */}
         <div className="flex items-center gap-4 text-xs">
           <Link to="/vendor/register" className="hover:text-yellow-300 transition-colors">
-            Become a Vendor
+            {currentContent.becomeVendor}
           </Link>
           <span>|</span>
           <Link to="/track-order" className="hover:text-yellow-300 transition-colors">
-            Track Order
+            {currentContent.trackOrder}
           </Link>
           <span>|</span>
           <Link to="/help" className="hover:text-yellow-300 transition-colors">
-            Help Center
+            {currentContent.helpCenter}
           </Link>
           <span>|</span>
           {user ? (
             <div className="flex items-center gap-2">
               <Link to="/account" className="hover:text-yellow-300 transition-colors">
-                My Account
+                {currentContent.myAccount}
               </Link>
               <button 
                 onClick={handleSignOut}
                 className="hover:text-yellow-300 transition-colors"
               >
-                Logout
+                {currentContent.logout}
               </button>
             </div>
           ) : (
             <div className="flex items-center gap-2">
               <Link to="/auth/login" className="hover:text-yellow-300 transition-colors">
-                Login
+                {currentContent.login}
               </Link>
               <span>/</span>
               <Link to="/auth/register" className="hover:text-yellow-300 transition-colors">
-                Register
+                {currentContent.register}
               </Link>
             </div>
           )}

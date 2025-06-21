@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
+import { Package } from 'lucide-react';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
 import { CategoryList } from '../components/categories/CategoryList';

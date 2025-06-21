@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '../components/homepage/Header';
@@ -7,7 +8,6 @@ import { CategoryBreadcrumb } from '../components/categories/CategoryBreadcrumb'
 import { CategoryGrid } from '../components/categories/CategoryGrid';
 import { CategoryFilters } from '../components/categories/CategoryFilters';
 import { CategoryHeader } from '../components/categories/CategoryHeader';
-import { CategoryTabs } from '../components/categories/CategoryTabs';
 import { categoriesData } from '@/data/categoriesData';
 
 interface VendorInfo {
@@ -67,7 +67,6 @@ const Categories: React.FC = () => {
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   const [sortBy, setSortBy] = useState('popular');
   const [showFilters, setShowFilters] = useState(false);
-  const [activeTab, setActiveTab] = useState('products');
 
   const handleCategorySelect = (categoryId?: string, subcategoryId?: string, subSubcategoryId?: string) => {
     const params = new URLSearchParams();
@@ -150,7 +149,7 @@ const Categories: React.FC = () => {
           </div>
 
           {/* Main Content */}
-          <div className="flex-1 lg:w-1/2">
+          <div className="flex-1">
             {/* Header Section */}
             <CategoryHeader
               title={getCurrentTitle()}
@@ -178,9 +177,9 @@ const Categories: React.FC = () => {
                       
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-800 mb-2">{product.name}</h3>
-                        <div className="text-lg font-bold text-blue-600">৳{product.price.toLocaleString()}</div>
+                        <div className="text-lg font-bold text-blue-600">${product.price.toLocaleString()}</div>
                         {product.originalPrice && (
-                          <div className="text-sm text-gray-500 line-through">৳{product.originalPrice.toLocaleString()}</div>
+                          <div className="text-sm text-gray-500 line-through">${product.originalPrice.toLocaleString()}</div>
                         )}
                         <div className="text-sm text-gray-600 mt-1">{product.vendor.name}</div>
                       </div>
@@ -189,16 +188,6 @@ const Categories: React.FC = () => {
                 </div>
               </div>
             )}
-          </div>
-
-          {/* Right Sidebar with Tabs */}
-          <div className="w-1/4 hidden lg:block">
-            <CategoryTabs 
-              activeTab={activeTab}
-              onTabChange={setActiveTab}
-              products={sampleProducts}
-              category={getCurrentCategoryData()}
-            />
           </div>
         </div>
       </div>

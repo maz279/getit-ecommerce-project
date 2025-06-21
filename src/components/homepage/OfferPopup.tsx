@@ -1,7 +1,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { X, Gift, Clock, Star } from 'lucide-react';
-import { Dialog, DialogContent, DialogClose } from '../ui/dialog';
+import { Dialog, DialogContent, DialogTitle, DialogDescription } from '../ui/dialog';
 
 export const OfferPopup: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -18,9 +18,11 @@ export const OfferPopup: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 bg-gradient-to-br from-red-500 via-pink-500 to-purple-600">
-        <DialogClose className="absolute right-3 top-3 z-10 p-1 rounded-full bg-white/20 text-white hover:bg-white/30 transition-colors">
-          <X className="w-4 h-4" />
-        </DialogClose>
+        {/* Hidden title and description for accessibility */}
+        <DialogTitle className="sr-only">Great GetIt Sale Offer</DialogTitle>
+        <DialogDescription className="sr-only">
+          Special sale offer with up to 70% off on electronics, fashion and more. Limited time offer with free shipping and extra discount code.
+        </DialogDescription>
         
         <div className="relative text-white text-center p-6">
           {/* Decorative elements */}

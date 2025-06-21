@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { 
   Smartphone, Laptop, Headphones, Camera, Watch, Gamepad2, 
   Shirt, ShoppingBag, Home, Car, Baby, Heart,
@@ -11,28 +12,39 @@ interface CategoryItem {
   name: string;
   count: number;
   color: string;
+  slug: string;
 }
 
 const categories: CategoryItem[] = [
-  { icon: <Smartphone className="w-8 h-8" />, name: "Electronics", count: 2847, color: "text-blue-500" },
-  { icon: <Shirt className="w-8 h-8" />, name: "Fashion", count: 1923, color: "text-red-500" },
-  { icon: <Home className="w-8 h-8" />, name: "Home & Garden", count: 1456, color: "text-green-500" },
-  { icon: <Coffee className="w-8 h-8" />, name: "Food & Drink", count: 987, color: "text-yellow-600" },
-  { icon: <Laptop className="w-8 h-8" />, name: "Computers", count: 754, color: "text-blue-600" },
-  { icon: <Car className="w-8 h-8" />, name: "Automotive", count: 623, color: "text-red-600" },
-  { icon: <Baby className="w-8 h-8" />, name: "Baby & Kids", count: 445, color: "text-yellow-500" },
-  { icon: <Dumbbell className="w-8 h-8" />, name: "Sports", count: 389, color: "text-blue-700" },
-  { icon: <Heart className="w-8 h-8" />, name: "Health", count: 267, color: "text-red-400" },
-  { icon: <Book className="w-8 h-8" />, name: "Books", count: 234, color: "text-green-600" },
-  { icon: <Music className="w-8 h-8" />, name: "Music", count: 198, color: "text-blue-400" },
-  { icon: <Gift className="w-8 h-8" />, name: "Gifts", count: 156, color: "text-green-400" },
-  { icon: <Camera className="w-8 h-8" />, name: "Photography", count: 143, color: "text-yellow-700" },
-  { icon: <Watch className="w-8 h-8" />, name: "Watches", count: 128, color: "text-red-700" },
-  { icon: <Gamepad2 className="w-8 h-8" />, name: "Gaming", count: 112, color: "text-green-700" },
-  { icon: <Paintbrush className="w-8 h-8" />, name: "Art & Craft", count: 98, color: "text-blue-800" }
+  { icon: <Smartphone className="w-8 h-8" />, name: "Electronics", count: 2847, color: "text-blue-500", slug: "electronics" },
+  { icon: <Shirt className="w-8 h-8" />, name: "Fashion", count: 1923, color: "text-red-500", slug: "fashion" },
+  { icon: <Home className="w-8 h-8" />, name: "Home & Garden", count: 1456, color: "text-green-500", slug: "home-garden" },
+  { icon: <Coffee className="w-8 h-8" />, name: "Food & Drink", count: 987, color: "text-yellow-600", slug: "food-drink" },
+  { icon: <Laptop className="w-8 h-8" />, name: "Computers", count: 754, color: "text-blue-600", slug: "computers" },
+  { icon: <Car className="w-8 h-8" />, name: "Automotive", count: 623, color: "text-red-600", slug: "automotive" },
+  { icon: <Baby className="w-8 h-8" />, name: "Baby & Kids", count: 445, color: "text-yellow-500", slug: "baby-kids" },
+  { icon: <Dumbbell className="w-8 h-8" />, name: "Sports", count: 389, color: "text-blue-700", slug: "sports" },
+  { icon: <Heart className="w-8 h-8" />, name: "Health", count: 267, color: "text-red-400", slug: "health" },
+  { icon: <Book className="w-8 h-8" />, name: "Books", count: 234, color: "text-green-600", slug: "books" },
+  { icon: <Music className="w-8 h-8" />, name: "Music", count: 198, color: "text-blue-400", slug: "music" },
+  { icon: <Gift className="w-8 h-8" />, name: "Gifts", count: 156, color: "text-green-400", slug: "gifts" },
+  { icon: <Camera className="w-8 h-8" />, name: "Photography", count: 143, color: "text-yellow-700", slug: "photography" },
+  { icon: <Watch className="w-8 h-8" />, name: "Watches", count: 128, color: "text-red-700", slug: "watches" },
+  { icon: <Gamepad2 className="w-8 h-8" />, name: "Gaming", count: 112, color: "text-green-700", slug: "gaming" },
+  { icon: <Paintbrush className="w-8 h-8" />, name: "Art & Craft", count: 98, color: "text-blue-800", slug: "art-craft" }
 ];
 
 export const FeaturedCategories: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleCategoryClick = (slug: string) => {
+    navigate(`/categories?category=${slug}`);
+  };
+
+  const handleSeeAllClick = () => {
+    navigate('/categories');
+  };
+
   return (
     <section className="flex w-full flex-col items-center mt-4 pl-[26px] pr-[9px] max-md:max-w-full max-md:pl-5">
       <div className="flex w-full max-w-[1383px] items-center gap-px flex-wrap max-md:max-w-full">
@@ -47,7 +59,10 @@ export const FeaturedCategories: React.FC = () => {
             </div>
             <div className="flex items-stretch gap-[5px] text-xs font-semibold">
               <div className="text-white grow">SEE ALL</div>
-              <button className="bg-white text-blue-600 whitespace-nowrap px-[5px] py-px rounded-[5px] hover:bg-yellow-100 transition-colors font-bold">
+              <button 
+                onClick={handleSeeAllClick}
+                className="bg-white text-blue-600 whitespace-nowrap px-[5px] py-px rounded-[5px] hover:bg-yellow-100 transition-colors font-bold"
+              >
                 &gt;
               </button>
             </div>
@@ -58,7 +73,11 @@ export const FeaturedCategories: React.FC = () => {
           <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
             <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
               {categories.slice(0, 8).map((category, index) => (
-                <div key={index} className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-lg transition-all cursor-pointer group border border-gray-100 hover:border-blue-200">
+                <div 
+                  key={index} 
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-lg transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
+                >
                   <div className={`${category.color} mb-2 group-hover:scale-110 transition-transform`}>
                     {category.icon}
                   </div>
@@ -72,7 +91,11 @@ export const FeaturedCategories: React.FC = () => {
           <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
             <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
               {categories.slice(8, 16).map((category, index) => (
-                <div key={index + 8} className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-lg transition-all cursor-pointer group border border-gray-100 hover:border-blue-200">
+                <div 
+                  key={index + 8} 
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className="bg-white flex flex-col items-center p-4 rounded-lg hover:shadow-lg transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
+                >
                   <div className={`${category.color} mb-2 group-hover:scale-110 transition-transform`}>
                     {category.icon}
                   </div>

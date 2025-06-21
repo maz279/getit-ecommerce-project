@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { Sparkles, Zap, Clock, Star, CheckCircle, Gift, CreditCard, Shield } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -112,36 +113,60 @@ export const HeroSection: React.FC = () => {
       bg: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600",
       title: "AI-Powered Shopping Experience",
       subtitle: "Discover products tailored just for you",
+      buttons: [
+        { text: "Get Recommendations", link: "/recommendations", primary: true },
+        { text: "Browse Categories", link: "/categories", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800"
     },
     {
       bg: "bg-gradient-to-r from-green-500 via-teal-500 to-blue-500",
       title: "Flash Sale Extravaganza",
       subtitle: "Up to 80% off on trending items",
+      buttons: [
+        { text: "Shop Flash Sale", link: "/flash-sale", primary: true },
+        { text: "View All Deals", link: "/offers", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"
     },
     {
       bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500",
       title: "Limited Time Mega Deals",
       subtitle: "Don't miss out on these exclusive offers",
+      buttons: [
+        { text: "Shop Mega Deals", link: "/offers", primary: true },
+        { text: "View Products", link: "/products", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
     },
     {
       bg: "bg-gradient-to-r from-purple-600 via-pink-600 to-red-500",
       title: "Premium Electronics Collection",
       subtitle: "Latest smartphones, laptops & gadgets",
+      buttons: [
+        { text: "Shop Electronics", link: "/products", primary: true },
+        { text: "Browse Categories", link: "/categories", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800"
     },
     {
       bg: "bg-gradient-to-r from-indigo-600 via-blue-600 to-cyan-500",
       title: "Smart Home Revolution",
       subtitle: "Transform your home with AI technology",
+      buttons: [
+        { text: "Shop Smart Home", link: "/products", primary: true },
+        { text: "Learn More", link: "/categories", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1572569511254-d8f925fe2cbb?w=800"
     },
     {
       bg: "bg-gradient-to-r from-emerald-500 via-green-500 to-teal-500",
       title: "Fashion Forward Collection",
       subtitle: "Trending styles for every season",
+      buttons: [
+        { text: "Shop Fashion", link: "/products", primary: true },
+        { text: "View Trends", link: "/categories", primary: false }
+      ],
       image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800"
     }
   ];
@@ -219,12 +244,18 @@ export const HeroSection: React.FC = () => {
                           ))
                         ) : (
                           <>
-                            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-8 py-3 rounded-full hover:from-yellow-300 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg">
+                            <Link
+                              to="/products"
+                              className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-8 py-3 rounded-full hover:from-yellow-300 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg"
+                            >
                               Shop Now
-                            </button>
-                            <button className="border-2 border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-all">
+                            </Link>
+                            <Link
+                              to="/categories"
+                              className="border-2 border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-all"
+                            >
                               Learn More
-                            </button>
+                            </Link>
                           </>
                         )}
                       </div>

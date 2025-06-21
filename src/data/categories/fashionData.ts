@@ -8,7 +8,7 @@ export const fashionData: MainCategory = {
   name: 'Fashion & Apparel',
   icon: React.createElement(Shirt, { className: "w-8 h-8" }),
   color: 'text-red-500',
-  count: 12847,
+  count: 15847,
   featured: true,
   subcategories: {
     'womens-fashion': {
@@ -16,70 +16,64 @@ export const fashionData: MainCategory = {
       subcategories: [
         {
           name: 'Traditional Wear',
-          count: 1845,
+          count: 2845,
           items: [
+            // Saree
             'Cotton Saree', 'Silk Saree (Dhakai, Rajshahi, Tangail)', 'Tant Saree', 
             'Handloom Saree', 'Designer Saree', 'Printed Saree', 'Embroidered Saree',
-            'Party Wear Saree', 'Casual Saree', 'Bridal Saree', 'Georgette Saree',
-            'Chiffon Saree', 'Net Saree', 'Bandhani Saree', 'Kanjivaram Saree'
-          ]
-        },
-        {
-          name: 'Salwar Kameez',
-          count: 1392,
-          items: [
+            'Party Wear Saree', 'Casual Saree', 'Bridal Saree',
+            // Salwar Kameez
             'Three Piece Set', 'Two Piece Set', 'Straight Cut', 'A-Line Cut',
             'Palazzo Set', 'Churidar Set', 'Anarkali Set', 'Pakistani Style',
-            'Dhaka Style', 'Party Wear Salwar', 'Designer Suits', 'Cotton Suits',
-            'Silk Suits', 'Georgette Suits', 'Sharara Set', 'Gharara Set'
-          ]
-        },
-        {
-          name: 'Kurti & Tops',
-          count: 974,
-          items: [
+            'Dhaka Style', 'Party Wear Salwar',
+            // Kurti & Tops
             'Cotton Kurti', 'Silk Kurti', 'Embroidered Kurti', 'Printed Kurti',
             'Long Kurti', 'Short Kurti', 'Party Wear Kurti', 'Casual Kurti',
-            'Ethnic Tops', 'Indo-Western Tops', 'Designer Kurti', 'Angrakha Style',
-            'High-Low Hem Kurti', 'Asymmetrical Kurti', 'Tunic Tops'
+            'Ethnic Tops', 'Indo-Western Tops'
           ]
         },
         {
           name: 'Western Wear',
-          count: 823,
+          count: 1823,
           items: [
+            // Tops & Blouses
             'Casual Tops', 'Formal Blouses', 'Tank Tops', 'Crop Tops', 'Tunics',
-            'Jeans', 'Trousers', 'Leggings', 'Palazzo Pants', 'Shorts', 'Skirts',
+            'Shirts', 'T-Shirts', 'Polo Shirts',
+            // Bottoms
+            'Jeans', 'Trousers', 'Leggings', 'Palazzo Pants', 'Shorts', 'Skirts', 'Capris',
+            // Dresses
             'Casual Dresses', 'Party Dresses', 'Maxi Dresses', 'Mini Dresses',
-            'Midi Dresses', 'Jumpsuit', 'Rompers', 'Blazers', 'Cardigans'
+            'A-Line Dresses', 'Bodycon Dresses'
           ]
         },
         {
           name: 'Islamic Wear',
-          count: 687,
+          count: 987,
           items: [
+            // Hijab & Scarves
             'Cotton Hijab', 'Chiffon Hijab', 'Silk Hijab', 'Printed Hijab',
+            'Plain Hijab', 'Instant Hijab', 'Underscarves', 'Hijab Pins & Accessories',
+            // Burkha & Abaya
             'Traditional Burkha', 'Modern Abaya', 'Front Open Abaya',
-            'Butterfly Abaya', 'Party Wear Abaya', 'Casual Burkha',
-            'Niqab', 'Prayer Dress', 'Modest Wear', 'Long Cardigans'
+            'Butterfly Abaya', 'Party Wear Abaya', 'Casual Burkha'
           ]
         },
         {
           name: 'Innerwear & Sleepwear',
-          count: 434,
+          count: 634,
           items: [
+            // Lingerie
             'Bras', 'Panties', 'Shapewear', 'Camisoles', 'Slips',
-            'Nighties', 'Pajama Sets', 'Nightgowns', 'Robes',
-            'Sports Bra', 'Cotton Underwear', 'Silk Nightwear', 'Loungewear'
+            // Sleepwear
+            'Nighties', 'Pajama Sets', 'Nightgowns', 'Robes'
           ]
         },
         {
           name: 'Maternity Wear',
-          count: 256,
+          count: 356,
           items: [
             'Maternity Tops', 'Maternity Bottoms', 'Maternity Dresses',
-            'Nursing Wear', 'Maternity Innerwear', 'Maternity Saree',
-            'Maternity Kurti', 'Nursing Bra', 'Maternity Pajamas'
+            'Nursing Wear', 'Maternity Innerwear'
           ]
         },
         {
@@ -107,39 +101,48 @@ export const fashionData: MainCategory = {
       subcategories: [
         {
           name: 'Traditional Wear',
-          count: 1234,
+          count: 1834,
           items: [
+            // Panjabi
             'Cotton Panjabi', 'Silk Panjabi', 'Linen Panjabi', 'Embroidered Panjabi',
             'Printed Panjabi', 'Plain Panjabi', 'Full Sleeve Panjabi', 'Half Sleeve Panjabi',
-            'Cotton Lungi', 'Check Lungi', 'Printed Lungi', 'Silk Dhoti', 'Cotton Dhoti',
-            'Fatua', 'Kurta Pajama Set', 'Sherwani', 'Nehru Jacket'
+            'Collar Panjabi', 'Round Neck Panjabi',
+            // Lungi & Dhoti
+            'Cotton Lungi', 'Check Lungi', 'Printed Lungi', 'Silk Dhoti', 
+            'Cotton Dhoti', 'Traditional Dhoti',
+            // Pajama & Salwar
+            'Pajama', 'Churidar', 'Straight Cut Pajama', 'Cotton Pajama', 'Silk Pajama'
           ]
         },
         {
           name: 'Western Wear',
-          count: 912,
+          count: 1412,
           items: [
-            'Formal Shirts', 'Casual Shirts', 'Polo Shirts', 'T-Shirts', 'Tank Tops',
-            'Formal Pants', 'Chinos', 'Jeans', 'Cargo Pants', 'Shorts',
-            'Business Suits', 'Casual Blazers', 'Tuxedos', 'Waistcoats',
-            'Hoodies', 'Sweatshirts', 'Track Suits'
+            // Shirts & T-Shirts
+            'Formal Shirts', 'Casual Shirts', 'Polo Shirts', 'T-Shirts', 
+            'Tank Tops', 'Henley Shirts',
+            // Pants & Jeans
+            'Formal Pants', 'Chinos', 'Jeans', 'Cargo Pants', 'Shorts', 'Track Pants',
+            // Suits & Blazers
+            'Business Suits', 'Casual Blazers', 'Tuxedos', 'Waistcoats'
           ]
         },
         {
           name: 'Ethnic & Fusion',
-          count: 498,
+          count: 698,
           items: [
-            'Cotton Kurta', 'Silk Kurta', 'Linen Kurta', 'Designer Kurta', 'Nehru Jackets',
-            'Bandhgala', 'Indo-Western Shirts', 'Dhoti Pants', 'Ethnic Jackets'
+            // Kurta & Tops
+            'Cotton Kurta', 'Silk Kurta', 'Linen Kurta', 'Designer Kurta', 'Nehru Jackets'
           ]
         },
         {
           name: 'Innerwear & Sleepwear',
-          count: 387,
+          count: 487,
           items: [
+            // Innerwear
             'Vests', 'Briefs', 'Boxers', 'Trunk', 'Thermals',
-            'Pajama Sets', 'Night Suits', 'Robes', 'Loungewear',
-            'Cotton Underwear', 'Sports Underwear'
+            // Sleepwear
+            'Pajama Sets', 'Night Suits', 'Robes'
           ]
         },
         {

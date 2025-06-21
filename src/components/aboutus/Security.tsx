@@ -1,6 +1,6 @@
 
 import React, { useState } from 'react';
-import { Shield, Lock, Eye, FileCheck, Zap, AlertTriangle, CheckCircle, Users } from 'lucide-react';
+import { Shield, Lock, Eye, FileCheck, Zap, CheckCircle, Users } from 'lucide-react';
 
 export const Security: React.FC = () => {
   const [activeFeature, setActiveFeature] = useState(0);
@@ -43,7 +43,7 @@ export const Security: React.FC = () => {
   const securityStats = [
     { label: "Uptime", value: "99.9%", icon: CheckCircle, color: "text-green-600" },
     { label: "Security Incidents", value: "0", icon: Shield, color: "text-blue-600" },
-    { label: "Response Time", value: "&lt;5min", icon: Zap, color: "text-yellow-600" },
+    { label: "Response Time", value: "<5min", icon: Zap, color: "text-yellow-600" },
     { label: "Protected Users", value: "50K+", icon: Users, color: "text-purple-600" }
   ];
 
@@ -70,7 +70,7 @@ export const Security: React.FC = () => {
         {securityStats.map((stat, index) => (
           <div key={index} className="bg-white rounded-xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
             <stat.icon className={`w-8 h-8 mx-auto mb-3 ${stat.color}`} />
-            <div className="text-3xl font-bold text-gray-800 mb-1" dangerouslySetInnerHTML={{ __html: stat.value }}></div>
+            <div className="text-3xl font-bold text-gray-800 mb-1">{stat.value}</div>
             <div className="text-sm text-gray-600">{stat.label}</div>
           </div>
         ))}

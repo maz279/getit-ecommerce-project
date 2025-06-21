@@ -7,11 +7,8 @@ import {
   Globe, 
   GraduationCap, 
   HandHeart, 
-  Recycle, 
   Building,
   Award,
-  Target,
-  TrendingUp,
   CheckCircle
 } from 'lucide-react';
 

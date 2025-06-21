@@ -12,7 +12,7 @@ export const furnitureData = {
         // Tables
         'Coffee Tables', 'Side Tables', 'Console Tables', 'TV Units', 'Center Tables',
         // Storage
-        'TV Cabinets', 'Display Units', 'Bookshelves', 'Storage Cabinets',
+        'TV Cabinets', 'Display Units', 'Bookcases', 'Storage Cabinets',
         'Entertainment Centers', 'Media Storage', 'Floor Lamps', 'Table Lamps'
       ]
     },

@@ -8,7 +8,7 @@ export const homeGardenData: MainCategory = {
   name: 'Home & Garden',
   icon: React.createElement(Home, { className: "w-8 h-8" }),
   color: 'text-green-500',
-  count: 6456,
+  count: 8456,
   featured: true,
   subcategories: {
     'furniture': {
@@ -16,51 +16,63 @@ export const homeGardenData: MainCategory = {
       subcategories: [
         {
           name: 'Living Room Furniture',
-          count: 834,
+          count: 1234,
           items: [
-            'Sofas & Couches', 'Coffee Tables', 'TV Stands & Entertainment Centers', 'Recliners',
-            'Sectional Sofas', 'Accent Chairs', 'Ottoman & Footstools', 'Side Tables',
-            'Floor Lamps', 'Table Lamps', 'Bookshelves', 'Display Cabinets',
-            'Living Room Sets', 'Bean Bags', 'Rocking Chairs', 'Media Storage'
+            // Sofas & Seating
+            '3-Seater Sofas', '2-Seater Sofas', 'Sectional Sofas', 'Recliners',
+            'Bean Bags', 'Ottomans', 'Accent Chairs', 'Rocking Chairs',
+            // Tables
+            'Coffee Tables', 'Side Tables', 'Console Tables', 'TV Units', 'Center Tables',
+            // Storage
+            'TV Cabinets', 'Display Units', 'Bookshelves', 'Storage Cabinets',
+            'Entertainment Centers', 'Media Storage', 'Floor Lamps', 'Table Lamps'
           ]
         },
         {
           name: 'Bedroom Furniture',
-          count: 689,
+          count: 987,
           items: [
-            'Beds & Bed Frames', 'Mattresses', 'Wardrobes & Closets', 'Dressing Tables',
-            'Nightstands', 'Chest of Drawers', 'Bedroom Sets', 'Headboards',
-            'Mattress Toppers', 'Bed Linens', 'Pillows', 'Blankets & Comforters',
-            'Bedroom Mirrors', 'Bedroom Lighting', 'Storage Benches', 'Armoires'
+            // Beds
+            'Single Beds', 'Double Beds', 'Queen Size Beds', 'King Size Beds',
+            'Bunk Beds', 'Storage Beds', 'Platform Beds', 'Bed Frames', 'Headboards',
+            // Storage
+            'Wardrobes', 'Chest of Drawers', 'Bedside Tables', 'Dressing Tables',
+            'Almirahs', 'Armoires', 'Storage Benches',
+            // Mattresses
+            'Spring Mattresses', 'Foam Mattresses', 'Memory Foam Mattresses',
+            'Orthopedic Mattresses', 'Coir Mattresses', 'Mattress Toppers'
           ]
         },
         {
           name: 'Dining Room Furniture',
-          count: 445,
+          count: 567,
           items: [
-            'Dining Tables', 'Dining Chairs', 'Dining Sets', 'Bar Stools',
-            'China Cabinets', 'Buffets & Sideboards', 'Bar Tables', 'Dining Benches',
-            'Counter Height Tables', 'Outdoor Dining Sets', 'Kitchen Islands',
-            'Wine Racks', 'Serving Carts', 'Dining Room Lighting'
+            // Dining Sets
+            '4-Seater Dining Sets', '6-Seater Dining Sets', '8-Seater Dining Sets',
+            'Bar Tables', 'Counter Height Tables', 'Dining Tables',
+            // Dining Chairs
+            'Wooden Chairs', 'Upholstered Chairs', 'Bar Stools', 'Folding Chairs',
+            'Dining Benches', 'China Cabinets', 'Buffets & Sideboards',
+            'Wine Racks', 'Serving Carts', 'Kitchen Islands'
           ]
         },
         {
-          name: 'Office Furniture',
-          count: 367,
+          name: 'Study & Office Furniture',
+          count: 445,
           items: [
-            'Office Chairs', 'Office Desks', 'Computer Desks', 'Filing Cabinets',
-            'Office Storage', 'Bookshelves', 'Standing Desks', 'Executive Chairs',
-            'Conference Tables', 'Reception Desks', 'Office Lighting', 'Desk Accessories',
-            'Ergonomic Furniture', 'Home Office Sets', 'Office Partitions'
+            'Study Tables', 'Computer Tables', 'Writing Desks', 'Standing Desks',
+            'Study Chairs', 'Office Chairs', 'Executive Chairs', 'Filing Cabinets',
+            'Office Storage', 'Bookshelves', 'Conference Tables', 'Reception Desks',
+            'Desk Accessories', 'Ergonomic Furniture', 'Home Office Sets'
           ]
         },
         {
           name: 'Outdoor Furniture',
-          count: 278,
+          count: 334,
           items: [
-            'Patio Sets', 'Outdoor Chairs', 'Outdoor Tables', 'Garden Benches',
-            'Outdoor Sofas', 'Umbrellas & Shade', 'Fire Pits', 'Outdoor Storage',
-            'Hammocks', 'Swing Sets', 'Pool Furniture', 'Outdoor Cushions',
+            'Garden Furniture', 'Patio Sets', 'Outdoor Chairs', 'Garden Benches',
+            'Outdoor Tables', 'Outdoor Sofas', 'Umbrellas & Shade', 'Fire Pits',
+            'Outdoor Storage', 'Hammocks', 'Swing Sets', 'Pool Furniture',
             'Gazebos & Pergolas', 'Outdoor Rugs', 'Garden Stools'
           ]
         }
@@ -71,42 +83,53 @@ export const homeGardenData: MainCategory = {
       subcategories: [
         {
           name: 'Wall Decor',
-          count: 567,
+          count: 789,
           items: [
-            'Wall Art & Paintings', 'Photo Frames', 'Wall Mirrors', 'Wall Stickers',
-            'Canvas Prints', 'Metal Wall Art', 'Wooden Wall Decor', 'Wall Shelves',
-            'Clocks', 'Wall Hooks', 'Tapestries', 'Wall Decals', 'Gallery Walls',
-            'Religious Wall Art', 'Nature Prints', 'Abstract Art'
+            // Wall Art
+            'Paintings', 'Canvas Prints', 'Wall Hangings', 'Islamic Calligraphy',
+            'Photo Frames', 'Wall Mirrors', 'Wall Stickers', 'Wall Shelves',
+            'Metal Wall Art', 'Wooden Wall Decor', 'Wall Decals', 'Clocks',
+            'Gallery Walls', 'Religious Wall Art', 'Nature Prints', 'Abstract Art',
+            'Tapestries', 'Wall Hooks'
           ]
         },
         {
-          name: 'Decorative Accessories',
-          count: 723,
+          name: 'Decorative Items',
+          count: 656,
           items: [
-            'Vases & Planters', 'Candles & Holders', 'Decorative Bowls', 'Figurines & Sculptures',
-            'Table Centerpieces', 'Artificial Flowers', 'Decorative Trays', 'Picture Frames',
-            'Decorative Pillows', 'Throw Blankets', 'Bookends', 'Decorative Boxes',
+            // Showpieces
+            'Vases', 'Figurines', 'Candle Holders', 'Decorative Bowls',
+            'Antique Items', 'Handicrafts', 'Sculptures', 'Table Centerpieces',
+            'Artificial Flowers', 'Decorative Trays', 'Bookends', 'Decorative Boxes',
+            // Plants & Planters
+            'Indoor Plants', 'Artificial Plants', 'Planters', 'Gardening Tools',
             'Wind Chimes', 'Lanterns', 'Seasonal Decor', 'Holiday Decorations'
           ]
         },
         {
           name: 'Lighting',
-          count: 445,
+          count: 567,
           items: [
-            'Ceiling Lights', 'Table Lamps', 'Floor Lamps', 'Wall Sconces',
-            'Pendant Lights', 'Chandeliers', 'LED Lights', 'String Lights',
-            'Night Lights', 'Desk Lamps', 'Outdoor Lighting', 'Smart Lighting',
-            'Lamp Shades', 'Track Lighting', 'Under Cabinet Lighting', 'Solar Lights'
+            // Ceiling Lights
+            'Chandeliers', 'Pendant Lights', 'Ceiling Fans with Lights', 'Flush Mount Lights',
+            'Ceiling Lights', 'Track Lighting',
+            // Lamps
+            'Table Lamps', 'Floor Lamps', 'Desk Lamps', 'Night Lights',
+            'String Lights', 'Wall Sconces', 'LED Lights', 'Smart Lighting',
+            'Lamp Shades', 'Under Cabinet Lighting', 'Solar Lights', 'Outdoor Lighting'
           ]
         },
         {
           name: 'Window Treatments',
-          count: 334,
+          count: 445,
           items: [
-            'Curtains & Drapes', 'Blinds', 'Shades', 'Valances',
-            'Curtain Rods', 'Sheer Curtains', 'Blackout Curtains', 'Window Films',
-            'Roman Shades', 'Venetian Blinds', 'Vertical Blinds', 'Roller Blinds',
-            'Bamboo Blinds', 'Motorized Blinds', 'Curtain Tiebacks'
+            // Curtains & Drapes
+            'Blackout Curtains', 'Sheer Curtains', 'Printed Curtains', 'Plain Curtains',
+            'Door Curtains', 'Curtains & Drapes', 'Valances', 'Curtain Rods',
+            'Curtain Tiebacks',
+            // Blinds
+            'Venetian Blinds', 'Vertical Blinds', 'Roller Blinds', 'Bamboo Blinds',
+            'Roman Shades', 'Motorized Blinds', 'Window Films', 'Shades'
           ]
         }
       ]
@@ -116,42 +139,54 @@ export const homeGardenData: MainCategory = {
       subcategories: [
         {
           name: 'Cookware',
+          count: 823,
+          items: [
+            // Pots & Pans
+            'Non-stick Cookware', 'Stainless Steel Cookware', 'Cast Iron Cookware',
+            'Aluminum Cookware', 'Pressure Cookers', 'Rice Cookers', 'Pots & Pans',
+            'Woks', 'Stockpots', 'Skillets & Frying Pans', 'Saucepans',
+            'Dutch Ovens', 'Roasting Pans', 'Grill Pans', 'Steamer Pots', 'Cookware Sets'
+          ]
+        },
+        {
+          name: 'Tableware & Cutlery',
           count: 678,
           items: [
-            'Pots & Pans', 'Non-stick Cookware', 'Stainless Steel Cookware', 'Cast Iron Cookware',
-            'Pressure Cookers', 'Woks', 'Stockpots', 'Skillets & Frying Pans',
-            'Saucepans', 'Dutch Ovens', 'Roasting Pans', 'Grill Pans',
-            'Steamer Pots', 'Cookware Sets', 'Specialty Cookware'
+            // Dinnerware
+            'Dinner Sets', 'Plates', 'Bowls', 'Serving Dishes', 'Melamine Sets',
+            'Dinner Plates', 'Cups & Mugs', 'Dinnerware Sets', 'Fine China',
+            'Kids Dinnerware', 'Disposable Tableware',
+            // Glassware
+            'Drinking Glasses', 'Wine Glasses', 'Mugs & Cups', 'Water Bottles',
+            'Jugs & Pitchers', 'Glassware', 'Travel Mugs',
+            // Cutlery
+            'Spoon Sets', 'Knife Sets', 'Fork Sets', 'Serving Spoons',
+            'Knives & Cutlery', 'Flatware', 'Serving Utensils'
           ]
         },
         {
-          name: 'Kitchen Tools & Gadgets',
+          name: 'Kitchen Storage & Tools',
           count: 567,
           items: [
-            'Knives & Cutlery', 'Cutting Boards', 'Mixing Bowls', 'Measuring Tools',
-            'Can Openers', 'Peelers & Graters', 'Kitchen Scales', 'Timers',
-            'Tongs & Spatulas', 'Whisks', 'Ladles', 'Kitchen Shears',
-            'Mandoline Slicers', 'Food Storage', 'Spice Racks', 'Kitchen Organizers'
+            // Storage Containers
+            'Food Storage Containers', 'Spice Containers', 'Rice Containers',
+            'Lunch Boxes', 'Glass Storage', 'Plastic Storage', 'Storage Jars',
+            'Airtight Containers', 'Meal Prep Containers', 'Pantry Storage',
+            // Kitchen Tools
+            'Cutting Boards', 'Kitchen Knives', 'Measuring Tools', 'Kitchen Scales',
+            'Can Openers', 'Mixing Bowls', 'Peelers & Graters', 'Tongs & Spatulas',
+            'Whisks', 'Ladles', 'Kitchen Shears', 'Timers', 'Kitchen Organizers'
           ]
         },
         {
-          name: 'Dinnerware',
-          count: 445,
+          name: 'Kitchen Appliances',
+          count: 734,
           items: [
-            'Dinner Plates', 'Bowls', 'Cups & Mugs', 'Glassware',
-            'Dinnerware Sets', 'Serving Dishes', 'Flatware', 'Serving Utensils',
-            'Wine Glasses', 'Water Bottles', 'Travel Mugs', 'Kids Dinnerware',
-            'Disposable Tableware', 'Melamine Dinnerware', 'Fine China'
-          ]
-        },
-        {
-          name: 'Food Storage',
-          count: 356,
-          items: [
-            'Food Containers', 'Glass Storage', 'Plastic Storage', 'Vacuum Bags',
-            'Lunch Boxes', 'Thermos Bottles', 'Food Wraps', 'Storage Jars',
-            'Refrigerator Organizers', 'Freezer Bags', 'Airtight Containers',
-            'Meal Prep Containers', 'Spice Containers', 'Pantry Storage'
+            // Small Appliances
+            'Blenders', 'Juicers', 'Food Processors', 'Mixer Grinders', 'Toasters',
+            'Coffee Makers', 'Electric Kettles', 'Rice Cookers', 'Air Fryers',
+            'Microwave Ovens', 'Pressure Cookers', 'Induction Cooktops', 'Stand Mixers',
+            'Slow Cookers', 'Electric Grills', 'Refrigerators'
           ]
         }
       ]
@@ -161,32 +196,63 @@ export const homeGardenData: MainCategory = {
       subcategories: [
         {
           name: 'Bedding',
+          count: 678,
+          items: [
+            // Bed Sheets
+            'Cotton Bed Sheets', 'Silk Bed Sheets', 'Satin Bed Sheets',
+            'Fitted Sheets', 'Bed Sheet Sets', 'Bed Sheets', 'Pillowcases',
+            'Luxury Bedding', 'Organic Bedding', 'Kids Bedding', 'Seasonal Bedding',
+            // Pillows & Cushions
+            'Bed Pillows', 'Cushion Covers', 'Pillow Covers', 'Memory Foam Pillows',
+            'Decorative Cushions', 'Pillows', 'Throw Pillows',
+            // Blankets & Comforters
+            'Cotton Blankets', 'Woolen Blankets', 'Quilts', 'Comforters',
+            'Duvets', 'Bed Covers', 'Blankets', 'Duvet Covers', 'Bed Skirts'
+          ]
+        },
+        {
+          name: 'Bath Essentials',
           count: 534,
           items: [
-            'Bed Sheets', 'Pillowcases', 'Comforters', 'Duvet Covers',
-            'Blankets', 'Pillows', 'Mattress Protectors', 'Bed Skirts',
-            'Quilts', 'Throw Pillows', 'Bedding Sets', 'Kids Bedding',
-            'Luxury Bedding', 'Organic Bedding', 'Seasonal Bedding'
+            // Towels
+            'Bath Towels', 'Hand Towels', 'Face Towels', 'Beach Towels',
+            'Towel Sets', 'Washcloths', 'Luxury Towels', 'Quick Dry Towels',
+            'Organic Towels', 'Kids Bath Towels', 'Travel Towels', 'Hair Towels',
+            // Bathroom Accessories
+            'Shower Curtains', 'Bath Mats', 'Soap Dispensers', 'Toothbrush Holders',
+            'Bathroom Storage', 'Bath Rugs', 'Toilet Paper Holders', 'Towel Bars',
+            'Shower Caddies', 'Bath Organizers', 'Mirrors', 'Scales', 'Trash Cans'
+          ]
+        }
+      ]
+    },
+    'cleaning-laundry': {
+      name: 'Cleaning & Laundry',
+      subcategories: [
+        {
+          name: 'Cleaning Supplies',
+          count: 445,
+          items: [
+            // Cleaning Products
+            'Floor Cleaners', 'Glass Cleaners', 'Bathroom Cleaners', 'Kitchen Cleaners',
+            'Disinfectants', 'All-Purpose Cleaners', 'Stain Removers', 'Polish',
+            // Cleaning Tools
+            'Mops', 'Brooms', 'Vacuum Cleaners', 'Robot Vacuums', 'Steam Mops',
+            'Cleaning Cloths', 'Buckets', 'Sponges', 'Scrub Brushes',
+            'Carpet Cleaners', 'Pressure Washers', 'Window Cleaners'
           ]
         },
         {
-          name: 'Bath Towels & Linens',
-          count: 423,
+          name: 'Laundry',
+          count: 356,
           items: [
-            'Bath Towels', 'Hand Towels', 'Washcloths', 'Beach Towels',
-            'Towel Sets', 'Bath Mats', 'Shower Curtains', 'Bath Rugs',
-            'Luxury Towels', 'Quick Dry Towels', 'Organic Towels',
-            'Kids Bath Towels', 'Travel Towels', 'Hair Towels'
-          ]
-        },
-        {
-          name: 'Bathroom Accessories',
-          count: 367,
-          items: [
-            'Soap Dispensers', 'Toothbrush Holders', 'Toilet Paper Holders', 'Towel Bars',
-            'Shower Caddies', 'Bath Organizers', 'Mirrors', 'Scales',
-            'Trash Cans', 'Toilet Seat Covers', 'Shower Heads', 'Faucets',
-            'Bathroom Storage', 'Medicine Cabinets', 'Bathroom Lighting'
+            // Laundry Products
+            'Detergents', 'Fabric Softeners', 'Stain Removers', 'Bleach',
+            'Laundry Pods', 'Eco-Friendly Detergents',
+            // Laundry Accessories
+            'Laundry Baskets', 'Clothes Hangers', 'Drying Racks', 'Ironing Boards',
+            'Irons', 'Laundry Bags', 'Clothespins', 'Garment Steamers',
+            'Washing Machines', 'Dryers'
           ]
         }
       ]

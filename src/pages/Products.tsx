@@ -5,7 +5,6 @@ import { Footer } from '@/components/homepage/Footer';
 import { HeroSection } from '@/components/products/HeroSection';
 import { FestivalGreeting } from '@/components/products/FestivalGreeting';
 import { CategoriesSection } from '@/components/products/CategoriesSection';
-import { FlashDealsSection } from '@/components/products/FlashDealsSection';
 import { BundleOffersSection } from '@/components/products/BundleOffersSection';
 import { MobileAppSection } from '@/components/products/MobileAppSection';
 import { PaymentOffersSection } from '@/components/products/PaymentOffersSection';
@@ -23,7 +22,6 @@ const Products: React.FC = () => {
       <HeroSection />
       <FestivalGreeting />
       <CategoriesSection />
-      <FlashDealsSection />
       <BundleOffersSection />
       <MobileAppSection />
       <PaymentOffersSection />

@@ -15,7 +15,6 @@ import { VendorCTA } from '../components/homepage/VendorCTA';
 import { TrustIndicators } from '../components/homepage/TrustIndicators';
 import { BangladeshFeatures } from '../components/homepage/BangladeshFeatures';
 import { Footer } from '../components/homepage/Footer';
-import { OfferPopup } from '../components/homepage/OfferPopup';
 
 const Index: React.FC = () => {
   return (
@@ -39,7 +38,6 @@ const Index: React.FC = () => {
       </main>
       
       <Footer />
-      <OfferPopup />
     </div>
   );
 };

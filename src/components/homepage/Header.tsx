@@ -96,15 +96,11 @@ export const Header: React.FC = () => {
           {/* Mobile Menu and Logo */}
           <div className="flex items-center gap-1 sm:gap-2">
             <MobileMenu />
-            <Link to="/" className="flex flex-col items-center">
-              <div className="w-8 h-8 sm:w-12 sm:h-12 bg-gradient-to-br from-red-500 to-yellow-400 rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-sm sm:text-xl">G</span>
+            <Link to="/" className="flex items-center gap-2">
+              <div className="w-6 h-6 sm:w-8 sm:h-8 bg-gradient-to-br from-red-500 to-yellow-400 rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-xs sm:text-sm">G</span>
               </div>
-              <div className="hidden sm:block text-center">
-                <span className="text-white font-bold text-sm sm:text-xl">GETIT</span>
-                <p className="text-xs text-yellow-200">Bangladesh's Trusted Marketplace</p>
-                <p className="text-xs text-yellow-100">Shop Smart, Ship Fast, Pay Easy</p>
-              </div>
+              <span className="text-white font-bold text-sm sm:text-lg">GETIT</span>
             </Link>
           </div>
 

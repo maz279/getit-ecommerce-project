@@ -34,6 +34,16 @@ import { toysHobbiesData } from './categories/toysHobbiesData';
 import { jewelryData } from './categories/jewelryData';
 import { musicalInstrumentsData } from './categories/musicalInstrumentsData';
 import { digitalProductsData } from './categories/digitalProductsData';
+import { seasonalFestivalData } from './categories/seasonalFestivalData';
+import { businessIndustrialData } from './categories/businessIndustrialData';
+import { giftItemsData } from './categories/giftItemsData';
+import { travelLuggageData } from './categories/travelLuggageData';
+import { petSuppliesData } from './categories/petSuppliesData';
+import { medicalHealthcareData } from './categories/medicalHealthcareData';
+import { gardenOutdoorData } from './categories/gardenOutdoorData';
+import { securitySafetyData } from './categories/securitySafetyData';
+import { wholesaleBulkData } from './categories/wholesaleBulkData';
+import { secondHandData } from './categories/secondHandData';
 
 export const categoriesData: MainCategory[] = [
   fashionData,
@@ -49,5 +59,15 @@ export const categoriesData: MainCategory[] = [
   toysHobbiesData,
   jewelryData,
   musicalInstrumentsData,
-  digitalProductsData
+  digitalProductsData,
+  seasonalFestivalData,
+  businessIndustrialData,
+  giftItemsData,
+  travelLuggageData,
+  petSuppliesData,
+  medicalHealthcareData,
+  gardenOutdoorData,
+  securitySafetyData,
+  wholesaleBulkData,
+  secondHandData
 ];

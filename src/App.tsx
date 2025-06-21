@@ -31,6 +31,15 @@ import Offers from "./pages/Offers";
 import FlashSale from "./pages/FlashSale";
 import Recommendations from "./pages/Recommendations";
 
+// New Footer Navigation Pages
+import OrderTracking from "./pages/OrderTracking";
+import ReturnsRefunds from "./pages/ReturnsRefunds";
+import DeliveryInfo from "./pages/DeliveryInfo";
+import SellerCenter from "./pages/SellerCenter";
+import AboutUs from "./pages/AboutUs";
+import TermsOfService from "./pages/TermsOfService";
+import PrivacyPolicy from "./pages/PrivacyPolicy";
+
 const queryClient = new QueryClient();
 
 const App = () => (

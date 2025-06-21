@@ -43,7 +43,7 @@ export const Security: React.FC = () => {
   const securityStats = [
     { label: "Uptime", value: "99.9%", icon: CheckCircle, color: "text-green-600" },
     { label: "Security Incidents", value: "0", icon: Shield, color: "text-blue-600" },
-    { label: "Response Time", value: "<5min", icon: Zap, color: "text-yellow-600" },
+    { label: "Response Time", value: "< 5min", icon: Zap, color: "text-yellow-600" },
     { label: "Protected Users", value: "50K+", icon: Users, color: "text-purple-600" }
   ];
 

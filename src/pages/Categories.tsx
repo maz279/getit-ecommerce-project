@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '../components/homepage/Header';
@@ -138,18 +137,20 @@ const Categories: React.FC = () => {
         />
 
         <div className="flex gap-6">
-          {/* Enhanced Sidebar */}
-          <div className="w-1/5 hidden lg:block">
+          {/* Left Sidebar */}
+          <div className="w-1/4 hidden lg:block">
             <CategoryList 
               onCategorySelect={handleCategorySelect}
               selectedCategory={selectedCategory || undefined}
               selectedSubcategory={selectedSubcategory || undefined}
             />
-            <CategoryFilters />
+            <div className="mt-6">
+              <CategoryFilters />
+            </div>
           </div>
 
           {/* Main Content */}
-          <div className="w-3/5">
+          <div className="flex-1 lg:w-1/2">
             {/* Header Section */}
             <CategoryHeader
               title={getCurrentTitle()}
@@ -191,7 +192,7 @@ const Categories: React.FC = () => {
           </div>
 
           {/* Right Sidebar with Tabs */}
-          <div className="w-1/5 hidden xl:block">
+          <div className="w-1/4 hidden lg:block">
             <CategoryTabs 
               activeTab={activeTab}
               onTabChange={setActiveTab}

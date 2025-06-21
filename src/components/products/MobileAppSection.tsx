@@ -116,7 +116,7 @@ export const MobileAppSection: React.FC = () => {
                 <p className="text-sm text-gray-600">Faster Checkout</p>
               </div>
               <div>
-                <h4 className="font-bold text-2xl text-green-600">$20</h4>
+                <h4 className="font-bold text-2xl text-green-600">৳20</h4>
                 <p className="text-sm text-gray-600">Average Extra Savings</p>
               </div>
               <div>
@@ -125,11 +125,14 @@ export const MobileAppSection: React.FC = () => {
               </div>
             </div>
             <div className="text-center mt-6">
-              <div className="flex gap-2 justify-center">
+              <div className="flex gap-2 justify-center flex-wrap">
                 <Button className="bg-blue-500 hover:bg-blue-600">📱 Download Now</Button>
                 <Button variant="outline">🎯 Try Smart Features</Button>
                 <Button variant="outline">🤖 Meet Nila</Button>
                 <Button variant="outline">📍 Find Nearby</Button>
+                <Button variant="outline">👑 Become VIP</Button>
+                <Button variant="outline">💎 Check Points</Button>
+                <Button variant="outline">📊 View Analytics</Button>
               </div>
             </div>
           </CardContent>

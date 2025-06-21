@@ -215,80 +215,140 @@ export const socialImpact = [
 
 export const mobileAppFeatures = [
   {
-    category: "App-Exclusive EID Offers",
+    category: "🎊 App-Exclusive EID Offers",
     icon: "📱",
     features: [
       {
-        title: "Flash Sales Every Hour",
-        description: "App-only 60% off deals with push notifications",
-        details: ["First 100 users get extra 10% off", "Instant alert notifications", "Hourly surprise deals"]
+        title: "⚡ Flash Sales Every Hour",
+        description: "Hourly app-only flash sales with massive discounts",
+        details: [
+          "App-only 60% off deals",
+          "Push notifications for instant alerts",
+          "First 100 users get extra 10% off",
+          "Limited time hourly promotions"
+        ]
       },
       {
-        title: "App-Exclusive Products",
-        description: "Limited edition EID collections available only on mobile",
-        details: ["Designer collaborations", "Celebrity endorsed items", "Pre-launch product access"]
+        title: "🎁 App-Exclusive Products",
+        description: "Special collections available only on mobile app",
+        details: [
+          "Limited edition EID collections",
+          "Designer collaborations",
+          "Celebrity endorsed items",
+          "Exclusive brand partnerships"
+        ]
       },
       {
-        title: "Mobile Banking Bonuses", 
-        description: "Extra 2% cashback on app payments",
-        details: ["Faster checkout", "Biometric payment security", "One-tap payment setup"]
+        title: "💰 Mobile Banking Bonuses",
+        description: "Extra benefits for mobile payment users",
+        details: [
+          "Extra 2% cashback on app payments",
+          "Faster bKash/Nagad checkout",
+          "Biometric payment security",
+          "One-tap payment options"
+        ]
       },
       {
-        title: "Priority Delivery",
-        description: "App users get delivery preference",
-        details: ["Real-time delivery tracking", "GPS-based delivery updates", "Delivery time slot selection"]
+        title: "🚚 Priority Delivery",
+        description: "Enhanced delivery services for app users",
+        details: [
+          "App users get delivery preference",
+          "Real-time delivery tracking",
+          "GPS-based delivery updates",
+          "Express delivery options"
+        ]
       }
     ]
   },
   {
-    category: "Smart Features for EID Shopping",
-    icon: "🌟",
+    category: "🌟 Smart Features for EID Shopping",
+    icon: "🤳",
     features: [
       {
-        title: "Visual Search & AR Try-On",
-        description: "Take photo to find similar products",
-        details: ["AR fitting for clothes and accessories", "Color matching with your wardrobe", "Style recommendations based on photos"]
+        title: "🤳 Visual Search & AR Try-On",
+        description: "Advanced visual shopping technology",
+        details: [
+          "Take photo to find similar products",
+          "AR fitting for clothes and accessories",
+          "Color matching with your wardrobe",
+          "Style recommendations based on photos"
+        ]
       },
       {
-        title: "Voice Shopping",
-        description: "Shop using voice commands",
-        details: ["Natural language processing", "Accent recognition", "Voice-to-text search capabilities"]
+        title: "🗣️ Voice Shopping in Bengali",
+        description: "Shop using voice commands in Bengali",
+        details: [
+          "আমার জন্য একটি লাল শাড়ি খুঁজে দিন",
+          "Show me EID gifts under 2000 taka",
+          "Voice-to-text search",
+          "Accent recognition for regional Bengali"
+        ]
       },
       {
-        title: "Location-Based Services",
-        description: "Find nearby pickup points and local vendors",
-        details: ["Area-specific delivery times", "Regional price comparisons", "Local vendor recommendations"]
+        title: "📍 Location-Based Services",
+        description: "Smart location-aware shopping features",
+        details: [
+          "Find nearby pickup points",
+          "Local vendor recommendations",
+          "Area-specific delivery times",
+          "Regional price comparisons"
+        ]
       },
       {
-        title: "AI Shopping Assistant - Nila",
-        description: "Your personal shopping companion",
-        details: ["Budget planning and suggestions", "Size and style matching", "EID timeline planning"]
+        title: "🤖 AI Shopping Assistant",
+        description: "Nila - Your personal shopping companion",
+        details: [
+          "Nila - Your personal shopping companion",
+          "Budget planning and suggestions",
+          "Size and style matching",
+          "EID timeline planning"
+        ]
       }
     ]
   },
   {
-    category: "App User Benefits",
-    icon: "🏆", 
+    category: "🏆 App User Benefits",
+    icon: "👑",
     features: [
       {
-        title: "VIP Member Privileges",
-        description: "Early access to EID sales and priority support",
-        details: ["Exclusive member pricing", "Birthday and anniversary offers", "Priority customer support"]
+        title: "👑 VIP Member Privileges",
+        description: "Exclusive benefits for app users",
+        details: [
+          "Early access to EID sales",
+          "Priority customer support",
+          "Exclusive member pricing",
+          "Birthday and anniversary special offers"
+        ]
       },
       {
-        title: "Loyalty Points Program",
-        description: "Earn 1 point per $1 spent",
-        details: ["Bonus points for app usage", "Redeem points for discounts", "Special EID point multipliers"]
+        title: "💎 Loyalty Points Program",
+        description: "Earn and redeem points on every purchase",
+        details: [
+          "Earn 1 point per ৳10 spent",
+          "Bonus points for app usage",
+          "Redeem points for discounts",
+          "Special EID point multipliers"
+        ]
       },
       {
-        title: "Smart Notifications",
-        description: "Personalized deal alerts and updates",
-        details: ["Back-in-stock notifications", "Price drop alerts", "EID reminder notifications"]
+        title: "🔔 Smart Notifications",
+        description: "Personalized alerts and reminders",
+        details: [
+          "Personalized deal alerts",
+          "Back-in-stock notifications",
+          "Price drop alerts",
+          "EID reminder notifications"
+        ]
       },
       {
-        title: "Personal Shopping Analytics",
-        description: "Spending insights and trends analysis",
-        details: ["Category-wise purchase analysis", "Budget tracking and alerts", "EID shopping progress tracking"]
+        title: "📊 Personal Shopping Analytics",
+        description: "Track and analyze your shopping patterns",
+        details: [
+          "Spending insights and trends",
+          "Category-wise purchase analysis",
+          "Budget tracking and alerts",
+          "EID shopping progress tracking"
+        ]
       }
     ]
   }

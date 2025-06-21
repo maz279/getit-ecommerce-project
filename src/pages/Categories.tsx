@@ -177,14 +177,17 @@ const Categories: React.FC = () => {
               onToggleFilters={() => setShowFilters(!showFilters)}
             />
 
-            {/* Category Content */}
+            {/* Category Content with Tabs */}
             <CategoryContent
               selectedCategory={selectedCategory || undefined}
+              selectedSubcategory={selectedSubcategory || undefined}
               selectedSubSubcategory={selectedSubSubcategory || undefined}
               viewMode={viewMode}
               onCategorySelect={(categoryId) => handleCategorySelect(categoryId)}
               getCurrentItems={getCurrentItems}
               sampleProducts={sampleProducts}
+              getCategoryData={getCurrentCategoryData}
+              getSubcategoryData={getCurrentSubcategoryData}
             />
           </div>
         </div>

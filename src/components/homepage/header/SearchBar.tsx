@@ -7,15 +7,46 @@ interface SearchBarProps {
   setSearchQuery: (query: string) => void;
   showMobileSearch: boolean;
   setShowMobileSearch: (show: boolean) => void;
+  language: string;
 }
 
 export const SearchBar: React.FC<SearchBarProps> = ({
   searchQuery,
   setSearchQuery,
   showMobileSearch,
-  setShowMobileSearch
+  setShowMobileSearch,
+  language
 }) => {
-  const trendingSearches = ['Mobile', 'Fashion', 'Electronics', 'Groceries'];
+  const content = {
+    EN: {
+      placeholder: "Search products, brands, vendors...",
+      trending: "Trending:",
+      allCategories: "All Categories",
+      categories: {
+        electronics: "Electronics",
+        fashion: "Fashion",
+        home: "Home",
+        beauty: "Beauty",
+        groceries: "Groceries"
+      },
+      trendingSearches: ['Mobile', 'Fashion', 'Electronics', 'Groceries']
+    },
+    BD: {
+      placeholder: "পণ্য, ব্র্যান্ড, বিক্রেতা খুঁজুন...",
+      trending: "ট্রেন্ডিং:",
+      allCategories: "সব ক্যাটেগরি",
+      categories: {
+        electronics: "ইলেকট্রনিক্স",
+        fashion: "ফ্যাশন",
+        home: "ঘর",
+        beauty: "সৌন্দর্য",
+        groceries: "মুদি"
+      },
+      trendingSearches: ['মোবাইল', 'ফ্যাশন', 'ইলেকট্রনিক্স', 'মুদি']
+    }
+  };
+
+  const currentContent = content[language as keyof typeof content];
 
   return (
     <>
@@ -32,16 +63,16 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full">
           <div className="flex items-center">
             <select className="px-3 py-3 border-r border-gray-200 text-sm focus:outline-none">
-              <option>All Categories</option>
-              <option>Electronics</option>
-              <option>Fashion</option>
-              <option>Home</option>
-              <option>Beauty</option>
-              <option>Groceries</option>
+              <option>{currentContent.allCategories}</option>
+              <option>{currentContent.categories.electronics}</option>
+              <option>{currentContent.categories.fashion}</option>
+              <option>{currentContent.categories.home}</option>
+              <option>{currentContent.categories.beauty}</option>
+              <option>{currentContent.categories.groceries}</option>
             </select>
             <input
               type="search"
-              placeholder="Search products, brands, vendors..."
+              placeholder={currentContent.placeholder}
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="flex-1 px-4 py-3 text-sm focus:outline-none"
@@ -64,8 +95,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         </div>
         {/* Trending Searches */}
         <div className="mt-2 flex items-center gap-2 text-xs text-white">
-          <span>Trending:</span>
-          {trendingSearches.map((search) => (
+          <span>{currentContent.trending}</span>
+          {currentContent.trendingSearches.map((search) => (
             <button 
               key={search}
               onClick={() => setSearchQuery(search)}
@@ -83,14 +114,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
           <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full">
             <div className="flex items-center">
               <select className="px-3 py-2 border-r border-gray-200 text-sm focus:outline-none">
-                <option>All</option>
-                <option>Electronics</option>
-                <option>Fashion</option>
-                <option>Home</option>
+                <option>{currentContent.allCategories}</option>
+                <option>{currentContent.categories.electronics}</option>
+                <option>{currentContent.categories.fashion}</option>
+                <option>{currentContent.categories.home}</option>
               </select>
               <input
                 type="search"
-                placeholder="Search products, brands, vendors..."
+                placeholder={currentContent.placeholder}
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 className="flex-1 px-3 py-2 text-sm focus:outline-none"

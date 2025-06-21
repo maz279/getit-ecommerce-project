@@ -1,11 +1,22 @@
-
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductCard } from './ProductCard';
 import { Sparkles, ArrowRight } from 'lucide-react';
 
 export const NewProductsSection: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    navigate('/categories?filter=new');
+  };
+
+  const handleProductClick = (productId: string) => {
+    navigate(`/product/${productId}`);
+  };
+
   const products = [
     {
+      id: 'new-1',
       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
       category: "Watches",
       title: "Smart Fitness Watch - Heart Rate Monitor",
@@ -18,6 +29,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-2',
       image: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?w=300&h=300&fit=crop",
       category: "Audio",
       title: "Wireless Noise Cancelling Headphones",
@@ -30,6 +42,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-3',
       image: "https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300&h=300&fit=crop",
       category: "Gaming",
       title: "RGB Gaming Keyboard - Mechanical Keys",
@@ -42,6 +55,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-4',
       image: "https://images.unsplash.com/photo-1572635196237-14b3f281503f?w=300&h=300&fit=crop",
       category: "Fashion",
       title: "Designer Sunglasses - UV Protection",
@@ -54,6 +68,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-5',
       image: "https://images.unsplash.com/photo-1542291026-7eec264c27ff?w=300&h=300&fit=crop",
       category: "Sports",
       title: "Professional Running Shoes",
@@ -66,6 +81,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-6',
       image: "https://images.unsplash.com/photo-1484704849700-f032a568e944?w=300&h=300&fit=crop",
       category: "Home",
       title: "Smart Coffee Maker - WiFi Enabled",
@@ -78,6 +94,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-7',
       image: "https://images.unsplash.com/photo-1517336714731-489689fd1ca8?w=300&h=300&fit=crop",
       category: "Tech",
       title: "Adjustable Laptop Stand - Ergonomic",
@@ -90,6 +107,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-8',
       image: "https://images.unsplash.com/photo-1511707171634-5f897ff02aa9?w=300&h=300&fit=crop",
       category: "Mobile",
       title: "Fast Wireless Charging Pad",
@@ -102,6 +120,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-9',
       image: "https://images.unsplash.com/photo-1526170375885-4d8ecf77b99f?w=300&h=300&fit=crop",
       category: "Photography",
       title: "DSLR Camera Lens - 50mm Prime",
@@ -114,6 +133,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-10',
       image: "https://images.unsplash.com/photo-1583394838336-acd977736f90?w=300&h=300&fit=crop",
       category: "Audio",
       title: "Professional Studio Speakers",
@@ -126,6 +146,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-11',
       image: "https://images.unsplash.com/photo-1571019613540-996a8c044e55?w=300&h=300&fit=crop",
       category: "Fitness",
       title: "Smart Exercise Bike - Connected",
@@ -138,6 +159,7 @@ export const NewProductsSection: React.FC = () => {
       badge: "NEW"
     },
     {
+      id: 'new-12',
       image: "https://images.unsplash.com/photo-1434626881859-194d67b2b86f?w=300&h=300&fit=crop",
       category: "Beauty",
       title: "LED Light Therapy Device",
@@ -164,7 +186,10 @@ export const NewProductsSection: React.FC = () => {
               <p className="text-gray-600">Fresh arrivals just for you</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all">
+          <button 
+            onClick={handleViewAll}
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-purple-600 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-purple-700 transition-all"
+          >
             View All <ArrowRight className="w-4 h-4" />
           </button>
         </div>
@@ -185,6 +210,7 @@ export const NewProductsSection: React.FC = () => {
               badge={product.badge}
               isCompact={true}
               onAddToCart={() => console.log(`Added new product ${index + 1} to cart`)}
+              onClick={() => handleProductClick(product.id)}
             />
           ))}
         </div>

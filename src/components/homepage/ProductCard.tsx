@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Heart, ShoppingCart, Star, Eye, Zap, AlertCircle } from 'lucide-react';
 
@@ -16,6 +17,7 @@ interface ProductCardProps {
   isCompact?: boolean;
   onAddToCart?: () => void;
   onWishlist?: () => void;
+  onClick?: () => void;
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({
@@ -32,19 +34,33 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   discount = "25% OFF",
   isCompact = false,
   onAddToCart,
-  onWishlist
+  onWishlist,
+  onClick
 }) => {
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [imageLoaded, setImageLoaded] = useState(false);
 
-  const handleWishlist = () => {
+  const handleWishlist = (e: React.MouseEvent) => {
+    e.stopPropagation();
     setIsWishlisted(!isWishlisted);
     onWishlist?.();
   };
 
+  const handleAddToCart = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    onAddToCart?.();
+  };
+
+  const handleCardClick = () => {
+    onClick?.();
+  };
+
   if (isCompact) {
     return (
-      <div className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100">
+      <div 
+        onClick={handleCardClick}
+        className="bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100 cursor-pointer"
+      >
         {/* Compact Image Container */}
         <div className="relative overflow-hidden">
           {!imageLoaded && (
@@ -131,7 +147,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
           {/* Compact Add to Cart Button */}
           <button
-            onClick={onAddToCart}
+            onClick={handleAddToCart}
             className="w-full bg-gradient-to-r from-blue-500 to-green-600 text-white font-semibold py-1.5 rounded text-xs hover:from-blue-600 hover:to-green-700 transition-all transform hover:scale-105 flex items-center justify-center gap-1 shadow-md"
           >
             <ShoppingCart className="w-3 h-3" />
@@ -143,7 +159,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   }
 
   return (
-    <div className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100">
+    <div 
+      onClick={handleCardClick}
+      className="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100 cursor-pointer"
+    >
       {/* Image Container */}
       <div className="relative overflow-hidden">
         {!imageLoaded && (
@@ -230,7 +249,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Add to Cart Button */}
         <button
-          onClick={onAddToCart}
+          onClick={handleAddToCart}
           className="w-full bg-gradient-to-r from-blue-500 to-purple-600 text-white font-semibold py-3 rounded-lg hover:from-blue-600 hover:to-purple-700 transition-all transform hover:scale-105 flex items-center justify-center gap-2 shadow-lg"
         >
           <ShoppingCart className="w-4 h-4" />

@@ -1,11 +1,22 @@
-
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import { ProductCard } from './ProductCard';
 import { TrendingUp, ArrowRight } from 'lucide-react';
 
 export const TrendingProducts: React.FC = () => {
+  const navigate = useNavigate();
+
+  const handleViewAll = () => {
+    navigate('/categories?trending=products');
+  };
+
+  const handleProductClick = (productId: string) => {
+    navigate(`/product/${productId}`);
+  };
+
   const products = [
     {
+      id: 'trending-1',
       image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=300&h=300&fit=crop",
       category: "Watches",
       title: "Smart Fitness Watch - Heart Rate Monitor",
@@ -117,7 +128,10 @@ export const TrendingProducts: React.FC = () => {
               <p className="text-gray-600">Most popular items this week</p>
             </div>
           </div>
-          <button className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-green-600 transition-all font-semibold">
+          <button 
+            onClick={handleViewAll}
+            className="flex items-center gap-2 bg-gradient-to-r from-blue-500 to-green-500 text-white px-6 py-3 rounded-full hover:from-blue-600 hover:to-green-600 transition-all font-semibold"
+          >
             View All
             <ArrowRight className="w-4 h-4" />
           </button>
@@ -140,6 +154,7 @@ export const TrendingProducts: React.FC = () => {
               badge={product.badge}
               isCompact={true}
               onAddToCart={() => console.log(`Added trending product ${index + 1} to cart`)}
+              onClick={() => handleProductClick(product.id)}
             />
           ))}
         </div>

@@ -86,7 +86,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
   const categoryData = getCategoryData();
   const subcategoryData = getSubcategoryData();
 
-  // If we have a subcategory selected, show tabs for its subcategories
+  // If we have a subcategory selected, show tabs for its sub-subcategories
   if (selectedSubcategory && subcategoryData) {
     const subSubcategories = subcategoryData.subcategories || [];
     
@@ -110,7 +110,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
 
           <div className="p-6">
             <TabsContent value="all">
-              <ProductList products={sampleProducts} viewMode={viewMode} />
+              <ProductList products={sampleProducts} viewMode={viewMode} gridSize="small" />
             </TabsContent>
             
             {subSubcategories.map((subSub: SubCategory) => (
@@ -123,6 +123,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
                   <ProductList 
                     products={sampleProducts.filter((_, index) => index % 3 === subSubcategories.indexOf(subSub) % 3)} 
                     viewMode={viewMode} 
+                    gridSize="small"
                   />
                 </div>
               </TabsContent>
@@ -133,67 +134,54 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
     );
   }
 
-  // If we have a category but no subcategory, show tabs for subcategories
+  // If we have a category but no subcategory, show subcategories as cards
   if (selectedCategory && categoryData) {
     const subcategories = Object.values(categoryData.subcategories || {}) as CategoryData[];
     
     return (
-      <div className="bg-white rounded-lg shadow-sm">
-        <Tabs defaultValue={subcategories[0]?.name || 'all'} className="w-full">
-          <div className="border-b px-6 py-4">
-            <TabsList className="w-full justify-start overflow-x-auto">
-              <TabsTrigger value="all" className="whitespace-nowrap">All Products</TabsTrigger>
-              {subcategories.map((sub: CategoryData) => (
-                <TabsTrigger 
-                  key={sub.name} 
-                  value={sub.name}
-                  className="whitespace-nowrap"
-                >
-                  {sub.name}
-                </TabsTrigger>
-              ))}
-            </TabsList>
+      <div className="bg-white rounded-lg shadow-sm p-6">
+        <div className="space-y-6">
+          <div className="flex items-center justify-between">
+            <h2 className="text-xl font-bold text-gray-800">{categoryData.name}</h2>
+            <span className="text-sm text-gray-500">
+              {subcategories.reduce((total, sub) => total + (sub.subcategories?.reduce((subTotal, subSub) => subTotal + subSub.count, 0) || 0), 0)} products available
+            </span>
           </div>
-
-          <div className="p-6">
-            <TabsContent value="all">
-              <ProductList products={sampleProducts} viewMode={viewMode} />
-            </TabsContent>
-            
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {subcategories.map((sub: CategoryData) => (
-              <TabsContent key={sub.name} value={sub.name}>
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h3 className="text-lg font-semibold text-gray-800">{sub.name}</h3>
-                    <span className="text-sm text-gray-500">
-                      {sub.subcategories?.reduce((total: number, subSub: SubCategory) => total + subSub.count, 0) || 0} products available
-                    </span>
+              <div key={sub.name} className="border rounded-lg p-4 hover:shadow-md transition-shadow cursor-pointer">
+                <h3 className="font-semibold text-gray-800 mb-3">{sub.name}</h3>
+                
+                {sub.subcategories && sub.subcategories.length > 0 ? (
+                  <div className="space-y-2">
+                    {sub.subcategories.slice(0, 4).map((subSub: SubCategory) => (
+                      <div key={subSub.name} className="flex items-center justify-between text-sm">
+                        <span className="text-gray-600">{subSub.name}</span>
+                        <span className="text-gray-400">({subSub.count})</span>
+                      </div>
+                    ))}
+                    {sub.subcategories.length > 4 && (
+                      <div className="text-xs text-blue-600">+{sub.subcategories.length - 4} more</div>
+                    )}
                   </div>
-                  
-                  {sub.subcategories && sub.subcategories.length > 0 ? (
-                    <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mb-6">
-                      {sub.subcategories.map((subSub: SubCategory) => (
-                        <div key={subSub.name} className="bg-gray-50 rounded-lg p-4 hover:bg-gray-100 transition-colors cursor-pointer">
-                          <h4 className="font-medium text-gray-800 mb-1">{subSub.name}</h4>
-                          <p className="text-sm text-gray-600">{subSub.count} items</p>
-                        </div>
-                      ))}
-                    </div>
-                  ) : null}
-                  
-                  <ProductList 
-                    products={sampleProducts.filter((_, index) => index % 4 === subcategories.indexOf(sub) % 4)} 
-                    viewMode={viewMode} 
-                  />
+                ) : (
+                  <div className="text-sm text-gray-500">No subcategories available</div>
+                )}
+                
+                <div className="mt-4 pt-3 border-t">
+                  <div className="text-sm font-medium text-blue-600">
+                    {sub.subcategories?.reduce((total: number, subSub: SubCategory) => total + subSub.count, 0) || 0} products
+                  </div>
                 </div>
-              </TabsContent>
+              </div>
             ))}
           </div>
-        </Tabs>
+        </div>
       </div>
     );
   }
 
   // Fallback to regular product list
-  return <ProductList products={sampleProducts} viewMode={viewMode} />;
+  return <ProductList products={sampleProducts} viewMode={viewMode} gridSize="small" />;
 };

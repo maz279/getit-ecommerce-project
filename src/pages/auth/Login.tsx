@@ -22,7 +22,8 @@ const Login: React.FC = () => {
   const [enableTwoFactor, setEnableTwoFactor] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
-  const [loginMethod, setLoginMethod] = useState<'email' | 'phone'>('email');
+  const [loginMethod, setLoginMethod] = useState<'email' | 'phone' | 'phone-otp'>('email');
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
 
   const { signIn, signInWithGoogle } = useAuth();
   const navigate = useNavigate();
@@ -50,6 +51,67 @@ const Login: React.FC = () => {
     }
   };
 
+  const handleSendOTP = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      // Here you would integrate with Supabase SMS OTP
+      // For now, we'll simulate the flow
+      console.log('Sending OTP to:', phone);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 2000));
+      
+      // Show OTP verification screen
+      setShowOTPVerification(true);
+    } catch (err) {
+      setError('Failed to send OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleVerifyOTP = async (otp: string) => {
+    setLoading(true);
+    setError('');
+
+    try {
+      // Here you would verify the OTP with Supabase
+      console.log('Verifying OTP:', otp, 'for phone:', phone);
+      
+      // Simulate verification
+      await new Promise(resolve => setTimeout(resolve, 1500));
+      
+      // For demo purposes, accept any 6-digit code
+      if (otp.length === 6) {
+        console.log('OTP verified successfully');
+        navigate(redirectTo);
+      } else {
+        setError('Invalid verification code');
+      }
+    } catch (err) {
+      setError('Failed to verify OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleResendOTP = async () => {
+    setLoading(true);
+    setError('');
+
+    try {
+      console.log('Resending OTP to:', phone);
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Reset any error states
+    } catch (err) {
+      setError('Failed to resend OTP. Please try again.');
+    } finally {
+      setLoading(false);
+    }
+  };
+
   const handleGoogleLogin = async () => {
     setLoading(true);
     setError('');
@@ -59,7 +121,6 @@ const Login: React.FC = () => {
       if (error) {
         setError(error.message);
       }
-      // Note: For OAuth, the redirect happens automatically
     } catch (err) {
       setError('Failed to sign in with Google');
     } finally {
@@ -71,7 +132,6 @@ const Login: React.FC = () => {
     if (provider === 'google') {
       handleGoogleLogin();
     } else {
-      // Placeholder for other social login implementations
       console.log(`Login with ${provider} - Not implemented yet`);
       setError(`${provider} login is not yet implemented`);
     }
@@ -81,14 +141,11 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
       
-      {/* Main Content */}
       <main className="flex-1 flex items-center justify-center p-4 py-12">
         <div className="w-full max-w-6xl flex gap-8 items-center">
           <WelcomeSection />
 
-          {/* Login Form Section */}
           <div className="w-full max-w-md lg:max-w-lg">
-            {/* Back to Home Link */}
             <div className="mb-6">
               <Link 
                 to="/" 
@@ -112,20 +169,23 @@ const Login: React.FC = () => {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Social Login Options */}
-                <SocialLoginButtons 
-                  onSocialLogin={handleSocialLogin}
-                  loading={loading}
-                />
+                {/* Show social login only if not in OTP verification mode */}
+                {!showOTPVerification && (
+                  <>
+                    <SocialLoginButtons 
+                      onSocialLogin={handleSocialLogin}
+                      loading={loading}
+                    />
 
-                <div className="relative">
-                  <Separator />
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="bg-white px-4 text-sm text-gray-500">Or continue with</span>
-                  </div>
-                </div>
+                    <div className="relative">
+                      <Separator />
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <span className="bg-white px-4 text-sm text-gray-500">Or continue with</span>
+                      </div>
+                    </div>
+                  </>
+                )}
 
-                {/* Login Form */}
                 <LoginForm
                   email={email}
                   setEmail={setEmail}
@@ -144,49 +204,58 @@ const Login: React.FC = () => {
                   loginMethod={loginMethod}
                   setLoginMethod={setLoginMethod}
                   onSubmit={handleSubmit}
+                  onSendOTP={handleSendOTP}
+                  onVerifyOTP={handleVerifyOTP}
+                  onResendOTP={handleResendOTP}
+                  showOTPVerification={showOTPVerification}
                 />
 
-                {/* Links */}
-                <div className="space-y-4 text-center">
-                  <Link 
-                    to="/auth/forgot-password" 
-                    className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                  >
-                    Forgot your password?
-                  </Link>
-                  
-                  <Separator />
-                  
-                  <div className="space-y-2">
-                    <p className="text-sm text-gray-600">
-                      Don't have an account?{' '}
-                      <Link to="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
-                        Create Account
+                {/* Show links only if not in OTP verification mode */}
+                {!showOTPVerification && (
+                  <>
+                    <div className="space-y-4 text-center">
+                      <Link 
+                        to="/auth/forgot-password" 
+                        className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                      >
+                        Forgot your password?
                       </Link>
-                    </p>
-                    
-                    <p className="text-sm text-gray-600">
-                      Want to sell on GetIt?{' '}
-                      <Link to="/vendor/register" className="text-green-600 hover:text-green-800 font-medium transition-colors">
-                        Become a Vendor
-                      </Link>
-                    </p>
-                  </div>
-                </div>
+                      
+                      <Separator />
+                      
+                      <div className="space-y-2">
+                        <p className="text-sm text-gray-600">
+                          Don't have an account?{' '}
+                          <Link to="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                            Create Account
+                          </Link>
+                        </p>
+                        
+                        <p className="text-sm text-gray-600">
+                          Want to sell on GetIt?{' '}
+                          <Link to="/vendor/register" className="text-green-600 hover:text-green-800 font-medium transition-colors">
+                            Become a Vendor
+                          </Link>
+                        </p>
+                      </div>
+                    </div>
 
-                <TrustIndicators />
+                    <TrustIndicators />
+                  </>
+                )}
               </CardContent>
             </Card>
 
-            {/* Additional Info */}
-            <div className="mt-8 text-center text-xs text-gray-500">
-              <p>
-                By signing in, you agree to our{' '}
-                <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
-                {' '}and{' '}
-                <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
-              </p>
-            </div>
+            {!showOTPVerification && (
+              <div className="mt-8 text-center text-xs text-gray-500">
+                <p>
+                  By signing in, you agree to our{' '}
+                  <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
+                  {' '}and{' '}
+                  <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </main>

@@ -24,17 +24,6 @@ export const Header: React.FC = () => {
   };
 
   const trendingSearches = ['Mobile', 'Fashion', 'Electronics', 'Groceries'];
-  const categories = [
-    { name: 'Electronics & Gadgets', icon: '📱', path: '/categories/electronics' },
-    { name: 'Fashion & Clothing', icon: '👕', path: '/categories/fashion' },
-    { name: 'Home & Living', icon: '🏠', path: '/categories/home' },
-    { name: 'Health & Beauty', icon: '💄', path: '/categories/beauty' },
-    { name: 'Food & Groceries', icon: '🛒', path: '/categories/groceries' },
-    { name: 'Books & Stationery', icon: '📚', path: '/categories/books' },
-    { name: 'Sports & Outdoor', icon: '⚽', path: '/categories/sports' },
-    { name: 'Handicrafts & Traditional', icon: '🎨', path: '/categories/handicrafts' },
-    { name: 'Automotive', icon: '🚗', path: '/categories/automotive' },
-  ];
 
   return (
     <>
@@ -232,72 +221,6 @@ export const Header: React.FC = () => {
             </div>
           </div>
         )}
-
-        {/* Navigation Menu */}
-        <nav className="max-w-7xl mx-auto mt-4 hidden lg:block">
-          <div className="flex items-center justify-between">
-            {/* Main Categories */}
-            <div className="flex items-center gap-6 text-white text-sm">
-              {categories.slice(0, 6).map((category) => (
-                <Link 
-                  key={category.name}
-                  to={category.path}
-                  className="flex items-center gap-2 hover:text-yellow-300 transition-colors cursor-pointer"
-                >
-                  <span>{category.icon}</span>
-                  <span className="hidden xl:block">{category.name}</span>
-                </Link>
-              ))}
-              
-              {/* More Categories Dropdown */}
-              <div className="relative group">
-                <button className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                  <span>➕</span>
-                  <span>More</span>
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-                <div className="absolute top-full left-0 mt-2 bg-white text-black rounded-lg shadow-lg p-4 min-w-64 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-50">
-                  <div className="grid grid-cols-1 gap-2">
-                    {categories.slice(6).map((category) => (
-                      <Link 
-                        key={category.name}
-                        to={category.path}
-                        className="flex items-center gap-3 p-2 hover:bg-gray-100 rounded transition-colors"
-                      >
-                        <span>{category.icon}</span>
-                        <span>{category.name}</span>
-                      </Link>
-                    ))}
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            {/* Special Sections */}
-            <div className="flex items-center gap-6 text-white text-sm">
-              <Link to="/flash-sale" className="flex items-center gap-2 bg-red-500 px-3 py-1 rounded-full hover:bg-red-600 transition-colors">
-                <span>⚡</span>
-                <span>Flash Sales</span>
-              </Link>
-              <Link to="/new-arrivals" className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <span>🆕</span>
-                <span>New Arrivals</span>
-              </Link>
-              <Link to="/best-sellers" className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <span>🔥</span>
-                <span>Best Sellers</span>
-              </Link>
-              <Link to="/local-vendors" className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <span>🇧🇩</span>
-                <span>Local Vendors</span>
-              </Link>
-              <Link to="/international" className="flex items-center gap-2 hover:text-yellow-300 transition-colors">
-                <span>🌍</span>
-                <span>International</span>
-              </Link>
-            </div>
-          </div>
-        </nav>
       </header>
     </>
   );

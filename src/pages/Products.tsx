@@ -5,7 +5,7 @@ import { Footer } from '@/components/homepage/Footer';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/homepage/ProductCard';
-import { Star, Gift, Clock, Zap, Heart, ShoppingBag, Phone, MessageCircle, Users, Award, Truck, Globe, DollarSign, Camera, Target, Crown, Sparkles, Flame, CheckCircle, ArrowRight } from 'lucide-react';
+import { Star, Gift, Clock, Zap, Heart, ShoppingBag, Phone, MessageCircle, Users, Award, Truck, Globe, DollarSign, Camera, Target, Crown, Sparkles, Flame, CheckCircle, ArrowRight, Eye, Plus } from 'lucide-react';
 
 const Products: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -93,30 +93,54 @@ const Products: React.FC = () => {
     { 
       name: "EID Fashion Collection", 
       icon: "👗", 
-      subcategories: ["Women's Collection", "Men's Collection", "Kids Collection", "Footwear"],
+      subcategories: [
+        "Women's Collection - Salwar Kameez (50% OFF)",
+        "Men's Collection - Punjabi (40% OFF)", 
+        "Kids Collection - Cute EID Outfits",
+        "Footwear - Formal Shoes & Sandals"
+      ],
       discount: "Up to 50% OFF",
-      color: "bg-gradient-to-br from-pink-500 to-red-500"
+      color: "bg-gradient-to-br from-pink-500 to-red-500",
+      topPicks: "Exclusive designer collections from premium Bangladesh fashion brands"
     },
     { 
       name: "Home & Decor", 
       icon: "🏠", 
-      subcategories: ["Furniture", "Kitchen & Dining", "Decoration", "Cleaning"],
+      subcategories: [
+        "Furniture - Sofas & Dining Tables",
+        "Kitchen & Dining - Dinner Sets & Cookware", 
+        "Decoration - Islamic Calligraphy & Wall Arts",
+        "Cleaning - Storage & Organization"
+      ],
       discount: "Up to 60% OFF",
-      color: "bg-gradient-to-br from-blue-500 to-teal-500"
+      color: "bg-gradient-to-br from-blue-500 to-teal-500",
+      topPicks: "Islamic home decor from local artisans"
     },
     { 
       name: "EID Food & Treats", 
       icon: "🍖", 
-      subcategories: ["Fresh Meat", "Sweets & Desserts", "Rice & Grains", "Spices"],
+      subcategories: [
+        "Fresh Meat - Premium Beef & Mutton",
+        "Sweets & Desserts - Traditional Mishti", 
+        "Rice & Grains - Premium Basmati Rice",
+        "Spices - Complete Spice Sets"
+      ],
       discount: "Up to 40% OFF",
-      color: "bg-gradient-to-br from-green-500 to-yellow-500"
+      color: "bg-gradient-to-br from-green-500 to-yellow-500",
+      topPicks: "EID FEAST PACKAGES: Complete meal solutions for 5, 10, 15+ people"
     },
     { 
       name: "Gifts & Electronics", 
       icon: "🎁", 
-      subcategories: ["Smartphones", "Gift Items", "Home Appliances", "Beauty Care"],
+      subcategories: [
+        "Smartphones - Latest iPhone & Samsung",
+        "Gift Items - Perfumes & Islamic Books", 
+        "Home Appliances - AC & Refrigerators",
+        "Beauty Care - Skincare & Cosmetics"
+      ],
       discount: "Up to 70% OFF",
-      color: "bg-gradient-to-br from-purple-500 to-pink-500"
+      color: "bg-gradient-to-br from-purple-500 to-pink-500",
+      topPicks: "BUNDLE DEALS: Phone + Accessories combos with extended warranties"
     }
   ];
 
@@ -133,28 +157,95 @@ const Products: React.FC = () => {
     {
       title: "EID HOME MAKEOVER COMBO",
       description: "Transform Your Home for EID",
-      items: ["Living Room Sofa Set", "Dining Table with 6 Chairs", "Islamic Wall Art Collection", "Decorative Lighting Set"],
+      items: ["Living Room Sofa Set", "Dining Table with 6 Chairs", "Islamic Wall Art Collection", "Decorative Lighting Set", "Premium Curtains & Cushions"],
       originalPrice: 65000,
       bundlePrice: 42250,
       savings: 35,
-      freeBonus: "FREE Assembly & Installation"
+      freeBonus: "FREE Assembly & Installation + EID Delivery Guarantee"
     },
     {
       title: "EID FEAST PACKAGE",
       description: "Complete EID Dinner for 10 People",
-      items: ["2KG Premium Beef", "1KG Mutton", "2KG Basmati Rice", "Complete Spice Set"],
+      items: ["2KG Premium Beef (Fresh Cut)", "1KG Mutton (Goat)", "2KG Basmati Rice", "Complete Spice Set", "Traditional Sweets (1KG)", "Fruits & Dry Nuts"],
       originalPrice: 7800,
       bundlePrice: 5850,
       savings: 25,
-      freeBonus: "FREE Recipe Collection App"
+      freeBonus: "FREE Recipe Collection App + Chef Consultation Call"
     }
   ];
 
   const featuredVendors = [
-    { name: "Aarong Fashion House", rating: 4.9, reviews: 5000, specialty: "Traditional & Modern", badge: "🥇" },
-    { name: "Rang Bangladesh", rating: 4.8, reviews: 3200, specialty: "Modest Islamic Wear", badge: "🥇" },
-    { name: "TechLand BD", rating: 4.8, reviews: 8500, specialty: "Latest Electronics", badge: "📱" },
-    { name: "Fresh Food BD", rating: 4.9, reviews: 12000, specialty: "Premium Meat & Groceries", badge: "🍖" }
+    { name: "Aarong Fashion House", rating: 4.9, reviews: 5000, specialty: "Traditional & Modern", badge: "🥇", discount: "Up to 60% EID Discount" },
+    { name: "Rang Bangladesh", rating: 4.8, reviews: 3200, specialty: "Modest Islamic Wear", badge: "🥇", discount: "Buy 2 Get 1 FREE" },
+    { name: "TechLand BD", rating: 4.8, reviews: 8500, specialty: "Latest Electronics", badge: "📱", discount: "Flash Sale: 50% OFF + 2 Year Warranty" },
+    { name: "Fresh Food BD", rating: 4.9, reviews: 12000, specialty: "Premium Meat & Groceries", badge: "🍖", discount: "EID Feast Packages + Halal Certified" },
+    { name: "HomeStyle Bangladesh", rating: 4.7, reviews: 4100, specialty: "Furniture & Decor", badge: "🏠", discount: "Home Makeover Packages + Interest-Free EMI" },
+    { name: "Ecstasy Fashion", rating: 4.7, reviews: 2800, specialty: "Premium Men's Wear", badge: "👔", discount: "Flat 40% OFF Everything + Express Tailoring" },
+    { name: "Bengal Handicrafts", rating: 4.6, reviews: 1500, specialty: "Authentic Bengali Art", badge: "🎨", discount: "Support Local Artisans + Custom Islamic Calligraphy" },
+    { name: "Gift Corner BD", rating: 4.6, reviews: 2700, specialty: "Unique Gift Items", badge: "🎁", discount: "Bundle Gift Offers + Custom Gift Wrapping" }
+  ];
+
+  const giftGuide = [
+    {
+      recipient: "For Father (বাবার জন্য)",
+      items: ["Latest Smartphone", "Premium Watch", "Formal Shirt Collection", "Islamic Books", "Prayer Mat & Tasbeeh"],
+      priceRange: "৳2,000 - ৳25,000",
+      icon: "👨"
+    },
+    {
+      recipient: "For Mother (মায়ের জন্য)",
+      items: ["Gold Jewelry Set", "Designer Saree", "Branded Handbag", "Premium Skincare", "Perfume Collection"],
+      priceRange: "৳1,500 - ৳20,000",
+      icon: "👩"
+    },
+    {
+      recipient: "For Son (ছেলের জন্য)",
+      items: ["Gaming Console & Games", "Smartphone/Tablet", "Sports Equipment", "Trendy Clothing", "Headphones & Gadgets"],
+      priceRange: "৳1,000 - ৳15,000",
+      icon: "👦"
+    },
+    {
+      recipient: "For Daughter (মেয়ের জন্য)",
+      items: ["Makeup & Beauty Kit", "Trendy Outfit Set", "Books & Stationery", "Art & Craft Supplies", "Jewelry Collection"],
+      priceRange: "৳800 - ৳12,000",
+      icon: "👧"
+    }
+  ];
+
+  const contests = [
+    {
+      title: "MEGA EID LOTTERY",
+      description: "Grand Prizes Worth Millions",
+      prizes: ["1st Prize: Hajj Trip for 2 People (৳6,00,000)", "2nd Prize: Brand New Car Toyota Vitz (৳18,00,000)", "3rd Prize: Complete Home Appliance Set (৳3,50,000)"],
+      participation: "Shop for ৳500+ to get 1 lottery ticket",
+      drawDate: "Day after EID"
+    },
+    {
+      title: "EID PHOTO CONTEST",
+      description: "My Perfect EID Moment",
+      prizes: ["1st Place: iPhone 15 Pro + ৳10,000 voucher", "2nd Place: Samsung Galaxy S24 + ৳5,000 voucher", "3rd Place: OnePlus 12 + ৳3,000 voucher"],
+      participation: "Post on Instagram/Facebook with #GetItEID2024",
+      drawDate: "Weekly winners announced"
+    }
+  ];
+
+  const socialImpact = [
+    {
+      title: "Feed the Hungry Initiative",
+      description: "Provide EID Meals to Underprivileged Families",
+      impact: "৳100 = 1 Family EID Meal",
+      goal: "10,000 Families Fed This EID",
+      progress: 82,
+      currentCount: "8,247 families helped"
+    },
+    {
+      title: "EID Clothing Drive",
+      description: "New EID Clothes for Orphan Children",
+      impact: "৳800 = 1 Child's Complete EID Outfit",
+      goal: "5,000 Children Across Bangladesh",
+      progress: 82,
+      currentCount: "4,123 children helped"
+    }
   ];
 
   return (
@@ -251,9 +342,15 @@ const Products: React.FC = () => {
       {/* EID Shopping Categories */}
       <section className="py-12">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            🛍️ EID Special Collections
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🛍️ EID Special Collections
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Eye className="w-4 h-4" />
+              View All Categories
+            </Button>
+          </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {categories.map((category, index) => (
               <Card key={index} className={`${category.color} text-white transform hover:scale-105 transition-all duration-300 border-none shadow-xl`}>
@@ -265,15 +362,18 @@ const Products: React.FC = () => {
                       {category.discount}
                     </div>
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2 mb-4">
                     {category.subcategories.map((sub, idx) => (
-                      <div key={idx} className="flex items-center gap-2 text-sm">
-                        <CheckCircle className="w-4 h-4" />
+                      <div key={idx} className="flex items-start gap-2 text-xs">
+                        <CheckCircle className="w-3 h-3 mt-0.5" />
                         <span>{sub}</span>
                       </div>
                     ))}
                   </div>
-                  <Button variant="secondary" className="w-full mt-4 text-gray-800 font-bold">
+                  <div className="text-xs text-white bg-white bg-opacity-20 p-2 rounded mb-4">
+                    🎯 {category.topPicks}
+                  </div>
+                  <Button variant="secondary" className="w-full text-gray-800 font-bold">
                     Shop Collection
                   </Button>
                 </CardContent>
@@ -286,16 +386,22 @@ const Products: React.FC = () => {
       {/* Flash Deals */}
       <section className="py-12 bg-gradient-to-r from-red-100 to-yellow-100">
         <div className="max-w-7xl mx-auto px-4">
-          <div className="text-center mb-8">
-            <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center gap-3 mb-4">
-              <Flame className="w-8 h-8 text-red-500" />
-              ⚡ আজকের বিশেষ অফার ⚡
-              <Flame className="w-8 h-8 text-red-500" />
-            </h2>
-            <p className="text-lg text-gray-600">⏰ Limited Time Flash Deals ⏰</p>
-            <div className="bg-red-500 text-white px-4 py-2 rounded-full inline-block font-bold mt-2">
-              🔥 ENDING IN: 2:15:30 - Don't Miss Out!
+          <div className="flex justify-between items-center mb-8">
+            <div className="text-center">
+              <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center gap-3 mb-4">
+                <Flame className="w-8 h-8 text-red-500" />
+                ⚡ আজকের বিশেষ অফার ⚡
+                <Flame className="w-8 h-8 text-red-500" />
+              </h2>
+              <p className="text-lg text-gray-600">⏰ Limited Time Flash Deals ⏰</p>
+              <div className="bg-red-500 text-white px-4 py-2 rounded-full inline-block font-bold mt-2">
+                🔥 ENDING IN: 2:15:30 - Don't Miss Out!
+              </div>
             </div>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Plus className="w-4 h-4" />
+              View All Flash Deals
+            </Button>
           </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -343,9 +449,15 @@ const Products: React.FC = () => {
       {/* Bundle Offers */}
       <section className="py-12 bg-gradient-to-br from-purple-50 to-pink-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            🎁 EID COMBO DEALS - সেট অফার 🎁
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🎁 EID COMBO DEALS - সেট অফার 🎁
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <ArrowRight className="w-4 h-4" />
+              View All Bundles
+            </Button>
+          </div>
           
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             {bundleOffers.map((bundle, index) => (
@@ -407,11 +519,17 @@ const Products: React.FC = () => {
       {/* Payment Offers */}
       <section className="py-12 bg-gradient-to-r from-blue-100 to-green-100">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            💰 EID Payment Bonuses - পেমেন্ট অফার
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              💰 EID Payment Bonuses - পেমেন্ট অফার
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <DollarSign className="w-4 h-4" />
+              View All Payment Offers
+            </Button>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             <Card className="bg-gradient-to-br from-pink-500 to-red-500 text-white border-none shadow-xl">
               <CardContent className="p-6">
                 <h3 className="text-xl font-bold mb-4">📱 bKash EID Special</h3>
@@ -420,6 +538,7 @@ const Products: React.FC = () => {
                   <div>🎁 Instant ৳200 bonus on first payment</div>
                   <div>🔄 0% transaction fee for all EID purchases</div>
                   <div>💰 Double rewards points until EID</div>
+                  <div>📱 Easy 1-tap checkout for repeat purchases</div>
                 </div>
                 <Button variant="secondary" className="w-full text-pink-600 font-bold">
                   💳 Pay with bKash
@@ -432,9 +551,10 @@ const Products: React.FC = () => {
                 <h3 className="text-xl font-bold mb-4">📱 Nagad Mega Offer</h3>
                 <div className="space-y-2 text-sm mb-4">
                   <div>💸 Up to 10% Cashback (Maximum ৳1,000)</div>
-                  <div>🎊 Special EID scratch cards</div>
+                  <div>🎊 Special EID scratch cards with every payment</div>
                   <div>🎁 Win EID gifts worth up to ৳10,000</div>
                   <div>🏆 Lucky draw for Hajj trip (2 winners)</div>
+                  <div>💵 Instant payment processing</div>
                 </div>
                 <Button variant="secondary" className="w-full text-orange-600 font-bold">
                   💳 Pay with Nagad
@@ -450,9 +570,26 @@ const Products: React.FC = () => {
                   <div>🎁 Free mobile recharge vouchers</div>
                   <div>💰 No minimum purchase requirement</div>
                   <div>🔐 Extra security with PIN + OTP</div>
+                  <div>📊 Track all EID expenses in Rocket app</div>
                 </div>
                 <Button variant="secondary" className="w-full text-purple-600 font-bold">
                   💳 Pay with Rocket
+                </Button>
+              </CardContent>
+            </Card>
+
+            <Card className="bg-gradient-to-br from-gray-600 to-gray-800 text-white border-none shadow-xl">
+              <CardContent className="p-6">
+                <h3 className="text-xl font-bold mb-4">💳 Bank Cards & COD</h3>
+                <div className="space-y-2 text-sm mb-4">
+                  <div>💳 Credit/Debit Cards: 3% cashback</div>
+                  <div>🏦 Bank Transfer: 2% discount on orders above ৳5,000</div>
+                  <div>💰 Cash on Delivery: FREE COD on EID orders</div>
+                  <div>📱 EMI Options: 0% interest up to 12 months</div>
+                  <div>🎯 All payments 100% secure with bank-level encryption</div>
+                </div>
+                <Button variant="secondary" className="w-full text-gray-600 font-bold">
+                  💳 Other Payment Options
                 </Button>
               </CardContent>
             </Card>
@@ -463,14 +600,19 @@ const Products: React.FC = () => {
       {/* Delivery Promise */}
       <section className="py-12 bg-gradient-to-br from-green-50 to-blue-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            🎯 EID DELIVERY GUARANTEE - ডেলিভারি গ্যারান্টি
-          </h2>
-          
-          <div className="text-center mb-8">
-            <div className="text-2xl font-bold text-green-600 mb-4">
-              📅 ORDER TODAY, GET BEFORE EID! 📅
+          <div className="flex justify-between items-center mb-8">
+            <div>
+              <h2 className="text-3xl font-bold text-gray-800">
+                🎯 EID DELIVERY GUARANTEE - ডেলিভারি গ্যারান্টি
+              </h2>
+              <div className="text-2xl font-bold text-green-600 mt-4">
+                📅 ORDER TODAY, GET BEFORE EID! 📅
+              </div>
             </div>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Truck className="w-4 h-4" />
+              Track My Order
+            </Button>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -481,8 +623,11 @@ const Products: React.FC = () => {
                 <p className="text-sm text-gray-600 mb-2">(Dhaka Metro)</p>
                 <div className="text-xs text-gray-500 space-y-1">
                   <div>⏰ Order before 3 PM → Deliver by 8 PM</div>
+                  <div>🏍️ Pathao Express Partnership</div>
+                  <div>📍 Covers: Dhanmondi, Gulshan, Uttara, Wari, Old Dhaka</div>
                   <div>💰 FREE on orders above ৳1,500</div>
-                  <div>📱 Real-time tracking</div>
+                  <div>📱 Real-time tracking with live location</div>
+                  <div>🎁 Free gift wrapping for same-day orders</div>
                 </div>
               </CardContent>
             </Card>
@@ -493,9 +638,12 @@ const Products: React.FC = () => {
                 <h3 className="font-bold text-gray-800 mb-2">Express Delivery</h3>
                 <p className="text-sm text-gray-600 mb-2">(Major Cities)</p>
                 <div className="text-xs text-gray-500 space-y-1">
-                  <div>📦 Next day delivery</div>
-                  <div>💰 ৳80 (FREE above ৳2,000)</div>
-                  <div>🔒 Insured delivery</div>
+                  <div>📦 Chittagong, Sylhet, Rajshahi: Next day delivery</div>
+                  <div>🚚 Paperfly & Sundarban courier network</div>
+                  <div>💰 Cost: ৳80 (FREE on orders above ৳2,000)</div>
+                  <div>📅 Order by 12 PM for next-day delivery</div>
+                  <div>🔒 Insured delivery for valuable items</div>
+                  <div>📞 SMS/Call updates at every step</div>
                 </div>
               </CardContent>
             </Card>
@@ -506,9 +654,12 @@ const Products: React.FC = () => {
                 <h3 className="font-bold text-gray-800 mb-2">Pickup Points</h3>
                 <p className="text-sm text-gray-600 mb-2">(Nationwide)</p>
                 <div className="text-xs text-gray-500 space-y-1">
-                  <div>📍 50+ Pickup locations</div>
-                  <div>💰 FREE pickup service</div>
-                  <div>🕐 Extended EID hours</div>
+                  <div>📍 50+ Pickup locations across Bangladesh</div>
+                  <div>🏪 Shopping malls, markets, community centers</div>
+                  <div>💰 FREE pickup service, no delivery charges</div>
+                  <div>🕐 Extended hours: 8 AM - 10 PM during EID week</div>
+                  <div>🔐 Secure locker system for safe collection</div>
+                  <div>📱 SMS notification when ready for pickup</div>
                 </div>
               </CardContent>
             </Card>
@@ -519,9 +670,12 @@ const Products: React.FC = () => {
                 <h3 className="font-bold text-gray-800 mb-2">Emergency Delivery</h3>
                 <p className="text-sm text-gray-600 mb-2">(2-hour guarantee)</p>
                 <div className="text-xs text-gray-500 space-y-1">
-                  <div>🚁 Drone delivery available</div>
-                  <div>💰 ৳300 flat rate</div>
-                  <div>📞 24/7 hotline: 16263</div>
+                  <div>🆘 Last-minute EID shopping solution</div>
+                  <div>🚁 Drone delivery in select Dhaka areas</div>
+                  <div>🏍️ 2-hour guaranteed delivery</div>
+                  <div>💰 Premium service: ৳300 flat rate</div>
+                  <div>📞 24/7 emergency hotline: 16263</div>
+                  <div>🎁 Available for gifts, fashion, electronics</div>
                 </div>
               </CardContent>
             </Card>
@@ -532,9 +686,15 @@ const Products: React.FC = () => {
       {/* Featured Vendors */}
       <section className="py-12 bg-gradient-to-r from-yellow-100 to-orange-100">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            🏆 EID Featured Vendors - টপ বিক্রেতা
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🏆 EID Featured Vendors - টপ বিক্রেতা
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Users className="w-4 h-4" />
+              View All Vendors
+            </Button>
+          </div>
           
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredVendors.map((vendor, index) => (
@@ -547,7 +707,8 @@ const Products: React.FC = () => {
                     <span className="font-semibold">{vendor.rating}/5</span>
                     <span className="text-gray-500 text-sm">({vendor.reviews.toLocaleString()}+ reviews)</span>
                   </div>
-                  <p className="text-sm text-gray-600 mb-3">🎯 {vendor.specialty}</p>
+                  <p className="text-sm text-gray-600 mb-2">🎯 {vendor.specialty}</p>
+                  <div className="text-xs text-green-600 font-semibold mb-3">{vendor.discount}</div>
                   <Button variant="outline" className="w-full border-yellow-500 text-yellow-700 hover:bg-yellow-50">
                     🛍️ Shop Now
                   </Button>
@@ -555,17 +716,228 @@ const Products: React.FC = () => {
               </Card>
             ))}
           </div>
+          <div className="text-center mt-6">
+            <p className="text-sm text-gray-600">🎯 All Featured Vendors: Verified ✅ | Top Rated ⭐ | Fast Delivery 🚚</p>
+          </div>
+        </div>
+      </section>
+
+      {/* Gift Guide */}
+      <section className="py-12 bg-gradient-to-br from-pink-50 to-purple-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🎁 EID Gift Guide - উপহার গাইড 🎁
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Gift className="w-4 h-4" />
+              Complete Gift Guide
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {giftGuide.map((guide, index) => (
+              <Card key={index} className="border-2 border-pink-200 hover:border-pink-400 transform hover:scale-105 transition-all">
+                <CardContent className="p-6">
+                  <div className="text-center mb-4">
+                    <div className="text-4xl mb-2">{guide.icon}</div>
+                    <h3 className="font-bold text-gray-800 mb-2">{guide.recipient}</h3>
+                  </div>
+                  <div className="space-y-2 mb-4">
+                    {guide.items.map((item, idx) => (
+                      <div key={idx} className="flex items-center gap-2 text-sm text-gray-600">
+                        <Gift className="w-3 h-3 text-pink-500" />
+                        <span>{item}</span>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="text-center">
+                    <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold mb-3">
+                      {guide.priceRange}
+                    </div>
+                    <Button variant="outline" className="w-full border-pink-500 text-pink-600 hover:bg-pink-50">
+                      🎁 Shop Gifts
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <Card className="bg-gradient-to-r from-purple-100 to-pink-100 border-2 border-purple-200">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">🎁 Custom Gift Services 🎁</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-bold mb-2">📦 Gift Wrapping Services</h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>• Premium EID wrapping paper</li>
+                    <li>• Personalized gift messages</li>
+                    <li>• Islamic-themed gift boxes</li>
+                    <li>• Ribbon & bow decoration</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold mb-2">💌 Personalized Gifts</h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>• Custom name engraving</li>
+                    <li>• Photo printing on items</li>
+                    <li>• Personalized clothing</li>
+                    <li>• Custom gift baskets</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="text-center mt-4">
+                <div className="flex gap-2 justify-center">
+                  <Button className="bg-purple-500 hover:bg-purple-600">🎁 Gift Wrapping</Button>
+                  <Button variant="outline">✍️ Personalization</Button>
+                  <Button variant="outline">📞 Gift Advice</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </div>
+      </section>
+
+      {/* Contests & Activities */}
+      <section className="py-12 bg-gradient-to-r from-blue-100 to-purple-100">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🏆 EID CONTESTS & GIVEAWAYS - প্রতিযোগিতা
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Award className="w-4 h-4" />
+              View All Contests
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            {contests.map((contest, index) => (
+              <Card key={index} className="border-2 border-blue-200 hover:border-blue-400 transform hover:scale-105 transition-all shadow-xl">
+                <CardContent className="p-6">
+                  <div className="text-center mb-4">
+                    <h3 className="text-xl font-bold text-gray-800 mb-2">🎯 {contest.title}</h3>
+                    <p className="text-gray-600 font-semibold">{contest.description}</p>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className="font-bold mb-2">🏅 Prizes:</h4>
+                    <div className="space-y-1">
+                      {contest.prizes.map((prize, idx) => (
+                        <div key={idx} className="text-sm text-gray-600">• {prize}</div>
+                      ))}
+                    </div>
+                  </div>
+                  
+                  <div className="mb-4">
+                    <h4 className="font-bold mb-2">How to Participate:</h4>
+                    <p className="text-sm text-gray-600">{contest.participation}</p>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-semibold mb-3">
+                      📅 {contest.drawDate}
+                    </div>
+                    <Button className="bg-gradient-to-r from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 text-white font-bold">
+                      🎫 Participate Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Social Impact */}
+      <section className="py-12 bg-gradient-to-br from-green-50 to-teal-50">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🤲 EID Giving Program - দান ও সমাজসেবা 🤲
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Heart className="w-4 h-4" />
+              View All Programs
+            </Button>
+          </div>
+          
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+            {socialImpact.map((program, index) => (
+              <Card key={index} className="border-2 border-green-200 hover:border-green-400 transform hover:scale-105 transition-all shadow-lg">
+                <CardContent className="p-6">
+                  <h3 className="text-xl font-bold text-gray-800 mb-2">🍽️ {program.title}</h3>
+                  <p className="text-gray-600 mb-4">{program.description}</p>
+                  
+                  <div className="mb-4">
+                    <p className="text-sm text-gray-600 mb-2">{program.impact}</p>
+                    <div className="w-full bg-gray-200 rounded-full h-3 mb-2">
+                      <div className="bg-green-500 h-3 rounded-full" style={{width: `${program.progress}%`}}></div>
+                    </div>
+                    <div className="flex justify-between text-sm">
+                      <span className="text-gray-600">{program.currentCount}</span>
+                      <span className="text-green-600 font-semibold">{program.progress}%</span>
+                    </div>
+                  </div>
+                  
+                  <div className="text-center">
+                    <div className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-semibold mb-3">
+                      🎯 {program.goal}
+                    </div>
+                    <Button className="bg-gradient-to-r from-green-500 to-teal-500 hover:from-green-600 hover:to-teal-600 text-white font-bold">
+                      💰 Donate Now
+                    </Button>
+                  </div>
+                </CardContent>
+              </Card>
+            ))}
+          </div>
+
+          <Card className="bg-gradient-to-r from-yellow-100 to-green-100 border-2 border-green-200">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">✨ GetIt Matching Program ✨</h3>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-center">
+                <div>
+                  <h4 className="font-bold text-2xl text-green-600">৳2,45,67,890</h4>
+                  <p className="text-sm text-gray-600">Total Raised This EID</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-2xl text-blue-600">15,678</h4>
+                  <p className="text-sm text-gray-600">Caring Hearts (Donors)</p>
+                </div>
+                <div>
+                  <h4 className="font-bold text-2xl text-purple-600">47,892</h4>
+                  <p className="text-sm text-gray-600">Lives Touched</p>
+                </div>
+              </div>
+              <div className="text-center mt-4">
+                <p className="mb-4">🎁 GetIt matches 50% of all donations! Your ৳100 becomes ৳150 impact</p>
+                <div className="flex gap-2 justify-center">
+                  <Button className="bg-green-500 hover:bg-green-600">💝 Start Giving</Button>
+                  <Button variant="outline">📊 Impact Dashboard</Button>
+                  <Button variant="outline">🤝 Join Community</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 
       {/* Customer Support */}
       <section className="py-12 bg-gradient-to-br from-teal-50 to-cyan-50">
         <div className="max-w-7xl mx-auto px-4">
-          <h2 className="text-3xl font-bold text-center mb-8 text-gray-800">
-            🤝 EID Customer Support - গ্রাহক সেবা
-          </h2>
+          <div className="flex justify-between items-center mb-8">
+            <h2 className="text-3xl font-bold text-gray-800">
+              🤝 EID Customer Support - গ্রাহক সেবা
+            </h2>
+            <Button variant="outline" className="flex items-center gap-2">
+              <Phone className="w-4 h-4" />
+              Contact Support
+            </Button>
+          </div>
           
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
             <Card className="bg-gradient-to-br from-green-500 to-teal-500 text-white border-none shadow-xl">
               <CardContent className="p-6 text-center">
                 <Phone className="w-12 h-12 mx-auto mb-4" />
@@ -576,6 +948,7 @@ const Products: React.FC = () => {
                   <div>🕐 24/7 support until EID</div>
                   <div>🗣️ বাংলা & English support</div>
                   <div>🚚 Emergency delivery support</div>
+                  <div>🎁 Gift wrapping assistance</div>
                 </div>
                 <Button variant="secondary" className="w-full mt-4 text-green-600 font-bold">
                   📞 Call Now
@@ -615,6 +988,39 @@ const Products: React.FC = () => {
               </CardContent>
             </Card>
           </div>
+
+          <Card className="bg-gradient-to-r from-orange-100 to-yellow-100 border-2 border-orange-200">
+            <CardContent className="p-6">
+              <h3 className="text-xl font-bold text-gray-800 mb-4 text-center">📱 Social Media & Community Support</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div>
+                  <h4 className="font-bold mb-2">📱 Follow Us</h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>📘 Facebook: GetIt Bangladesh (500K+ members)</li>
+                    <li>📷 Instagram: @GetItBangladesh</li>
+                    <li>📹 YouTube: GetIt Official</li>
+                    <li>💬 WhatsApp Groups: Instant deal notifications</li>
+                  </ul>
+                </div>
+                <div>
+                  <h4 className="font-bold mb-2">🎯 Referral Rewards</h4>
+                  <ul className="text-sm text-gray-600 space-y-1">
+                    <li>👥 Refer 1 friend: ৳200 for both</li>
+                    <li>🎁 Refer 5 friends: ৳1,500 + bonus ৳500</li>
+                    <li>💎 Refer 10 friends: ৳3,500 + VIP membership</li>
+                    <li>💰 Family referrals: Extra ৳1,000</li>
+                  </ul>
+                </div>
+              </div>
+              <div className="text-center mt-4">
+                <div className="flex gap-2 justify-center">
+                  <Button className="bg-orange-500 hover:bg-orange-600">📤 Share Now</Button>
+                  <Button variant="outline">👥 Refer Friends</Button>
+                  <Button variant="outline">🏆 Leaderboard</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
       </section>
 

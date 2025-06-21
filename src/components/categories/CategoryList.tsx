@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { 
   ChevronDown, ChevronRight, Sparkles, Crown, Shirt, Users, Baby, Heart, 
@@ -9,6 +10,7 @@ interface CategoryListProps {
   onCategorySelect: (categoryId: string, subcategoryId?: string, subSubcategoryId?: string) => void;
   selectedCategory?: string;
   selectedSubcategory?: string;
+  selectedSubSubcategory?: string;
 }
 
 // Icon mappings for subcategories
@@ -70,7 +72,8 @@ const subSubcategoryIcons: { [key: string]: React.ReactNode } = {
 export const CategoryList: React.FC<CategoryListProps> = ({
   onCategorySelect,
   selectedCategory,
-  selectedSubcategory
+  selectedSubcategory,
+  selectedSubSubcategory
 }) => {
   const [expandedCategories, setExpandedCategories] = useState<Set<string>>(new Set());
   const [expandedSubcategories, setExpandedSubcategories] = useState<Set<string>>(new Set());
@@ -166,7 +169,9 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                         {subcategory.subcategories.map((subSubcat, index) => (
                           <div
                             key={index}
-                            className="p-2 cursor-pointer hover:bg-gray-50 rounded-md transition-colors"
+                            className={`p-2 cursor-pointer hover:bg-gray-50 rounded-md transition-colors ${
+                              selectedSubSubcategory === subSubcat.name ? 'bg-blue-100' : ''
+                            }`}
                             onClick={() => onCategorySelect(category.id, subcatId, subSubcat.name)}
                           >
                             <div className="flex items-center justify-between">

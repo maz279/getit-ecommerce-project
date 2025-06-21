@@ -87,6 +87,12 @@ const Categories: React.FC = () => {
     return category.subcategories[selectedSubcategory];
   };
 
+  const getCurrentSubSubcategoryData = () => {
+    const subcategory = getCurrentSubcategoryData();
+    if (!subcategory || !selectedSubSubcategory) return null;
+    return subcategory.subcategories.find(s => s.name === selectedSubSubcategory);
+  };
+
   const getCurrentTitle = () => {
     const category = getCurrentCategoryData();
     const subcategory = getCurrentSubcategoryData();
@@ -103,8 +109,7 @@ const Categories: React.FC = () => {
 
   const getTotalProducts = () => {
     if (selectedSubSubcategory) {
-      const subcategory = getCurrentSubcategoryData();
-      const subSubcat = subcategory?.subcategories.find(s => s.name === selectedSubSubcategory);
+      const subSubcat = getCurrentSubSubcategoryData();
       return subSubcat?.count || 0;
     } else if (selectedSubcategory) {
       const subcategory = getCurrentSubcategoryData();
@@ -120,6 +125,14 @@ const Categories: React.FC = () => {
     return selectedCategory 
       ? `Discover amazing products from trusted vendors across Bangladesh`
       : 'Explore all product categories from verified vendors across Bangladesh';
+  };
+
+  const getCurrentItems = () => {
+    if (selectedSubSubcategory) {
+      const subSubcat = getCurrentSubSubcategoryData();
+      return subSubcat?.items || [];
+    }
+    return [];
   };
 
   return (
@@ -142,6 +155,7 @@ const Categories: React.FC = () => {
               onCategorySelect={handleCategorySelect}
               selectedCategory={selectedCategory || undefined}
               selectedSubcategory={selectedSubcategory || undefined}
+              selectedSubSubcategory={selectedSubSubcategory || undefined}
             />
             <div className="mt-6">
               <CategoryFilters />
@@ -166,6 +180,27 @@ const Categories: React.FC = () => {
             {/* Category Grid or Product Results */}
             {!selectedCategory ? (
               <CategoryGrid onCategorySelect={handleCategorySelect} />
+            ) : selectedSubSubcategory && getCurrentItems().length > 0 ? (
+              <div className="bg-white rounded-lg shadow-sm p-6">
+                <h3 className="font-bold text-lg mb-4 text-gray-800">
+                  Available Items in {selectedSubSubcategory}
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {getCurrentItems().map((item, index) => (
+                    <div key={index} className="border rounded-lg p-4 hover:shadow-md transition-shadow">
+                      <div className="flex items-center gap-3">
+                        <div className="w-12 h-12 bg-gray-100 rounded-lg flex items-center justify-center">
+                          <Package className="w-6 h-6 text-gray-400" />
+                        </div>
+                        <div>
+                          <h4 className="font-medium text-gray-800">{item}</h4>
+                          <p className="text-sm text-gray-500">Available from verified vendors</p>
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
             ) : (
               <div className="bg-white rounded-lg shadow-sm p-6">
                 <div className={viewMode === 'grid' ? 'grid grid-cols-1 md:grid-cols-2 gap-6' : 'space-y-4'}>
@@ -177,9 +212,9 @@ const Categories: React.FC = () => {
                       
                       <div className="flex-1">
                         <h3 className="font-medium text-gray-800 mb-2">{product.name}</h3>
-                        <div className="text-lg font-bold text-blue-600">${product.price.toLocaleString()}</div>
+                        <div className="text-lg font-bold text-blue-600">৳{product.price.toLocaleString()}</div>
                         {product.originalPrice && (
-                          <div className="text-sm text-gray-500 line-through">${product.originalPrice.toLocaleString()}</div>
+                          <div className="text-sm text-gray-500 line-through">৳{product.originalPrice.toLocaleString()}</div>
                         )}
                         <div className="text-sm text-gray-600 mt-1">{product.vendor.name}</div>
                       </div>

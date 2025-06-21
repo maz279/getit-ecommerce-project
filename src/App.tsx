@@ -52,6 +52,22 @@ const App = () => (
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/account" element={<MyAccount />} />
               
+              {/* Customer Service Routes */}
+              <Route path="/help-center" element={<HelpCenter />} />
+              <Route path="/order-tracking" element={<OrderTracking />} />
+              <Route path="/returns-refunds" element={<ReturnsRefunds />} />
+              
+              {/* Delivery & Logistics Routes */}
+              <Route path="/delivery-info" element={<DeliveryInfo />} />
+              
+              {/* Vendor Routes */}
+              <Route path="/seller-center" element={<SellerCenter />} />
+              
+              {/* Company & Legal Routes */}
+              <Route path="/about-us" element={<AboutUs />} />
+              <Route path="/terms" element={<TermsOfService />} />
+              <Route path="/privacy" element={<PrivacyPolicy />} />
+              
               {/* New Hero Section Routes */}
               <Route path="/eid-sale" element={<EidSale />} />
               <Route path="/new-user-offer" element={<NewUserOffer />} />

@@ -39,7 +39,6 @@ export const VendorCTA: React.FC = () => {
           
           <Card className="bg-white/10 backdrop-blur border-white/20">
             <CardContent className="pt-6 text-center">
-              <CardContent className="pt-6 text-center">
               <Users className="w-12 h-12 mx-auto mb-3 text-white" />
               <h3 className="font-semibold text-white">Support</h3>
               <p className="text-sm text-white/80">24/7 Bengali support</p>

@@ -11,6 +11,9 @@ import { SocialLoginButtons } from '@/components/auth/SocialLoginButtons';
 import { LoginForm } from '@/components/auth/LoginForm';
 import { TrustIndicators } from '@/components/auth/TrustIndicators';
 import { MobileWelcome } from '@/components/auth/MobileWelcome';
+import { SecurityFeatures } from '@/components/auth/SecurityFeatures';
+import { SecurityStatus } from '@/components/auth/SecurityStatus';
+import { Alert, AlertTriangle, AlertDescription } from '@/components/ui/alert';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -23,6 +26,9 @@ const Login: React.FC = () => {
   const [error, setError] = useState('');
   const [loginMethod, setLoginMethod] = useState<'email' | 'phone' | 'phone-otp'>('email');
   const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [loginAttempts, setLoginAttempts] = useState(0);
+  const [isAccountLocked, setIsAccountLocked] = useState(false);
+  const [suspiciousActivityDetected, setSuspiciousActivityDetected] = useState(false);
 
   const { signIn, signInWithGoogle, signInWithFacebook, signInWithWhatsApp } = useAuth();
   const navigate = useNavigate();
@@ -32,19 +38,45 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    
+    if (isAccountLocked) {
+      setError('Account is temporarily locked. Please try again later.');
+      return;
+    }
+
     setLoading(true);
     setError('');
 
     try {
       const loginCredential = loginMethod === 'email' ? email : phone;
       const { error } = await signIn(loginCredential, password);
+      
       if (error) {
-        setError(error.message);
+        const newAttempts = loginAttempts + 1;
+        setLoginAttempts(newAttempts);
+        
+        // Account lockout after 5 attempts
+        if (newAttempts >= 5) {
+          setIsAccountLocked(true);
+          setError('Account locked due to multiple failed attempts. Please contact support or try again in 15 minutes.');
+        } else {
+          setError(error.message);
+        }
+        
+        // Suspicious activity detection simulation
+        if (newAttempts >= 3) {
+          setSuspiciousActivityDetected(true);
+        }
       } else {
+        // Reset attempts on successful login
+        setLoginAttempts(0);
+        setIsAccountLocked(false);
+        setSuspiciousActivityDetected(false);
         navigate(redirectTo);
       }
     } catch (err) {
       setError('An unexpected error occurred');
+      setLoginAttempts(prev => prev + 1);
     } finally {
       setLoading(false);
     }
@@ -139,7 +171,7 @@ const Login: React.FC = () => {
       <Header />
       
       <main className="flex-1 flex items-center justify-center p-4 py-12">
-        <div className="w-full max-w-6xl flex gap-8 items-center">
+        <div className="w-full max-w-7xl flex gap-8 items-start">
           <WelcomeSection />
 
           <div className="w-full max-w-md lg:max-w-lg">
@@ -152,6 +184,24 @@ const Login: React.FC = () => {
                 Back to GetIt
               </Link>
             </div>
+
+            {/* Security Status */}
+            <div className="mb-6">
+              <SecurityStatus 
+                loginAttempts={loginAttempts}
+                isAccountLocked={isAccountLocked}
+              />
+            </div>
+
+            {/* Suspicious Activity Alert */}
+            {suspiciousActivityDetected && (
+              <Alert className="mb-6 border-orange-200 bg-orange-50">
+                <AlertTriangle className="h-4 w-4 text-orange-600" />
+                <AlertDescription className="text-orange-800">
+                  Suspicious activity detected. We've sent a security alert to your registered email.
+                </AlertDescription>
+              </Alert>
+            )}
 
             <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
               <CardHeader className="text-center pb-8">
@@ -251,6 +301,11 @@ const Login: React.FC = () => {
                 </p>
               </div>
             )}
+          </div>
+
+          {/* Security Features Panel */}
+          <div className="hidden xl:block w-full max-w-sm">
+            <SecurityFeatures />
           </div>
         </div>
       </main>

@@ -187,25 +187,25 @@ const Products: React.FC = () => {
 
   const giftGuide = [
     {
-      recipient: "For Father (বাবার জন্য)",
+      recipient: "For Father",
       items: ["Latest Smartphone", "Premium Watch", "Formal Shirt Collection", "Islamic Books", "Prayer Mat & Tasbeeh"],
       priceRange: "৳2,000 - ৳25,000",
       icon: "👨"
     },
     {
-      recipient: "For Mother (মায়ের জন্য)",
+      recipient: "For Mother",
       items: ["Gold Jewelry Set", "Designer Saree", "Branded Handbag", "Premium Skincare", "Perfume Collection"],
       priceRange: "৳1,500 - ৳20,000",
       icon: "👩"
     },
     {
-      recipient: "For Son (ছেলের জন্য)",
+      recipient: "For Son",
       items: ["Gaming Console & Games", "Smartphone/Tablet", "Sports Equipment", "Trendy Clothing", "Headphones & Gadgets"],
       priceRange: "৳1,000 - ৳15,000",
       icon: "👦"
     },
     {
-      recipient: "For Daughter (মেয়ের জন্য)",
+      recipient: "For Daughter",
       items: ["Makeup & Beauty Kit", "Trendy Outfit Set", "Books & Stationery", "Art & Craft Supplies", "Jewelry Collection"],
       priceRange: "৳800 - ৳12,000",
       icon: "👧"
@@ -264,10 +264,10 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 text-center text-white relative z-10">
           <div className="mb-6">
             <h1 className="text-5xl md:text-7xl font-bold mb-4">
-              🌙 ঈদ মুবারক! EID MUBARAK! 🌟
+              🌙 EID MUBARAK! 🌟
             </h1>
             <p className="text-2xl md:text-4xl mb-6 font-bold text-yellow-300">
-              🎉 সবচেয়ে বড় ঈদ অফার Bangladesh's Biggest EID Sale 🎉
+              🎉 Bangladesh's Biggest EID Sale 🎉
             </p>
             <div className="text-3xl md:text-5xl font-bold text-yellow-400 mb-6">
               ✨ UP TO 70% OFF ✨
@@ -322,7 +322,7 @@ const Products: React.FC = () => {
       <section className="py-12 bg-gradient-to-r from-teal-100 to-blue-100">
         <div className="max-w-7xl mx-auto px-4 text-center">
           <h2 className="text-3xl font-bold text-gray-800 mb-4">
-            🤲 ঈদুল ফিতর এর শুভেচ্ছা 🤲
+            🤲 EID Mubarak Greetings 🤲
           </h2>
           <p className="text-xl text-gray-600 mb-6 italic">
             "May this blessed occasion bring peace, happiness, and prosperity to you and your loved ones"
@@ -390,7 +390,7 @@ const Products: React.FC = () => {
             <div className="text-center">
               <h2 className="text-3xl font-bold text-gray-800 flex items-center justify-center gap-3 mb-4">
                 <Flame className="w-8 h-8 text-red-500" />
-                ⚡ আজকের বিশেষ অফার ⚡
+                ⚡ Today's Special Offers ⚡
                 <Flame className="w-8 h-8 text-red-500" />
               </h2>
               <p className="text-lg text-gray-600">⏰ Limited Time Flash Deals ⏰</p>
@@ -451,7 +451,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🎁 EID COMBO DEALS - সেট অফার 🎁
+              🎁 EID COMBO DEALS 🎁
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <ArrowRight className="w-4 h-4" />
@@ -521,7 +521,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              💰 EID Payment Bonuses - পেমেন্ট অফার
+              💰 EID Payment Bonuses
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <DollarSign className="w-4 h-4" />
@@ -603,7 +603,7 @@ const Products: React.FC = () => {
           <div className="flex justify-between items-center mb-8">
             <div>
               <h2 className="text-3xl font-bold text-gray-800">
-                🎯 EID DELIVERY GUARANTEE - ডেলিভারি গ্যারান্টি
+                🎯 EID DELIVERY GUARANTEE
               </h2>
               <div className="text-2xl font-bold text-green-600 mt-4">
                 📅 ORDER TODAY, GET BEFORE EID! 📅
@@ -688,7 +688,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🏆 EID Featured Vendors - টপ বিক্রেতা
+              🏆 EID Featured Vendors
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <Users className="w-4 h-4" />
@@ -727,7 +727,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🎁 EID Gift Guide - উপহার গাইড 🎁
+              🎁 EID Gift Guide 🎁
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <Gift className="w-4 h-4" />
@@ -804,7 +804,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🏆 EID CONTESTS & GIVEAWAYS - প্রতিযোগিতা
+              🏆 EID CONTESTS & GIVEAWAYS
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <Award className="w-4 h-4" />
@@ -855,7 +855,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🤲 EID Giving Program - দান ও সমাজসেবা 🤲
+              🤲 EID Giving Program 🤲
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <Heart className="w-4 h-4" />
@@ -929,7 +929,7 @@ const Products: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4">
           <div className="flex justify-between items-center mb-8">
             <h2 className="text-3xl font-bold text-gray-800">
-              🤝 EID Customer Support - গ্রাহক সেবা
+              🤝 EID Customer Support
             </h2>
             <Button variant="outline" className="flex items-center gap-2">
               <Phone className="w-4 h-4" />
@@ -946,7 +946,7 @@ const Products: React.FC = () => {
                 <p className="text-sm mb-4">Call FREE from any operator</p>
                 <div className="text-xs space-y-1">
                   <div>🕐 24/7 support until EID</div>
-                  <div>🗣️ বাংলা & English support</div>
+                  <div>🗣️ Bengali & English support</div>
                   <div>🚚 Emergency delivery support</div>
                   <div>🎁 Gift wrapping assistance</div>
                 </div>

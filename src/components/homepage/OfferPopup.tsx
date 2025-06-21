@@ -18,7 +18,7 @@ export const OfferPopup: React.FC = () => {
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogContent className="max-w-md p-0 overflow-hidden border-0 bg-gradient-to-br from-red-500 via-pink-500 to-purple-600">
-        {/* Hidden title and description for accessibility */}
+        {/* Accessible title and description */}
         <DialogTitle className="sr-only">Great GetIt Sale Offer</DialogTitle>
         <DialogDescription className="sr-only">
           Special sale offer with up to 70% off on electronics, fashion and more. Limited time offer with free shipping and extra discount code.

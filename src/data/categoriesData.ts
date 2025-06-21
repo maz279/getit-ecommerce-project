@@ -23,9 +23,13 @@ export interface MainCategory {
 import { fashionData } from './categories/fashionData';
 import { electronicsData } from './categories/electronicsData';
 import { homeGardenData } from './categories/homeGardenData';
+import { healthBeautyData } from './categories/healthBeautyData';
+import { foodGroceriesData } from './categories/foodGroceriesData';
 
 export const categoriesData: MainCategory[] = [
   fashionData,
   electronicsData,
-  homeGardenData
+  homeGardenData,
+  healthBeautyData,
+  foodGroceriesData
 ];

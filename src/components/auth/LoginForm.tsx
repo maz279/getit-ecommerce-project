@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -8,7 +9,6 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Eye, EyeOff, Mail, Lock, Shield, Smartphone, Phone } from 'lucide-react';
 import { MobileNumberInput } from './MobileNumberInput';
 import { MobileOTPVerification } from './MobileOTPVerification';
-import { SecurityFeatures } from './SecurityFeatures';
 
 interface LoginFormProps {
   email: string;
@@ -73,29 +73,29 @@ export const LoginForm: React.FC<LoginFormProps> = ({
   }
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <Tabs value={loginMethod} onValueChange={(value) => setLoginMethod(value as 'email' | 'phone' | 'phone-otp')} className="w-full">
         <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="email" className="flex items-center gap-2">
-            <Mail className="w-4 h-4" />
+          <TabsTrigger value="email" className="flex items-center gap-1 text-xs">
+            <Mail className="w-3 h-3" />
             Email
           </TabsTrigger>
-          <TabsTrigger value="phone" className="flex items-center gap-2">
-            <Phone className="w-4 h-4" />
+          <TabsTrigger value="phone" className="flex items-center gap-1 text-xs">
+            <Phone className="w-3 h-3" />
             Phone
           </TabsTrigger>
-          <TabsTrigger value="phone-otp" className="flex items-center gap-2">
-            <Smartphone className="w-4 h-4" />
+          <TabsTrigger value="phone-otp" className="flex items-center gap-1 text-xs">
+            <Smartphone className="w-3 h-3" />
             OTP
           </TabsTrigger>
         </TabsList>
 
         {/* Email Login */}
         <TabsContent value="email">
-          <form onSubmit={onSubmit} className="space-y-5 mt-6">
+          <form onSubmit={onSubmit} className="space-y-4 mt-4">
             {error && (
               <Alert variant="destructive" className="border-red-200 bg-red-50">
-                <AlertDescription className="text-red-800">{error}</AlertDescription>
+                <AlertDescription className="text-red-800 text-sm">{error}</AlertDescription>
               </Alert>
             )}
             
@@ -104,14 +104,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 Email Address
               </Label>
               <div className="relative">
-                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Mail className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="email"
                   type="email"
                   placeholder="Enter your email address"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  className="pl-11 py-6 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 py-5 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
@@ -122,14 +122,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 Password
               </Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="password"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-11 pr-11 py-6 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 pr-10 py-5 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
                 <button
@@ -137,18 +137,13 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
-            {/* ... keep existing code (security options and submit button) the same ... */}
-            <div className="space-y-4 p-4 bg-gray-50 rounded-lg">
-              <h4 className="font-medium text-gray-700 flex items-center gap-2">
-                <Shield className="w-4 h-4" />
-                Security Options
-              </h4>
-              
+            {/* Security Options - Compact */}
+            <div className="space-y-3 p-3 bg-gray-50 rounded-lg">
               <div className="flex items-center space-x-2">
                 <Checkbox 
                   id="remember-me" 
@@ -168,19 +163,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 />
                 <label htmlFor="two-factor" className="text-sm text-gray-600 flex items-center gap-1">
                   <Smartphone className="w-3 h-3" />
-                  Enable two-factor authentication (Recommended)
+                  Enable 2FA (Recommended)
                 </label>
               </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full py-6 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-200" 
+              className="w-full py-5 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-200" 
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   Signing in...
                 </>
               ) : (
@@ -188,19 +183,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               )}
             </Button>
           </form>
-
-          {/* Security Features for Mobile */}
-          <div className="mt-8 xl:hidden">
-            <SecurityFeatures />
-          </div>
         </TabsContent>
 
         {/* Phone with Password Login */}
         <TabsContent value="phone">
-          <form onSubmit={onSubmit} className="space-y-5 mt-6">
+          <form onSubmit={onSubmit} className="space-y-4 mt-4">
             {error && (
               <Alert variant="destructive" className="border-red-200 bg-red-50">
-                <AlertDescription className="text-red-800">{error}</AlertDescription>
+                <AlertDescription className="text-red-800 text-sm">{error}</AlertDescription>
               </Alert>
             )}
             
@@ -209,18 +199,18 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 Phone Number
               </Label>
               <div className="relative">
-                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Phone className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="phone-login"
                   type="tel"
                   placeholder="Enter your phone number (+880...)"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
-                  className="pl-11 py-6 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 py-5 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
               </div>
-              <p className="text-xs text-gray-500 mt-1">
+              <p className="text-xs text-gray-500">
                 Format: +8801XXXXXXXXX or 01XXXXXXXXX
               </p>
             </div>
@@ -230,14 +220,14 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                 Password
               </Label>
               <div className="relative">
-                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-5 w-5 text-gray-400" />
+                <Lock className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                 <Input
                   id="password-phone"
                   type={showPassword ? 'text' : 'password'}
                   placeholder="Enter your password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
-                  className="pl-11 pr-11 py-6 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
+                  className="pl-10 pr-10 py-5 text-base border-gray-300 focus:border-blue-500 focus:ring-blue-500"
                   required
                 />
                 <button
@@ -245,19 +235,19 @@ export const LoginForm: React.FC<LoginFormProps> = ({
                   onClick={() => setShowPassword(!showPassword)}
                   className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  {showPassword ? <EyeOff className="h-5 w-5" /> : <Eye className="h-5 w-5" />}
+                  {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
                 </button>
               </div>
             </div>
 
             <Button 
               type="submit" 
-              className="w-full py-6 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-200" 
+              className="w-full py-5 text-base font-medium bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg transition-all duration-200" 
               disabled={loading}
             >
               {loading ? (
                 <>
-                  <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin mr-3" />
+                  <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin mr-2" />
                   Signing in...
                 </>
               ) : (
@@ -265,15 +255,10 @@ export const LoginForm: React.FC<LoginFormProps> = ({
               )}
             </Button>
           </form>
-
-          {/* Security Features for Mobile */}
-          <div className="mt-8 xl:hidden">
-            <SecurityFeatures />
-          </div>
         </TabsContent>
 
         {/* Mobile OTP Login */}
-        <TabsContent value="phone-otp" className="mt-6">
+        <TabsContent value="phone-otp" className="mt-4">
           <MobileNumberInput
             phoneNumber={phone}
             setPhoneNumber={setPhone}
@@ -281,11 +266,6 @@ export const LoginForm: React.FC<LoginFormProps> = ({
             loading={loading}
             error={error}
           />
-
-          {/* Security Features for Mobile */}
-          <div className="mt-8 xl:hidden">
-            <SecurityFeatures />
-          </div>
         </TabsContent>
       </Tabs>
     </div>

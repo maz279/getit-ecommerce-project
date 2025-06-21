@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { ArrowLeft, AlertTriangle, Shield, Lock } from 'lucide-react';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
@@ -170,142 +171,176 @@ const Login: React.FC = () => {
     <div className="min-h-screen flex flex-col bg-gradient-to-br from-blue-50 via-white to-purple-50">
       <Header />
       
-      <main className="flex-1 flex items-center justify-center p-4 py-12">
-        <div className="w-full max-w-7xl flex gap-8 items-start">
-          <WelcomeSection />
+      <main className="flex-1 flex items-center justify-center p-4 py-8">
+        <div className="w-full max-w-7xl">
+          <div className="grid lg:grid-cols-3 gap-8 items-start">
+            {/* Welcome Section */}
+            <WelcomeSection />
 
-          <div className="w-full max-w-md lg:max-w-lg">
-            <div className="mb-6">
-              <Link 
-                to="/" 
-                className="inline-flex items-center text-sm text-gray-600 hover:text-gray-800 transition-colors"
-              >
-                <ArrowLeft className="w-4 h-4 mr-2" />
-                Back to GetIt
-              </Link>
-            </div>
-
-            {/* Security Status */}
-            <div className="mb-6">
-              <SecurityStatus 
-                loginAttempts={loginAttempts}
-                isAccountLocked={isAccountLocked}
-              />
-            </div>
-
-            {/* Suspicious Activity Alert */}
-            {suspiciousActivityDetected && (
-              <Alert className="mb-6 border-orange-200 bg-orange-50">
-                <AlertTriangle className="h-4 w-4 text-orange-600" />
-                <AlertDescription className="text-orange-800">
-                  Suspicious activity detected. We've sent a security alert to your registered email.
-                </AlertDescription>
-              </Alert>
-            )}
-
-            <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
-              <CardHeader className="text-center pb-8">
-                <MobileWelcome />
-                
-                <CardTitle className="text-2xl font-bold text-gray-800">
-                  Sign In
-                </CardTitle>
-                <CardDescription className="text-base text-gray-600 mt-2">
-                  Continue your shopping journey with GetIt
-                </CardDescription>
-              </CardHeader>
-
-              <CardContent className="space-y-6">
-                {!showOTPVerification && (
-                  <>
-                    <SocialLoginButtons 
-                      onSocialLogin={handleSocialLogin}
-                      loading={loading}
-                    />
-
-                    <div className="relative">
-                      <Separator />
-                      <div className="absolute inset-0 flex items-center justify-center">
-                        <span className="bg-white px-4 text-sm text-gray-500">Or continue with</span>
-                      </div>
-                    </div>
-                  </>
-                )}
-
-                <LoginForm
-                  email={email}
-                  setEmail={setEmail}
-                  phone={phone}
-                  setPhone={setPhone}
-                  password={password}
-                  setPassword={setPassword}
-                  showPassword={showPassword}
-                  setShowPassword={setShowPassword}
-                  rememberMe={rememberMe}
-                  setRememberMe={setRememberMe}
-                  enableTwoFactor={enableTwoFactor}
-                  setEnableTwoFactor={setEnableTwoFactor}
-                  loading={loading}
-                  error={error}
-                  loginMethod={loginMethod}
-                  setLoginMethod={setLoginMethod}
-                  onSubmit={handleSubmit}
-                  onSendOTP={handleSendOTP}
-                  onVerifyOTP={handleVerifyOTP}
-                  onResendOTP={handleResendOTP}
-                  showOTPVerification={showOTPVerification}
-                />
-
-                {!showOTPVerification && (
-                  <>
-                    <div className="space-y-4 text-center">
-                      <Link 
-                        to="/auth/forgot-password" 
-                        className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
-                      >
-                        Forgot your password?
-                      </Link>
-                      
-                      <Separator />
-                      
-                      <div className="space-y-2">
-                        <p className="text-sm text-gray-600">
-                          Don't have an account?{' '}
-                          <Link to="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
-                            Create Account
-                          </Link>
-                        </p>
-                        
-                        <p className="text-sm text-gray-600">
-                          Want to sell on GetIt?{' '}
-                          <Link to="/vendor/register" className="text-green-600 hover:text-green-800 font-medium transition-colors">
-                            Become a Vendor
-                          </Link>
-                        </p>
-                      </div>
-                    </div>
-
-                    <TrustIndicators />
-                  </>
-                )}
-              </CardContent>
-            </Card>
-
-            {!showOTPVerification && (
-              <div className="mt-8 text-center text-xs text-gray-500">
-                <p>
-                  By signing in, you agree to our{' '}
-                  <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
-                  {' '}and{' '}
-                  <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
-                </p>
+            {/* Main Login Section */}
+            <div className="lg:col-span-1 w-full max-w-md mx-auto">
+              <div className="mb-6">
+                <Link 
+                  to="/" 
+                  className="inline-flex items-center text-sm text-gray-600 hover:text-gray-800 transition-colors"
+                >
+                  <ArrowLeft className="w-4 h-4 mr-2" />
+                  Back to GetIt
+                </Link>
               </div>
-            )}
-          </div>
 
-          {/* Security Features Panel */}
-          <div className="hidden xl:block w-full max-w-sm">
-            <SecurityFeatures />
+              <Card className="shadow-xl border-0 bg-white/90 backdrop-blur-sm">
+                <CardHeader className="text-center pb-6">
+                  <MobileWelcome />
+                  <CardTitle className="text-2xl font-bold text-gray-800">
+                    Sign In
+                  </CardTitle>
+                  <CardDescription className="text-base text-gray-600 mt-2">
+                    Continue your shopping journey with GetIt
+                  </CardDescription>
+                </CardHeader>
+
+                <CardContent>
+                  <Tabs defaultValue="login" className="w-full">
+                    <TabsList className="grid w-full grid-cols-2 mb-6">
+                      <TabsTrigger value="login" className="flex items-center gap-2">
+                        <Lock className="w-4 h-4" />
+                        Login
+                      </TabsTrigger>
+                      <TabsTrigger value="security" className="flex items-center gap-2">
+                        <Shield className="w-4 h-4" />
+                        Security
+                      </TabsTrigger>
+                    </TabsList>
+
+                    <TabsContent value="login" className="space-y-6">
+                      {/* Security Status - Compact */}
+                      {(loginAttempts > 0 || suspiciousActivityDetected) && (
+                        <div className="space-y-3">
+                          {/* Suspicious Activity Alert */}
+                          {suspiciousActivityDetected && (
+                            <Alert className="border-orange-200 bg-orange-50">
+                              <AlertTriangle className="h-4 w-4 text-orange-600" />
+                              <AlertDescription className="text-orange-800 text-sm">
+                                Suspicious activity detected. Security alert sent to your email.
+                              </AlertDescription>
+                            </Alert>
+                          )}
+
+                          {/* Login attempts indicator - compact */}
+                          {loginAttempts > 0 && (
+                            <div className="flex items-center justify-between p-2 bg-yellow-50 rounded border border-yellow-200">
+                              <span className="text-sm text-yellow-800">Login attempts:</span>
+                              <span className="text-sm font-medium text-yellow-600">{loginAttempts}/5</span>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {!showOTPVerification && (
+                        <>
+                          <SocialLoginButtons 
+                            onSocialLogin={handleSocialLogin}
+                            loading={loading}
+                          />
+
+                          <div className="relative">
+                            <Separator />
+                            <div className="absolute inset-0 flex items-center justify-center">
+                              <span className="bg-white px-4 text-sm text-gray-500">Or continue with</span>
+                            </div>
+                          </div>
+                        </>
+                      )}
+
+                      <LoginForm
+                        email={email}
+                        setEmail={setEmail}
+                        phone={phone}
+                        setPhone={setPhone}
+                        password={password}
+                        setPassword={setPassword}
+                        showPassword={showPassword}
+                        setShowPassword={setShowPassword}
+                        rememberMe={rememberMe}
+                        setRememberMe={setRememberMe}
+                        enableTwoFactor={enableTwoFactor}
+                        setEnableTwoFactor={setEnableTwoFactor}
+                        loading={loading}
+                        error={error}
+                        loginMethod={loginMethod}
+                        setLoginMethod={setLoginMethod}
+                        onSubmit={handleSubmit}
+                        onSendOTP={handleSendOTP}
+                        onVerifyOTP={handleVerifyOTP}
+                        onResendOTP={handleResendOTP}
+                        showOTPVerification={showOTPVerification}
+                      />
+
+                      {!showOTPVerification && (
+                        <>
+                          <div className="space-y-4 text-center">
+                            <Link 
+                              to="/auth/forgot-password" 
+                              className="text-sm text-blue-600 hover:text-blue-800 font-medium transition-colors"
+                            >
+                              Forgot your password?
+                            </Link>
+                            
+                            <Separator />
+                            
+                            <div className="space-y-2">
+                              <p className="text-sm text-gray-600">
+                                Don't have an account?{' '}
+                                <Link to="/auth/register" className="text-blue-600 hover:text-blue-800 font-medium transition-colors">
+                                  Create Account
+                                </Link>
+                              </p>
+                              
+                              <p className="text-sm text-gray-600">
+                                Want to sell on GetIt?{' '}
+                                <Link to="/vendor/register" className="text-green-600 hover:text-green-800 font-medium transition-colors">
+                                  Become a Vendor
+                                </Link>
+                              </p>
+                            </div>
+                          </div>
+
+                          <TrustIndicators />
+                        </>
+                      )}
+                    </TabsContent>
+
+                    <TabsContent value="security" className="space-y-6">
+                      <SecurityStatus 
+                        loginAttempts={loginAttempts}
+                        isAccountLocked={isAccountLocked}
+                      />
+                      
+                      <div className="lg:hidden">
+                        <SecurityFeatures />
+                      </div>
+                    </TabsContent>
+                  </Tabs>
+                </CardContent>
+              </Card>
+
+              {!showOTPVerification && (
+                <div className="mt-6 text-center text-xs text-gray-500">
+                  <p>
+                    By signing in, you agree to our{' '}
+                    <Link to="/terms" className="text-blue-600 hover:underline">Terms of Service</Link>
+                    {' '}and{' '}
+                    <Link to="/privacy" className="text-blue-600 hover:underline">Privacy Policy</Link>
+                  </p>
+                </div>
+              )}
+            </div>
+
+            {/* Security Features Panel - Desktop Only */}
+            <div className="hidden lg:block">
+              <SecurityFeatures />
+            </div>
           </div>
         </div>
       </main>

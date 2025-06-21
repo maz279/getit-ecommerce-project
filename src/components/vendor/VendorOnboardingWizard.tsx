@@ -204,6 +204,8 @@ export const VendorOnboardingWizard: React.FC = () => {
     }
   };
 
+  const StepIcon = steps[currentStep - 1].icon;
+
   return (
     <div className="max-w-7xl mx-auto">
       {/* Header */}
@@ -283,7 +285,7 @@ export const VendorOnboardingWizard: React.FC = () => {
           <Card className="shadow-lg">
             <CardHeader>
               <CardTitle className="text-xl flex items-center gap-2">
-                <steps[currentStep - 1].icon className="w-6 h-6" />
+                <StepIcon className="w-6 h-6" />
                 {steps[currentStep - 1].title}
               </CardTitle>
               <CardDescription>{steps[currentStep - 1].description}</CardDescription>

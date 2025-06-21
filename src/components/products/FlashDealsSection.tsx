@@ -2,14 +2,12 @@
 import React, { useState } from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Flame, Plus, Clock, Star, ShoppingCart, Heart, Eye, Filter, SortAsc } from 'lucide-react';
+import { Flame, Plus, Clock, Star, ShoppingCart, Heart, Eye } from 'lucide-react';
 import { flashDeals } from '@/data/productsData';
 import { useCountdownTimer } from '@/hooks/useCountdownTimer';
 
 export const FlashDealsSection: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState('all');
-  const [sortBy, setSortBy] = useState('discount');
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
   
   const timeLeft = useCountdownTimer({ days: 0, hours: 2, minutes: 15, seconds: 30 });
 
@@ -22,105 +20,62 @@ export const FlashDealsSection: React.FC = () => {
   return (
     <section className="py-12 bg-gradient-to-br from-red-50 via-orange-50 to-yellow-50">
       <div className="max-w-7xl mx-auto px-4">
-        {/* Enhanced Header with Countdown */}
+        {/* Header with Countdown */}
         <div className="text-center mb-8">
           <div className="flex justify-center items-center gap-4 mb-4">
-            <Flame className="w-10 h-10 text-red-500 animate-pulse" />
-            <h2 className="text-4xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
+            <Flame className="w-8 h-8 text-red-500 animate-pulse" />
+            <h2 className="text-3xl font-bold bg-gradient-to-r from-red-600 to-orange-600 bg-clip-text text-transparent">
               ⚡ Today's Special Offers ⚡
             </h2>
-            <Flame className="w-10 h-10 text-red-500 animate-pulse" />
+            <Flame className="w-8 h-8 text-red-500 animate-pulse" />
           </div>
           
-          <p className="text-xl text-gray-600 mb-6">🔥 Limited Time Flash Deals - Don't Miss Out! 🔥</p>
+          <p className="text-lg text-gray-600 mb-6">🔥 Limited Time Flash Deals - Don't Miss Out! 🔥</p>
           
-          {/* Countdown Timer */}
-          <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-2xl p-6 inline-block shadow-xl">
-            <div className="flex items-center justify-center gap-4 mb-2">
-              <Clock className="w-6 h-6" />
-              <span className="text-lg font-semibold">FLASH SALE ENDING IN:</span>
+          {/* Enhanced Countdown Timer */}
+          <div className="bg-gradient-to-r from-red-500 to-orange-500 text-white rounded-xl p-4 inline-block shadow-lg">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Clock className="w-5 h-5" />
+              <span className="font-semibold">FLASH SALE ENDING IN:</span>
             </div>
-            <div className="flex gap-3 justify-center">
-              <div className="bg-white bg-opacity-20 rounded-lg p-3 min-w-[70px] text-center">
-                <div className="text-2xl font-bold">{timeLeft.days.toString().padStart(2, '0')}</div>
-                <div className="text-xs uppercase">Days</div>
+            <div className="flex gap-2 justify-center">
+              <div className="bg-white bg-opacity-20 rounded-lg p-2 min-w-[60px] text-center">
+                <div className="text-xl font-bold">{timeLeft.days.toString().padStart(2, '0')}</div>
+                <div className="text-xs">Days</div>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3 min-w-[70px] text-center">
-                <div className="text-2xl font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
-                <div className="text-xs uppercase">Hours</div>
+              <div className="bg-white bg-opacity-20 rounded-lg p-2 min-w-[60px] text-center">
+                <div className="text-xl font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
+                <div className="text-xs">Hours</div>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3 min-w-[70px] text-center">
-                <div className="text-2xl font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
-                <div className="text-xs uppercase">Minutes</div>
+              <div className="bg-white bg-opacity-20 rounded-lg p-2 min-w-[60px] text-center">
+                <div className="text-xl font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
+                <div className="text-xs">Minutes</div>
               </div>
-              <div className="bg-white bg-opacity-20 rounded-lg p-3 min-w-[70px] text-center">
-                <div className="text-2xl font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
-                <div className="text-xs uppercase">Seconds</div>
+              <div className="bg-white bg-opacity-20 rounded-lg p-2 min-w-[60px] text-center">
+                <div className="text-xl font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
+                <div className="text-xs">Seconds</div>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Enhanced Filter and Sort Controls */}
-        <div className="flex flex-wrap justify-between items-center gap-4 mb-8 p-4 bg-white rounded-xl shadow-md">
-          <div className="flex items-center gap-4">
-            <Filter className="w-5 h-5 text-gray-600" />
-            <span className="font-semibold text-gray-700">Filter by:</span>
-            <div className="flex gap-2">
-              {categories.map((category) => (
-                <Button
-                  key={category}
-                  variant={selectedCategory === category ? "default" : "outline"}
-                  size="sm"
-                  onClick={() => setSelectedCategory(category)}
-                  className="capitalize"
-                >
-                  {category}
-                </Button>
-              ))}
-            </div>
-          </div>
-          
-          <div className="flex items-center gap-4">
-            <SortAsc className="w-5 h-5 text-gray-600" />
-            <select 
-              value={sortBy} 
-              onChange={(e) => setSortBy(e.target.value)}
-              className="border rounded-lg px-3 py-2 text-sm"
+        {/* Simple Category Filter */}
+        <div className="flex justify-center items-center gap-2 mb-8">
+          {categories.map((category) => (
+            <Button
+              key={category}
+              variant={selectedCategory === category ? "default" : "outline"}
+              size="sm"
+              onClick={() => setSelectedCategory(category)}
+              className="capitalize"
             >
-              <option value="discount">Highest Discount</option>
-              <option value="price">Lowest Price</option>
-              <option value="rating">Highest Rating</option>
-              <option value="reviews">Most Reviews</option>
-            </select>
-            
-            <div className="flex gap-1 border rounded-lg">
-              <Button
-                variant={viewMode === 'grid' ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode('grid')}
-                className="rounded-r-none"
-              >
-                Grid
-              </Button>
-              <Button
-                variant={viewMode === 'list' ? "default" : "ghost"}
-                size="sm"
-                onClick={() => setViewMode('list')}
-                className="rounded-l-none"
-              >
-                List
-              </Button>
-            </div>
-          </div>
+              {category}
+            </Button>
+          ))}
         </div>
 
-        {/* Enhanced Products Grid */}
-        <div className={`grid gap-6 mb-8 ${
-          viewMode === 'grid' 
-            ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-4' 
-            : 'grid-cols-1'
-        }`}>
+        {/* Products Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {filteredDeals.map((product, index) => (
             <Card key={index} className="group relative overflow-hidden border-2 border-red-100 hover:border-red-300 transform hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl">
               <CardContent className="p-0">
@@ -137,7 +92,7 @@ export const FlashDealsSection: React.FC = () => {
                       <Flame className="w-3 h-3" />
                       {product.discount}
                     </div>
-                    <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-lg">
+                    <div className="bg-gradient-to-r from-green-500 to-teal-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
                       {product.freeItem}
                     </div>
                   </div>
@@ -163,7 +118,7 @@ export const FlashDealsSection: React.FC = () => {
                     {product.title}
                   </h3>
                   
-                  {/* Enhanced Rating Display */}
+                  {/* Rating Display */}
                   <div className="flex items-center gap-2 mb-3">
                     <div className="flex items-center">
                       {[...Array(5)].map((_, i) => (
@@ -178,23 +133,23 @@ export const FlashDealsSection: React.FC = () => {
                       ))}
                     </div>
                     <span className="text-sm text-gray-600">
-                      {product.rating} ({product.reviews.toLocaleString()} reviews)
+                      {product.rating} ({product.reviews.toLocaleString()})
                     </span>
                   </div>
                   
-                  {/* Enhanced Price Display */}
+                  {/* Price Display */}
                   <div className="flex items-center justify-between mb-3">
                     <div className="flex flex-col">
                       <span className="text-xl font-bold text-green-600">{product.salePrice}</span>
                       <span className="text-sm text-gray-400 line-through">{product.originalPrice}</span>
                     </div>
                     <div className="text-right text-sm text-gray-600">
-                      <div>🚚 {product.delivery}</div>
+                      🚚 {product.delivery}
                     </div>
                   </div>
                   
-                  {/* Enhanced Add to Cart Button */}
-                  <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-3 shadow-lg transform hover:scale-105 transition-all">
+                  {/* Add to Cart Button */}
+                  <Button className="w-full bg-gradient-to-r from-red-500 to-orange-500 hover:from-red-600 hover:to-orange-600 text-white font-bold py-2 shadow-lg transform hover:scale-105 transition-all">
                     <ShoppingCart className="w-4 h-4 mr-2" />
                     Add to Cart
                   </Button>
@@ -204,10 +159,10 @@ export const FlashDealsSection: React.FC = () => {
           ))}
         </div>
 
-        {/* Enhanced Footer Section */}
-        <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl p-6 text-center">
+        {/* Footer Section */}
+        <div className="bg-gradient-to-r from-blue-100 to-purple-100 rounded-xl p-6 text-center">
           <div className="mb-4">
-            <h3 className="text-xl font-bold text-gray-800 mb-2">🎯 Flash Sale Benefits</h3>
+            <h3 className="text-lg font-bold text-gray-800 mb-2">🎯 Flash Sale Benefits</h3>
             <div className="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm text-gray-600">
               <div className="flex items-center justify-center gap-2">
                 <span className="text-green-500">✅</span>

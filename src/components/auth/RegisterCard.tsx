@@ -11,7 +11,7 @@ interface RegisterCardProps {
     confirmPassword: string;
     fullName: string;
     phone: string;
-    role: 'customer' | 'vendor';
+    role: 'customer';
   };
   setFormData: (data: any) => void;
   showPassword: boolean;

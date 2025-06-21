@@ -17,7 +17,7 @@ const Register: React.FC = () => {
     confirmPassword: '',
     fullName: '',
     phone: '',
-    role: 'customer' as 'customer' | 'vendor'
+    role: 'customer' as 'customer'
   });
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);

@@ -4,7 +4,6 @@ import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Eye, EyeOff, Mail, Lock, User, Phone } from 'lucide-react';
 
@@ -15,7 +14,7 @@ interface RegistrationFormProps {
     confirmPassword: string;
     fullName: string;
     phone: string;
-    role: 'customer' | 'vendor';
+    role: 'customer';
   };
   setFormData: (data: any) => void;
   showPassword: boolean;
@@ -92,30 +91,6 @@ export const RegistrationForm: React.FC<RegistrationFormProps> = ({
               className="pl-10"
             />
           </div>
-        </div>
-
-        <div className="space-y-3">
-          <Label>I want to</Label>
-          <RadioGroup
-            value={formData.role}
-            onValueChange={(value) => setFormData({ ...formData, role: value as 'customer' | 'vendor' })}
-            className="space-y-3"
-          >
-            <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-              <RadioGroupItem value="customer" id="customer" />
-              <div>
-                <Label htmlFor="customer" className="font-medium">Shop as Customer</Label>
-                <p className="text-sm text-gray-500">Browse and purchase products</p>
-              </div>
-            </div>
-            <div className="flex items-center space-x-3 p-3 border rounded-lg hover:bg-gray-50 transition-colors">
-              <RadioGroupItem value="vendor" id="vendor" />
-              <div>
-                <Label htmlFor="vendor" className="font-medium">Sell as Vendor</Label>
-                <p className="text-sm text-gray-500">Start selling your products</p>
-              </div>
-            </div>
-          </RadioGroup>
         </div>
 
         <div className="space-y-2">

@@ -13,6 +13,7 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Login from "./pages/auth/Login";
 import Register from "./pages/auth/Register";
+import VerifyEmail from "./pages/auth/VerifyEmail";
 import Products from "./pages/Products";
 import Categories from "./pages/Categories";
 import VendorDashboard from "./pages/vendor/Dashboard";
@@ -63,6 +64,7 @@ const App = () => (
               {/* Auth Routes */}
               <Route path="/auth/login" element={<Login />} />
               <Route path="/auth/register" element={<Register />} />
+              <Route path="/auth/verify-email" element={<VerifyEmail />} />
               
               {/* Protected Vendor Routes */}
               <Route 

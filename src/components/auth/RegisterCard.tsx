@@ -2,7 +2,7 @@
 import React from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { MobileWelcome } from './MobileWelcome';
-import { RegistrationForm } from './RegistrationForm';
+import { RegistrationTabs } from './RegistrationTabs';
 
 interface RegisterCardProps {
   formData: {
@@ -21,6 +21,10 @@ interface RegisterCardProps {
   loading: boolean;
   error: string;
   onSubmit: (e: React.FormEvent) => void;
+  onSocialRegister: (provider: string) => void;
+  onPhoneRegister: (phone: string) => void;
+  onVerifyOTP: (otp: string) => void;
+  showOTPVerification: boolean;
 }
 
 export const RegisterCard: React.FC<RegisterCardProps> = (props) => {
@@ -32,12 +36,12 @@ export const RegisterCard: React.FC<RegisterCardProps> = (props) => {
           Join GetIt
         </CardTitle>
         <CardDescription className="text-base text-gray-600 mt-2">
-          Create your account and start your shopping journey
+          Choose your preferred registration method
         </CardDescription>
       </CardHeader>
 
       <CardContent>
-        <RegistrationForm {...props} />
+        <RegistrationTabs {...props} />
       </CardContent>
     </Card>
   );

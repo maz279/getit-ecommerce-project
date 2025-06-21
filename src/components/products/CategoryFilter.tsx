@@ -14,14 +14,14 @@ export const CategoryFilter: React.FC<CategoryFilterProps> = ({
   onCategoryChange
 }) => {
   return (
-    <div className="flex justify-center items-center gap-2 flex-wrap">
+    <div className="flex justify-center items-center gap-1 flex-wrap">
       {categories.map((category) => (
         <Button
           key={category}
           variant={selectedCategory === category ? "default" : "outline"}
           size="sm"
           onClick={() => onCategoryChange(category)}
-          className="capitalize text-xs px-3 py-1"
+          className="capitalize text-xs px-2 py-1 h-7"
         >
           {category}
         </Button>

@@ -3,7 +3,8 @@ import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Separator } from '@/components/ui/separator';
-import { ArrowLeft } from 'lucide-react';
+import { ArrowLeft, AlertTriangle } from 'lucide-react';
+import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
 import { WelcomeSection } from '@/components/auth/WelcomeSection';
@@ -13,7 +14,6 @@ import { TrustIndicators } from '@/components/auth/TrustIndicators';
 import { MobileWelcome } from '@/components/auth/MobileWelcome';
 import { SecurityFeatures } from '@/components/auth/SecurityFeatures';
 import { SecurityStatus } from '@/components/auth/SecurityStatus';
-import { Alert, AlertTriangle, AlertDescription } from '@/components/ui/alert';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');

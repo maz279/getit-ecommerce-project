@@ -1,6 +1,6 @@
-
 import React, { useState, useEffect } from 'react';
-import { Sparkles, Zap, Clock, Star } from 'lucide-react';
+import { Sparkles, Zap, Clock, Star, CheckCircle, Gift, CreditCard, Shield } from 'lucide-react';
+import { Link } from 'react-router-dom';
 
 export const HeroSection: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -33,13 +33,81 @@ export const HeroSection: React.FC = () => {
 
   useEffect(() => {
     const slideTimer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 7);
+      setCurrentSlide(prev => (prev + 1) % 10);
     }, 5000);
 
     return () => clearInterval(slideTimer);
   }, []);
 
   const heroSlides = [
+    {
+      bg: "bg-gradient-to-r from-green-600 via-blue-600 to-purple-600",
+      title: "Welcome to GetIt - Bangladesh's Premier Multi-Vendor Marketplace",
+      subtitle: "Discover millions of products from trusted local and international vendors",
+      features: [
+        "Free Delivery on orders above ৳500",
+        "Cash on Delivery available nationwide", 
+        "bKash, Nagad, Rocket payment support",
+        "7-Day Return policy",
+        "Authentic Products from verified vendors"
+      ],
+      buttons: [
+        { text: "Shop Now", link: "/products", primary: true },
+        { text: "Become a Vendor", link: "/vendor/register", primary: false }
+      ],
+      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500",
+      title: "Festival Sale - Eid Collection",
+      subtitle: "Up to 70% off on traditional and modern Eid items",
+      features: [
+        "Traditional Clothing & Accessories",
+        "Modern Electronics & Gadgets",
+        "Home Décor & Furniture",
+        "Special Gift Items",
+        "Free Express Delivery"
+      ],
+      buttons: [
+        { text: "Shop Eid Sale", link: "/eid-sale", primary: true },
+        { text: "View All Offers", link: "/offers", primary: false }
+      ],
+      image: "https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-purple-600 via-pink-600 to-red-500",
+      title: "New User Special Offer",
+      subtitle: "৳200 off on your first purchase - Welcome to the GetIt family!",
+      features: [
+        "৳200 instant discount",
+        "Free delivery on first order",
+        "Priority customer support",
+        "Exclusive welcome deals",
+        "Access to member-only sales"
+      ],
+      buttons: [
+        { text: "Claim Offer", link: "/new-user-offer", primary: true },
+        { text: "Sign Up Now", link: "/auth/register", primary: false }
+      ],
+      image: "https://images.unsplash.com/photo-1556742502-ec7c0e9f34b1?w=800"
+    },
+    {
+      bg: "bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-500",
+      title: "Mobile Banking Bonus",
+      subtitle: "Extra 5% cashback with bKash/Nagad payments",
+      features: [
+        "5% cashback on bKash payments",
+        "5% cashback on Nagad payments", 
+        "Instant payment processing",
+        "Secure transaction guarantee",
+        "No hidden charges"
+      ],
+      buttons: [
+        { text: "Pay with bKash", link: "/mobile-banking", primary: true },
+        { text: "Learn More", link: "/payment-methods", primary: false }
+      ],
+      image: "https://images.unsplash.com/photo-1593642702821-c8da6771f0c6?w=800"
+    },
     {
       bg: "bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600",
       title: "AI-Powered Shopping Experience",
@@ -75,12 +143,6 @@ export const HeroSection: React.FC = () => {
       title: "Fashion Forward Collection",
       subtitle: "Trending styles for every season",
       image: "https://images.unsplash.com/photo-1441986300917-64674bd600d8?w=800"
-    },
-    {
-      bg: "bg-gradient-to-r from-amber-500 via-orange-500 to-red-500",
-      title: "Health & Fitness Essentials",
-      subtitle: "Everything for your wellness journey",
-      image: "https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=800"
     }
   ];
 
@@ -103,34 +165,68 @@ export const HeroSection: React.FC = () => {
                       <div className="flex items-center gap-2 mb-4">
                         <Sparkles className="w-6 h-6 text-yellow-300" />
                         <span className="bg-yellow-400 text-black px-3 py-1 rounded-full text-sm font-semibold">
-                          AI Recommended
+                          Featured
                         </span>
                       </div>
-                      <h1 className="text-4xl md:text-5xl font-bold mb-4 leading-tight">
+                      <h1 className="text-3xl md:text-4xl font-bold mb-4 leading-tight">
                         {slide.title}
                       </h1>
-                      <p className="text-xl mb-6 opacity-90">{slide.subtitle}</p>
+                      <p className="text-lg mb-4 opacity-90">{slide.subtitle}</p>
                       
-                      {/* Countdown Timer */}
-                      <div className="flex items-center gap-4 mb-6">
-                        <span className="text-lg font-semibold">Ends in:</span>
-                        <div className="flex gap-2">
-                          {Object.entries(timeLeft).map(([unit, value]) => (
-                            <div key={unit} className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-2 text-center min-w-[50px]">
-                              <div className="text-2xl font-bold">{value.toString().padStart(2, '0')}</div>
-                              <div className="text-xs uppercase">{unit}</div>
-                            </div>
-                          ))}
+                      {/* Features List */}
+                      {slide.features && (
+                        <div className="mb-6">
+                          <div className="grid grid-cols-1 md:grid-cols-2 gap-2">
+                            {slide.features.map((feature, idx) => (
+                              <div key={idx} className="flex items-center gap-2">
+                                <CheckCircle className="w-4 h-4 text-green-300" />
+                                <span className="text-sm">{feature}</span>
+                              </div>
+                            ))}
+                          </div>
                         </div>
-                      </div>
+                      )}
+                      
+                      {/* Countdown Timer for slides without features */}
+                      {!slide.features && (
+                        <div className="flex items-center gap-4 mb-6">
+                          <span className="text-lg font-semibold">Ends in:</span>
+                          <div className="flex gap-2">
+                            {Object.entries(timeLeft).map(([unit, value]) => (
+                              <div key={unit} className="bg-white bg-opacity-20 backdrop-blur-sm rounded-lg p-2 text-center min-w-[50px]">
+                                <div className="text-2xl font-bold">{value.toString().padStart(2, '0')}</div>
+                                <div className="text-xs uppercase">{unit}</div>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
                       
                       <div className="flex gap-4">
-                        <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-8 py-3 rounded-full hover:from-yellow-300 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg">
-                          Shop Now
-                        </button>
-                        <button className="border-2 border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-all">
-                          Learn More
-                        </button>
+                        {slide.buttons ? (
+                          slide.buttons.map((button, idx) => (
+                            <Link
+                              key={idx}
+                              to={button.link}
+                              className={`font-bold px-6 py-3 rounded-full transition-all transform hover:scale-105 shadow-lg ${
+                                button.primary
+                                  ? 'bg-gradient-to-r from-yellow-400 to-orange-500 text-black hover:from-yellow-300 hover:to-orange-400'
+                                  : 'border-2 border-white text-white hover:bg-white hover:text-gray-800'
+                              }`}
+                            >
+                              {button.text}
+                            </Link>
+                          ))
+                        ) : (
+                          <>
+                            <button className="bg-gradient-to-r from-yellow-400 to-orange-500 text-black font-bold px-8 py-3 rounded-full hover:from-yellow-300 hover:to-orange-400 transition-all transform hover:scale-105 shadow-lg">
+                              Shop Now
+                            </button>
+                            <button className="border-2 border-white text-white font-bold px-8 py-3 rounded-full hover:bg-white hover:text-gray-800 transition-all">
+                              Learn More
+                            </button>
+                          </>
+                        )}
                       </div>
                     </div>
                     <div className="flex-1 hidden md:block">
@@ -163,9 +259,12 @@ export const HeroSection: React.FC = () => {
                 <h3 className="font-bold text-lg">Flash Sale</h3>
                 <p className="text-sm opacity-90">Up to 70% off</p>
               </div>
-              <button className="bg-white text-green-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all">
+              <Link 
+                to="/flash-sale"
+                className="bg-white text-green-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all text-center"
+              >
                 Shop Now
-              </button>
+              </Link>
             </div>
             
             <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white h-44 flex flex-col justify-between">
@@ -174,9 +273,12 @@ export const HeroSection: React.FC = () => {
                 <h3 className="font-bold text-lg">AI Picks</h3>
                 <p className="text-sm opacity-90">Just for you</p>
               </div>
-              <button className="bg-white text-purple-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all">
+              <Link 
+                to="/recommendations"
+                className="bg-white text-purple-600 font-semibold px-4 py-2 rounded-full text-sm hover:bg-gray-100 transition-all text-center"
+              >
                 Explore
-              </button>
+              </Link>
             </div>
           </div>
         </div>

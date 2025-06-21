@@ -22,6 +22,13 @@ import TrackOrder from "./pages/TrackOrder";
 import HelpCenter from "./pages/HelpCenter";
 import Wishlist from "./pages/Wishlist";
 import MyAccount from "./pages/MyAccount";
+import EidSale from "./pages/EidSale";
+import NewUserOffer from "./pages/NewUserOffer";
+import MobileBanking from "./pages/MobileBanking";
+import PaymentMethods from "./pages/PaymentMethods";
+import Offers from "./pages/Offers";
+import FlashSale from "./pages/FlashSale";
+import Recommendations from "./pages/Recommendations";
 
 const queryClient = new QueryClient();
 
@@ -43,6 +50,15 @@ const App = () => (
               <Route path="/help" element={<HelpCenter />} />
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/account" element={<MyAccount />} />
+              
+              {/* New Hero Section Routes */}
+              <Route path="/eid-sale" element={<EidSale />} />
+              <Route path="/new-user-offer" element={<NewUserOffer />} />
+              <Route path="/mobile-banking" element={<MobileBanking />} />
+              <Route path="/payment-methods" element={<PaymentMethods />} />
+              <Route path="/offers" element={<Offers />} />
+              <Route path="/flash-sale" element={<FlashSale />} />
+              <Route path="/recommendations" element={<Recommendations />} />
               
               {/* Auth Routes */}
               <Route path="/auth/login" element={<Login />} />

@@ -21,7 +21,6 @@ export const CategoryGrid: React.FC<CategoryGridProps> = ({ onCategorySelect }) 
             </div>
             <div>
               <h3 className="font-bold text-lg text-gray-800">{category.name}</h3>
-              <p className="text-sm text-gray-500">{category.nameBn}</p>
             </div>
           </div>
           

@@ -96,9 +96,9 @@ const Categories: React.FC = () => {
     if (selectedSubSubcategory) {
       return selectedSubSubcategory;
     } else if (subcategory) {
-      return `${subcategory.name} (${subcategory.nameBn})`;
+      return subcategory.name;
     } else if (category) {
-      return `${category.name} (${category.nameBn})`;
+      return category.name;
     }
     return 'All Categories';
   };

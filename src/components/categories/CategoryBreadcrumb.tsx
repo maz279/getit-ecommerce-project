@@ -46,7 +46,6 @@ export const CategoryBreadcrumb: React.FC<CategoryBreadcrumbProps> = ({
             className="hover:text-blue-600 transition-colors"
           >
             <span>{category.name}</span>
-            <span className="text-gray-500 ml-1">({category.nameBn})</span>
           </button>
         </>
       )}
@@ -59,7 +58,6 @@ export const CategoryBreadcrumb: React.FC<CategoryBreadcrumbProps> = ({
             className="hover:text-blue-600 transition-colors"
           >
             <span>{subcategory.name}</span>
-            <span className="text-gray-500 ml-1">({subcategory.nameBn})</span>
           </button>
         </>
       )}

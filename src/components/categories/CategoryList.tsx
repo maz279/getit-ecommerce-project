@@ -59,7 +59,6 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                 </div>
                 <div>
                   <div className="font-medium text-gray-800">{category.name}</div>
-                  <div className="text-xs text-gray-500">{category.nameBn}</div>
                 </div>
               </div>
               <div className="flex items-center gap-2">
@@ -89,7 +88,6 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                     >
                       <div>
                         <div className="font-medium text-sm text-gray-700">{subcategory.name}</div>
-                        <div className="text-xs text-gray-500">{subcategory.nameBn}</div>
                       </div>
                       <div className="flex items-center gap-2">
                         <span className="text-xs text-gray-500">
@@ -115,7 +113,6 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                             <div className="flex items-center justify-between">
                               <div>
                                 <div className="font-medium text-sm text-gray-600">{subSubcat.name}</div>
-                                <div className="text-xs text-gray-500">{subSubcat.nameBn}</div>
                               </div>
                               <span className="text-xs text-gray-400">({subSubcat.count})</span>
                             </div>

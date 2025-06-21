@@ -1,7 +1,6 @@
 
 export interface SubCategory {
   name: string;
-  nameBn: string;
   items: string[];
   count: number;
 }
@@ -9,7 +8,6 @@ export interface SubCategory {
 export interface MainCategory {
   id: string;
   name: string;
-  nameBn: string;
   icon: React.ReactNode;
   color: string;
   count: number;
@@ -17,7 +15,6 @@ export interface MainCategory {
   subcategories: {
     [key: string]: {
       name: string;
-      nameBn: string;
       subcategories: SubCategory[];
     };
   };
@@ -34,7 +31,6 @@ export const categoriesData: MainCategory[] = [
   {
     id: 'fashion',
     name: 'Fashion & Apparel',
-    nameBn: 'ফ্যাশন ও পোশাক',
     icon: React.createElement(Shirt, { className: "w-8 h-8" }),
     color: 'text-red-500',
     count: 5847,
@@ -42,11 +38,9 @@ export const categoriesData: MainCategory[] = [
     subcategories: {
       'womens-fashion': {
         name: "Women's Fashion",
-        nameBn: 'মহিলাদের ফ্যাশন',
         subcategories: [
           {
             name: 'Traditional Wear',
-            nameBn: 'ঐতিহ্যবাহী পোশাক',
             count: 1245,
             items: [
               'Cotton Saree', 'Silk Saree (Dhakai, Rajshahi, Tangail)', 'Tant Saree', 
@@ -56,7 +50,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Salwar Kameez',
-            nameBn: 'সালোয়ার কামিজ',
             count: 892,
             items: [
               'Three Piece Set', 'Two Piece Set', 'Straight Cut', 'A-Line Cut',
@@ -66,7 +59,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Kurti & Tops',
-            nameBn: 'কুর্তি ও টপস',
             count: 674,
             items: [
               'Cotton Kurti', 'Silk Kurti', 'Embroidered Kurti', 'Printed Kurti',
@@ -76,7 +68,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Western Wear',
-            nameBn: 'পশ্চিমা পোশাক',
             count: 523,
             items: [
               'Casual Tops', 'Formal Blouses', 'Tank Tops', 'Crop Tops', 'Tunics',
@@ -86,7 +77,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Islamic Wear',
-            nameBn: 'ইসলামিক পোশাক',
             count: 387,
             items: [
               'Cotton Hijab', 'Chiffon Hijab', 'Silk Hijab', 'Printed Hijab',
@@ -96,7 +86,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Innerwear & Sleepwear',
-            nameBn: 'অন্তর্বাস ও ঘুমের পোশাক',
             count: 234,
             items: [
               'Bras', 'Panties', 'Shapewear', 'Camisoles', 'Slips',
@@ -105,7 +94,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Maternity Wear',
-            nameBn: 'মাতৃত্বকালীন পোশাক',
             count: 156,
             items: [
               'Maternity Tops', 'Maternity Bottoms', 'Maternity Dresses',
@@ -116,11 +104,9 @@ export const categoriesData: MainCategory[] = [
       },
       'mens-fashion': {
         name: "Men's Fashion",
-        nameBn: 'পুরুষদের ফ্যাশন',
         subcategories: [
           {
             name: 'Traditional Wear',
-            nameBn: 'ঐতিহ্যবাহী পোশাক',
             count: 834,
             items: [
               'Cotton Panjabi', 'Silk Panjabi', 'Linen Panjabi', 'Embroidered Panjabi',
@@ -130,7 +116,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Western Wear',
-            nameBn: 'পশ্চিমা পোশাক',
             count: 612,
             items: [
               'Formal Shirts', 'Casual Shirts', 'Polo Shirts', 'T-Shirts', 'Tank Tops',
@@ -140,7 +125,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Ethnic & Fusion',
-            nameBn: 'জাতিগত ও ফিউশন',
             count: 298,
             items: [
               'Cotton Kurta', 'Silk Kurta', 'Linen Kurta', 'Designer Kurta', 'Nehru Jackets'
@@ -148,7 +132,6 @@ export const categoriesData: MainCategory[] = [
           },
           {
             name: 'Innerwear & Sleepwear',
-            nameBn: 'অন্তর্বাস ও ঘুমের পোশাক',
             count: 187,
             items: [
               'Vests', 'Briefs', 'Boxers', 'Trunk', 'Thermals',
@@ -162,7 +145,6 @@ export const categoriesData: MainCategory[] = [
   {
     id: 'electronics',
     name: 'Electronics',
-    nameBn: 'ইলেকট্রনিক্স',
     icon: React.createElement(Smartphone, { className: "w-8 h-8" }),
     color: 'text-blue-500',
     count: 2847,
@@ -170,17 +152,14 @@ export const categoriesData: MainCategory[] = [
     subcategories: {
       'mobile-tablets': {
         name: 'Mobile & Tablets',
-        nameBn: 'মোবাইল ও ট্যাবলেট',
         subcategories: [
           {
             name: 'Smartphones',
-            nameBn: 'স্মার্টফোন',
             count: 456,
             items: ['Android Phones', 'iPhones', 'Feature Phones', 'Gaming Phones']
           },
           {
             name: 'Tablets',
-            nameBn: 'ট্যাবলেট',
             count: 123,
             items: ['iPad', 'Android Tablets', 'Windows Tablets', 'E-readers']
           }
@@ -188,17 +167,14 @@ export const categoriesData: MainCategory[] = [
       },
       'computers': {
         name: 'Computers',
-        nameBn: 'কম্পিউটার',
         subcategories: [
           {
             name: 'Laptops',
-            nameBn: 'ল্যাপটপ',
             count: 234,
             items: ['Gaming Laptops', 'Business Laptops', 'Ultrabooks', 'Chromebooks']
           },
           {
             name: 'Desktops',
-            nameBn: 'ডেস্কটপ',
             count: 145,
             items: ['Gaming PCs', 'All-in-One PCs', 'Workstations', 'Mini PCs']
           }
@@ -209,7 +185,6 @@ export const categoriesData: MainCategory[] = [
   {
     id: 'home-garden',
     name: 'Home & Garden',
-    nameBn: 'বাড়ি ও বাগান',
     icon: React.createElement(Home, { className: "w-8 h-8" }),
     color: 'text-green-500',
     count: 1456,
@@ -217,17 +192,14 @@ export const categoriesData: MainCategory[] = [
     subcategories: {
       'furniture': {
         name: 'Furniture',
-        nameBn: 'আসবাবপত্র',
         subcategories: [
           {
             name: 'Living Room',
-            nameBn: 'বসার ঘর',
             count: 234,
             items: ['Sofas', 'Coffee Tables', 'TV Units', 'Recliners']
           },
           {
             name: 'Bedroom',
-            nameBn: 'শয়নকক্ষ',
             count: 189,
             items: ['Beds', 'Mattresses', 'Wardrobes', 'Dressing Tables']
           }

@@ -65,7 +65,6 @@ export const Security: React.FC = () => {
         </p>
       </div>
 
-      {/* Security Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
         {securityStats.map((stat, index) => (
           <div key={index} className="bg-white rounded-xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -76,7 +75,6 @@ export const Security: React.FC = () => {
         ))}
       </div>
 
-      {/* Security Features */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-12">
         <div className="flex flex-wrap">
           {securityFeatures.map((feature, index) => (
@@ -128,7 +126,6 @@ export const Security: React.FC = () => {
                   <div className="absolute inset-0 bg-black/10"></div>
                   <securityFeatures[activeFeature].icon className="w-24 h-24 text-white relative z-10" />
                   
-                  {/* Animated particles */}
                   <div className="absolute top-4 left-4 w-2 h-2 bg-white/30 rounded-full animate-pulse"></div>
                   <div className="absolute top-12 right-8 w-1 h-1 bg-white/40 rounded-full animate-pulse delay-100"></div>
                   <div className="absolute bottom-8 left-12 w-3 h-3 bg-white/20 rounded-full animate-pulse delay-200"></div>
@@ -139,7 +136,6 @@ export const Security: React.FC = () => {
         </div>
       </div>
 
-      {/* Compliance Standards */}
       <div className="bg-gradient-to-br from-gray-50 to-white rounded-2xl p-8 border border-gray-200">
         <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">Compliance & Certifications</h3>
         
@@ -168,7 +164,6 @@ export const Security: React.FC = () => {
         </div>
       </div>
 
-      {/* Security Promise */}
       <div className="mt-12 bg-gradient-to-r from-blue-600 to-purple-600 rounded-2xl p-8 text-center text-white">
         <Shield className="w-16 h-16 mx-auto mb-6 text-white" />
         <h3 className="text-2xl font-bold mb-4">Our Security Promise</h3>

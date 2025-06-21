@@ -97,7 +97,6 @@ export const Commitment: React.FC = () => {
         </p>
       </div>
 
-      {/* Social Impact Stats */}
       <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
         {socialImpacts.map((impact, index) => (
           <div key={index} className="bg-gradient-to-br from-white to-gray-50 rounded-xl p-6 text-center shadow-lg border border-gray-100 hover:shadow-xl transition-all duration-300 hover:-translate-y-1">
@@ -108,7 +107,6 @@ export const Commitment: React.FC = () => {
         ))}
       </div>
 
-      {/* Commitment Areas */}
       <div className="bg-white rounded-2xl shadow-lg border border-gray-100 overflow-hidden mb-12">
         <div className="grid grid-cols-1 md:grid-cols-4">
           {commitments.map((commitment, index) => (
@@ -162,7 +160,6 @@ export const Commitment: React.FC = () => {
                   <div className="absolute inset-0 bg-black/10"></div>
                   <commitments[activeCommitment].icon className="w-24 h-24 text-white relative z-10" />
                   
-                  {/* Floating elements */}
                   <div className="absolute top-6 left-6 w-3 h-3 bg-white/30 rounded-full animate-bounce"></div>
                   <div className="absolute top-16 right-8 w-2 h-2 bg-white/40 rounded-full animate-bounce delay-100"></div>
                   <div className="absolute bottom-8 left-16 w-4 h-4 bg-white/20 rounded-full animate-bounce delay-200"></div>
@@ -173,7 +170,6 @@ export const Commitment: React.FC = () => {
         </div>
       </div>
 
-      {/* Sustainability Goals */}
       <div className="bg-gradient-to-br from-green-50 to-blue-50 rounded-2xl p-8 border border-green-200 mb-12">
         <h3 className="text-2xl font-bold text-gray-800 mb-8 text-center">2030 Sustainability Goals</h3>
         
@@ -202,7 +198,6 @@ export const Commitment: React.FC = () => {
         </div>
       </div>
 
-      {/* Partnership Call to Action */}
       <div className="bg-gradient-to-r from-purple-600 to-pink-600 rounded-2xl p-8 text-center text-white">
         <HandHeart className="w-16 h-16 mx-auto mb-6 text-white" />
         <h3 className="text-2xl font-bold mb-4">Join Our Mission</h3>

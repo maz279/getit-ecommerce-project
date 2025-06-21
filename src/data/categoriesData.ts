@@ -25,11 +25,19 @@ import { electronicsData } from './categories/electronicsData';
 import { homeGardenData } from './categories/homeGardenData';
 import { healthBeautyData } from './categories/healthBeautyData';
 import { foodGroceriesData } from './categories/foodGroceriesData';
+import { booksEducationData } from './categories/booksEducationData';
+import { sportsOutdoorData } from './categories/sportsOutdoorData';
+import { automobilesData } from './categories/automobilesData';
+import { babyKidsData } from './categories/babyKidsData';
 
 export const categoriesData: MainCategory[] = [
   fashionData,
   electronicsData,
   homeGardenData,
   healthBeautyData,
-  foodGroceriesData
+  foodGroceriesData,
+  booksEducationData,
+  sportsOutdoorData,
+  automobilesData,
+  babyKidsData
 ];

@@ -116,11 +116,6 @@ export const CategoryList: React.FC<CategoryListProps> = ({
                               </div>
                               <span className="text-xs text-gray-400">({subSubcat.count})</span>
                             </div>
-                            {/* Items preview */}
-                            <div className="mt-1 text-xs text-gray-400">
-                              {subSubcat.items.slice(0, 3).join(', ')}
-                              {subSubcat.items.length > 3 && '...'}
-                            </div>
                           </div>
                         ))}
                       </div>

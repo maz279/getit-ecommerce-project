@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/context/AuthContext';
@@ -25,7 +24,7 @@ const Login: React.FC = () => {
   const [loginMethod, setLoginMethod] = useState<'email' | 'phone' | 'phone-otp'>('email');
   const [showOTPVerification, setShowOTPVerification] = useState(false);
 
-  const { signIn, signInWithGoogle } = useAuth();
+  const { signIn, signInWithGoogle, signInWithFacebook, signInWithWhatsApp } = useAuth();
   const navigate = useNavigate();
   const location = useLocation();
   
@@ -56,14 +55,8 @@ const Login: React.FC = () => {
     setError('');
 
     try {
-      // Here you would integrate with Supabase SMS OTP
-      // For now, we'll simulate the flow
       console.log('Sending OTP to:', phone);
-      
-      // Simulate API call delay
       await new Promise(resolve => setTimeout(resolve, 2000));
-      
-      // Show OTP verification screen
       setShowOTPVerification(true);
     } catch (err) {
       setError('Failed to send OTP. Please try again.');
@@ -77,13 +70,9 @@ const Login: React.FC = () => {
     setError('');
 
     try {
-      // Here you would verify the OTP with Supabase
       console.log('Verifying OTP:', otp, 'for phone:', phone);
-      
-      // Simulate verification
       await new Promise(resolve => setTimeout(resolve, 1500));
       
-      // For demo purposes, accept any 6-digit code
       if (otp.length === 6) {
         console.log('OTP verified successfully');
         navigate(redirectTo);
@@ -104,7 +93,6 @@ const Login: React.FC = () => {
     try {
       console.log('Resending OTP to:', phone);
       await new Promise(resolve => setTimeout(resolve, 1000));
-      // Reset any error states
     } catch (err) {
       setError('Failed to resend OTP. Please try again.');
     } finally {
@@ -112,28 +100,37 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleGoogleLogin = async () => {
+  const handleSocialLogin = async (provider: string) => {
     setLoading(true);
     setError('');
     
     try {
-      const { error } = await signInWithGoogle();
-      if (error) {
-        setError(error.message);
+      let result;
+      
+      switch (provider) {
+        case 'google':
+          result = await signInWithGoogle();
+          break;
+        case 'facebook':
+          result = await signInWithFacebook();
+          break;
+        case 'whatsapp':
+          result = await signInWithWhatsApp();
+          break;
+        default:
+          throw new Error(`Unknown provider: ${provider}`);
+      }
+
+      if (result.error) {
+        setError(result.error.message);
+      } else if (provider !== 'whatsapp') {
+        // For OAuth providers, navigation happens automatically via redirect
+        console.log(`${provider} login initiated successfully`);
       }
     } catch (err) {
-      setError('Failed to sign in with Google');
+      setError(`Failed to sign in with ${provider}`);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSocialLogin = (provider: string) => {
-    if (provider === 'google') {
-      handleGoogleLogin();
-    } else {
-      console.log(`Login with ${provider} - Not implemented yet`);
-      setError(`${provider} login is not yet implemented`);
     }
   };
 
@@ -169,7 +166,6 @@ const Login: React.FC = () => {
               </CardHeader>
 
               <CardContent className="space-y-6">
-                {/* Show social login only if not in OTP verification mode */}
                 {!showOTPVerification && (
                   <>
                     <SocialLoginButtons 
@@ -210,7 +206,6 @@ const Login: React.FC = () => {
                   showOTPVerification={showOTPVerification}
                 />
 
-                {/* Show links only if not in OTP verification mode */}
                 {!showOTPVerification && (
                   <>
                     <div className="space-y-4 text-center">

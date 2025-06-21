@@ -1,4 +1,3 @@
-
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User } from '@supabase/supabase-js';
@@ -10,6 +9,8 @@ interface AuthContextType {
   loading: boolean;
   signIn: (email: string, password: string) => Promise<any>;
   signInWithGoogle: () => Promise<any>;
+  signInWithFacebook: () => Promise<any>;
+  signInWithWhatsApp: () => Promise<any>;
   signUp: (email: string, password: string, userData: any) => Promise<any>;
   signOut: () => Promise<void>;
   updateProfile: (data: Partial<AppUser>) => Promise<void>;
@@ -44,7 +45,9 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
       if (session?.user) {
-        await fetchUserProfile(session.user.id);
+        setTimeout(() => {
+          fetchUserProfile(session.user.id);
+        }, 0);
       } else {
         setUserProfile(null);
       }
@@ -87,6 +90,36 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     return { data, error };
   };
 
+  const signInWithFacebook = async () => {
+    const { data, error } = await supabase.auth.signInWithOAuth({
+      provider: 'facebook',
+      options: {
+        redirectTo: `${window.location.origin}/`,
+        scopes: 'email,public_profile',
+      },
+    });
+    return { data, error };
+  };
+
+  const signInWithWhatsApp = async () => {
+    // WhatsApp Business API integration would require custom implementation
+    // For now, we'll simulate the flow and show instructions
+    console.log('WhatsApp login initiated');
+    
+    // In a real implementation, you would:
+    // 1. Integrate with WhatsApp Business API
+    // 2. Send verification message via WhatsApp
+    // 3. Verify user's response
+    // 4. Create user session
+    
+    return { 
+      data: null, 
+      error: { 
+        message: 'WhatsApp login requires WhatsApp Business API setup. Please contact support for integration.' 
+      } 
+    };
+  };
+
   const signUp = async (email: string, password: string, userData: any) => {
     const { data, error } = await supabase.auth.signUp({
       email,
@@ -121,6 +154,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     loading,
     signIn,
     signInWithGoogle,
+    signInWithFacebook,
+    signInWithWhatsApp,
     signUp,
     signOut,
     updateProfile,

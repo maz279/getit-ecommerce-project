@@ -29,6 +29,11 @@ import { booksEducationData } from './categories/booksEducationData';
 import { sportsOutdoorData } from './categories/sportsOutdoorData';
 import { automobilesData } from './categories/automobilesData';
 import { babyKidsData } from './categories/babyKidsData';
+import { handicraftsData } from './categories/handicraftsData';
+import { toysHobbiesData } from './categories/toysHobbiesData';
+import { jewelryData } from './categories/jewelryData';
+import { musicalInstrumentsData } from './categories/musicalInstrumentsData';
+import { digitalProductsData } from './categories/digitalProductsData';
 
 export const categoriesData: MainCategory[] = [
   fashionData,
@@ -39,5 +44,10 @@ export const categoriesData: MainCategory[] = [
   booksEducationData,
   sportsOutdoorData,
   automobilesData,
-  babyKidsData
+  babyKidsData,
+  handicraftsData,
+  toysHobbiesData,
+  jewelryData,
+  musicalInstrumentsData,
+  digitalProductsData
 ];

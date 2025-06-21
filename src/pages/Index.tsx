@@ -4,7 +4,6 @@ import { Header } from '../components/homepage/Header';
 import { HeroSection } from '../components/homepage/HeroSection';
 import { QuickAccessIcons } from '../components/homepage/QuickAccessIcons';
 import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
-import { CategoryHighlights } from '../components/homepage/CategoryHighlights';
 import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
 import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
@@ -27,7 +26,6 @@ const Index: React.FC = () => {
         <HeroSection />
         <QuickAccessIcons />
         <FeaturedCategories />
-        <CategoryHighlights />
         <FlashSaleSection />
         <TrendingProducts />
         <PromotionalBanners />

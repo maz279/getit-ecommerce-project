@@ -7,9 +7,13 @@ import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
 import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
 import { MegaSaleSection } from '../components/homepage/MegaSaleSection';
+import { TrendingProducts } from '../components/homepage/TrendingProducts';
 import { NewProductsSection } from '../components/homepage/NewProductsSection';
 import { RecommendedSection } from '../components/homepage/RecommendedSection';
 import { TopSellingSection } from '../components/homepage/TopSellingSection';
+import { VendorCTA } from '../components/homepage/VendorCTA';
+import { TrustIndicators } from '../components/homepage/TrustIndicators';
+import { BangladeshFeatures } from '../components/homepage/BangladeshFeatures';
 import { Footer } from '../components/homepage/Footer';
 import { OfferPopup } from '../components/homepage/OfferPopup';
 
@@ -23,11 +27,15 @@ const Index: React.FC = () => {
         <QuickAccessIcons />
         <FeaturedCategories />
         <FlashSaleSection />
+        <TrendingProducts />
         <PromotionalBanners />
         <MegaSaleSection />
         <NewProductsSection />
+        <VendorCTA />
         <RecommendedSection />
         <TopSellingSection />
+        <TrustIndicators />
+        <BangladeshFeatures />
       </main>
       
       <Footer />

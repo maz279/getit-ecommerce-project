@@ -35,6 +35,15 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
   activeTab,
   onActiveTabChange
 }) => {
+  // Get the actual subcategory name from URL parameters
+  const urlParams = new URLSearchParams(window.location.search);
+  const subsubcategoryFromUrl = urlParams.get('subsubcategory');
+  
+  // Use URL parameter or fallback to selectedSubSubcategory
+  const actualSubSubcategory = subsubcategoryFromUrl || selectedSubSubcategory;
+
+  console.log('CategoryMainContent - actualSubSubcategory:', actualSubSubcategory);
+
   if (!selectedCategory) {
     return (
       <div className="space-y-6">
@@ -50,7 +59,7 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
       <CategoryBreadcrumb
         selectedCategory={selectedCategory}
         selectedSubcategory={selectedSubcategory}
-        selectedSubSubcategory={selectedSubSubcategory}
+        selectedSubSubcategory={actualSubSubcategory}
         currentCategory={currentCategory}
         currentSubmenu={currentSubmenu}
       />
@@ -63,15 +72,15 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
             <ProductGrid
               category={selectedCategory}
               submenu={selectedSubcategory}
-              tab={selectedSubSubcategory}
+              tab={actualSubSubcategory}
               activeTab={activeTab}
             />
           </Card>
         </div>
 
         {/* Right Side - Subcategory Details */}
-        {selectedSubSubcategory && (
-          <SubcategoryDetails selectedSubSubcategory={selectedSubSubcategory} />
+        {actualSubSubcategory && (
+          <SubcategoryDetails selectedSubSubcategory={actualSubSubcategory} />
         )}
       </div>
     </div>

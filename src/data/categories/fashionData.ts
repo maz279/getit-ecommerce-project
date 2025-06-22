@@ -2,7 +2,7 @@
 import React from 'react';
 import { Shirt } from 'lucide-react';
 import { MainCategory } from './types';
-import { womensFashionDataConverted } from './fashion/womensFashionStructured';
+import { womensFashionDataConverted } from './fashion/womensFashionHierarchical';
 import { mensFashionData } from './fashion/mensFashionData';
 import { kidsFashionData } from './fashion/kidsFashionData';
 import { footwearData } from './fashion/footwearData';

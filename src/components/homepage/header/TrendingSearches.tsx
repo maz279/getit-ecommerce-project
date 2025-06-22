@@ -12,16 +12,8 @@ export const TrendingSearches: React.FC<TrendingSearchesProps> = ({
   onTrendingClick,
   language
 }) => {
-  const content = {
-    EN: { trending: "Trending:" },
-    BD: { trending: "ট্রেন্ডিং:" }
-  };
-
-  const currentContent = content[language as keyof typeof content];
-
   return (
     <div className="mt-2 flex items-center gap-2 text-xs text-white flex-wrap">
-      <span className="whitespace-nowrap">{currentContent.trending}</span>
       {searches.map((search) => (
         <button 
           key={search}

@@ -1,12 +1,10 @@
-
 import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
-import { CategoryList } from '../components/categories/CategoryList';
-import { CategoryBreadcrumb } from '../components/categories/CategoryBreadcrumb';
-import { CategoryFilters } from '../components/categories/CategoryFilters';
-import { CategoryHeader } from '../components/categories/CategoryHeader';
+import { CategorySidebar } from '../components/categories/CategorySidebar';
+import { CategoryBreadcrumbEnhanced } from '../components/categories/CategoryBreadcrumbEnhanced';
+import { CategoryHeaderEnhanced } from '../components/categories/CategoryHeaderEnhanced';
 import { CategoryContent } from '../components/categories/CategoryContent';
 import { categoriesData } from '@/data/categoriesData';
 
@@ -139,9 +137,9 @@ const Categories: React.FC = () => {
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-7xl mx-auto px-4 py-8">
-        {/* Breadcrumb */}
-        <CategoryBreadcrumb 
+      <div className="max-w-7xl mx-auto px-4 py-6">
+        {/* Enhanced Breadcrumb */}
+        <CategoryBreadcrumbEnhanced 
           selectedCategory={selectedCategory || undefined}
           selectedSubcategory={selectedSubcategory || undefined}
           selectedSubSubcategory={selectedSubSubcategory || undefined}
@@ -149,23 +147,20 @@ const Categories: React.FC = () => {
         />
 
         <div className="flex gap-6">
-          {/* Left Sidebar */}
-          <div className="w-1/4 hidden lg:block">
-            <CategoryList 
+          {/* Enhanced Left Sidebar */}
+          <div className="w-80 hidden lg:block">
+            <CategorySidebar 
               onCategorySelect={handleCategorySelect}
               selectedCategory={selectedCategory || undefined}
               selectedSubcategory={selectedSubcategory || undefined}
               selectedSubSubcategory={selectedSubSubcategory || undefined}
             />
-            <div className="mt-6">
-              <CategoryFilters />
-            </div>
           </div>
 
           {/* Main Content */}
-          <div className="flex-1">
-            {/* Header Section */}
-            <CategoryHeader
+          <div className="flex-1 min-w-0">
+            {/* Enhanced Header Section */}
+            <CategoryHeaderEnhanced
               title={getCurrentTitle()}
               description={getDescription()}
               productCount={getTotalProducts()}
@@ -177,18 +172,20 @@ const Categories: React.FC = () => {
               onToggleFilters={() => setShowFilters(!showFilters)}
             />
 
-            {/* Category Content with Tabs */}
-            <CategoryContent
-              selectedCategory={selectedCategory || undefined}
-              selectedSubcategory={selectedSubcategory || undefined}
-              selectedSubSubcategory={selectedSubSubcategory || undefined}
-              viewMode={viewMode}
-              onCategorySelect={(categoryId) => handleCategorySelect(categoryId)}
-              getCurrentItems={getCurrentItems}
-              sampleProducts={sampleProducts}
-              getCategoryData={getCurrentCategoryData}
-              getSubcategoryData={getCurrentSubcategoryData}
-            />
+            {/* Enhanced Category Content with Tabs */}
+            <div className="mt-6">
+              <CategoryContent
+                selectedCategory={selectedCategory || undefined}
+                selectedSubcategory={selectedSubcategory || undefined}
+                selectedSubSubcategory={selectedSubSubcategory || undefined}
+                viewMode={viewMode}
+                onCategorySelect={(categoryId) => handleCategorySelect(categoryId)}
+                getCurrentItems={getCurrentItems}
+                sampleProducts={sampleProducts}
+                getCategoryData={getCurrentCategoryData}
+                getSubcategoryData={getCurrentSubcategoryData}
+              />
+            </div>
           </div>
         </div>
       </div>

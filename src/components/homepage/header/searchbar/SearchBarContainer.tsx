@@ -1,11 +1,18 @@
+
 import React, { useEffect } from 'react';
-import { Search } from 'lucide-react';
 import { DesktopSearchBar } from '../DesktopSearchBar';
 import { MobileSearchBar } from '../MobileSearchBar';
 import { useSearchState } from './hooks/useSearchState';
 import { useSearchHandlers } from './hooks/useSearchHandlers';
 import { useSearchIndexing } from '@/hooks/useSearchIndexing';
 import { SEARCH_CONTENT } from './constants';
+import { 
+  MobileSearchButton, 
+  AIModeIndicator, 
+  ConversationalSearchHelper,
+  useSearchBarHandlers,
+  useSearchKeyboardHandlers
+} from './components';
 
 interface SearchBarContainerProps {
   searchQuery: string;
@@ -61,6 +68,32 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
     setSearchQuery
   });
 
+  // Custom handlers for voice, image, and QR search
+  const {
+    handleVoiceSearch,
+    handleImageSearch,
+    handleQRSearch
+  } = useSearchBarHandlers({
+    aiSearch,
+    isAIMode,
+    voiceLanguage,
+    setShowResults,
+    setShowSuggestions
+  });
+
+  // Keyboard handlers
+  const {
+    handleKeyPress,
+    handleClearSearch
+  } = useSearchKeyboardHandlers({
+    onSearch: handleSearch,
+    setShowResults,
+    setShowSuggestions,
+    setSearchQuery,
+    aiSearch,
+    inputRef
+  });
+
   // Initialize search index on component mount
   useEffect(() => {
     console.log('Initializing search indexing for SearchBarContainer');
@@ -82,88 +115,19 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
 
   const currentContent = SEARCH_CONTENT[language as keyof typeof SEARCH_CONTENT];
 
-  // Enhanced voice search handler
-  const handleVoiceSearch = async (audioBlob: Blob) => {
-    try {
-      if (isAIMode) {
-        console.log('Processing voice search with AI');
-        await aiSearch.processVoiceInput(audioBlob, voiceLanguage);
-      }
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('Voice search failed:', error);
-    }
-  };
-
-  // Enhanced image search handler
-  const handleImageSearch = async (file: File) => {
-    try {
-      if (isAIMode) {
-        console.log('Processing image search with AI');
-        await aiSearch.processImageSearch(file);
-      }
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('Image search failed:', error);
-    }
-  };
-
-  // Enhanced QR search handler
-  const handleQRSearch = async (file: File) => {
-    try {
-      if (isAIMode) {
-        console.log('Processing QR search with AI');
-        await aiSearch.processImageSearch(file);
-      }
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('QR search failed:', error);
-    }
-  };
-
-  // Handle Enter key press
-  const handleKeyPress = (e: React.KeyboardEvent) => {
-    if (e.key === 'Enter') {
-      handleSearch();
-    } else if (e.key === 'Escape') {
-      setShowResults(false);
-      setShowSuggestions(false);
-    }
-  };
-
-  const handleClearSearch = () => {
-    setSearchQuery('');
-    aiSearch.clearResults();
-    setShowResults(false);
-    setShowSuggestions(false);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
   // Enhanced suggestions that include AI suggestions
   const enhancedSuggestions = isAIMode && aiSearch.aiSuggestions.length > 0 
     ? aiSearch.aiSuggestions.map(s => s.text)
     : aiSearch.suggestions;
 
-  // Mobile Search Button with AI indicator
   return (
     <>
-      <button 
-        onClick={() => setShowMobileSearch(!showMobileSearch)}
-        className={`md:hidden p-1.5 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all relative ${
-          isAIMode ? 'bg-gradient-to-r from-purple-500 to-blue-500' : ''
-        }`}
-        aria-label={currentContent.voiceSearch}
-      >
-        <Search className="w-4 h-4" />
-        {isAIMode && (
-          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-        )}
-      </button>
+      <MobileSearchButton
+        showMobileSearch={showMobileSearch}
+        onToggle={() => setShowMobileSearch(!showMobileSearch)}
+        isAIMode={isAIMode}
+        voiceSearchLabel={currentContent.voiceSearch}
+      />
 
       {/* Desktop Search Bar with AI enhancements */}
       <DesktopSearchBar
@@ -233,19 +197,13 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
         onPageNavigate={handlePageNavigation}
       />
 
-      {/* AI Mode Indicator */}
-      {isAIMode && (
-        <div className="hidden md:block absolute top-full right-0 mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs">
-          AI Enhanced
-        </div>
-      )}
+      <AIModeIndicator isAIMode={isAIMode} />
       
-      {/* Conversational Search Helper */}
-      {showSuggestions && !searchQuery && (
-        <div className="hidden md:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 max-w-md text-center">
-          💡 {currentContent.conversationalSearch}
-        </div>
-      )}
+      <ConversationalSearchHelper
+        showSuggestions={showSuggestions}
+        searchQuery={searchQuery}
+        conversationalSearchText={currentContent.conversationalSearch}
+      />
     </>
   );
 };

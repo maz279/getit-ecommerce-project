@@ -1,7 +1,6 @@
 
 import React from 'react';
 import { CategoryBreadcrumb } from './CategoryBreadcrumb';
-import { CategoryTabs } from './CategoryTabs';
 import { ProductGrid } from './ProductGrid';
 import { Card } from '@/components/ui/card';
 import { categoriesData, MainCategory } from '@/data/categoriesData';
@@ -108,31 +107,14 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
         currentSubmenu={currentSubmenu}
       />
 
-      {/* Main Content */}
+      {/* Main Content - Always show ProductGrid without tabs */}
       <Card className="shadow-sm rounded-lg overflow-hidden">
-        {/* Tabs Section with integrated ProductGrid */}
-        {selectedSubcategory && (
-          <CategoryTabs
-            submenu={currentSubmenu}
-            selectedTab={selectedSubSubcategory}
-            activeTab={activeTab}
-            onTabSelect={() => {}} // Will be handled by URL params
-            onActiveTabChange={onActiveTabChange}
-            category={selectedCategory}
-            subcategory={selectedSubcategory}
-            subSubcategory={selectedSubSubcategory}
-          />
-        )}
-        
-        {/* Show ProductGrid when no subcategory is selected */}
-        {!selectedSubcategory && (
-          <ProductGrid
-            category={selectedCategory}
-            submenu={selectedSubcategory}
-            tab={selectedSubSubcategory}
-            activeTab={activeTab}
-          />
-        )}
+        <ProductGrid
+          category={selectedCategory}
+          submenu={selectedSubcategory}
+          tab={selectedSubSubcategory}
+          activeTab={activeTab}
+        />
       </Card>
     </div>
   );

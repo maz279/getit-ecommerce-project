@@ -1,4 +1,3 @@
-
 export const SEARCH_CONTENT = {
   EN: {
     placeholder: "Search products, brands, vendors... or navigate to any page (Type in English or বাংলা)",
@@ -7,16 +6,7 @@ export const SEARCH_CONTENT = {
     filters: "Filters",
     noResults: "No results found",
     loading: "Searching...",
-    trendingSearches: [
-      "Samsung Galaxy S24",
-      "Nike shoes",
-      "Laptop deals",
-      "Fashion trends",
-      "Home decor",
-      "Books",
-      "Health products",
-      "Electronics"
-    ] as string[],
+    trendingSearches: [] as string[],
     conversationalSearch: "Try asking 'Show me new phones' or 'Find cheap laptops' for better results!"
   },
   BD: {
@@ -26,16 +16,7 @@ export const SEARCH_CONTENT = {
     filters: "ফিল্টার",
     noResults: "কোনো ফলাফল পাওয়া যায়নি",
     loading: "খুঁজছি...",
-    trendingSearches: [
-      "স্যামসাং গ্যালাক্সি",
-      "নাইকি জুতা",
-      "ল্যাপটপ অফার",
-      "ফ্যাশন ট্রেন্ড",
-      "ঘর সাজানো",
-      "বই",
-      "স্বাস্থ্য পণ্য",
-      "ইলেকট্রনিক্স"
-    ] as string[],
+    trendingSearches: [] as string[],
     conversationalSearch: "ভালো ফলাফলের জন্য 'নতুন ফোন দেখান' বা 'সস্তা ল্যাপটপ খুঁজুন' লিখে দেখুন!"
   }
 } as const;

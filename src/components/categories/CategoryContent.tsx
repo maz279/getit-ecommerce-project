@@ -51,7 +51,7 @@ interface CategoryContentProps {
   selectedSubcategory?: string;
   selectedSubSubcategory?: string;
   viewMode: 'grid' | 'list';
-  onCategorySelect: (categoryId: string) => void;
+  onCategorySelect: (categoryId?: string, subcategoryId?: string, subSubcategoryId?: string) => void;
   getCurrentItems: () => string[];
   sampleProducts: ProductInfo[];
   getCategoryData: () => MainCategoryData | null;
@@ -70,7 +70,7 @@ export const CategoryContent: React.FC<CategoryContentProps> = ({
   getSubcategoryData
 }) => {
   if (!selectedCategory) {
-    return <CategoryGrid onCategorySelect={onCategorySelect} />;
+    return <CategoryGrid onCategorySelect={(categoryId) => onCategorySelect(categoryId)} />;
   }
 
   if (selectedSubSubcategory && getCurrentItems().length > 0) {

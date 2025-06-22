@@ -179,7 +179,7 @@ const Categories: React.FC = () => {
                 selectedSubcategory={selectedSubcategory || undefined}
                 selectedSubSubcategory={selectedSubSubcategory || undefined}
                 viewMode={viewMode}
-                onCategorySelect={(categoryId) => handleCategorySelect(categoryId)}
+                onCategorySelect={handleCategorySelect}
                 getCurrentItems={getCurrentItems}
                 sampleProducts={sampleProducts}
                 getCategoryData={getCurrentCategoryData}

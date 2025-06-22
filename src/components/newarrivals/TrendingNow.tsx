@@ -1,7 +1,6 @@
-
 import React from 'react';
 import { ProductCard } from '../homepage/ProductCard';
-import { TrendingUp, Fire } from 'lucide-react';
+import { TrendingUp, Flame } from 'lucide-react';
 
 export const TrendingNow: React.FC = () => {
   const trendingProducts = [
@@ -80,7 +79,7 @@ export const TrendingNow: React.FC = () => {
           {trendingProducts.map((product, index) => (
             <div key={index} className="relative group">
               <div className="absolute -top-3 -right-3 bg-gradient-to-r from-purple-500 to-pink-500 text-white px-3 py-1 rounded-full text-sm font-bold z-10 shadow-lg flex items-center gap-1">
-                <Fire className="w-3 h-3" />
+                <Flame className="w-3 h-3" />
                 {product.trendPercentage}
               </div>
               <div className="absolute -top-1 -left-1 bg-yellow-400 text-black px-2 py-1 rounded-full text-xs font-bold z-10 shadow-lg">

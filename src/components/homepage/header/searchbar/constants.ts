@@ -16,7 +16,7 @@ export const SEARCH_CONTENT = {
       "Books",
       "Health products",
       "Electronics"
-    ],
+    ] as string[],
     conversationalSearch: "Try asking 'Show me new phones' or 'Find cheap laptops' for better results!"
   },
   BD: {
@@ -35,9 +35,47 @@ export const SEARCH_CONTENT = {
       "বই",
       "স্বাস্থ্য পণ্য",
       "ইলেকট্রনিক্স"
-    ],
+    ] as string[],
     conversationalSearch: "ভালো ফলাফলের জন্য 'নতুন ফোন দেখান' বা 'সস্তা ল্যাপটপ খুঁজুন' লিখে দেখুন!"
   }
+} as const;
+
+export const PAGE_NAVIGATION_MAP = {
+  'home': '/',
+  'homepage': '/',
+  'গৃহপাতা': '/',
+  'new arrivals': '/new-arrivals',
+  'নতুন পণ্য': '/new-arrivals',
+  'categories': '/categories',
+  'বিভাগসমূহ': '/categories',
+  'about': '/about',
+  'about us': '/about',
+  'আমাদের সম্পর্কে': '/about',
+  'help': '/help',
+  'help center': '/help',
+  'সহায়তা': '/help',
+  'login': '/login',
+  'লগইন': '/login',
+  'register': '/register',
+  'sign up': '/register',
+  'নিবন্ধন': '/register',
+  'wishlist': '/wishlist',
+  'পছন্দের তালিকা': '/wishlist',
+  'profile': '/profile',
+  'my account': '/profile',
+  'আমার অ্যাকাউন্ট': '/profile',
+  'privacy': '/privacy',
+  'privacy policy': '/privacy',
+  'গোপনীয়তা নীতি': '/privacy',
+  'terms': '/terms',
+  'terms of service': '/terms',
+  'সেবার শর্তাবলী': '/terms',
+  'cart': '/cart',
+  'checkout': '/checkout',
+  'orders': '/orders',
+  'vendors': '/vendors',
+  'contact': '/contact',
+  'dashboard': '/dashboard'
 } as const;
 
 export const SEARCH_CATEGORIES = [

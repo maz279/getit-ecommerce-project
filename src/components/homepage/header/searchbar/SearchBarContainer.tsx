@@ -1,10 +1,11 @@
 
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { DesktopSearchBar } from '../DesktopSearchBar';
 import { MobileSearchBar } from '../MobileSearchBar';
 import { useSearchState } from './hooks/useSearchState';
 import { useSearchHandlers } from './hooks/useSearchHandlers';
+import { useSearchIndexing } from '@/hooks/useSearchIndexing';
 import { SEARCH_CONTENT } from './constants';
 
 interface SearchBarContainerProps {
@@ -23,6 +24,12 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
   language
 }) => {
   const isAIMode = true; // AI mode enabled by default
+  
+  // Initialize search indexing
+  const { addToSearchIndex, refreshSearchIndex } = useSearchIndexing({
+    autoIndex: true,
+    indexInterval: 5 * 60 * 1000 // 5 minutes
+  });
   
   const {
     showResults,
@@ -54,6 +61,25 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
     setShowResults,
     setSearchQuery
   });
+
+  // Initialize search index on component mount
+  useEffect(() => {
+    console.log('Initializing search indexing for SearchBarContainer');
+    
+    // Auto-index current page content
+    const currentPageData = {
+      id: `page-${window.location.pathname}`,
+      title: document.title || 'Current Page',
+      description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
+      type: 'page' as const,
+      url: window.location.pathname,
+      tags: [window.location.pathname.split('/').filter(Boolean)],
+      dateAdded: new Date(),
+      isActive: true
+    };
+    
+    addToSearchIndex(currentPageData);
+  }, [addToSearchIndex]);
 
   const currentContent = SEARCH_CONTENT[language as keyof typeof SEARCH_CONTENT];
 

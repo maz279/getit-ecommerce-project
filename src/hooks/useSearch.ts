@@ -13,6 +13,8 @@ export interface UseSearchReturn {
   getSuggestions: (query: string) => Promise<string[]>;
   clearResults: () => void;
   applyFilters?: (filters: any) => void;
+  addToIndex: (item: SearchResult) => void;
+  refreshIndex: () => void;
 }
 
 export const useSearch = (): UseSearchReturn => {
@@ -133,6 +135,17 @@ export const useSearch = (): UseSearchReturn => {
     // This would be implemented based on current search query
   }, []);
 
+  // New functionality for automatic indexing
+  const addToIndex = useCallback((item: SearchResult) => {
+    console.log('Adding item to search index:', item);
+    searchService.addToIndex(item);
+  }, []);
+
+  const refreshIndex = useCallback(() => {
+    console.log('Refreshing search index');
+    searchService.refreshIndex();
+  }, []);
+
   return {
     searchResults,
     suggestions,
@@ -143,6 +156,8 @@ export const useSearch = (): UseSearchReturn => {
     searchImage,
     getSuggestions,
     clearResults,
-    applyFilters
+    applyFilters,
+    addToIndex,
+    refreshIndex
   };
 };

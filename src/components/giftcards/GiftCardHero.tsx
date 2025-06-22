@@ -2,7 +2,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Search, Gift, Sparkles } from 'lucide-react';
+import { Search, Gift, Sparkles, Globe, Clock, Heart } from 'lucide-react';
 
 export const GiftCardHero: React.FC = () => {
   return (
@@ -15,12 +15,17 @@ export const GiftCardHero: React.FC = () => {
       <div className="relative max-w-7xl mx-auto px-4 text-center">
         <div className="flex items-center justify-center gap-2 mb-4">
           <Gift className="w-8 h-8 text-yellow-300" />
-          <h1 className="text-5xl md:text-6xl font-bold">Gift Cards</h1>
+          <h1 className="text-5xl md:text-6xl font-bold">getit Gift Cards</h1>
           <Sparkles className="w-8 h-8 text-yellow-300" />
         </div>
         
-        <p className="text-xl md:text-2xl mb-8 text-pink-100 max-w-3xl mx-auto">
+        <p className="text-xl md:text-2xl mb-4 text-pink-100 max-w-3xl mx-auto">
           Perfect gifts for every occasion from 500+ trusted brands and vendors across Bangladesh
+        </p>
+        
+        <p className="text-lg mb-8 text-pink-200 max-w-4xl mx-auto">
+          Give the gift of endless possibilities - from traditional Bangladeshi products to international brands, 
+          electronics to fashion, all in one convenient gift card
         </p>
         
         <div className="max-w-2xl mx-auto mb-8">
@@ -42,21 +47,32 @@ export const GiftCardHero: React.FC = () => {
           </Button>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-4xl mx-auto">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 max-w-5xl mx-auto">
           <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
-            <div className="text-3xl mb-2">🎨</div>
-            <h3 className="font-bold mb-1">Customizable</h3>
-            <p className="text-sm text-pink-100">Add personal messages & designs</p>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Heart className="w-5 h-5" />
+              <h3 className="font-bold">Endless Possibilities</h3>
+            </div>
+            <p className="text-sm text-pink-100">Electronics, fashion, traditional products & more</p>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
-            <div className="text-3xl mb-2">⚡</div>
-            <h3 className="font-bold mb-1">Instant Delivery</h3>
-            <p className="text-sm text-pink-100">Digital cards delivered instantly</p>
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Clock className="w-5 h-5" />
+              <h3 className="font-bold">Instant & Convenient</h3>
+            </div>
+            <p className="text-sm text-pink-100">Digital delivery, no expiration, mobile-friendly</p>
+          </div>
+          <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
+            <div className="flex items-center justify-center gap-2 mb-2">
+              <Globe className="w-5 h-5" />
+              <h3 className="font-bold">Perfect for Bangladesh</h3>
+            </div>
+            <p className="text-sm text-pink-100">Local & international, festival-ready</p>
           </div>
           <div className="bg-white/20 backdrop-blur-sm rounded-lg p-4 text-center">
             <div className="text-3xl mb-2">🔒</div>
             <h3 className="font-bold mb-1">Secure & Reliable</h3>
-            <p className="text-sm text-pink-100">Protected transactions & support</p>
+            <p className="text-sm text-pink-100">Protected transactions & 24/7 support</p>
           </div>
         </div>
       </div>

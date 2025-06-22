@@ -17,6 +17,9 @@ import { CoreValues } from '../components/aboutus/CoreValues';
 import { Leadership } from '../components/aboutus/Leadership';
 import { JoinRevolution } from '../components/aboutus/JoinRevolution';
 import { Achievements } from '../components/aboutus/Achievements';
+import { Careers } from '../components/aboutus/Careers';
+import { PressMedia } from '../components/aboutus/PressMedia';
+import { InvestorRelations } from '../components/aboutus/InvestorRelations';
 
 const AboutUs: React.FC = () => {
   return (
@@ -46,6 +49,15 @@ const AboutUs: React.FC = () => {
         <CoreValues />
         <div id="leadership">
           <Leadership />
+        </div>
+        <div id="careers">
+          <Careers />
+        </div>
+        <div id="press-media">
+          <PressMedia />
+        </div>
+        <div id="investor-relations">
+          <InvestorRelations />
         </div>
         <JoinRevolution />
         <div id="achievements">

@@ -4,39 +4,39 @@ import { Clock, Zap, Gift, Truck } from 'lucide-react';
 
 export const BestSellerOffers: React.FC = () => {
   return (
-    <section className="py-8 bg-gradient-to-r from-red-500 to-pink-500 text-white">
+    <section className="py-4">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
           <div className="text-center">
-            <div className="bg-white/20 rounded-full p-3 w-16 h-16 mx-auto mb-2 flex items-center justify-center">
-              <Clock className="w-8 h-8" />
+            <div className="bg-gray-100 rounded-full p-2 w-12 h-12 mx-auto mb-1 flex items-center justify-center">
+              <Clock className="w-6 h-6 text-orange-500" />
             </div>
-            <h3 className="font-bold text-sm">Flash Sale</h3>
-            <p className="text-xs opacity-90">Up to 70% OFF</p>
+            <h3 className="font-bold text-sm text-gray-800">Flash Sale</h3>
+            <p className="text-xs text-gray-600">Up to 70% OFF</p>
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-full p-3 w-16 h-16 mx-auto mb-2 flex items-center justify-center">
-              <Truck className="w-8 h-8" />
+            <div className="bg-gray-100 rounded-full p-2 w-12 h-12 mx-auto mb-1 flex items-center justify-center">
+              <Truck className="w-6 h-6 text-blue-500" />
             </div>
-            <h3 className="font-bold text-sm">Free Shipping</h3>
-            <p className="text-xs opacity-90">Orders over ৳1000</p>
+            <h3 className="font-bold text-sm text-gray-800">Free Shipping</h3>
+            <p className="text-xs text-gray-600">Orders over ৳1000</p>
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-full p-3 w-16 h-16 mx-auto mb-2 flex items-center justify-center">
-              <Gift className="w-8 h-8" />
+            <div className="bg-gray-100 rounded-full p-2 w-12 h-12 mx-auto mb-1 flex items-center justify-center">
+              <Gift className="w-6 h-6 text-green-500" />
             </div>
-            <h3 className="font-bold text-sm">Gift Vouchers</h3>
-            <p className="text-xs opacity-90">Extra 5% OFF</p>
+            <h3 className="font-bold text-sm text-gray-800">Gift Vouchers</h3>
+            <p className="text-xs text-gray-600">Extra 5% OFF</p>
           </div>
           
           <div className="text-center">
-            <div className="bg-white/20 rounded-full p-3 w-16 h-16 mx-auto mb-2 flex items-center justify-center">
-              <Zap className="w-8 h-8" />
+            <div className="bg-gray-100 rounded-full p-2 w-12 h-12 mx-auto mb-1 flex items-center justify-center">
+              <Zap className="w-6 h-6 text-purple-500" />
             </div>
-            <h3 className="font-bold text-sm">Lightning Deals</h3>
-            <p className="text-xs opacity-90">Limited Time</p>
+            <h3 className="font-bold text-sm text-gray-800">Lightning Deals</h3>
+            <p className="text-xs text-gray-600">Limited Time</p>
           </div>
         </div>
       </div>

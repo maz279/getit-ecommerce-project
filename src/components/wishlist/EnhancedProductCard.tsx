@@ -1,9 +1,10 @@
 
 import React, { useState } from 'react';
-import { Heart, Share2, Eye, ShoppingCart, Star, Truck, Clock, CreditCard, MapPin, Zap, AlertTriangle, Gift, BarChart3 } from 'lucide-react';
+import { Heart, Share2, Eye, ShoppingCart, Star, Truck, Clock, CreditCard, MapPin, Zap, AlertTriangle, Gift, BarChart3, GitCompare } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface ProductProps {
   id: number;
@@ -35,10 +36,13 @@ interface ProductProps {
     festival: boolean;
   };
   viewMode: 'grid' | 'list' | 'compact';
+  isSelected?: boolean;
+  onSelect?: (id: number, selected: boolean) => void;
   onRemove: (id: number) => void;
   onAddToCart: (id: number) => void;
   onShare: (id: number) => void;
   onQuickView: (id: number) => void;
+  onCompare?: (id: number) => void;
 }
 
 export const EnhancedProductCard: React.FC<ProductProps> = ({
@@ -53,10 +57,13 @@ export const EnhancedProductCard: React.FC<ProductProps> = ({
   delivery,
   features,
   viewMode,
+  isSelected = false,
+  onSelect,
   onRemove,
   onAddToCart,
   onShare,
-  onQuickView
+  onQuickView,
+  onCompare
 }) => {
   const [imageLoaded, setImageLoaded] = useState(false);
   const [showNameBn, setShowNameBn] = useState(false);
@@ -92,12 +99,22 @@ export const EnhancedProductCard: React.FC<ProductProps> = ({
       <Card className="hover:shadow-lg transition-all duration-300 border border-gray-100">
         <CardContent className="p-4">
           <div className="flex gap-4">
+            {/* Selection Checkbox */}
+            {onSelect && (
+              <div className="flex items-center">
+                <Checkbox
+                  checked={isSelected}
+                  onCheckedChange={(checked) => onSelect(id, checked as boolean)}
+                />
+              </div>
+            )}
+
             <div className="relative w-32 h-32 flex-shrink-0">
               {!imageLoaded && <div className="w-full h-full bg-gray-200 animate-pulse rounded-lg"></div>}
               <img
                 src={image}
                 alt={name}
-                className={`w-full h-full object-cover rounded-lg ${imageLoaded ? 'block' : 'hidden'}`}
+                className={`w-full h-full object-cover rounded-lg transition-transform hover:scale-105 ${imageLoaded ? 'block' : 'hidden'}`}
                 onLoad={() => setImageLoaded(true)}
               />
               {features.festival && (
@@ -189,6 +206,16 @@ export const EnhancedProductCard: React.FC<ProductProps> = ({
               >
                 <Share2 className="w-4 h-4" />
               </Button>
+              {onCompare && (
+                <Button
+                  variant="outline"
+                  size="sm"
+                  onClick={() => onCompare(id)}
+                  className="p-2"
+                >
+                  <GitCompare className="w-4 h-4" />
+                </Button>
+              )}
               <Button
                 variant="outline"
                 size="sm"
@@ -212,13 +239,24 @@ export const EnhancedProductCard: React.FC<ProductProps> = ({
     );
   }
 
-  // Grid and Compact view (similar structure but different sizing)
+  // Grid and Compact view
   const cardSize = viewMode === 'compact' ? 'w-64' : 'w-80';
   const imageHeight = viewMode === 'compact' ? 'h-40' : 'h-48';
 
   return (
-    <Card className={`${cardSize} hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100`}>
+    <Card className={`${cardSize} hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 group overflow-hidden border border-gray-100 ${isSelected ? 'ring-2 ring-blue-500' : ''}`}>
       <CardContent className="p-0">
+        {/* Selection Checkbox */}
+        {onSelect && (
+          <div className="absolute top-3 left-3 z-10">
+            <Checkbox
+              checked={isSelected}
+              onCheckedChange={(checked) => onSelect(id, checked as boolean)}
+              className="bg-white shadow-lg"
+            />
+          </div>
+        )}
+
         <div className="relative overflow-hidden">
           {!imageLoaded && <div className={`w-full ${imageHeight} bg-gray-200 animate-pulse`}></div>}
           <img
@@ -262,6 +300,16 @@ export const EnhancedProductCard: React.FC<ProductProps> = ({
             >
               <Share2 className="w-4 h-4" />
             </Button>
+            {onCompare && (
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={() => onCompare(id)}
+                className="p-2 bg-white shadow-lg"
+              >
+                <GitCompare className="w-4 h-4" />
+              </Button>
+            )}
             <Button
               variant="outline"
               size="sm"

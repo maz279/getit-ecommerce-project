@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Heart, ShoppingCart, Trash2, Star } from 'lucide-react';
@@ -12,12 +11,18 @@ import { RecentlyViewed } from '../components/wishlist/RecentlyViewed';
 import { PriceAlerts } from '../components/wishlist/PriceAlerts';
 import { WishlistSharing } from '../components/wishlist/WishlistSharing';
 import { WishlistRecommendations } from '../components/wishlist/WishlistRecommendations';
+import { BulkActions } from '../components/wishlist/BulkActions';
+import { SmartNotifications } from '../components/wishlist/SmartNotifications';
+import { PrivacyControls } from '../components/wishlist/PrivacyControls';
+import { WishlistAnalytics } from '../components/wishlist/WishlistAnalytics';
 
 const Wishlist: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState('all');
   const [sortBy, setSortBy] = useState('newest');
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('grid');
   const [filters, setFilters] = useState({});
+  const [selectedItems, setSelectedItems] = useState<number[]>([]);
+  const [showAnalytics, setShowAnalytics] = useState(false);
 
   const wishlistItems = [
     {
@@ -137,6 +142,32 @@ const Wishlist: React.FC = () => {
     console.log('Filters changed:', newFilters);
   };
 
+  const handleSelectAll = () => {
+    setSelectedItems(wishlistItems.map(item => item.id));
+  };
+
+  const handleSelectNone = () => {
+    setSelectedItems([]);
+  };
+
+  const handleBulkRemove = (ids: number[]) => {
+    console.log('Bulk remove:', ids);
+    setSelectedItems([]);
+  };
+
+  const handleBulkAddToCart = (ids: number[]) => {
+    console.log('Bulk add to cart:', ids);
+    setSelectedItems([]);
+  };
+
+  const handleBulkShare = (ids: number[]) => {
+    console.log('Bulk share:', ids);
+  };
+
+  const handleCompare = (id: number) => {
+    console.log('Compare product:', id);
+  };
+
   // Dashboard stats
   const totalItems = wishlistItems.length;
   const totalValue = wishlistItems.reduce((sum, item) => sum + item.price, 0);
@@ -152,8 +183,19 @@ const Wishlist: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
           <h1 className="text-3xl font-bold text-gray-800">My Wishlist</h1>
-          <span className="text-gray-600">{wishlistItems.length} items</span>
+          <div className="flex items-center gap-4">
+            <span className="text-gray-600">{wishlistItems.length} items</span>
+            <button
+              onClick={() => setShowAnalytics(!showAnalytics)}
+              className="text-blue-600 hover:text-blue-700 text-sm font-medium"
+            >
+              {showAnalytics ? 'Hide Analytics' : 'View Analytics'}
+            </button>
+          </div>
         </div>
+
+        {/* Analytics Section */}
+        {showAnalytics && <WishlistAnalytics />}
 
         {/* Dashboard Overview */}
         <WishlistDashboard
@@ -173,11 +215,28 @@ const Wishlist: React.FC = () => {
           onCategoryChange={setActiveCategory}
         />
 
+        {/* Smart Notifications */}
+        <SmartNotifications />
+
+        {/* Privacy Controls */}
+        <PrivacyControls />
+
         {/* Price Alerts Section */}
         <PriceAlerts />
 
         {/* Wishlist Sharing Section */}
         <WishlistSharing />
+
+        {/* Bulk Actions */}
+        <BulkActions
+          selectedItems={selectedItems}
+          totalItems={wishlistItems.length}
+          onSelectAll={handleSelectAll}
+          onSelectNone={handleSelectNone}
+          onBulkRemove={handleBulkRemove}
+          onBulkAddToCart={handleBulkAddToCart}
+          onBulkShare={handleBulkShare}
+        />
 
         {/* Main Wishlist Items */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
@@ -209,10 +268,19 @@ const Wishlist: React.FC = () => {
                   key={item.id}
                   {...item}
                   viewMode={viewMode}
+                  isSelected={selectedItems.includes(item.id)}
+                  onSelect={(id, selected) => {
+                    if (selected) {
+                      setSelectedItems(prev => [...prev, id]);
+                    } else {
+                      setSelectedItems(prev => prev.filter(itemId => itemId !== id));
+                    }
+                  }}
                   onRemove={handleRemoveFromWishlist}
                   onAddToCart={handleAddToCart}
                   onShare={handleShare}
                   onQuickView={handleQuickView}
+                  onCompare={handleCompare}
                 />
               ))}
             </div>

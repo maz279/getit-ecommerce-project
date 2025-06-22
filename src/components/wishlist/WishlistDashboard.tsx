@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { BarChart3, TrendingDown, Package, Bell, Filter, Grid3X3, List, LayoutGrid, Check, X } from 'lucide-react';
+import { BarChart3, TrendingDown, Package, Bell, Filter, Grid3X3, List, LayoutGrid, Check, X, DollarSign } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Badge } from '@/components/ui/badge';
@@ -28,6 +27,7 @@ export const WishlistDashboard: React.FC<DashboardProps> = ({
   viewMode
 }) => {
   const [showFilters, setShowFilters] = useState(false);
+  const [showUSD, setShowUSD] = useState(false);
   const [selectedFilters, setSelectedFilters] = useState({
     priceRange: '',
     category: '',
@@ -39,6 +39,11 @@ export const WishlistDashboard: React.FC<DashboardProps> = ({
   const formatBanglaNumber = (num: number) => {
     const banglaDigits = ['০', '১', '২', '৩', '৪', '৫', '৬', '৭', '৮', '৯'];
     return num.toString().split('').map(digit => banglaDigits[parseInt(digit)] || digit).join('');
+  };
+
+  const convertToUSD = (bdtAmount: number) => {
+    const exchangeRate = 110; // Approximate BDT to USD rate
+    return Math.round(bdtAmount / exchangeRate);
   };
 
   const stats = [
@@ -54,11 +59,12 @@ export const WishlistDashboard: React.FC<DashboardProps> = ({
     {
       title: 'Total Value',
       titleBn: 'মোট মূল্য',
-      value: `৳${totalValue.toLocaleString()}`,
-      valueBn: `৳${formatBanglaNumber(totalValue)}`,
+      value: showUSD ? `$${convertToUSD(totalValue)}` : `৳${totalValue.toLocaleString()}`,
+      valueBn: showUSD ? `$${convertToUSD(totalValue)}` : `৳${formatBanglaNumber(totalValue)}`,
       icon: BarChart3,
       color: 'text-green-600',
-      bgColor: 'bg-green-50'
+      bgColor: 'bg-green-50',
+      hasToggle: true
     },
     {
       title: 'Available Items',
@@ -90,6 +96,15 @@ export const WishlistDashboard: React.FC<DashboardProps> = ({
               <div className={`p-2 rounded-lg ${stat.bgColor}`}>
                 <stat.icon className={`w-5 h-5 ${stat.color}`} />
               </div>
+              {stat.hasToggle && (
+                <button
+                  onClick={() => setShowUSD(!showUSD)}
+                  className="text-xs text-blue-600 hover:text-blue-700 flex items-center gap-1"
+                >
+                  <DollarSign className="w-3 h-3" />
+                  {showUSD ? 'BDT' : 'USD'}
+                </button>
+              )}
             </div>
             <h3 className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</h3>
             <p className="text-sm text-gray-600 mb-1">{stat.title}</p>

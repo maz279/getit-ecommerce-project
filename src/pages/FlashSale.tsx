@@ -43,7 +43,9 @@ const FlashSale: React.FC = () => {
         
         <FlashSaleNavigationMap />
         
-        <LightningDealsSection />
+        <div id="lightning-deals">
+          <LightningDealsSection />
+        </div>
         
         <CategoryQuickAccess />
         

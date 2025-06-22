@@ -65,10 +65,18 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   // Handle search submit
-  const handleSearch = () => {
+  const handleSearch = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
     if (searchQuery.trim()) {
       searchText(searchQuery);
       setShowResults(true);
+    }
+  };
+
+  // Handle Enter key press
+  const handleKeyPress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') {
+      handleSearch();
     }
   };
 
@@ -88,20 +96,32 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
   // Handle voice search
   const handleVoiceSearch = async (audioBlob: Blob) => {
-    await searchVoice(audioBlob);
-    setShowResults(true);
+    try {
+      await searchVoice(audioBlob);
+      setShowResults(true);
+    } catch (error) {
+      console.error('Voice search failed:', error);
+    }
   };
 
   // Handle image search
   const handleImageSearch = async (file: File) => {
-    await searchImage(file);
-    setShowResults(true);
+    try {
+      await searchImage(file);
+      setShowResults(true);
+    } catch (error) {
+      console.error('Image search failed:', error);
+    }
   };
 
   // Handle QR search
   const handleQRSearch = async (file: File) => {
-    await searchQR(file);
-    setShowResults(true);
+    try {
+      await searchQR(file);
+      setShowResults(true);
+    } catch (error) {
+      console.error('QR search failed:', error);
+    }
   };
 
   // Handle click outside to close results
@@ -128,14 +148,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
 
       {/* Desktop Search Bar */}
       <div className="hidden md:flex flex-1 max-w-3xl flex-col" ref={searchRef}>
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full relative">
+        <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-lg overflow-hidden w-full relative">
           <div className="flex items-center">
             <input
-              type="search"
+              type="text"
               placeholder={currentContent.placeholder}
               value={searchQuery}
               onChange={handleInputChange}
-              onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+              onKeyPress={handleKeyPress}
               className="flex-1 px-4 py-3 text-sm focus:outline-none"
             />
             <div className="flex items-center gap-2 px-3">
@@ -156,7 +176,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 type="qr"
               />
               <button 
-                onClick={handleSearch}
+                type="submit"
                 className="bg-gradient-to-r from-orange-400 to-yellow-400 p-2 rounded-r-lg hover:from-orange-500 hover:to-yellow-500 transition-all"
               >
                 <Search className="w-4 h-4 text-white" />
@@ -173,7 +193,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
               onResultClick={handleResultClick}
             />
           )}
-        </div>
+        </form>
         
         {/* Trending Searches */}
         <div className="mt-2 flex items-center gap-2 text-xs text-white">
@@ -193,14 +213,14 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       {/* Mobile Search Bar */}
       {showMobileSearch && (
         <div className="md:hidden mt-3 px-2" ref={searchRef}>
-          <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full relative">
+          <form onSubmit={handleSearch} className="bg-white rounded-lg shadow-lg overflow-hidden w-full relative">
             <div className="flex items-center">
               <input
-                type="search"
+                type="text"
                 placeholder={currentContent.placeholder}
                 value={searchQuery}
                 onChange={handleInputChange}
-                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                onKeyPress={handleKeyPress}
                 className="flex-1 px-3 py-2 text-sm focus:outline-none"
               />
               <div className="flex items-center gap-1 px-2">
@@ -221,7 +241,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                   type="qr"
                 />
                 <button 
-                  onClick={handleSearch}
+                  type="submit"
                   className="bg-gradient-to-r from-orange-400 to-yellow-400 p-2 rounded-r-lg"
                 >
                   <Search className="w-4 h-4 text-white" />
@@ -238,7 +258,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
                 onResultClick={handleResultClick}
               />
             )}
-          </div>
+          </form>
         </div>
       )}
     </>

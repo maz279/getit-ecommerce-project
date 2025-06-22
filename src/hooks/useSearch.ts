@@ -49,16 +49,32 @@ export const useSearch = (): UseSearchReturn => {
     },
     {
       id: '3',
+      title: 'Apple iPhone 15',
+      type: 'product',
+      image: '/placeholder.svg',
+      price: 119999,
+      rating: 4.7,
+      description: 'Latest iPhone with advanced features'
+    },
+    {
+      id: '4',
       title: 'TechHub Electronics',
       type: 'vendor',
       rating: 4.8,
       description: 'Verified electronics vendor'
     },
     {
-      id: '4',
+      id: '5',
       title: 'Apple',
       type: 'brand',
       description: 'Premium technology brand'
+    },
+    {
+      id: '6',
+      title: 'Fashion Store BD',
+      type: 'vendor',
+      rating: 4.6,
+      description: 'Trusted fashion retailer'
     }
   ];
 
@@ -72,14 +88,18 @@ export const useSearch = (): UseSearchReturn => {
     setError(null);
 
     try {
-      // Simulate API call
-      await new Promise(resolve => setTimeout(resolve, 500));
+      console.log('Searching for:', query);
+      
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 300));
       
       const filtered = mockResults.filter(item =>
         item.title.toLowerCase().includes(query.toLowerCase()) ||
-        item.description?.toLowerCase().includes(query.toLowerCase())
+        item.description?.toLowerCase().includes(query.toLowerCase()) ||
+        item.type.toLowerCase().includes(query.toLowerCase())
       );
 
+      console.log('Search results:', filtered);
       setSearchResults(filtered);
     } catch (err) {
       setError('Search failed. Please try again.');
@@ -94,24 +114,19 @@ export const useSearch = (): UseSearchReturn => {
     setError(null);
 
     try {
-      // Convert audio to base64
-      const reader = new FileReader();
-      reader.readAsDataURL(audioBlob);
+      console.log('Processing voice search...');
       
-      reader.onloadend = async () => {
-        const base64Audio = reader.result?.toString().split(',')[1];
-        
-        // Simulate voice-to-text conversion
-        await new Promise(resolve => setTimeout(resolve, 1000));
-        
-        // Mock voice search result
-        const voiceQuery = 'mobile phone';
-        await searchText(voiceQuery);
-      };
+      // Simulate voice-to-text conversion
+      await new Promise(resolve => setTimeout(resolve, 1000));
+      
+      // Mock voice search result - simulate converting speech to text
+      const voiceQuery = 'mobile phone';
+      console.log('Voice converted to text:', voiceQuery);
+      
+      await searchText(voiceQuery);
     } catch (err) {
       setError('Voice search failed. Please try again.');
       console.error('Voice search error:', err);
-    } finally {
       setIsLoading(false);
     }
   }, [searchText]);
@@ -121,16 +136,19 @@ export const useSearch = (): UseSearchReturn => {
     setError(null);
 
     try {
+      console.log('Processing image search...');
+      
       // Simulate image processing
       await new Promise(resolve => setTimeout(resolve, 1500));
       
       // Mock image search result
       const imageQuery = 'smartphone';
+      console.log('Image identified as:', imageQuery);
+      
       await searchText(imageQuery);
     } catch (err) {
       setError('Image search failed. Please try again.');
       console.error('Image search error:', err);
-    } finally {
       setIsLoading(false);
     }
   }, [searchText]);
@@ -140,16 +158,19 @@ export const useSearch = (): UseSearchReturn => {
     setError(null);
 
     try {
+      console.log('Processing QR code...');
+      
       // Simulate QR code processing
       await new Promise(resolve => setTimeout(resolve, 1000));
       
       // Mock QR search result
-      const qrQuery = 'electronics';
+      const qrQuery = 'electronics store';
+      console.log('QR code decoded:', qrQuery);
+      
       await searchText(qrQuery);
     } catch (err) {
       setError('QR code search failed. Please try again.');
       console.error('QR search error:', err);
-    } finally {
       setIsLoading(false);
     }
   }, [searchText]);
@@ -157,6 +178,7 @@ export const useSearch = (): UseSearchReturn => {
   const clearResults = useCallback(() => {
     setSearchResults([]);
     setError(null);
+    console.log('Search results cleared');
   }, []);
 
   return {

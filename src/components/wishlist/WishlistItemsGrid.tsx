@@ -3,6 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Heart } from 'lucide-react';
 import { EnhancedProductCard } from './EnhancedProductCard';
+import { ProductVendor, ProductStock, ProductDelivery, ProductFeatures } from './productCard/types';
 
 interface WishlistItem {
   id: number;
@@ -11,28 +12,10 @@ interface WishlistItem {
   price: number;
   originalPrice: number;
   image: string;
-  vendor: {
-    name: string;
-    rating: number;
-    location: string;
-    verified: boolean;
-  };
-  stock: {
-    status: 'in_stock' | 'limited' | 'out_of_stock';
-    quantity?: number;
-  };
-  delivery: {
-    estimatedDays: number;
-    cod: boolean;
-    freeShipping: boolean;
-    express: boolean;
-  };
-  features: {
-    emi: boolean;
-    priceHistory: boolean;
-    trending: boolean;
-    festival: boolean;
-  };
+  vendor: ProductVendor;
+  stock: ProductStock;
+  delivery: ProductDelivery;
+  features: ProductFeatures;
 }
 
 interface WishlistItemsGridProps {

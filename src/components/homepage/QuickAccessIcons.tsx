@@ -8,7 +8,6 @@ import {
   Percent, 
   Users, 
   Award,
-  ArrowRight,
   ShoppingCart,
   Heart,
   Star,
@@ -19,109 +18,95 @@ import {
 export const QuickAccessIcons: React.FC = () => {
   const quickAccessItems = [
     {
-      icon: <Zap className="w-5 h-5" />,
+      icon: <Zap className="w-8 h-8" />,
       title: 'Flash Sales',
-      subtitle: 'Up to 80% OFF',
-      gradient: 'from-red-500 to-orange-500',
+      color: 'text-red-500 hover:text-red-600',
       link: '/flash-sale'
     },
     {
-      icon: <Calendar className="w-5 h-5" />,
+      icon: <Calendar className="w-8 h-8" />,
       title: 'Daily Deals',
-      subtitle: 'New Every Day',
-      gradient: 'from-green-500 to-teal-500',
+      color: 'text-green-500 hover:text-green-600',
       link: '/daily-deals'
     },
     {
-      icon: <Gift className="w-5 h-5" />,
+      icon: <Gift className="w-8 h-8" />,
       title: 'Gift Cards',
-      subtitle: 'Perfect Gifts',
-      gradient: 'from-purple-500 to-pink-500',
+      color: 'text-purple-500 hover:text-purple-600',
       link: '/gift-cards'
     },
     {
-      icon: <Percent className="w-5 h-5" />,
+      icon: <Percent className="w-8 h-8" />,
       title: 'Mega Sale',
-      subtitle: 'Biggest Discounts',
-      gradient: 'from-blue-500 to-indigo-500',
+      color: 'text-blue-500 hover:text-blue-600',
       link: '/mega-sale'
     },
     {
-      icon: <Users className="w-5 h-5" />,
+      icon: <Users className="w-8 h-8" />,
       title: 'Group Buy',
-      subtitle: 'Buy Together Save',
-      gradient: 'from-teal-500 to-cyan-500',
+      color: 'text-teal-500 hover:text-teal-600',
       link: '/group-buy'
     },
     {
-      icon: <Award className="w-5 h-5" />,
+      icon: <Award className="w-8 h-8" />,
       title: 'Premium',
-      subtitle: 'Exclusive Deals',
-      gradient: 'from-yellow-500 to-orange-500',
+      color: 'text-yellow-500 hover:text-yellow-600',
       link: '/premium'
     },
     {
-      icon: <ShoppingCart className="w-5 h-5" />,
+      icon: <ShoppingCart className="w-8 h-8" />,
       title: 'Best Sellers',
-      subtitle: 'Top Rated',
-      gradient: 'from-emerald-500 to-green-500',
+      color: 'text-emerald-500 hover:text-emerald-600',
       link: '/best-sellers'
     },
     {
-      icon: <Heart className="w-5 h-5" />,
+      icon: <Heart className="w-8 h-8" />,
       title: 'Wishlist',
-      subtitle: 'Save Favorites',
-      gradient: 'from-rose-500 to-pink-500',
+      color: 'text-pink-500 hover:text-pink-600',
       link: '/wishlist'
     },
     {
-      icon: <Star className="w-5 h-5" />,
+      icon: <Star className="w-8 h-8" />,
       title: 'New Arrivals',
-      subtitle: 'Latest Products',
-      gradient: 'from-violet-500 to-purple-500',
+      color: 'text-violet-500 hover:text-violet-600',
       link: '/new-arrivals'
     },
     {
-      icon: <Truck className="w-5 h-5" />,
+      icon: <Truck className="w-8 h-8" />,
       title: 'Free Delivery',
-      subtitle: 'No Shipping Cost',
-      gradient: 'from-amber-500 to-yellow-500',
+      color: 'text-orange-500 hover:text-orange-600',
       link: '/free-delivery'
     },
     {
-      icon: <CreditCard className="w-5 h-5" />,
+      icon: <CreditCard className="w-8 h-8" />,
       title: 'Easy Payment',
-      subtitle: 'Multiple Options',
-      gradient: 'from-slate-500 to-gray-500',
+      color: 'text-slate-500 hover:text-slate-600',
       link: '/payment-methods'
     },
     {
-      icon: <Users className="w-5 h-5" />,
+      icon: <Users className="w-8 h-8" />,
       title: 'Bulk Orders',
-      subtitle: 'Wholesale Prices',
-      gradient: 'from-indigo-500 to-blue-500',
+      color: 'text-indigo-500 hover:text-indigo-600',
       link: '/bulk-orders'
     }
   ];
 
   return (
-    <section className="py-6 bg-gray-50">
+    <section className="py-8 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-12 gap-3">
+        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-8 xl:grid-cols-12 gap-6">
           {quickAccessItems.map((item, index) => (
             <Link 
               key={index}
               to={item.link}
-              className={`bg-gradient-to-br ${item.gradient} rounded-lg p-4 text-white shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105 group`}
+              className="flex flex-col items-center group"
             >
-              <div className="text-center">
-                <div className="flex justify-center mb-2 group-hover:scale-110 transition-transform duration-300">
-                  {item.icon}
-                </div>
-                <h3 className="font-semibold text-xs mb-1">{item.title}</h3>
-                <p className="text-xs opacity-90 mb-2">{item.subtitle}</p>
-                <ArrowRight className="w-3 h-3 mx-auto opacity-75 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
+              <div className={`${item.color} transition-all duration-300 transform group-hover:scale-110 mb-3`}>
+                {item.icon}
               </div>
+              <h3 className="text-xs font-medium text-gray-700 text-center group-hover:text-gray-900 transition-colors duration-300">
+                {item.title}
+              </h3>
             </Link>
           ))}
         </div>

@@ -21,27 +21,11 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     EN: {
       placeholder: "Search products, brands, vendors...",
       trending: "Trending:",
-      allCategories: "All Categories",
-      categories: {
-        electronics: "Electronics",
-        fashion: "Fashion",
-        home: "Home",
-        beauty: "Beauty",
-        groceries: "Groceries"
-      },
       trendingSearches: ['Mobile', 'Fashion', 'Electronics', 'Groceries']
     },
     BD: {
       placeholder: "পণ্য, ব্র্যান্ড, বিক্রেতা খুঁজুন...",
       trending: "ট্রেন্ডিং:",
-      allCategories: "সব ক্যাটেগরি",
-      categories: {
-        electronics: "ইলেকট্রনিক্স",
-        fashion: "ফ্যাশন",
-        home: "ঘর",
-        beauty: "সৌন্দর্য",
-        groceries: "মুদি"
-      },
       trendingSearches: ['মোবাইল', 'ফ্যাশন', 'ইলেকট্রনিক্স', 'মুদি']
     }
   };
@@ -62,14 +46,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
       <div className="hidden md:flex flex-1 max-w-3xl flex-col">
         <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full">
           <div className="flex items-center">
-            <select className="px-3 py-3 border-r border-gray-200 text-sm focus:outline-none">
-              <option>{currentContent.allCategories}</option>
-              <option>{currentContent.categories.electronics}</option>
-              <option>{currentContent.categories.fashion}</option>
-              <option>{currentContent.categories.home}</option>
-              <option>{currentContent.categories.beauty}</option>
-              <option>{currentContent.categories.groceries}</option>
-            </select>
             <input
               type="search"
               placeholder={currentContent.placeholder}
@@ -113,12 +89,6 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         <div className="md:hidden mt-3 px-2">
           <div className="bg-white rounded-lg shadow-lg overflow-hidden w-full">
             <div className="flex items-center">
-              <select className="px-3 py-2 border-r border-gray-200 text-sm focus:outline-none">
-                <option>{currentContent.allCategories}</option>
-                <option>{currentContent.categories.electronics}</option>
-                <option>{currentContent.categories.fashion}</option>
-                <option>{currentContent.categories.home}</option>
-              </select>
               <input
                 type="search"
                 placeholder={currentContent.placeholder}

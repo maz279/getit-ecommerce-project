@@ -42,6 +42,10 @@ interface DesktopSearchBarProps {
   trendingSearches: string[];
   onTrendingClick: (search: string) => void;
   
+  // Page navigation
+  pageSuggestions: string[];
+  onPageNavigate: (pageName: string) => void;
+  
   language: string;
 }
 
@@ -71,11 +75,13 @@ export const DesktopSearchBar: React.FC<DesktopSearchBarProps> = ({
   onResultClick,
   trendingSearches,
   onTrendingClick,
-  language
+  language,
+  pageSuggestions,
+  onPageNavigate
 }) => {
   const content = {
-    EN: { placeholder: "Search products, brands, vendors... (Type in English or বাংলা)" },
-    BD: { placeholder: "পণ্য, ব্র্যান্ড, বিক্রেতা খুঁজুন... (ইংরেজি বা বাংলায় লিখুন)" }
+    EN: { placeholder: "Search products, brands, vendors... or navigate to any page (Type in English or বাংলা)" },
+    BD: { placeholder: "পণ্য, ব্র্যান্ড, বিক্রেতা খুঁজুন... বা যেকোনো পেজে যান (ইংরেজি বা বাংলায় লিখুন)" }
   };
 
   const currentContent = content[language as keyof typeof content];
@@ -110,6 +116,8 @@ export const DesktopSearchBar: React.FC<DesktopSearchBarProps> = ({
             suggestions={suggestions}
             onSuggestionClick={onSuggestionClick}
             language={language}
+            pageSuggestions={pageSuggestions}
+            onPageNavigate={onPageNavigate}
           />
         )}
         

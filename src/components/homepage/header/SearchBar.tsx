@@ -1,4 +1,3 @@
-
 import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
@@ -14,6 +13,106 @@ interface SearchBarProps {
   language: string;
 }
 
+// Comprehensive page mapping for navigation
+const PAGE_NAVIGATION_MAP = {
+  // Main pages
+  'home': '/',
+  'homepage': '/',
+  'index': '/',
+  'dashboard': '/dashboard',
+  'admin': '/dashboard',
+  'profile': '/profile',
+  'account': '/profile',
+  'my account': '/profile',
+  
+  // Auth pages
+  'login': '/login',
+  'register': '/register',
+  'signup': '/register',
+  'sign up': '/register',
+  'sign in': '/login',
+  
+  // Shopping pages
+  'cart': '/cart',
+  'checkout': '/checkout',
+  'orders': '/orders',
+  'order': '/orders',
+  'wishlist': '/wishlist',
+  'wish list': '/wishlist',
+  'categories': '/categories',
+  'category': '/categories',
+  
+  // Business pages
+  'vendors': '/vendors',
+  'vendor': '/vendors',
+  'seller': '/vendors',
+  'sellers': '/vendors',
+  'vendor register': '/vendor-register',
+  'seller center': '/seller-center',
+  
+  // Shopping features
+  'flash sale': '/flash-sale',
+  'daily deals': '/daily-deals',
+  'mega sale': '/mega-sale',
+  'new arrivals': '/new-arrivals',
+  'best sellers': '/bestsellers',
+  'premium': '/premium',
+  'offers': '/offers',
+  'gift cards': '/gift-cards',
+  'group buy': '/group-buy',
+  'bulk orders': '/bulk-orders',
+  
+  // Information pages
+  'about': '/about',
+  'about us': '/about',
+  'contact': '/contact',
+  'help': '/help',
+  'help center': '/help',
+  'support': '/help',
+  'privacy': '/privacy',
+  'privacy policy': '/privacy',
+  'terms': '/terms',
+  'terms of service': '/terms',
+  
+  // Utility pages
+  'track order': '/track-order',
+  'order tracking': '/order-tracking',
+  'delivery info': '/delivery-info',
+  'payment methods': '/payment-methods',
+  'mobile banking': '/mobile-banking',
+  'returns': '/returns-refunds',
+  'refunds': '/returns-refunds',
+  'recommendations': '/recommendations',
+  'products': '/products',
+  
+  // Festival/Special pages
+  'eid sale': '/eid-sale',
+  'new user offer': '/new-user-offer',
+  
+  // Search specific
+  'search': '/search',
+  'product': '/search?type=product',
+  'brand': '/search?type=brand'
+};
+
+// Get page suggestions based on query
+const getPageSuggestions = (query: string): string[] => {
+  if (!query.trim()) return [];
+  
+  const lowerQuery = query.toLowerCase();
+  const matchingPages = Object.keys(PAGE_NAVIGATION_MAP).filter(page => 
+    page.includes(lowerQuery) || lowerQuery.includes(page)
+  );
+  
+  return matchingPages.slice(0, 5);
+};
+
+// Check if query matches a page name
+const getDirectPageMatch = (query: string): string | null => {
+  const lowerQuery = query.toLowerCase().trim();
+  return PAGE_NAVIGATION_MAP[lowerQuery] || null;
+};
+
 export const SearchBar: React.FC<SearchBarProps> = ({
   searchQuery,
   setSearchQuery,
@@ -26,6 +125,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [showFilters, setShowFilters] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [voiceLanguage, setVoiceLanguage] = useState<'bn' | 'en'>('bn');
+  const [pageSuggestions, setPageSuggestions] = useState<string[]>([]);
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
@@ -46,38 +146,58 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const content = {
     EN: {
       voiceSearch: "Voice Search",
-      trendingSearches: ['Mobile', 'Fashion', 'Electronics', 'Groceries', 'Books']
+      trendingSearches: ['Mobile', 'Fashion', 'Electronics', 'Groceries', 'Books'],
+      navigateToPage: "Navigate to page:",
+      pages: "Pages"
     },
     BD: {
       voiceSearch: "ভয়েস সার্চ",
-      trendingSearches: ['মোবাইল', 'ফ্যাশন', 'ইলেকট্রনিক্স', 'মুদি', 'বই']
+      trendingSearches: ['মোবাইল', 'ফ্যাশন', 'ইলেকট্রনিক্স', 'মুদি', 'বই'],
+      navigateToPage: "পেজে যান:",
+      pages: "পেজসমূহ"
     }
   };
 
   const currentContent = content[language as keyof typeof content];
 
-  // Handle input change with suggestions
+  // Handle input change with suggestions and page matching
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
     
     if (value.trim()) {
+      // Get page suggestions
+      const pageMatches = getPageSuggestions(value);
+      setPageSuggestions(pageMatches);
+      
+      // Get search suggestions
       await getSuggestions(value);
       setShowSuggestions(true);
       setShowResults(false);
     } else {
       clearResults();
+      setPageSuggestions([]);
       setShowSuggestions(false);
       setShowResults(false);
     }
   };
 
-  // Handle search submit
+  // Handle search submit with page navigation priority
   const handleSearch = async (e?: React.FormEvent, query?: string) => {
     if (e) e.preventDefault();
     const searchQuery = query || inputRef.current?.value || '';
     
     if (searchQuery.trim()) {
+      // First check if it's a direct page match
+      const directPageMatch = getDirectPageMatch(searchQuery);
+      if (directPageMatch) {
+        navigate(directPageMatch);
+        setShowSuggestions(false);
+        setShowResults(false);
+        return;
+      }
+      
+      // Otherwise, perform regular search
       await searchText(searchQuery);
       setShowResults(true);
       setShowSuggestions(false);
@@ -95,11 +215,33 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  // Handle suggestion click
+  // Handle suggestion click (both search and page suggestions)
   const handleSuggestionClick = (suggestion: string) => {
+    // Check if it's a page suggestion
+    const pageMatch = PAGE_NAVIGATION_MAP[suggestion.toLowerCase()];
+    if (pageMatch) {
+      navigate(pageMatch);
+      setShowSuggestions(false);
+      setShowResults(false);
+      setSearchQuery('');
+      return;
+    }
+    
+    // Regular search suggestion
     setSearchQuery(suggestion);
     handleSearch(undefined, suggestion);
     setShowSuggestions(false);
+  };
+
+  // Handle page navigation directly
+  const handlePageNavigation = (pageName: string) => {
+    const route = PAGE_NAVIGATION_MAP[pageName.toLowerCase()];
+    if (route) {
+      navigate(route);
+      setShowSuggestions(false);
+      setShowResults(false);
+      setSearchQuery('');
+    }
   };
 
   // Handle trending search click
@@ -179,6 +321,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     clearResults();
     setShowResults(false);
     setShowSuggestions(false);
+    setPageSuggestions([]);
     if (inputRef.current) {
       inputRef.current.focus();
     }
@@ -207,6 +350,13 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     document.addEventListener('mousedown', handleClickOutside);
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
+
+  // Enhanced suggestions that include both search and page suggestions
+  const enhancedSuggestions = {
+    searchSuggestions: suggestions,
+    pageSuggestions: pageSuggestions,
+    onPageNavigate: handlePageNavigation
+  };
 
   return (
     <>
@@ -247,6 +397,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         trendingSearches={currentContent.trendingSearches}
         onTrendingClick={handleTrendingClick}
         language={language}
+        pageSuggestions={pageSuggestions}
+        onPageNavigate={handlePageNavigation}
       />
 
       {/* Mobile Search Bar */}
@@ -275,6 +427,8 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         error={error}
         onResultClick={handleResultClick}
         language={language}
+        pageSuggestions={pageSuggestions}
+        onPageNavigate={handlePageNavigation}
       />
     </>
   );

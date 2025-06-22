@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
-import { useSearch } from '@/hooks/useSearch';
+import { useAISearch } from '@/hooks/useAISearch';
 import { DesktopSearchBar } from './DesktopSearchBar';
 import { MobileSearchBar } from './MobileSearchBar';
 
@@ -126,52 +126,91 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   const [showSuggestions, setShowSuggestions] = useState(false);
   const [voiceLanguage, setVoiceLanguage] = useState<'bn' | 'en'>('bn');
   const [pageSuggestions, setPageSuggestions] = useState<string[]>([]);
+  const [isAIMode, setIsAIMode] = useState(true); // AI mode enabled by default
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   
+  // Use AI-enhanced search hook
   const {
+    searchWithAI,
+    processVoiceInput,
+    processImageSearch,
+    processConversationalQuery,
+    getAISuggestions,
+    getPersonalizedRecommendations,
+    analyzeQuery,
+    aiSuggestions,
+    personalizedRecommendations,
+    queryAnalysis,
     searchResults,
     suggestions,
     isLoading,
     error,
-    searchText,
-    searchVoice,
-    searchImage,
-    searchQR,
-    getSuggestions,
     clearResults,
     applyFilters
-  } = useSearch();
+  } = useAISearch();
 
   const content = {
     EN: {
-      voiceSearch: "Voice Search",
-      trendingSearches: ['Mobile', 'Fashion', 'Electronics', 'Groceries', 'Books'],
+      voiceSearch: "AI Voice Search",
+      trendingSearches: ['AI Search', 'Smart Recommendations', 'Voice Commands', 'Visual Search', 'Personalized Results'],
       navigateToPage: "Navigate to page:",
-      pages: "Pages"
+      pages: "Pages",
+      aiMode: "AI Mode",
+      conversationalSearch: "Try: 'Show me phones under 30000' or 'Find best laptops for gaming'"
     },
     BD: {
-      voiceSearch: "ভয়েস সার্চ",
-      trendingSearches: ['মোবাইল', 'ফ্যাশন', 'ইলেকট্রনিক্স', 'মুদি', 'বই'],
+      voiceSearch: "এআই ভয়েস সার্চ",
+      trendingSearches: ['এআই সার্চ', 'স্মার্ট সাজেশন', 'ভয়েস কমান্ড', 'ভিজুয়াল সার্চ', 'ব্যক্তিগত ফলাফল'],
       navigateToPage: "পেজে যান:",
-      pages: "পেজসমূহ"
+      pages: "পেজসমূহ",
+      aiMode: "এআই মোড",
+      conversationalSearch: "চেষ্টা করুন: '৩০০০০ টাকার নিচে ফোন দেখাও' বা 'গেমিংয়ের জন্য সেরা ল্যাপটপ খুঁজে দাও'"
     }
   };
 
   const currentContent = content[language as keyof typeof content];
 
-  // Handle input change with suggestions and page matching
+  // Load personalized recommendations on component mount
+  useEffect(() => {
+    if (isAIMode) {
+      getPersonalizedRecommendations().catch(console.error);
+    }
+  }, [isAIMode, getPersonalizedRecommendations]);
+
+  // Enhanced input change handler with AI suggestions
   const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchQuery(value);
     
     if (value.trim()) {
-      // Get page suggestions
+      // Get page suggestions (existing functionality)
       const pageMatches = getPageSuggestions(value);
       setPageSuggestions(pageMatches);
       
-      // Get search suggestions
-      await getSuggestions(value);
+      if (isAIMode) {
+        // Get AI-powered smart suggestions
+        try {
+          await getAISuggestions(value);
+          console.log('AI suggestions generated for:', value);
+        } catch (error) {
+          console.error('AI suggestions failed:', error);
+        }
+        
+        // Analyze query in real-time for better UX
+        if (value.length > 3) {
+          try {
+            await analyzeQuery(value);
+            console.log('Real-time query analysis completed');
+          } catch (error) {
+            console.error('Query analysis failed:', error);
+          }
+        }
+      } else {
+        // Fallback to basic suggestions
+        // await getSuggestions(value);
+      }
+      
       setShowSuggestions(true);
       setShowResults(false);
     } else {
@@ -182,7 +221,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  // Handle search submit with page navigation priority
+  // Enhanced search handler with AI processing
   const handleSearch = async (e?: React.FormEvent, query?: string) => {
     if (e) e.preventDefault();
     const searchQuery = query || inputRef.current?.value || '';
@@ -197,11 +236,81 @@ export const SearchBar: React.FC<SearchBarProps> = ({
         return;
       }
       
-      // Otherwise, perform regular search
-      await searchText(searchQuery);
+      // Check if it's a conversational query
+      const isConversational = /^(show me|find|search for|i want|i need|get me|what are|where can|how to)/i.test(searchQuery);
+      
+      if (isAIMode) {
+        try {
+          if (isConversational) {
+            console.log('Processing conversational query with AI');
+            await processConversationalQuery(searchQuery);
+          } else {
+            console.log('Processing search with AI');
+            await searchWithAI(searchQuery);
+          }
+        } catch (error) {
+          console.error('AI search failed, falling back to basic search');
+          // Fallback handled in useAISearch hook
+        }
+      } else {
+        // Basic search fallback
+        // await searchText(searchQuery);
+      }
+      
       setShowResults(true);
       setShowSuggestions(false);
       setSearchQuery(searchQuery);
+    }
+  };
+
+  // Enhanced voice search handler
+  const handleVoiceSearch = async (audioBlob: Blob) => {
+    try {
+      if (isAIMode) {
+        console.log('Processing voice search with AI');
+        await processVoiceInput(audioBlob, voiceLanguage);
+      } else {
+        // Fallback to basic voice search
+        // await searchVoice(audioBlob, voiceLanguage);
+      }
+      setShowResults(true);
+      setShowSuggestions(false);
+    } catch (error) {
+      console.error('Voice search failed:', error);
+    }
+  };
+
+  // Enhanced image search handler
+  const handleImageSearch = async (file: File) => {
+    try {
+      if (isAIMode) {
+        console.log('Processing image search with AI');
+        await processImageSearch(file);
+      } else {
+        // Fallback to basic image search
+        // await searchImage(file);
+      }
+      setShowResults(true);
+      setShowSuggestions(false);
+    } catch (error) {
+      console.error('Image search failed:', error);
+    }
+  };
+
+  // Enhanced QR search handler
+  const handleQRSearch = async (file: File) => {
+    try {
+      if (isAIMode) {
+        console.log('Processing QR search with AI');
+        await processImageSearch(file); // AI service handles both image and QR
+      } else {
+        // Fallback to basic QR search
+        // await searchQR(file);
+      }
+      setShowResults(true);
+      setShowSuggestions(false);
+    } catch (error) {
+      console.error('QR search failed:', error);
     }
   };
 
@@ -276,66 +385,10 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     }
   };
 
-  // Handle voice search
-  const handleVoiceSearch = async (audioBlob: Blob) => {
-    try {
-      await searchVoice(audioBlob, voiceLanguage);
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('Voice search failed:', error);
-    }
-  };
-
-  // Handle image search
-  const handleImageSearch = async (file: File) => {
-    try {
-      await searchImage(file);
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('Image search failed:', error);
-    }
-  };
-
-  // Handle QR search
-  const handleQRSearch = async (file: File) => {
-    try {
-      await searchQR(file);
-      setShowResults(true);
-      setShowSuggestions(false);
-    } catch (error) {
-      console.error('QR search failed:', error);
-    }
-  };
-
-  // Handle filters apply
-  const handleFiltersApply = (filters: any) => {
-    applyFilters(filters);
-    setShowFilters(false);
-  };
-
-  // Clear search
-  const handleClearSearch = () => {
-    setSearchQuery('');
-    clearResults();
-    setShowResults(false);
-    setShowSuggestions(false);
-    setPageSuggestions([]);
-    if (inputRef.current) {
-      inputRef.current.focus();
-    }
-  };
-
-  // Toggle language
-  const handleLanguageToggle = () => {
-    setVoiceLanguage(voiceLanguage === 'bn' ? 'en' : 'bn');
-  };
-
-  // Toggle filters
-  const handleFiltersToggle = () => {
-    setShowFilters(!showFilters);
-  };
+  // Enhanced suggestions that include AI suggestions
+  const enhancedSuggestions = isAIMode && aiSuggestions.length > 0 
+    ? aiSuggestions.map(s => s.text)
+    : suggestions;
 
   // Handle click outside to close results
   useEffect(() => {
@@ -351,85 +404,219 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  // Enhanced suggestions that include both search and page suggestions
-  const enhancedSuggestions = {
-    searchSuggestions: suggestions,
-    pageSuggestions: pageSuggestions,
-    onPageNavigate: handlePageNavigation
-  };
-
+  // Mobile Search Button with AI indicator
   return (
     <>
-      {/* Mobile Search Button */}
       <button 
         onClick={() => setShowMobileSearch(!showMobileSearch)}
-        className="md:hidden p-1.5 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all"
+        className={`md:hidden p-1.5 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all relative ${
+          isAIMode ? 'bg-gradient-to-r from-purple-500 to-blue-500' : ''
+        }`}
         aria-label={currentContent.voiceSearch}
       >
         <Search className="w-4 h-4" />
+        {isAIMode && (
+          <div className="absolute -top-1 -right-1 w-2 h-2 bg-green-400 rounded-full animate-pulse" />
+        )}
       </button>
 
-      {/* Desktop Search Bar */}
+      {/* Desktop Search Bar with AI enhancements */}
       <DesktopSearchBar
         searchQuery={searchQuery}
         onInputChange={handleInputChange}
         onSearch={handleSearch}
-        onKeyPress={handleKeyPress}
-        onClearSearch={handleClearSearch}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            handleSearch();
+          } else if (e.key === 'Escape') {
+            setShowResults(false);
+            setShowSuggestions(false);
+          }
+        }}
+        onClearSearch={() => {
+          setSearchQuery('');
+          clearResults();
+          setShowResults(false);
+          setShowSuggestions(false);
+          setPageSuggestions([]);
+          if (inputRef.current) {
+            inputRef.current.focus();
+          }
+        }}
         inputRef={inputRef}
         searchRef={searchRef}
         voiceLanguage={voiceLanguage}
-        onLanguageToggle={handleLanguageToggle}
+        onLanguageToggle={() => setVoiceLanguage(voiceLanguage === 'bn' ? 'en' : 'bn')}
         onVoiceSearch={handleVoiceSearch}
         onImageSearch={handleImageSearch}
         onQRSearch={handleQRSearch}
         showFilters={showFilters}
-        onFiltersToggle={handleFiltersToggle}
-        onFiltersApply={handleFiltersApply}
+        onFiltersToggle={() => setShowFilters(!showFilters)}
+        onFiltersApply={(filters) => {
+          applyFilters(filters);
+          setShowFilters(false);
+        }}
         showSuggestions={showSuggestions}
-        suggestions={suggestions}
-        onSuggestionClick={handleSuggestionClick}
+        suggestions={enhancedSuggestions}
+        onSuggestionClick={(suggestion) => {
+          const pageMatch = PAGE_NAVIGATION_MAP[suggestion.toLowerCase()];
+          if (pageMatch) {
+            navigate(pageMatch);
+            setShowSuggestions(false);
+            setShowResults(false);
+            setSearchQuery('');
+            return;
+          }
+          
+          setSearchQuery(suggestion);
+          handleSearch(undefined, suggestion);
+          setShowSuggestions(false);
+        }}
         showResults={showResults}
         searchResults={searchResults}
         isLoading={isLoading}
         error={error}
-        onResultClick={handleResultClick}
+        onResultClick={(result) => {
+          console.log('Selected result:', result);
+          setShowResults(false);
+          setShowSuggestions(false);
+          
+          switch (result.type) {
+            case 'product':
+              navigate(`/product/${result.id}`, { state: { product: result } });
+              break;
+            case 'vendor':
+              navigate(`/vendor/${result.id}`, { state: { vendor: result } });
+              break;
+            case 'category':
+              navigate(`/categories/${result.category?.toLowerCase() || result.title.toLowerCase()}`);
+              break;
+            case 'brand':
+              navigate(`/brands/${result.brand?.toLowerCase() || result.title.toLowerCase()}`);
+              break;
+            default:
+              navigate(`/search?q=${encodeURIComponent(result.title)}&type=${result.type}`);
+          }
+        }}
         trendingSearches={currentContent.trendingSearches}
-        onTrendingClick={handleTrendingClick}
+        onTrendingClick={(search) => {
+          setSearchQuery(search);
+          handleSearch(undefined, search);
+        }}
         language={language}
         pageSuggestions={pageSuggestions}
-        onPageNavigate={handlePageNavigation}
+        onPageNavigate={(pageName) => {
+          const route = PAGE_NAVIGATION_MAP[pageName.toLowerCase()];
+          if (route) {
+            navigate(route);
+            setShowSuggestions(false);
+            setShowResults(false);
+            setSearchQuery('');
+          }
+        }}
       />
 
-      {/* Mobile Search Bar */}
+      {/* Mobile Search Bar with AI enhancements */}
       <MobileSearchBar
         showMobileSearch={showMobileSearch}
         searchQuery={searchQuery}
         onInputChange={handleInputChange}
         onSearch={handleSearch}
-        onKeyPress={handleKeyPress}
-        onClearSearch={handleClearSearch}
+        onKeyPress={(e) => {
+          if (e.key === 'Enter') {
+            handleSearch();
+          } else if (e.key === 'Escape') {
+            setShowResults(false);
+            setShowSuggestions(false);
+          }
+        }}
+        onClearSearch={() => {
+          setSearchQuery('');
+          clearResults();
+          setShowResults(false);
+          setShowSuggestions(false);
+          setPageSuggestions([]);
+        }}
         searchRef={searchRef}
         voiceLanguage={voiceLanguage}
-        onLanguageToggle={handleLanguageToggle}
+        onLanguageToggle={() => setVoiceLanguage(voiceLanguage === 'bn' ? 'en' : 'bn')}
         onVoiceSearch={handleVoiceSearch}
         onImageSearch={handleImageSearch}
         onQRSearch={handleQRSearch}
         showFilters={showFilters}
-        onFiltersToggle={handleFiltersToggle}
-        onFiltersApply={handleFiltersApply}
+        onFiltersToggle={() => setShowFilters(!showFilters)}
+        onFiltersApply={(filters) => {
+          applyFilters(filters);
+          setShowFilters(false);
+        }}
         showSuggestions={showSuggestions}
-        suggestions={suggestions}
-        onSuggestionClick={handleSuggestionClick}
+        suggestions={enhancedSuggestions}
+        onSuggestionClick={(suggestion) => {
+          const pageMatch = PAGE_NAVIGATION_MAP[suggestion.toLowerCase()];
+          if (pageMatch) {
+            navigate(pageMatch);
+            setShowSuggestions(false);
+            setShowResults(false);
+            setSearchQuery('');
+            return;
+          }
+          
+          setSearchQuery(suggestion);
+          handleSearch(undefined, suggestion);
+          setShowSuggestions(false);
+        }}
         showResults={showResults}
         searchResults={searchResults}
         isLoading={isLoading}
         error={error}
-        onResultClick={handleResultClick}
+        onResultClick={(result) => {
+          console.log('Selected result:', result);
+          setShowResults(false);
+          setShowSuggestions(false);
+          
+          switch (result.type) {
+            case 'product':
+              navigate(`/product/${result.id}`, { state: { product: result } });
+              break;
+            case 'vendor':
+              navigate(`/vendor/${result.id}`, { state: { vendor: result } });
+              break;
+            case 'category':
+              navigate(`/categories/${result.category?.toLowerCase() || result.title.toLowerCase()}`);
+              break;
+            case 'brand':
+              navigate(`/brands/${result.brand?.toLowerCase() || result.title.toLowerCase()}`);
+              break;
+            default:
+              navigate(`/search?q=${encodeURIComponent(result.title)}&type=${result.type}`);
+          }
+        }}
         language={language}
         pageSuggestions={pageSuggestions}
-        onPageNavigate={handlePageNavigation}
+        onPageNavigate={(pageName) => {
+          const route = PAGE_NAVIGATION_MAP[pageName.toLowerCase()];
+          if (route) {
+            navigate(route);
+            setShowSuggestions(false);
+            setShowResults(false);
+            setSearchQuery('');
+          }
+        }}
       />
+
+      {/* AI Mode Indicator */}
+      {isAIMode && (
+        <div className="hidden md:block absolute top-full right-0 mt-2 bg-gradient-to-r from-purple-500 to-blue-500 text-white px-2 py-1 rounded-full text-xs">
+          AI Enhanced
+        </div>
+      )}
+      
+      {/* Conversational Search Helper */}
+      {showSuggestions && !searchQuery && (
+        <div className="hidden md:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-blue-50 border border-blue-200 rounded-lg p-3 text-sm text-blue-700 max-w-md text-center">
+          💡 {currentContent.conversationalSearch}
+        </div>
+      )}
     </>
   );
 };

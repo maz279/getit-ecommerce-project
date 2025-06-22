@@ -3,7 +3,7 @@ import React from 'react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { TrendingUp, Fire, Star, Clock } from 'lucide-react';
+import { TrendingUp, Flame, Star, Clock } from 'lucide-react';
 
 export const TrendingGifts: React.FC = () => {
   const trendingItems = [
@@ -80,7 +80,7 @@ export const TrendingGifts: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="flex items-center justify-between mb-8">
           <div className="flex items-center gap-3">
-            <Fire className="w-8 h-8 text-red-500" />
+            <Flame className="w-8 h-8 text-red-500" />
             <h2 className="text-4xl font-bold">🔥 Trending Gift Cards</h2>
             <Badge className="bg-red-500 text-white animate-pulse">Hot!</Badge>
           </div>

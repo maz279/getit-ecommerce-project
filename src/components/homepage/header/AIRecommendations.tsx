@@ -73,11 +73,10 @@ export const AIRecommendations: React.FC<AIRecommendationsProps> = ({
         {visibleRecommendations.map((recommendation, index) => (
           <div
             key={recommendation.id}
-            className="group p-3 bg-white border border-gray-100 rounded-lg hover:border-purple-200 hover:shadow-md transition-all cursor-pointer"
+            className="group p-3 bg-white border border-gray-100 rounded-lg hover:border-purple-200 hover:shadow-md transition-all cursor-pointer animate-fadeInUp"
             onClick={() => onRecommendationClick(recommendation)}
             style={{
-              animationDelay: `${index * 100}ms`,
-              animation: 'fadeInUp 0.3s ease-out forwards'
+              animationDelay: `${index * 100}ms`
             }}
           >
             <div className="flex items-start gap-3">
@@ -154,26 +153,6 @@ export const AIRecommendations: React.FC<AIRecommendationsProps> = ({
           </Button>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        
-        .line-clamp-2 {
-          display: -webkit-box;
-          -webkit-line-clamp: 2;
-          -webkit-box-orient: vertical;
-          overflow: hidden;
-        }
-      `}</style>
     </Card>
   );
 };

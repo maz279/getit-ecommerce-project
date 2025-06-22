@@ -18,6 +18,9 @@ interface UseAISearchReturn {
   analyzeQuery: (query: string) => Promise<AISearchQuery>;
   expandQuery: (query: string) => Promise<string[]>;
   
+  // Filters
+  applyFilters: (filters: any) => void;
+  
   // State
   aiSuggestions: AISearchSuggestion[];
   personalizedRecommendations: PersonalizedRecommendation[];
@@ -230,6 +233,15 @@ export const useAISearch = (): UseAISearchReturn => {
     }
   }, []);
 
+  // Apply filters
+  const applyFilters = useCallback((filters: any) => {
+    console.log('Applying filters:', filters);
+    // Apply filters to current search results
+    if (baseSearch.applyFilters) {
+      baseSearch.applyFilters(filters);
+    }
+  }, [baseSearch]);
+
   // Enhanced clear results
   const clearResults = useCallback(() => {
     baseSearch.clearResults();
@@ -249,6 +261,7 @@ export const useAISearch = (): UseAISearchReturn => {
     getPersonalizedRecommendations,
     analyzeQuery,
     expandQuery,
+    applyFilters,
 
     // AI state
     aiSuggestions,

@@ -30,7 +30,7 @@ export const FooterMainSection: React.FC = () => {
           <Link to="/order-tracking" className="text-sm text-gray-300 hover:text-white transition-colors block">Track Your Order</Link>
           <Link to="/returns-refunds" className="text-sm text-gray-300 hover:text-white transition-colors block">Return & Refund Policy</Link>
           <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Customer Reviews</a>
-          <Link to="/wishlist" className="text-sm text-gray-300 hover:text-white transition-colors block">Wishlist & Favorites</a>
+          <Link to="/wishlist" className="text-sm text-gray-300 hover:text-white transition-colors block">Wishlist & Favorites</Link>
           <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Gift Cards & Vouchers</a>
         </div>
       </div>

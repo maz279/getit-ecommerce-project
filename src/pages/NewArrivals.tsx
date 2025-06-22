@@ -4,17 +4,20 @@ import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
 import { NewArrivalsHero } from '../components/newarrivals/NewArrivalsHero';
 import { NewArrivalsNavigationMap } from '../components/newarrivals/NewArrivalsNavigationMap';
-import { LatestProducts } from '../components/newarrivals/LatestProducts';
-import { BrandSpotlight } from '../components/newarrivals/BrandSpotlight';
-import { SeasonalCollections } from '../components/newarrivals/SeasonalCollections';
+import { NewArrivalsStats } from '../components/newarrivals/NewArrivalsStats';
 import { TodaysArrivals } from '../components/newarrivals/TodaysArrivals';
 import { CategoryShowcase } from '../components/newarrivals/CategoryShowcase';
+import { SmartShoppingFeatures } from '../components/newarrivals/SmartShoppingFeatures';
+import { SpecialFeatures } from '../components/newarrivals/SpecialFeatures';
 import { LimitedTimeOffers } from '../components/newarrivals/LimitedTimeOffers';
-import { CustomerFavorites } from '../components/newarrivals/CustomerFavorites';
-import { PreOrderSection } from '../components/newarrivals/PreOrderSection';
 import { TrendingNow } from '../components/newarrivals/TrendingNow';
+import { LatestProducts } from '../components/newarrivals/LatestProducts';
+import { CustomerFavorites } from '../components/newarrivals/CustomerFavorites';
+import { BrandSpotlight } from '../components/newarrivals/BrandSpotlight';
 import { RecentlyLaunched } from '../components/newarrivals/RecentlyLaunched';
-import { NewArrivalsStats } from '../components/newarrivals/NewArrivalsStats';
+import { PreOrderSection } from '../components/newarrivals/PreOrderSection';
+import { SeasonalCollections } from '../components/newarrivals/SeasonalCollections';
+import { GetStartedSection } from '../components/newarrivals/GetStartedSection';
 
 const NewArrivals: React.FC = () => {
   return (
@@ -25,8 +28,10 @@ const NewArrivals: React.FC = () => {
         <NewArrivalsHero />
         <NewArrivalsNavigationMap />
         <NewArrivalsStats />
-        <TodaysArrivals />
         <CategoryShowcase />
+        <SmartShoppingFeatures />
+        <SpecialFeatures />
+        <TodaysArrivals />
         <LimitedTimeOffers />
         <TrendingNow />
         <LatestProducts />
@@ -35,6 +40,7 @@ const NewArrivals: React.FC = () => {
         <RecentlyLaunched />
         <PreOrderSection />
         <SeasonalCollections />
+        <GetStartedSection />
       </main>
       
       <Footer />

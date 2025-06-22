@@ -73,11 +73,11 @@ export const useSearchIndexing = (options: UseSearchIndexingOptions = {}) => {
 };
 
 // Helper function to automatically index React components
-export const withSearchIndexing = <P extends Record<string, any>>(
+export function withSearchIndexing<P extends Record<string, any>>(
   Component: React.ComponentType<P>,
   getSearchData: (props: P) => SearchResult | null
-) => {
-  return (props: P) => {
+) {
+  return function WrappedComponent(props: P) {
     const { addToSearchIndex } = useSearchIndexing();
 
     useEffect(() => {
@@ -89,4 +89,4 @@ export const withSearchIndexing = <P extends Record<string, any>>(
 
     return <Component {...props} />;
   };
-};
+}

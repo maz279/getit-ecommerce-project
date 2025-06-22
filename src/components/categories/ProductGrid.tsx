@@ -2,11 +2,11 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal, TrendingUp, Clock, Award, Grid3X3, List, Grid2X2 } from 'lucide-react';
+import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal, TrendingUp, Clock, Award, Grid3X3, List, Grid2X2, Eye, Share2, BarChart3 } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
-// Enhanced sample product data
+// Enhanced sample product data with real product images
 const sampleProducts = [
   {
     id: '1',
@@ -16,12 +16,14 @@ const sampleProducts = [
     rating: 4.5,
     reviews: 156,
     vendor: 'Fashion House BD',
-    image: '/placeholder.svg',
+    image: 'https://images.unsplash.com/photo-1610030469983-98e550d6193c?w=400&h=400&fit=crop',
     discount: 17,
     freeShipping: true,
     location: 'Dhaka',
     verified: true,
-    quickDelivery: true
+    quickDelivery: true,
+    sold: 89,
+    category: 'Traditional Wear'
   },
   {
     id: '2',
@@ -30,11 +32,13 @@ const sampleProducts = [
     rating: 4.2,
     reviews: 89,
     vendor: 'Ethnic Wear',
-    image: '/placeholder.svg',
+    image: 'https://images.unsplash.com/photo-1583391733956-3750e0ff4e8b?w=400&h=400&fit=crop',
     freeShipping: false,
     location: 'Chittagong',
     verified: true,
-    quickDelivery: false
+    quickDelivery: false,
+    sold: 45,
+    category: 'Salwar Kameez'
   },
   {
     id: '3',
@@ -44,12 +48,14 @@ const sampleProducts = [
     rating: 4.8,
     reviews: 234,
     vendor: 'Heritage Textiles',
-    image: '/placeholder.svg',
+    image: 'https://images.unsplash.com/photo-1594736797933-d0e501ba2fe6?w=400&h=400&fit=crop',
     discount: 13,
     freeShipping: true,
     location: 'Dhaka',
     verified: true,
-    quickDelivery: true
+    quickDelivery: true,
+    sold: 156,
+    category: 'Traditional Wear'
   },
   {
     id: '4',
@@ -58,11 +64,77 @@ const sampleProducts = [
     rating: 4.1,
     reviews: 67,
     vendor: 'Trendy Fashion',
-    image: '/placeholder.svg',
+    image: 'https://images.unsplash.com/photo-1564557287817-3785e38ec1e5?w=400&h=400&fit=crop',
     freeShipping: true,
     location: 'Sylhet',
     verified: false,
-    quickDelivery: false
+    quickDelivery: false,
+    sold: 23,
+    category: 'Kurti & Tops'
+  },
+  {
+    id: '5',
+    name: 'Designer Lehenga - Wedding Special',
+    price: 8900,
+    originalPrice: 12000,
+    rating: 4.7,
+    reviews: 78,
+    vendor: 'Bridal Couture',
+    image: 'https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=400&h=400&fit=crop',
+    discount: 26,
+    freeShipping: true,
+    location: 'Dhaka',
+    verified: true,
+    quickDelivery: true,
+    sold: 12,
+    category: 'Traditional Wear'
+  },
+  {
+    id: '6',
+    name: 'Western Top & Jeans Combo',
+    price: 2200,
+    rating: 4.3,
+    reviews: 134,
+    vendor: 'Urban Style',
+    image: 'https://images.unsplash.com/photo-1551698618-1dfe5d97d256?w=400&h=400&fit=crop',
+    freeShipping: true,
+    location: 'Dhaka',
+    verified: true,
+    quickDelivery: false,
+    sold: 67,
+    category: 'Western Wear'
+  },
+  {
+    id: '7',
+    name: 'Casual Cotton Dress',
+    price: 1500,
+    rating: 4.0,
+    reviews: 92,
+    vendor: 'Comfort Zone',
+    image: 'https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=400&h=400&fit=crop',
+    freeShipping: false,
+    location: 'Chittagong',
+    verified: true,
+    quickDelivery: false,
+    sold: 34,
+    category: 'Western Wear'
+  },
+  {
+    id: '8',
+    name: 'Party Wear Gown',
+    price: 3500,
+    originalPrice: 4200,
+    rating: 4.6,
+    reviews: 156,
+    vendor: 'Glamour Collection',
+    image: 'https://images.unsplash.com/photo-1566479179817-0d0c12e18b3b?w=400&h=400&fit=crop',
+    discount: 17,
+    freeShipping: true,
+    location: 'Dhaka',
+    verified: true,
+    quickDelivery: true,
+    sold: 28,
+    category: 'Western Wear'
   }
 ];
 
@@ -99,12 +171,29 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
               {product.discount}% OFF
             </Badge>
           )}
-          <button className="absolute top-2 right-2 p-2 bg-white rounded-full shadow-md hover:bg-gray-50 opacity-0 group-hover:opacity-100 transition-opacity">
-            <Heart className="w-4 h-4" />
-          </button>
+          <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+            <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+              <Heart className="w-4 h-4" />
+            </button>
+            <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+              <Eye className="w-4 h-4" />
+            </button>
+            <button className="p-2 bg-white rounded-full shadow-md hover:bg-gray-50">
+              <Share2 className="w-4 h-4" />
+            </button>
+          </div>
         </div>
         
         <div className={`space-y-2 ${viewMode === 'list' ? 'flex-1' : ''}`}>
+          <div className="flex items-center justify-between">
+            <Badge variant="outline" className="text-xs">
+              {product.category}
+            </Badge>
+            {product.sold && (
+              <span className="text-xs text-gray-500">{product.sold} sold</span>
+            )}
+          </div>
+
           <h3 className={`font-semibold text-gray-800 group-hover:text-blue-600 transition-colors ${viewMode === 'compact' ? 'text-sm line-clamp-2' : 'line-clamp-2'}`}>
             {product.name}
           </h3>
@@ -185,29 +274,37 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
           </div>
         );
       case 'featured':
-        return <EmptyState 
-          icon={Star}
-          title="Featured Products"
-          description="Discover our handpicked featured products"
-        />;
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.filter(p => p.rating >= 4.5).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
       case 'trending':
-        return <EmptyState 
-          icon={TrendingUp}
-          title="Trending Now"
-          description="See what's popular and trending"
-        />;
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.filter(p => p.sold && p.sold > 50).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
       case 'new':
-        return <EmptyState 
-          icon={Clock}
-          title="New Arrivals"
-          description="Latest products just added"
-        />;
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.slice(0, 4).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
       case 'bestsellers':
-        return <EmptyState 
-          icon={Award}
-          title="Best Sellers"
-          description="Top-selling products in this category"
-        />;
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.filter(p => p.sold && p.sold > 30).sort((a, b) => (b.sold || 0) - (a.sold || 0)).map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
       default:
         return (
           <div className={`grid gap-4 ${getGridCols()}`}>

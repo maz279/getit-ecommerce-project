@@ -1,7 +1,8 @@
-
 import React, { useState } from 'react';
 import { Header } from '../components/homepage/Header';
 import { EnhancedFlashSaleHero } from '../components/flashsale/EnhancedFlashSaleHero';
+import { FlashSaleNavigationMap } from '../components/flashsale/FlashSaleNavigationMap';
+import { LightningDealsSection } from '../components/flashsale/LightningDealsSection';
 import { CategoryQuickAccess } from '../components/flashsale/CategoryQuickAccess';
 import { FlashSaleFilters } from '../components/flashsale/FlashSaleFilters';
 import { FlashSaleProductGrid } from '../components/flashsale/FlashSaleProductGrid';
@@ -40,6 +41,10 @@ const FlashSale: React.FC = () => {
       <main className="flex-1">
         <EnhancedFlashSaleHero timeLeft={timeLeft} />
         
+        <FlashSaleNavigationMap />
+        
+        <LightningDealsSection />
+        
         <CategoryQuickAccess />
         
         <FlashSaleFilters
@@ -61,13 +66,21 @@ const FlashSale: React.FC = () => {
           viewMode={viewMode}
         />
 
-        <PaymentMethodsSection />
+        <div id="payment-methods">
+          <PaymentMethodsSection />
+        </div>
         
-        <DeliveryOptionsSection />
+        <div id="delivery-options">
+          <DeliveryOptionsSection />
+        </div>
         
-        <CustomerReviewsSection />
+        <div id="customer-reviews">
+          <CustomerReviewsSection />
+        </div>
         
-        <TrustIndicatorsSection />
+        <div id="trust-indicators">
+          <TrustIndicatorsSection />
+        </div>
       </main>
       
       <Footer />

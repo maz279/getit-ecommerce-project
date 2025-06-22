@@ -34,30 +34,13 @@ export const HeroSection: React.FC = () => {
 
   useEffect(() => {
     const slideTimer = setInterval(() => {
-      setCurrentSlide(prev => (prev + 1) % 10);
+      setCurrentSlide(prev => (prev + 1) % 9);
     }, 5000);
 
     return () => clearInterval(slideTimer);
   }, []);
 
   const heroSlides = [
-    {
-      bg: "bg-gradient-to-r from-green-600 via-blue-600 to-purple-600",
-      title: "Welcome to GetIt - Bangladesh's Premier Multi-Vendor Marketplace",
-      subtitle: "Discover millions of products from trusted local and international vendors",
-      features: [
-        "Free Delivery on orders above ৳500",
-        "Cash on Delivery available nationwide", 
-        "bKash, Nagad, Rocket payment support",
-        "7-Day Return policy",
-        "Authentic Products from verified vendors"
-      ],
-      buttons: [
-        { text: "Shop Now", link: "/products", primary: true },
-        { text: "Become a Vendor", link: "/vendor/register", primary: false }
-      ],
-      image: "https://images.unsplash.com/photo-1556742049-0cfed4f6a45d?w=800"
-    },
     {
       bg: "bg-gradient-to-r from-red-500 via-orange-500 to-yellow-500",
       title: "Festival Sale - Eid Collection",
@@ -173,11 +156,11 @@ export const HeroSection: React.FC = () => {
 
   return (
     <section className="relative overflow-hidden">
-      <div className="max-w-7xl mx-auto px-4 py-6">
+      <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Main Hero Carousel */}
           <div className="lg:col-span-3">
-            <div className="relative h-96 rounded-2xl overflow-hidden shadow-2xl">
+            <div className="relative h-[500px] rounded-2xl overflow-hidden shadow-2xl">
               {heroSlides.map((slide, index) => (
                 <div
                   key={index}
@@ -261,7 +244,7 @@ export const HeroSection: React.FC = () => {
                       </div>
                     </div>
                     <div className="flex-1 hidden md:block">
-                      <img src={slide.image} alt="Hero" className="w-full h-80 object-cover rounded-xl" />
+                      <img src={slide.image} alt="Hero" className="w-full h-96 object-cover rounded-xl" />
                     </div>
                   </div>
                 </div>
@@ -284,7 +267,7 @@ export const HeroSection: React.FC = () => {
 
           {/* Side Banners */}
           <div className="space-y-4">
-            <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-xl p-6 text-white h-44 flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-green-400 to-blue-500 rounded-xl p-6 text-white h-60 flex flex-col justify-between">
               <div>
                 <Zap className="w-8 h-8 mb-2" />
                 <h3 className="font-bold text-lg">Flash Sale</h3>
@@ -298,7 +281,7 @@ export const HeroSection: React.FC = () => {
               </Link>
             </div>
             
-            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white h-44 flex flex-col justify-between">
+            <div className="bg-gradient-to-br from-purple-500 to-pink-500 rounded-xl p-6 text-white h-60 flex flex-col justify-between">
               <div>
                 <Star className="w-8 h-8 mb-2" />
                 <h3 className="font-bold text-lg">AI Picks</h3>

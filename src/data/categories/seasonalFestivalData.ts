@@ -1,21 +1,32 @@
 
-import { MainCategory } from '../categoriesData';
-import { createElement } from 'react';
-import { Gift } from 'lucide-react';
-import { festivalCollectionsData } from './seasonalFestival/festivalCollectionsData';
-import { weddingCollectionsData } from './seasonalFestival/weddingCollectionsData';
-import { seasonalProductsData } from './seasonalFestival/seasonalProductsData';
+import React from 'react';
+import { Calendar } from 'lucide-react';
+import { MainCategory } from './types';
 
 export const seasonalFestivalData: MainCategory = {
   id: 'seasonal-festival',
-  name: 'Seasonal & Festival Items',
-  icon: createElement(Gift, { className: 'w-6 h-6' }),
-  color: 'text-red-500',
-  count: 8765,
-  featured: true,
+  name: 'Seasonal & Festival',
+  icon: React.createElement(Calendar, { className: "w-6 h-6" }),
+  color: 'bg-yellow-600 text-white',
+  count: 12987,
   subcategories: {
-    'festival-collections': festivalCollectionsData,
-    'wedding-collections': weddingCollectionsData,
-    'seasonal-products': seasonalProductsData
+    'festival-items': {
+      name: "Festival Items",
+      subcategories: [
+        { name: 'Eid Collection', count: 3210 },
+        { name: 'Puja Items', count: 2987 },
+        { name: 'Christmas Decor', count: 2109 },
+        { name: 'New Year Items', count: 1876 }
+      ]
+    },
+    'seasonal-products': {
+      name: "Seasonal Products",
+      subcategories: [
+        { name: 'Summer Essentials', count: 2109 },
+        { name: 'Winter Collection', count: 1876 },
+        { name: 'Monsoon Gear', count: 1654 },
+        { name: 'Spring Collection', count: 1432 }
+      ]
+    }
   }
 };

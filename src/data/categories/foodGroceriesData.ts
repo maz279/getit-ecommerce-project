@@ -1,27 +1,32 @@
 
 import React from 'react';
-import { ShoppingBasket } from 'lucide-react';
-import { MainCategory } from '../categoriesData';
-import { freshFoodData } from './foodGroceries/freshFoodData';
-import { staplesGrainsData } from './foodGroceries/staplesGrainsData';
-import { spicesCondimentsData } from './foodGroceries/spicesCondimentsData';
-import { packagedFoodsData } from './foodGroceries/packagedFoodsData';
-import { beveragesData } from './foodGroceries/beveragesData';
-import { organicHealthFoodsData } from './foodGroceries/organicHealthFoodsData';
+import { Coffee } from 'lucide-react';
+import { MainCategory } from './types';
 
 export const foodGroceriesData: MainCategory = {
   id: 'food-groceries',
   name: 'Food & Groceries',
-  icon: React.createElement(ShoppingBasket, { className: "w-8 h-8" }),
-  color: 'text-orange-500',
-  count: 15780,
-  featured: true,
+  icon: React.createElement(Coffee, { className: "w-6 h-6" }),
+  color: 'bg-emerald-500 text-white',
+  count: 54321,
   subcategories: {
-    'fresh-food': freshFoodData,
-    'staples-grains': staplesGrainsData,
-    'spices-condiments': spicesCondimentsData,
-    'packaged-foods': packagedFoodsData,
-    'beverages': beveragesData,
-    'organic-health-foods': organicHealthFoodsData
+    'fresh-food': {
+      name: "Fresh Food",
+      subcategories: [
+        { name: 'Fruits & Vegetables', count: 12345 },
+        { name: 'Meat & Poultry', count: 9876 },
+        { name: 'Fish & Seafood', count: 8765 },
+        { name: 'Dairy Products', count: 6543 }
+      ]
+    },
+    'packaged-foods': {
+      name: "Packaged Foods",
+      subcategories: [
+        { name: 'Rice & Grains', count: 15678 },
+        { name: 'Snacks & Confectionery', count: 12345 },
+        { name: 'Beverages', count: 9876 },
+        { name: 'Cooking Ingredients', count: 8765 }
+      ]
+    }
   }
 };

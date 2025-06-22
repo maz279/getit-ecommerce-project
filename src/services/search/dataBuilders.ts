@@ -1,4 +1,3 @@
-
 import { SearchResult } from './types';
 import { categoriesData } from '@/data/categoriesData';
 

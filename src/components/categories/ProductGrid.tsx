@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
-import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal } from 'lucide-react';
+import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal, TrendingUp, Clock, Award } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 // Sample product data

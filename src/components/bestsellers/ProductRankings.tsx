@@ -69,6 +69,72 @@ export const ProductRankings: React.FC = () => {
       rating: 4.5,
       badge: 'SALE',
       image: 'https://images.unsplash.com/photo-1549298916-b41d501d3772?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 7,
+      name: 'iPad Pro 11"',
+      category: 'Electronics',
+      price: 89999,
+      originalPrice: 95000,
+      sales: '3.5K+',
+      rating: 4.8,
+      badge: 'NEW',
+      image: 'https://images.unsplash.com/photo-1544244015-0df4b3ffc6b0?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 8,
+      name: 'Canon EOS R5',
+      category: 'Electronics',
+      price: 285000,
+      originalPrice: 300000,
+      sales: '2.1K+',
+      rating: 4.9,
+      badge: 'PREMIUM',
+      image: 'https://images.unsplash.com/photo-1606983340126-99ab4feaa64a?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 9,
+      name: 'PlayStation 5',
+      category: 'Gaming',
+      price: 65000,
+      originalPrice: 70000,
+      sales: '4.2K+',
+      rating: 4.7,
+      badge: 'HOT',
+      image: 'https://images.unsplash.com/photo-1606813907291-d86efa9b94db?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 10,
+      name: 'Apple Watch Series 9',
+      category: 'Electronics',
+      price: 42000,
+      originalPrice: 45000,
+      sales: '3.8K+',
+      rating: 4.6,
+      badge: 'TRENDING',
+      image: 'https://images.unsplash.com/photo-1434494878577-86c23bcb06b9?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 11,
+      name: 'Puma RS-X',
+      category: 'Fashion',
+      price: 9500,
+      originalPrice: 12000,
+      sales: '2.8K+',
+      rating: 4.4,
+      badge: 'SALE',
+      image: 'https://images.unsplash.com/photo-1595950653106-6c9ebd614d3a?w=400&h=400&fit=crop'
+    },
+    {
+      rank: 12,
+      name: 'Dell XPS 13',
+      category: 'Electronics',
+      price: 95000,
+      originalPrice: 105000,
+      sales: '1.9K+',
+      rating: 4.5,
+      badge: 'BEST',
+      image: 'https://images.unsplash.com/photo-1588872657578-7efd1f1555ed?w=400&h=400&fit=crop'
     }
   ];
 
@@ -80,7 +146,7 @@ export const ProductRankings: React.FC = () => {
           <p className="text-gray-600">Most purchased products by our customers</p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+        <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
           {rankings.map((product) => (
             <div 
               key={product.rank} 
@@ -96,7 +162,7 @@ export const ProductRankings: React.FC = () => {
               <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
               
               {/* Rank Badge */}
-              <div className="absolute top-2 left-2 z-10">
+              <div className="absolute top-3 left-3 z-10">
                 <div className={`w-8 h-8 rounded-full flex items-center justify-center text-white font-bold text-xs ${
                   product.rank === 1 ? 'bg-yellow-500' :
                   product.rank === 2 ? 'bg-gray-400' : 
@@ -107,13 +173,14 @@ export const ProductRankings: React.FC = () => {
               </div>
 
               {/* Status Badge */}
-              <div className="absolute top-2 right-2 z-10">
+              <div className="absolute top-3 right-3 z-10">
                 <span className={`px-2 py-1 text-xs font-bold rounded-full ${
                   product.badge === 'HOT' ? 'bg-red-500 text-white' :
                   product.badge === 'NEW' ? 'bg-green-500 text-white' : 
                   product.badge === 'TRENDING' ? 'bg-blue-500 text-white' :
                   product.badge === 'POPULAR' ? 'bg-purple-500 text-white' :
                   product.badge === 'BEST' ? 'bg-yellow-500 text-white' :
+                  product.badge === 'PREMIUM' ? 'bg-indigo-500 text-white' :
                   'bg-orange-500 text-white'
                 }`}>
                   {product.badge}
@@ -121,7 +188,7 @@ export const ProductRankings: React.FC = () => {
               </div>
 
               {/* Rating */}
-              <div className="absolute top-10 right-2 z-10">
+              <div className="absolute top-12 right-3 z-10">
                 <div className="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
                   <Star className="w-3 h-3 text-yellow-400 fill-current" />
                   {product.rating}

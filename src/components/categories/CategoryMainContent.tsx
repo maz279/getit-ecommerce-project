@@ -110,7 +110,7 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
 
       {/* Main Content */}
       <Card className="shadow-sm rounded-lg overflow-hidden">
-        {/* Tabs Section */}
+        {/* Tabs Section with integrated ProductGrid */}
         {selectedSubcategory && (
           <CategoryTabs
             submenu={currentSubmenu}
@@ -118,16 +118,21 @@ export const CategoryMainContent: React.FC<CategoryMainContentProps> = ({
             activeTab={activeTab}
             onTabSelect={() => {}} // Will be handled by URL params
             onActiveTabChange={onActiveTabChange}
+            category={selectedCategory}
+            subcategory={selectedSubcategory}
+            subSubcategory={selectedSubSubcategory}
           />
         )}
         
-        {/* Product Grid Section */}
-        <ProductGrid
-          category={selectedCategory}
-          submenu={selectedSubcategory}
-          tab={selectedSubSubcategory}
-          activeTab={activeTab}
-        />
+        {/* Show ProductGrid when no subcategory is selected */}
+        {!selectedSubcategory && (
+          <ProductGrid
+            category={selectedCategory}
+            submenu={selectedSubcategory}
+            tab={selectedSubSubcategory}
+            activeTab={activeTab}
+          />
+        )}
       </Card>
     </div>
   );

@@ -1,6 +1,5 @@
 
 import React, { useState } from 'react';
-import { TabsContent } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Star, Heart, ShoppingCart, Filter, SlidersHorizontal, TrendingUp, Clock, Award, Grid3X3, List, Grid2X2 } from 'lucide-react';
@@ -72,13 +71,15 @@ interface ProductGridProps {
   submenu?: string | null;
   tab?: string | null;
   activeTab: string;
+  tabType?: string;
 }
 
 export const ProductGrid: React.FC<ProductGridProps> = ({
   category,
   submenu,
   tab,
-  activeTab
+  activeTab,
+  tabType = 'all'
 }) => {
   const [viewMode, setViewMode] = useState<'grid' | 'list' | 'compact'>('grid');
   const [showFilters, setShowFilters] = useState(false);
@@ -173,6 +174,51 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     }
   };
 
+  const getTabContent = () => {
+    switch (tabType) {
+      case 'all':
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
+      case 'featured':
+        return <EmptyState 
+          icon={Star}
+          title="Featured Products"
+          description="Discover our handpicked featured products"
+        />;
+      case 'trending':
+        return <EmptyState 
+          icon={TrendingUp}
+          title="Trending Now"
+          description="See what's popular and trending"
+        />;
+      case 'new':
+        return <EmptyState 
+          icon={Clock}
+          title="New Arrivals"
+          description="Latest products just added"
+        />;
+      case 'bestsellers':
+        return <EmptyState 
+          icon={Award}
+          title="Best Sellers"
+          description="Top-selling products in this category"
+        />;
+      default:
+        return (
+          <div className={`grid gap-4 ${getGridCols()}`}>
+            {sampleProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        );
+    }
+  };
+
   return (
     <div className="p-6">
       {/* Controls Bar */}
@@ -237,46 +283,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         </div>
       </div>
 
-      {/* Product Grid */}
-      <TabsContent value="all" className="mt-0">
-        <div className={`grid gap-4 ${getGridCols()}`}>
-          {sampleProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
-      </TabsContent>
-      
-      <TabsContent value="featured" className="mt-0">
-        <EmptyState 
-          icon={Star}
-          title="Featured Products"
-          description="Discover our handpicked featured products"
-        />
-      </TabsContent>
-      
-      <TabsContent value="trending" className="mt-0">
-        <EmptyState 
-          icon={TrendingUp}
-          title="Trending Now"
-          description="See what's popular and trending"
-        />
-      </TabsContent>
-      
-      <TabsContent value="new" className="mt-0">
-        <EmptyState 
-          icon={Clock}
-          title="New Arrivals"
-          description="Latest products just added"
-        />
-      </TabsContent>
-      
-      <TabsContent value="bestsellers" className="mt-0">
-        <EmptyState 
-          icon={Award}
-          title="Best Sellers"
-          description="Top-selling products in this category"
-        />
-      </TabsContent>
+      {/* Product Content */}
+      {getTabContent()}
       
       {/* Pagination */}
       <div className="flex items-center justify-between mt-8 p-4 bg-gray-50 rounded-lg">

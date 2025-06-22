@@ -4,7 +4,7 @@ import { Header } from '../components/homepage/Header';
 import { FlashSaleHero } from '../components/flashsale/FlashSaleHero';
 import { FlashSaleFilters } from '../components/flashsale/FlashSaleFilters';
 import { FlashSaleProductGrid } from '../components/flashsale/FlashSaleProductGrid';
-import { FlashSaleEnhancedFooter } from '../components/flashsale/FlashSaleEnhancedFooter';
+import { Footer } from '../components/homepage/Footer';
 import { useFlashSaleTimer } from '../hooks/useFlashSaleTimer';
 import { generateFlashProducts, categories } from '../data/flashSaleData';
 
@@ -55,7 +55,7 @@ const FlashSale: React.FC = () => {
         />
       </main>
       
-      <FlashSaleEnhancedFooter />
+      <Footer />
     </div>
   );
 };

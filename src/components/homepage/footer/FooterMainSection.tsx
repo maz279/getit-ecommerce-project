@@ -10,13 +10,13 @@ export const FooterMainSection: React.FC = () => {
         <h4 className="text-lg font-bold text-blue-300 mb-4">About GetIt</h4>
         <div className="space-y-2">
           <Link to="/about-us" className="text-sm text-gray-300 hover:text-white transition-colors block">About Us</Link>
-          <Link to="/about-us" className="text-sm text-gray-300 hover:text-white transition-colors block">Our Mission</Link>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">How It Works</a>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Success Stories</a>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Careers</a>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Press & Media</a>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Investor Relations</a>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Corporate Social Responsibility</a>
+          <Link to="/about-us#mission-vision" className="text-sm text-gray-300 hover:text-white transition-colors block">Our Mission</Link>
+          <Link to="/about-us#platform-capabilities" className="text-sm text-gray-300 hover:text-white transition-colors block">How It Works</Link>
+          <Link to="/about-us#achievements" className="text-sm text-gray-300 hover:text-white transition-colors block">Success Stories</Link>
+          <Link to="/about-us#leadership" className="text-sm text-gray-300 hover:text-white transition-colors block">Careers</Link>
+          <Link to="/about-us#company-stats" className="text-sm text-gray-300 hover:text-white transition-colors block">Press & Media</Link>
+          <Link to="/about-us#leadership" className="text-sm text-gray-300 hover:text-white transition-colors block">Investor Relations</Link>
+          <Link to="/about-us#commitment" className="text-sm text-gray-300 hover:text-white transition-colors block">Corporate Social Responsibility</Link>
         </div>
       </div>
 

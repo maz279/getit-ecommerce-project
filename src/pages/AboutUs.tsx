@@ -26,19 +26,31 @@ const AboutUs: React.FC = () => {
       <div className="max-w-6xl mx-auto px-4 py-8">
         <HeroSection />
         <CompanyOverview />
-        <MissionVision />
+        <div id="mission-vision">
+          <MissionVision />
+        </div>
         <MarketPosition />
-        <CompanyStats />
+        <div id="company-stats">
+          <CompanyStats />
+        </div>
         <UniqueValue />
         <Technology />
         <Security />
-        <PlatformCapabilities />
-        <Commitment />
+        <div id="platform-capabilities">
+          <PlatformCapabilities />
+        </div>
+        <div id="commitment">
+          <Commitment />
+        </div>
         <FutureVision />
         <CoreValues />
-        <Leadership />
+        <div id="leadership">
+          <Leadership />
+        </div>
         <JoinRevolution />
-        <Achievements />
+        <div id="achievements">
+          <Achievements />
+        </div>
       </div>
       
       <Footer />

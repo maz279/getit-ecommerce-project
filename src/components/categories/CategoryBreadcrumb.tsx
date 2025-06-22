@@ -1,73 +1,77 @@
 
 import React from 'react';
 import { ChevronRight, Home } from 'lucide-react';
-import { categoriesData } from '@/data/categoriesData';
+import { Link } from 'react-router-dom';
+import { MainCategory, SubCategory } from '@/data/categoriesData';
 
 interface CategoryBreadcrumbProps {
-  selectedCategory?: string;
-  selectedSubcategory?: string;
-  selectedSubSubcategory?: string;
-  onNavigate: (categoryId?: string, subcategoryId?: string, subSubcategoryId?: string) => void;
+  selectedCategory?: string | null;
+  selectedSubcategory?: string | null;
+  selectedSubSubcategory?: string | null;
+  currentCategory?: MainCategory | null;
+  currentSubmenu?: SubCategory | null;
 }
 
 export const CategoryBreadcrumb: React.FC<CategoryBreadcrumbProps> = ({
   selectedCategory,
   selectedSubcategory,
   selectedSubSubcategory,
-  onNavigate
+  currentCategory,
+  currentSubmenu
 }) => {
-  const category = categoriesData.find(cat => cat.id === selectedCategory);
-  const subcategory = category?.subcategories[selectedSubcategory || ''];
-
   return (
-    <nav className="flex items-center gap-2 text-sm text-gray-600 mb-6">
-      <button 
-        onClick={() => onNavigate()}
-        className="flex items-center gap-1 hover:text-blue-600 transition-colors"
-      >
-        <Home className="w-4 h-4" />
-        <span>Home</span>
-      </button>
-      
-      <ChevronRight className="w-4 h-4 text-gray-400" />
-      
-      <button 
-        onClick={() => onNavigate()}
-        className="hover:text-blue-600 transition-colors"
-      >
-        Categories
-      </button>
-
-      {category && (
-        <>
-          <ChevronRight className="w-4 h-4 text-gray-400" />
-          <button 
-            onClick={() => onNavigate(category.id)}
-            className="hover:text-blue-600 transition-colors"
-          >
-            <span>{category.name}</span>
-          </button>
-        </>
-      )}
-
-      {subcategory && (
-        <>
-          <ChevronRight className="w-4 h-4 text-gray-400" />
-          <button 
-            onClick={() => onNavigate(selectedCategory, selectedSubcategory)}
-            className="hover:text-blue-600 transition-colors"
-          >
-            <span>{subcategory.name}</span>
-          </button>
-        </>
-      )}
-
-      {selectedSubSubcategory && (
-        <>
-          <ChevronRight className="w-4 h-4 text-gray-400" />
-          <span className="text-blue-600 font-medium">{selectedSubSubcategory}</span>
-        </>
-      )}
-    </nav>
+    <div className="bg-white border-b px-6 py-4">
+      <nav className="flex items-center space-x-2 text-sm">
+        <Link 
+          to="/" 
+          className="flex items-center text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          <Home className="w-4 h-4 mr-1" />
+          Home
+        </Link>
+        
+        <ChevronRight className="w-4 h-4 text-gray-400" />
+        
+        <Link 
+          to="/categories" 
+          className="text-gray-500 hover:text-blue-600 transition-colors"
+        >
+          Categories
+        </Link>
+        
+        {currentCategory && (
+          <>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <Link 
+              to={`/categories?category=${selectedCategory}`}
+              className="text-gray-500 hover:text-blue-600 transition-colors"
+            >
+              {currentCategory.name}
+            </Link>
+          </>
+        )}
+        
+        {currentSubmenu && (
+          <>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <Link 
+              to={`/categories?category=${selectedCategory}&subcategory=${selectedSubcategory}`}
+              className="text-gray-500 hover:text-blue-600 transition-colors"
+            >
+              {currentSubmenu.name}
+            </Link>
+          </>
+        )}
+        
+        {selectedSubSubcategory && (
+          <>
+            <ChevronRight className="w-4 h-4 text-gray-400" />
+            <span className="text-blue-600 font-medium">
+              {selectedSubSubcategory}
+            </span>
+          </>
+        )}
+      </nav>
+    </div>
   );
 };

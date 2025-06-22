@@ -7,9 +7,9 @@ import { Filter, List } from 'lucide-react';
 
 interface CategorySidebarProps {
   onCategorySelect: (categoryId: string, subcategoryId?: string, subSubcategoryId?: string) => void;
-  selectedCategory?: string;
-  selectedSubcategory?: string;
-  selectedSubSubcategory?: string;
+  selectedCategory?: string | null;
+  selectedSubcategory?: string | null;
+  selectedSubSubcategory?: string | null;
 }
 
 export const CategorySidebar: React.FC<CategorySidebarProps> = ({

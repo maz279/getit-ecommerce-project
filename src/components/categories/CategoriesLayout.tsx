@@ -3,43 +3,26 @@ import React, { useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
-import { CategoryMenu } from './CategoryMenu';
-import { CategorySubmenu } from './CategorySubmenu';
-import { CategoryTabs } from './CategoryTabs';
-import { ProductGrid } from './ProductGrid';
+import { CategorySidebar } from './CategorySidebar';
+import { CategoryMainContent } from './CategoryMainContent';
 import { categoriesData } from '@/data/categoriesData';
 
 export const CategoriesLayout: React.FC = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [selectedCategory, setSelectedCategory] = useState(searchParams.get('category'));
-  const [selectedSubmenu, setSelectedSubmenu] = useState(searchParams.get('subcategory'));
-  const [selectedTab, setSelectedTab] = useState(searchParams.get('subsubcategory'));
+  const [selectedSubcategory, setSelectedSubcategory] = useState(searchParams.get('subcategory'));
+  const [selectedSubSubcategory, setSelectedSubSubcategory] = useState(searchParams.get('subsubcategory'));
   const [activeTab, setActiveTab] = useState('all');
 
-  const handleCategorySelect = (categoryId: string) => {
+  const handleCategorySelect = (categoryId: string, subcategoryId?: string, subSubcategoryId?: string) => {
     setSelectedCategory(categoryId);
-    setSelectedSubmenu(null);
-    setSelectedTab(null);
+    setSelectedSubcategory(subcategoryId || null);
+    setSelectedSubSubcategory(subSubcategoryId || null);
+    
     const params = new URLSearchParams();
     params.set('category', categoryId);
-    setSearchParams(params);
-  };
-
-  const handleSubmenuSelect = (submenuId: string) => {
-    setSelectedSubmenu(submenuId);
-    setSelectedTab(null);
-    const params = new URLSearchParams();
-    if (selectedCategory) params.set('category', selectedCategory);
-    params.set('subcategory', submenuId);
-    setSearchParams(params);
-  };
-
-  const handleTabSelect = (tabId: string) => {
-    setSelectedTab(tabId);
-    const params = new URLSearchParams();
-    if (selectedCategory) params.set('category', selectedCategory);
-    if (selectedSubmenu) params.set('subcategory', selectedSubmenu);
-    params.set('subsubcategory', tabId);
+    if (subcategoryId) params.set('subcategory', subcategoryId);
+    if (subSubcategoryId) params.set('subsubcategory', subSubcategoryId);
     setSearchParams(params);
   };
 
@@ -49,51 +32,37 @@ export const CategoriesLayout: React.FC = () => {
 
   const getCurrentSubmenu = () => {
     const category = getCurrentCategory();
-    return category && selectedSubmenu ? category.subcategories[selectedSubmenu] : null;
+    return category && selectedSubcategory ? category.subcategories[selectedSubcategory] : null;
   };
 
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       
-      <div className="max-w-7xl mx-auto px-4 py-6">
-        {/* Main Navigation Structure */}
-        <div className="space-y-6">
-          {/* Category Menu */}
-          <CategoryMenu
-            categories={categoriesData}
-            selectedCategory={selectedCategory}
-            onCategorySelect={handleCategorySelect}
-          />
-
-          {/* Submenu */}
-          {selectedCategory && (
-            <CategorySubmenu
-              category={getCurrentCategory()}
-              selectedSubmenu={selectedSubmenu}
-              onSubmenuSelect={handleSubmenuSelect}
+      <div className="max-w-[1400px] mx-auto px-4 py-6">
+        <div className="flex gap-6">
+          {/* Left Sidebar */}
+          <div className="w-80 flex-shrink-0">
+            <CategorySidebar
+              onCategorySelect={handleCategorySelect}
+              selectedCategory={selectedCategory}
+              selectedSubcategory={selectedSubcategory}
+              selectedSubSubcategory={selectedSubSubcategory}
             />
-          )}
+          </div>
 
-          {/* Tabs and Product Grid */}
-          {selectedSubmenu && (
-            <div className="bg-white rounded-lg shadow-sm">
-              <CategoryTabs
-                submenu={getCurrentSubmenu()}
-                selectedTab={selectedTab}
-                activeTab={activeTab}
-                onTabSelect={handleTabSelect}
-                onActiveTabChange={setActiveTab}
-              />
-              
-              <ProductGrid
-                category={selectedCategory}
-                submenu={selectedSubmenu}
-                tab={selectedTab}
-                activeTab={activeTab}
-              />
-            </div>
-          )}
+          {/* Main Content Area */}
+          <div className="flex-1 min-w-0">
+            <CategoryMainContent
+              selectedCategory={selectedCategory}
+              selectedSubcategory={selectedSubcategory}
+              selectedSubSubcategory={selectedSubSubcategory}
+              currentCategory={getCurrentCategory()}
+              currentSubmenu={getCurrentSubmenu()}
+              activeTab={activeTab}
+              onActiveTabChange={setActiveTab}
+            />
+          </div>
         </div>
       </div>
 

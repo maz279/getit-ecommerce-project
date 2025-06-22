@@ -37,17 +37,17 @@ export const ProductRankings: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-12">
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-8">
           <h2 className="text-3xl font-bold mb-2">🏆 Top 3 Best Sellers This Week</h2>
           <p className="text-gray-600">Most purchased products by our customers</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {rankings.map((product) => (
             <div key={product.rank} className="relative bg-white rounded-xl shadow-lg overflow-hidden border hover:shadow-xl transition-shadow">
-              <div className={`absolute top-4 left-4 w-12 h-12 rounded-full flex items-center justify-center text-white font-bold text-lg ${
+              <div className={`absolute top-4 left-4 w-10 h-10 rounded-full flex items-center justify-center text-white font-bold text-sm ${
                 product.rank === 1 ? 'bg-yellow-500' :
                 product.rank === 2 ? 'bg-gray-400' : 'bg-orange-500'
               }`}>
@@ -66,12 +66,12 @@ export const ProductRankings: React.FC = () => {
               <img
                 src={product.image}
                 alt={product.name}
-                className="w-full h-48 object-cover"
+                className="w-full h-40 object-cover"
               />
               
               <div className="p-4">
                 <span className="text-sm text-gray-500 mb-1 block">{product.category}</span>
-                <h3 className="font-bold text-lg mb-2">{product.name}</h3>
+                <h3 className="font-bold text-base mb-2">{product.name}</h3>
                 
                 <div className="flex items-center gap-2 mb-3">
                   <div className="flex items-center gap-1">
@@ -83,12 +83,12 @@ export const ProductRankings: React.FC = () => {
                 </div>
                 
                 <div className="flex items-center justify-between">
-                  <span className="text-xl font-bold text-blue-600">৳{product.price.toLocaleString()}</span>
+                  <span className="text-lg font-bold text-blue-600">৳{product.price.toLocaleString()}</span>
                   <div className="flex gap-2">
                     <button className="p-2 border rounded-lg hover:bg-gray-50">
                       <Heart className="w-4 h-4" />
                     </button>
-                    <button className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
+                    <button className="px-3 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2">
                       <ShoppingCart className="w-4 h-4" />
                       Add
                     </button>

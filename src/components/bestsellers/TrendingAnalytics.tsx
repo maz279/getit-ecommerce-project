@@ -1,40 +1,83 @@
 
 import React from 'react';
-import { TrendingUp, Eye, ShoppingCart, Heart } from 'lucide-react';
+import { TrendingUp, BarChart3, Users, ShoppingCart } from 'lucide-react';
 
 export const TrendingAnalytics: React.FC = () => {
   const stats = [
-    { icon: <Eye className="w-6 h-6" />, label: 'Daily Views', value: '2.5M+', color: 'text-blue-600' },
-    { icon: <ShoppingCart className="w-6 h-6" />, label: 'Orders Today', value: '15K+', color: 'text-green-600' },
-    { icon: <Heart className="w-6 h-6" />, label: 'Wishlist Adds', value: '8.2K+', color: 'text-red-600' },
-    { icon: <TrendingUp className="w-6 h-6" />, label: 'Growth Rate', value: '+25%', color: 'text-purple-600' }
+    {
+      icon: <TrendingUp className="w-8 h-8" />,
+      value: '2.5M+',
+      label: 'Monthly Active Users',
+      trend: '+15% this month',
+      color: 'text-green-600'
+    },
+    {
+      icon: <ShoppingCart className="w-8 h-8" />,
+      value: '450K+',
+      label: 'Orders This Month',
+      trend: '+22% from last month',
+      color: 'text-blue-600'
+    },
+    {
+      icon: <Users className="w-8 h-8" />,
+      value: '15K+',
+      label: 'Verified Vendors',
+      trend: '+8% new vendors',
+      color: 'text-purple-600'
+    },
+    {
+      icon: <BarChart3 className="w-8 h-8" />,
+      value: '98.5%',
+      label: 'Customer Satisfaction',
+      trend: 'Consistently high',
+      color: 'text-orange-600'
+    }
+  ];
+
+  const trendingProducts = [
+    { name: 'Winter Jackets', growth: '+45%', category: 'Fashion' },
+    { name: 'Smart Watches', growth: '+38%', category: 'Electronics' },
+    { name: 'Home Decor', growth: '+32%', category: 'Home & Garden' },
+    { name: 'Health Supplements', growth: '+28%', category: 'Health & Beauty' }
   ];
 
   return (
-    <section className="py-16 bg-white">
+    <section className="py-12">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-3xl font-bold text-center mb-12">Trending Analytics</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl font-bold mb-4">📊 Trending Analytics & Insights</h2>
+          <p className="text-gray-600 max-w-3xl mx-auto">
+            Real-time data showing what's popular, trending, and driving customer engagement across our platform. 
+            Stay informed about market trends and customer preferences in Bangladesh.
+          </p>
+        </div>
         
         <div className="grid grid-cols-2 md:grid-cols-4 gap-6 mb-12">
           {stats.map((stat, index) => (
-            <div key={index} className="text-center">
-              <div className={`inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-100 mb-4 ${stat.color}`}>
+            <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 text-center hover:shadow-lg transition-shadow">
+              <div className={`${stat.color} mb-3 flex justify-center`}>
                 {stat.icon}
               </div>
-              <h3 className="text-2xl font-bold text-gray-800 mb-1">{stat.value}</h3>
-              <p className="text-gray-600">{stat.label}</p>
+              <div className="text-2xl font-bold text-gray-900 mb-1">{stat.value}</div>
+              <div className="text-sm text-gray-600 mb-2">{stat.label}</div>
+              <div className="text-xs text-green-600 font-medium">{stat.trend}</div>
             </div>
           ))}
         </div>
         
-        <div className="bg-gradient-to-r from-blue-50 to-purple-50 rounded-lg p-8 text-center">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">Join the Best Sellers</h3>
-          <p className="text-gray-600 mb-6 max-w-2xl mx-auto">
-            Want to see your products here? Start selling on our platform and reach millions of customers across Bangladesh.
-          </p>
-          <button className="bg-gradient-to-r from-blue-600 to-purple-600 text-white px-8 py-3 rounded-lg hover:from-blue-700 hover:to-purple-700 transition-all">
-            Become a Seller
-          </button>
+        <div className="bg-white rounded-xl border border-gray-200 p-6">
+          <h3 className="text-xl font-bold mb-4">🚀 Fastest Growing Categories</h3>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            {trendingProducts.map((product, index) => (
+              <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
+                <div>
+                  <div className="font-semibold">{product.name}</div>
+                  <div className="text-sm text-gray-600">{product.category}</div>
+                </div>
+                <div className="text-green-600 font-bold">{product.growth}</div>
+              </div>
+            ))}
+          </div>
         </div>
       </div>
     </section>

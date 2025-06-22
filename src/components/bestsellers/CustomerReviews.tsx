@@ -34,33 +34,33 @@ export const CustomerReviews: React.FC = () => {
   ];
 
   return (
-    <section className="py-16 bg-gray-50">
+    <section className="py-8">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold mb-4">⭐ What Our Customers Say</h2>
-          <div className="flex items-center justify-center gap-2 mb-2">
+        <div className="text-center mb-6">
+          <h2 className="text-2xl font-bold mb-2">⭐ What Our Customers Say</h2>
+          <div className="flex items-center justify-center gap-2 mb-1">
             <div className="flex">
               {[1, 2, 3, 4, 5].map((star) => (
-                <Star key={star} className="w-6 h-6 text-yellow-400 fill-current" />
+                <Star key={star} className="w-5 h-5 text-yellow-400 fill-current" />
               ))}
             </div>
-            <span className="text-xl font-bold">4.8/5</span>
+            <span className="text-lg font-bold">4.8/5</span>
           </div>
-          <p className="text-gray-600">Based on 25,000+ verified reviews</p>
+          <p className="text-gray-600 text-sm">Based on 25,000+ verified reviews</p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {reviews.map((review, index) => (
-            <div key={index} className="bg-white rounded-xl shadow-lg p-6 hover:shadow-xl transition-shadow">
-              <div className="flex items-center gap-3 mb-4">
+            <div key={index} className="bg-white rounded-lg shadow-md p-4 hover:shadow-lg transition-shadow border">
+              <div className="flex items-center gap-3 mb-3">
                 <img
                   src={review.avatar}
                   alt={review.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
                   <div className="flex items-center gap-2">
-                    <h4 className="font-semibold">{review.name}</h4>
+                    <h4 className="font-semibold text-sm">{review.name}</h4>
                     {review.verified && (
                       <div className="flex items-center gap-1 bg-green-100 text-green-800 px-2 py-1 rounded-full text-xs">
                         <Verified className="w-3 h-3" />
@@ -72,7 +72,7 @@ export const CustomerReviews: React.FC = () => {
                     {[1, 2, 3, 4, 5].map((star) => (
                       <Star
                         key={star}
-                        className={`w-4 h-4 ${
+                        className={`w-3 h-3 ${
                           star <= review.rating ? 'text-yellow-400 fill-current' : 'text-gray-300'
                         }`}
                       />
@@ -81,15 +81,15 @@ export const CustomerReviews: React.FC = () => {
                 </div>
               </div>
               
-              <p className="text-gray-700 mb-3">"{review.comment}"</p>
+              <p className="text-gray-700 mb-2 text-sm">"{review.comment}"</p>
               
-              <div className="text-sm text-gray-500 mb-3">
+              <div className="text-xs text-gray-500 mb-2">
                 Product: <span className="font-medium">{review.product}</span>
               </div>
               
               <div className="flex items-center justify-between">
-                <button className="flex items-center gap-1 text-sm text-gray-600 hover:text-blue-600">
-                  <ThumbsUp className="w-4 h-4" />
+                <button className="flex items-center gap-1 text-xs text-gray-600 hover:text-blue-600">
+                  <ThumbsUp className="w-3 h-3" />
                   Helpful ({review.helpful})
                 </button>
                 <span className="text-xs text-gray-500">2 days ago</span>

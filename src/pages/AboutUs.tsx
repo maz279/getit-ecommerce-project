@@ -50,6 +50,9 @@ const AboutUs: React.FC = () => {
         <div id="leadership">
           <Leadership />
         </div>
+        <div id="achievements">
+          <Achievements />
+        </div>
         <div id="careers">
           <Careers />
         </div>
@@ -60,9 +63,6 @@ const AboutUs: React.FC = () => {
           <InvestorRelations />
         </div>
         <JoinRevolution />
-        <div id="achievements">
-          <Achievements />
-        </div>
       </div>
       
       <Footer />

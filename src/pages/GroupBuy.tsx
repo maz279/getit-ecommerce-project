@@ -13,6 +13,11 @@ import { PopularGroupsSection } from '../components/groupbuy/PopularGroupsSectio
 import { GroupBuyStatsSection } from '../components/groupbuy/GroupBuyStatsSection';
 import { TrustSafetySection } from '../components/groupbuy/TrustSafetySection';
 import { GroupBuyFAQSection } from '../components/groupbuy/GroupBuyFAQSection';
+import { PaymentMethodsSection } from '../components/groupbuy/PaymentMethodsSection';
+import { SmartRecommendationsSection } from '../components/groupbuy/SmartRecommendationsSection';
+import { CommunityFeaturesSection } from '../components/groupbuy/CommunityFeaturesSection';
+import { MobileFeaturesSection } from '../components/groupbuy/MobileFeaturesSection';
+import { LanguageSupportSection } from '../components/groupbuy/LanguageSupportSection';
 
 const GroupBuy: React.FC = () => {
   return (
@@ -26,8 +31,13 @@ const GroupBuy: React.FC = () => {
         <ActiveDealsSection />
         <PopularGroupsSection />
         <CategoryGroupsSection />
+        <SmartRecommendationsSection />
         <GroupBuyBenefitsSection />
+        <CommunityFeaturesSection />
         <CreateGroupSection />
+        <MobileFeaturesSection />
+        <PaymentMethodsSection />
+        <LanguageSupportSection />
         <SuccessStoriesSection />
         <TrustSafetySection />
         <GroupBuyFAQSection />

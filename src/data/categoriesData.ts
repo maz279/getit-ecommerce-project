@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Shirt, Smartphone, Home, Heart, Baby, Book, Car, Gamepad2, 
@@ -8,7 +7,8 @@ import {
   Speaker, Tv, Mouse, Keyboard, Printer, Router, Lightbulb, Sofa,
   Bed, UtensilsCrossed, Bath, Flower, Hammer, FolderOpen, Crown,
   Diamond, Paintbrush, Globe, Briefcase, GraduationCap, Building,
-  Factory, Truck, Users, Target, Calendar, Coins, TrendingUp
+  Factory, Truck, Users, Target, Calendar, Coins, TrendingUp,
+  Mountain, Sparkles
 } from 'lucide-react';
 
 export interface SubCategoryItem {
@@ -470,6 +470,386 @@ export const categoriesData: MainCategory[] = [
           { name: 'Costume Jewelry', count: 12345 },
           { name: 'Watches', count: 9876 },
           { name: 'Sunglasses', count: 8765 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'art-craft',
+    name: 'Art & Craft',
+    icon: React.createElement(Paintbrush, { className: "w-6 h-6" }),
+    color: 'bg-teal-500 text-white',
+    count: 32100,
+    subcategories: {
+      'art-supplies': {
+        name: "Art Supplies",
+        subcategories: [
+          { name: 'Paints & Brushes', count: 8765 },
+          { name: 'Drawing Materials', count: 6543 },
+          { name: 'Canvas & Paper', count: 5432 },
+          { name: 'Art Tools', count: 4321 }
+        ]
+      },
+      'craft-supplies': {
+        name: "Craft Supplies",
+        subcategories: [
+          { name: 'Sewing & Textiles', count: 7654 },
+          { name: 'Pottery & Clay', count: 4321 },
+          { name: 'Jewelry Making', count: 3210 },
+          { name: 'Scrapbooking', count: 2109 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'music-entertainment',
+    name: 'Music & Entertainment',
+    icon: React.createElement(Music, { className: "w-6 h-6" }),
+    color: 'bg-purple-600 text-white',
+    count: 29876,
+    subcategories: {
+      'musical-instruments': {
+        name: "Musical Instruments",
+        subcategories: [
+          { name: 'Traditional Instruments', count: 8765 },
+          { name: 'Modern Instruments', count: 6543 },
+          { name: 'Audio Equipment', count: 5432 },
+          { name: 'Accessories', count: 4321 }
+        ]
+      },
+      'entertainment': {
+        name: "Entertainment",
+        subcategories: [
+          { name: 'DVDs & Blu-rays', count: 3210 },
+          { name: 'Streaming Devices', count: 2109 },
+          { name: 'Party Supplies', count: 1987 },
+          { name: 'Event Equipment', count: 1543 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'pet-supplies',
+    name: 'Pet Supplies',
+    icon: React.createElement(PawPrint, { className: "w-6 h-6" }),
+    color: 'bg-amber-500 text-white',
+    count: 27654,
+    subcategories: {
+      'pet-food': {
+        name: "Pet Food & Care",
+        subcategories: [
+          { name: 'Dog Food', count: 8765 },
+          { name: 'Cat Food', count: 6543 },
+          { name: 'Bird Food', count: 4321 },
+          { name: 'Fish Food', count: 3210 },
+          { name: 'Pet Health', count: 5432 }
+        ]
+      },
+      'pet-accessories': {
+        name: "Pet Accessories",
+        subcategories: [
+          { name: 'Pet Toys', count: 4321 },
+          { name: 'Pet Beds', count: 3210 },
+          { name: 'Collars & Leashes', count: 2987 },
+          { name: 'Pet Carriers', count: 2109 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'office-supplies',
+    name: 'Office Supplies',
+    icon: React.createElement(Briefcase, { className: "w-6 h-6" }),
+    color: 'bg-slate-600 text-white',
+    count: 25432,
+    subcategories: {
+      'stationery': {
+        name: "Stationery",
+        subcategories: [
+          { name: 'Writing Instruments', count: 7654 },
+          { name: 'Paper Products', count: 6543 },
+          { name: 'Filing & Storage', count: 5432 },
+          { name: 'Desk Accessories', count: 4321 }
+        ]
+      },
+      'office-equipment': {
+        name: "Office Equipment",
+        subcategories: [
+          { name: 'Printers & Scanners', count: 3210 },
+          { name: 'Office Furniture', count: 2987 },
+          { name: 'Communication', count: 2109 },
+          { name: 'Security', count: 1876 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'tools-hardware',
+    name: 'Tools & Hardware',
+    icon: React.createElement(Wrench, { className: "w-6 h-6" }),
+    color: 'bg-stone-600 text-white',
+    count: 23210,
+    subcategories: {
+      'hand-tools': {
+        name: "Hand Tools",
+        subcategories: [
+          { name: 'Basic Tools', count: 6543 },
+          { name: 'Measuring Tools', count: 4321 },
+          { name: 'Cutting Tools', count: 3210 },
+          { name: 'Safety Equipment', count: 2987 }
+        ]
+      },
+      'power-tools': {
+        name: "Power Tools",
+        subcategories: [
+          { name: 'Electric Tools', count: 4321 },
+          { name: 'Cordless Tools', count: 3210 },
+          { name: 'Tool Accessories', count: 2109 },
+          { name: 'Workbenches', count: 1876 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'agriculture-gardening',
+    name: 'Agriculture & Gardening',
+    icon: React.createElement(TreePine, { className: "w-6 h-6" }),
+    color: 'bg-green-600 text-white',
+    count: 21098,
+    subcategories: {
+      'farming-supplies': {
+        name: "Farming Supplies",
+        subcategories: [
+          { name: 'Seeds & Plants', count: 6543 },
+          { name: 'Fertilizers', count: 4321 },
+          { name: 'Farming Tools', count: 3210 },
+          { name: 'Irrigation', count: 2987 }
+        ]
+      },
+      'gardening': {
+        name: "Gardening",
+        subcategories: [
+          { name: 'Garden Tools', count: 4321 },
+          { name: 'Plant Care', count: 3210 },
+          { name: 'Garden Decor', count: 2109 },
+          { name: 'Outdoor Furniture', count: 1876 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'traditional-handicrafts',
+    name: 'Traditional Handicrafts',
+    icon: React.createElement(Sparkles, { className: "w-6 h-6" }),
+    color: 'bg-rose-600 text-white',
+    count: 18765,
+    featured: true,
+    subcategories: {
+      'bengali-handicrafts': {
+        name: "Bengali Handicrafts",
+        subcategories: [
+          { name: 'Nakshi Kantha', count: 4321 },
+          { name: 'Jamdani', count: 3210 },
+          { name: 'Pottery', count: 2987 },
+          { name: 'Wood Crafts', count: 2109 }
+        ]
+      },
+      'folk-art': {
+        name: "Folk Art",
+        subcategories: [
+          { name: 'Traditional Paintings', count: 3210 },
+          { name: 'Handwoven Textiles', count: 2987 },
+          { name: 'Metal Crafts', count: 2109 },
+          { name: 'Bamboo Crafts', count: 1876 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'religious-items',
+    name: 'Religious Items',
+    icon: React.createElement(Archive, { className: "w-6 h-6" }),
+    color: 'bg-emerald-600 text-white',
+    count: 16543,
+    subcategories: {
+      'islamic-items': {
+        name: "Islamic Items",
+        subcategories: [
+          { name: 'Prayer Items', count: 4321 },
+          { name: 'Islamic Books', count: 3210 },
+          { name: 'Islamic Clothing', count: 2987 },
+          { name: 'Decorative Items', count: 2109 }
+        ]
+      },
+      'general-religious': {
+        name: "General Religious",
+        subcategories: [
+          { name: 'Prayer Beads', count: 2987 },
+          { name: 'Religious Art', count: 2109 },
+          { name: 'Ceremonial Items', count: 1876 },
+          { name: 'Religious Jewelry', count: 1654 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'gift-items',
+    name: 'Gift Items',
+    icon: React.createElement(Gift, { className: "w-6 h-6" }),
+    color: 'bg-pink-600 text-white',
+    count: 14321,
+    subcategories: {
+      'occasion-gifts': {
+        name: "Occasion Gifts",
+        subcategories: [
+          { name: 'Birthday Gifts', count: 3210 },
+          { name: 'Wedding Gifts', count: 2987 },
+          { name: 'Anniversary Gifts', count: 2109 },
+          { name: 'Holiday Gifts', count: 1876 }
+        ]
+      },
+      'corporate-gifts': {
+        name: "Corporate Gifts",
+        subcategories: [
+          { name: 'Business Gifts', count: 2109 },
+          { name: 'Promotional Items', count: 1876 },
+          { name: 'Awards & Trophies', count: 1654 },
+          { name: 'Gift Cards', count: 1432 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'seasonal-festival',
+    name: 'Seasonal & Festival',
+    icon: React.createElement(Calendar, { className: "w-6 h-6" }),
+    color: 'bg-yellow-600 text-white',
+    count: 12987,
+    subcategories: {
+      'festival-items': {
+        name: "Festival Items",
+        subcategories: [
+          { name: 'Eid Collection', count: 3210 },
+          { name: 'Puja Items', count: 2987 },
+          { name: 'Christmas Decor', count: 2109 },
+          { name: 'New Year Items', count: 1876 }
+        ]
+      },
+      'seasonal-products': {
+        name: "Seasonal Products",
+        subcategories: [
+          { name: 'Summer Essentials', count: 2109 },
+          { name: 'Winter Collection', count: 1876 },
+          { name: 'Monsoon Gear', count: 1654 },
+          { name: 'Spring Collection', count: 1432 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'medical-equipment',
+    name: 'Medical Equipment',
+    icon: React.createElement(Stethoscope, { className: "w-6 h-6" }),
+    color: 'bg-red-600 text-white',
+    count: 10765,
+    subcategories: {
+      'medical-devices': {
+        name: "Medical Devices",
+        subcategories: [
+          { name: 'Diagnostic Equipment', count: 2987 },
+          { name: 'Monitoring Devices', count: 2109 },
+          { name: 'Therapeutic Equipment', count: 1876 },
+          { name: 'Emergency Supplies', count: 1654 }
+        ]
+      },
+      'healthcare-supplies': {
+        name: "Healthcare Supplies",
+        subcategories: [
+          { name: 'Personal Protective Equipment', count: 1876 },
+          { name: 'First Aid Supplies', count: 1654 },
+          { name: 'Mobility Aids', count: 1432 },
+          { name: 'Home Care', count: 1210 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'industrial-supplies',
+    name: 'Industrial Supplies',
+    icon: React.createElement(Factory, { className: "w-6 h-6" }),
+    color: 'bg-gray-600 text-white',
+    count: 8543,
+    subcategories: {
+      'manufacturing': {
+        name: "Manufacturing",
+        subcategories: [
+          { name: 'Industrial Tools', count: 2109 },
+          { name: 'Raw Materials', count: 1876 },
+          { name: 'Machinery Parts', count: 1654 },
+          { name: 'Safety Equipment', count: 1432 }
+        ]
+      },
+      'industrial-equipment': {
+        name: "Industrial Equipment",
+        subcategories: [
+          { name: 'Heavy Machinery', count: 1432 },
+          { name: 'Electrical Equipment', count: 1210 },
+          { name: 'Hydraulic Systems', count: 1098 },
+          { name: 'Pneumatic Tools', count: 987 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'travel-tourism',
+    name: 'Travel & Tourism',
+    icon: React.createElement(Plane, { className: "w-6 h-6" }),
+    color: 'bg-sky-600 text-white',
+    count: 7321,
+    subcategories: {
+      'travel-gear': {
+        name: "Travel Gear",
+        subcategories: [
+          { name: 'Luggage & Bags', count: 1876 },
+          { name: 'Travel Accessories', count: 1654 },
+          { name: 'Outdoor Gear', count: 1432 },
+          { name: 'Navigation Tools', count: 1210 }
+        ]
+      },
+      'tourism-services': {
+        name: "Tourism Services",
+        subcategories: [
+          { name: 'Tour Packages', count: 1210 },
+          { name: 'Hotel Bookings', count: 1098 },
+          { name: 'Transport Services', count: 987 },
+          { name: 'Travel Insurance', count: 876 }
+        ]
+      }
+    }
+  },
+  {
+    id: 'photography-video',
+    name: 'Photography & Video',
+    icon: React.createElement(Camera, { className: "w-6 h-6" }),
+    color: 'bg-indigo-600 text-white',
+    count: 6109,
+    subcategories: {
+      'camera-equipment': {
+        name: "Camera Equipment",
+        subcategories: [
+          { name: 'Digital Cameras', count: 1654 },
+          { name: 'Lenses', count: 1432 },
+          { name: 'Tripods & Stands', count: 1210 },
+          { name: 'Camera Accessories', count: 1098 }
+        ]
+      },
+      'video-equipment': {
+        name: "Video Equipment",
+        subcategories: [
+          { name: 'Video Cameras', count: 1098 },
+          { name: 'Lighting Equipment', count: 987 },
+          { name: 'Audio Recording', count: 876 },
+          { name: 'Video Editing', count: 765 }
         ]
       }
     }

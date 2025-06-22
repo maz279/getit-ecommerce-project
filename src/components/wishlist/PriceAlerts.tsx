@@ -1,6 +1,5 @@
-
 import React from 'react';
-import { Bell, TrendingDown, TrendingUp, AlertCircle, Check } from 'lucide-react';
+import { Bell, TrendingDown, TrendingUp, AlertCircle, Check, Eye } from 'lucide-react';
 
 export const PriceAlerts: React.FC = () => {
   const alerts = [

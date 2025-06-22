@@ -81,6 +81,48 @@ export const productBadges = [
   'Best Seller'     // Toys
 ];
 
+// Static discount percentages for each product
+export const productDiscounts = [
+  65, 45, 55, 40, 35, 60, 50, 30, 25, 20,
+  55, 70, 75, 40, 35, 45, 50, 30, 25, 60,
+  55, 40, 45, 35
+];
+
+// Static ratings for each product
+export const productRatings = [
+  4.8, 4.5, 4.9, 4.6, 4.3, 4.7, 4.9, 4.4, 4.2, 4.1,
+  4.6, 4.8, 4.7, 4.5, 4.3, 4.6, 4.4, 4.2, 4.5, 4.7,
+  4.3, 4.5, 4.6, 4.4
+];
+
+// Static review counts for each product
+export const productReviews = [
+  1247, 856, 2103, 743, 456, 1567, 2891, 632, 234, 189,
+  967, 1834, 2456, 678, 345, 789, 534, 123, 567, 1234,
+  445, 678, 892, 567
+];
+
+// Static sold counts for each product
+export const productSold = [
+  2840, 1560, 3210, 980, 670, 2100, 4560, 890, 450, 320,
+  1780, 2930, 3840, 1240, 560, 1120, 890, 230, 780, 1890,
+  670, 980, 1340, 780
+];
+
+// Static stock left for each product
+export const productStockLeft = [
+  15, 8, 12, 5, 18, 9, 6, 14, 20, 11,
+  7, 13, 4, 16, 19, 10, 8, 17, 12, 6,
+  15, 9, 11, 14
+];
+
+// Static free shipping status for each product
+export const productFreeShipping = [
+  true, false, true, true, false, true, true, false, false, true,
+  true, true, false, true, false, true, false, true, true, false,
+  true, false, true, true
+];
+
 export const categories = [
   { id: 'all', name: 'All Categories', count: 156 },
   { id: 'electronics', name: 'Electronics', count: 45 },
@@ -97,12 +139,12 @@ export const generateFlashProducts = () => {
     title: productTitles[index],
     originalPrice: (999 + index * 100),
     salePrice: (299 + index * 50),
-    discount: Math.floor(Math.random() * 60 + 20),
-    rating: 4.2 + Math.random() * 0.8,
-    reviews: Math.floor(Math.random() * 500 + 100),
-    sold: Math.floor(Math.random() * 1000 + 50),
-    stockLeft: Math.floor(Math.random() * 20 + 5),
-    freeShipping: Math.random() > 0.5,
+    discount: productDiscounts[index],
+    rating: productRatings[index],
+    reviews: productReviews[index],
+    sold: productSold[index],
+    stockLeft: productStockLeft[index],
+    freeShipping: productFreeShipping[index],
     badge: productBadges[index], // Use static badge from the array
     location: 'Dhaka'
   }));

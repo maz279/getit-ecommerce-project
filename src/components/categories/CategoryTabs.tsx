@@ -1,8 +1,6 @@
 
 import React from 'react';
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Star, TrendingUp, Clock, Award, Grid3X3 } from 'lucide-react';
 import { ProductGrid } from './ProductGrid';
 
 interface SubmenuItem {
@@ -70,80 +68,16 @@ export const CategoryTabs: React.FC<CategoryTabsProps> = ({
           </div>
         </div>
 
-        <Tabs value={activeTab} onValueChange={onActiveTabChange} className="w-full">
-          <TabsList className="bg-white shadow-sm border h-12">
-            <TabsTrigger value="all" className="flex items-center gap-2 px-4">
-              <Grid3X3 className="w-4 h-4" />
-              All Products
-            </TabsTrigger>
-            <TabsTrigger value="featured" className="flex items-center gap-2 px-4">
-              <Star className="w-4 h-4" />
-              Featured
-            </TabsTrigger>
-            <TabsTrigger value="trending" className="flex items-center gap-2 px-4">
-              <TrendingUp className="w-4 h-4" />
-              Trending
-            </TabsTrigger>
-            <TabsTrigger value="new" className="flex items-center gap-2 px-4">
-              <Clock className="w-4 h-4" />
-              New Arrivals
-            </TabsTrigger>
-            <TabsTrigger value="bestsellers" className="flex items-center gap-2 px-4">
-              <Award className="w-4 h-4" />
-              Best Sellers
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="all" className="mt-0">
-            <ProductGrid
-              category={category}
-              submenu={subcategory}
-              tab={subSubcategory}
-              activeTab={activeTab}
-              tabType="all"
-            />
-          </TabsContent>
-          
-          <TabsContent value="featured" className="mt-0">
-            <ProductGrid
-              category={category}
-              submenu={subcategory}
-              tab={subSubcategory}
-              activeTab={activeTab}
-              tabType="featured"
-            />
-          </TabsContent>
-          
-          <TabsContent value="trending" className="mt-0">
-            <ProductGrid
-              category={category}
-              submenu={subcategory}
-              tab={subSubcategory}
-              activeTab={activeTab}
-              tabType="trending"
-            />
-          </TabsContent>
-          
-          <TabsContent value="new" className="mt-0">
-            <ProductGrid
-              category={category}
-              submenu={subcategory}
-              tab={subSubcategory}
-              activeTab={activeTab}
-              tabType="new"
-            />
-          </TabsContent>
-          
-          <TabsContent value="bestsellers" className="mt-0">
-            <ProductGrid
-              category={category}
-              submenu={subcategory}
-              tab={subSubcategory}
-              activeTab={activeTab}
-              tabType="bestsellers"
-            />
-          </TabsContent>
-        </Tabs>
+        {/* Product Grid - Show all products without tabs */}
+        <div className="mt-0">
+          <ProductGrid
+            category={category}
+            submenu={subcategory}
+            tab={subSubcategory}
+            activeTab="all"
+            tabType="all"
+          />
+        </div>
       </div>
     </div>
   );

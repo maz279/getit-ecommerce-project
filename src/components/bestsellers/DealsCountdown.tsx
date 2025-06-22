@@ -58,60 +58,63 @@ export const DealsCountdown: React.FC = () => {
   ];
 
   return (
-    <section className="py-3 bg-gradient-to-r from-orange-500 to-red-500 text-white">
+    <section className="py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-2">
-          <div className="flex items-center justify-center gap-2 mb-1">
-            <Flame className="w-4 h-4 text-yellow-300" />
-            <h2 className="text-lg font-bold">⚡ Best Seller Offer ⚡</h2>
-            <Flame className="w-4 h-4 text-yellow-300" />
+        <div className="text-center mb-1">
+          <div className="flex items-center justify-center gap-1 mb-1">
+            <Flame className="w-3 h-3 text-yellow-300" />
+            <h2 className="text-sm font-bold">⚡ Best Seller Offer ⚡</h2>
+            <Flame className="w-3 h-3 text-yellow-300" />
           </div>
           
-          <div className="bg-black/30 backdrop-blur-sm rounded-lg p-2 inline-block">
-            <div className="flex items-center gap-2 mb-1">
-              <Clock className="w-3 h-3" />
+          <div className="bg-black/30 backdrop-blur-sm rounded p-1 inline-block">
+            <div className="flex items-center gap-1 mb-1">
+              <Clock className="w-2 h-2" />
               <span className="text-xs font-semibold">Time Remaining:</span>
             </div>
             <div className="flex gap-1">
               <div className="text-center">
-                <div className="bg-white text-black rounded p-1 min-w-[30px]">
-                  <div className="text-sm font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
+                <div className="bg-white text-black rounded p-1 min-w-[20px]">
+                  <div className="text-xs font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-xs mt-1">Hours</div>
+                <div className="text-xs mt-0.5">Hours</div>
               </div>
               <div className="text-center">
-                <div className="bg-white text-black rounded p-1 min-w-[30px]">
-                  <div className="text-sm font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
+                <div className="bg-white text-black rounded p-1 min-w-[20px]">
+                  <div className="text-xs font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-xs mt-1">Minutes</div>
+                <div className="text-xs mt-0.5">Minutes</div>
               </div>
               <div className="text-center">
-                <div className="bg-white text-black rounded p-1 min-w-[30px]">
-                  <div className="text-sm font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
+                <div className="bg-white text-black rounded p-1 min-w-[20px]">
+                  <div className="text-xs font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-xs mt-1">Seconds</div>
+                <div className="text-xs mt-0.5">Seconds</div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-1">
           {deals.map((deal, index) => (
-            <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 text-center hover:bg-white/20 transition-colors">
-              <img
-                src={deal.image}
-                alt={deal.name}
-                className="w-full h-12 object-cover rounded mb-1"
-              />
-              <h3 className="font-semibold text-xs mb-1">{deal.name}</h3>
+            <div 
+              key={index} 
+              className="relative rounded p-2 text-center hover:bg-white/20 transition-colors h-20 flex flex-col justify-end"
+              style={{
+                backgroundImage: `linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url(${deal.image})`,
+                backgroundSize: 'cover',
+                backgroundPosition: 'center'
+              }}
+            >
+              <h3 className="font-semibold text-xs mb-1 text-white">{deal.name}</h3>
               <div className="mb-1">
-                <span className="text-xs line-through opacity-75">৳{deal.originalPrice.toLocaleString()}</span>
-                <div className="text-sm font-bold">৳{deal.salePrice.toLocaleString()}</div>
+                <span className="text-xs line-through opacity-75 text-white">৳{deal.originalPrice.toLocaleString()}</span>
+                <div className="text-sm font-bold text-white">৳{deal.salePrice.toLocaleString()}</div>
               </div>
               <div className="bg-yellow-400 text-black px-1 py-0.5 rounded-full text-xs font-bold mb-1">
                 {deal.discount}% OFF
               </div>
-              <button className="w-full bg-yellow-400 text-black py-1 rounded text-xs font-semibold hover:bg-yellow-300 transition-colors">
+              <button className="w-full bg-yellow-400 text-black py-0.5 rounded text-xs font-semibold hover:bg-yellow-300 transition-colors">
                 Buy Now
               </button>
             </div>

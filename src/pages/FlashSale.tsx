@@ -1,9 +1,14 @@
 
 import React, { useState } from 'react';
 import { Header } from '../components/homepage/Header';
-import { FlashSaleHero } from '../components/flashsale/FlashSaleHero';
+import { EnhancedFlashSaleHero } from '../components/flashsale/EnhancedFlashSaleHero';
+import { CategoryQuickAccess } from '../components/flashsale/CategoryQuickAccess';
 import { FlashSaleFilters } from '../components/flashsale/FlashSaleFilters';
 import { FlashSaleProductGrid } from '../components/flashsale/FlashSaleProductGrid';
+import { PaymentMethodsSection } from '../components/flashsale/PaymentMethodsSection';
+import { DeliveryOptionsSection } from '../components/flashsale/DeliveryOptionsSection';
+import { CustomerReviewsSection } from '../components/flashsale/CustomerReviewsSection';
+import { TrustIndicatorsSection } from '../components/flashsale/TrustIndicatorsSection';
 import { Footer } from '../components/homepage/Footer';
 import { useFlashSaleTimer } from '../hooks/useFlashSaleTimer';
 import { generateFlashProducts, categories } from '../data/flashSaleData';
@@ -33,7 +38,9 @@ const FlashSale: React.FC = () => {
       <Header />
       
       <main className="flex-1">
-        <FlashSaleHero timeLeft={timeLeft} />
+        <EnhancedFlashSaleHero timeLeft={timeLeft} />
+        
+        <CategoryQuickAccess />
         
         <FlashSaleFilters
           categories={categories}
@@ -53,6 +60,14 @@ const FlashSale: React.FC = () => {
           products={filteredProducts}
           viewMode={viewMode}
         />
+
+        <PaymentMethodsSection />
+        
+        <DeliveryOptionsSection />
+        
+        <CustomerReviewsSection />
+        
+        <TrustIndicatorsSection />
       </main>
       
       <Footer />

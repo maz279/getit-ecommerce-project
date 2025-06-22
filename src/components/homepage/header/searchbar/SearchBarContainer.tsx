@@ -1,4 +1,3 @@
-
 import React, { useEffect } from 'react';
 import { Search } from 'lucide-react';
 import { DesktopSearchBar } from '../DesktopSearchBar';
@@ -73,7 +72,7 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
       description: document.querySelector('meta[name="description"]')?.getAttribute('content') || '',
       type: 'page' as const,
       url: window.location.pathname,
-      tags: [window.location.pathname.split('/').filter(Boolean)],
+      tags: window.location.pathname.split('/').filter(Boolean),
       dateAdded: new Date(),
       isActive: true
     };

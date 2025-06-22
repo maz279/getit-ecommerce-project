@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Card } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
@@ -8,7 +7,7 @@ interface SearchResult {
   id: string;
   title: string;
   titleBn?: string;
-  type: 'product' | 'vendor' | 'brand' | 'category';
+  type: 'product' | 'vendor' | 'brand' | 'category' | 'page' | 'article';
   image?: string;
   price?: number;
   originalPrice?: number;
@@ -112,6 +111,8 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
       case 'brand':
         return <Star className="w-3 h-3" />;
       case 'category':
+      case 'page':
+      case 'article':
         return <Package className="w-3 h-3" />;
       default:
         return <Package className="w-3 h-3" />;

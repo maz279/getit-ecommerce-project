@@ -1,5 +1,4 @@
 
-
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -20,6 +19,7 @@ import HelpCenter from '@/pages/HelpCenter';
 import PrivacyPolicy from '@/pages/PrivacyPolicy';
 import TermsOfService from '@/pages/TermsOfService';
 import NotFound from '@/pages/NotFound';
+import NewArrivals from '@/pages/NewArrivals';
 
 // Import new pages
 import { ProductDetail } from '@/pages/ProductDetail';
@@ -45,6 +45,7 @@ function App() {
                 <Route path="/orders" element={<div>Orders Page - Coming Soon</div>} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/categories" element={<Categories />} />
+                <Route path="/new-arrivals" element={<NewArrivals />} />
                 <Route path="/vendors" element={<div>Vendors Page - Coming Soon</div>} />
                 <Route path="/about" element={<AboutUs />} />
                 <Route path="/contact" element={<div>Contact Page - Coming Soon</div>} />
@@ -71,4 +72,3 @@ function App() {
 }
 
 export default App;
-

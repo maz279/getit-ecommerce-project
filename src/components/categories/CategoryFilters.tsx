@@ -212,7 +212,7 @@ export const CategoryFilters: React.FC = () => {
                     <Checkbox
                       id={`brand-${brand}`}
                       checked={selectedBrands.includes(brand)}
-                      onCheckedChange={(checked) => handleBrandChange(brand, checked as boolean)}
+                      onCheckedChange={(checked) => handleBrandChange(brand, !!checked)}
                     />
                     <Label htmlFor={`brand-${brand}`} className="text-sm cursor-pointer">
                       {brand}
@@ -244,7 +244,7 @@ export const CategoryFilters: React.FC = () => {
                     <Checkbox
                       id={`location-${location}`}
                       checked={selectedLocations.includes(location)}
-                      onCheckedChange={(checked) => handleLocationChange(location, checked as boolean)}
+                      onCheckedChange={(checked) => handleLocationChange(location, !!checked)}
                     />
                     <Label htmlFor={`location-${location}`} className="text-sm cursor-pointer">
                       {location}
@@ -270,7 +270,7 @@ export const CategoryFilters: React.FC = () => {
             <Checkbox
               id="free-shipping"
               checked={freeShipping}
-              onCheckedChange={setFreeShipping}
+              onCheckedChange={(checked) => setFreeShipping(!!checked)}
             />
             <Label htmlFor="free-shipping" className="text-sm cursor-pointer">
               Free Shipping
@@ -280,7 +280,7 @@ export const CategoryFilters: React.FC = () => {
             <Checkbox
               id="quick-delivery"
               checked={quickDelivery}
-              onCheckedChange={setQuickDelivery}
+              onCheckedChange={(checked) => setQuickDelivery(!!checked)}
             />
             <Label htmlFor="quick-delivery" className="text-sm cursor-pointer">
               Quick Delivery (1-2 days)
@@ -302,7 +302,7 @@ export const CategoryFilters: React.FC = () => {
             <Checkbox
               id="verified-seller"
               checked={verifiedSeller}
-              onCheckedChange={setVerifiedSeller}
+              onCheckedChange={(checked) => setVerifiedSeller(!!checked)}
             />
             <Label htmlFor="verified-seller" className="text-sm cursor-pointer">
               Verified Sellers Only

@@ -32,7 +32,19 @@ export const CategoriesLayout: React.FC = () => {
 
   const getCurrentSubmenu = () => {
     const category = getCurrentCategory();
-    return category && selectedSubcategory ? category.subcategories[selectedSubcategory] : null;
+    if (!category || !selectedSubcategory) return null;
+    
+    const submenuData = category.subcategories[selectedSubcategory];
+    if (!submenuData) return null;
+    
+    // Transform the data structure to match what the components expect
+    return {
+      name: submenuData.name,
+      subcategories: submenuData.subcategories.map(sub => ({
+        name: sub.name,
+        count: sub.count
+      }))
+    };
   };
 
   return (

@@ -2,14 +2,22 @@
 import React from 'react';
 import { ChevronRight, Home } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { MainCategory, SubCategory } from '@/data/categoriesData';
+import { MainCategory } from '@/data/categoriesData';
+
+interface SubmenuItem {
+  name: string;
+  subcategories: Array<{
+    name: string;
+    count: number;
+  }>;
+}
 
 interface CategoryBreadcrumbProps {
   selectedCategory?: string | null;
   selectedSubcategory?: string | null;
   selectedSubSubcategory?: string | null;
   currentCategory?: MainCategory | null;
-  currentSubmenu?: SubCategory | null;
+  currentSubmenu?: SubmenuItem | null;
 }
 
 export const CategoryBreadcrumb: React.FC<CategoryBreadcrumbProps> = ({

@@ -4,14 +4,22 @@ import { CategoryBreadcrumb } from './CategoryBreadcrumb';
 import { CategoryTabs } from './CategoryTabs';
 import { ProductGrid } from './ProductGrid';
 import { Card } from '@/components/ui/card';
-import { categoriesData, MainCategory, SubCategory } from '@/data/categoriesData';
+import { categoriesData, MainCategory } from '@/data/categoriesData';
+
+interface SubmenuItem {
+  name: string;
+  subcategories: Array<{
+    name: string;
+    count: number;
+  }>;
+}
 
 interface CategoryMainContentProps {
   selectedCategory?: string | null;
   selectedSubcategory?: string | null;
   selectedSubSubcategory?: string | null;
   currentCategory?: MainCategory | null;
-  currentSubmenu?: SubCategory | null;
+  currentSubmenu?: SubmenuItem | null;
   activeTab: string;
   onActiveTabChange: (tab: string) => void;
 }

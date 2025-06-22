@@ -37,6 +37,9 @@ import GiftCards from "./pages/GiftCards";
 import MegaSale from "./pages/MegaSale";
 import GroupBuy from "./pages/GroupBuy";
 import Premium from "./pages/Premium";
+import BestSellers from "./pages/BestSellers";
+import NewArrivals from "./pages/NewArrivals";
+import BulkOrders from "./pages/BulkOrders";
 
 // New Footer Navigation Pages
 import OrderTracking from "./pages/OrderTracking";

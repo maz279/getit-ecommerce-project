@@ -98,4 +98,4 @@ export const SEARCH_CONTENT = {
     aiMode: "এআই মোড",
     conversationalSearch: "চেষ্টা করুন: '৩০০০০ টাকার নিচে ফোন দেখাও' বা 'গেমিংয়ের জন্য সেরা ল্যাপটপ খুঁজে দাও'"
   }
-} as const;
+};

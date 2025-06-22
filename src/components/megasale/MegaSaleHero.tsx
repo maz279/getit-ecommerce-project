@@ -32,33 +32,33 @@ export const MegaSaleHero: React.FC = () => {
   }, []);
 
   const highlights = [
-    { icon: <Zap className="w-4 h-4" />, text: "Up to 80% OFF", color: "text-yellow-400" },
-    { icon: <Gift className="w-4 h-4" />, text: "Free Gifts", color: "text-pink-400" },
-    { icon: <Truck className="w-4 h-4" />, text: "Free Shipping", color: "text-green-400" },
-    { icon: <Star className="w-4 h-4" />, text: "Exclusive Deals", color: "text-blue-400" }
+    { icon: <Zap className="w-3 h-3" />, text: "Up to 80% OFF", color: "text-yellow-400" },
+    { icon: <Gift className="w-3 h-3" />, text: "Free Gifts", color: "text-pink-400" },
+    { icon: <Truck className="w-3 h-3" />, text: "Free Shipping", color: "text-green-400" },
+    { icon: <Star className="w-3 h-3" />, text: "Exclusive Deals", color: "text-blue-400" }
   ];
 
   return (
     <section className="bg-gradient-to-br from-red-600 via-purple-700 to-indigo-800 text-white relative overflow-hidden">
       {/* Animated Background Elements */}
       <div className="absolute inset-0">
-        <div className="absolute top-6 left-6 w-16 h-16 bg-yellow-400/20 rounded-full animate-pulse"></div>
-        <div className="absolute bottom-10 right-10 w-12 h-12 bg-pink-400/20 rounded-full animate-pulse delay-100"></div>
-        <div className="absolute top-1/2 left-1/4 w-8 h-8 bg-blue-400/20 rounded-full animate-bounce"></div>
+        <div className="absolute top-3 left-3 w-8 h-8 bg-yellow-400/20 rounded-full animate-pulse"></div>
+        <div className="absolute bottom-4 right-4 w-6 h-6 bg-pink-400/20 rounded-full animate-pulse delay-100"></div>
+        <div className="absolute top-1/2 left-1/4 w-4 h-4 bg-blue-400/20 rounded-full animate-bounce"></div>
       </div>
       
-      <div className="relative max-w-7xl mx-auto px-4 py-8">
+      <div className="relative max-w-7xl mx-auto px-4 py-4">
         <div className="text-center">
           {/* Sale Badge */}
-          <div className="flex justify-center mb-3">
-            <Badge className="bg-yellow-500 text-black px-4 py-1 text-sm font-bold animate-pulse">
-              <Flame className="w-4 h-4 mr-1" />
+          <div className="flex justify-center mb-2">
+            <Badge className="bg-yellow-500 text-black px-2 py-0.5 text-xs font-bold animate-pulse">
+              <Flame className="w-3 h-3 mr-1" />
               MEGA SALE 2024
             </Badge>
           </div>
           
           {/* Main Title */}
-          <h1 className="text-4xl md:text-6xl font-black mb-3 drop-shadow-lg">
+          <h1 className="text-2xl md:text-4xl font-black mb-2 drop-shadow-lg">
             <span className="bg-gradient-to-r from-yellow-400 via-pink-400 to-cyan-400 bg-clip-text text-transparent">
               MEGA
             </span>
@@ -67,30 +67,30 @@ export const MegaSaleHero: React.FC = () => {
           </h1>
           
           {/* Subtitle */}
-          <p className="text-lg md:text-xl mb-4 text-yellow-100 font-semibold">
+          <p className="text-sm md:text-base mb-3 text-yellow-100 font-semibold">
             Bangladesh's Biggest Shopping Festival
           </p>
           
           {/* Highlights */}
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 mb-4 max-w-3xl mx-auto">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mb-3 max-w-2xl mx-auto">
             {highlights.map((highlight, index) => (
-              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-3 flex flex-col items-center">
+              <div key={index} className="bg-white/10 backdrop-blur-sm rounded-lg p-2 flex flex-col items-center">
                 <div className={highlight.color}>{highlight.icon}</div>
-                <span className="text-xs font-semibold mt-1">{highlight.text}</span>
+                <span className="text-xs font-semibold mt-0.5">{highlight.text}</span>
               </div>
             ))}
           </div>
           
           {/* Countdown Timer */}
-          <div className="bg-black/30 backdrop-blur-sm rounded-xl p-4 inline-block mb-4">
-            <div className="flex items-center justify-center gap-2 mb-3">
-              <Clock className="w-5 h-5 text-yellow-400" />
-              <span className="text-lg font-bold">Sale Ends In:</span>
+          <div className="bg-black/30 backdrop-blur-sm rounded-lg p-3 inline-block mb-3">
+            <div className="flex items-center justify-center gap-1 mb-2">
+              <Clock className="w-4 h-4 text-yellow-400" />
+              <span className="text-sm font-bold">Sale Ends In:</span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-2">
               {Object.entries(timeLeft).map(([unit, value]) => (
-                <div key={unit} className="bg-white text-red-600 rounded-lg p-3 min-w-[60px] text-center shadow-lg">
-                  <div className="text-xl font-black">{value.toString().padStart(2, '0')}</div>
+                <div key={unit} className="bg-white text-red-600 rounded-lg p-2 min-w-[45px] text-center shadow-lg">
+                  <div className="text-lg font-black">{value.toString().padStart(2, '0')}</div>
                   <div className="text-xs uppercase font-bold">{unit}</div>
                 </div>
               ))}
@@ -98,12 +98,12 @@ export const MegaSaleHero: React.FC = () => {
           </div>
           
           {/* CTA Buttons */}
-          <div className="flex flex-col sm:flex-row gap-3 justify-center">
-            <Button size="lg" className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-6 py-3">
-              <Flame className="w-4 h-4 mr-2" />
+          <div className="flex flex-col sm:flex-row gap-2 justify-center">
+            <Button size="default" className="bg-yellow-500 hover:bg-yellow-600 text-black font-bold px-4 py-2 text-sm">
+              <Flame className="w-3 h-3 mr-1" />
               Shop Flash Deals
             </Button>
-            <Button size="lg" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600 px-6 py-3">
+            <Button size="default" variant="outline" className="border-white text-white hover:bg-white hover:text-purple-600 px-4 py-2 text-sm">
               View All Categories
             </Button>
           </div>

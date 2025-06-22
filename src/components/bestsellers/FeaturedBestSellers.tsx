@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { Star, ShoppingCart } from 'lucide-react';
+import { Star, ShoppingCart, Heart, Eye } from 'lucide-react';
 
 export const FeaturedBestSellers: React.FC = () => {
   const products = [
@@ -172,72 +172,94 @@ export const FeaturedBestSellers: React.FC = () => {
   ];
 
   return (
-    <section className="py-8">
+    <section className="py-8 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="text-2xl font-bold text-center mb-6">Featured Best Sellers</h2>
+        <div className="text-center mb-8">
+          <h2 className="text-3xl md:text-4xl font-bold mb-3 text-gray-800">Featured Best Sellers</h2>
+          <p className="text-gray-600 text-lg">Handpicked products loved by customers</p>
+        </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {products.map((product) => (
             <div 
               key={product.id} 
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 aspect-square"
+              className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
             >
-              {/* Background Image with Overlay */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url(${product.image})`
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-              
-              {/* Badge */}
-              <div className="absolute top-3 left-3 z-10">
-                <span className={`px-2 py-1 text-xs font-bold rounded-full ${
-                  product.badge === 'HOT' ? 'bg-red-500 text-white' :
-                  product.badge === 'NEW' ? 'bg-green-500 text-white' : 
-                  product.badge === 'TRENDING' ? 'bg-blue-500 text-white' :
-                  product.badge === 'POPULAR' ? 'bg-purple-500 text-white' :
-                  product.badge === 'BEST' ? 'bg-yellow-500 text-white' :
-                  product.badge === 'SALE' ? 'bg-orange-500 text-white' :
-                  product.badge === 'GAMING' ? 'bg-indigo-500 text-white' :
-                  product.badge === 'PREMIUM' ? 'bg-gray-700 text-white' :
-                  product.badge === 'SMART' ? 'bg-cyan-500 text-white' :
-                  product.badge === 'AUDIO' ? 'bg-pink-500 text-white' :
-                  product.badge === 'FUN' ? 'bg-lime-500 text-white' :
-                  product.badge === 'PHOTO' ? 'bg-rose-500 text-white' :
-                  product.badge === 'READ' ? 'bg-emerald-500 text-white' :
-                  'bg-blue-500 text-white'
-                }`}>
-                  {product.badge}
-                </span>
-              </div>
+              {/* Image Container */}
+              <div className="relative aspect-square overflow-hidden">
+                <img 
+                  src={product.image} 
+                  alt={product.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                
+                {/* Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <span className={`px-2 py-1 text-xs font-bold rounded-full shadow-md ${
+                    product.badge === 'HOT' ? 'bg-red-500 text-white' :
+                    product.badge === 'NEW' ? 'bg-green-500 text-white' : 
+                    product.badge === 'TRENDING' ? 'bg-blue-500 text-white' :
+                    product.badge === 'POPULAR' ? 'bg-purple-500 text-white' :
+                    product.badge === 'BEST' ? 'bg-yellow-500 text-white' :
+                    product.badge === 'SALE' ? 'bg-orange-500 text-white' :
+                    product.badge === 'GAMING' ? 'bg-indigo-500 text-white' :
+                    product.badge === 'PREMIUM' ? 'bg-gray-700 text-white' :
+                    product.badge === 'SMART' ? 'bg-cyan-500 text-white' :
+                    product.badge === 'AUDIO' ? 'bg-pink-500 text-white' :
+                    product.badge === 'FUN' ? 'bg-lime-500 text-white' :
+                    product.badge === 'PHOTO' ? 'bg-rose-500 text-white' :
+                    product.badge === 'READ' ? 'bg-emerald-500 text-white' :
+                    'bg-blue-500 text-white'
+                  }`}>
+                    {product.badge}
+                  </span>
+                </div>
 
-              {/* Rating */}
-              <div className="absolute top-3 right-3 z-10">
-                <div className="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                  <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  {product.rating}
+                {/* Action Buttons */}
+                <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button className="p-2 bg-white rounded-full shadow-md hover:bg-red-50 transition-colors">
+                    <Heart className="w-4 h-4 text-gray-600 hover:text-red-500" />
+                  </button>
+                  <button className="p-2 bg-white rounded-full shadow-md hover:bg-blue-50 transition-colors">
+                    <Eye className="w-4 h-4 text-gray-600 hover:text-blue-500" />
+                  </button>
                 </div>
               </div>
               
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-3 text-white z-10">
-                <h3 className="font-bold text-sm mb-2 line-clamp-2">{product.name}</h3>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-800 text-sm mb-2 line-clamp-2 leading-5">
+                  {product.name}
+                </h3>
                 
-                <div className="mb-3">
-                  <div className="flex items-center gap-1 mb-1">
-                    <span className="text-xs line-through opacity-75">৳{product.originalPrice.toLocaleString()}</span>
-                    <span className="text-xs text-green-400">({product.reviews} reviews)</span>
+                <div className="flex items-center gap-1 mb-3">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${
+                          i < Math.floor(product.rating) 
+                            ? 'text-yellow-400 fill-current' 
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
+                  </div>
+                  <span className="text-xs text-gray-500">({product.reviews})</span>
+                </div>
+                
+                <div className="mb-4">
+                  <div className="flex items-center gap-2 mb-1">
+                    <span className="text-lg font-bold text-green-600">৳{product.price.toLocaleString()}</span>
                   </div>
                   <div className="flex items-center justify-between">
-                    <div className="text-sm font-bold text-yellow-400">৳{product.price.toLocaleString()}</div>
-                    <span className="text-xs text-green-400 font-medium">{product.sold}</span>
+                    <span className="text-xs text-gray-400 line-through">৳{product.originalPrice.toLocaleString()}</span>
+                    <span className="text-xs text-green-500 font-medium">{product.sold}</span>
                   </div>
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-black py-2 rounded-lg text-xs font-bold hover:from-yellow-300 hover:to-orange-300 transition-all duration-300 flex items-center justify-center gap-1 shadow-lg transform group-hover:scale-105">
-                  <ShoppingCart className="w-3 h-3" />
+                <button className="w-full bg-gradient-to-r from-blue-500 to-blue-600 hover:from-blue-600 hover:to-blue-700 text-white font-semibold py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md">
+                  <ShoppingCart className="w-4 h-4" />
                   Add to Cart
                 </button>
               </div>

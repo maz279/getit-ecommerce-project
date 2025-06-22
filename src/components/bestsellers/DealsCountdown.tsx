@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Clock, Flame, ShoppingCart, Star } from 'lucide-react';
+import { Clock, Flame, ShoppingCart, Star, Heart, Eye } from 'lucide-react';
 
 export const DealsCountdown: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -75,88 +75,107 @@ export const DealsCountdown: React.FC = () => {
   ];
 
   return (
-    <section className="py-6 bg-gradient-to-br from-orange-500 via-red-500 to-pink-500 text-white">
+    <section className="py-8 bg-gradient-to-br from-orange-50 via-red-50 to-pink-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-6">
-          <div className="flex items-center justify-center gap-2 mb-3">
-            <Flame className="w-6 h-6 text-yellow-300 animate-pulse" />
-            <h2 className="text-2xl md:text-3xl font-bold">⚡ Best Seller Offer ⚡</h2>
-            <Flame className="w-6 h-6 text-yellow-300 animate-pulse" />
+        <div className="text-center mb-8">
+          <div className="flex items-center justify-center gap-3 mb-4">
+            <Flame className="w-8 h-8 text-orange-500 animate-pulse" />
+            <h2 className="text-3xl md:text-4xl font-bold text-gray-800">⚡ Flash Deal ⚡</h2>
+            <Flame className="w-8 h-8 text-orange-500 animate-pulse" />
           </div>
           
-          <div className="bg-black/40 backdrop-blur-sm rounded-xl p-4 inline-block shadow-2xl">
-            <div className="flex items-center gap-2 mb-3">
-              <Clock className="w-5 h-5" />
-              <span className="text-lg font-semibold">Time Remaining:</span>
+          <div className="bg-white rounded-2xl p-6 inline-block shadow-lg border">
+            <div className="flex items-center gap-3 mb-4">
+              <Clock className="w-6 h-6 text-orange-500" />
+              <span className="text-xl font-semibold text-gray-700">Time Remaining:</span>
             </div>
-            <div className="flex gap-3">
+            <div className="flex gap-4">
               <div className="text-center">
-                <div className="bg-white text-black rounded-lg p-3 min-w-[50px] shadow-lg">
-                  <div className="text-xl font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
+                <div className="bg-gradient-to-b from-orange-500 to-red-500 text-white rounded-xl p-4 min-w-[60px] shadow-lg">
+                  <div className="text-2xl font-bold">{timeLeft.hours.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-sm mt-2 font-medium">Hours</div>
+                <div className="text-sm mt-2 font-medium text-gray-600">Hours</div>
               </div>
               <div className="text-center">
-                <div className="bg-white text-black rounded-lg p-3 min-w-[50px] shadow-lg">
-                  <div className="text-xl font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
+                <div className="bg-gradient-to-b from-orange-500 to-red-500 text-white rounded-xl p-4 min-w-[60px] shadow-lg">
+                  <div className="text-2xl font-bold">{timeLeft.minutes.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-sm mt-2 font-medium">Minutes</div>
+                <div className="text-sm mt-2 font-medium text-gray-600">Minutes</div>
               </div>
               <div className="text-center">
-                <div className="bg-white text-black rounded-lg p-3 min-w-[50px] shadow-lg">
-                  <div className="text-xl font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
+                <div className="bg-gradient-to-b from-orange-500 to-red-500 text-white rounded-xl p-4 min-w-[60px] shadow-lg">
+                  <div className="text-2xl font-bold">{timeLeft.seconds.toString().padStart(2, '0')}</div>
                 </div>
-                <div className="text-sm mt-2 font-medium">Seconds</div>
+                <div className="text-sm mt-2 font-medium text-gray-600">Seconds</div>
               </div>
             </div>
           </div>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-5 gap-6">
           {deals.map((deal, index) => (
             <div 
               key={index} 
-              className="group relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-2 aspect-square"
+              className="group bg-white rounded-2xl overflow-hidden shadow-md hover:shadow-xl transition-all duration-300 transform hover:-translate-y-1 border border-gray-100"
             >
-              {/* Background Image with Overlay */}
-              <div 
-                className="absolute inset-0 bg-cover bg-center"
-                style={{
-                  backgroundImage: `url(${deal.image})`
-                }}
-              />
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/40 to-transparent" />
-              
-              {/* Discount Badge */}
-              <div className="absolute top-3 left-3 z-10">
-                <div className="bg-red-500 text-white px-2 py-1 rounded-full text-xs font-bold shadow-lg">
-                  {deal.discount}% OFF
+              {/* Image Container */}
+              <div className="relative aspect-square overflow-hidden">
+                <img 
+                  src={deal.image} 
+                  alt={deal.name}
+                  className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                />
+                
+                {/* Discount Badge */}
+                <div className="absolute top-3 left-3 z-10">
+                  <div className="bg-red-500 text-white px-3 py-1 rounded-full text-xs font-bold shadow-md">
+                    -{deal.discount}%
+                  </div>
                 </div>
-              </div>
 
-              {/* Rating */}
-              <div className="absolute top-3 right-3 z-10">
-                <div className="bg-black/50 backdrop-blur-sm text-white px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1">
-                  <Star className="w-3 h-3 text-yellow-400 fill-current" />
-                  {deal.rating}
+                {/* Action Buttons */}
+                <div className="absolute top-3 right-3 z-10 flex flex-col gap-2 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  <button className="p-2 bg-white rounded-full shadow-md hover:bg-red-50 transition-colors">
+                    <Heart className="w-4 h-4 text-gray-600 hover:text-red-500" />
+                  </button>
+                  <button className="p-2 bg-white rounded-full shadow-md hover:bg-blue-50 transition-colors">
+                    <Eye className="w-4 h-4 text-gray-600 hover:text-blue-500" />
+                  </button>
                 </div>
               </div>
               
               {/* Content */}
-              <div className="absolute bottom-0 left-0 right-0 p-4 text-white z-10">
-                <h3 className="font-bold text-sm mb-2 line-clamp-2">{deal.name}</h3>
+              <div className="p-4">
+                <h3 className="font-semibold text-gray-800 text-sm mb-2 line-clamp-2 leading-5">
+                  {deal.name}
+                </h3>
                 
-                <div className="mb-3">
-                  <div className="flex items-center gap-1 mb-1">
-                    <span className="text-xs line-through opacity-75">৳{deal.originalPrice.toLocaleString()}</span>
-                    <span className="text-xs text-gray-300">({deal.reviews} reviews)</span>
+                <div className="flex items-center gap-1 mb-3">
+                  <div className="flex items-center">
+                    {[...Array(5)].map((_, i) => (
+                      <Star
+                        key={i}
+                        className={`w-3 h-3 ${
+                          i < Math.floor(deal.rating) 
+                            ? 'text-yellow-400 fill-current' 
+                            : 'text-gray-300'
+                        }`}
+                      />
+                    ))}
                   </div>
-                  <div className="text-lg font-bold text-yellow-400">৳{deal.salePrice.toLocaleString()}</div>
+                  <span className="text-xs text-gray-500">({deal.reviews})</span>
                 </div>
                 
-                <button className="w-full bg-gradient-to-r from-yellow-400 to-orange-400 text-black py-2 rounded-lg text-sm font-bold hover:from-yellow-300 hover:to-orange-300 transition-all duration-300 flex items-center justify-center gap-2 shadow-lg transform group-hover:scale-105">
+                <div className="mb-4">
+                  <div className="flex items-center gap-2">
+                    <span className="text-lg font-bold text-red-600">৳{deal.salePrice.toLocaleString()}</span>
+                  </div>
+                  <span className="text-sm text-gray-400 line-through">৳{deal.originalPrice.toLocaleString()}</span>
+                </div>
+                
+                <button className="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold py-2.5 rounded-lg transition-all duration-300 flex items-center justify-center gap-2 shadow-md">
                   <ShoppingCart className="w-4 h-4" />
-                  Buy Now
+                  Add to Cart
                 </button>
               </div>
             </div>

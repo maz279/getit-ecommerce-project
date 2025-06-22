@@ -11,12 +11,12 @@ export const FooterMainSection: React.FC = () => {
         <div className="space-y-2">
           <Link to="/about-us" className="text-sm text-gray-300 hover:text-white transition-colors block">About Us</Link>
           <Link to="/about-us#mission-vision" className="text-sm text-gray-300 hover:text-white transition-colors block">Our Mission</Link>
-          <Link to="/about-us#platform-capabilities" className="text-sm text-gray-300 hover:text-white transition-colors block">How It Works</Link>
-          <Link to="/about-us#achievements" className="text-sm text-gray-300 hover:text-white transition-colors block">Success Stories</Link>
+          <Link to="/about-us#how-it-works" className="text-sm text-gray-300 hover:text-white transition-colors block">How It Works</Link>
+          <Link to="/about-us#success-stories" className="text-sm text-gray-300 hover:text-white transition-colors block">Success Stories</Link>
           <Link to="/about-us#careers" className="text-sm text-gray-300 hover:text-white transition-colors block">Careers</Link>
           <Link to="/about-us#press-media" className="text-sm text-gray-300 hover:text-white transition-colors block">Press & Media</Link>
           <Link to="/about-us#investor-relations" className="text-sm text-gray-300 hover:text-white transition-colors block">Investor Relations</Link>
-          <Link to="/about-us#commitment" className="text-sm text-gray-300 hover:text-white transition-colors block">Corporate Social Responsibility</Link>
+          <Link to="/about-us#corporate-social-responsibility" className="text-sm text-gray-300 hover:text-white transition-colors block">Corporate Social Responsibility</Link>
         </div>
       </div>
 

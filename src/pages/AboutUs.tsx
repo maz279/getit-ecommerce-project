@@ -39,10 +39,10 @@ const AboutUs: React.FC = () => {
         <UniqueValue />
         <Technology />
         <Security />
-        <div id="platform-capabilities">
+        <div id="how-it-works">
           <PlatformCapabilities />
         </div>
-        <div id="commitment">
+        <div id="corporate-social-responsibility">
           <Commitment />
         </div>
         <FutureVision />
@@ -50,7 +50,7 @@ const AboutUs: React.FC = () => {
         <div id="leadership">
           <Leadership />
         </div>
-        <div id="achievements">
+        <div id="success-stories">
           <Achievements />
         </div>
         <div id="careers">

@@ -1,61 +1,81 @@
 
 import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { 
-  Flame, Gift, Coins, CreditCard, Calendar, Zap, 
-  ShoppingBag, Truck, Star, Sparkles, Crown, Heart 
+  Zap, 
+  Calendar, 
+  Gift, 
+  Percent, 
+  Users, 
+  Award,
+  ArrowRight
 } from 'lucide-react';
 
-interface QuickAccessItem {
-  icon: React.ReactNode;
-  title: string;
-  subtitle?: string;
-  color: string;
-  link: string;
-}
-
-const quickAccessItems: QuickAccessItem[] = [
-  { icon: <Flame className="w-6 h-6" />, title: "Flash Sale", subtitle: "70% Off", color: "from-red-500 to-orange-500", link: "/categories?sale=flash" },
-  { icon: <Gift className="w-6 h-6" />, title: "Daily Deals", subtitle: "New Daily", color: "from-green-500 to-teal-500", link: "/categories?deals=daily" },
-  { icon: <Coins className="w-6 h-6" />, title: "Reward Points", subtitle: "Earn More", color: "from-yellow-500 to-orange-500", link: "/rewards" },
-  { icon: <CreditCard className="w-6 h-6" />, title: "Payment", subtitle: "Offers", color: "from-blue-500 to-purple-500", link: "/payment-offers" },
-  { icon: <Calendar className="w-6 h-6" />, title: "Today's", subtitle: "Special", color: "from-purple-500 to-pink-500", link: "/categories?special=today" },
-  { icon: <Zap className="w-6 h-6" />, title: "Lightning", subtitle: "Deals", color: "from-indigo-500 to-blue-500", link: "/categories?lightning=deals" },
-  { icon: <ShoppingBag className="w-6 h-6" />, title: "Bundle", subtitle: "Offers", color: "from-teal-500 to-green-500", link: "/categories?bundle=offers" },
-  { icon: <Truck className="w-6 h-6" />, title: "Free", subtitle: "Delivery", color: "from-orange-500 to-red-500", link: "/categories?delivery=free" },
-  { icon: <Star className="w-6 h-6" />, title: "Top Rated", subtitle: "Products", color: "from-pink-500 to-purple-500", link: "/categories?rating=top" },
-  { icon: <Sparkles className="w-6 h-6" />, title: "AI Picks", subtitle: "For You", color: "from-cyan-500 to-blue-500", link: "/recommendations" },
-  { icon: <Crown className="w-6 h-6" />, title: "Premium", subtitle: "Collection", color: "from-yellow-600 to-orange-600", link: "/categories?premium=collection" },
-  { icon: <Heart className="w-6 h-6" />, title: "Wishlist", subtitle: "Favorites", color: "from-red-500 to-pink-500", link: "/wishlist" },
-];
-
 export const QuickAccessIcons: React.FC = () => {
-  const navigate = useNavigate();
-
-  const handleItemClick = (link: string) => {
-    navigate(link);
-  };
+  const quickAccessItems = [
+    {
+      icon: <Zap className="w-8 h-8" />,
+      title: 'Flash Sales',
+      subtitle: 'Up to 80% OFF',
+      gradient: 'from-red-500 to-orange-500',
+      link: '/flash-sale'
+    },
+    {
+      icon: <Calendar className="w-8 h-8" />,
+      title: 'Daily Deals',
+      subtitle: 'New Every Day',
+      gradient: 'from-green-500 to-teal-500',
+      link: '/daily-deals'
+    },
+    {
+      icon: <Gift className="w-8 h-8" />,
+      title: 'Gift Cards',
+      subtitle: 'Perfect Gifts',
+      gradient: 'from-purple-500 to-pink-500',
+      link: '/products'
+    },
+    {
+      icon: <Percent className="w-8 h-8" />,
+      title: 'Mega Sale',
+      subtitle: 'Biggest Discounts',
+      gradient: 'from-blue-500 to-indigo-500',
+      link: '/products'
+    },
+    {
+      icon: <Users className="w-8 h-8" />,
+      title: 'Group Buy',
+      subtitle: 'Buy Together Save',
+      gradient: 'from-teal-500 to-cyan-500',
+      link: '/products'
+    },
+    {
+      icon: <Award className="w-8 h-8" />,
+      title: 'Premium',
+      subtitle: 'Exclusive Deals',
+      gradient: 'from-yellow-500 to-orange-500',
+      link: '/products'
+    }
+  ];
 
   return (
-    <section className="bg-gray-50 py-8">
+    <section className="py-8 bg-gray-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-4 md:grid-cols-6 lg:grid-cols-12 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
           {quickAccessItems.map((item, index) => (
-            <div
+            <Link 
               key={index}
-              onClick={() => handleItemClick(item.link)}
-              className="flex flex-col items-center p-4 bg-white rounded-xl shadow-sm hover:shadow-lg transition-all duration-300 transform hover:scale-105 cursor-pointer group"
+              to={item.link}
+              className={`bg-gradient-to-br ${item.gradient} rounded-xl p-6 text-white shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105 group`}
             >
-              <div className={`bg-gradient-to-r ${item.color} p-4 rounded-full text-white mb-3 group-hover:scale-110 transition-transform`}>
-                {item.icon}
-              </div>
               <div className="text-center">
-                <div className="font-semibold text-sm text-gray-800">{item.title}</div>
-                {item.subtitle && (
-                  <div className="text-xs text-gray-500 mt-1">{item.subtitle}</div>
-                )}
+                <div className="flex justify-center mb-3 group-hover:scale-110 transition-transform duration-300">
+                  {item.icon}
+                </div>
+                <h3 className="font-bold text-sm mb-1">{item.title}</h3>
+                <p className="text-xs opacity-90 mb-3">{item.subtitle}</p>
+                <ArrowRight className="w-4 h-4 mx-auto opacity-75 group-hover:opacity-100 group-hover:translate-x-1 transition-all duration-300" />
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

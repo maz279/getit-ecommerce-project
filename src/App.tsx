@@ -29,6 +29,7 @@ import MobileBanking from "./pages/MobileBanking";
 import PaymentMethods from "./pages/PaymentMethods";
 import Offers from "./pages/Offers";
 import FlashSale from "./pages/FlashSale";
+import DailyDeals from "./pages/DailyDeals";
 import Recommendations from "./pages/Recommendations";
 
 // New Footer Navigation Pages
@@ -84,6 +85,7 @@ const App = () => (
               <Route path="/payment-methods" element={<PaymentMethods />} />
               <Route path="/offers" element={<Offers />} />
               <Route path="/flash-sale" element={<FlashSale />} />
+              <Route path="/daily-deals" element={<DailyDeals />} />
               <Route path="/recommendations" element={<Recommendations />} />
               
               {/* Auth Routes */}

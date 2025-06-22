@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { CategoryBreadcrumb } from './CategoryBreadcrumb';
 import { ProductGrid } from './ProductGrid';
@@ -72,6 +73,70 @@ const getSubcategoryDetails = (subcategoryName: string) => {
       occasions: ['Casual Wear', 'Office', 'College', 'Shopping'],
       priceRange: '৳600 - ৳2,500',
       popular: ['A-line Kurtis', 'Straight Kurtis', 'High-Low Kurtis']
+    },
+    'Cocktail Dresses': {
+      title: 'Cocktail Dresses',
+      description: 'Elegant cocktail dresses perfect for evening parties and social events.',
+      features: ['Sophisticated Design', 'Premium Quality', 'Perfect Fit', 'Party Ready'],
+      occasions: ['Cocktail Parties', 'Evening Events', 'Social Gatherings', 'Date Nights'],
+      priceRange: '৳2,500 - ৳8,000',
+      popular: ['Little Black Dress', 'Sequin Cocktail Dress', 'Midi Cocktail Dress']
+    },
+    'Maxi Dresses': {
+      title: 'Maxi Dresses',
+      description: 'Floor-length maxi dresses that offer comfort and style for various occasions.',
+      features: ['Full Length', 'Comfortable Fit', 'Versatile Styling', 'Flowy Design'],
+      occasions: ['Beach Outings', 'Casual Events', 'Summer Parties', 'Vacation Wear'],
+      priceRange: '৳1,500 - ৳5,000',
+      popular: ['Floral Maxi Dress', 'Solid Color Maxi', 'Bohemian Maxi Dress']
+    },
+    'Casual Tops': {
+      title: 'Casual Tops',
+      description: 'Comfortable and stylish casual tops for everyday wear and relaxed occasions.',
+      features: ['Comfortable Fabric', 'Easy Care', 'Versatile Pairing', 'Modern Designs'],
+      occasions: ['Daily Wear', 'Casual Outings', 'Weekend Activities', 'Shopping'],
+      priceRange: '৳500 - ৳2,000',
+      popular: ['Cotton Casual Tops', 'Printed Casual Tops', 'Solid Color Tops']
+    },
+    'Skinny Jeans': {
+      title: 'Skinny Jeans',
+      description: 'Form-fitting skinny jeans that create a sleek and modern silhouette.',
+      features: ['Slim Fit', 'Stretchable Fabric', 'Comfortable Wear', 'Versatile Styling'],
+      occasions: ['Casual Wear', 'Shopping', 'College', 'Weekend Outings'],
+      priceRange: '৳1,200 - ৳3,500',
+      popular: ['High-Waisted Skinny Jeans', 'Classic Blue Skinny Jeans', 'Black Skinny Jeans']
+    },
+    'Sports Bras': {
+      title: 'Sports Bras',
+      description: 'Supportive and comfortable sports bras designed for active lifestyles.',
+      features: ['High Support', 'Moisture Wicking', 'Comfortable Fit', 'Durable Quality'],
+      occasions: ['Gym Workouts', 'Yoga Sessions', 'Running', 'Sports Activities'],
+      priceRange: '৳800 - ৳2,500',
+      popular: ['High Impact Sports Bras', 'Wireless Sports Bras', 'Padded Sports Bras']
+    },
+    'Women Pajama Sets': {
+      title: 'Women Pajama Sets',
+      description: 'Comfortable and cozy pajama sets perfect for a good night\'s sleep.',
+      features: ['Soft Fabric', 'Comfortable Fit', 'Easy Care', 'Breathable Material'],
+      occasions: ['Sleep Wear', 'Lounging', 'Home Comfort', 'Relaxation'],
+      priceRange: '৳800 - ৳2,500',
+      popular: ['Cotton Pajama Sets', 'Satin Pajama Sets', 'Printed Pajama Sets']
+    },
+    'Bikinis': {
+      title: 'Bikinis',
+      description: 'Stylish and comfortable bikinis perfect for beach and pool activities.',
+      features: ['Quick Dry', 'UV Protection', 'Comfortable Fit', 'Trendy Designs'],
+      occasions: ['Beach Vacations', 'Pool Parties', 'Swimming', 'Water Sports'],
+      priceRange: '৳1,500 - ৳4,000',
+      popular: ['Triangle Bikini', 'Bandeau Bikini', 'High-Waisted Bikini']
+    },
+    'Everyday Bras': {
+      title: 'Everyday Bras',
+      description: 'Comfortable and supportive bras designed for daily wear and comfort.',
+      features: ['All Day Comfort', 'Perfect Support', 'Seamless Design', 'Durable Quality'],
+      occasions: ['Daily Wear', 'Office', 'Casual Outings', 'Everyday Comfort'],
+      priceRange: '৳600 - ৳2,000',
+      popular: ['T-Shirt Bras', 'Wireless Bras', 'Full Coverage Bras']
     }
   };
 

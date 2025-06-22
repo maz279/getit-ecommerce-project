@@ -2,7 +2,7 @@
 import React from 'react';
 import { Shirt } from 'lucide-react';
 import { MainCategory } from './types';
-import { womensFashionData } from './fashion/womensFashionData';
+import { womensFashionDataConverted } from './fashion/womensFashionStructured';
 import { mensFashionData } from './fashion/mensFashionData';
 import { kidsFashionData } from './fashion/kidsFashionData';
 import { footwearData } from './fashion/footwearData';
@@ -24,7 +24,7 @@ export const fashionData: MainCategory = {
   count: 485672,
   featured: true,
   subcategories: {
-    'womens-fashion': womensFashionData,
+    'womens-fashion': womensFashionDataConverted,
     'mens-fashion': mensFashionData,
     'kids-fashion': kidsFashionData,
     'footwear': footwearData,

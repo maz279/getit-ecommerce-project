@@ -2,6 +2,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ArrowLeft, Heart, ShoppingCart, Trash2, Star } from 'lucide-react';
+import { Header } from '../components/homepage/Header';
+import { Footer } from '../components/homepage/Footer';
+import { WishlistNavigationMap } from '../components/wishlist/WishlistNavigationMap';
 
 const Wishlist: React.FC = () => {
   const wishlistItems = [
@@ -39,15 +42,9 @@ const Wishlist: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
-      {/* Header */}
-      <div className="bg-white shadow-sm border-b">
-        <div className="max-w-7xl mx-auto px-4 py-4">
-          <Link to="/" className="flex items-center gap-2 text-blue-600 hover:text-blue-800 transition-colors">
-            <ArrowLeft className="w-4 h-4" />
-            <span>Back to Home</span>
-          </Link>
-        </div>
-      </div>
+      <Header />
+      
+      <WishlistNavigationMap />
 
       <div className="max-w-6xl mx-auto px-4 py-8">
         <div className="flex items-center justify-between mb-8">
@@ -131,6 +128,8 @@ const Wishlist: React.FC = () => {
           </div>
         )}
       </div>
+      
+      <Footer />
     </div>
   );
 };

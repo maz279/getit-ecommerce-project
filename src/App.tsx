@@ -75,10 +75,10 @@ const App = () => (
               <Route path="/mega-sale" element={<MegaSale />} />
               <Route path="/group-buy" element={<GroupBuy />} />
               <Route path="/premium" element={<Premium />} />
-              <Route path="/best-sellers" element={<Products />} />
-              <Route path="/new-arrivals" element={<Products />} />
+              <Route path="/best-sellers" element={<BestSellers />} />
+              <Route path="/new-arrivals" element={<NewArrivals />} />
               <Route path="/free-delivery" element={<DeliveryInfo />} />
-              <Route path="/bulk-orders" element={<Products />} />
+              <Route path="/bulk-orders" element={<BulkOrders />} />
               
               {/* Customer Service Routes */}
               <Route path="/help-center" element={<HelpCenter />} />

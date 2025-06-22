@@ -5,6 +5,7 @@ import { TopBar } from './header/TopBar';
 import { Logo } from './header/Logo';
 import { SearchBar } from './header/SearchBar';
 import { ActionIcons } from './header/ActionIcons';
+import { AIInspiredMenu } from './header/AIInspiredMenu';
 
 export const Header: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -42,6 +43,9 @@ export const Header: React.FC = () => {
           <ActionIcons language={language} />
         </div>
       </header>
+
+      {/* AI Inspired Menu */}
+      <AIInspiredMenu />
     </>
   );
 };

@@ -1,11 +1,10 @@
 
 import React, { useState } from 'react';
 import { Header } from '../components/homepage/Header';
-import { Footer } from '../components/homepage/Footer';
 import { FlashSaleHero } from '../components/flashsale/FlashSaleHero';
 import { FlashSaleFilters } from '../components/flashsale/FlashSaleFilters';
 import { FlashSaleProductGrid } from '../components/flashsale/FlashSaleProductGrid';
-import { FlashSaleTrustIndicators } from '../components/flashsale/FlashSaleTrustIndicators';
+import { FlashSaleEnhancedFooter } from '../components/flashsale/FlashSaleEnhancedFooter';
 import { useFlashSaleTimer } from '../hooks/useFlashSaleTimer';
 import { generateFlashProducts, categories } from '../data/flashSaleData';
 
@@ -54,11 +53,9 @@ const FlashSale: React.FC = () => {
           products={filteredProducts}
           viewMode={viewMode}
         />
-
-        <FlashSaleTrustIndicators />
       </main>
       
-      <Footer />
+      <FlashSaleEnhancedFooter />
     </div>
   );
 };

@@ -1,13 +1,19 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { 
   ShoppingCart, 
   Heart, 
   Eye, 
-  Share2, 
   Star,
-  Truck
+  Truck,
+  Play,
+  FileText,
+  CreditCard,
+  RotateCcw,
+  MessageCircle,
+  Phone,
+  BarChart3
 } from 'lucide-react';
 
 interface Product {
@@ -35,6 +41,8 @@ export const FlashSaleProductCard: React.FC<FlashSaleProductCardProps> = ({
   product, 
   viewMode 
 }) => {
+  const [showMoreActions, setShowMoreActions] = useState(false);
+
   return (
     <div className={`bg-white rounded-lg shadow-md hover:shadow-xl transition-all duration-300 group overflow-hidden border ${
       viewMode === 'list' ? 'flex' : ''
@@ -67,25 +75,39 @@ export const FlashSaleProductCard: React.FC<FlashSaleProductCardProps> = ({
           )}
         </div>
 
-        {/* Action Buttons */}
+        {/* Enhanced Action Buttons */}
         <div className="absolute top-2 right-2 flex flex-col gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
-          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-red-50">
+          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-red-50 transition-colors">
             <Heart className="w-4 h-4 text-gray-600 hover:text-red-500" />
           </button>
-          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-blue-50">
+          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-blue-50 transition-colors">
             <Eye className="w-4 h-4 text-gray-600 hover:text-blue-500" />
           </button>
-          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-green-50">
-            <Share2 className="w-4 h-4 text-gray-600 hover:text-green-500" />
+          <button className="p-2 bg-white rounded-full shadow-lg hover:bg-purple-50 transition-colors">
+            <BarChart3 className="w-4 h-4 text-gray-600 hover:text-purple-500" />
           </button>
         </div>
 
         {/* Stock Warning */}
         {product.stockLeft <= 10 && (
-          <div className="absolute bottom-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold">
+          <div className="absolute bottom-2 left-2 bg-orange-500 text-white px-2 py-1 rounded text-xs font-bold animate-pulse">
             Only {product.stockLeft} left!
           </div>
         )}
+
+        {/* Quick Action Overlay */}
+        <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
+          <div className="flex gap-2">
+            <Button size="sm" className="bg-white text-black hover:bg-gray-100">
+              <Eye className="w-4 h-4 mr-1" />
+              Quick View
+            </Button>
+            <Button size="sm" className="bg-blue-500 hover:bg-blue-600">
+              <Play className="w-4 h-4 mr-1" />
+              Video
+            </Button>
+          </div>
+        </div>
       </div>
 
       {/* Product Info */}
@@ -133,11 +155,64 @@ export const FlashSaleProductCard: React.FC<FlashSaleProductCardProps> = ({
           </div>
         </div>
 
-        {/* Add to Cart Button */}
-        <Button className="w-full bg-red-500 hover:bg-red-600 text-white font-medium shadow-md hover:shadow-lg transition-all">
-          <ShoppingCart className="w-4 h-4 mr-2" />
-          Add to Cart
-        </Button>
+        {/* Enhanced Action Buttons */}
+        <div className="space-y-2">
+          {/* Primary Actions */}
+          <div className="grid grid-cols-2 gap-2">
+            <Button className="bg-red-500 hover:bg-red-600 text-white font-medium text-xs py-2">
+              <ShoppingCart className="w-3 h-3 mr-1" />
+              Add to Cart
+            </Button>
+            <Button className="bg-green-500 hover:bg-green-600 text-white font-medium text-xs py-2">
+              💰 Buy Now
+            </Button>
+          </div>
+
+          {/* Secondary Actions */}
+          <div className="grid grid-cols-3 gap-1">
+            <Button variant="outline" size="sm" className="text-xs p-1">
+              <Heart className="w-3 h-3" />
+            </Button>
+            <Button variant="outline" size="sm" className="text-xs p-1">
+              <MessageCircle className="w-3 h-3" />
+            </Button>
+            <Button variant="outline" size="sm" className="text-xs p-1">
+              <Phone className="w-3 h-3" />
+            </Button>
+          </div>
+
+          {/* Expandable Quick Actions */}
+          {showMoreActions && (
+            <div className="grid grid-cols-2 gap-1 animate-in slide-in-from-bottom-2">
+              <Button variant="outline" size="sm" className="text-xs">
+                <FileText className="w-3 h-3 mr-1" />
+                Details
+              </Button>
+              <Button variant="outline" size="sm" className="text-xs">
+                <Truck className="w-3 h-3 mr-1" />
+                Delivery
+              </Button>
+              <Button variant="outline" size="sm" className="text-xs">
+                <CreditCard className="w-3 h-3 mr-1" />
+                Payment
+              </Button>
+              <Button variant="outline" size="sm" className="text-xs">
+                <RotateCcw className="w-3 h-3 mr-1" />
+                Return
+              </Button>
+            </div>
+          )}
+
+          {/* Toggle More Actions */}
+          <Button 
+            variant="ghost" 
+            size="sm" 
+            className="w-full text-xs text-gray-500"
+            onClick={() => setShowMoreActions(!showMoreActions)}
+          >
+            {showMoreActions ? 'Less Options' : 'More Options'}
+          </Button>
+        </div>
       </div>
     </div>
   );

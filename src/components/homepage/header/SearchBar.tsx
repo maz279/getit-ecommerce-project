@@ -1,6 +1,7 @@
 
 import React, { useState, useRef, useEffect } from 'react';
 import { Search } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useSearch } from '@/hooks/useSearch';
 import { DesktopSearchBar } from './DesktopSearchBar';
 import { MobileSearchBar } from './MobileSearchBar';
@@ -20,6 +21,7 @@ export const SearchBar: React.FC<SearchBarProps> = ({
   setShowMobileSearch,
   language
 }) => {
+  const navigate = useNavigate();
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
@@ -106,11 +108,30 @@ export const SearchBar: React.FC<SearchBarProps> = ({
     handleSearch(undefined, search);
   };
 
-  // Handle result click
+  // Enhanced result click handler with proper navigation
   const handleResultClick = (result: any) => {
     console.log('Selected result:', result);
     setShowResults(false);
     setShowSuggestions(false);
+    
+    // Navigate based on result type
+    switch (result.type) {
+      case 'product':
+        navigate(`/product/${result.id}`, { state: { product: result } });
+        break;
+      case 'vendor':
+        navigate(`/vendor/${result.id}`, { state: { vendor: result } });
+        break;
+      case 'category':
+        navigate(`/categories/${result.category?.toLowerCase() || result.title.toLowerCase()}`);
+        break;
+      case 'brand':
+        navigate(`/brands/${result.brand?.toLowerCase() || result.title.toLowerCase()}`);
+        break;
+      default:
+        // Fallback to search results page
+        navigate(`/search?q=${encodeURIComponent(result.title)}&type=${result.type}`);
+    }
   };
 
   // Handle voice search

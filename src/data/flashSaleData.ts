@@ -53,6 +53,34 @@ export const productTitles = [
   'Educational STEM Toys - Kids Learning Kit'
 ];
 
+// Static badges for each product - these won't change
+export const productBadges = [
+  'Best Seller',    // iPhone
+  'Limited Time',   // Nike Shoes
+  'Best Seller',    // Apple Watch
+  'Hot Deal',       // Headphones
+  'New Arrival',    // Women's Fashion
+  'Best Seller',    // Kitchen Appliance
+  'Limited Time',   // Laptop
+  'Hot Deal',       // Sunglasses
+  'New Arrival',    // Cosmetics
+  null,             // Office Supplies
+  'Best Seller',    // Sneakers
+  'Limited Time',   // Camera
+  'Hot Deal',       // Gaming Setup
+  'New Arrival',    // Fashion Accessories
+  null,             // Kitchen Utensils
+  'Best Seller',    // Home Decor
+  'Limited Time',   // Sports Shoes
+  'Fresh',          // Fresh Food
+  'Best Seller',    // Books
+  'Hot Deal',       // Beauty Products
+  'New Arrival',    // Fashion Items
+  'Trending',       // Plants
+  'Limited Time',   // Bags
+  'Best Seller'     // Toys
+];
+
 export const categories = [
   { id: 'all', name: 'All Categories', count: 156 },
   { id: 'electronics', name: 'Electronics', count: 45 },
@@ -75,7 +103,7 @@ export const generateFlashProducts = () => {
     sold: Math.floor(Math.random() * 1000 + 50),
     stockLeft: Math.floor(Math.random() * 20 + 5),
     freeShipping: Math.random() > 0.5,
-    badge: Math.random() > 0.7 ? 'Best Seller' : Math.random() > 0.5 ? 'Limited Time' : null,
+    badge: productBadges[index], // Use static badge from the array
     location: 'Dhaka'
   }));
 };

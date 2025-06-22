@@ -26,7 +26,7 @@ interface HierarchicalStructure {
   subcategories: Record<string, HierarchicalMainCategory>;
 }
 
-// Hierarchical structure for Women's Fashion
+// Complete hierarchical structure for Women's Fashion as per guidelines
 export const womensFashionHierarchical: HierarchicalStructure = {
   name: "Women's Fashion",
   subcategories: {
@@ -129,6 +129,17 @@ export const womensFashionHierarchical: HierarchicalStructure = {
                 { name: 'Formal Shirts', count: 5678 }
               ]
             },
+            't-shirts': {
+              name: 'T-Shirts',
+              items: [
+                { name: 'Graphic Tees', count: 12456 },
+                { name: 'Plain Tees', count: 15432 },
+                { name: 'V-Neck Tees', count: 8765 },
+                { name: 'Long Sleeve Tees', count: 6543 },
+                { name: 'Henley Tees', count: 4321 },
+                { name: 'Polo Shirts', count: 7654 }
+              ]
+            },
             'bottoms': {
               name: 'Bottoms',
               items: [
@@ -139,7 +150,33 @@ export const womensFashionHierarchical: HierarchicalStructure = {
                 { name: 'Dress Trousers', count: 7654 },
                 { name: 'Wide-Leg Trousers', count: 5432 },
                 { name: 'Cropped Trousers', count: 4321 },
-                { name: 'Palazzo Trousers', count: 6789 }
+                { name: 'Palazzo Trousers', count: 6789 },
+                { name: 'Leggings', count: 9876 },
+                { name: 'Shorts', count: 5678 },
+                { name: 'Skirts', count: 8234 }
+              ]
+            },
+            'suits-blazers': {
+              name: 'Suits & Blazers',
+              items: [
+                { name: 'Pantsuits', count: 3456 },
+                { name: 'Skirt Suits', count: 2345 },
+                { name: 'Blazers', count: 6789 },
+                { name: 'Tailored Blazers', count: 4567 },
+                { name: 'Double-Breasted Blazers', count: 2876 },
+                { name: 'Casual Blazers', count: 5432 }
+              ]
+            },
+            'outerwear': {
+              name: 'Outerwear',
+              items: [
+                { name: 'Denim Jackets', count: 7654 },
+                { name: 'Leather Jackets', count: 4321 },
+                { name: 'Trench Coats', count: 3456 },
+                { name: 'Puffer Jackets', count: 5432 },
+                { name: 'Parkas', count: 2876 },
+                { name: 'Capes', count: 1987 },
+                { name: 'Cardigans', count: 8765 }
               ]
             }
           }
@@ -232,6 +269,160 @@ export const womensFashionHierarchical: HierarchicalStructure = {
                 { name: 'Minimizer Bras', count: 4321 },
                 { name: 'Nursing Bras', count: 3456 },
                 { name: 'Bralettes', count: 6789 }
+              ]
+            },
+            'panties': {
+              name: 'Panties',
+              items: [
+                { name: 'Briefs', count: 8765 },
+                { name: 'Thongs', count: 6543 },
+                { name: 'Boyshorts', count: 5432 },
+                { name: 'Bikini', count: 7654 },
+                { name: 'Hipster', count: 4321 },
+                { name: 'High-Cut Panties', count: 3456 }
+              ]
+            },
+            'shapewear': {
+              name: 'Shapewear',
+              items: [
+                { name: 'Bodysuits', count: 4321 },
+                { name: 'Waist Cinchers', count: 3456 },
+                { name: 'Control Briefs', count: 2876 },
+                { name: 'Shaping Slips', count: 2345 },
+                { name: 'Thigh Shapers', count: 1987 }
+              ]
+            }
+          }
+        }
+      }
+    },
+    'seasonal-weather': {
+      name: 'Seasonal & Weather Specific',
+      subcategories: {
+        'summer-wear': {
+          name: 'Summer Wear',
+          subcategories: {
+            'hot-weather': {
+              name: 'Hot Weather Clothing',
+              items: [
+                { name: 'Light Cotton Shirts', count: 7654 },
+                { name: 'Sleeveless Tops', count: 9876 },
+                { name: 'Light Trousers', count: 5432 },
+                { name: 'Summer Dresses', count: 8765 },
+                { name: 'Tank Tops Summer', count: 6543 },
+                { name: 'Linen Shirts', count: 4321 }
+              ]
+            }
+          }
+        },
+        'monsoon-wear': {
+          name: 'Monsoon Wear',
+          subcategories: {
+            'rainy-season': {
+              name: 'Rainy Season Essentials',
+              items: [
+                { name: 'Waterproof Jackets', count: 3456 },
+                { name: 'Quick-Dry Pants', count: 2876 },
+                { name: 'Rain Jackets', count: 4321 },
+                { name: 'Raincoats', count: 3654 },
+                { name: 'Windbreakers', count: 2987 },
+                { name: 'Water-Resistant Clothing', count: 2345 }
+              ]
+            }
+          }
+        },
+        'winter-wear': {
+          name: 'Winter Wear',
+          subcategories: {
+            'cold-weather': {
+              name: 'Cold Weather Clothing',
+              items: [
+                { name: 'Light Sweaters', count: 6789 },
+                { name: 'Jackets', count: 5432 },
+                { name: 'Shawls and Wraps', count: 4321 },
+                { name: 'Scarves', count: 3456 },
+                { name: 'Fleece Jackets', count: 2876 }
+              ]
+            }
+          }
+        }
+      }
+    },
+    'festival-special': {
+      name: 'Festival & Special Occasion',
+      subcategories: {
+        'eid-collection': {
+          name: 'Eid Collection',
+          subcategories: {
+            'eid-specials': {
+              name: 'Eid Specials',
+              items: [
+                { name: 'Eid Saree', count: 5432 },
+                { name: 'Eid Salwar Kameez', count: 6789 },
+                { name: 'Eid Lehenga', count: 3456 }
+              ]
+            }
+          }
+        },
+        'pohela-boishakh': {
+          name: 'Pohela Boishakh (Bengali New Year)',
+          subcategories: {
+            'new-year-specials': {
+              name: 'New Year Specials',
+              items: [
+                { name: 'Traditional White Saree with Red Border', count: 4321 },
+                { name: 'Pohela Boishakh Kurtas', count: 3456 },
+                { name: 'Traditional Bangladeshi Outfits', count: 2876 }
+              ]
+            }
+          }
+        },
+        'wedding-party': {
+          name: 'Wedding & Party Wear',
+          subcategories: {
+            'special-occasions': {
+              name: 'Special Occasions',
+              items: [
+                { name: 'Wedding Sarees', count: 4567 },
+                { name: 'Bridal Lehengas', count: 3456 },
+                { name: 'Party Dresses', count: 5432 },
+                { name: 'Cocktail Outfits', count: 4321 },
+                { name: 'Reception Wear', count: 3654 }
+              ]
+            }
+          }
+        }
+      }
+    },
+    'accessories': {
+      name: 'Accessories & Add-ons',
+      subcategories: {
+        'fashion-accessories': {
+          name: 'Fashion Accessories',
+          subcategories: {
+            'style-essentials': {
+              name: 'Style Essentials',
+              items: [
+                { name: 'Scarves & Hijabs', count: 6789 },
+                { name: 'Belts', count: 5432 },
+                { name: 'Hair Accessories', count: 4321 },
+                { name: 'Fashion Jewelry', count: 7654 },
+                { name: 'Handbags & Purses', count: 8765 }
+              ]
+            }
+          }
+        },
+        'traditional-accessories': {
+          name: 'Traditional Accessories',
+          subcategories: {
+            'ethnic-accessories': {
+              name: 'Ethnic Accessories',
+              items: [
+                { name: 'Dupattas', count: 5432 },
+                { name: 'Traditional Jewelry', count: 4321 },
+                { name: 'Bangles', count: 6543 },
+                { name: 'Ethnic Bags', count: 3456 },
+                { name: 'Traditional Footwear', count: 4567 }
               ]
             }
           }

@@ -1,8 +1,33 @@
 
 import { SubCategory } from '../types';
 
+interface HierarchicalItem {
+  name: string;
+  count: number;
+}
+
+interface HierarchicalSubSubCategory {
+  name: string;
+  items: HierarchicalItem[];
+}
+
+interface HierarchicalSubCategory {
+  name: string;
+  subcategories: Record<string, HierarchicalSubSubCategory>;
+}
+
+interface HierarchicalMainCategory {
+  name: string;
+  subcategories: Record<string, HierarchicalSubCategory>;
+}
+
+interface HierarchicalStructure {
+  name: string;
+  subcategories: Record<string, HierarchicalMainCategory>;
+}
+
 // Hierarchical structure for Women's Fashion
-export const womensFashionHierarchical = {
+export const womensFashionHierarchical: HierarchicalStructure = {
   name: "Women's Fashion",
   subcategories: {
     'traditional-ethnic': {

@@ -1,6 +1,6 @@
 
 import React, { useState, useEffect } from 'react';
-import { Clock, Fire } from 'lucide-react';
+import { Clock, Flame } from 'lucide-react';
 
 export const DealsCountdown: React.FC = () => {
   const [timeLeft, setTimeLeft] = useState({
@@ -38,9 +38,9 @@ export const DealsCountdown: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4">
         <div className="text-center mb-8">
           <div className="flex items-center justify-center gap-2 mb-4">
-            <Fire className="w-8 h-8 text-yellow-300" />
+            <Flame className="w-8 h-8 text-yellow-300" />
             <h2 className="text-3xl font-bold">⚡ Flash Sale Ending Soon! ⚡</h2>
-            <Fire className="w-8 h-8 text-yellow-300" />
+            <Flame className="w-8 h-8 text-yellow-300" />
           </div>
           
           <div className="bg-black/30 backdrop-blur-sm rounded-xl p-6 inline-block">

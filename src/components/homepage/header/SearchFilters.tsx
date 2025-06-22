@@ -277,7 +277,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                 <Checkbox
                   id={item.value}
                   checked={selectedAvailability.includes(item.value)}
-                  onCheckedChange={(checked) => handleAvailabilityChange(item.value, checked as boolean)}
+                  onCheckedChange={(checked) => handleAvailabilityChange(item.value, checked === true)}
                 />
                 <Label htmlFor={item.value} className="text-sm">{item.label}</Label>
               </div>
@@ -353,7 +353,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <Checkbox
                 id="freeShipping"
                 checked={freeShipping}
-                onCheckedChange={setFreeShipping}
+                onCheckedChange={(checked) => setFreeShipping(checked === true)}
               />
               <Label htmlFor="freeShipping" className="text-sm">{currentContent.freeShipping}</Label>
             </div>
@@ -361,7 +361,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <Checkbox
                 id="codAvailable"
                 checked={codAvailable}
-                onCheckedChange={setCodAvailable}
+                onCheckedChange={(checked) => setCodAvailable(checked === true)}
               />
               <Label htmlFor="codAvailable" className="text-sm">{currentContent.codAvailable}</Label>
             </div>
@@ -377,7 +377,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
                 <Checkbox
                   id={method.id}
                   checked={selectedPaymentMethods.includes(method.id)}
-                  onCheckedChange={(checked) => handlePaymentMethodChange(method.id, checked as boolean)}
+                  onCheckedChange={(checked) => handlePaymentMethodChange(method.id, checked === true)}
                 />
                 <Label htmlFor={method.id} className="text-sm">{method.label}</Label>
               </div>
@@ -427,7 +427,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <Checkbox
                 id="festivalOffers"
                 checked={festivalOffers}
-                onCheckedChange={setFestivalOffers}
+                onCheckedChange={(checked) => setFestivalOffers(checked === true)}
               />
               <Label htmlFor="festivalOffers" className="text-sm">{currentContent.festivalOffers}</Label>
             </div>
@@ -435,7 +435,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
               <Checkbox
                 id="trending"
                 checked={trending}
-                onCheckedChange={setTrending}
+                onCheckedChange={(checked) => setTrending(checked === true)}
               />
               <Label htmlFor="trending" className="text-sm">{currentContent.trending}</Label>
             </div>
@@ -449,7 +449,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
             <Checkbox
               id="tradeLicenseVerified"
               checked={tradeLicenseVerified}
-              onCheckedChange={setTradeLicenseVerified}
+              onCheckedChange={(checked) => setTradeLicenseVerified(checked === true)}
             />
             <Label htmlFor="tradeLicenseVerified" className="text-sm">{currentContent.tradeLicenseVerified}</Label>
           </div>

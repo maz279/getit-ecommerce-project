@@ -32,6 +32,12 @@ import FlashSale from "./pages/FlashSale";
 import DailyDeals from "./pages/DailyDeals";
 import Recommendations from "./pages/Recommendations";
 
+// New Quick Access Pages
+import GiftCards from "./pages/GiftCards";
+import MegaSale from "./pages/MegaSale";
+import GroupBuy from "./pages/GroupBuy";
+import Premium from "./pages/Premium";
+
 // New Footer Navigation Pages
 import OrderTracking from "./pages/OrderTracking";
 import ReturnsRefunds from "./pages/ReturnsRefunds";
@@ -62,6 +68,18 @@ const App = () => (
               <Route path="/wishlist" element={<Wishlist />} />
               <Route path="/account" element={<MyAccount />} />
               
+              {/* Quick Access Routes */}
+              <Route path="/flash-sale" element={<FlashSale />} />
+              <Route path="/daily-deals" element={<DailyDeals />} />
+              <Route path="/gift-cards" element={<GiftCards />} />
+              <Route path="/mega-sale" element={<MegaSale />} />
+              <Route path="/group-buy" element={<GroupBuy />} />
+              <Route path="/premium" element={<Premium />} />
+              <Route path="/best-sellers" element={<Products />} />
+              <Route path="/new-arrivals" element={<Products />} />
+              <Route path="/free-delivery" element={<DeliveryInfo />} />
+              <Route path="/bulk-orders" element={<Products />} />
+              
               {/* Customer Service Routes */}
               <Route path="/help-center" element={<HelpCenter />} />
               <Route path="/order-tracking" element={<OrderTracking />} />
@@ -84,8 +102,6 @@ const App = () => (
               <Route path="/mobile-banking" element={<MobileBanking />} />
               <Route path="/payment-methods" element={<PaymentMethods />} />
               <Route path="/offers" element={<Offers />} />
-              <Route path="/flash-sale" element={<FlashSale />} />
-              <Route path="/daily-deals" element={<DailyDeals />} />
               <Route path="/recommendations" element={<Recommendations />} />
               
               {/* Auth Routes */}

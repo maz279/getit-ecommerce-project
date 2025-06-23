@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
+import { UserManagementContent } from './content/UserManagementContent';
 import { SalesManagementContent } from './content/SalesManagementContent';
 import { OrderManagementContent } from './content/OrderManagementContent';
 import { ProductManagementContent } from './content/ProductManagementContent';
@@ -32,6 +33,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu} />;
     }
 
+    // Handle user management
+    if (selectedMenu === 'user-management' || selectedMenu.startsWith('user-') || selectedMenu.startsWith('customer-') || selectedMenu.startsWith('admin-') || 
+        ['customer-management', 'customer-list', 'customer-details', 'customer-analytics', 'account-verification', 'customer-support', 
+         'admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
+         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedMenu)) {
+      return <UserManagementContent selectedSubmenu={selectedMenu === 'user-management' ? selectedSubmenu : selectedMenu} />;
+    }
+
     // Handle sales management
     if (selectedMenu === 'sales' || selectedMenu.startsWith('sales-') || 
         ['sales-overview', 'revenue-analytics', 'sales-reports', 'daily-sales', 'monthly-trends', 'yearly-reports', 'sales-forecast', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking', 'detailed-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu)) {
@@ -50,7 +59,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <ProductManagementContent selectedSubmenu={selectedMenu === 'products' ? selectedSubmenu : selectedMenu} />;
     }
 
-    // Handle customer management
+    // Handle customer management (legacy)
     if (selectedMenu === 'customers' || selectedMenu.startsWith('customer-') || 
         ['customer-database', 'customer-analytics', 'customer-support', 'all-customers', 'customer-segments', 'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews'].includes(selectedMenu)) {
       return <CustomerManagementContent selectedSubmenu={selectedMenu === 'customers' ? selectedSubmenu : selectedMenu} />;

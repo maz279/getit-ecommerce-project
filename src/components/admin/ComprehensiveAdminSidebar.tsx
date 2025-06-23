@@ -1,46 +1,35 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
-  LayoutDashboard,
-  Users,
-  Store,
-  Package,
-  ShoppingCart,
+  LayoutDashboard, 
+  Users, 
+  Package, 
+  ShoppingCart, 
   DollarSign,
-  TrendingUp,
-  BarChart3,
   Settings,
-  Bell,
-  MessageSquare,
+  Store,
   Truck,
-  CreditCard,
-  Shield,
-  FileText,
-  Zap,
-  Globe,
-  Target,
-  Award,
-  Headphones,
+  Megaphone,
+  BarChart3,
   ChevronLeft,
   ChevronRight,
   ChevronDown,
   ChevronUp,
+  Home,
   Activity,
-  PieChart,
-  LineChart,
-  Calendar,
+  Shield,
+  FileText,
+  CreditCard,
   MapPin,
-  Search,
-  Filter,
-  Download,
-  Upload,
-  Eye,
-  Edit,
-  Trash2,
-  Plus,
-  Minus,
-  RefreshCw
+  Bell,
+  Award,
+  TrendingUp,
+  UserCheck,
+  Clipboard,
+  Target,
+  Database,
+  Globe,
+  Zap
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
@@ -104,6 +93,46 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         { id: 'real-time-metrics', label: 'Real-time Metrics' },
         { id: 'kpi-monitoring', label: 'KPI Monitoring' },
         { id: 'performance-insights', label: 'Performance Insights' }
+      ]
+    },
+    {
+      id: 'user-management',
+      label: 'User Management',
+      icon: Users,
+      color: 'text-green-600',
+      badge: 34,
+      children: [
+        {
+          id: 'customer-management',
+          label: 'Customer Management',
+          badge: 12,
+          children: [
+            { id: 'customer-list', label: 'Customer List' },
+            { id: 'customer-details', label: 'Customer Details' },
+            { id: 'customer-analytics', label: 'Customer Analytics' },
+            { id: 'account-verification', label: 'Account Verification', badge: 8 },
+            { id: 'customer-support', label: 'Customer Support', badge: 4 }
+          ]
+        },
+        {
+          id: 'admin-users',
+          label: 'Admin Users',
+          children: [
+            { id: 'admin-list', label: 'Admin List' },
+            { id: 'role-management', label: 'Role Management' },
+            { id: 'permissions', label: 'Permissions' },
+            { id: 'activity-logs', label: 'Activity Logs' }
+          ]
+        },
+        {
+          id: 'user-analytics',
+          label: 'User Analytics',
+          children: [
+            { id: 'registration-trends', label: 'Registration Trends' },
+            { id: 'activity-reports', label: 'Activity Reports' },
+            { id: 'demographics', label: 'Demographics' }
+          ]
+        }
       ]
     },
     {
@@ -210,16 +239,6 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
             { id: 'low-stock-alerts', label: 'Low Stock Alerts', badge: 15 },
             { id: 'reorder-points', label: 'Reorder Points' },
             { id: 'warehouse-management', label: 'Warehouse Management' }
-          ]
-        },
-        {
-          id: 'product-analytics',
-          label: 'Product Analytics',
-          children: [
-            { id: 'best-sellers', label: 'Best Sellers' },
-            { id: 'product-performance', label: 'Product Performance' },
-            { id: 'trending-products', label: 'Trending Products' },
-            { id: 'price-optimization', label: 'Price Optimization' }
           ]
         }
       ]
@@ -424,7 +443,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
     {
       id: 'communications',
       label: 'Communications',
-      icon: MessageSquare,
+      icon: Bell,
       color: 'text-teal-600',
       badge: 42,
       children: [

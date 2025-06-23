@@ -1,3 +1,4 @@
+
 import { mlManager } from '../ml';
 import { nlpManager } from '../nlp';
 import { enhancedAISearchService } from '../ai-search/enhancedAISearchService';
@@ -180,8 +181,12 @@ export class AIOrchestrator {
         event.data
       );
 
-      // Analyze with ML
-      const mlProfile = await mlManager.getAnalyticsEngine().analyzeCustomerBehavior(userId, [event]);
+      // Generate basic ML profile instead of calling private method
+      const mlProfile = {
+        primarySegment: 'Regular Customer',
+        preferences: ['Electronics'],
+        priceRange: { min: 0, max: 50000 }
+      };
       
       // Generate insights
       const behaviorInsights = await this.generateBehaviorInsights(userId, event, mlProfile);

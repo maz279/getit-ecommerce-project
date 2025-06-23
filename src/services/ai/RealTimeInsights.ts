@@ -432,7 +432,7 @@ export class RealTimeInsights {
     }, 30000); // Every 30 seconds
   }
 
-  private async processBackgroundInsights(): void {
+  private async processBackgroundInsights(): Promise<void> {
     console.log('Real-time Insights: Processing background insights');
     
     // Generate automated insights

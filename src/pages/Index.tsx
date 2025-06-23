@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { HeroSection } from '../components/homepage/HeroSection';
@@ -13,6 +14,7 @@ import { VendorCTA } from '../components/homepage/VendorCTA';
 import { TrustIndicators } from '../components/homepage/TrustIndicators';
 import { BangladeshFeatures } from '../components/homepage/BangladeshFeatures';
 import { Footer } from '../components/homepage/Footer';
+import { QuickAccessIcons } from '../components/homepage/QuickAccessIcons';
 import { useSEO } from '@/hooks/useSEO';
 
 const Index: React.FC = () => {
@@ -52,6 +54,7 @@ const Index: React.FC = () => {
       
       <main>
         <HeroSection />
+        <QuickAccessIcons />
         <FeaturedCategories />
         <FlashSaleSection />
         <TrendingProducts />

@@ -48,67 +48,57 @@ export const FeaturedCategories: React.FC = () => {
   return (
     <section className="py-8 bg-gradient-to-br from-blue-50 via-yellow-50 to-red-50">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="flex items-center gap-3">
-          <button className="bg-gradient-to-r from-blue-500 to-green-500 text-sm text-white font-bold whitespace-nowrap text-center w-[35px] h-[35px] flex items-center justify-center rounded-full hover:from-blue-600 hover:to-green-600 transition-all shadow-md">
-            &lt;
-          </button>
-          
-          <div className="bg-gradient-to-br from-blue-50 via-yellow-50 to-red-50 shadow-xl border flex-1 rounded-xl border-blue-500 border-solid overflow-hidden">
-            <div className="bg-gradient-to-r from-blue-500 via-red-500 to-green-500 flex w-full items-center justify-between px-8 py-4">
-              <div className="text-white text-xl font-bold">
-                Search by Category
-              </div>
-              <div className="flex items-center gap-3 text-sm font-semibold">
-                <div className="text-white">SEE ALL</div>
-                <button 
-                  onClick={handleSeeAllClick}
-                  className="bg-white text-blue-600 whitespace-nowrap px-4 py-2 rounded-lg hover:bg-yellow-100 transition-colors font-bold"
-                >
-                  &gt;
-                </button>
-              </div>
+        <div className="bg-gradient-to-br from-blue-50 via-yellow-50 to-red-50 shadow-xl border rounded-xl border-blue-500 border-solid overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-500 via-red-500 to-green-500 flex w-full items-center justify-between px-8 py-4">
+            <div className="text-white text-xl font-bold">
+              Search by Category
             </div>
-            
-            <div className="bg-gradient-to-r from-blue-300 via-red-300 to-green-300 h-1 w-full" />
-            
-            <div className="p-8">
-              <div className="grid grid-cols-8 gap-5 mb-8 max-md:grid-cols-4">
-                {categories.slice(0, 8).map((category, index) => (
-                  <div 
-                    key={index} 
-                    onClick={() => handleCategoryClick(category.slug)}
-                    className="bg-white flex flex-col items-center p-5 rounded-xl hover:shadow-xl transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
-                  >
-                    <div className={`${category.color} mb-3 group-hover:scale-110 transition-transform`}>
-                      {category.icon}
-                    </div>
-                    <div className="text-sm font-medium text-center text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</div>
-                    <div className="text-xs text-gray-500 mt-1">({category.count})</div>
-                  </div>
-                ))}
-              </div>
-              
-              <div className="grid grid-cols-8 gap-5 max-md:grid-cols-4">
-                {categories.slice(8, 16).map((category, index) => (
-                  <div 
-                    key={index + 8} 
-                    onClick={() => handleCategoryClick(category.slug)}
-                    className="bg-white flex flex-col items-center p-5 rounded-xl hover:shadow-xl transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
-                  >
-                    <div className={`${category.color} mb-3 group-hover:scale-110 transition-transform`}>
-                      {category.icon}
-                    </div>
-                    <div className="text-sm font-medium text-center text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</div>
-                    <div className="text-xs text-gray-500 mt-1">({category.count})</div>
-                  </div>
-                ))}
-              </div>
+            <div className="flex items-center gap-3 text-sm font-semibold">
+              <div className="text-white">SEE ALL</div>
+              <button 
+                onClick={handleSeeAllClick}
+                className="bg-white text-blue-600 whitespace-nowrap px-4 py-2 rounded-lg hover:bg-yellow-100 transition-colors font-bold"
+              >
+                &gt;
+              </button>
             </div>
           </div>
           
-          <button className="bg-gradient-to-r from-red-500 to-yellow-500 text-sm text-white font-bold whitespace-nowrap text-center w-[35px] h-[35px] flex items-center justify-center rounded-full hover:from-red-600 hover:to-yellow-600 transition-all shadow-md">
-            &gt;
-          </button>
+          <div className="bg-gradient-to-r from-blue-300 via-red-300 to-green-300 h-1 w-full" />
+          
+          <div className="p-8">
+            <div className="grid grid-cols-8 gap-5 mb-8 max-md:grid-cols-4">
+              {categories.slice(0, 8).map((category, index) => (
+                <div 
+                  key={index} 
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className="bg-white flex flex-col items-center p-5 rounded-xl hover:shadow-xl transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
+                >
+                  <div className={`${category.color} mb-3 group-hover:scale-110 transition-transform`}>
+                    {category.icon}
+                  </div>
+                  <div className="text-sm font-medium text-center text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">({category.count})</div>
+                </div>
+              ))}
+            </div>
+            
+            <div className="grid grid-cols-8 gap-5 max-md:grid-cols-4">
+              {categories.slice(8, 16).map((category, index) => (
+                <div 
+                  key={index + 8} 
+                  onClick={() => handleCategoryClick(category.slug)}
+                  className="bg-white flex flex-col items-center p-5 rounded-xl hover:shadow-xl transition-all cursor-pointer group border border-gray-100 hover:border-blue-200"
+                >
+                  <div className={`${category.color} mb-3 group-hover:scale-110 transition-transform`}>
+                    {category.icon}
+                  </div>
+                  <div className="text-sm font-medium text-center text-gray-800 group-hover:text-blue-600 transition-colors">{category.name}</div>
+                  <div className="text-xs text-gray-500 mt-1">({category.count})</div>
+                </div>
+              ))}
+            </div>
+          </div>
         </div>
       </div>
     </section>

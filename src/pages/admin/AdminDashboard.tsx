@@ -2,7 +2,8 @@
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
-import { AdminHeader } from '@/components/admin/AdminHeader';
+import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
+import { AdminDashboardFooter } from '@/components/admin/AdminDashboardFooter';
 import { AdminStats } from '@/components/admin/AdminStats';
 import { AdminCharts } from '@/components/admin/AdminCharts';
 import { AdminRecentActivity } from '@/components/admin/AdminRecentActivity';
@@ -58,25 +59,29 @@ const AdminDashboard: React.FC = () => {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 flex">
-      <AdminSidebar 
-        activeTab={activeTab}
-        setActiveTab={setActiveTab}
-        collapsed={sidebarCollapsed}
-        setCollapsed={setSidebarCollapsed}
-      />
-      
-      <div className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-        <AdminHeader 
-          userProfile={userProfile}
-          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+    <div className="min-h-screen bg-gray-50 flex flex-col">
+      <div className="flex flex-1">
+        <AdminSidebar 
+          activeTab={activeTab}
+          setActiveTab={setActiveTab}
+          collapsed={sidebarCollapsed}
+          setCollapsed={setSidebarCollapsed}
         />
         
-        <main className="p-6">
-          <div className="max-w-7xl mx-auto">
-            {renderContent()}
-          </div>
-        </main>
+        <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
+          <AdminDashboardHeader 
+            userProfile={userProfile}
+            onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+          />
+          
+          <main className="flex-1 p-6">
+            <div className="max-w-7xl mx-auto">
+              {renderContent()}
+            </div>
+          </main>
+
+          <AdminDashboardFooter />
+        </div>
       </div>
     </div>
   );

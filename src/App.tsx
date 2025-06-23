@@ -39,6 +39,8 @@ function App() {
                 <Route path="/login" element={<Login />} />
                 <Route path="/register" element={<Register />} />
                 <Route path="/dashboard" element={<AdminDashboard />} />
+                <Route path="/admin" element={<AdminDashboard />} />
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 <Route path="/profile" element={<MyAccount />} />
                 <Route path="/cart" element={<div>Cart Page - Coming Soon</div>} />
                 <Route path="/checkout" element={<div>Checkout Page - Coming Soon</div>} />

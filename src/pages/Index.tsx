@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { HeroSection } from '../components/homepage/HeroSection';
@@ -16,6 +15,7 @@ import { TrustIndicators } from '../components/homepage/TrustIndicators';
 import { BangladeshFeatures } from '../components/homepage/BangladeshFeatures';
 import { Footer } from '../components/homepage/Footer';
 import { useSEO } from '@/hooks/useSEO';
+import { AdminNavigationCard } from '../components/homepage/AdminNavigationCard';
 
 const Index: React.FC = () => {
   // SEO optimization for homepage
@@ -53,6 +53,7 @@ const Index: React.FC = () => {
       <Header />
       
       <main>
+        <AdminNavigationCard />
         <HeroSection />
         <QuickAccessIcons />
         <FeaturedCategories />

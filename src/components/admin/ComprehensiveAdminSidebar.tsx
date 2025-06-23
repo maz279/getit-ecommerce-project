@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -621,22 +620,24 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   };
 
   return (
-    <div className={`fixed left-0 top-[70px] bottom-0 bg-white border-r border-gray-200 shadow-lg transition-all duration-300 z-40 ${
+    <div className={`fixed left-0 top-[95px] bottom-0 bg-white border-r border-gray-200 shadow-lg transition-all duration-300 z-40 ${
       collapsed ? 'w-16' : 'w-80'
     }`}>
       {/* Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
         {!collapsed && (
-          <Link to="/" className="flex items-center space-x-3">
+          <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-              <Store className="h-6 w-6 text-white" />
+              <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-xs">G</span>
+              </div>
             </div>
             <div>
               <div className="font-bold text-lg text-gray-800">GetIt Admin</div>
               <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
               <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
             </div>
-          </Link>
+          </div>
         )}
         
         <button
@@ -648,7 +649,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       </div>
 
       {/* Navigation Menu */}
-      <div className="h-[calc(100vh-140px)] overflow-hidden">
+      <div className="h-[calc(100vh-165px)] overflow-hidden">
         <ScrollArea className="h-full">
           <nav className="p-2">
             {menuItems.map((item) => {

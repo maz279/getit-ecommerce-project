@@ -33,19 +33,19 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   setCollapsed
 }) => {
   const menuItems = [
-    { id: 'overview', label: 'Overview', icon: LayoutDashboard },
-    { id: 'vendors', label: 'Vendors', icon: Store },
-    { id: 'products', label: 'Products', icon: Package },
-    { id: 'orders', label: 'Orders', icon: ShoppingCart },
-    { id: 'users', label: 'Users', icon: Users },
-    { id: 'financials', label: 'Financials', icon: DollarSign },
-    { id: 'reports', label: 'Reports', icon: BarChart3 },
-    { id: 'notifications', label: 'Notifications', icon: Bell },
-    { id: 'settings', label: 'Settings', icon: Settings }
+    { id: 'overview', label: 'Overview', icon: LayoutDashboard, color: 'text-blue-500' },
+    { id: 'vendors', label: 'Vendors', icon: Store, color: 'text-green-500' },
+    { id: 'products', label: 'Products', icon: Package, color: 'text-purple-500' },
+    { id: 'orders', label: 'Orders', icon: ShoppingCart, color: 'text-orange-500' },
+    { id: 'users', label: 'Users', icon: Users, color: 'text-cyan-500' },
+    { id: 'financials', label: 'Financials', icon: DollarSign, color: 'text-emerald-500' },
+    { id: 'reports', label: 'Reports', icon: BarChart3, color: 'text-indigo-500' },
+    { id: 'notifications', label: 'Notifications', icon: Bell, color: 'text-red-500' },
+    { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-500' }
   ];
 
   return (
-    <div className={`fixed left-0 top-0 h-screen bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 text-gray-800 transition-all duration-300 z-50 shadow-lg border-r border-gray-300 ${
+    <div className={`fixed left-0 top-[120px] h-[calc(100vh-120px)] bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 text-gray-800 transition-all duration-300 z-40 shadow-lg border-r border-gray-300 ${
       collapsed ? 'w-16' : 'w-64'
     }`}>
       {/* Header */}
@@ -67,30 +67,37 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </button>
       </div>
 
-      {/* Scrollable Navigation */}
-      <ScrollArea className="flex-1 h-[calc(100vh-140px)]">
-        <nav className="mt-4 px-2">
-          {menuItems.map((item) => {
-            const Icon = item.icon;
-            const isActive = activeTab === item.id;
-            
-            return (
-              <button
-                key={item.id}
-                onClick={() => setActiveTab(item.id)}
-                className={`w-full flex items-center px-3 py-2.5 mb-1 text-left hover:bg-white/60 hover:shadow-sm transition-all duration-200 rounded-lg text-xs ${
-                  isActive ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
-                }`}
-              >
-                <Icon size={16} className="flex-shrink-0" />
-                {!collapsed && (
-                  <span className="ml-2.5 font-medium">{item.label}</span>
-                )}
-              </button>
-            );
-          })}
-        </nav>
-      </ScrollArea>
+      {/* Scrollable Navigation with Custom Scrollbar */}
+      <div className="flex-1 h-[calc(100%-120px)] overflow-hidden">
+        <ScrollArea className="h-full">
+          <nav className="mt-4 px-2 pb-4">
+            {menuItems.map((item) => {
+              const Icon = item.icon;
+              const isActive = activeTab === item.id;
+              
+              return (
+                <button
+                  key={item.id}
+                  onClick={() => setActiveTab(item.id)}
+                  className={`w-full flex items-center px-3 py-2.5 mb-1 text-left hover:bg-white/60 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
+                    isActive ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
+                  }`}
+                >
+                  <Icon 
+                    size={16} 
+                    className={`flex-shrink-0 transition-colors ${
+                      isActive ? 'text-blue-600' : item.color
+                    } group-hover:${item.color}`} 
+                  />
+                  {!collapsed && (
+                    <span className="ml-2.5 font-medium">{item.label}</span>
+                  )}
+                </button>
+              );
+            })}
+          </nav>
+        </ScrollArea>
+      </div>
 
       {/* Footer */}
       {!collapsed && (

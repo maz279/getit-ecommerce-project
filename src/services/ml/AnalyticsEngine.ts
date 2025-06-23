@@ -2,274 +2,318 @@
 import { mlService } from './MLService';
 
 export interface MLInsight {
-  id: string;
+  type: string;
   title: string;
   description: string;
-  type: 'trend' | 'anomaly' | 'opportunity' | 'warning';
   confidence: number;
-  impact: 'high' | 'medium' | 'low';
   actionable: boolean;
-  recommendations: string[];
+  priority: 'low' | 'medium' | 'high' | 'critical';
+  category: 'customer' | 'product' | 'sales' | 'marketing' | 'operations';
   data: any;
 }
 
 export interface CustomerInsight {
-  segmentId: string;
-  segmentName: string;
-  size: number;
-  characteristics: string[];
-  preferences: string[];
-  predictedLifetimeValue: number;
+  userId: string;
+  segment: string;
+  clv: number;
   churnRisk: number;
-  recommendations: string[];
+  preferences: string[];
+  nextBestAction: string;
 }
 
 export class AnalyticsEngine {
-  private analyticsData: Map<string, any[]> = new Map();
+  private insights: MLInsight[] = [];
+  private customerProfiles: Map<string, CustomerInsight> = new Map();
+  private realTimeEvents: Array<{
+    type: string;
+    userId?: string;
+    timestamp: number;
+    data: any;
+  }> = [];
 
-  async generateBusinessInsights(timeframe: string = '30d'): Promise<MLInsight[]> {
-    console.log('ML Analytics: Generating business insights for timeframe:', timeframe);
-    
-    await mlService.initialize();
-    
-    const insights: MLInsight[] = [];
-    
-    // Sales trend analysis
-    insights.push(await this.analyzeSalesTrends());
-    
-    // Customer behavior insights
-    insights.push(await this.analyzeCustomerBehavior());
-    
-    // Product performance insights
-    insights.push(await this.analyzeProductPerformance());
-    
-    // Market opportunity insights
-    insights.push(await this.identifyMarketOpportunities());
-    
-    // Anomaly detection
-    insights.push(...await this.detectAnomalies());
-    
-    return insights.sort((a, b) => b.confidence - a.confidence);
-  }
-
-  async analyzeCustomerSegments(): Promise<CustomerInsight[]> {
-    console.log('ML Analytics: Analyzing customer segments');
-    
-    await new Promise(resolve => setTimeout(resolve, 400));
-    
-    return [
-      {
-        segmentId: 'tech_enthusiasts',
-        segmentName: 'Tech Enthusiasts',
-        size: 15420,
-        characteristics: ['early_adopter', 'high_spending', 'frequent_buyer'],
-        preferences: ['electronics', 'gadgets', 'premium_brands'],
-        predictedLifetimeValue: 45000,
-        churnRisk: 0.12,
-        recommendations: [
-          'Target with latest tech releases',
-          'Offer exclusive early access',
-          'Focus on premium product lines'
-        ]
-      },
-      {
-        segmentId: 'value_seekers',
-        segmentName: 'Value Seekers',
-        size: 32150,
-        characteristics: ['price_sensitive', 'deal_hunter', 'comparison_shopper'],
-        preferences: ['discounts', 'bulk_orders', 'budget_friendly'],
-        predictedLifetimeValue: 18000,
-        churnRisk: 0.25,
-        recommendations: [
-          'Highlight price savings',
-          'Offer bulk discounts',
-          'Send deal notifications'
-        ]
-      },
-      {
-        segmentId: 'fashion_forward',
-        segmentName: 'Fashion Forward',
-        size: 21330,
-        characteristics: ['trend_follower', 'brand_conscious', 'social_influence'],
-        preferences: ['fashion', 'trending_items', 'social_proof'],
-        predictedLifetimeValue: 28000,
-        churnRisk: 0.18,
-        recommendations: [
-          'Showcase trending fashion items',
-          'Use influencer partnerships',
-          'Highlight customer reviews'
-        ]
-      }
-    ];
-  }
-
-  async predictChurnRisk(userId: string): Promise<{
-    riskScore: number;
-    riskLevel: 'low' | 'medium' | 'high';
-    factors: string[];
-    interventions: string[];
-  }> {
-    console.log('ML Analytics: Predicting churn risk for user:', userId);
-    
-    await new Promise(resolve => setTimeout(resolve, 200));
-    
-    const riskScore = Math.random();
-    const riskLevel = riskScore > 0.7 ? 'high' : riskScore > 0.4 ? 'medium' : 'low';
-    
-    return {
-      riskScore,
-      riskLevel,
-      factors: [
-        'decreased_engagement',
-        'longer_time_between_orders',
-        'price_sensitivity_increase'
-      ],
-      interventions: [
-        'Send personalized discount',
-        'Recommend similar products',
-        'Offer customer service outreach'
-      ]
-    };
-  }
-
-  private async analyzeSalesTrends(): Promise<MLInsight> {
-    return {
-      id: 'sales_trend_1',
-      title: 'Electronics Sales Surge Detected',
-      description: 'Electronics category showing 23% increase in sales over last 14 days',
-      type: 'trend',
-      confidence: 0.91,
-      impact: 'high',
-      actionable: true,
-      recommendations: [
-        'Increase electronics inventory',
-        'Launch targeted electronics campaigns',
-        'Consider expanding electronics selection'
-      ],
-      data: {
-        category: 'electronics',
-        growth: 0.23,
-        timeframe: '14d'
-      }
-    };
-  }
-
-  private async analyzeCustomerBehavior(): Promise<MLInsight> {
-    return {
-      id: 'behavior_1',
-      title: 'Mobile Shopping Behavior Shift',
-      description: 'Mobile users now complete 67% more purchases on weekends',
-      type: 'trend',
-      confidence: 0.87,
-      impact: 'medium',
-      actionable: true,
-      recommendations: [
-        'Optimize mobile checkout experience',
-        'Increase weekend mobile advertising',
-        'Create mobile-first product features'
-      ],
-      data: {
-        platform: 'mobile',
-        weekendIncrease: 0.67
-      }
-    };
-  }
-
-  private async analyzeProductPerformance(): Promise<MLInsight> {
-    return {
-      id: 'product_perf_1',
-      title: 'High Conversion Product Identified',
-      description: 'Samsung Galaxy S24 showing exceptional 34% conversion rate',
-      type: 'opportunity',
-      confidence: 0.94,
-      impact: 'high',
-      actionable: true,
-      recommendations: [
-        'Increase marketing budget for this product',
-        'Feature prominently on homepage',
-        'Create bundle offers with accessories'
-      ],
-      data: {
-        productId: 'samsung_s24',
-        conversionRate: 0.34
-      }
-    };
-  }
-
-  private async identifyMarketOpportunities(): Promise<MLInsight> {
-    return {
-      id: 'opportunity_1',
-      title: 'Emerging Category Opportunity',
-      description: 'Smart home devices showing 156% search growth but low availability',
-      type: 'opportunity',
-      confidence: 0.82,
-      impact: 'high',
-      actionable: true,
-      recommendations: [
-        'Expand smart home product catalog',
-        'Partner with smart home vendors',
-        'Create smart home shopping guide'
-      ],
-      data: {
-        category: 'smart_home',
-        searchGrowth: 1.56,
-        availability: 'low'
-      }
-    };
-  }
-
-  private async detectAnomalies(): Promise<MLInsight[]> {
-    return [
-      {
-        id: 'anomaly_1',
-        title: 'Unusual Cart Abandonment Spike',
-        description: 'Cart abandonment rate increased 45% in last 3 days',
-        type: 'warning',
-        confidence: 0.89,
-        impact: 'medium',
-        actionable: true,
-        recommendations: [
-          'Review checkout process for issues',
-          'Send cart recovery emails',
-          'Check payment gateway performance'
-        ],
-        data: {
-          metric: 'cart_abandonment',
-          increase: 0.45,
-          timeframe: '3d'
-        }
-      }
-    ];
-  }
-
-  // Real-time analytics processing
   async processRealTimeEvent(event: {
     type: string;
-    userId: string;
-    productId?: string;
-    value?: number;
+    userId?: string;
     timestamp: number;
-    metadata?: any;
-  }): Promise<void> {
+    data?: any;
+  }): Promise<MLInsight[]> {
     console.log('ML Analytics: Processing real-time event:', event.type);
     
-    const eventData = this.analyticsData.get(event.type) || [];
-    eventData.push(event);
-    this.analyticsData.set(event.type, eventData);
+    this.realTimeEvents.push(event);
     
-    // Trigger ML analysis for critical events
-    if (['purchase', 'cart_abandon', 'high_value_view'].includes(event.type)) {
-      await this.triggerRealTimeAnalysis(event);
+    // Generate insights based on event type
+    const insights: MLInsight[] = [];
+    
+    switch (event.type) {
+      case 'purchase':
+        insights.push(...await this.analyzePurchaseBehavior(event));
+        break;
+      case 'product_view':
+        insights.push(...await this.analyzeViewingBehavior(event));
+        break;
+      case 'search':
+        insights.push(...await this.analyzeSearchBehavior(event));
+        break;
+      case 'cart_abandonment':
+        insights.push(...await this.analyzeAbandonmentBehavior(event));
+        break;
+      case 'ml_background_analysis':
+        insights.push(...await this.performBackgroundAnalysis());
+        break;
     }
+    
+    // Store insights
+    this.insights.push(...insights);
+    
+    // Update customer profiles if user event
+    if (event.userId) {
+      await this.updateCustomerProfile(event.userId, event);
+    }
+    
+    return insights;
   }
 
-  private async triggerRealTimeAnalysis(event: any): Promise<void> {
-    console.log('ML Analytics: Triggering real-time analysis for event:', event.type);
+  private async analyzePurchaseBehavior(event: any): Promise<MLInsight[]> {
+    const insights: MLInsight[] = [];
     
-    // Simulate real-time ML processing
-    await new Promise(resolve => setTimeout(resolve, 100));
+    // Analyze purchase patterns
+    const userPurchases = this.realTimeEvents
+      .filter(e => e.type === 'purchase' && e.userId === event.userId)
+      .slice(-10);
     
-    // Could trigger alerts, recommendations, or automated actions
+    if (userPurchases.length >= 3) {
+      const avgOrderValue = userPurchases
+        .reduce((sum, e) => sum + (e.data?.amount || 0), 0) / userPurchases.length;
+      
+      insights.push({
+        type: 'customer_behavior',
+        title: 'Repeat Customer Identified',
+        description: `Customer showing consistent purchase behavior with avg order value: ৳${avgOrderValue.toFixed(0)}`,
+        confidence: 0.9,
+        actionable: true,
+        priority: 'medium',
+        category: 'customer',
+        data: { avgOrderValue, purchaseCount: userPurchases.length }
+      });
+    }
+    
+    // Check for high-value purchase
+    if (event.data?.amount > 50000) {
+      insights.push({
+        type: 'high_value_transaction',
+        title: 'High-Value Purchase Detected',
+        description: 'Customer made a significant purchase, consider VIP treatment',
+        confidence: 1.0,
+        actionable: true,
+        priority: 'high',
+        category: 'customer',
+        data: { amount: event.data.amount }
+      });
+    }
+    
+    return insights;
+  }
+
+  private async analyzeViewingBehavior(event: any): Promise<MLInsight[]> {
+    const insights: MLInsight[] = [];
+    
+    const recentViews = this.realTimeEvents
+      .filter(e => e.type === 'product_view' && e.userId === event.userId)
+      .slice(-20);
+    
+    // Detect category preferences
+    const categoryCount = recentViews.reduce((acc, e) => {
+      const category = e.data?.category || 'unknown';
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    const topCategory = Object.entries(categoryCount)
+      .sort(([,a], [,b]) => b - a)[0];
+    
+    if (topCategory && topCategory[1] >= 3) {
+      insights.push({
+        type: 'category_affinity',
+        title: 'Category Preference Detected',
+        description: `Strong interest in ${topCategory[0]} category`,
+        confidence: 0.85,
+        actionable: true,
+        priority: 'medium',
+        category: 'customer',
+        data: { category: topCategory[0], views: topCategory[1] }
+      });
+    }
+    
+    return insights;
+  }
+
+  private async analyzeSearchBehavior(event: any): Promise<MLInsight[]> {
+    const insights: MLInsight[] = [];
+    
+    const recentSearches = this.realTimeEvents
+      .filter(e => e.type === 'search' && e.userId === event.userId)
+      .slice(-10);
+    
+    if (recentSearches.length >= 5) {
+      insights.push({
+        type: 'search_pattern',
+        title: 'Active Search Behavior',
+        description: 'User showing high search activity, may need assistance',
+        confidence: 0.8,
+        actionable: true,
+        priority: 'medium',
+        category: 'customer',
+        data: { searchCount: recentSearches.length }
+      });
+    }
+    
+    return insights;
+  }
+
+  private async analyzeAbandonmentBehavior(event: any): Promise<MLInsight[]> {
+    const insights: MLInsight[] = [];
+    
+    insights.push({
+      type: 'cart_abandonment',
+      title: 'Cart Abandonment Alert',
+      description: 'Customer abandoned cart, immediate follow-up recommended',
+      confidence: 1.0,
+      actionable: true,
+      priority: 'high',
+      category: 'sales',
+      data: { cartValue: event.data?.cartValue || 0 }
+    });
+    
+    return insights;
+  }
+
+  private async performBackgroundAnalysis(): Promise<MLInsight[]> {
+    const insights: MLInsight[] = [];
+    
+    // Analyze overall trends
+    const recent24h = this.realTimeEvents
+      .filter(e => e.timestamp > Date.now() - 24 * 60 * 60 * 1000);
+    
+    const eventsByType = recent24h.reduce((acc, e) => {
+      acc[e.type] = (acc[e.type] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    // Check for unusual patterns
+    if (eventsByType.cart_abandonment > 10) {
+      insights.push({
+        type: 'trend_analysis',
+        title: 'High Cart Abandonment Rate',
+        description: 'Unusually high cart abandonment in last 24h',
+        confidence: 0.9,
+        actionable: true,
+        priority: 'high',
+        category: 'sales',
+        data: { abandonmentCount: eventsByType.cart_abandonment }
+      });
+    }
+    
+    return insights;
+  }
+
+  public async analyzeCustomerBehavior(userId: string, data: any): Promise<CustomerInsight> {
+    console.log('ML Analytics: Analyzing customer behavior for:', userId);
+    
+    const userEvents = this.realTimeEvents.filter(e => e.userId === userId);
+    const purchases = userEvents.filter(e => e.type === 'purchase');
+    const views = userEvents.filter(e => e.type === 'product_view');
+    
+    // Calculate CLV (simplified)
+    const totalSpent = purchases.reduce((sum, e) => sum + (e.data?.amount || 0), 0);
+    const clv = totalSpent * 1.5; // Simple multiplier
+    
+    // Calculate churn risk
+    const daysSinceLastActivity = userEvents.length > 0 ? 
+      Math.floor((Date.now() - Math.max(...userEvents.map(e => e.timestamp))) / (24 * 60 * 60 * 1000)) : 30;
+    const churnRisk = Math.min(daysSinceLastActivity / 30, 1);
+    
+    // Determine segment
+    let segment = 'new';
+    if (purchases.length >= 5) segment = 'loyal';
+    else if (totalSpent > 50000) segment = 'high_value';
+    else if (purchases.length >= 2) segment = 'regular';
+    
+    // Extract preferences
+    const categoryViews = views.reduce((acc, e) => {
+      const category = e.data?.category || 'unknown';
+      acc[category] = (acc[category] || 0) + 1;
+      return acc;
+    }, {} as Record<string, number>);
+    
+    const preferences = Object.entries(categoryViews)
+      .sort(([,a], [,b]) => b - a)
+      .slice(0, 3)
+      .map(([category]) => category);
+    
+    // Determine next best action
+    let nextBestAction = 'send_welcome_offer';
+    if (churnRisk > 0.7) nextBestAction = 'retention_campaign';
+    else if (segment === 'high_value') nextBestAction = 'vip_treatment';
+    else if (views.length > purchases.length * 5) nextBestAction = 'purchase_incentive';
+    
+    const insight: CustomerInsight = {
+      userId,
+      segment,
+      clv,
+      churnRisk,
+      preferences,
+      nextBestAction
+    };
+    
+    this.customerProfiles.set(userId, insight);
+    return insight;
+  }
+
+  private async updateCustomerProfile(userId: string, event: any): Promise<void> {
+    await this.analyzeCustomerBehavior(userId, event.data);
+  }
+
+  public getInsights(filters?: {
+    category?: string;
+    priority?: string;
+    limit?: number;
+  }): MLInsight[] {
+    let filtered = this.insights;
+    
+    if (filters?.category) {
+      filtered = filtered.filter(i => i.category === filters.category);
+    }
+    
+    if (filters?.priority) {
+      filtered = filtered.filter(i => i.priority === filters.priority);
+    }
+    
+    filtered = filtered.sort((a, b) => {
+      const priorityOrder = { critical: 4, high: 3, medium: 2, low: 1 };
+      return priorityOrder[b.priority] - priorityOrder[a.priority];
+    });
+    
+    if (filters?.limit) {
+      filtered = filtered.slice(0, filters.limit);
+    }
+    
+    return filtered;
+  }
+
+  public getCustomerProfile(userId: string): CustomerInsight | undefined {
+    return this.customerProfiles.get(userId);
+  }
+
+  public getPerformanceMetrics(): any {
+    return {
+      totalInsights: this.insights.length,
+      customerProfiles: this.customerProfiles.size,
+      realtimeEvents: this.realTimeEvents.length,
+      insightsByCategory: this.insights.reduce((acc, insight) => {
+        acc[insight.category] = (acc[insight.category] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>)
+    };
   }
 }
 

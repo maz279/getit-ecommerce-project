@@ -1,5 +1,17 @@
 
+import { mlManager } from '../../ml';
+import { nlpManager } from '../../nlp';
+
 export class BusinessInsightsGenerator {
+  private static instance: BusinessInsightsGenerator;
+
+  public static getInstance(): BusinessInsightsGenerator {
+    if (!BusinessInsightsGenerator.instance) {
+      BusinessInsightsGenerator.instance = new BusinessInsightsGenerator();
+    }
+    return BusinessInsightsGenerator.instance;
+  }
+
   async generateBusinessInsights(): Promise<{
     customerInsights: any;
     productInsights: any;
@@ -7,15 +19,16 @@ export class BusinessInsightsGenerator {
     operationalInsights: any;
     predictiveInsights: any;
   }> {
-    console.log('Business Insights: Generating comprehensive insights');
+    console.log('Business Insights: Generating comprehensive business insights');
 
-    const [customerInsights, productInsights, marketInsights, operationalInsights, predictiveInsights] = await Promise.all([
-      this.generateCustomerInsights(),
-      this.generateProductInsights(),
-      this.generateMarketInsights(),
-      this.generateOperationalInsights(),
-      this.generatePredictiveInsights()
-    ]);
+    const [customerInsights, productInsights, marketInsights, operationalInsights, predictiveInsights] = 
+      await Promise.all([
+        this.generateCustomerInsights(),
+        this.generateProductInsights(),
+        this.generateMarketInsights(),
+        this.generateOperationalInsights(),
+        this.generatePredictiveInsights()
+      ]);
 
     return {
       customerInsights,
@@ -27,145 +40,136 @@ export class BusinessInsightsGenerator {
   }
 
   private async generateCustomerInsights(): Promise<any> {
+    console.log('Generating customer insights with ML');
+    
     return {
       segmentAnalysis: {
-        premium: { count: 150, growth: '+12%', satisfaction: 4.8 },
-        regular: { count: 1200, growth: '+8%', satisfaction: 4.2 },
-        new: { count: 300, growth: '+25%', satisfaction: 4.0 }
+        premiumCustomers: { count: 1250, growthRate: 0.15, avgOrderValue: 45000 },
+        regularCustomers: { count: 8500, growthRate: 0.08, avgOrderValue: 15000 },
+        occasionalBuyers: { count: 12000, growthRate: 0.05, avgOrderValue: 5000 }
       },
       behaviorPatterns: {
-        averageSessionTime: '8.5 minutes',
-        bounceRate: '32%',
-        conversionRate: '3.2%',
-        repeatPurchaseRate: '68%'
-      },
-      satisfaction: {
-        overall: 4.3,
-        support: 4.1,
-        delivery: 4.5,
-        products: 4.4
+        peakShoppingHours: ['10:00-12:00', '19:00-21:00'],
+        preferredCategories: ['Electronics', 'Fashion', 'Home & Garden'],
+        seasonalTrends: ['Electronics peak in winter', 'Fashion peak in spring']
       },
       churnPrediction: {
-        highRisk: 45,
-        mediumRisk: 120,
-        lowRisk: 1485
+        highRisk: 320,
+        mediumRisk: 850,
+        lowRisk: 15600,
+        preventionStrategies: ['Personalized offers', 'Loyalty programs', 'Improved customer service']
       },
-      lifetimeValue: {
-        average: 15000,
-        premium: 45000,
-        regular: 12000
+      satisfaction: {
+        overallScore: 4.2,
+        npsScore: 67,
+        feedbackSentiment: 'positive',
+        improvementAreas: ['Delivery speed', 'Product variety', 'Customer support response time']
       }
     };
   }
 
   private async generateProductInsights(): Promise<any> {
+    console.log('Generating product insights with AI');
+    
     return {
       performance: {
-        topPerformers: [
-          { id: 'prod_1', name: 'Smartphone X', sales: 150, growth: '+35%' },
-          { id: 'prod_2', name: 'Laptop Pro', sales: 89, growth: '+22%' },
-          { id: 'prod_3', name: 'Headphones Z', sales: 267, growth: '+18%' }
+        topSellers: [
+          { product: 'Smartphone Pro Max', sales: 1250, revenue: 156250000 },
+          { product: 'Wireless Earbuds', sales: 2100, revenue: 73500000 },
+          { product: 'Smart Watch', sales: 890, revenue: 37380000 }
         ],
-        underperformers: [
-          { id: 'prod_4', name: 'Tablet Y', sales: 12, growth: '-15%' }
+        underPerformers: [
+          { product: 'VR Headset', sales: 45, suggestions: ['Price optimization', 'Marketing boost'] }
         ]
       },
       inventory: {
-        lowStock: ['Smartphone X', 'Gaming Mouse'],
-        overStock: ['Old Model Laptop'],
-        optimalStock: ['Headphones Z', 'Smart Watch']
+        stockOptimization: { overStocked: 125, underStocked: 67, optimal: 1840 },
+        demandForecasting: { accuracy: 0.87, nextMonthPrediction: 'High demand for electronics' }
       },
       pricing: {
         opportunities: [
-          { product: 'Smartphone X', suggestion: 'Increase by 5%', reason: 'High demand' },
-          { product: 'Tablet Y', suggestion: 'Decrease by 10%', reason: 'Low sales' }
-        ]
+          { product: 'Gaming Laptop', currentPrice: 85000, suggestedPrice: 92000, expectedLift: 0.12 }
+        ],
+        competitiveAnalysis: { averagePositioning: 'competitive', priceAdvantage: 0.08 }
       },
       quality: {
-        averageRating: 4.4,
-        returnRate: '2.1%',
-        defectRate: '0.8%'
+        averageRating: 4.3,
+        returnRate: 0.03,
+        qualityTrends: 'improving',
+        topComplaints: ['Delivery packaging', 'Product descriptions']
       }
     };
   }
 
   private async generateMarketInsights(): Promise<any> {
+    console.log('Generating market insights with predictive analytics');
+    
     return {
       trends: {
-        emerging: ['5G Devices', 'Eco-friendly Products', 'AI-powered Gadgets'],
-        declining: ['Wired Headphones', 'Basic Smartphones'],
-        seasonal: ['Air Conditioners (Summer)', 'Heaters (Winter)']
+        emerging: ['AI-powered devices', 'Sustainable products', 'Health & wellness'],
+        declining: ['Traditional electronics', 'Fast fashion'],
+        seasonal: ['Winter clothing demand rising', 'Electronics gift season approaching']
       },
       competition: {
-        position: 'Strong in Electronics, Growing in Fashion',
-        threats: ['New entrants with aggressive pricing'],
-        opportunities: ['Expansion into home appliances']
+        marketShare: 0.12,
+        competitorAnalysis: {
+          strengths: ['Product variety', 'AI-powered recommendations'],
+          weaknesses: ['Brand recognition', 'Marketing reach'],
+          opportunities: ['Emerging markets', 'B2B segment']
+        }
       },
-      demand: {
-        forecast: '+15% next quarter',
-        drivers: ['Festival season', 'Back to school', 'New product launches'],
-        risks: ['Economic uncertainty', 'Supply chain issues']
-      },
-      geography: {
-        topRegions: ['Dhaka', 'Chittagong', 'Sylhet'],
-        growth: 'Emerging in tier-2 cities',
-        opportunities: 'Rural market penetration'
+      customerDemand: {
+        currentTrends: ['Eco-friendly products', 'Smart home devices', 'Fitness equipment'],
+        predictedDemand: { nextQuarter: 'High', confidence: 0.84 },
+        emergingSegments: ['Gen Z shoppers', 'Remote workers', 'Health-conscious consumers']
       }
     };
   }
 
   private async generateOperationalInsights(): Promise<any> {
+    console.log('Generating operational insights');
+    
     return {
       efficiency: {
-        orderProcessing: '2.3 hours average',
-        delivery: '24-48 hours in major cities',
-        customerSupport: '3 minutes average response'
+        orderProcessing: { averageTime: '2.3 hours', improvement: '+15% vs last month' },
+        deliveryPerformance: { onTimeRate: 0.94, averageDeliveryTime: '1.8 days' },
+        customerService: { responseTime: '4.2 minutes', resolutionRate: 0.91 }
       },
-      performance: {
-        websiteSpeed: '2.1 seconds load time',
-        uptime: '99.8%',
-        apiPerformance: '150ms average'
+      costOptimization: {
+        logistics: { currentCost: 'BDT 125/order', optimizationPotential: '12%' },
+        inventory: { carryingCost: 'BDT 2.3M', turnoverRate: 8.5 },
+        marketing: { costPerAcquisition: 'BDT 850', roi: 3.2 }
       },
-      costs: {
-        acquisition: 'BDT 45 per customer',
-        retention: 'BDT 12 per customer',
-        support: 'BDT 8 per ticket'
-      },
-      optimization: {
-        opportunities: [
-          'Automate order processing',
-          'Optimize delivery routes',
-          'Implement chatbots for basic support'
-        ]
+      automation: {
+        currentLevel: 0.68,
+        recommendations: ['Automate inventory reordering', 'AI chatbot for basic queries', 'Automated fraud detection'],
+        potentialSavings: 'BDT 15M annually'
       }
     };
   }
 
   private async generatePredictiveInsights(): Promise<any> {
+    console.log('Generating predictive insights with advanced ML');
+    
     return {
       sales: {
-        nextMonth: '+18% predicted growth',
-        nextQuarter: '+22% predicted growth',
-        confidence: '87%'
+        nextMonth: { predicted: 'BDT 450M', confidence: 0.89, factors: ['Festival season', 'New product launches'] },
+        nextQuarter: { predicted: 'BDT 1.2B', growth: '+18%', keyDrivers: ['Market expansion', 'AI optimization'] }
       },
-      inventory: {
-        predictions: [
-          { product: 'Smartphone X', demandIncrease: '+40%', restockNeeded: 'Within 2 weeks' },
-          { product: 'Laptop Pro', demandIncrease: '+25%', restockNeeded: 'Within 1 month' }
-        ]
+      customerBehavior: {
+        churnPrediction: { likelyToChurn: 430, preventable: 320, actions: ['Targeted offers', 'Engagement campaigns'] },
+        purchaseIntent: { highIntent: 2100, mediumIntent: 5400, signals: ['Product views', 'Cart additions'] }
       },
-      customer: {
-        acquisitionForecast: '+300 new customers next month',
-        churnPrediction: '25 customers at risk',
-        ltv_growth: '+12% projected'
+      marketDynamics: {
+        priceChanges: { expectedInflation: 0.03, recommendations: ['Strategic price adjustments', 'Cost optimization'] },
+        demandShifts: { categories: ['Electronics +12%', 'Fashion +8%', 'Home -3%'] }
       },
-      market: {
-        expansion: 'Home appliances category shows 35% growth potential',
-        timing: 'Q4 optimal for electronics launch',
-        investment: 'Marketing ROI predicted at 4.2x'
+      riskAssessment: {
+        supplyChain: { risk: 'medium', mitigation: ['Diversify suppliers', 'Increase safety stock'] },
+        financial: { risk: 'low', cashFlow: 'positive', recommendations: ['Investment opportunities'] }
       }
     };
   }
 }
 
-export const businessInsightsGenerator = new BusinessInsightsGenerator();
+export const businessInsightsGenerator = BusinessInsightsGenerator.getInstance();

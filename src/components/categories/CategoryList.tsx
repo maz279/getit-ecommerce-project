@@ -1,7 +1,8 @@
-
 import React, { useState } from 'react';
+import { Star } from 'lucide-react';
 import { categoriesData } from '@/data/categoriesData';
 import { CategoryItem } from './categoryList/CategoryItem';
+import { SubcategoryItem } from './categoryList/SubcategoryItem';
 import { CategoryListProps } from './categoryList/types';
 import {
   Accordion,

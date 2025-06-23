@@ -1,292 +1,166 @@
 
 import React, { useState } from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { 
-  BarChart3,
-  Users,
-  Store,
-  Package,
-  ShoppingCart,
+  TrendingUp, 
+  TrendingDown, 
+  Users, 
+  Package, 
+  ShoppingCart, 
   DollarSign,
-  Truck,
-  Megaphone,
-  Settings,
-  Search,
-  Filter,
-  Download,
-  RefreshCw,
-  Calendar,
-  MapPin,
-  Eye,
-  Edit,
+  Bell,
+  AlertTriangle,
   CheckCircle,
   XCircle,
-  AlertCircle,
-  Star,
-  TrendingUp,
   Clock,
-  Bell,
-  FileText,
-  CreditCard,
+  Eye,
+  Edit,
+  Trash2,
+  Plus,
+  Filter,
+  Download,
+  Search,
+  MessageSquare,
+  Shield,
   Activity,
-  Target,
-  Zap,
+  Server,
   Database,
-  UserCheck,
-  Globe,
-  Shield
+  Webhook,
+  FileText,
+  Settings,
+  BarChart3
 } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
-import { Input } from '@/components/ui/input';
 
 interface ComprehensiveMainContentProps {
   activeTab: string;
 }
 
 export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> = ({ activeTab }) => {
-  const [currentSubTab, setCurrentSubTab] = useState('overview');
+  const [searchTerm, setSearchTerm] = useState('');
+  const [selectedFilter, setSelectedFilter] = useState('all');
+  const [selectedStatus, setSelectedStatus] = useState('all');
 
-  // Configuration for all sections
-  const getTabConfiguration = (tabId: string) => {
-    const tabConfigs: Record<string, any> = {
-      'dashboard': {
-        title: 'Dashboard Overview',
-        breadcrumb: 'Home > Dashboard > Overview',
-        icon: BarChart3,
-        tabs: [
-          { id: 'overview', label: 'Overview', active: true },
-          { id: 'real-time-metrics', label: 'Real-time Metrics' },
-          { id: 'platform-performance', label: 'Platform Performance' },
-          { id: 'system-health', label: 'System Health' },
-          { id: 'quick-actions', label: 'Quick Actions' }
-        ]
-      },
-      'user-management': {
-        title: 'User Management',
-        breadcrumb: 'Home > User Management > Customer Management',
-        icon: Users,
-        tabs: [
-          { id: 'customer-management', label: 'Customer Management', active: true },
-          { id: 'admin-users', label: 'Admin Users' },
-          { id: 'user-analytics', label: 'User Analytics' },
-          { id: 'account-verification', label: 'Verification' },
-          { id: 'customer-support', label: 'Support' }
-        ]
-      },
-      'vendor-management': {
-        title: 'Vendor Management',
-        breadcrumb: 'Home > Vendor Management > Directory',
-        icon: Store,
-        tabs: [
-          { id: 'vendor-directory', label: 'Directory', active: true },
-          { id: 'kyc-verification', label: 'KYC Verification' },
-          { id: 'vendor-performance', label: 'Performance' },
-          { id: 'vendor-financial', label: 'Financial' },
-          { id: 'vendor-support', label: 'Support' }
-        ]
-      },
-      'product-management': {
-        title: 'Product Management',
-        breadcrumb: 'Home > Product Management > Product Catalog',
-        icon: Package,
-        tabs: [
-          { id: 'product-catalog', label: 'Product Catalog', active: true },
-          { id: 'category-management', label: 'Categories' },
-          { id: 'product-moderation', label: 'Moderation' },
-          { id: 'inventory-management', label: 'Inventory' },
-          { id: 'product-analytics', label: 'Analytics' }
-        ]
-      },
-      'order-management': {
-        title: 'Order Management',
-        breadcrumb: 'Home > Order Management > Order Overview',
-        icon: ShoppingCart,
-        tabs: [
-          { id: 'order-overview', label: 'Overview', active: true },
-          { id: 'order-processing', label: 'Processing' },
-          { id: 'payment-management', label: 'Payments' },
-          { id: 'shipping-logistics', label: 'Shipping' },
-          { id: 'order-analytics', label: 'Analytics' }
-        ]
-      },
-      'financial-management': {
-        title: 'Financial Management',
-        breadcrumb: 'Home > Financial Management > Revenue Dashboard',
-        icon: DollarSign,
-        tabs: [
-          { id: 'revenue-dashboard', label: 'Revenue', active: true },
-          { id: 'payment-gateways', label: 'Gateways' },
-          { id: 'vendor-payouts', label: 'Payouts' },
-          { id: 'financial-reports', label: 'Reports' },
-          { id: 'transaction-monitoring', label: 'Monitoring' }
-        ]
-      },
-      'shipping-logistics': {
-        title: 'Shipping & Logistics',
-        breadcrumb: 'Home > Shipping & Logistics > Courier Partners',
-        icon: Truck,
-        tabs: [
-          { id: 'courier-partners', label: 'Courier Partners', active: true },
-          { id: 'delivery-management', label: 'Delivery Management' },
-          { id: 'shipping-analytics', label: 'Analytics' },
-          { id: 'returns-exchanges', label: 'Returns & Exchanges' }
-        ]
-      },
-      'marketing-promotions': {
-        title: 'Marketing & Promotions',
-        breadcrumb: 'Home > Marketing & Promotions > Campaign Management',
-        icon: Megaphone,
-        tabs: [
-          { id: 'campaign-management', label: 'Campaigns', active: true },
-          { id: 'promotional-tools', label: 'Promotional Tools' },
-          { id: 'content-management', label: 'Content Management' },
-          { id: 'marketing-analytics', label: 'Analytics' }
-        ]
-      },
-      'analytics-reports': {
-        title: 'Analytics & Reports',
-        breadcrumb: 'Home > Analytics & Reports > Business Intelligence',
-        icon: BarChart3,
-        tabs: [
-          { id: 'business-intelligence', label: 'Business Intelligence', active: true },
-          { id: 'sales-analytics', label: 'Sales Analytics' },
-          { id: 'customer-analytics', label: 'Customer Analytics' },
-          { id: 'financial-analytics', label: 'Financial Analytics' },
-          { id: 'custom-reports', label: 'Custom Reports' }
-        ]
-      },
-      'settings-configuration': {
-        title: 'Settings & Configuration',
-        breadcrumb: 'Home > Settings & Configuration > Platform Settings',
-        icon: Settings,
-        tabs: [
-          { id: 'platform-settings', label: 'Platform Settings', active: true },
-          { id: 'payment-configuration', label: 'Payment Config' },
-          { id: 'shipping-configuration', label: 'Shipping Config' },
-          { id: 'localization', label: 'Localization' },
-          { id: 'system-administration', label: 'System Admin' }
-        ]
-      }
-    };
+  // Sample data for different sections
+  const sampleNotifications = [
+    { id: 1, type: 'warning', title: 'Low Stock Alert', message: '15 products below minimum stock level', time: '5 min ago', priority: 'high' },
+    { id: 2, type: 'success', title: 'Payment Received', message: 'BDT 25,000 payment processed successfully', time: '10 min ago', priority: 'medium' },
+    { id: 3, type: 'error', title: 'Server Error', message: 'API endpoint experiencing high latency', time: '15 min ago', priority: 'high' },
+    { id: 4, type: 'info', title: 'New Vendor Registration', message: 'ABC Electronics submitted application', time: '1 hour ago', priority: 'low' }
+  ];
 
-    return tabConfigs[tabId] || tabConfigs['dashboard'];
-  };
+  const sampleVendors = [
+    { id: 'V001', name: 'ABC Electronics', status: 'active', products: 234, revenue: 'BDT 1,45,000', rating: 4.8, kyc: 'verified' },
+    { id: 'V002', name: 'Fashion House', status: 'pending', products: 56, revenue: 'BDT 25,000', rating: 4.2, kyc: 'pending' },
+    { id: 'V003', name: 'Home Decor Ltd', status: 'active', products: 189, revenue: 'BDT 89,000', rating: 4.6, kyc: 'verified' },
+    { id: 'V004', name: 'Tech Solutions', status: 'suspended', products: 78, revenue: 'BDT 15,000', rating: 3.9, kyc: 'rejected' }
+  ];
 
-  const config = getTabConfiguration(activeTab);
-  const IconComponent = config.icon;
+  const sampleOrders = [
+    { id: 'ORD001', customer: 'John Rahman', amount: 'BDT 2,340', status: 'processing', date: '2025-01-20', payment: 'paid' },
+    { id: 'ORD002', customer: 'Sarah Ahmed', amount: 'BDT 1,890', status: 'shipped', date: '2025-01-20', payment: 'paid' },
+    { id: 'ORD003', customer: 'Karim Hassan', amount: 'BDT 3,450', status: 'failed', date: '2025-01-19', payment: 'failed' },
+    { id: 'ORD004', customer: 'Fatima Khan', amount: 'BDT 890', status: 'delivered', date: '2025-01-19', payment: 'paid' }
+  ];
 
-  // Enhanced Dashboard Content
-  const renderDashboardContent = () => (
-    <div className="space-y-8">
+  const sampleSecurityLogs = [
+    { id: 1, event: 'Failed Login Attempt', user: 'admin@getit.com', ip: '192.168.1.100', time: '2025-01-20 14:30', severity: 'medium' },
+    { id: 2, event: 'Password Changed', user: 'vendor@abc.com', ip: '192.168.1.101', time: '2025-01-20 13:15', severity: 'low' },
+    { id: 3, event: 'Suspicious Activity', user: 'unknown', ip: '192.168.1.999', time: '2025-01-20 12:45', severity: 'high' }
+  ];
+
+  const renderDashboard = () => (
+    <div className="space-y-6">
       {/* Key Metrics Cards */}
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        <Card className="bg-gradient-to-br from-blue-50 to-blue-100 border-blue-200 hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-blue-600 text-sm font-medium">Total Revenue</p>
-                <p className="text-3xl font-bold text-blue-800">৳ 2,34,567</p>
-                <p className="text-xs text-green-600 font-medium flex items-center mt-1">
-                  <TrendingUp size={12} className="mr-1" />
-                  +12.5% from yesterday
-                </p>
-              </div>
-              <div className="p-3 bg-blue-500 rounded-full">
-                <DollarSign className="h-6 w-6 text-white" />
-              </div>
+        <Card className="bg-gradient-to-r from-blue-500 to-blue-600 text-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+            <DollarSign className="h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">BDT 2,34,567</div>
+            <div className="flex items-center text-xs">
+              <TrendingUp className="h-3 w-3 mr-1" />
+              +12.5% from last month
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-green-50 to-green-100 border-green-200 hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-green-600 text-sm font-medium">Total Users</p>
-                <p className="text-3xl font-bold text-green-800">45,678</p>
-                <p className="text-xs text-green-600 font-medium flex items-center mt-1">
-                  <TrendingUp size={12} className="mr-1" />
-                  +8.3% from yesterday
-                </p>
-              </div>
-              <div className="p-3 bg-green-500 rounded-full">
-                <Users className="h-6 w-6 text-white" />
-              </div>
+        <Card className="bg-gradient-to-r from-green-500 to-green-600 text-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Users</CardTitle>
+            <Users className="h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">45,678</div>
+            <div className="flex items-center text-xs">
+              <TrendingUp className="h-3 w-3 mr-1" />
+              +8.3% from last month
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-purple-50 to-purple-100 border-purple-200 hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-purple-600 text-sm font-medium">Active Vendors</p>
-                <p className="text-3xl font-bold text-purple-800">1,234</p>
-                <p className="text-xs text-green-600 font-medium flex items-center mt-1">
-                  <TrendingUp size={12} className="mr-1" />
-                  +15.2% from yesterday
-                </p>
-              </div>
-              <div className="p-3 bg-purple-500 rounded-full">
-                <Store className="h-6 w-6 text-white" />
-              </div>
+        <Card className="bg-gradient-to-r from-purple-500 to-purple-600 text-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Vendors</CardTitle>
+            <Package className="h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">1,234</div>
+            <div className="flex items-center text-xs">
+              <TrendingUp className="h-3 w-3 mr-1" />
+              +15.2% from last month
             </div>
           </CardContent>
         </Card>
 
-        <Card className="bg-gradient-to-br from-orange-50 to-orange-100 border-orange-200 hover:shadow-lg transition-shadow">
-          <CardContent className="p-6">
-            <div className="flex items-center justify-between">
-              <div>
-                <p className="text-orange-600 text-sm font-medium">Total Orders</p>
-                <p className="text-3xl font-bold text-orange-800">8,901</p>
-                <p className="text-xs text-green-600 font-medium flex items-center mt-1">
-                  <TrendingUp size={12} className="mr-1" />
-                  +6.7% from yesterday
-                </p>
-              </div>
-              <div className="p-3 bg-orange-500 rounded-full">
-                <ShoppingCart className="h-6 w-6 text-white" />
-              </div>
+        <Card className="bg-gradient-to-r from-orange-500 to-orange-600 text-white">
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Total Orders</CardTitle>
+            <ShoppingCart className="h-4 w-4" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">8,901</div>
+            <div className="flex items-center text-xs">
+              <TrendingUp className="h-3 w-3 mr-1" />
+              +6.7% from last month
             </div>
           </CardContent>
         </Card>
       </div>
 
       {/* Charts Section */}
-      <div className="grid lg:grid-cols-2 gap-8">
-        <Card className="hover:shadow-lg transition-shadow">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center text-lg">
-              <BarChart3 className="mr-3 h-5 w-5 text-blue-600" />
-              Revenue Trend (6 Months)
-            </CardTitle>
+            <CardTitle>Revenue Trend (Last 6 Months)</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80 bg-gradient-to-br from-blue-50 to-purple-50 rounded-lg flex items-center justify-center border-2 border-dashed border-blue-200">
-              <div className="text-center">
-                <BarChart3 className="h-16 w-16 text-blue-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">Interactive Revenue Chart</p>
-                <p className="text-sm text-gray-500">Line chart showing 6-month trend</p>
-              </div>
+            <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
+              <BarChart3 className="h-16 w-16 text-gray-400" />
+              <span className="ml-2 text-gray-500">Revenue Line Chart</span>
             </div>
           </CardContent>
         </Card>
 
-        <Card className="hover:shadow-lg transition-shadow">
+        <Card>
           <CardHeader>
-            <CardTitle className="flex items-center text-lg">
-              <MapPin className="mr-3 h-5 w-5 text-green-600" />
-              Geographic Distribution
-            </CardTitle>
+            <CardTitle>Geographic Distribution</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="h-80 bg-gradient-to-br from-green-50 to-blue-50 rounded-lg flex items-center justify-center border-2 border-dashed border-green-200">
+            <div className="h-64 bg-gray-100 rounded-lg flex items-center justify-center">
               <div className="text-center">
-                <MapPin className="h-16 w-16 text-green-400 mx-auto mb-4" />
-                <p className="text-gray-600 font-medium">Bangladesh Map</p>
-                <p className="text-sm text-gray-500">User distribution across divisions</p>
+                <div className="h-16 w-16 bg-green-500 rounded-full mx-auto mb-2 flex items-center justify-center">
+                  <span className="text-white font-bold">BD</span>
+                </div>
+                <span className="text-gray-500">Bangladesh Map</span>
               </div>
             </div>
           </CardContent>
@@ -294,37 +168,27 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       </div>
 
       {/* Recent Activities */}
-      <Card className="hover:shadow-lg transition-shadow">
+      <Card>
         <CardHeader>
-          <CardTitle className="flex items-center text-lg">
-            <Clock className="mr-3 h-5 w-5 text-orange-600" />
-            Recent Activities
-          </CardTitle>
+          <CardTitle>Recent Activities</CardTitle>
         </CardHeader>
         <CardContent>
           <div className="space-y-4">
-            {[
-              { icon: '🔔', text: 'New vendor application received from Dhaka Electronics', time: '2 min ago', type: 'info' },
-              { icon: '📦', text: '100 new products added today across all categories', time: '15 min ago', type: 'success' },
-              { icon: '💰', text: 'BDT 45,000 in vendor payouts processed successfully', time: '1 hour ago', type: 'success' },
-              { icon: '⚠️', text: '3 orders requiring immediate attention for delivery issues', time: '2 hours ago', type: 'warning' },
-              { icon: '🎯', text: 'Flash sale campaign started - 25% off electronics', time: '3 hours ago', type: 'info' },
-              { icon: '📊', text: 'Weekly analytics report generated and sent to stakeholders', time: '4 hours ago', type: 'info' }
-            ].map((activity, index) => (
-              <div key={index} className={`flex items-center p-4 rounded-lg border-l-4 ${
-                activity.type === 'success' ? 'bg-green-50 border-green-400' :
-                activity.type === 'warning' ? 'bg-yellow-50 border-yellow-400' :
-                'bg-blue-50 border-blue-400'
-              }`}>
-                <span className="text-2xl mr-4">{activity.icon}</span>
-                <div className="flex-1">
-                  <p className="text-sm font-medium text-gray-800">{activity.text}</p>
-                  <p className="text-xs text-gray-500 mt-1">{activity.time}</p>
+            {sampleNotifications.slice(0, 4).map((activity) => (
+              <div key={activity.id} className="flex items-center space-x-4 p-3 bg-gray-50 rounded-lg">
+                <div className={`p-2 rounded-full ${
+                  activity.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                  activity.type === 'success' ? 'bg-green-100 text-green-600' :
+                  activity.type === 'error' ? 'bg-red-100 text-red-600' :
+                  'bg-blue-100 text-blue-600'
+                }`}>
+                  <Bell className="h-4 w-4" />
                 </div>
-                <Button variant="outline" size="sm">
-                  <Eye className="h-4 w-4 mr-1" />
-                  View
-                </Button>
+                <div className="flex-1">
+                  <h4 className="font-medium">{activity.title}</h4>
+                  <p className="text-sm text-gray-600">{activity.message}</p>
+                </div>
+                <span className="text-xs text-gray-500">{activity.time}</span>
               </div>
             ))}
           </div>
@@ -333,80 +197,655 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     </div>
   );
 
-  // Generic content renderer for other sections
-  const renderGenericContent = (sectionName: string, stats: any[], features: string[]) => (
+  const renderNotifications = () => (
     <div className="space-y-6">
-      {/* Statistics Cards */}
-      <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-        {stats.map((stat, index) => (
-          <Card key={index} className={`bg-gradient-to-br ${stat.gradient}`}>
-            <CardContent className="p-4">
-              <div className="text-center">
-                <div className="text-2xl mb-1">{stat.icon}</div>
-                <div className={`text-2xl font-bold ${stat.textColor}`}>{stat.value}</div>
-                <div className={`text-xs ${stat.labelColor}`}>{stat.label}</div>
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Notification Center</h2>
+        <div className="flex space-x-2">
+          <Button variant="outline" size="sm">
+            <Filter className="h-4 w-4 mr-2" />
+            Filter
+          </Button>
+          <Button size="sm">
+            <Plus className="h-4 w-4 mr-2" />
+            Create Alert
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Critical Alerts</p>
+                <p className="text-2xl font-bold text-red-600">5</p>
+              </div>
+              <AlertTriangle className="h-8 w-8 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Warning Alerts</p>
+                <p className="text-2xl font-bold text-yellow-600">12</p>
+              </div>
+              <Clock className="h-8 w-8 text-yellow-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Info Alerts</p>
+                <p className="text-2xl font-bold text-blue-600">28</p>
+              </div>
+              <Bell className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Resolved</p>
+                <p className="text-2xl font-bold text-green-600">156</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>All Notifications</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {sampleNotifications.map((notification) => (
+              <div key={notification.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                <div className="flex items-center space-x-4">
+                  <div className={`p-2 rounded-full ${
+                    notification.type === 'warning' ? 'bg-yellow-100 text-yellow-600' :
+                    notification.type === 'success' ? 'bg-green-100 text-green-600' :
+                    notification.type === 'error' ? 'bg-red-100 text-red-600' :
+                    'bg-blue-100 text-blue-600'
+                  }`}>
+                    <Bell className="h-4 w-4" />
+                  </div>
+                  <div>
+                    <h4 className="font-medium">{notification.title}</h4>
+                    <p className="text-sm text-gray-600">{notification.message}</p>
+                    <span className="text-xs text-gray-500">{notification.time}</span>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={notification.priority === 'high' ? 'destructive' : notification.priority === 'medium' ? 'default' : 'secondary'}>
+                    {notification.priority}
+                  </Badge>
+                  <Button variant="ghost" size="sm">
+                    <Eye className="h-4 w-4" />
+                  </Button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderVendorManagement = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Vendor Management</h2>
+        <div className="flex space-x-2">
+          <Input
+            placeholder="Search vendors..."
+            value={searchTerm}
+            onChange={(e) => setSearchTerm(e.target.value)}
+            className="w-64"
+          />
+          <Select value={selectedFilter} onValueChange={setSelectedFilter}>
+            <SelectTrigger className="w-32">
+              <SelectValue placeholder="Filter" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All</SelectItem>
+              <SelectItem value="active">Active</SelectItem>
+              <SelectItem value="pending">Pending</SelectItem>
+              <SelectItem value="suspended">Suspended</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button>
+            <Plus className="h-4 w-4 mr-2" />
+            Add Vendor
+          </Button>
+        </div>
+      </div>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Vendor ID</TableHead>
+                <TableHead>Vendor Name</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Products</TableHead>
+                <TableHead>Revenue</TableHead>
+                <TableHead>Rating</TableHead>
+                <TableHead>KYC Status</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sampleVendors.map((vendor) => (
+                <TableRow key={vendor.id}>
+                  <TableCell className="font-medium">{vendor.id}</TableCell>
+                  <TableCell>{vendor.name}</TableCell>
+                  <TableCell>
+                    <Badge variant={vendor.status === 'active' ? 'default' : vendor.status === 'pending' ? 'secondary' : 'destructive'}>
+                      {vendor.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{vendor.products}</TableCell>
+                  <TableCell>{vendor.revenue}</TableCell>
+                  <TableCell>
+                    <div className="flex items-center">
+                      <span className="mr-1">⭐</span>
+                      {vendor.rating}
+                    </div>
+                  </TableCell>
+                  <TableCell>
+                    <Badge variant={vendor.kyc === 'verified' ? 'default' : vendor.kyc === 'pending' ? 'secondary' : 'destructive'}>
+                      {vendor.kyc}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-1">
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <MessageSquare className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderOrderManagement = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Order Management</h2>
+        <div className="flex space-x-2">
+          <Select value={selectedStatus} onValueChange={setSelectedStatus}>
+            <SelectTrigger className="w-40">
+              <SelectValue placeholder="All Orders" />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="all">All Orders</SelectItem>
+              <SelectItem value="processing">Processing</SelectItem>
+              <SelectItem value="shipped">Shipped</SelectItem>
+              <SelectItem value="delivered">Delivered</SelectItem>
+              <SelectItem value="failed">Failed</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button variant="outline">
+            <Download className="h-4 w-4 mr-2" />
+            Export CSV
+          </Button>
+        </div>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Total Orders</p>
+                <p className="text-2xl font-bold">8,901</p>
+              </div>
+              <ShoppingCart className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Processing</p>
+                <p className="text-2xl font-bold text-yellow-600">156</p>
+              </div>
+              <Clock className="h-8 w-8 text-yellow-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Delivered</p>
+                <p className="text-2xl font-bold text-green-600">7,891</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Failed</p>
+                <p className="text-2xl font-bold text-red-600">23</p>
+              </div>
+              <XCircle className="h-8 w-8 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardContent className="p-0">
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Order ID</TableHead>
+                <TableHead>Customer</TableHead>
+                <TableHead>Amount</TableHead>
+                <TableHead>Status</TableHead>
+                <TableHead>Date</TableHead>
+                <TableHead>Payment</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sampleOrders.map((order) => (
+                <TableRow key={order.id}>
+                  <TableCell className="font-medium">{order.id}</TableCell>
+                  <TableCell>{order.customer}</TableCell>
+                  <TableCell>{order.amount}</TableCell>
+                  <TableCell>
+                    <Badge variant={
+                      order.status === 'delivered' ? 'default' :
+                      order.status === 'shipped' ? 'secondary' :
+                      order.status === 'processing' ? 'default' :
+                      'destructive'
+                    }>
+                      {order.status}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>{order.date}</TableCell>
+                  <TableCell>
+                    <Badge variant={order.payment === 'paid' ? 'default' : 'destructive'}>
+                      {order.payment}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <div className="flex space-x-1">
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderSecurityAudit = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Security & Audit</h2>
+        <Button>
+          <Shield className="h-4 w-4 mr-2" />
+          Run Security Scan
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Security Score</p>
+                <p className="text-2xl font-bold text-green-600">95%</p>
+              </div>
+              <Shield className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Active Sessions</p>
+                <p className="text-2xl font-bold">1,245</p>
+              </div>
+              <Users className="h-8 w-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Failed Logins</p>
+                <p className="text-2xl font-bold text-red-600">12</p>
+              </div>
+              <AlertTriangle className="h-8 w-8 text-red-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Security Events</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <Table>
+            <TableHeader>
+              <TableRow>
+                <TableHead>Event</TableHead>
+                <TableHead>User</TableHead>
+                <TableHead>IP Address</TableHead>
+                <TableHead>Time</TableHead>
+                <TableHead>Severity</TableHead>
+                <TableHead>Actions</TableHead>
+              </TableRow>
+            </TableHeader>
+            <TableBody>
+              {sampleSecurityLogs.map((log) => (
+                <TableRow key={log.id}>
+                  <TableCell>{log.event}</TableCell>
+                  <TableCell>{log.user}</TableCell>
+                  <TableCell>{log.ip}</TableCell>
+                  <TableCell>{log.time}</TableCell>
+                  <TableCell>
+                    <Badge variant={log.severity === 'high' ? 'destructive' : log.severity === 'medium' ? 'default' : 'secondary'}>
+                      {log.severity}
+                    </Badge>
+                  </TableCell>
+                  <TableCell>
+                    <Button variant="ghost" size="sm">
+                      <Eye className="h-4 w-4" />
+                    </Button>
+                  </TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </CardContent>
+      </Card>
+    </div>
+  );
+
+  const renderSystemMonitoring = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">System Monitoring</h2>
+        <Button variant="outline">
+          <Activity className="h-4 w-4 mr-2" />
+          Refresh Status
+        </Button>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Server Status</p>
+                <p className="text-lg font-bold text-green-600">Online</p>
+              </div>
+              <Server className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Database</p>
+                <p className="text-lg font-bold text-green-600">Healthy</p>
+              </div>
+              <Database className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">API Response</p>
+                <p className="text-lg font-bold text-green-600">125ms</p>
+              </div>
+              <Activity className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Uptime</p>
+                <p className="text-lg font-bold text-green-600">99.9%</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Performance Metrics</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div>
+                <div className="flex justify-between text-sm">
+                  <span>CPU Usage</span>
+                  <span>65%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-blue-600 h-2 rounded-full" style={{ width: '65%' }}></div>
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm">
+                  <span>Memory Usage</span>
+                  <span>78%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-yellow-600 h-2 rounded-full" style={{ width: '78%' }}></div>
+                </div>
+              </div>
+              <div>
+                <div className="flex justify-between text-sm">
+                  <span>Disk Usage</span>
+                  <span>45%</span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-2">
+                  <div className="bg-green-600 h-2 rounded-full" style={{ width: '45%' }}></div>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Error Logs</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-2">
+              <div className="p-2 bg-red-50 border border-red-200 rounded text-sm">
+                <span className="text-red-600 font-medium">Error:</span> API timeout in payment gateway
+              </div>
+              <div className="p-2 bg-yellow-50 border border-yellow-200 rounded text-sm">
+                <span className="text-yellow-600 font-medium">Warning:</span> High memory usage detected
+              </div>
+              <div className="p-2 bg-blue-50 border border-blue-200 rounded text-sm">
+                <span className="text-blue-600 font-medium">Info:</span> Scheduled backup completed
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+
+  const renderContentManagement = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">Content Management</h2>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Create Content
+        </Button>
+      </div>
+
+      <Tabs defaultValue="pages" className="w-full">
+        <TabsList>
+          <TabsTrigger value="pages">CMS Pages</TabsTrigger>
+          <TabsTrigger value="banners">Banners</TabsTrigger>
+          <TabsTrigger value="blog">Blog</TabsTrigger>
+          <TabsTrigger value="media">Media</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="pages" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Website Pages</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-3">
+                {['Home Page', 'About Us', 'Terms & Conditions', 'Privacy Policy', 'Help Center', 'FAQ'].map((page, index) => (
+                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                    <div>
+                      <h4 className="font-medium">{page}</h4>
+                      <p className="text-sm text-gray-600">Last updated: 2 days ago</p>
+                    </div>
+                    <div className="flex space-x-2">
+                      <Button variant="ghost" size="sm">
+                        <Eye className="h-4 w-4" />
+                      </Button>
+                      <Button variant="ghost" size="sm">
+                        <Edit className="h-4 w-4" />
+                      </Button>
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>
-        ))}
+        </TabsContent>
+        
+        <TabsContent value="banners">
+          <Card>
+            <CardHeader>
+              <CardTitle>Banner Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-gray-600">Manage homepage banners, promotional banners, and category banners.</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
+    </div>
+  );
+
+  const renderAPIManagement = () => (
+    <div className="space-y-6">
+      <div className="flex justify-between items-center">
+        <h2 className="text-2xl font-bold">API & Integrations</h2>
+        <Button>
+          <Plus className="h-4 w-4 mr-2" />
+          Generate API Key
+        </Button>
       </div>
 
-      {/* Main Content */}
-      <Card className="hover:shadow-lg transition-shadow">
-        <CardHeader>
-          <CardTitle className="flex items-center justify-between">
-            <span>{sectionName} Management</span>
-            <div className="flex space-x-2">
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export
-              </Button>
-              <Button variant="outline" size="sm">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh
-              </Button>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Active APIs</p>
+                <p className="text-2xl font-bold">24</p>
+              </div>
+              <Webhook className="h-8 w-8 text-blue-600" />
             </div>
-          </CardTitle>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Daily Requests</p>
+                <p className="text-2xl font-bold">1.2M</p>
+              </div>
+              <Activity className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+        <Card>
+          <CardContent className="p-4">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-gray-600">Success Rate</p>
+                <p className="text-2xl font-bold">99.8%</p>
+              </div>
+              <CheckCircle className="h-8 w-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>API Documentation</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="space-y-6">
-            {/* Search and Filters */}
-            <div className="flex flex-col md:flex-row md:items-center space-y-4 md:space-y-0 md:space-x-4">
-              <div className="relative flex-1">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  type="text"
-                  placeholder={`Search ${sectionName.toLowerCase()}...`}
-                  className="pl-10 pr-4 py-2"
-                />
+          <div className="space-y-4">
+            <div className="p-4 border rounded-lg">
+              <h4 className="font-medium mb-2">Authentication API</h4>
+              <p className="text-sm text-gray-600 mb-2">Manage user authentication and authorization</p>
+              <div className="flex space-x-2">
+                <Badge>v2.0</Badge>
+                <Badge variant="secondary">REST</Badge>
               </div>
-              <select className="px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white">
-                <option>All Status</option>
-                <option>Active</option>
-                <option>Pending</option>
-                <option>Inactive</option>
-              </select>
-              <Button variant="outline" size="sm">
-                <Filter className="h-4 w-4 mr-2" />
-                Advanced Filter
-              </Button>
             </div>
-
-            {/* Features Grid */}
-            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
-              {features.map((feature, index) => (
-                <Card key={index} className="p-4 hover:shadow-md transition-shadow border-l-4 border-blue-400">
-                  <div className="flex items-center space-x-3">
-                    <div className="w-10 h-10 bg-blue-100 rounded-lg flex items-center justify-center">
-                      <Activity className="h-5 w-5 text-blue-600" />
-                    </div>
-                    <div>
-                      <h3 className="font-medium text-gray-800">{feature}</h3>
-                      <p className="text-sm text-gray-500">Manage and monitor</p>
-                    </div>
-                  </div>
-                </Card>
-              ))}
+            <div className="p-4 border rounded-lg">
+              <h4 className="font-medium mb-2">Product API</h4>
+              <p className="text-sm text-gray-600 mb-2">CRUD operations for product management</p>
+              <div className="flex space-x-2">
+                <Badge>v2.1</Badge>
+                <Badge variant="secondary">REST</Badge>
+              </div>
             </div>
           </div>
         </CardContent>
@@ -414,150 +853,37 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     </div>
   );
 
+  // Main content router
   const renderContent = () => {
-    const sectionConfigs = {
-      'product-management': {
-        name: 'Product',
-        stats: [
-          { icon: '📦', value: '12,345', label: 'Total Products', gradient: 'from-blue-50 to-blue-100', textColor: 'text-blue-800', labelColor: 'text-blue-600' },
-          { icon: '✅', value: '11,890', label: 'Active Products', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' },
-          { icon: '⏳', value: '156', label: 'Pending Approval', gradient: 'from-yellow-50 to-yellow-100', textColor: 'text-yellow-800', labelColor: 'text-yellow-600' },
-          { icon: '🚫', value: '23', label: 'Rejected', gradient: 'from-red-50 to-red-100', textColor: 'text-red-800', labelColor: 'text-red-600' }
-        ],
-        features: ['Product Catalog Management', 'Category Structure', 'Quality Control', 'Inventory Tracking', 'Performance Analytics', 'Import/Export Tools']
-      },
-      'financial-management': {
-        name: 'Financial',
-        stats: [
-          { icon: '💰', value: '৳ 45L', label: 'Monthly Revenue', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' },
-          { icon: '🏪', value: '৳ 12L', label: 'Vendor Payouts', gradient: 'from-blue-50 to-blue-100', textColor: 'text-blue-800', labelColor: 'text-blue-600' },
-          { icon: '📊', value: '8.5%', label: 'Commission Rate', gradient: 'from-purple-50 to-purple-100', textColor: 'text-purple-800', labelColor: 'text-purple-600' },
-          { icon: '🔒', value: '99.8%', label: 'Payment Success', gradient: 'from-emerald-50 to-emerald-100', textColor: 'text-emerald-800', labelColor: 'text-emerald-600' }
-        ],
-        features: ['Revenue Tracking', 'Payment Gateways', 'Vendor Payouts', 'Transaction Monitoring', 'Financial Reports', 'Fraud Detection']
-      },
-      'shipping-logistics': {
-        name: 'Shipping',
-        stats: [
-          { icon: '🚛', value: '1,234', label: 'Daily Deliveries', gradient: 'from-indigo-50 to-indigo-100', textColor: 'text-indigo-800', labelColor: 'text-indigo-600' },
-          { icon: '⚡', value: '24h', label: 'Avg Delivery Time', gradient: 'from-yellow-50 to-yellow-100', textColor: 'text-yellow-800', labelColor: 'text-yellow-600' },
-          { icon: '📍', value: '64', label: 'Delivery Zones', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' },
-          { icon: '🎯', value: '96%', label: 'Success Rate', gradient: 'from-emerald-50 to-emerald-100', textColor: 'text-emerald-800', labelColor: 'text-emerald-600' }
-        ],
-        features: ['Courier Management', 'Delivery Tracking', 'Zone Configuration', 'Returns Processing', 'Performance Analytics', 'Route Optimization']
-      },
-      'marketing-promotions': {
-        name: 'Marketing',
-        stats: [
-          { icon: '📢', value: '25', label: 'Active Campaigns', gradient: 'from-pink-50 to-pink-100', textColor: 'text-pink-800', labelColor: 'text-pink-600' },
-          { icon: '🎯', value: '15%', label: 'Conversion Rate', gradient: 'from-purple-50 to-purple-100', textColor: 'text-purple-800', labelColor: 'text-purple-600' },
-          { icon: '💳', value: '450', label: 'Active Coupons', gradient: 'from-blue-50 to-blue-100', textColor: 'text-blue-800', labelColor: 'text-blue-600' },
-          { icon: '📈', value: '₹ 8.5L', label: 'Campaign ROI', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' }
-        ],
-        features: ['Campaign Management', 'Promotional Tools', 'Content Creation', 'Email Marketing', 'Social Media', 'Analytics & ROI']
-      },
-      'analytics-reports': {
-        name: 'Analytics',
-        stats: [
-          { icon: '📊', value: '500+', label: 'Data Points', gradient: 'from-violet-50 to-violet-100', textColor: 'text-violet-800', labelColor: 'text-violet-600' },
-          { icon: '📈', value: '25', label: 'Key Metrics', gradient: 'from-blue-50 to-blue-100', textColor: 'text-blue-800', labelColor: 'text-blue-600' },
-          { icon: '📋', value: '150', label: 'Custom Reports', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' },
-          { icon: '⚡', value: 'Real-time', label: 'Data Updates', gradient: 'from-yellow-50 to-yellow-100', textColor: 'text-yellow-800', labelColor: 'text-yellow-600' }
-        ],
-        features: ['Business Intelligence', 'Sales Analytics', 'Customer Insights', 'Financial Forecasting', 'Custom Reports', 'Data Export']
-      },
-      'settings-configuration': {
-        name: 'Settings',
-        stats: [
-          { icon: '⚙️', value: '99.9%', label: 'System Uptime', gradient: 'from-gray-50 to-gray-100', textColor: 'text-gray-800', labelColor: 'text-gray-600' },
-          { icon: '🔐', value: '256-bit', label: 'Encryption', gradient: 'from-blue-50 to-blue-100', textColor: 'text-blue-800', labelColor: 'text-blue-600' },
-          { icon: '🌍', value: '3', label: 'Languages', gradient: 'from-green-50 to-green-100', textColor: 'text-green-800', labelColor: 'text-green-600' },
-          { icon: '👥', value: '15', label: 'Admin Users', gradient: 'from-purple-50 to-purple-100', textColor: 'text-purple-800', labelColor: 'text-purple-600' }
-        ],
-        features: ['Platform Configuration', 'Security Settings', 'User Management', 'API Configuration', 'Backup Systems', 'System Maintenance']
-      }
-    };
-
-    if (activeTab.includes('dashboard') || activeTab === 'overview') {
-      return renderDashboardContent();
-    } else if (sectionConfigs[activeTab]) {
-      const config = sectionConfigs[activeTab];
-      return renderGenericContent(config.name, config.stats, config.features);
-    } else {
-      return renderDashboardContent();
-    }
+    if (activeTab.startsWith('dashboard')) return renderDashboard();
+    if (activeTab.startsWith('notifications')) return renderNotifications();
+    if (activeTab.startsWith('vendor-management')) return renderVendorManagement();
+    if (activeTab.startsWith('order-management')) return renderOrderManagement();
+    if (activeTab.startsWith('security-audit')) return renderSecurityAudit();
+    if (activeTab.startsWith('system-monitoring')) return renderSystemMonitoring();
+    if (activeTab.startsWith('content-management')) return renderContentManagement();
+    if (activeTab.startsWith('api-integrations')) return renderAPIManagement();
+    
+    // Default content for other sections
+    return (
+      <div className="space-y-6">
+        <h2 className="text-2xl font-bold">
+          {activeTab.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ')}
+        </h2>
+        <Card>
+          <CardContent className="p-8 text-center">
+            <FileText className="h-16 w-16 mx-auto text-gray-400 mb-4" />
+            <h3 className="text-lg font-medium text-gray-600 mb-2">Content Coming Soon</h3>
+            <p className="text-gray-500">This section is being developed and will be available soon.</p>
+          </CardContent>
+        </Card>
+      </div>
+    );
   };
 
   return (
-    <div className="space-y-6">
-      {/* Enhanced Page Header */}
-      <div className="bg-white rounded-lg shadow-sm border p-6">
-        <div className="flex items-center justify-between">
-          <div>
-            <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-              <IconComponent className="mr-3 h-8 w-8 text-blue-600" />
-              {config.title}
-            </h1>
-            <p className="text-sm text-gray-600 mt-2">
-              📍 Breadcrumb: {config.breadcrumb}
-            </p>
-            <p className="text-xs text-gray-500 mt-1 flex items-center">
-              <Clock className="h-3 w-3 mr-1" />
-              Last Updated: {new Date().toLocaleDateString('en-US', { 
-                year: 'numeric',
-                month: 'long',
-                day: 'numeric',
-                hour: '2-digit',
-                minute: '2-digit'
-              })}
-            </p>
-          </div>
-          <div className="flex items-center space-x-3">
-            <Button variant="outline" size="sm">
-              <RefreshCw className="h-4 w-4 mr-2" />
-              Refresh Data
-            </Button>
-            <Button variant="outline" size="sm">
-              <Download className="h-4 w-4 mr-2" />
-              Export Report
-            </Button>
-            <Button className="bg-blue-600 hover:bg-blue-700">
-              <Settings className="h-4 w-4 mr-2" />
-              Configure
-            </Button>
-          </div>
-        </div>
-      </div>
-
-      {/* Enhanced Tab Navigation */}
-      <div className="bg-white rounded-lg shadow-sm border overflow-hidden">
-        <div className="flex border-b overflow-x-auto">
-          {config.tabs.map((tab: any, index: number) => (
-            <button
-              key={tab.id}
-              onClick={() => setCurrentSubTab(tab.id)}
-              className={`px-6 py-4 text-sm font-medium whitespace-nowrap transition-all duration-200 border-b-2 relative ${
-                currentSubTab === tab.id || (index === 0 && !currentSubTab)
-                  ? 'border-blue-500 text-blue-600 bg-blue-50'
-                  : 'border-transparent text-gray-600 hover:text-gray-800 hover:bg-gray-50'
-              }`}
-            >
-              {tab.label}
-              {tab.active && (
-                <Badge className="ml-2 bg-blue-500 text-white text-xs">Active</Badge>
-              )}
-              {(currentSubTab === tab.id || (index === 0 && !currentSubTab)) && (
-                <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-blue-500" />
-              )}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      {/* Main Content Area */}
-      <div className="min-h-[600px]">
-        {renderContent()}
-      </div>
+    <div className="p-6">
+      {renderContent()}
     </div>
   );
 };

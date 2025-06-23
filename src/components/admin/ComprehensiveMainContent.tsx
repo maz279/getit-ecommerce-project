@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -28,8 +29,8 @@ interface ComprehensiveMainContentProps {
 }
 
 export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> = ({
-  selectedMenu,
-  selectedSubmenu
+  selectedMenu = 'dashboard',
+  selectedSubmenu = 'overview'
 }) => {
   const [activeTab, setActiveTab] = useState('overview');
 
@@ -1456,11 +1457,17 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     }
   };
 
+  // Safe string formatting function
+  const formatMenuTitle = (str: string) => {
+    if (!str || typeof str !== 'string') return 'Dashboard';
+    return str.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
+  };
+
   return (
     <div className="flex-1 space-y-4 p-4 md:p-8 pt-6">
       <div className="flex items-center justify-between space-y-2">
         <h2 className="text-3xl font-bold tracking-tight">
-          {selectedMenu.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())} - {selectedSubmenu.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase())}
+          {formatMenuTitle(selectedMenu)} - {formatMenuTitle(selectedSubmenu)}
         </h2>
       </div>
       {renderContent()}

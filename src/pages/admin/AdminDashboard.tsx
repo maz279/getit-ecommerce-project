@@ -19,6 +19,49 @@ export const AdminDashboard: React.FC = () => {
     avatar: null
   };
 
+  // Handle menu changes and set appropriate default submenu
+  const handleMenuChange = (menu: string) => {
+    setSelectedMenu(menu);
+    // Set default submenu based on menu selection
+    switch (menu) {
+      case 'dashboard':
+        setSelectedSubmenu('overview');
+        break;
+      case 'user-management':
+        setSelectedSubmenu('customers');
+        break;
+      case 'vendor-management':
+        setSelectedSubmenu('vendor-list');
+        break;
+      case 'product-management':
+        setSelectedSubmenu('product-catalog');
+        break;
+      case 'order-management':
+        setSelectedSubmenu('order-list');
+        break;
+      case 'analytics-reports':
+        setSelectedSubmenu('sales-reports');
+        break;
+      case 'marketing-promotions':
+        setSelectedSubmenu('campaigns');
+        break;
+      case 'content-management':
+        setSelectedSubmenu('website-content');
+        break;
+      case 'financial-management':
+        setSelectedSubmenu('revenue-tracking');
+        break;
+      case 'system-administration':
+        setSelectedSubmenu('system-settings');
+        break;
+      case 'communication':
+        setSelectedSubmenu('notifications');
+        break;
+      default:
+        setSelectedSubmenu('overview');
+    }
+  };
+
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
@@ -30,7 +73,7 @@ export const AdminDashboard: React.FC = () => {
           {/* Collapsible Sidebar */}
           <ComprehensiveAdminSidebar
             activeTab={selectedMenu}
-            setActiveTab={setSelectedMenu}
+            setActiveTab={handleMenuChange}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />

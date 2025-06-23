@@ -46,17 +46,6 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
     <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white px-4 py-1.5">
       <div className="flex items-center justify-between text-xs">
         <div className="flex items-center space-x-6">
-          {/* Logo & Branding - Compressed */}
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center shadow-md">
-              <span className="text-white font-bold text-xs">G</span>
-            </div>
-            <div>
-              <span className="font-bold text-sm">GETIT Admin</span>
-              <div className="text-xs text-blue-100">v2.0.1</div>
-            </div>
-          </div>
-
           {/* System Status Indicators - Compressed */}
           <div className="hidden lg:flex items-center space-x-4">
             <Tooltip>

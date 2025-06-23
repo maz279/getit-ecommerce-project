@@ -4,7 +4,7 @@ import { Search, Brain, Sparkles, Filter, Mic, Image, X } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { useAISearch } from '@/hooks/useAISearch';
 import { useNLPEnhancedSearch } from '@/hooks/ai-search/useNLPEnhancedSearch';
-import { enhancedSearchService } from '@/services/search/EnhancedSearchService';
+import { enhancedSearchService } from '@/services/search';
 
 export const EnhancedAdminSearchBar: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
@@ -200,7 +200,7 @@ export const EnhancedAdminSearchBar: React.FC = () => {
     return () => document.removeEventListener('mousedown', handleClickOutside);
   }, []);
 
-  const isLoading = aiSearch.isLoading || nlpSearch.nlpState?.isNLPProcessing;
+  const isLoading = aiSearch.isLoading || nlpSearch.isNLPProcessing;
 
   return (
     <div className="flex flex-1 max-w-3xl mx-6" ref={searchRef}>

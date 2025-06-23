@@ -7,7 +7,8 @@ import { ComprehensiveMainContent } from '@/components/admin/ComprehensiveMainCo
 import { AdminDashboardFooter } from '@/components/admin/AdminDashboardFooter';
 
 export const AdminDashboard: React.FC = () => {
-  const [activeTab, setActiveTab] = useState('dashboard');
+  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedSubmenu, setSelectedSubmenu] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
 
   // Mock user profile data
@@ -28,8 +29,8 @@ export const AdminDashboard: React.FC = () => {
         <div className="flex pt-[125px]">
           {/* Collapsible Sidebar */}
           <ComprehensiveAdminSidebar
-            activeTab={activeTab}
-            setActiveTab={setActiveTab}
+            activeTab={selectedMenu}
+            setActiveTab={setSelectedMenu}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />
@@ -38,7 +39,10 @@ export const AdminDashboard: React.FC = () => {
           <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-80'}`}>
             {/* Extended Main Content - 3x longer */}
             <div className="min-h-[300vh]">
-              <ComprehensiveMainContent activeTab={activeTab} />
+              <ComprehensiveMainContent 
+                selectedMenu={selectedMenu} 
+                selectedSubmenu={selectedSubmenu} 
+              />
               
               {/* Additional content to make page 3x longer */}
               <div className="p-6 space-y-8">

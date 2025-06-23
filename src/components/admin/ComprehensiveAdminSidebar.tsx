@@ -617,7 +617,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   return (
     <div className={`fixed left-0 top-[120px] bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
       collapsed ? 'w-12' : 'w-56'
-    }`} style={{ bottom: '-360px', height: 'calc(100vh + 360px)' }}>
+    }`} style={{ bottom: '-504px', height: 'calc(100vh + 504px)' }}>
       {/* Header */}
       <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
         {!collapsed && (
@@ -642,7 +642,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       </div>
 
       {/* Scrollable Navigation */}
-      <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 200px)' }}>
+      <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 344px)' }}>
         <ScrollArea className="h-full">
           <nav className="p-2">
             {menuItems.map(renderMenuItem)}
@@ -652,7 +652,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
 
       {/* Footer */}
       {!collapsed && (
-        <div className="absolute left-2 right-2" style={{ bottom: '20px' }}>
+        <div className="absolute left-2 right-2" style={{ bottom: '164px' }}>
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-xl p-2 shadow-sm border border-gray-200">
             <div className="text-xs text-gray-600 font-medium">System Status</div>
             <div className="flex items-center mt-1">

@@ -15,7 +15,7 @@ export class DatabaseChurnPredictor {
         .from('churn_predictions')
         .upsert({
           user_id: userId,
-          churn_probability,
+          churn_probability: churnProbability,
           risk_level: riskLevel,
           factors,
           retention_strategies: retentionStrategies,

@@ -219,11 +219,13 @@ export class DatabaseService {
   ) {
     // Use edge function for behavior tracking
     try {
+      const { data: { session } } = await supabase.auth.getSession();
+      
       const response = await fetch('/functions/v1/behavior-tracking', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          'Authorization': `Bearer ${supabase.auth.session()?.access_token}`
+          'Authorization': `Bearer ${session?.access_token}`
         },
         body: JSON.stringify({
           user_id: userId,

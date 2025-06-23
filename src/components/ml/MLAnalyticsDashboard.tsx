@@ -15,11 +15,11 @@ import {
   Lightbulb,
   Zap
 } from 'lucide-react';
-import { analyticsEngine, MLInsight, CustomerInsight } from '@/services/ml/AnalyticsEngine';
+import { analyticsEngine, MLInsight, CustomerSegment } from '@/services/ml/AnalyticsEngine';
 
 export const MLAnalyticsDashboard: React.FC = () => {
   const [insights, setInsights] = useState<MLInsight[]>([]);
-  const [customerSegments, setCustomerSegments] = useState<CustomerInsight[]>([]);
+  const [customerSegments, setCustomerSegments] = useState<CustomerSegment[]>([]);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -188,7 +188,7 @@ export const MLAnalyticsDashboard: React.FC = () => {
                   </Badge>
                 </div>
                 
-                {insight.recommendations.length > 0 && (
+                {insight.recommendations && insight.recommendations.length > 0 && (
                   <div className="mt-3">
                     <p className="text-xs font-medium mb-2">AI Recommendations:</p>
                     <ul className="text-xs space-y-1">

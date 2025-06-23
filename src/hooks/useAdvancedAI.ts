@@ -78,8 +78,13 @@ export const useAdvancedAI = (userId?: string) => {
     if (!userId) return;
 
     try {
-      // Update personalization profile
-      await advancedPersonalizationEngine.createOrUpdateProfile(userId, action);
+      // Update personalization profile - convert type to action
+      await advancedPersonalizationEngine.createOrUpdateProfile(userId, {
+        action: action.type,
+        productId: action.productId,
+        category: action.category,
+        metadata: action.data
+      });
 
       // Process real-time event
       await realTimeInsights.processRealTimeEvent({

@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -619,25 +620,25 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   };
 
   return (
-    <div className="fixed left-0 top-[125px] bottom-0 w-80 bg-white border-r border-gray-200 shadow-lg z-40">
-      {/* Header - No collapse button */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
-        <div className="flex items-center space-x-3">
-          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-            <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
+    <div className="fixed left-0 top-[125px] bottom-[-144px] w-80 bg-white border-r border-gray-200 shadow-lg z-40">
+      {/* Smaller Header */}
+      <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
+        <div className="flex items-center space-x-2">
+          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+            <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
               <span className="text-white font-bold text-xs">G</span>
             </div>
           </div>
           <div>
-            <div className="font-bold text-lg text-gray-800">GetIt Admin</div>
+            <div className="font-bold text-sm text-gray-800">GetIt Admin</div>
             <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
             <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
           </div>
         </div>
       </div>
 
-      {/* Navigation Menu */}
-      <div className="h-[calc(100vh-225px)] overflow-hidden">
+      {/* Navigation Menu - Extended height */}
+      <div className="h-[calc(100vh-81px)] overflow-hidden">
         <ScrollArea className="h-full">
           <nav className="p-2">
             {menuItems.map((item) => {
@@ -733,7 +734,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         </ScrollArea>
       </div>
 
-      {/* Footer */}
+      {/* Footer - positioned at the extended bottom */}
       <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
         <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
           <Shield size={14} />
@@ -750,3 +751,4 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
     </div>
   );
 };
+

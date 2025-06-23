@@ -43,26 +43,26 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
   setCurrency
 }) => {
   return (
-    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white px-6 py-2">
-      <div className="flex items-center justify-between text-sm">
-        <div className="flex items-center space-x-8">
-          {/* Logo & Branding */}
-          <div className="flex items-center space-x-3">
-            <div className="w-8 h-8 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-sm">G</span>
+    <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white px-4 py-1.5">
+      <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center space-x-6">
+          {/* Logo & Branding - Compressed */}
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center shadow-md">
+              <span className="text-white font-bold text-xs">G</span>
             </div>
             <div>
-              <span className="font-bold text-lg">GETIT Admin</span>
-              <div className="text-xs text-blue-100">Bangladesh Multi-Vendor Ecommerce Platform v2.0.1</div>
+              <span className="font-bold text-sm">GETIT Admin</span>
+              <div className="text-xs text-blue-100">v2.0.1</div>
             </div>
           </div>
 
-          {/* System Status Indicators */}
-          <div className="hidden lg:flex items-center space-x-6">
+          {/* System Status Indicators - Compressed */}
+          <div className="hidden lg:flex items-center space-x-4">
             <Tooltip>
               <TooltipTrigger>
-                <div className="flex items-center space-x-2">
-                  <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse"></div>
+                <div className="flex items-center space-x-1">
+                  <div className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></div>
                   <span className="text-xs">System: {systemStatus.overall}</span>
                 </div>
               </TooltipTrigger>
@@ -73,37 +73,31 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
                     <span className="text-green-400">{systemStatus.database}</span>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
-                    <span>Payment Gateways:</span>
+                    <span>Payment:</span>
                     <span className="text-green-400">{systemStatus.paymentGateways}</span>
                   </div>
                   <div className="flex items-center justify-between space-x-4">
-                    <span>API Status:</span>
+                    <span>API:</span>
                     <span className="text-green-400">{systemStatus.apiStatus}</span>
-                  </div>
-                  <div className="flex items-center justify-between space-x-4">
-                    <span>Server Load:</span>
-                    <span className="text-green-400">{systemStatus.serverLoad}</span>
                   </div>
                 </div>
               </TooltipContent>
             </Tooltip>
             
-            <div className="flex items-center space-x-2">
-              <Users size={14} />
+            <div className="flex items-center space-x-1">
+              <Users size={12} />
               <span className="text-xs">Active: {systemStatus.activeUsers}</span>
             </div>
           </div>
         </div>
 
-        {/* Current Time & Language/Currency */}
-        <div className="flex items-center space-x-6">
-          <div className="hidden md:flex items-center space-x-2">
-            <Clock size={14} />
+        {/* Current Time & Language/Currency - Compressed */}
+        <div className="flex items-center space-x-4">
+          <div className="hidden md:flex items-center space-x-1">
+            <Clock size={12} />
             <span className="text-xs">
               {new Date().toLocaleDateString('en-US', { 
-                weekday: 'long', 
-                year: 'numeric', 
-                month: 'long', 
+                month: 'short', 
                 day: 'numeric' 
               })} - {new Date().toLocaleTimeString('en-US', { 
                 hour: '2-digit', 
@@ -113,11 +107,11 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
           </div>
 
           {/* Language & Currency Selector */}
-          <div className="flex items-center space-x-3">
+          <div className="flex items-center space-x-2">
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <Languages size={14} className="mr-1" />
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 h-6 px-2 text-xs">
+                  <Languages size={12} className="mr-1" />
                   {language === 'en' ? 'EN' : 'বাং'}
                 </Button>
               </DropdownMenuTrigger>
@@ -133,17 +127,17 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
 
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10">
-                  <DollarSign size={14} className="mr-1" />
+                <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 h-6 px-2 text-xs">
+                  <DollarSign size={12} className="mr-1" />
                   {currency}
                 </Button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="bg-white z-50">
                 <DropdownMenuItem onClick={() => setCurrency('BDT')}>
-                  BDT (Primary) {currency === 'BDT' && '✓'}
+                  BDT {currency === 'BDT' && '✓'}
                 </DropdownMenuItem>
                 <DropdownMenuItem onClick={() => setCurrency('USD')}>
-                  USD (Secondary) {currency === 'USD' && '✓'}
+                  USD {currency === 'USD' && '✓'}
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>

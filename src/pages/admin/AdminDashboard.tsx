@@ -2,25 +2,11 @@
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
-import { SystemStatusBar } from '@/components/admin/header/SystemStatusBar';
 import { ComprehensiveAdminSidebar } from '@/components/admin/ComprehensiveAdminSidebar';
 import { ComprehensiveMainContent } from '@/components/admin/ComprehensiveMainContent';
 
 export const AdminDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('dashboard');
-  const [collapsed, setCollapsed] = useState(false);
-  const [language, setLanguage] = useState('en');
-  const [currency, setCurrency] = useState('BDT');
-
-  // Mock system status data
-  const systemStatus = {
-    overall: 'Operational',
-    database: 'Connected',
-    paymentGateways: 'All Active',
-    apiStatus: 'Healthy',
-    serverLoad: 'Normal',
-    activeUsers: '15,437'
-  };
 
   // Mock user profile data
   const userProfile = {
@@ -33,34 +19,20 @@ export const AdminDashboard: React.FC = () => {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
-        {/* System Status Bar */}
-        <SystemStatusBar
-          systemStatus={systemStatus}
-          language={language}
-          setLanguage={setLanguage}
-          currency={currency}
-          setCurrency={setCurrency}
-        />
-
-        {/* Main Header */}
-        <AdminDashboardHeader
-          userProfile={userProfile}
-          onToggleSidebar={() => setCollapsed(!collapsed)}
-        />
+        {/* Independent Header */}
+        <AdminDashboardHeader userProfile={userProfile} />
 
         <div className="flex">
-          {/* Sidebar */}
+          {/* Fixed Sidebar - No collapse option */}
           <ComprehensiveAdminSidebar
             activeTab={activeTab}
             setActiveTab={setActiveTab}
-            collapsed={collapsed}
-            setCollapsed={setCollapsed}
+            collapsed={false}
+            setCollapsed={() => {}} // No-op function since we removed collapse
           />
 
-          {/* Main Content */}
-          <main className={`flex-1 transition-all duration-300 ${
-            collapsed ? 'ml-16' : 'ml-80'
-          }`}>
+          {/* Main Content - Fixed margin for sidebar */}
+          <main className="flex-1 ml-80">
             <ComprehensiveMainContent activeTab={activeTab} />
           </main>
         </div>

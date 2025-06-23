@@ -71,9 +71,7 @@ interface ComprehensiveAdminSidebarProps {
 
 export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps> = ({
   activeTab,
-  setActiveTab,
-  collapsed,
-  setCollapsed
+  setActiveTab
 }) => {
   const [expandedMenus, setExpandedMenus] = useState<string[]>(['dashboard']);
 
@@ -620,36 +618,25 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   };
 
   return (
-    <div className={`fixed left-0 top-[95px] bottom-0 bg-white border-r border-gray-200 shadow-lg transition-all duration-300 z-40 ${
-      collapsed ? 'w-16' : 'w-80'
-    }`}>
-      {/* Header */}
+    <div className="fixed left-0 top-[125px] bottom-0 w-80 bg-white border-r border-gray-200 shadow-lg z-40">
+      {/* Header - No collapse button */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
-        {!collapsed && (
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-              <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
-                <span className="text-white font-bold text-xs">G</span>
-              </div>
-            </div>
-            <div>
-              <div className="font-bold text-lg text-gray-800">GetIt Admin</div>
-              <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
-              <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
+        <div className="flex items-center space-x-3">
+          <div className="w-10 h-10 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+            <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
+              <span className="text-white font-bold text-xs">G</span>
             </div>
           </div>
-        )}
-        
-        <button
-          onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg hover:bg-gray-100 transition-colors"
-        >
-          {collapsed ? <ChevronRight size={18} /> : <ChevronLeft size={18} />}
-        </button>
+          <div>
+            <div className="font-bold text-lg text-gray-800">GetIt Admin</div>
+            <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
+            <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
+          </div>
+        </div>
       </div>
 
       {/* Navigation Menu */}
-      <div className="h-[calc(100vh-165px)] overflow-hidden">
+      <div className="h-[calc(100vh-225px)] overflow-hidden">
         <ScrollArea className="h-full">
           <nav className="p-2">
             {menuItems.map((item) => {
@@ -752,21 +739,19 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       </div>
 
       {/* Footer */}
-      {!collapsed && (
-        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
-          <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-            <Shield size={14} />
-            <span>Admin Panel Security Enabled</span>
-            <div className="flex items-center space-x-1 ml-auto">
-              <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-              <span>Online</span>
-            </div>
-          </div>
-          <div className="text-xs text-gray-400">
-            © 2025 GetIt Bangladesh. All rights reserved.
+      <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
+        <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+          <Shield size={14} />
+          <span>Admin Panel Security Enabled</span>
+          <div className="flex items-center space-x-1 ml-auto">
+            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
+            <span>Online</span>
           </div>
         </div>
-      )}
+        <div className="text-xs text-gray-400">
+          © 2025 GetIt Bangladesh. All rights reserved.
+        </div>
+      </div>
     </div>
   );
 };

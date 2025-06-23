@@ -45,17 +45,17 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
   ];
 
   return (
-    <div className={`fixed left-0 top-[120px] h-[calc(100vh-120px)] bg-gradient-to-b from-gray-50 via-gray-100 to-gray-200 text-gray-800 transition-all duration-300 z-40 shadow-lg border-r border-gray-300 ${
+    <div className={`fixed left-0 top-[120px] bottom-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
       collapsed ? 'w-16' : 'w-64'
     }`}>
       {/* Header */}
-      <div className="flex items-center justify-between p-3 border-b border-gray-300 bg-white/50 backdrop-blur-sm">
+      <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
         {!collapsed && (
           <Link to="/" className="flex items-center space-x-2">
             <div className="w-7 h-7 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
               <span className="text-white font-bold text-xs">G</span>
             </div>
-            <span className="font-bold text-base text-gray-700">GETIT Admin</span>
+            <span className="font-bold text-sm text-gray-700">GETIT Admin</span>
           </Link>
         )}
         
@@ -67,10 +67,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
         </button>
       </div>
 
-      {/* Scrollable Navigation with Custom Scrollbar */}
-      <div className="flex-1 h-[calc(100%-120px)] overflow-hidden">
+      {/* Scrollable Navigation */}
+      <div className="flex-1 h-[calc(100vh-180px)] overflow-hidden">
         <ScrollArea className="h-full">
-          <nav className="mt-4 px-2 pb-4">
+          <nav className="p-2">
             {menuItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -79,7 +79,7 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`w-full flex items-center px-3 py-2.5 mb-1 text-left hover:bg-white/60 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
+                  className={`w-full flex items-center px-3 py-2.5 mb-1 text-left hover:bg-white/80 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
                     isActive ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
                   }`}
                 >

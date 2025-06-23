@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
@@ -280,12 +281,17 @@ const AdminDashboard: React.FC = () => {
 
   return (
     <div className="min-h-screen bg-gray-50 flex flex-col">
-      <AdminDashboardHeader 
-        userProfile={userProfile}
-        onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
-      />
+      {/* Fixed Header */}
+      <div className="fixed top-0 left-0 right-0 z-50">
+        <AdminDashboardHeader 
+          userProfile={userProfile}
+          onToggleSidebar={() => setSidebarCollapsed(!sidebarCollapsed)}
+        />
+      </div>
       
-      <div className="flex flex-1">
+      {/* Main Layout with Sidebar and Content */}
+      <div className="flex flex-1 pt-[120px]">
+        {/* Fixed Sidebar */}
         <AdminSidebar 
           activeTab={activeTab}
           setActiveTab={setActiveTab}
@@ -293,15 +299,19 @@ const AdminDashboard: React.FC = () => {
           setCollapsed={setSidebarCollapsed}
         />
         
+        {/* Main Content Area */}
         <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-          <main className="flex-1 p-6">
+          <main className="flex-1 p-6 pb-0">
             <div className="max-w-7xl mx-auto">
               {renderContent()}
             </div>
           </main>
-
-          <AdminDashboardFooter />
         </div>
+      </div>
+
+      {/* Fixed Footer */}
+      <div className="fixed bottom-0 left-0 right-0 z-40">
+        <AdminDashboardFooter />
       </div>
     </div>
   );

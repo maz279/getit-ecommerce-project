@@ -15,8 +15,29 @@ import { GiftGuideSection } from '@/components/products/GiftGuideSection';
 import { ContestsSection } from '@/components/products/ContestsSection';
 import { SocialImpactSection } from '@/components/products/SocialImpactSection';
 import { CustomerSupportSection } from '@/components/products/CustomerSupportSection';
+import { useSEO } from '@/hooks/useSEO';
 
 const Products: React.FC = () => {
+  useSEO({
+    title: 'All Products | Complete Product Catalog | GetIt Bangladesh',
+    description: 'Explore our complete product catalog. Electronics, fashion, home & garden, books, toys and more. Quality products from verified vendors across Bangladesh.',
+    keywords: 'all products bangladesh, product catalog, electronics, fashion, home garden, books, toys, complete collection, verified vendors',
+    canonical: 'https://getit-bangladesh.com/products',
+    ogType: 'website',
+    structuredData: {
+      "@context": "https://schema.org",
+      "@type": "CollectionPage",
+      "name": "All Products - Complete Catalog",
+      "description": "Complete product catalog featuring electronics, fashion, home essentials and more from verified vendors",
+      "url": "https://getit-bangladesh.com/products",
+      "isPartOf": {
+        "@type": "WebSite",
+        "name": "GetIt Bangladesh",
+        "url": "https://getit-bangladesh.com"
+      }
+    }
+  });
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-yellow-50 via-orange-50 to-red-50">
       <Header />

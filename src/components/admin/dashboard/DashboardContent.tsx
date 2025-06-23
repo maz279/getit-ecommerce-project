@@ -75,7 +75,9 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
     );
   };
 
-  const getTabContent = () => {
+  const getContent = () => {
+    console.log('DashboardContent - selectedSubmenu:', selectedSubmenu);
+    
     switch (selectedSubmenu) {
       case 'overview':
         return renderOverview();
@@ -107,13 +109,14 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       case 'executive-summary':
         return <ExecutiveSummarySection />;
       default:
+        console.log('DashboardContent - no matching submenu, showing default overview');
         return renderOverview();
     }
   };
 
   return (
     <div className="p-6">
-      {getTabContent()}
+      {getContent()}
     </div>
   );
 };

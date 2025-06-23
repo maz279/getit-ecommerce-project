@@ -11,6 +11,8 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   selectedMenu,
   selectedSubmenu
 }) => {
+  console.log('ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+  
   const renderContent = () => {
     switch (selectedMenu) {
       case 'dashboard':

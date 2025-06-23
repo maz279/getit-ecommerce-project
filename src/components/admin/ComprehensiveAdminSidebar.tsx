@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -531,26 +532,26 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
               setActiveTab(item.id);
             }
           }}
-          className={`w-full flex items-center px-3 py-2.5 text-left hover:bg-white/80 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
+          className={`w-full flex items-center px-2 py-2 text-left hover:bg-white/80 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
             activeTab === item.id ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
           }`}
         >
           <Icon 
-            size={20} 
+            size={16} 
             className={`flex-shrink-0 transition-colors ${
               activeTab === item.id ? 'text-blue-600' : item.color
             } group-hover:${item.color}`} 
           />
           {!collapsed && (
             <>
-              <span className="ml-3 font-medium flex-1">{item.label}</span>
+              <span className="ml-2 font-medium flex-1 text-xs">{item.label}</span>
               {item.badge && (
-                <Badge className="bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[18px] h-5 flex items-center justify-center ml-2">
+                <Badge className="bg-red-500 text-white text-xs px-1 py-0.5 rounded-full min-w-[16px] h-4 flex items-center justify-center ml-1">
                   {item.badge}
                 </Badge>
               )}
               {hasChildren && (
-                isExpanded ? <ChevronUp size={14} className="ml-2" /> : <ChevronDown size={14} className="ml-2" />
+                isExpanded ? <ChevronUp size={12} className="ml-1" /> : <ChevronDown size={12} className="ml-1" />
               )}
             </>
           )}
@@ -558,7 +559,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
 
         {/* Sub-menu items */}
         {!collapsed && hasChildren && isExpanded && (
-          <div className="ml-6 mt-1 space-y-1">
+          <div className="ml-4 mt-1 space-y-1">
             {item.children?.map((subItem) => (
               <div key={subItem.id}>
                 <button
@@ -569,35 +570,35 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                       setActiveTab(subItem.id);
                     }
                   }}
-                  className={`w-full flex items-center px-3 py-2 text-left hover:bg-gray-100 transition-all duration-200 rounded-md text-xs ${
+                  className={`w-full flex items-center px-2 py-1.5 text-left hover:bg-gray-100 transition-all duration-200 rounded-md text-xs ${
                     activeTab === subItem.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-600'
                   }`}
                 >
-                  <span className="flex-1">{subItem.label}</span>
+                  <span className="flex-1 text-xs">{subItem.label}</span>
                   {subItem.badge && (
-                    <Badge className="bg-orange-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[16px] h-4 flex items-center justify-center ml-2">
+                    <Badge className="bg-orange-500 text-white text-xs px-1 py-0.5 rounded-full min-w-[14px] h-3.5 flex items-center justify-center ml-1">
                       {subItem.badge}
                     </Badge>
                   )}
                   {subItem.children && subItem.children.length > 0 && (
-                    expandedMenus.has(subItem.id) ? <ChevronUp size={12} className="ml-2" /> : <ChevronDown size={12} className="ml-2" />
+                    expandedMenus.has(subItem.id) ? <ChevronUp size={10} className="ml-1" /> : <ChevronDown size={10} className="ml-1" />
                   )}
                 </button>
 
                 {/* Sub-sub-menu items */}
                 {subItem.children && subItem.children.length > 0 && expandedMenus.has(subItem.id) && (
-                  <div className="ml-4 mt-1 space-y-1">
+                  <div className="ml-3 mt-1 space-y-1">
                     {subItem.children.map((subSubItem) => (
                       <button
                         key={subSubItem.id}
                         onClick={() => setActiveTab(subSubItem.id)}
-                        className={`w-full flex items-center px-3 py-1.5 text-left hover:bg-gray-100 transition-all duration-200 rounded-md text-xs ${
+                        className={`w-full flex items-center px-2 py-1 text-left hover:bg-gray-100 transition-all duration-200 rounded-md text-xs ${
                           activeTab === subSubItem.id ? 'bg-blue-50 text-blue-700 font-medium' : 'text-gray-500'
                         }`}
                       >
-                        <span className="flex-1">{subSubItem.label}</span>
+                        <span className="flex-1 text-xs">{subSubItem.label}</span>
                         {subSubItem.badge && (
-                          <Badge className="bg-red-500 text-white text-xs px-1 py-0.5 rounded-full min-w-[14px] h-3.5 flex items-center justify-center ml-2">
+                          <Badge className="bg-red-500 text-white text-xs px-1 py-0.5 rounded-full min-w-[12px] h-3 flex items-center justify-center ml-1">
                             {subSubItem.badge}
                           </Badge>
                         )}
@@ -615,17 +616,17 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
 
   return (
     <div className={`fixed left-0 top-[120px] bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
-      collapsed ? 'w-16' : 'w-80'
+      collapsed ? 'w-12' : 'w-56'
     }`} style={{ bottom: '-360px', height: 'calc(100vh + 360px)' }}>
       {/* Header */}
-      <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
+      <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
         {!collapsed && (
-          <div className="flex items-center space-x-3">
-            <div className="w-10 h-10 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-lg">🏪</span>
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+              <span className="text-white font-bold text-xs">🏪</span>
             </div>
             <div>
-              <span className="font-bold text-lg text-gray-800">GetIt Admin</span>
+              <span className="font-bold text-sm text-gray-800">GetIt Admin</span>
               <div className="text-xs text-gray-500">Multi-Vendor Platform</div>
               <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
             </div>
@@ -634,16 +635,16 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         
         <button
           onClick={() => setCollapsed(!collapsed)}
-          className="p-2 rounded-lg hover:bg-gray-200 transition-colors"
+          className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
         >
-          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+          {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
         </button>
       </div>
 
       {/* Scrollable Navigation */}
       <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 200px)' }}>
         <ScrollArea className="h-full">
-          <nav className="p-3">
+          <nav className="p-2">
             {menuItems.map(renderMenuItem)}
           </nav>
         </ScrollArea>
@@ -651,8 +652,8 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
 
       {/* Footer */}
       {!collapsed && (
-        <div className="absolute left-4 right-4" style={{ bottom: '20px' }}>
-          <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-xl p-3 shadow-sm border border-gray-200">
+        <div className="absolute left-2 right-2" style={{ bottom: '20px' }}>
+          <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-xl p-2 shadow-sm border border-gray-200">
             <div className="text-xs text-gray-600 font-medium">System Status</div>
             <div className="flex items-center mt-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>

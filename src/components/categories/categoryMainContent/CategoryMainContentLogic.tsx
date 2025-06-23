@@ -1,8 +1,9 @@
 
 import { womensFashionHierarchical } from '@/data/categories/fashion/womensFashionHierarchical';
+import { HierarchicalStructure } from '@/data/categories/fashion/hierarchical/types';
 
 export const useHierarchicalData = (selectedCategory?: string | null, selectedSubcategory?: string | null) => {
-  const getHierarchicalData = () => {
+  const getHierarchicalData = (): HierarchicalStructure | null => {
     if (selectedCategory === 'fashion' && selectedSubcategory === 'womens-fashion') {
       return womensFashionHierarchical;
     }
@@ -12,7 +13,7 @@ export const useHierarchicalData = (selectedCategory?: string | null, selectedSu
   return { getHierarchicalData };
 };
 
-export const useSubcategoryValidation = (hierarchicalData: any, actualSubSubcategory?: string | null) => {
+export const useSubcategoryValidation = (hierarchicalData: HierarchicalStructure | null, actualSubSubcategory?: string | null) => {
   const shouldShowSubcategoryDetails = () => {
     if (!hierarchicalData || !actualSubSubcategory) return false;
 

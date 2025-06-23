@@ -452,29 +452,59 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       ]
     },
     {
-      id: 'payments',
-      label: 'Payment Management',
-      icon: CreditCard,
+      id: 'financial',
+      label: 'Financial Management',
+      icon: DollarSign,
       color: 'text-yellow-600',
       children: [
         {
-          id: 'payment-processing',
-          label: 'Payment Processing',
+          id: 'revenue-dashboard',
+          label: 'Revenue Dashboard',
           children: [
-            { id: 'transaction-monitoring', label: 'Transaction Monitoring' },
-            { id: 'payment-gateways', label: 'Payment Gateways' },
-            { id: 'failed-payments', label: 'Failed Payments', badge: 8 },
+            { id: 'revenue-overview', label: 'Revenue Overview' },
+            { id: 'revenue-trends', label: 'Revenue Trends' },
+            { id: 'commission-summary', label: 'Commission Summary' },
+            { id: 'profit-analytics', label: 'Profit Analytics' }
+          ]
+        },
+        {
+          id: 'payment-gateways',
+          label: 'Payment Gateways',
+          children: [
+            { id: 'bkash-integration', label: 'bKash Integration' },
+            { id: 'nagad-integration', label: 'Nagad Integration' },
+            { id: 'rocket-integration', label: 'Rocket Integration' },
+            { id: 'international-gateways', label: 'International Gateways' },
             { id: 'payment-analytics', label: 'Payment Analytics' }
           ]
         },
         {
-          id: 'financial-management',
-          label: 'Financial Management',
+          id: 'vendor-payouts',
+          label: 'Vendor Payouts',
           children: [
-            { id: 'revenue-tracking', label: 'Revenue Tracking' },
-            { id: 'expense-management', label: 'Expense Management' },
-            { id: 'budget-planning', label: 'Budget Planning' },
-            { id: 'financial-forecasting', label: 'Financial Forecasting' }
+            { id: 'payout-schedule', label: 'Payout Schedule' },
+            { id: 'pending-payouts', label: 'Pending Payouts', badge: 18 },
+            { id: 'payout-history', label: 'Payout History' },
+            { id: 'payout-reports', label: 'Payout Reports' }
+          ]
+        },
+        {
+          id: 'financial-reports',
+          label: 'Financial Reports',
+          children: [
+            { id: 'daily-reports', label: 'Daily Reports' },
+            { id: 'monthly-reports', label: 'Monthly Reports' },
+            { id: 'tax-reports', label: 'Tax Reports' },
+            { id: 'audit-reports', label: 'Audit Reports' }
+          ]
+        },
+        {
+          id: 'transaction-monitoring',
+          label: 'Transaction Monitoring',
+          children: [
+            { id: 'transaction-logs', label: 'Transaction Logs' },
+            { id: 'fraud-detection', label: 'Fraud Detection' },
+            { id: 'security-monitoring', label: 'Security Monitoring' }
           ]
         }
       ]

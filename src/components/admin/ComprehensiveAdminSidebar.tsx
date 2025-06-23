@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -282,20 +281,50 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
           id: 'vendor-directory',
           label: 'Vendor Directory',
           children: [
-            { id: 'all-vendors', label: 'All Vendors' },
-            { id: 'vendor-onboarding', label: 'Vendor Onboarding' },
-            { id: 'vendor-verification', label: 'Vendor Verification', badge: 12 },
-            { id: 'vendor-performance', label: 'Vendor Performance' }
+            { id: 'active-vendors', label: 'Active Vendors' },
+            { id: 'pending-applications', label: 'Pending Applications' },
+            { id: 'suspended-vendors', label: 'Suspended Vendors' },
+            { id: 'vendor-search', label: 'Vendor Search' }
           ]
         },
         {
-          id: 'vendor-analytics',
-          label: 'Vendor Analytics',
+          id: 'kyc-verification',
+          label: 'KYC Verification',
           children: [
-            { id: 'vendor-sales', label: 'Vendor Sales' },
+            { id: 'document-review', label: 'Document Review' },
+            { id: 'trade-license-verification', label: 'Trade License Verification' },
+            { id: 'tin-verification', label: 'TIN Verification' },
+            { id: 'nid-verification', label: 'NID Verification' },
+            { id: 'bank-account-verification', label: 'Bank Account Verification' }
+          ]
+        },
+        {
+          id: 'vendor-performance',
+          label: 'Vendor Performance',
+          children: [
+            { id: 'performance-metrics', label: 'Performance Metrics' },
+            { id: 'vendor-scorecard', label: 'Vendor Scorecard' },
+            { id: 'rating-management', label: 'Rating Management' },
+            { id: 'performance-reports', label: 'Performance Reports' }
+          ]
+        },
+        {
+          id: 'financial-management',
+          label: 'Financial Management',
+          children: [
             { id: 'commission-tracking', label: 'Commission Tracking' },
-            { id: 'payout-management', label: 'Payout Management' },
-            { id: 'vendor-ratings', label: 'Vendor Ratings' }
+            { id: 'payout-processing', label: 'Payout Processing' },
+            { id: 'revenue-sharing', label: 'Revenue Sharing' },
+            { id: 'financial-reports', label: 'Financial Reports' }
+          ]
+        },
+        {
+          id: 'vendor-support',
+          label: 'Vendor Support',
+          children: [
+            { id: 'support-tickets', label: 'Support Tickets' },
+            { id: 'training-programs', label: 'Training Programs' },
+            { id: 'resource-center', label: 'Resource Center' }
           ]
         }
       ]

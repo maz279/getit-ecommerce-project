@@ -222,6 +222,7 @@ export class AIManager {
     searchResults?: any[];
     confirmationRequired: boolean;
     response: string;
+    error?: string;
   }> {
     console.log('🎤 Processing voice commerce request');
 

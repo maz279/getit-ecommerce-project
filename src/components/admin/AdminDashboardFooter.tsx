@@ -4,7 +4,7 @@ import {
   Shield, Globe, Mail, Phone, Clock, Server, Users, Package, 
   FileText, Book, HelpCircle, Settings, Award, Heart,
   Facebook, Linkedin, Twitter, Youtube, MessageCircle,
-  AlertTriangle, Database, Monitor, Wifi, Lock
+  AlertTriangle, Database, Monitor, Wifi, Lock, Building2
 } from 'lucide-react';
 
 export const AdminDashboardFooter: React.FC = () => {
@@ -22,18 +22,23 @@ export const AdminDashboardFooter: React.FC = () => {
       <div className="max-w-7xl mx-auto px-4 py-8">
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-6">
           
-          {/* Company Information */}
+          {/* Company Information with Logo */}
           <div className="lg:col-span-1">
-            <h3 className="text-sm font-semibold mb-3 flex items-center text-blue-300">
-              <Shield className="mr-2 text-blue-400" size={14} />
-              Company Information
-            </h3>
+            <div className="flex items-center mb-3">
+              <div className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-2 rounded-lg mr-3">
+                <Building2 className="text-white" size={16} />
+              </div>
+              <h3 className="text-sm font-semibold text-blue-300">
+                GetIt Bangladesh
+              </h3>
+            </div>
             <div className="space-y-2 text-xs text-gray-300">
               <div>
-                <h4 className="font-medium text-white mb-1">GetIt Platform</h4>
+                <h4 className="font-medium text-white mb-1 bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">GetIt Bangladesh</h4>
                 <div className="space-y-1">
-                  <p>House 15, Road 8, Dhanmondi</p>
-                  <p>Dhaka 1205, Bangladesh</p>
+                  <p>Jahir Smart Tower 205/1 & 205/1/A</p>
+                  <p>West Kafrul, Taltola</p>
+                  <p>Dhaka-1207, Bangladesh</p>
                 </div>
               </div>
               <div className="space-y-1">
@@ -441,7 +446,7 @@ export const AdminDashboardFooter: React.FC = () => {
           {/* Copyright Section */}
           <div className="flex flex-col lg:flex-row justify-between items-start lg:items-center text-xs text-gray-300 mb-3">
             <div className="flex flex-col lg:flex-row lg:items-center lg:space-x-3 mb-2 lg:mb-0">
-              <span>© 2025 GetIt Platform. All rights reserved.</span>
+              <span>© 2025 GetIt Bangladesh. All rights reserved.</span>
               <span className="hidden lg:inline">•</span>
               <span>Developed by GetIt Technology Team</span>
               <span className="hidden lg:inline">•</span>

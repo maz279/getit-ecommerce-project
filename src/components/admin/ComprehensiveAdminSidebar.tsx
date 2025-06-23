@@ -169,34 +169,53 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       badge: 128,
       children: [
         {
+          id: 'order-overview',
+          label: 'Order Overview',
+          children: [
+            { id: 'all-orders', label: 'All Orders' },
+            { id: 'order-search', label: 'Order Search' },
+            { id: 'order-timeline', label: 'Order Timeline' },
+            { id: 'bulk-actions', label: 'Bulk Actions' }
+          ]
+        },
+        {
           id: 'order-processing',
           label: 'Order Processing',
           badge: 67,
           children: [
             { id: 'new-orders', label: 'New Orders', badge: 23 },
-            { id: 'pending-orders', label: 'Pending Orders', badge: 15 },
-            { id: 'confirmed-orders', label: 'Confirmed Orders', badge: 29 },
-            { id: 'shipped-orders', label: 'Shipped Orders' },
+            { id: 'processing-orders', label: 'Processing Orders', badge: 15 },
+            { id: 'shipped-orders', label: 'Shipped Orders', badge: 29 },
             { id: 'delivered-orders', label: 'Delivered Orders' }
           ]
         },
         {
-          id: 'order-tracking',
-          label: 'Order Tracking',
+          id: 'payment-management',
+          label: 'Payment Management',
           children: [
-            { id: 'live-tracking', label: 'Live Tracking' },
-            { id: 'delivery-status', label: 'Delivery Status' },
-            { id: 'shipment-updates', label: 'Shipment Updates' }
+            { id: 'payment-status', label: 'Payment Status' },
+            { id: 'payment-methods', label: 'Payment Methods' },
+            { id: 'failed-payments', label: 'Failed Payments', badge: 8 },
+            { id: 'refund-processing', label: 'Refund Processing', badge: 4 }
           ]
         },
         {
-          id: 'returns-refunds',
-          label: 'Returns & Refunds',
-          badge: 12,
+          id: 'shipping-logistics',
+          label: 'Shipping & Logistics',
           children: [
-            { id: 'return-requests', label: 'Return Requests', badge: 8 },
-            { id: 'refund-processing', label: 'Refund Processing', badge: 4 },
-            { id: 'exchange-requests', label: 'Exchange Requests' }
+            { id: 'courier-partners', label: 'Courier Partners' },
+            { id: 'delivery-tracking', label: 'Delivery Tracking' },
+            { id: 'shipping-zones', label: 'Shipping Zones' },
+            { id: 'delivery-performance', label: 'Delivery Performance' }
+          ]
+        },
+        {
+          id: 'order-analytics',
+          label: 'Order Analytics',
+          children: [
+            { id: 'order-reports', label: 'Order Reports' },
+            { id: 'revenue-analytics', label: 'Revenue Analytics' },
+            { id: 'performance-metrics', label: 'Performance Metrics' }
           ]
         }
       ]

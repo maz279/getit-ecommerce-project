@@ -89,8 +89,15 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       subItems: [
         { id: 'overview', label: 'Overview' },
         { id: 'real-time-metrics', label: 'Real-time Metrics', badge: 3 },
+        { id: 'revenue-analytics', label: 'Revenue Analytics' },
+        { id: 'user-activity', label: 'User Activity', badge: 2 },
+        { id: 'vendor-performance', label: 'Vendor Performance' },
+        { id: 'order-insights', label: 'Order Insights' },
+        { id: 'inventory-alerts', label: 'Inventory Alerts', badge: 8 },
         { id: 'platform-performance', label: 'Platform Performance' },
         { id: 'system-health', label: 'System Health' },
+        { id: 'security-monitoring', label: 'Security Monitoring', badge: 1 },
+        { id: 'system-logs', label: 'System Logs' },
         { id: 'quick-actions', label: 'Quick Actions' },
         { id: 'executive-summary', label: 'Executive Summary' }
       ]

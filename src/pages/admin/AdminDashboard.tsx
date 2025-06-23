@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -28,38 +27,43 @@ export const AdminDashboard: React.FC = () => {
         setSelectedSubmenu('overview');
         break;
       case 'user-management':
-        setSelectedSubmenu('customers');
+        setSelectedSubmenu('customer-management');
         break;
       case 'vendor-management':
-        setSelectedSubmenu('vendor-list');
+        setSelectedSubmenu('vendor-directory');
         break;
       case 'product-management':
         setSelectedSubmenu('product-catalog');
         break;
       case 'order-management':
-        setSelectedSubmenu('order-list');
+        setSelectedSubmenu('order-overview');
         break;
       case 'analytics-reports':
-        setSelectedSubmenu('sales-reports');
+        setSelectedSubmenu('business-intelligence');
         break;
       case 'marketing-promotions':
-        setSelectedSubmenu('campaigns');
+        setSelectedSubmenu('campaign-management');
         break;
       case 'content-management':
-        setSelectedSubmenu('website-content');
+        setSelectedSubmenu('cms-pages');
         break;
       case 'financial-management':
-        setSelectedSubmenu('revenue-tracking');
+        setSelectedSubmenu('revenue-dashboard');
         break;
       case 'system-administration':
-        setSelectedSubmenu('system-settings');
+        setSelectedSubmenu('platform-settings');
         break;
       case 'communication':
-        setSelectedSubmenu('notifications');
+        setSelectedSubmenu('customer-support');
         break;
       default:
         setSelectedSubmenu('overview');
     }
+  };
+
+  // Handle submenu changes for dashboard items
+  const handleSubmenuChange = (submenu: string) => {
+    setSelectedSubmenu(submenu);
   };
 
   return (
@@ -73,43 +77,27 @@ export const AdminDashboard: React.FC = () => {
           {/* Collapsible Sidebar */}
           <ComprehensiveAdminSidebar
             activeTab={selectedMenu}
-            setActiveTab={handleMenuChange}
+            setActiveTab={(tab: string) => {
+              if (tab.includes('-')) {
+                const [menu, submenu] = tab.split('-', 2);
+                setSelectedMenu(menu);
+                setSelectedSubmenu(submenu);
+              } else {
+                handleMenuChange(tab);
+              }
+            }}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />
 
           {/* Main Content - Dynamic margin based on sidebar state */}
           <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-80'}`}>
-            {/* Extended Main Content - 3x longer */}
-            <div className="min-h-[300vh]">
+            {/* Main Content */}
+            <div className="min-h-screen">
               <ComprehensiveMainContent 
                 selectedMenu={selectedMenu} 
                 selectedSubmenu={selectedSubmenu} 
               />
-              
-              {/* Additional content to make page 3x longer */}
-              <div className="p-6 space-y-8">
-                <div className="grid grid-cols-1 lg:grid-cols-2 xl:grid-cols-3 gap-6">
-                  {Array.from({ length: 12 }, (_, i) => (
-                    <div key={i} className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                      <h3 className="text-lg font-semibold text-gray-800 mb-3">
-                        Extended Section {i + 1}
-                      </h3>
-                      <p className="text-gray-600 text-sm mb-4">
-                        This section provides additional content to extend the dashboard page length for better demonstration of scrolling behavior and footer placement.
-                      </p>
-                      <div className="space-y-2">
-                        {Array.from({ length: 4 }, (_, j) => (
-                          <div key={j} className="flex items-center justify-between py-2 border-b border-gray-100 last:border-b-0">
-                            <span className="text-sm text-gray-600">Metric {j + 1}</span>
-                            <span className="text-sm font-medium text-blue-600">{Math.floor(Math.random() * 1000)}</span>
-                          </div>
-                        ))}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
             </div>
             
             {/* Footer */}

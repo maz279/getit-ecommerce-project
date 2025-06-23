@@ -1,7 +1,7 @@
-
 import { SearchResult, SearchServiceConfig } from './types';
 import { SearchIndex } from './SearchIndex';
 import { ContentIndexer } from './ContentIndexer';
+import { adminContentIndexer } from '../admin/AdminContentIndexer';
 import { mlSearchEnhancer } from '../ml/MLSearchEnhancer';
 
 export class EnhancedSearchService {
@@ -23,12 +23,15 @@ export class EnhancedSearchService {
     console.log('Enhanced search service initialized with ML capabilities');
   }
 
-  // Build comprehensive search index
+  // Build comprehensive search index including admin content
   private buildComprehensiveIndex() {
     const allContent = this.contentIndexer.indexAllContent();
-    allContent.forEach(item => this.searchIndex.addToIndex(item));
+    const adminContent = adminContentIndexer.indexAllAdminContent();
     
-    console.log(`Comprehensive search index built with ${allContent.length} items`);
+    const combinedContent = [...allContent, ...adminContent];
+    combinedContent.forEach(item => this.searchIndex.addToIndex(item));
+    
+    console.log(`Comprehensive search index built with ${combinedContent.length} items (${adminContent.length} admin items)`);
   }
 
   // ML-Enhanced search with navigation mapping
@@ -45,7 +48,7 @@ export class EnhancedSearchService {
     console.log('ML Enhanced Search: Processing query with AI:', query);
     
     // Get base search results
-    const baseResults = this.searchIndex.search(query, limit * 2); // Get more for ML filtering
+    const baseResults = this.searchIndex.search(query, limit * 2);
     
     // Enhance with ML
     const enhancedResults = await mlSearchEnhancer.enhanceSearchResults(query, baseResults, userId);
@@ -151,17 +154,29 @@ export class EnhancedSearchService {
     return { searchSuggestions, navigationSuggestions };
   }
 
+  // Admin-specific search
+  public searchAdminContent(query: string, limit: number = 10): SearchResult[] {
+    const allResults = this.searchIndex.search(query, 50);
+    return allResults.filter(result => 
+      result.category?.includes('Management') || 
+      result.category?.includes('Admin') ||
+      result.category?.includes('Dashboard') ||
+      result.category?.includes('System') ||
+      result.tags?.some(tag => ['admin', 'dashboard', 'management', 'system'].includes(tag))
+    ).slice(0, limit);
+  }
+
   // Search specific content types
   public searchByType(query: string, type: 'product' | 'category' | 'page' | 'vendor', limit: number = 10): SearchResult[] {
     const allResults = this.searchIndex.search(query, 50);
     return allResults.filter(result => result.type === type).slice(0, limit);
   }
 
-  // Refresh index with latest content
+  // Refresh index with latest content including admin content
   public refreshComprehensiveIndex() {
     this.searchIndex.clearIndex();
     this.buildComprehensiveIndex();
-    console.log('Comprehensive search index refreshed');
+    console.log('Comprehensive search index refreshed with admin content');
   }
 
   // Regular search service methods
@@ -201,21 +216,21 @@ export class EnhancedSearchService {
   }
 
   public autoIndexNewContent() {
-    console.log('Auto-indexing new content');
-    // Check for new content and add to index
+    console.log('Auto-indexing new content including admin content');
     const newContent = this.contentIndexer.indexAllContent();
+    const newAdminContent = adminContentIndexer.indexAllAdminContent();
+    const allNewContent = [...newContent, ...newAdminContent];
+    
     const existingItems = this.searchIndex.getAllItems();
     
-    // Find new items that aren't already indexed
-    const newItems = newContent.filter(newItem => 
+    const newItems = allNewContent.filter(newItem => 
       !existingItems.some(existingItem => existingItem.id === newItem.id)
     );
     
-    // Add new items to index
     newItems.forEach(item => this.searchIndex.addToIndex(item));
     
     if (newItems.length > 0) {
-      console.log(`Auto-indexed ${newItems.length} new items`);
+      console.log(`Auto-indexed ${newItems.length} new items (including admin content)`);
     }
   }
 }

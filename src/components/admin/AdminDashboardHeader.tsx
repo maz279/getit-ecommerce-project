@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { 
   Calendar, 
   Clock, 
@@ -22,7 +22,7 @@ import {
 import { NotificationCenter } from './header/NotificationCenter';
 import { AdminProfileDropdown } from './header/AdminProfileDropdown';
 import { QuickActionsSection } from './header/QuickActionsSection';
-import { GlobalAISearchBar } from './header/GlobalAISearchBar';
+import { EnhancedAdminSearchBar } from './header/EnhancedAdminSearchBar';
 import { SystemStatusBar } from './header/SystemStatusBar';
 
 interface AdminDashboardHeaderProps {
@@ -32,8 +32,6 @@ interface AdminDashboardHeaderProps {
 export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
   userProfile
 }) => {
-  const [searchQuery, setSearchQuery] = useState('');
-  const [searchFilter, setSearchFilter] = useState('all');
   const [language, setLanguage] = useState('en');
   const [currency, setCurrency] = useState('BDT');
 
@@ -64,7 +62,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
 
       {/* Main Header */}
       <div className="h-[70px] bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-between px-6">
-        {/* Left Section - Simplified without branding text */}
+        {/* Left Section - Logo only */}
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -75,13 +73,8 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
           </div>
         </div>
 
-        {/* Center Section - Global AI Search */}
-        <GlobalAISearchBar
-          searchQuery={searchQuery}
-          setSearchQuery={setSearchQuery}
-          searchFilter={searchFilter}
-          setSearchFilter={setSearchFilter}
-        />
+        {/* Center Section - Enhanced AI Search */}
+        <EnhancedAdminSearchBar />
 
         {/* Right Section - Quick Actions and User Profile */}
         <div className="flex items-center space-x-4">

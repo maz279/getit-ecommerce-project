@@ -38,7 +38,7 @@ import {
   Monitor,
   Smartphone,
   Accessibility,
-  FileShield,
+  ShieldCheck,
   BookOpen,
   VideoIcon,
   Wrench,
@@ -52,7 +52,7 @@ import {
   Play,
   GitBranch,
   Construction,
-  ExclamationTriangle,
+  AlertCircle,
   PhoneCall,
   Tv,
   KeyboardIcon,
@@ -60,7 +60,6 @@ import {
   Type,
   Archive,
   RefreshCw,
-  ShieldCheck,
   Hash,
   Timer,
   Building2,
@@ -112,7 +111,7 @@ export const AdminDashboardFooter: React.FC = () => {
           {/* Legal & Compliance */}
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-yellow-400 flex items-center space-x-2">
-              <FileShield size={14} />
+              <ShieldCheck size={14} />
               <span>Legal & Compliance</span>
             </h3>
             <div className="grid grid-cols-1 gap-1 text-xs">
@@ -312,7 +311,7 @@ export const AdminDashboardFooter: React.FC = () => {
           {/* Emergency & Maintenance */}
           <div className="space-y-3">
             <h3 className="text-sm font-bold text-red-400 flex items-center space-x-2">
-              <ExclamationTriangle size={14} />
+              <AlertCircle size={14} />
               <span>Emergency & Maintenance</span>
             </h3>
             <div className="space-y-1 text-xs text-gray-300">

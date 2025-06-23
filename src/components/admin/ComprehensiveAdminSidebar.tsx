@@ -103,18 +103,6 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       badge: 34,
       children: [
         {
-          id: 'customer-management',
-          label: 'Customer Management',
-          badge: 12,
-          children: [
-            { id: 'customer-list', label: 'Customer List' },
-            { id: 'customer-details', label: 'Customer Details' },
-            { id: 'customer-analytics', label: 'Customer Analytics' },
-            { id: 'account-verification', label: 'Account Verification', badge: 8 },
-            { id: 'customer-support', label: 'Customer Support', badge: 4 }
-          ]
-        },
-        {
           id: 'admin-users',
           label: 'Admin Users',
           children: [

@@ -1,3 +1,4 @@
+
 export const PAGE_NAVIGATION_MAP = {
   'admin': '/admin/dashboard',
   'admin dashboard': '/admin/dashboard',
@@ -76,32 +77,32 @@ export const SEARCH_CONTENT = {
     placeholder: "Search products, brands, vendors... or navigate to any page (Type in English or বাংলা)",
     voiceSearch: "Voice Search",
     imageSearch: "Image Search",
-    conversationalSearch: "Try asking: 'Show me admin dashboard' or 'Take me to vendor management'",
+    conversationalSearch: "Try asking: 'Show me products' or 'Take me to categories'",
     trendingSearches: [
-      "Admin Dashboard",
-      "Vendor Management", 
-      "iPhone 15 Pro Max",
-      "Samsung Galaxy S24",
-      "Flash Sale",
-      "New Arrivals",
-      "Order Management",
-      "Financial Reports"
+      "Electronics",
+      "Fashion", 
+      "Home & Garden",
+      "Books",
+      "Health & Beauty",
+      "Sports & Outdoors",
+      "Toys & Games",
+      "Automotive"
     ]
   },
   BD: {
     placeholder: "পণ্য, ব্র্যান্ড, বিক্রেতা খুঁজুন... বা যেকোনো পেজে যান (ইংরেজি বা বাংলায় লিখুন)",
     voiceSearch: "ভয়েস সার্চ",
     imageSearch: "ছবি সার্চ",
-    conversationalSearch: "চেষ্টা করুন: 'অ্যাডমিন ড্যাশবোর্ড দেখান' বা 'বিক্রেতা ব্যবস্থাপনায় নিয়ে যান'",
+    conversationalSearch: "চেষ্টা করুন: 'পণ্য দেখান' বা 'ক্যাটেগরিতে নিয়ে যান'",
     trendingSearches: [
-      "অ্যাডমিন ড্যাশবোর্ড",
-      "বিক্রেতা ব্যবস্থাপনা",
-      "আইফোন ১৫ প্রো ম্যাক্স",
-      "স্যামসাং গ্যালাক্সি এস২৪",
-      "ফ্ল্যাশ সেল",
-      "নতুন পণ্য",
-      "অর্ডার ব্যবস্থাপনা",
-      "আর্থিক প্রতিবেদন"
+      "ইলেকট্রনিক্স",
+      "ফ্যাশন",
+      "হোম অ্যান্ড গার্ডেন",
+      "বই",
+      "স্বাস্থ্য ও সৌন্দর্য",
+      "খেলাধুলা",
+      "খেলনা ও গেমস",
+      "অটোমোটিভ"
     ]
   }
 };

@@ -40,10 +40,12 @@ import {
   TrendingUp,
   Server,
   Wifi,
-  Cloud
+  Cloud,
+  Menu
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge as BadgeComponent } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
 
 interface MenuItem {
   id: string;
@@ -71,7 +73,9 @@ interface ComprehensiveAdminSidebarProps {
 
 export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps> = ({
   activeTab,
-  setActiveTab
+  setActiveTab,
+  collapsed,
+  setCollapsed
 }) => {
   const [expandedMenus, setExpandedMenus] = useState<string[]>(['dashboard']);
 
@@ -601,6 +605,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   ];
 
   const toggleMenu = (menuId: string) => {
+    if (collapsed) return;
     setExpandedMenus(prev => 
       prev.includes(menuId) 
         ? prev.filter(id => id !== menuId)
@@ -618,24 +623,37 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   };
 
   return (
-    <div className="fixed left-0 top-[125px] bottom-[-144px] w-80 bg-white border-r border-gray-200 shadow-lg z-40">
-      {/* Smaller Header */}
+    <div className={`fixed left-0 top-[125px] bottom-[-144px] bg-white border-r border-gray-200 shadow-lg z-40 transition-all duration-300 ${
+      collapsed ? 'w-16' : 'w-80'
+    }`}>
+      {/* Header with Collapse Toggle */}
       <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-gradient-to-r from-blue-50 to-purple-50">
-        <div className="flex items-center space-x-2">
-          <div className="w-8 h-8 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
-            <div className="w-5 h-5 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
-              <span className="text-white font-bold text-xs">G</span>
+        {!collapsed && (
+          <div className="flex items-center space-x-2">
+            <div className="w-6 h-6 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg flex items-center justify-center shadow-md">
+              <div className="w-4 h-4 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
+                <span className="text-white font-bold text-xs">G</span>
+              </div>
+            </div>
+            <div>
+              <div className="font-bold text-xs text-gray-800">GetIt Admin</div>
+              <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
+              <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
             </div>
           </div>
-          <div>
-            <div className="font-bold text-sm text-gray-800">GetIt Admin</div>
-            <div className="text-xs text-gray-600">Multi-Vendor Platform</div>
-            <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
-          </div>
-        </div>
+        )}
+        
+        <Button
+          variant="ghost"
+          size="sm"
+          onClick={() => setCollapsed(!collapsed)}
+          className="h-8 w-8 p-0 hover:bg-gray-200"
+        >
+          {collapsed ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}
+        </Button>
       </div>
 
-      {/* Navigation Menu - Extended height */}
+      {/* Navigation Menu */}
       <div className="h-[calc(100vh-81px)] overflow-hidden">
         <ScrollArea className="h-full">
           <nav className="p-2">
@@ -652,48 +670,53 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                       toggleMenu(item.id);
                       setActiveTab(item.id);
                     }}
-                    className={`w-full flex items-center px-3 py-3 text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group border-l-4 ${
+                    className={`w-full flex items-center px-3 py-2 text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group border-l-4 ${
                       isActive ? 'bg-blue-50 border-blue-500 text-blue-700' : `border-transparent ${getPriorityColor(item.priority)}`
                     }`}
+                    title={collapsed ? item.label : undefined}
                   >
                     <Icon 
-                      size={20} 
+                      size={18} 
                       className={`flex-shrink-0 transition-colors ${
                         isActive ? 'text-blue-600' : item.color
                       }`} 
                     />
-                    <span className="ml-3 font-medium text-sm flex-1">{item.label}</span>
-                    <div className="flex items-center space-x-2">
-                      {item.badge && (
-                        <BadgeComponent 
-                          className={`text-white text-xs px-2 py-1 ${
-                            item.badge > 50 ? 'bg-red-500' : 
-                            item.badge > 20 ? 'bg-orange-500' : 
-                            'bg-blue-500'
-                          }`}
-                        >
-                          {item.badge}
-                        </BadgeComponent>
-                      )}
-                      {item.subItems && (
-                        <ChevronDown 
-                          size={16} 
-                          className={`transition-transform duration-200 ${
-                            isExpanded ? 'rotate-180' : ''
-                          }`}
-                        />
-                      )}
-                    </div>
+                    {!collapsed && (
+                      <>
+                        <span className="ml-3 font-medium text-xs flex-1">{item.label}</span>
+                        <div className="flex items-center space-x-2">
+                          {item.badge && (
+                            <BadgeComponent 
+                              className={`text-white text-xs px-1.5 py-0.5 ${
+                                item.badge > 50 ? 'bg-red-500' : 
+                                item.badge > 20 ? 'bg-orange-500' : 
+                                'bg-blue-500'
+                              }`}
+                            >
+                              {item.badge}
+                            </BadgeComponent>
+                          )}
+                          {item.subItems && (
+                            <ChevronDown 
+                              size={14} 
+                              className={`transition-transform duration-200 ${
+                                isExpanded ? 'rotate-180' : ''
+                              }`}
+                            />
+                          )}
+                        </div>
+                      </>
+                    )}
                   </button>
 
-                  {/* Sub Menu Items */}
-                  {item.subItems && isExpanded && (
-                    <div className="ml-8 mt-1 space-y-1 border-l-2 border-gray-100 pl-4">
+                  {/* Sub Menu Items - only show when not collapsed */}
+                  {!collapsed && item.subItems && isExpanded && (
+                    <div className="ml-6 mt-1 space-y-1 border-l-2 border-gray-100 pl-4">
                       {item.subItems.map((subItem) => (
                         <div key={subItem.id}>
                           <button
                             onClick={() => setActiveTab(`${item.id}-${subItem.id}`)}
-                            className={`w-full text-left px-3 py-2 text-sm rounded-md transition-colors flex items-center justify-between ${
+                            className={`w-full text-left px-3 py-1.5 text-xs rounded-md transition-colors flex items-center justify-between ${
                               activeTab === `${item.id}-${subItem.id}`
                                 ? 'bg-blue-100 text-blue-700 font-medium'
                                 : 'text-gray-600 hover:bg-gray-50 hover:text-gray-800'
@@ -701,7 +724,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                           >
                             <span>{subItem.label}</span>
                             {subItem.badge && (
-                              <BadgeComponent className="bg-red-500 text-white text-xs px-1.5 py-0.5">
+                              <BadgeComponent className="bg-red-500 text-white text-xs px-1 py-0.5">
                                 {subItem.badge}
                               </BadgeComponent>
                             )}
@@ -732,20 +755,22 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         </ScrollArea>
       </div>
 
-      {/* Footer - positioned at the extended bottom */}
-      <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
-        <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
-          <Shield size={14} />
-          <span>Admin Panel Security Enabled</span>
-          <div className="flex items-center space-x-1 ml-auto">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-            <span>Online</span>
+      {/* Footer - only show when not collapsed */}
+      {!collapsed && (
+        <div className="absolute bottom-0 left-0 right-0 p-3 border-t border-gray-200 bg-gray-50">
+          <div className="flex items-center space-x-2 text-xs text-gray-500 mb-2">
+            <Shield size={12} />
+            <span>Admin Panel Security Enabled</span>
+            <div className="flex items-center space-x-1 ml-auto">
+              <div className="w-1.5 h-1.5 bg-green-500 rounded-full animate-pulse"></div>
+              <span>Online</span>
+            </div>
+          </div>
+          <div className="text-xs text-gray-400">
+            © 2025 GetIt Bangladesh. All rights reserved.
           </div>
         </div>
-        <div className="text-xs text-gray-400">
-          © 2025 GetIt Bangladesh. All rights reserved.
-        </div>
-      </div>
+      )}
     </div>
   );
 };

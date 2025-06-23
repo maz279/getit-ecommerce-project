@@ -1,26 +1,25 @@
-
 import React from 'react';
 import { Shield, Truck, RefreshCw, Star, Quote, Award } from 'lucide-react';
 
 export const TrustIndicators: React.FC = () => {
   const guarantees = [
     {
-      icon: <Shield className="w-8 h-8" />,
+      icon: <Shield className="w-6 h-6" />,
       title: "100% Secure Payment",
       description: "Your money is safe with SSL encryption"
     },
     {
-      icon: <Truck className="w-8 h-8" />,
+      icon: <Truck className="w-6 h-6" />,
       title: "Fast Delivery",
       description: "Same day delivery in Dhaka, 2-3 days nationwide"
     },
     {
-      icon: <RefreshCw className="w-8 h-8" />,
+      icon: <RefreshCw className="w-6 h-6" />,
       title: "Easy Returns",
       description: "7-day hassle-free return policy"
     },
     {
-      icon: <Award className="w-8 h-8" />,
+      icon: <Award className="w-6 h-6" />,
       title: "Quality Guarantee",
       description: "Verified products from trusted sellers"
     }
@@ -51,84 +50,84 @@ export const TrustIndicators: React.FC = () => {
   ];
 
   return (
-    <section className="py-12 bg-gradient-to-br from-gray-50 to-blue-50">
+    <section className="py-8 bg-gradient-to-br from-gray-50 to-blue-50">
       <div className="max-w-7xl mx-auto px-4">
         {/* Trust Guarantees */}
-        <div className="text-center mb-12">
-          <h2 className="text-3xl font-bold text-gray-800 mb-4">Why Choose GETIT?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto">
+        <div className="text-center mb-8">
+          <h2 className="text-2xl font-bold text-gray-800 mb-3">Why Choose GETIT?</h2>
+          <p className="text-gray-600 max-w-2xl mx-auto text-sm">
             Trusted by millions of customers across Bangladesh for safe, fast, and reliable shopping experience
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-12">
           {guarantees.map((guarantee, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 text-center shadow-sm hover:shadow-lg transition-all border border-gray-100">
-              <div className="text-blue-600 mb-4 flex justify-center">
+            <div key={index} className="bg-white rounded-lg p-4 text-center shadow-sm hover:shadow-lg transition-all border border-gray-100">
+              <div className="text-blue-600 mb-3 flex justify-center">
                 {guarantee.icon}
               </div>
-              <h3 className="font-semibold text-gray-800 mb-2">{guarantee.title}</h3>
-              <p className="text-gray-600 text-sm">{guarantee.description}</p>
+              <h3 className="font-semibold text-gray-800 mb-2 text-sm">{guarantee.title}</h3>
+              <p className="text-gray-600 text-xs">{guarantee.description}</p>
             </div>
           ))}
         </div>
 
         {/* Customer Testimonials */}
-        <div className="text-center mb-8">
-          <h3 className="text-2xl font-bold text-gray-800 mb-4">What Our Customers Say</h3>
-          <div className="flex items-center justify-center gap-2 mb-8">
+        <div className="text-center mb-6">
+          <h3 className="text-xl font-bold text-gray-800 mb-3">What Our Customers Say</h3>
+          <div className="flex items-center justify-center gap-2 mb-6">
             <div className="flex">
               {[...Array(5)].map((_, i) => (
-                <Star key={i} className="w-5 h-5 text-yellow-400 fill-current" />
+                <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
               ))}
             </div>
-            <span className="text-gray-600 ml-2">4.8/5 from 500K+ reviews</span>
+            <span className="text-gray-600 ml-2 text-sm">4.8/5 from 500K+ reviews</span>
           </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {testimonials.map((testimonial, index) => (
-            <div key={index} className="bg-white rounded-xl p-6 shadow-sm border border-gray-100 relative">
-              <Quote className="w-8 h-8 text-blue-200 absolute top-4 right-4" />
-              <div className="flex items-center gap-4 mb-4">
+            <div key={index} className="bg-white rounded-xl p-5 shadow-sm border border-gray-100 relative">
+              <Quote className="w-6 h-6 text-blue-200 absolute top-3 right-3" />
+              <div className="flex items-center gap-3 mb-3">
                 <img 
                   src={testimonial.avatar} 
                   alt={testimonial.name}
-                  className="w-12 h-12 rounded-full object-cover"
+                  className="w-10 h-10 rounded-full object-cover"
                 />
                 <div>
-                  <h4 className="font-semibold text-gray-800">{testimonial.name}</h4>
-                  <p className="text-gray-600 text-sm">{testimonial.location}</p>
+                  <h4 className="font-semibold text-gray-800 text-sm">{testimonial.name}</h4>
+                  <p className="text-gray-600 text-xs">{testimonial.location}</p>
                 </div>
               </div>
-              <div className="flex mb-3">
+              <div className="flex mb-2">
                 {[...Array(testimonial.rating)].map((_, i) => (
-                  <Star key={i} className="w-4 h-4 text-yellow-400 fill-current" />
+                  <Star key={i} className="w-3 h-3 text-yellow-400 fill-current" />
                 ))}
               </div>
-              <p className="text-gray-700 italic">"{testimonial.text}"</p>
+              <p className="text-gray-700 italic text-sm">"{testimonial.text}"</p>
             </div>
           ))}
         </div>
 
         {/* Trust Badges */}
-        <div className="text-center mt-12">
-          <div className="flex items-center justify-center gap-8 flex-wrap">
+        <div className="text-center mt-8">
+          <div className="flex items-center justify-center gap-6 flex-wrap">
             <div className="text-center">
-              <div className="text-2xl font-bold text-green-600">10M+</div>
-              <div className="text-gray-600 text-sm">Happy Customers</div>
+              <div className="text-xl font-bold text-green-600">10M+</div>
+              <div className="text-gray-600 text-xs">Happy Customers</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-blue-600">500K+</div>
-              <div className="text-gray-600 text-sm">Products Delivered</div>
+              <div className="text-xl font-bold text-blue-600">500K+</div>
+              <div className="text-gray-600 text-xs">Products Delivered</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-purple-600">99.5%</div>
-              <div className="text-gray-600 text-sm">Customer Satisfaction</div>
+              <div className="text-xl font-bold text-purple-600">99.5%</div>
+              <div className="text-gray-600 text-xs">Customer Satisfaction</div>
             </div>
             <div className="text-center">
-              <div className="text-2xl font-bold text-red-600">24/7</div>
-              <div className="text-gray-600 text-sm">Customer Support</div>
+              <div className="text-xl font-bold text-red-600">24/7</div>
+              <div className="text-gray-600 text-xs">Customer Support</div>
             </div>
           </div>
         </div>

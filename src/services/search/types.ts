@@ -13,6 +13,14 @@ export interface SearchResult {
   tags?: string[];
   dateAdded?: Date;
   isActive?: boolean;
+  // ML-related properties
+  mlScore?: number;
+  mlInsights?: {
+    relevanceScore: number;
+    recommendationReason: string;
+    priceOptimal: boolean;
+    trendingScore: number;
+  };
 }
 
 export interface SearchIndexEntry extends SearchResult {

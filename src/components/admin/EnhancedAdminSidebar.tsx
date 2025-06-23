@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -683,9 +682,9 @@ export const EnhancedAdminSidebar: React.FC<EnhancedAdminSidebarProps> = ({
   };
 
   return (
-    <div className={`fixed left-0 top-[120px] bottom-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
+    <div className={`fixed left-0 top-[120px] bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
       collapsed ? 'w-16' : 'w-80'
-    }`}>
+    }`} style={{ bottom: '-360px', height: 'calc(100vh + 360px)' }}>
       {/* Enhanced Header */}
       <div className="flex items-center justify-between p-4 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
         {!collapsed && (
@@ -710,7 +709,7 @@ export const EnhancedAdminSidebar: React.FC<EnhancedAdminSidebarProps> = ({
       </div>
 
       {/* Enhanced Scrollable Navigation */}
-      <div className="flex-1 h-[calc(100vh-240px)] overflow-hidden">
+      <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 200px)' }}>
         <ScrollArea className="h-full">
           <nav className="p-3">
             {menuItems.map(renderMenuItem)}
@@ -718,9 +717,9 @@ export const EnhancedAdminSidebar: React.FC<EnhancedAdminSidebarProps> = ({
         </ScrollArea>
       </div>
 
-      {/* Enhanced Footer */}
+      {/* Enhanced Footer - positioned at the extended bottom */}
       {!collapsed && (
-        <div className="absolute bottom-4 left-4 right-4">
+        <div className="absolute left-4 right-4" style={{ bottom: '20px' }}>
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-xl p-3 shadow-sm border border-gray-200">
             <div className="text-xs text-gray-600 font-medium">System Status</div>
             <div className="flex items-center mt-1">

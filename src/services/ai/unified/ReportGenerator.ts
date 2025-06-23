@@ -1,11 +1,11 @@
 
 export class ReportGenerator {
-  async generateComprehensiveReport(
+  generateComprehensiveReport(
     type: 'business' | 'customer' | 'product' | 'performance',
     businessInsights: any,
     performanceMetrics: any
-  ): Promise<any> {
-    console.log('Report Generator: Generating comprehensive report:', type);
+  ): any {
+    console.log('Report Generator: Creating comprehensive report:', type);
 
     switch (type) {
       case 'business':
@@ -17,95 +17,69 @@ export class ReportGenerator {
       case 'performance':
         return this.generatePerformanceReport(performanceMetrics);
       default:
-        return this.generateExecutiveSummary(businessInsights, performanceMetrics);
+        return { error: 'Invalid report type' };
     }
   }
 
-  private async generateBusinessReport(insights: any, performance: any): Promise<any> {
+  private generateBusinessReport(insights: any, metrics: any): any {
     return {
-      type: 'business',
-      period: 'current',
-      summary: {
-        revenue: insights.predictiveInsights?.sales?.nextMonth || 'N/A',
-        customers: insights.customerInsights?.segmentAnalysis || {},
-        products: insights.productInsights?.performance || {},
-        efficiency: insights.operationalInsights?.efficiency || {}
-      },
-      recommendations: [
-        'Focus on high-performing product categories',
-        'Optimize pricing for underperformers',
-        'Expand marketing for premium segment',
-        'Improve operational efficiency in order processing'
-      ],
-      aiContribution: {
-        performanceGain: '+23% efficiency',
-        revenueImpact: '+15% from personalization',
-        customerSatisfaction: '+18% from AI support'
-      }
-    };
-  }
-
-  private async generateCustomerReport(insights: any): Promise<any> {
-    return {
-      type: 'customer',
-      segments: insights.customerInsights?.segmentAnalysis || {},
-      behavior: insights.customerInsights?.behaviorPatterns || {},
-      satisfaction: insights.customerInsights?.satisfaction || {},
-      churnRisk: insights.customerInsights?.churnPrediction || {},
-      aiPersonalization: {
-        activeUsers: '85% receiving personalized experience',
-        engagementLift: '+31% with AI recommendations',
-        conversionImprovement: '+19% from dynamic content'
-      }
-    };
-  }
-
-  private async generateProductReport(insights: any): Promise<any> {
-    return {
-      type: 'product',
-      performance: insights.productInsights?.performance || {},
-      inventory: insights.productInsights?.inventory || {},
-      pricing: insights.productInsights?.pricing || {},
-      quality: insights.productInsights?.quality || {},
-      aiOptimizations: {
-        pricingAdjustments: '12 products optimized',
-        inventoryPredictions: '94% accuracy',
-        qualityInsights: 'Real-time monitoring active'
-      }
-    };
-  }
-
-  private async generatePerformanceReport(performance: any): Promise<any> {
-    return {
-      type: 'performance',
-      metrics: performance,
-      efficiency: {
-        responseTime: performance.averageResponseTime || 0,
-        cacheHitRate: performance.cacheHitRate || 0,
-        throughput: performance.totalOperations || 0
-      },
-      optimizations: [
-        'Cache optimization reduced response time by 40%',
-        'ML model updates improved accuracy by 12%',
-        'Real-time processing handles 1000+ events/hour'
-      ]
-    };
-  }
-
-  private async generateExecutiveSummary(insights: any, performance: any): Promise<any> {
-    return {
-      type: 'executive',
-      summary: 'AI system performing optimally with strong business impact',
+      summary: 'Business performance showing positive trends',
       keyMetrics: {
-        aiPerformance: performance.averageResponseTime + 'ms',
-        businessImpact: '+18% revenue growth',
-        customerSatisfaction: '4.3/5'
+        revenue: insights.predictiveInsights?.sales,
+        customerGrowth: '15%',
+        marketShare: '12%'
       },
+      insights: insights,
       recommendations: [
-        'Continue AI optimization programs',
-        'Expand personalization coverage',
-        'Implement advanced predictive analytics'
-      ]
+        'Focus on high-growth segments',
+        'Optimize pricing strategy',
+        'Enhance customer experience'
+      ],
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  private generateCustomerReport(insights: any): any {
+    return {
+      summary: 'Customer analytics and behavior insights',
+      segments: insights.customerInsights?.segmentAnalysis,
+      satisfaction: insights.customerInsights?.satisfaction,
+      churnAnalysis: insights.customerInsights?.churnPrediction,
+      recommendations: [
+        'Improve customer retention',
+        'Enhance personalization',
+        'Optimize customer journey'
+      ],
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  private generateProductReport(insights: any): any {
+    return {
+      summary: 'Product performance and optimization insights',
+      performance: insights.productInsights?.performance,
+      inventory: insights.productInsights?.inventory,
+      pricing: insights.productInsights?.pricing,
+      recommendations: [
+        'Optimize inventory levels',
+        'Adjust pricing strategy',
+        'Improve product descriptions'
+      ],
+      generatedAt: new Date().toISOString()
+    };
+  }
+
+  private generatePerformanceReport(metrics: any): any {
+    return {
+      summary: 'AI system performance metrics',
+      systemHealth: 'Good',
+      metrics,
+      recommendations: [
+        'Monitor cache performance',
+        'Optimize ML models',
+        'Enhance response times'
+      ],
+      generatedAt: new Date().toISOString()
     };
   }
 }

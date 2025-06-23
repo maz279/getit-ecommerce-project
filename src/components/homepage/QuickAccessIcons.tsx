@@ -21,7 +21,11 @@ import {
   Settings,
   Home,
   Search,
-  Tag
+  Tag,
+  Clock,
+  MapPin,
+  Phone,
+  Mail
 } from 'lucide-react';
 
 export const QuickAccessIcons: React.FC = () => {
@@ -145,13 +149,37 @@ export const QuickAccessIcons: React.FC = () => {
       title: 'Offers',
       color: 'text-rose-500 hover:text-rose-600',
       link: '/offers'
+    },
+    {
+      icon: <Clock className="w-4 h-4" />,
+      title: 'Order History',
+      color: 'text-blue-500 hover:text-blue-600',
+      link: '/orders'
+    },
+    {
+      icon: <MapPin className="w-4 h-4" />,
+      title: 'Store Locator',
+      color: 'text-green-500 hover:text-green-600',
+      link: '/stores'
+    },
+    {
+      icon: <Phone className="w-4 h-4" />,
+      title: 'Contact Us',
+      color: 'text-purple-500 hover:text-purple-600',
+      link: '/contact'
+    },
+    {
+      icon: <Mail className="w-4 h-4" />,
+      title: 'Newsletter',
+      color: 'text-teal-500 hover:text-teal-600',
+      link: '/newsletter'
     }
   ];
 
   return (
     <section className="py-4 bg-white border-b border-gray-100">
       <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-20 gap-3 justify-items-center">
+        <div className="grid grid-cols-8 md:grid-cols-12 lg:grid-cols-24 gap-3 justify-items-center">
           {quickAccessItems.map((item, index) => (
             <Link 
               key={index}

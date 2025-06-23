@@ -4,7 +4,7 @@ import {
   Shield, Globe, Mail, Phone, Clock, Server, Users, Package, 
   FileText, Book, HelpCircle, Settings, Award, Heart,
   Facebook, Linkedin, Twitter, Youtube, MessageCircle,
-  AlertTriangle, Database, Monitor, Wifi, Lock, Building2
+  AlertTriangle, Database, Monitor, Wifi, Lock
 } from 'lucide-react';
 
 export const AdminDashboardFooter: React.FC = () => {
@@ -25,8 +25,8 @@ export const AdminDashboardFooter: React.FC = () => {
           {/* Company Information with Logo */}
           <div className="lg:col-span-1">
             <div className="flex items-center mb-3">
-              <div className="bg-gradient-to-r from-blue-400 via-purple-500 to-pink-500 p-2 rounded-lg mr-3">
-                <Building2 className="text-white" size={16} />
+              <div className="bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 p-3 rounded-xl mr-3 shadow-lg">
+                <div className="text-white font-bold text-lg leading-none">G</div>
               </div>
               <h3 className="text-sm font-semibold text-blue-300">
                 GetIt Bangladesh

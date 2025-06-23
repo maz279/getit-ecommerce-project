@@ -51,7 +51,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
   };
 
   return (
-    <div className="w-full bg-white border-b border-gray-200 shadow-sm">
+    <div className="fixed top-0 left-0 right-0 w-full bg-white border-b border-gray-200 shadow-sm z-50">
       {/* System Status Bar */}
       <div className="bg-gradient-to-r from-blue-600 via-purple-600 to-indigo-600 text-white px-4 py-1.5">
         <div className="flex items-center justify-between text-xs">

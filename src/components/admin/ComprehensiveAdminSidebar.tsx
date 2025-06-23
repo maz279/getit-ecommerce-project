@@ -1,5 +1,3 @@
-
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -751,4 +749,3 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
     </div>
   );
 };
-

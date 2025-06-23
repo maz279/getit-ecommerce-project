@@ -19,11 +19,12 @@ export const AdminDashboard: React.FC = () => {
   return (
     <TooltipProvider>
       <div className="min-h-screen bg-gray-50">
-        {/* Independent Header */}
+        {/* Fixed Independent Header */}
         <AdminDashboardHeader userProfile={userProfile} />
 
-        <div className="flex">
-          {/* Fixed Sidebar - No collapse option */}
+        {/* Content Area with top margin for fixed header */}
+        <div className="flex pt-[125px]">
+          {/* Fixed Sidebar */}
           <ComprehensiveAdminSidebar
             activeTab={activeTab}
             setActiveTab={setActiveTab}

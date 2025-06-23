@@ -16,6 +16,11 @@ import { designerSareeProducts } from '@/data/products/designerSareeProducts';
 import { bridalSareeProducts } from '@/data/products/bridalSareeProducts';
 import { casualSareeProducts } from '@/data/products/casualSareeProducts';
 import { partySareeProducts } from '@/data/products/partySareeProducts';
+import { cocktailDressProducts } from '@/data/products/cocktailDressProducts';
+import { eveningGownProducts } from '@/data/products/eveningGownProducts';
+import { maxiDressProducts } from '@/data/products/maxiDressProducts';
+import { midiDressProducts } from '@/data/products/midiDressProducts';
+import { miniDressProducts } from '@/data/products/miniDressProducts';
 import { Search } from 'lucide-react';
 
 interface ProductGridProps {
@@ -64,10 +69,25 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       'Party Saree': partySareeProducts
     };
 
+    // Handle different dress types
+    const dressProductMap: Record<string, any[]> = {
+      'Cocktail Dresses': cocktailDressProducts,
+      'Evening Gowns': eveningGownProducts,
+      'Maxi Dresses': maxiDressProducts,
+      'Midi Dresses': midiDressProducts,
+      'Mini Dresses': miniDressProducts
+    };
+
     // Check if we're viewing a specific saree type
     if (tab && sareeProductMap[tab]) {
       console.log(`Showing ${tab} products`);
       return sareeProductMap[tab];
+    }
+
+    // Check if we're viewing a specific dress type
+    if (tab && dressProductMap[tab]) {
+      console.log(`Showing ${tab} products`);
+      return dressProductMap[tab];
     }
 
     // Default product filtering logic
@@ -149,6 +169,38 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     return sareeInfo[sareeType] || null;
   };
 
+  const getDressTypeInfo = (dressType: string) => {
+    const dressInfo: Record<string, { title: string; description: string; features: string[] }> = {
+      'Cocktail Dresses': {
+        title: 'Cocktail Dress Collection',
+        description: 'Elevate your evening style with our sophisticated cocktail dresses. Perfect for parties, dinners, and special occasions.',
+        features: ['✓ Evening Elegance', '✓ Premium Fabrics', '✓ Designer Cuts', '✓ Party Perfect']
+      },
+      'Evening Gowns': {
+        title: 'Evening Gown Collection',
+        description: 'Make a grand entrance with our luxurious evening gowns. Designed for formal events and special celebrations.',
+        features: ['✓ Luxury Collection', '✓ Floor Length', '✓ Premium Quality', '✓ Event Ready']
+      },
+      'Maxi Dresses': {
+        title: 'Maxi Dress Collection',
+        description: 'Find comfort and style with our flowing maxi dresses. Perfect for casual outings, beach days, or relaxed events.',
+        features: ['✓ Comfortable Wear', '✓ Full Length', '✓ Versatile Styles', '✓ Casual Elegance']
+      },
+      'Midi Dresses': {
+        title: 'Midi Dress Collection',
+        description: 'Discover our versatile midi dresses that strike the perfect balance between casual and formal wear.',
+        features: ['✓ Business Casual', '✓ Modern Silhouettes', '✓ Versatile Wear', '✓ Office Ready']
+      },
+      'Mini Dresses': {
+        title: 'Mini Dress Collection',
+        description: 'Show off your style with our trendy mini dresses. Perfect for nights out, parties, and making a statement.',
+        features: ['✓ Party Perfect', '✓ Modern Styles', '✓ Trendy Designs', '✓ Night Out Ready']
+      }
+    };
+
+    return dressInfo[dressType] || null;
+  };
+
   const renderProductGrid = () => {
     if (filteredProducts.length === 0) {
       return (
@@ -170,6 +222,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   };
 
   const sareeInfo = tab ? getSareeTypeInfo(tab) : null;
+  const dressInfo = tab ? getDressTypeInfo(tab) : null;
 
   return (
     <div className="p-6">
@@ -196,6 +249,29 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         </div>
       )}
 
+      {/* Header section for Dress categories */}
+      {dressInfo && (
+        <div className="mb-6 bg-gradient-to-r from-rose-50 to-orange-50 p-6 rounded-lg border">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{dressInfo.title}</h2>
+          <p className="text-gray-600 mb-4">{dressInfo.description}</p>
+          <div className="flex flex-wrap gap-2">
+            {dressInfo.features.map((feature, index) => (
+              <span 
+                key={index}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  index % 4 === 0 ? 'bg-red-100 text-red-800' :
+                  index % 4 === 1 ? 'bg-pink-100 text-pink-800' :
+                  index % 4 === 2 ? 'bg-purple-100 text-purple-800' :
+                  'bg-amber-100 text-amber-800'
+                }`}
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <ProductControls
         showFilters={showFilters}
         setShowFilters={setShowFilters}
@@ -210,7 +286,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       
       <ProductPagination
         currentProducts={filteredProducts.length}
-        totalProducts={tab && getSareeTypeInfo(tab) ? filteredProducts.length : 2456789}
+        totalProducts={(tab && (getSareeTypeInfo(tab) || getDressTypeInfo(tab))) ? filteredProducts.length : 2456789}
       />
     </div>
   );

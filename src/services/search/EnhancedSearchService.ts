@@ -110,4 +110,38 @@ export class EnhancedSearchService {
   public getIndexedItems(): SearchResult[] {
     return this.searchIndex.getAllItems();
   }
+
+  // Missing methods that were causing errors
+  public removeFromIndex(itemId: string) {
+    console.log('Removing from search index:', itemId);
+    // Implementation would depend on SearchIndex having a remove method
+    // For now, we'll rebuild the index without this item
+    const allItems = this.searchIndex.getAllItems().filter(item => item.id !== itemId);
+    this.searchIndex.clearIndex();
+    allItems.forEach(item => this.searchIndex.addToIndex(item));
+  }
+
+  public refreshIndex() {
+    console.log('Refreshing search index');
+    this.refreshComprehensiveIndex();
+  }
+
+  public autoIndexNewContent() {
+    console.log('Auto-indexing new content');
+    // Check for new content and add to index
+    const newContent = this.contentIndexer.indexAllContent();
+    const existingItems = this.searchIndex.getAllItems();
+    
+    // Find new items that aren't already indexed
+    const newItems = newContent.filter(newItem => 
+      !existingItems.some(existingItem => existingItem.id === newItem.id)
+    );
+    
+    // Add new items to index
+    newItems.forEach(item => this.searchIndex.addToIndex(item));
+    
+    if (newItems.length > 0) {
+      console.log(`Auto-indexed ${newItems.length} new items`);
+    }
+  }
 }

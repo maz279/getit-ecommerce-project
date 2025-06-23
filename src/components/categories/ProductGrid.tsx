@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { ProductCard } from './ProductCard';
 import { ProductControls } from './ProductControls';
@@ -21,6 +20,13 @@ import { eveningGownProducts } from '@/data/products/eveningGownProducts';
 import { maxiDressProducts } from '@/data/products/maxiDressProducts';
 import { midiDressProducts } from '@/data/products/midiDressProducts';
 import { miniDressProducts } from '@/data/products/miniDressProducts';
+import { cottonSalwarKameezProducts } from '@/data/products/cottonSalwarKameezProducts';
+import { silkSalwarKameezProducts } from '@/data/products/silkSalwarKameezProducts';
+import { printedSalwarKameezProducts } from '@/data/products/printedSalwarKameezProducts';
+import { embroideredSalwarKameezProducts } from '@/data/products/embroideredSalwarKameezProducts';
+import { partySalwarKameezProducts } from '@/data/products/partySalwarKameezProducts';
+import { casualSalwarKameezProducts } from '@/data/products/casualSalwarKameezProducts';
+import { designerSuitsProducts } from '@/data/products/designerSuitsProducts';
 import { Search } from 'lucide-react';
 
 interface ProductGridProps {
@@ -78,6 +84,21 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       'Mini Dresses': miniDressProducts
     };
 
+    // Handle different salwar kameez types
+    const salwarKameezProductMap: Record<string, any[]> = {
+      'Cotton Salwar Kameez': cottonSalwarKameezProducts,
+      'Silk Salwar Kameez': silkSalwarKameezProducts,
+      'Printed Salwar Kameez': printedSalwarKameezProducts,
+      'Embroidered Salwar Kameez': embroideredSalwarKameezProducts,
+      'Party Salwar Kameez': partySalwarKameezProducts,
+      'Casual Salwar Kameez': casualSalwarKameezProducts
+    };
+
+    // Handle suits
+    const suitsProductMap: Record<string, any[]> = {
+      'Designer Suits': designerSuitsProducts
+    };
+
     // Check if we're viewing a specific saree type
     if (tab && sareeProductMap[tab]) {
       console.log(`Showing ${tab} products`);
@@ -88,6 +109,18 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     if (tab && dressProductMap[tab]) {
       console.log(`Showing ${tab} products`);
       return dressProductMap[tab];
+    }
+
+    // Check if we're viewing a specific salwar kameez type
+    if (tab && salwarKameezProductMap[tab]) {
+      console.log(`Showing ${tab} products`);
+      return salwarKameezProductMap[tab];
+    }
+
+    // Check if we're viewing a specific suits type
+    if (tab && suitsProductMap[tab]) {
+      console.log(`Showing ${tab} products`);
+      return suitsProductMap[tab];
     }
 
     // Default product filtering logic
@@ -201,6 +234,55 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
     return dressInfo[dressType] || null;
   };
 
+  const getSalwarKameezTypeInfo = (salwarKameezType: string) => {
+    const salwarKameezInfo: Record<string, { title: string; description: string; features: string[] }> = {
+      'Cotton Salwar Kameez': {
+        title: 'Cotton Salwar Kameez Collection',
+        description: 'Discover our premium collection of comfortable cotton salwar kameez. Perfect for daily wear with traditional elegance and modern comfort.',
+        features: ['✓ 100% Pure Cotton', '✓ Breathable Fabric', '✓ Traditional Designs', '✓ Comfortable Fit']
+      },
+      'Silk Salwar Kameez': {
+        title: 'Silk Salwar Kameez Collection',
+        description: 'Explore our luxurious silk salwar kameez collection featuring rich textures and elegant designs perfect for special occasions.',
+        features: ['✓ Premium Silk Quality', '✓ Rich Textures', '✓ Elegant Designs', '✓ Special Occasions']
+      },
+      'Printed Salwar Kameez': {
+        title: 'Printed Salwar Kameez Collection',
+        description: 'Beautiful printed salwar kameez with vibrant colors and artistic patterns. Perfect blend of traditional style and contemporary prints.',
+        features: ['✓ Vibrant Prints', '✓ Artistic Patterns', '✓ Modern Designs', '✓ Color Variety']
+      },
+      'Embroidered Salwar Kameez': {
+        title: 'Embroidered Salwar Kameez Collection',
+        description: 'Exquisite embroidered salwar kameez featuring intricate handwork and traditional craftsmanship for special celebrations.',
+        features: ['✓ Intricate Embroidery', '✓ Handcrafted Work', '✓ Traditional Art', '✓ Premium Quality']
+      },
+      'Party Salwar Kameez': {
+        title: 'Party Salwar Kameez Collection',
+        description: 'Glamorous party salwar kameez with sequins, beads, and luxurious fabrics to make you shine at every celebration.',
+        features: ['✓ Party Perfect', '✓ Glamorous Design', '✓ Luxury Fabrics', '✓ Special Events']
+      },
+      'Casual Salwar Kameez': {
+        title: 'Casual Salwar Kameez Collection',
+        description: 'Comfortable and stylish casual salwar kameez for everyday wear. Perfect for office, shopping, and daily activities.',
+        features: ['✓ Daily Comfort', '✓ Easy Care', '✓ Versatile Style', '✓ Affordable Range']
+      }
+    };
+
+    return salwarKameezInfo[salwarKameezType] || null;
+  };
+
+  const getSuitsTypeInfo = (suitsType: string) => {
+    const suitsInfo: Record<string, { title: string; description: string; features: string[] }> = {
+      'Designer Suits': {
+        title: 'Designer Suits Collection',
+        description: 'Premium designer suits featuring contemporary cuts, luxury fabrics, and modern silhouettes for the fashion-forward woman.',
+        features: ['✓ Designer Collection', '✓ Premium Fabrics', '✓ Modern Cuts', '✓ Fashion Forward']
+      }
+    };
+
+    return suitsInfo[suitsType] || null;
+  };
+
   const renderProductGrid = () => {
     if (filteredProducts.length === 0) {
       return (
@@ -223,6 +305,8 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
   const sareeInfo = tab ? getSareeTypeInfo(tab) : null;
   const dressInfo = tab ? getDressTypeInfo(tab) : null;
+  const salwarKameezInfo = tab ? getSalwarKameezTypeInfo(tab) : null;
+  const suitsInfo = tab ? getSuitsTypeInfo(tab) : null;
 
   return (
     <div className="p-6">
@@ -272,6 +356,52 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
         </div>
       )}
 
+      {/* Header section for Salwar Kameez categories */}
+      {salwarKameezInfo && (
+        <div className="mb-6 bg-gradient-to-r from-green-50 to-teal-50 p-6 rounded-lg border">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{salwarKameezInfo.title}</h2>
+          <p className="text-gray-600 mb-4">{salwarKameezInfo.description}</p>
+          <div className="flex flex-wrap gap-2">
+            {salwarKameezInfo.features.map((feature, index) => (
+              <span 
+                key={index}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  index % 4 === 0 ? 'bg-teal-100 text-teal-800' :
+                  index % 4 === 1 ? 'bg-green-100 text-green-800' :
+                  index % 4 === 2 ? 'bg-emerald-100 text-emerald-800' :
+                  'bg-cyan-100 text-cyan-800'
+                }`}
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Header section for Suits categories */}
+      {suitsInfo && (
+        <div className="mb-6 bg-gradient-to-r from-indigo-50 to-purple-50 p-6 rounded-lg border">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">{suitsInfo.title}</h2>
+          <p className="text-gray-600 mb-4">{suitsInfo.description}</p>
+          <div className="flex flex-wrap gap-2">
+            {suitsInfo.features.map((feature, index) => (
+              <span 
+                key={index}
+                className={`px-3 py-1 rounded-full text-sm font-medium ${
+                  index % 4 === 0 ? 'bg-indigo-100 text-indigo-800' :
+                  index % 4 === 1 ? 'bg-purple-100 text-purple-800' :
+                  index % 4 === 2 ? 'bg-violet-100 text-violet-800' :
+                  'bg-blue-100 text-blue-800'
+                }`}
+              >
+                {feature}
+              </span>
+            ))}
+          </div>
+        </div>
+      )}
+
       <ProductControls
         showFilters={showFilters}
         setShowFilters={setShowFilters}
@@ -286,7 +416,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       
       <ProductPagination
         currentProducts={filteredProducts.length}
-        totalProducts={(tab && (getSareeTypeInfo(tab) || getDressTypeInfo(tab))) ? filteredProducts.length : 2456789}
+        totalProducts={(tab && (getSareeTypeInfo(tab) || getDressTypeInfo(tab) || getSalwarKameezTypeInfo(tab) || getSuitsTypeInfo(tab))) ? filteredProducts.length : 2456789}
       />
     </div>
   );

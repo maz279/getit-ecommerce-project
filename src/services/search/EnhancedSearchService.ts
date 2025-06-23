@@ -2,6 +2,7 @@
 import { SearchResult, SearchServiceConfig } from './types';
 import { SearchIndex } from './SearchIndex';
 import { ContentIndexer } from './ContentIndexer';
+import { mlSearchEnhancer } from '../ml/MLSearchEnhancer';
 
 export class EnhancedSearchService {
   private searchIndex: SearchIndex;
@@ -19,7 +20,7 @@ export class EnhancedSearchService {
     this.contentIndexer = new ContentIndexer();
     this.buildComprehensiveIndex();
     
-    console.log('Enhanced search service initialized with comprehensive indexing');
+    console.log('Enhanced search service initialized with ML capabilities');
   }
 
   // Build comprehensive search index
@@ -30,7 +31,44 @@ export class EnhancedSearchService {
     console.log(`Comprehensive search index built with ${allContent.length} items`);
   }
 
-  // Enhanced search with navigation mapping
+  // ML-Enhanced search with navigation mapping
+  public async searchWithML(query: string, userId?: string, limit: number = this.config.maxResults || 20): Promise<{
+    results: SearchResult[];
+    navigationSuggestions: Array<{
+      title: string;
+      url: string;
+      type: string;
+      description: string;
+    }>;
+    mlEnhanced: boolean;
+  }> {
+    console.log('ML Enhanced Search: Processing query with AI:', query);
+    
+    // Get base search results
+    const baseResults = this.searchIndex.search(query, limit * 2); // Get more for ML filtering
+    
+    // Enhance with ML
+    const enhancedResults = await mlSearchEnhancer.enhanceSearchResults(query, baseResults, userId);
+    
+    // Generate navigation suggestions based on ML-enhanced results
+    const navigationSuggestions = enhancedResults
+      .filter(result => result.type === 'category' || result.type === 'page')
+      .slice(0, 5)
+      .map(result => ({
+        title: result.title,
+        url: result.url || '#',
+        type: result.type,
+        description: result.description
+      }));
+
+    return { 
+      results: enhancedResults.slice(0, limit), 
+      navigationSuggestions,
+      mlEnhanced: true
+    };
+  }
+
+  // Enhanced search with navigation mapping (backwards compatibility)
   public searchWithNavigation(query: string, limit: number = this.config.maxResults || 20): {
     results: SearchResult[];
     navigationSuggestions: Array<{
@@ -56,7 +94,43 @@ export class EnhancedSearchService {
     return { results, navigationSuggestions };
   }
 
-  // Get contextual suggestions with navigation
+  // Get ML-enhanced contextual suggestions
+  public async getMLContextualSuggestions(query: string): Promise<{
+    searchSuggestions: string[];
+    navigationSuggestions: Array<{
+      title: string;
+      url: string;
+      type: string;
+    }>;
+    mlGenerated: boolean;
+  }> {
+    console.log('ML Search: Getting enhanced contextual suggestions');
+    
+    // Get ML-powered suggestions
+    const mlSuggestions = await mlSearchEnhancer.generateSearchSuggestions(query);
+    
+    // Get traditional suggestions as fallback
+    const traditionalSuggestions = this.searchIndex.getSuggestions(query, 4);
+    
+    // Combine and deduplicate
+    const allSuggestions = [...new Set([...mlSuggestions, ...traditionalSuggestions])];
+    
+    const pageResults = this.searchIndex.search(query, 5).filter(r => r.type === 'page' || r.type === 'category');
+    
+    const navigationSuggestions = pageResults.map(result => ({
+      title: result.title,
+      url: result.url || '#',
+      type: result.type
+    }));
+
+    return { 
+      searchSuggestions: allSuggestions.slice(0, 8), 
+      navigationSuggestions,
+      mlGenerated: true
+    };
+  }
+
+  // Get contextual suggestions with navigation (backwards compatibility)
   public getContextualSuggestions(query: string): {
     searchSuggestions: string[];
     navigationSuggestions: Array<{

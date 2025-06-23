@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Star } from 'lucide-react';
 import { categoriesData } from '@/data/categoriesData';
@@ -75,20 +76,16 @@ export const CategoryList: React.FC<CategoryListProps> = ({
               <div className="ml-6 mt-2 space-y-1">
                 {Object.entries(category.subcategories).map(([subcatId, subcategory]) => (
                   <div key={subcatId}>
-                    <Accordion type="multiple" className="w-full">
-                      <AccordionItem value={subcatId} className="border-b-0">
-                        <SubcategoryItem
-                          subcategoryId={subcatId}
-                          subcategory={subcategory}
-                          categoryId={category.id}
-                          onCategorySelect={onCategorySelect}
-                          selectedSubcategory={selectedSubcategory}
-                          selectedSubSubcategory={selectedSubSubcategory}
-                          isExpanded={expandedSubcategories.has(subcatId)}
-                          onToggleSubcategory={toggleSubcategory}
-                        />
-                      </AccordionItem>
-                    </Accordion>
+                    <SubcategoryItem
+                      subcategoryId={subcatId}
+                      subcategory={subcategory}
+                      categoryId={category.id}
+                      onCategorySelect={onCategorySelect}
+                      selectedSubcategory={selectedSubcategory}
+                      selectedSubSubcategory={selectedSubSubcategory}
+                      isExpanded={expandedSubcategories.has(subcatId)}
+                      onToggleSubcategory={toggleSubcategory}
+                    />
                   </div>
                 ))}
               </div>

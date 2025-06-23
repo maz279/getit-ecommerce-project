@@ -511,27 +511,49 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
     },
     {
       id: 'logistics',
-      label: 'Logistics & Shipping',
+      label: 'Shipping & Logistics',
       icon: Truck,
       color: 'text-blue-500',
       children: [
         {
-          id: 'shipping-management',
-          label: 'Shipping Management',
+          id: 'courier-partners',
+          label: 'Courier Partners',
           children: [
-            { id: 'courier-partners', label: 'Courier Partners' },
-            { id: 'shipping-rates', label: 'Shipping Rates' },
-            { id: 'delivery-zones', label: 'Delivery Zones' },
-            { id: 'shipping-analytics', label: 'Shipping Analytics' }
+            { id: 'pathao-management', label: 'Pathao Management' },
+            { id: 'paperfly-integration', label: 'Paperfly Integration' },
+            { id: 'sundarban-coordination', label: 'Sundarban Coordination' },
+            { id: 'redx-monitoring', label: 'RedX Monitoring' },
+            { id: 'ecourier-tracking', label: 'eCourier Tracking' }
           ]
         },
         {
-          id: 'warehouse-operations',
-          label: 'Warehouse Operations',
+          id: 'delivery-management',
+          label: 'Delivery Management',
           children: [
-            { id: 'warehouse-management', label: 'Warehouse Management' },
-            { id: 'pick-pack-operations', label: 'Pick & Pack Operations' },
-            { id: 'quality-control', label: 'Quality Control' }
+            { id: 'delivery-zones', label: 'Delivery Zones' },
+            { id: 'delivery-scheduling', label: 'Delivery Scheduling' },
+            { id: 'route-optimization', label: 'Route Optimization' },
+            { id: 'delivery-performance', label: 'Delivery Performance' }
+          ]
+        },
+        {
+          id: 'shipping-analytics',
+          label: 'Shipping Analytics',
+          children: [
+            { id: 'delivery-reports', label: 'Delivery Reports' },
+            { id: 'performance-metrics', label: 'Performance Metrics' },
+            { id: 'cost-analysis', label: 'Cost Analysis' },
+            { id: 'customer-satisfaction', label: 'Customer Satisfaction' }
+          ]
+        },
+        {
+          id: 'returns-exchanges',
+          label: 'Returns & Exchanges',
+          children: [
+            { id: 'return-requests', label: 'Return Requests', badge: 7 },
+            { id: 'exchange-processing', label: 'Exchange Processing' },
+            { id: 'refund-management', label: 'Refund Management' },
+            { id: 'return-analytics', label: 'Return Analytics' }
           ]
         }
       ]

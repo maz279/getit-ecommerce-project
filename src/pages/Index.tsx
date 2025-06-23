@@ -1,7 +1,6 @@
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { HeroSection } from '../components/homepage/HeroSection';
-import { QuickAccessIcons } from '../components/homepage/QuickAccessIcons';
 import { FeaturedCategories } from '../components/homepage/FeaturedCategories';
 import { FlashSaleSection } from '../components/homepage/FlashSaleSection';
 import { PromotionalBanners } from '../components/homepage/PromotionalBanners';
@@ -15,7 +14,6 @@ import { TrustIndicators } from '../components/homepage/TrustIndicators';
 import { BangladeshFeatures } from '../components/homepage/BangladeshFeatures';
 import { Footer } from '../components/homepage/Footer';
 import { useSEO } from '@/hooks/useSEO';
-import { AdminNavigationCard } from '../components/homepage/AdminNavigationCard';
 
 const Index: React.FC = () => {
   // SEO optimization for homepage
@@ -54,7 +52,6 @@ const Index: React.FC = () => {
       
       <main>
         <HeroSection />
-        <QuickAccessIcons />
         <FeaturedCategories />
         <FlashSaleSection />
         <TrendingProducts />

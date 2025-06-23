@@ -8,7 +8,7 @@ import { mlSearchEnhancer } from './MLSearchEnhancer';
 import { fraudDetectionEngine } from './FraudDetectionEngine';
 import { advancedPersonalizationEngine } from './PersonalizationEngine';
 import { inventoryManager } from './InventoryManager';
-import { churnPredictor } from './ChurnPredictor';
+import { churnPredictor } from './churn/ChurnPredictor';
 
 export class MLManager {
   private static instance: MLManager;
@@ -183,4 +183,4 @@ export type { MLInsight, CustomerInsight } from './AnalyticsEngine';
 export type { FraudAnalysis, TransactionData } from './FraudDetectionEngine';
 export type { PersonalizationRecommendation, UserProfile } from './PersonalizationEngine';
 export type { DemandForecast as InventoryDemandForecast, StockOptimization } from './InventoryManager';
-export type { ChurnPrediction, EngagementPrediction } from './ChurnPredictor';
+export type { ChurnPrediction, EngagementPrediction } from './churn/types';

@@ -61,7 +61,8 @@ export class MLManager {
       analyticsEngine.processRealTimeEvent({
         type: 'ml_background_analysis',
         userId: 'system',
-        timestamp: Date.now()
+        timestamp: Date.now(),
+        data: {} // Added missing data property
       });
     }, 5 * 60 * 1000); // Every 5 minutes
   }

@@ -213,20 +213,49 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
           label: 'Product Catalog',
           children: [
             { id: 'all-products', label: 'All Products' },
-            { id: 'add-product', label: 'Add New Product' },
-            { id: 'bulk-upload', label: 'Bulk Upload' },
-            { id: 'product-categories', label: 'Categories' }
+            { id: 'product-search', label: 'Product Search' },
+            { id: 'featured-products', label: 'Featured Products' },
+            { id: 'product-import-export', label: 'Product Import/Export' }
+          ]
+        },
+        {
+          id: 'category-management',
+          label: 'Category Management',
+          children: [
+            { id: 'category-structure', label: 'Category Structure' },
+            { id: 'category-performance', label: 'Category Performance' },
+            { id: 'seasonal-categories', label: 'Seasonal Categories' },
+            { id: 'category-analytics', label: 'Category Analytics' }
+          ]
+        },
+        {
+          id: 'product-moderation',
+          label: 'Product Moderation',
+          badge: 25,
+          children: [
+            { id: 'pending-approvals', label: 'Pending Approvals', badge: 25 },
+            { id: 'content-review', label: 'Content Review' },
+            { id: 'quality-control', label: 'Quality Control' },
+            { id: 'rejected-products', label: 'Rejected Products' }
           ]
         },
         {
           id: 'inventory-management',
           label: 'Inventory Management',
-          badge: 25,
           children: [
-            { id: 'stock-levels', label: 'Stock Levels' },
-            { id: 'low-stock-alerts', label: 'Low Stock Alerts', badge: 15 },
-            { id: 'reorder-points', label: 'Reorder Points' },
+            { id: 'stock-overview', label: 'Stock Overview' },
+            { id: 'low-stock-alerts', label: 'Low Stock Alerts', badge: 20 },
+            { id: 'inventory-reports', label: 'Inventory Reports' },
             { id: 'warehouse-management', label: 'Warehouse Management' }
+          ]
+        },
+        {
+          id: 'product-analytics',
+          label: 'Product Analytics',
+          children: [
+            { id: 'best-sellers', label: 'Best Sellers' },
+            { id: 'performance-metrics', label: 'Performance Metrics' },
+            { id: 'market-trends', label: 'Market Trends' }
           ]
         }
       ]

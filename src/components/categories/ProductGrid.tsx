@@ -5,6 +5,7 @@ import { ProductControls } from './ProductControls';
 import { ProductPagination } from './ProductPagination';
 import { EmptyState } from './EmptyState';
 import { sampleProducts } from '@/data/sampleProducts';
+import { cottonSareeProducts } from '@/data/products/cottonSareeProducts';
 import { Search } from 'lucide-react';
 
 interface ProductGridProps {
@@ -38,6 +39,13 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
   };
 
   const getFilteredProducts = () => {
+    // Check if we're specifically viewing Cotton Saree products
+    if (tab === 'Cotton Saree' || (category === 'fashion' && submenu === 'womens-fashion' && tab === 'Cotton Saree')) {
+      console.log('Showing Cotton Saree products');
+      return cottonSareeProducts;
+    }
+
+    // Default product filtering logic
     switch (tabType) {
       case 'featured':
         return sampleProducts.filter(p => p.rating >= 4.5);
@@ -76,6 +84,30 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
 
   return (
     <div className="p-6">
+      {/* Header section for Cotton Saree category */}
+      {tab === 'Cotton Saree' && (
+        <div className="mb-6 bg-gradient-to-r from-blue-50 to-purple-50 p-6 rounded-lg border">
+          <h2 className="text-2xl font-bold text-gray-900 mb-2">Cotton Saree Collection</h2>
+          <p className="text-gray-600 mb-4">
+            Discover our premium collection of authentic Bengali cotton sarees. From traditional handloom designs to modern printed patterns, find the perfect saree for every occasion.
+          </p>
+          <div className="flex flex-wrap gap-2">
+            <span className="bg-green-100 text-green-800 px-3 py-1 rounded-full text-sm font-medium">
+              ✓ 100% Pure Cotton
+            </span>
+            <span className="bg-blue-100 text-blue-800 px-3 py-1 rounded-full text-sm font-medium">
+              ✓ Handloom Available
+            </span>
+            <span className="bg-purple-100 text-purple-800 px-3 py-1 rounded-full text-sm font-medium">
+              ✓ Traditional Designs
+            </span>
+            <span className="bg-orange-100 text-orange-800 px-3 py-1 rounded-full text-sm font-medium">
+              ✓ Free Shipping
+            </span>
+          </div>
+        </div>
+      )}
+
       <ProductControls
         showFilters={showFilters}
         setShowFilters={setShowFilters}
@@ -90,7 +122,7 @@ export const ProductGrid: React.FC<ProductGridProps> = ({
       
       <ProductPagination
         currentProducts={filteredProducts.length}
-        totalProducts={2456789}
+        totalProducts={tab === 'Cotton Saree' ? cottonSareeProducts.length : 2456789}
       />
     </div>
   );

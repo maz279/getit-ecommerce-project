@@ -4,7 +4,7 @@ import { UserBehaviorManager } from './UserBehaviorManager';
 import { ChurnAnalysisUtils } from './ChurnAnalysisUtils';
 import { RetentionStrategies } from './RetentionStrategies';
 import { EngagementPredictor } from './EngagementPredictor';
-import { ChurnAnalytics as ChurnAnalyticsService } from './ChurnAnalytics';
+import { ChurnAnalyticsService } from './ChurnAnalytics';
 
 export class ChurnPredictor {
   private static instance: ChurnPredictor;

@@ -1,7 +1,7 @@
 
 import type { ChurnAnalytics, RetentionCampaignMetrics } from './types';
 
-export class ChurnAnalytics {
+export class ChurnAnalyticsService {
   static async analyzeChurnTrends(): Promise<ChurnAnalytics> {
     console.log('Churn ML: Analyzing churn trends');
 

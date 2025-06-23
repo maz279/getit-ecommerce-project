@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { 
   Bell, Search, User, LogOut, Menu, Globe, Shield, TrendingUp, 
   Settings, Key, Activity, ShieldCheck, ChevronDown, Plus, 
-  CheckCircle, DollarSign, FileText, Tool, AlertTriangle,
+  CheckCircle, DollarSign, FileText, Wrench, AlertTriangle,
   Database, Wifi, Server, Users, Clock, Filter, Languages
 } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
@@ -70,7 +70,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
     { icon: CheckCircle, label: 'Approve Vendor', color: 'bg-green-500 hover:bg-green-600' },
     { icon: DollarSign, label: 'Process Payout', color: 'bg-purple-500 hover:bg-purple-600' },
     { icon: FileText, label: 'Generate Report', color: 'bg-orange-500 hover:bg-orange-600' },
-    { icon: Tool, label: 'Maintenance', color: 'bg-gray-500 hover:bg-gray-600' },
+    { icon: Wrench, label: 'Maintenance', color: 'bg-gray-500 hover:bg-gray-600' },
     { icon: AlertTriangle, label: 'Emergency Stop', color: 'bg-red-500 hover:bg-red-600' }
   ];
 

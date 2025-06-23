@@ -156,7 +156,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
                       {language === 'en' ? 'EN' : 'বাং'}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white">
+                  <DropdownMenuContent className="bg-white z-50">
                     <DropdownMenuItem onClick={() => setLanguage('en')}>
                       English {language === 'en' && '✓'}
                     </DropdownMenuItem>
@@ -173,7 +173,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
                       {currency}
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent className="bg-white">
+                  <DropdownMenuContent className="bg-white z-50">
                     <DropdownMenuItem onClick={() => setCurrency('BDT')}>
                       BDT (Primary) {currency === 'BDT' && '✓'}
                     </DropdownMenuItem>
@@ -221,7 +221,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
                         <ChevronDown size={14} className="ml-2" />
                       </Button>
                     </DropdownMenuTrigger>
-                    <DropdownMenuContent className="bg-white">
+                    <DropdownMenuContent className="bg-white z-50">
                       <DropdownMenuItem onClick={() => setSearchFilter('all')}>All</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSearchFilter('orders')}>Order ID</DropdownMenuItem>
                       <DropdownMenuItem onClick={() => setSearchFilter('products')}>Product Name</DropdownMenuItem>
@@ -282,7 +282,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
                     )}
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-80 bg-white border shadow-lg" align="end">
+                <DropdownMenuContent className="w-80 bg-white border shadow-lg z-50" align="end">
                   <DropdownMenuLabel className="flex items-center justify-between">
                     <span>Notifications</span>
                     <Badge variant="secondary">{totalNotifications} unread</Badge>
@@ -327,7 +327,7 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
                     <ChevronDown size={14} className="text-gray-400" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent className="w-64 bg-white border shadow-lg" align="end">
+                <DropdownMenuContent className="w-64 bg-white border shadow-lg z-50" align="end">
                   <DropdownMenuLabel>
                     <div className="space-y-1">
                       <div className="font-medium">{userProfile?.full_name || 'John Doe'}</div>

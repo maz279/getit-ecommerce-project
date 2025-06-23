@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { useAuth } from '@/context/AuthContext';
 import { AdminSidebar } from '@/components/admin/AdminSidebar';
@@ -301,17 +300,15 @@ const AdminDashboard: React.FC = () => {
         
         {/* Main Content Area */}
         <div className={`flex-1 flex flex-col transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
-          <main className="flex-1 p-6 pb-0">
+          <main className="flex-1 p-6">
             <div className="max-w-7xl mx-auto">
               {renderContent()}
             </div>
           </main>
+          
+          {/* Footer positioned normally within the content flow */}
+          <AdminDashboardFooter />
         </div>
-      </div>
-
-      {/* Fixed Footer */}
-      <div className="fixed bottom-0 left-0 right-0 z-40">
-        <AdminDashboardFooter />
       </div>
     </div>
   );

@@ -5,82 +5,112 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { BarChart3, Users, Package, Download, Calendar } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { FileText, Download, Calendar, BarChart3, TrendingUp } from 'lucide-react';
 
 export const ReportsTab: React.FC = () => {
   return (
     <div className="space-y-6">
-      {/* Report Generation */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {/* Report Statistics */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center">
-              <BarChart3 className="h-5 w-5 mr-2" />
-              Sales Report
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center">
+              <FileText className="h-4 w-4 mr-2" />
+              Total Reports
             </CardTitle>
-            <CardDescription>Generate comprehensive sales analytics</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="text-2xl font-bold text-green-600">৳2,45,890</div>
-              <p className="text-sm text-gray-600">Total sales this month</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Download Report
-              </Button>
-            </div>
+            <div className="text-2xl font-bold text-blue-600">156</div>
+            <p className="text-xs text-gray-500">Generated this month</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center">
-              <Users className="h-5 w-5 mr-2" />
-              User Activity Report
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center">
+              <Download className="h-4 w-4 mr-2" />
+              Downloads
             </CardTitle>
-            <CardDescription>User engagement and behavior analysis</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="text-2xl font-bold text-blue-600">12,456</div>
-              <p className="text-sm text-gray-600">Active users this month</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Download Report
-              </Button>
-            </div>
+            <div className="text-2xl font-bold text-green-600">2,341</div>
+            <p className="text-xs text-gray-500">This month</p>
           </CardContent>
         </Card>
 
         <Card>
-          <CardHeader>
-            <CardTitle className="text-lg flex items-center">
-              <Package className="h-5 w-5 mr-2" />
-              Inventory Report
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center">
+              <Calendar className="h-4 w-4 mr-2" />
+              Scheduled
             </CardTitle>
-            <CardDescription>Stock levels and inventory analytics</CardDescription>
           </CardHeader>
           <CardContent>
-            <div className="space-y-3">
-              <div className="text-2xl font-bold text-purple-600">1,234</div>
-              <p className="text-sm text-gray-600">Total products in stock</p>
-              <Button size="sm" className="w-full">
-                <Download className="h-4 w-4 mr-2" />
-                Download Report
-              </Button>
-            </div>
+            <div className="text-2xl font-bold text-orange-600">23</div>
+            <p className="text-xs text-gray-500">Upcoming reports</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center">
+              <TrendingUp className="h-4 w-4 mr-2" />
+              Success Rate
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-purple-600">98.5%</div>
+            <p className="text-xs text-gray-500">Report completion</p>
           </CardContent>
         </Card>
       </div>
 
-      {/* Custom Report Builder */}
+      {/* Recent Reports */}
       <Card>
         <CardHeader>
-          <CardTitle>Custom Report Builder</CardTitle>
-          <CardDescription>Create personalized reports with specific parameters</CardDescription>
+          <CardTitle className="flex items-center">
+            <BarChart3 className="h-5 w-5 mr-2" />
+            Recent Reports
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {[
+              { name: 'Monthly Sales Report', status: 'completed', date: '2 hours ago', type: 'Sales' },
+              { name: 'User Activity Analysis', status: 'processing', date: '4 hours ago', type: 'Analytics' },
+              { name: 'Vendor Performance Report', status: 'completed', date: '1 day ago', type: 'Vendor' },
+              { name: 'Financial Summary Q4', status: 'completed', date: '2 days ago', type: 'Financial' },
+              { name: 'Inventory Audit Report', status: 'scheduled', date: 'Tomorrow', type: 'Inventory' }
+            ].map((report, index) => (
+              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <FileText className="h-4 w-4 text-gray-500" />
+                  <div>
+                    <span className="text-sm font-medium">{report.name}</span>
+                    <div className="text-xs text-gray-500">{report.type}</div>
+                  </div>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={report.status === 'completed' ? 'default' : report.status === 'processing' ? 'secondary' : 'outline'}>
+                    {report.status}
+                  </Badge>
+                  <span className="text-xs text-gray-500">{report.date}</span>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Report Generation Form */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Generate New Report</CardTitle>
+          <CardDescription>Create custom reports with your preferred settings</CardDescription>
         </CardHeader>
         <CardContent className="space-y-4">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <div>
               <Label htmlFor="report-type">Report Type</Label>
               <Select defaultValue="sales">
@@ -89,20 +119,26 @@ export const ReportsTab: React.FC = () => {
                 </SelectTrigger>
                 <SelectContent>
                   <SelectItem value="sales">Sales Report</SelectItem>
-                  <SelectItem value="users">User Report</SelectItem>
+                  <SelectItem value="analytics">Analytics Report</SelectItem>
+                  <SelectItem value="vendor">Vendor Performance</SelectItem>
+                  <SelectItem value="financial">Financial Summary</SelectItem>
                   <SelectItem value="inventory">Inventory Report</SelectItem>
-                  <SelectItem value="financial">Financial Report</SelectItem>
-                  <SelectItem value="performance">Performance Report</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label htmlFor="date-from">From Date</Label>
-              <Input id="date-from" type="date" />
-            </div>
-            <div>
-              <Label htmlFor="date-to">To Date</Label>
-              <Input id="date-to" type="date" />
+              <Label htmlFor="date-range">Date Range</Label>
+              <Select defaultValue="month">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="week">Last 7 Days</SelectItem>
+                  <SelectItem value="month">Last 30 Days</SelectItem>
+                  <SelectItem value="quarter">Last 3 Months</SelectItem>
+                  <SelectItem value="year">Last Year</SelectItem>
+                </SelectContent>
+              </Select>
             </div>
             <div>
               <Label htmlFor="format">Export Format</Label>
@@ -114,39 +150,29 @@ export const ReportsTab: React.FC = () => {
                   <SelectItem value="pdf">PDF</SelectItem>
                   <SelectItem value="excel">Excel</SelectItem>
                   <SelectItem value="csv">CSV</SelectItem>
-                  <SelectItem value="json">JSON</SelectItem>
                 </SelectContent>
               </Select>
             </div>
             <div>
-              <Label htmlFor="frequency">Schedule Frequency</Label>
+              <Label htmlFor="schedule">Schedule</Label>
               <Select defaultValue="once">
                 <SelectTrigger>
                   <SelectValue />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="once">One Time</SelectItem>
+                  <SelectItem value="once">Generate Once</SelectItem>
                   <SelectItem value="daily">Daily</SelectItem>
                   <SelectItem value="weekly">Weekly</SelectItem>
                   <SelectItem value="monthly">Monthly</SelectItem>
                 </SelectContent>
               </Select>
             </div>
-            <div>
-              <Label htmlFor="email">Email Recipients</Label>
-              <Input id="email" type="email" placeholder="admin@getit.com" />
-            </div>
           </div>
-          <div className="flex space-x-2">
-            <Button>
-              <Download className="h-4 w-4 mr-2" />
-              Generate Report
-            </Button>
-            <Button variant="outline">
-              <Calendar className="h-4 w-4 mr-2" />
-              Schedule Report
-            </Button>
+          <div>
+            <Label htmlFor="report-name">Report Name</Label>
+            <Input id="report-name" placeholder="Enter custom report name" />
           </div>
+          <Button className="w-full">Generate Report</Button>
         </CardContent>
       </Card>
     </div>

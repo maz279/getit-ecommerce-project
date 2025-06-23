@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   Package,
@@ -27,30 +26,39 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
 
   const renderOverview = () => (
-    <Tabs defaultValue="analytics" className="w-full">
-      <TabsList className="grid w-full grid-cols-4">
-        <TabsTrigger value="analytics">Analytics</TabsTrigger>
-        <TabsTrigger value="performance">Performance</TabsTrigger>
-        <TabsTrigger value="insights">Insights</TabsTrigger>
-        <TabsTrigger value="reports">Reports</TabsTrigger>
-      </TabsList>
+    <div className="space-y-6">
+      <div className="flex items-center justify-between">
+        <h1 className="text-3xl font-bold text-gray-900">Dashboard Overview</h1>
+        <div className="text-sm text-gray-500">
+          Welcome to your comprehensive admin dashboard
+        </div>
+      </div>
       
-      <TabsContent value="analytics" className="mt-6">
-        <AnalyticsTab />
-      </TabsContent>
+      <Tabs defaultValue="analytics" className="w-full">
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="analytics">Analytics</TabsTrigger>
+          <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="insights">Insights</TabsTrigger>
+          <TabsTrigger value="reports">Reports</TabsTrigger>
+        </TabsList>
+        
+        <TabsContent value="analytics" className="mt-6">
+          <AnalyticsTab />
+        </TabsContent>
 
-      <TabsContent value="performance" className="mt-6">
-        <PerformanceTab />
-      </TabsContent>
+        <TabsContent value="performance" className="mt-6">
+          <PerformanceTab />
+        </TabsContent>
 
-      <TabsContent value="insights" className="mt-6">
-        <InsightsTab />
-      </TabsContent>
+        <TabsContent value="insights" className="mt-6">
+          <InsightsTab />
+        </TabsContent>
 
-      <TabsContent value="reports" className="mt-6">
-        <ReportsTab />
-      </TabsContent>
-    </Tabs>
+        <TabsContent value="reports" className="mt-6">
+          <ReportsTab />
+        </TabsContent>
+      </Tabs>
+    </div>
   );
 
   const renderRevenueAnalytics = () => (
@@ -280,6 +288,10 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
   const getTabContent = () => {
     switch (selectedSubmenu) {
       case 'overview':
+      case 'metrics':
+      case 'performance':
+      case 'health':
+      case 'quick-actions':
         return renderOverview();
       case 'revenue-analytics':
         return renderRevenueAnalytics();

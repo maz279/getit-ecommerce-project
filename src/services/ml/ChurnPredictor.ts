@@ -1,3 +1,4 @@
+
 export interface ChurnPrediction {
   userId: string;
   churnProbability: number;
@@ -262,7 +263,20 @@ export class ChurnPredictor {
       });
     }
 
-    const featureUsageScore = Object.values(userBehavior.featureUsage).reduce((sum: number, usage: any) => sum + usage, 0) / Object.keys(userBehavior.featureUsage).length;
+    // Fixed the type checking issue here
+    const featureUsageValues = Object.values(userBehavior.featureUsage);
+    let featureUsageSum = 0;
+    let validCount = 0;
+    
+    for (const usage of featureUsageValues) {
+      if (typeof usage === 'number' && !isNaN(usage)) {
+        featureUsageSum += usage;
+        validCount++;
+      }
+    }
+    
+    const featureUsageScore = validCount > 0 ? featureUsageSum / validCount : 0;
+    
     if (featureUsageScore < 0.3) {
       factors.push({
         factor: 'low_feature_adoption',

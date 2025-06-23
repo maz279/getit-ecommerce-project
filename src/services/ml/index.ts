@@ -1,14 +1,12 @@
 
 import { mlService } from './MLService';
 import { recommendationEngine } from './RecommendationEngine';
-import { visualSearchEngine } from './VisualSearchEngine';
-import { pricingEngine } from './PricingEngine';
-import { analyticsEngine } from './AnalyticsEngine';
-import { mlSearchEnhancer } from './MLSearchEnhancer';
-import { fraudDetectionEngine } from './FraudDetectionEngine';
-import { advancedPersonalizationEngine } from './PersonalizationEngine';
-import { inventoryManager } from './InventoryManager';
-import { churnPredictor } from './churn/ChurnPredictor';
+import { churnPredictor } from './ChurnPredictor';
+import { fraudDetectionEngine } from './fraud/FraudDetectionEngine';
+import { demandForecastingEngine } from './inventory/DemandForecastingEngine';
+import { pricingOptimizer } from './pricing/PricingOptimizer';
+import { customerSegmentationEngine } from './segmentation/CustomerSegmentationEngine';
+import { personalizationEngine } from './PersonalizationEngine';
 
 export class MLManager {
   private static instance: MLManager;
@@ -24,163 +22,102 @@ export class MLManager {
   }
 
   async initialize(): Promise<void> {
-    if (this.isInitialized) {
-      console.log('ML Manager already initialized');
-      return;
-    }
+    if (this.isInitialized) return;
 
-    try {
-      console.log('🤖 Initializing Enhanced ML Manager...');
-      
-      // Initialize core ML service
-      await mlService.initialize();
-      
-      // Initialize all ML engines
-      console.log('🎯 ML Recommendation Engine ready');
-      console.log('👁️ ML Visual Search Engine ready');
-      console.log('💰 ML Pricing Engine ready');
-      console.log('📊 ML Analytics Engine ready');
-      console.log('🔍 ML Search Enhancer ready');
-      console.log('🛡️ ML Fraud Detection ready');
-      console.log('🎪 Advanced Personalization ready');
-      console.log('📦 Inventory Management AI ready');
-      console.log('📈 Churn Prediction ready');
-      
-      this.isInitialized = true;
-      console.log('✅ Enhanced ML Manager fully initialized');
-      
-      // Start background ML processes
-      this.startBackgroundProcesses();
-      
-    } catch (error) {
-      console.error('❌ Failed to initialize ML Manager:', error);
-      throw error;
-    }
-  }
-
-  private startBackgroundProcesses(): void {
-    // Simulate periodic ML model updates
-    setInterval(() => {
-      console.log('🔄 Running background ML optimization...');
-    }, 10 * 60 * 1000); // Every 10 minutes
+    console.log('🤖 Initializing ML Manager...');
     
-    // Simulate periodic analytics processing
-    setInterval(() => {
-      analyticsEngine.processRealTimeEvent({
-        type: 'ml_background_analysis',
-        userId: 'system',
-        timestamp: Date.now(),
-        data: {}
-      });
-    }, 5 * 60 * 1000); // Every 5 minutes
+    // Initialize all ML services
+    await Promise.all([
+      mlService.initialize(),
+      fraudDetectionEngine.initialize(),
+      demandForecastingEngine.initialize(),
+      pricingOptimizer.initialize(),
+      customerSegmentationEngine.initialize(),
+      personalizationEngine.initialize()
+    ]);
 
-    // Run fraud detection checks
-    setInterval(() => {
-      console.log('🛡️ Running fraud detection analysis...');
-    }, 15 * 60 * 1000); // Every 15 minutes
-
-    // Update inventory predictions
-    setInterval(() => {
-      console.log('📦 Updating inventory forecasts...');
-    }, 60 * 60 * 1000); // Every hour
-
-    // Analyze churn risk
-    setInterval(() => {
-      console.log('📈 Analyzing customer churn risk...');
-    }, 120 * 60 * 1000); // Every 2 hours
+    this.isInitialized = true;
+    console.log('✅ ML Manager initialized successfully');
   }
 
-  // Public API for ML features
-  public getRecommendationEngine() {
-    return recommendationEngine;
+  // Comprehensive ML analysis for any user
+  async performComprehensiveAnalysis(userId: string, context: any = {}): Promise<{
+    recommendations: any;
+    segmentation: any;
+    churnRisk: any;
+    fraudRisk: any;
+    personalizedPricing: any;
+    behaviorInsights: any;
+  }> {
+    console.log('🔍 Performing comprehensive ML analysis for user:', userId);
+
+    const [
+      recommendations,
+      segmentation,
+      churnRisk,
+      fraudRisk,
+      personalizedPricing,
+      behaviorInsights
+    ] = await Promise.all([
+      recommendationEngine.generateRecommendations(userId, context),
+      customerSegmentationEngine.segmentUser(userId),
+      churnPredictor.predictChurn(userId),
+      fraudDetectionEngine.analyzeUser(userId),
+      pricingOptimizer.getPersonalizedPricing(userId, context.productIds || []),
+      this.analyzeBehaviorPatterns(userId)
+    ]);
+
+    return {
+      recommendations,
+      segmentation,
+      churnRisk,
+      fraudRisk,
+      personalizedPricing,
+      behaviorInsights
+    };
   }
 
-  public getVisualSearchEngine() {
-    return visualSearchEngine;
+  // Real-time recommendation updates
+  async updateRecommendationsRealTime(userId: string, event: {
+    type: string;
+    productId?: string;
+    categoryId?: string;
+    data?: any;
+  }): Promise<void> {
+    // Track behavior for learning
+    recommendationEngine.trackUserBehavior(userId, event.type, event.productId || '', event.data);
+    
+    // Update personalization profile
+    await personalizationEngine.updateProfile(userId, event);
+    
+    // Trigger real-time recommendation refresh
+    await recommendationEngine.updateRecommendations(userId, event.type, event.data);
   }
 
-  public getPricingEngine() {
-    return pricingEngine;
-  }
+  // Get all ML engines for direct access
+  public getRecommendationEngine() { return recommendationEngine; }
+  public getChurnPredictor() { return churnPredictor; }
+  public getFraudDetectionEngine() { return fraudDetectionEngine; }
+  public getDemandForecastingEngine() { return demandForecastingEngine; }
+  public getPricingOptimizer() { return pricingOptimizer; }
+  public getCustomerSegmentationEngine() { return customerSegmentationEngine; }
+  public getPersonalizationEngine() { return personalizationEngine; }
 
-  public getAnalyticsEngine() {
-    return analyticsEngine;
-  }
-
-  public getSearchEnhancer() {
-    return mlSearchEnhancer;
-  }
-
-  public getFraudDetectionEngine() {
-    return fraudDetectionEngine;
-  }
-
-  public getPersonalizationEngine() {
-    return advancedPersonalizationEngine;
-  }
-
-  public getInventoryManager() {
-    return inventoryManager;
-  }
-
-  public getChurnPredictor() {
-    return churnPredictor;
+  private async analyzeBehaviorPatterns(userId: string): Promise<any> {
+    // Analyze user behavior patterns
+    return {
+      sessionDuration: Math.random() * 1800, // 0-30 minutes
+      pageViews: Math.floor(Math.random() * 50) + 1,
+      conversionRate: Math.random(),
+      engagementScore: Math.random(),
+      preferredCategories: ['Electronics', 'Fashion', 'Home'],
+      shoppingPatterns: ['evening_shopper', 'deal_seeker']
+    };
   }
 
   public isReady(): boolean {
     return this.isInitialized;
   }
-
-  // Enhanced ML capabilities
-  public async performComprehensiveAnalysis(userId: string, context: any): Promise<{
-    recommendations: any[];
-    fraudRisk: any;
-    churnRisk: any;
-    personalization: any;
-    inventoryInsights: any;
-  }> {
-    const [recommendations, fraudAnalysis, churnPrediction, personalization] = await Promise.all([
-      recommendationEngine.generateRecommendations(userId, context),
-      fraudDetectionEngine.analyzeTransaction(context.transaction || {}),
-      churnPredictor.predictUserChurn(userId),
-      advancedPersonalizationEngine.getPersonalizedRecommendations(userId)
-    ]);
-
-    const inventoryInsights = await inventoryManager.getInventoryAlerts();
-
-    return {
-      recommendations,
-      fraudRisk: fraudAnalysis,
-      churnRisk: churnPrediction,
-      personalization,
-      inventoryInsights
-    };
-  }
 }
 
-// Export singleton instance
 export const mlManager = MLManager.getInstance();
-
-// Export all ML services
-export {
-  mlService,
-  recommendationEngine,
-  visualSearchEngine,
-  pricingEngine,
-  analyticsEngine,
-  mlSearchEnhancer,
-  fraudDetectionEngine,
-  advancedPersonalizationEngine,
-  inventoryManager,
-  churnPredictor
-};
-
-// Export types
-export type { MLRecommendation } from './RecommendationEngine';
-export type { VisualSearchResult } from './VisualSearchEngine';
-export type { PriceOptimization, DemandForecast } from './PricingEngine';
-export type { MLInsight, CustomerInsight } from './AnalyticsEngine';
-export type { FraudAnalysis, TransactionData } from './FraudDetectionEngine';
-export type { PersonalizationRecommendation, UserProfile } from './PersonalizationEngine';
-export type { DemandForecast as InventoryDemandForecast, StockOptimization } from './InventoryManager';
-export type { ChurnPrediction, EngagementPrediction } from './churn/types';

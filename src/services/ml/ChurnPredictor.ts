@@ -378,7 +378,7 @@ export class ChurnPredictor {
 
   private calculateOverallEngagement(featureEngagement: any): number {
     const scores = Object.values(featureEngagement) as number[];
-    return scores.reduce((sum, score) => sum + (score || 0), 0) / scores.length;
+    return scores.reduce((sum: number, score: number) => (sum || 0) + (score || 0), 0) / scores.length;
   }
 
   private recommendFeatures(userBehavior: any, featureEngagement: any): string[] {

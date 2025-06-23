@@ -105,7 +105,6 @@ export class ChurnPredictor {
   async getHighRiskUsers(limit: number = 100): Promise<ChurnPrediction[]> {
     console.log('Churn ML: Identifying high-risk users');
 
-    // In a real implementation, this would query all active users
     const mockUserIds = Array.from({ length: 500 }, (_, i) => `user_${i + 1}`);
     
     const predictions = await this.batchPredictChurn(mockUserIds.slice(0, limit));
@@ -132,7 +131,7 @@ export class ChurnPredictor {
     console.log('Churn ML: Analyzing churn trends');
 
     return {
-      overallChurnRate: 0.12, // 12% monthly churn rate
+      overallChurnRate: 0.12,
       segmentAnalysis: [
         {
           segment: 'New Users (0-30 days)',
@@ -173,7 +172,6 @@ export class ChurnPredictor {
     roi: number;
     topPerformingStrategies: string[];
   }> {
-    // Mock campaign effectiveness tracking
     return {
       campaignId,
       targetedUsers: 1000,
@@ -192,7 +190,6 @@ export class ChurnPredictor {
   // Private helper methods
   private getUserBehaviorData(userId: string): any {
     if (!this.userBehaviorData.has(userId)) {
-      // Generate mock user behavior data
       this.userBehaviorData.set(userId, this.generateMockBehaviorData(userId));
     }
     return this.userBehaviorData.get(userId);
@@ -206,7 +203,7 @@ export class ChurnPredictor {
       daysSinceRegistration,
       daysSinceLastLogin,
       totalSessions: Math.floor(Math.random() * 50) + 1,
-      averageSessionDuration: Math.floor(Math.random() * 30) + 5, // minutes
+      averageSessionDuration: Math.floor(Math.random() * 30) + 5,
       totalPurchases: Math.floor(Math.random() * 10),
       totalSpent: Math.floor(Math.random() * 50000),
       supportTickets: Math.floor(Math.random() * 5),
@@ -233,7 +230,6 @@ export class ChurnPredictor {
   }> {
     const factors = [];
 
-    // Analyze recency
     if (userBehavior.daysSinceLastLogin > 14) {
       factors.push({
         factor: 'login_recency',
@@ -242,7 +238,6 @@ export class ChurnPredictor {
       });
     }
 
-    // Analyze engagement
     if (userBehavior.averageSessionDuration < 10) {
       factors.push({
         factor: 'low_engagement',
@@ -251,7 +246,6 @@ export class ChurnPredictor {
       });
     }
 
-    // Analyze purchase behavior
     if (userBehavior.totalPurchases === 0 && userBehavior.daysSinceRegistration > 30) {
       factors.push({
         factor: 'no_purchases',
@@ -260,7 +254,6 @@ export class ChurnPredictor {
       });
     }
 
-    // Analyze support interactions
     if (userBehavior.supportTickets > 2) {
       factors.push({
         factor: 'support_issues',
@@ -269,7 +262,6 @@ export class ChurnPredictor {
       });
     }
 
-    // Analyze feature adoption
     const featureUsageScore = Object.values(userBehavior.featureUsage).reduce((sum: number, usage: any) => sum + usage, 0) / Object.keys(userBehavior.featureUsage).length;
     if (featureUsageScore < 0.3) {
       factors.push({
@@ -283,7 +275,7 @@ export class ChurnPredictor {
   }
 
   private calculateChurnProbability(churnFactors: any[]): number {
-    if (churnFactors.length === 0) return 0.1; // Base churn rate
+    if (churnFactors.length === 0) return 0.1;
 
     const totalImpact = churnFactors.reduce((sum, factor) => sum + factor.impact, 0);
     const weightedImpact = totalImpact / churnFactors.length;
@@ -299,10 +291,9 @@ export class ChurnPredictor {
   }
 
   private estimateTimeToChurn(probability: number, factors: any[]): number {
-    const baseTime = 90; // 90 days base
+    const baseTime = 90;
     const urgencyMultiplier = 1 - probability;
     
-    // Factor in specific risk factors
     const hasRecentActivity = factors.some(f => f.factor === 'login_recency' && f.impact > 0.7);
     if (hasRecentActivity) return Math.floor(baseTime * 0.3);
     
@@ -357,9 +348,8 @@ export class ChurnPredictor {
   }
 
   private calculatePredictionConfidence(userBehavior: any): number {
-    let confidence = 0.5; // Base confidence
+    let confidence = 0.5;
     
-    // More data = higher confidence
     confidence += Math.min(userBehavior.totalSessions / 20, 0.3);
     confidence += Math.min(userBehavior.daysSinceRegistration / 180, 0.2);
     
@@ -371,8 +361,8 @@ export class ChurnPredictor {
       wishlist: userBehavior.featureUsage.wishlist || 0,
       reviews: userBehavior.featureUsage.reviews || 0,
       socialSharing: userBehavior.featureUsage.social || 0,
-      referrals: Math.random() * 0.3, // Mock referral engagement
-      premiumFeatures: Math.random() * 0.2 // Mock premium feature usage
+      referrals: Math.random() * 0.3,
+      premiumFeatures: Math.random() * 0.2
     };
   }
 
@@ -381,13 +371,12 @@ export class ChurnPredictor {
     
     if (values.length === 0) return 0;
     
-    // Calculate sum with explicit type checking
-    let sum = 0;
-    let count = 0;
+    let sum: number = 0;
+    let count: number = 0;
     
     for (const value of values) {
       if (typeof value === 'number' && !isNaN(value)) {
-        sum = sum + Number(value);
+        sum = sum + value;
         count++;
       }
     }

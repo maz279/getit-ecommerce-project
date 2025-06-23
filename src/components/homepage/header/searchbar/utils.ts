@@ -1,94 +1,82 @@
 
-import { searchService } from '@/services/searchService';
-
-export const PAGE_NAVIGATION_MAP = {
-  'home': '/',
-  'homepage': '/',
-  'গৃহপাতা': '/',
-  'new arrivals': '/new-arrivals',
-  'নতুন পণ্য': '/new-arrivals',
-  'categories': '/categories',
-  'বিভাগসমূহ': '/categories',
-  'about': '/about',
-  'about us': '/about',
-  'আমাদের সম্পর্কে': '/about',
-  'help': '/help',
-  'help center': '/help',
-  'সহায়তা': '/help',
-  'login': '/login',
-  'লগইন': '/login',
-  'register': '/register',
-  'sign up': '/register',
-  'নিবন্ধন': '/register',
-  'wishlist': '/wishlist',
-  'পছন্দের তালিকা': '/wishlist',
-  'profile': '/profile',
-  'my account': '/profile',
-  'আমার অ্যাকাউন্ট': '/profile',
-  'privacy': '/privacy',
-  'privacy policy': '/privacy',
-  'গোপনীয়তা নীতি': '/privacy',
-  'terms': '/terms',
-  'terms of service': '/terms',
-  'সেবার শর্তাবলী': '/terms',
-  'cart': '/cart',
-  'checkout': '/checkout',
-  'orders': '/orders',
-  'vendors': '/vendors',
-  'contact': '/contact',
-  'dashboard': '/dashboard'
-} as const;
-
-export const getPageSuggestions = (query: string): string[] => {
-  return searchService.getPageSuggestions(query);
-};
+import { PAGE_NAVIGATION_MAP } from './constants';
 
 export const getDirectPageMatch = (query: string): string | null => {
-  const lowerQuery = query.toLowerCase().trim();
-  return PAGE_NAVIGATION_MAP[lowerQuery as keyof typeof PAGE_NAVIGATION_MAP] || null;
+  const normalizedQuery = query.toLowerCase().trim();
+  
+  // Check for direct page matches
+  const pageMatch = PAGE_NAVIGATION_MAP[normalizedQuery as keyof typeof PAGE_NAVIGATION_MAP];
+  if (pageMatch) {
+    return pageMatch;
+  }
+  
+  // Check for partial matches with admin-related terms
+  if (normalizedQuery.includes('admin') || normalizedQuery.includes('অ্যাডমিন')) {
+    if (normalizedQuery.includes('vendor') || normalizedQuery.includes('বিক্রেতা')) {
+      return '/admin/dashboard?tab=vendors';
+    }
+    if (normalizedQuery.includes('product') || normalizedQuery.includes('পণ্য')) {
+      return '/admin/dashboard?tab=products';
+    }
+    if (normalizedQuery.includes('order') || normalizedQuery.includes('অর্ডার')) {
+      return '/admin/dashboard?tab=orders';
+    }
+    if (normalizedQuery.includes('user') || normalizedQuery.includes('ব্যবহারকারী')) {
+      return '/admin/dashboard?tab=users';
+    }
+    if (normalizedQuery.includes('financial') || normalizedQuery.includes('আর্থিক') || normalizedQuery.includes('revenue')) {
+      return '/admin/dashboard?tab=financials';
+    }
+    if (normalizedQuery.includes('report') || normalizedQuery.includes('প্রতিবেদন') || normalizedQuery.includes('analytics')) {
+      return '/admin/dashboard?tab=reports';
+    }
+    if (normalizedQuery.includes('setting') || normalizedQuery.includes('সেটিং')) {
+      return '/admin/dashboard?tab=settings';
+    }
+    if (normalizedQuery.includes('notification') || normalizedQuery.includes('বিজ্ঞপ্তি')) {
+      return '/admin/dashboard?tab=notifications';
+    }
+    // Default to main admin dashboard
+    return '/admin/dashboard';
+  }
+  
+  // Check for management-related terms
+  if (normalizedQuery.includes('management') || normalizedQuery.includes('ব্যবস্থাপনা')) {
+    if (normalizedQuery.includes('vendor') || normalizedQuery.includes('বিক্রেতা')) {
+      return '/admin/dashboard?tab=vendors';
+    }
+    if (normalizedQuery.includes('product') || normalizedQuery.includes('পণ্য')) {
+      return '/admin/dashboard?tab=products';
+    }
+    if (normalizedQuery.includes('order') || normalizedQuery.includes('অর্ডার')) {
+      return '/admin/dashboard?tab=orders';
+    }
+    if (normalizedQuery.includes('user') || normalizedQuery.includes('ব্যবহারকারী')) {
+      return '/admin/dashboard?tab=users';
+    }
+  }
+  
+  return null;
 };
 
 export const isConversationalQuery = (query: string): boolean => {
-  const conversationalKeywords = [
-    'show me', 'find me', 'i want', 'i need', 'looking for',
-    'search for', 'help me find', 'can you', 'where is',
-    'how to', 'what is', 'tell me about', 'recommend',
-    'suggest', 'best', 'popular', 'trending', 'new',
-    'দেখান', 'খুঁজুন', 'চাই', 'দরকার', 'খুঁজছি'
+  const conversationalPatterns = [
+    'show me', 'take me to', 'go to', 'open', 'navigate to',
+    'আমাকে দেখান', 'নিয়ে যান', 'খুলুন', 'যান'
   ];
   
-  const lowerQuery = query.toLowerCase();
-  return conversationalKeywords.some(keyword => lowerQuery.includes(keyword));
+  const normalizedQuery = query.toLowerCase();
+  return conversationalPatterns.some(pattern => normalizedQuery.includes(pattern));
 };
 
-export const extractSearchIntent = (query: string): {
-  intent: 'product' | 'category' | 'page' | 'vendor' | 'help';
-  entities: string[];
-} => {
-  const lowerQuery = query.toLowerCase();
+export const extractNavigationIntent = (query: string): string | null => {
+  const normalizedQuery = query.toLowerCase();
   
-  // Page navigation intent
-  if (Object.keys(PAGE_NAVIGATION_MAP).some(key => lowerQuery.includes(key))) {
-    return { intent: 'page', entities: [] };
-  }
+  // Remove conversational words
+  const cleanQuery = normalizedQuery
+    .replace(/show me|take me to|go to|open|navigate to/g, '')
+    .replace(/আমাকে দেখান|নিয়ে যান|খুলুন|যান/g, '')
+    .trim();
   
-  // Product search intent
-  const productKeywords = ['buy', 'price', 'shop', 'purchase', 'order'];
-  if (productKeywords.some(keyword => lowerQuery.includes(keyword))) {
-    return { intent: 'product', entities: [] };
-  }
-  
-  // Category intent
-  const categoryKeywords = ['category', 'section', 'department', 'বিভাগ'];
-  if (categoryKeywords.some(keyword => lowerQuery.includes(keyword))) {
-    return { intent: 'category', entities: [] };
-  }
-  
-  // Help intent
-  const helpKeywords = ['help', 'support', 'how', 'what', 'সহায়তা'];
-  if (helpKeywords.some(keyword => lowerQuery.includes(keyword))) {
-    return { intent: 'help', entities: [] };
-  }
-  
-  return { intent: 'product', entities: [] };
+  return getDirectPageMatch(cleanQuery);
 };

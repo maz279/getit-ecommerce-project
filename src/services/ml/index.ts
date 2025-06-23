@@ -1,3 +1,4 @@
+
 import { mlService } from './MLService';
 import { recommendationEngine } from './RecommendationEngine';
 import { churnPredictor } from './ChurnPredictor';
@@ -104,16 +105,25 @@ export class MLManager {
         const churnRisk = await churnPredictor.predictUserChurn(userId);
         
         return {
-          segment: segmentation.segment,
+          segment: segmentation.primarySegment.segmentName,
           churnRisk: churnRisk.churnProbability,
           clv: Math.random() * 100000, // Mock CLV
-          preferences: segmentation.preferences || []
+          preferences: segmentation.primarySegment.characteristics || []
         };
       }
     };
   }
 
-  public getPricingOptimizer() { return pricingOptimizer; }
+  public getPricingEngine() { 
+    return {
+      optimizePrice: async (product: any) => {
+        return pricingOptimizer.optimizePrice(product);
+      },
+      forecastDemand: async (productId: string) => {
+        return demandForecastingEngine.forecastDemand(productId);
+      }
+    };
+  }
   
   public getSearchEnhancer() {
     return {

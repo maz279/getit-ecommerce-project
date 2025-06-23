@@ -377,14 +377,15 @@ export class ChurnPredictor {
   }
 
   private calculateOverallEngagement(featureEngagement: any): number {
-    const scores = Object.values(featureEngagement) as number[];
+    const scores = Object.values(featureEngagement).filter((value): value is number => 
+      typeof value === 'number' && !isNaN(value)
+    );
+    
     if (scores.length === 0) return 0;
     
-    const sum = scores.reduce((acc, score) => {
-      const numAcc = typeof acc === 'number' ? acc : 0;
-      const numScore = typeof score === 'number' ? score : 0;
-      return numAcc + numScore;
-    }, 0 as number);
+    const sum = scores.reduce((acc: number, score: number): number => {
+      return acc + score;
+    }, 0);
     
     return sum / scores.length;
   }

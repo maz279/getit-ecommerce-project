@@ -53,7 +53,6 @@ const Index: React.FC = () => {
       <Header />
       
       <main>
-        <AdminNavigationCard />
         <HeroSection />
         <QuickAccessIcons />
         <FeaturedCategories />

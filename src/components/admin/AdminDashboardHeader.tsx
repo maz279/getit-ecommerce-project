@@ -60,8 +60,8 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
         setCurrency={setCurrency}
       />
 
-      {/* Main Header */}
-      <div className="h-[70px] bg-gradient-to-r from-blue-50 via-purple-50 to-indigo-50 flex items-center justify-between px-6">
+      {/* Main Header with blended background */}
+      <div className="h-[70px] bg-gradient-to-r from-blue-100 via-purple-100 to-indigo-100 flex items-center justify-between px-6">
         {/* Left Section - Logo only */}
         <div className="flex items-center space-x-4">
           <div className="flex items-center space-x-3">
@@ -73,8 +73,12 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
           </div>
         </div>
 
-        {/* Center Section - Enhanced AI Search */}
-        <EnhancedAdminSearchBar />
+        {/* Center Section - Smaller Enhanced AI Search moved up */}
+        <div className="flex flex-1 max-w-xl mx-6 -mt-2">
+          <div className="relative w-full">
+            <EnhancedAdminSearchBar />
+          </div>
+        </div>
 
         {/* Right Section - Quick Actions and User Profile */}
         <div className="flex items-center space-x-4">

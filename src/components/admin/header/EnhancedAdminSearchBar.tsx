@@ -203,13 +203,13 @@ export const EnhancedAdminSearchBar: React.FC = () => {
   const isLoading = aiSearch.isLoading || nlpSearch.isNLPProcessing;
 
   return (
-    <div className="flex flex-1 max-w-3xl mx-6" ref={searchRef}>
+    <div className="flex flex-1 w-full" ref={searchRef}>
       <div className="relative w-full">
-        {/* Search Mode Selector */}
-        <div className="flex mb-2 bg-gray-100 rounded-lg p-1">
+        {/* Compact Search Mode Selector */}
+        <div className="flex mb-1 bg-gray-100 rounded-md p-0.5">
           <button
             onClick={() => setSearchMode('basic')}
-            className={`px-3 py-1 text-xs rounded-md transition-colors ${
+            className={`px-2 py-0.5 text-xs rounded-sm transition-colors ${
               searchMode === 'basic' 
                 ? 'bg-white text-gray-800 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-800'
@@ -219,38 +219,38 @@ export const EnhancedAdminSearchBar: React.FC = () => {
           </button>
           <button
             onClick={() => setSearchMode('ai')}
-            className={`px-3 py-1 text-xs rounded-md transition-colors flex items-center space-x-1 ${
+            className={`px-2 py-0.5 text-xs rounded-sm transition-colors flex items-center space-x-1 ${
               searchMode === 'ai' 
                 ? 'bg-white text-blue-600 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-800'
             }`}
           >
-            <Brain size={12} />
+            <Brain size={10} />
             <span>AI</span>
           </button>
           <button
             onClick={() => setSearchMode('nlp')}
-            className={`px-3 py-1 text-xs rounded-md transition-colors flex items-center space-x-1 ${
+            className={`px-2 py-0.5 text-xs rounded-sm transition-colors flex items-center space-x-1 ${
               searchMode === 'nlp' 
                 ? 'bg-white text-purple-600 shadow-sm' 
                 : 'text-gray-600 hover:text-gray-800'
             }`}
           >
-            <Sparkles size={12} />
+            <Sparkles size={10} />
             <span>NLP</span>
           </button>
         </div>
 
         <form onSubmit={handleSearch} className="flex">
-          {/* Search Input */}
+          {/* Compact Search Input */}
           <div className="relative flex-1">
             <input
               ref={inputRef}
               type="text"
-              placeholder={`Search admin panel with ${searchMode.toUpperCase()}... (orders, products, vendors, customers, analytics)`}
+              placeholder={`Search admin panel with ${searchMode.toUpperCase()}...`}
               value={searchQuery}
               onChange={handleInputChange}
-              className="w-full pl-4 pr-12 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
+              className="w-full pl-3 pr-10 py-1.5 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 text-sm"
             />
             
             {/* Clear button */}
@@ -258,22 +258,22 @@ export const EnhancedAdminSearchBar: React.FC = () => {
               <button
                 type="button"
                 onClick={clearSearch}
-                className="absolute right-10 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                className="absolute right-8 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-600"
               >
-                <X size={14} />
+                <X size={12} />
               </button>
             )}
             
             {/* Loading indicator */}
             {isLoading && (
               <div className="absolute right-2 top-1/2 transform -translate-y-1/2">
-                <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-blue-500"></div>
+                <div className="animate-spin rounded-full h-3 w-3 border-b-2 border-blue-500"></div>
               </div>
             )}
           </div>
           
-          {/* Search Controls */}
-          <div className="flex items-center space-x-2 ml-2">
+          {/* Compact Search Controls */}
+          <div className="flex items-center space-x-1 ml-2">
             {/* Voice Search */}
             <Button
               type="button"
@@ -281,9 +281,9 @@ export const EnhancedAdminSearchBar: React.FC = () => {
               variant="outline"
               onClick={handleVoiceSearch}
               disabled={searchMode === 'basic'}
-              className={`px-2 ${isVoiceActive ? 'bg-red-100 border-red-300' : ''}`}
+              className={`px-1.5 py-1 h-7 ${isVoiceActive ? 'bg-red-100 border-red-300' : ''}`}
             >
-              <Mic size={14} className={isVoiceActive ? 'text-red-500' : ''} />
+              <Mic size={12} className={isVoiceActive ? 'text-red-500' : ''} />
             </Button>
 
             {/* Image Search */}
@@ -299,10 +299,10 @@ export const EnhancedAdminSearchBar: React.FC = () => {
                 type="button"
                 size="sm"
                 variant="outline"
-                className="px-2"
+                className="px-1.5 py-1 h-7"
                 disabled={searchMode === 'basic'}
               >
-                <Image size={14} />
+                <Image size={12} />
               </Button>
             </label>
 
@@ -310,7 +310,7 @@ export const EnhancedAdminSearchBar: React.FC = () => {
             <Button
               type="submit"
               size="sm"
-              className="px-3 py-1 bg-gradient-to-r from-blue-500 to-purple-600 text-white"
+              className="px-2 py-1 h-7 bg-gradient-to-r from-blue-500 to-purple-600 text-white"
             >
               <Search size={12} />
             </Button>
@@ -319,7 +319,7 @@ export const EnhancedAdminSearchBar: React.FC = () => {
         
         {/* AI Insights */}
         {aiInsights && searchMode === 'nlp' && (
-          <div className="absolute top-full left-0 right-0 bg-blue-50 border border-blue-200 rounded-b-lg p-3 mt-1 z-50">
+          <div className="absolute top-full left-0 right-0 bg-blue-50 border border-blue-200 rounded-b-lg p-2 mt-1 z-50">
             <div className="text-xs text-blue-700">
               <strong>AI Analysis:</strong> Intent: {aiInsights.nlpAnalysis?.intent?.intent || 'search'} | 
               Sentiment: {aiInsights.nlpAnalysis?.sentiment?.sentiment || 'neutral'} | 
@@ -330,9 +330,9 @@ export const EnhancedAdminSearchBar: React.FC = () => {
 
         {/* Suggestions */}
         {showSuggestions && suggestions.length > 0 && (
-          <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-lg z-50 max-h-48 overflow-y-auto">
+          <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-lg z-50 max-h-40 overflow-y-auto">
             <div className="p-2">
-              {suggestions.map((suggestion, index) => (
+              {suggestions.slice(0, 5).map((suggestion, index) => (
                 <button
                   key={index}
                   onClick={() => {
@@ -340,9 +340,9 @@ export const EnhancedAdminSearchBar: React.FC = () => {
                     setShowSuggestions(false);
                     handleSearch();
                   }}
-                  className="w-full text-left px-2 py-1.5 hover:bg-gray-50 rounded text-sm flex items-center space-x-2"
+                  className="w-full text-left px-2 py-1 hover:bg-gray-50 rounded text-xs flex items-center space-x-2"
                 >
-                  <Search size={12} className="text-gray-400" />
+                  <Search size={10} className="text-gray-400" />
                   <span>{suggestion}</span>
                 </button>
               ))}
@@ -352,9 +352,9 @@ export const EnhancedAdminSearchBar: React.FC = () => {
 
         {/* Search Results */}
         {showResults && (
-          <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-lg z-50 max-h-96 overflow-y-auto">
-            <div className="p-4">
-              <div className="flex items-center justify-between mb-3">
+          <div className="absolute top-full left-0 right-0 bg-white border border-gray-200 rounded-b-lg shadow-lg z-50 max-h-80 overflow-y-auto">
+            <div className="p-3">
+              <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-medium text-gray-800">
                   Search Results ({searchResults.length})
                 </h3>
@@ -369,7 +369,7 @@ export const EnhancedAdminSearchBar: React.FC = () => {
                 </div>
               ) : (
                 <div className="space-y-2">
-                  {searchResults.slice(0, 8).map((result, index) => (
+                  {searchResults.slice(0, 6).map((result, index) => (
                     <div
                       key={index}
                       className="p-2 hover:bg-gray-50 rounded border border-gray-100 cursor-pointer"

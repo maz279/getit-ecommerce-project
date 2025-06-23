@@ -380,11 +380,11 @@ export class ChurnPredictor {
     const scores = Object.values(featureEngagement) as number[];
     if (scores.length === 0) return 0;
     
-    const sum = scores.reduce((acc: number, score: number) => {
-      const numAcc = Number(acc) || 0;
-      const numScore = Number(score) || 0;
+    const sum = scores.reduce((acc, score) => {
+      const numAcc = typeof acc === 'number' ? acc : 0;
+      const numScore = typeof score === 'number' ? score : 0;
       return numAcc + numScore;
-    }, 0);
+    }, 0 as number);
     
     return sum / scores.length;
   }

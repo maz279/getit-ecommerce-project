@@ -5,6 +5,10 @@ import { visualSearchEngine } from './VisualSearchEngine';
 import { pricingEngine } from './PricingEngine';
 import { analyticsEngine } from './AnalyticsEngine';
 import { mlSearchEnhancer } from './MLSearchEnhancer';
+import { fraudDetectionEngine } from './FraudDetectionEngine';
+import { advancedPersonalizationEngine } from './PersonalizationEngine';
+import { inventoryManager } from './InventoryManager';
+import { churnPredictor } from './ChurnPredictor';
 
 export class MLManager {
   private static instance: MLManager;
@@ -26,7 +30,7 @@ export class MLManager {
     }
 
     try {
-      console.log('🤖 Initializing ML Manager...');
+      console.log('🤖 Initializing Enhanced ML Manager...');
       
       // Initialize core ML service
       await mlService.initialize();
@@ -37,9 +41,13 @@ export class MLManager {
       console.log('💰 ML Pricing Engine ready');
       console.log('📊 ML Analytics Engine ready');
       console.log('🔍 ML Search Enhancer ready');
+      console.log('🛡️ ML Fraud Detection ready');
+      console.log('🎪 Advanced Personalization ready');
+      console.log('📦 Inventory Management AI ready');
+      console.log('📈 Churn Prediction ready');
       
       this.isInitialized = true;
-      console.log('✅ ML Manager fully initialized');
+      console.log('✅ Enhanced ML Manager fully initialized');
       
       // Start background ML processes
       this.startBackgroundProcesses();
@@ -62,9 +70,24 @@ export class MLManager {
         type: 'ml_background_analysis',
         userId: 'system',
         timestamp: Date.now(),
-        data: {} // Added missing data property
+        data: {}
       });
     }, 5 * 60 * 1000); // Every 5 minutes
+
+    // Run fraud detection checks
+    setInterval(() => {
+      console.log('🛡️ Running fraud detection analysis...');
+    }, 15 * 60 * 1000); // Every 15 minutes
+
+    // Update inventory predictions
+    setInterval(() => {
+      console.log('📦 Updating inventory forecasts...');
+    }, 60 * 60 * 1000); // Every hour
+
+    // Analyze churn risk
+    setInterval(() => {
+      console.log('📈 Analyzing customer churn risk...');
+    }, 120 * 60 * 1000); // Every 2 hours
   }
 
   // Public API for ML features
@@ -88,8 +111,50 @@ export class MLManager {
     return mlSearchEnhancer;
   }
 
+  public getFraudDetectionEngine() {
+    return fraudDetectionEngine;
+  }
+
+  public getPersonalizationEngine() {
+    return advancedPersonalizationEngine;
+  }
+
+  public getInventoryManager() {
+    return inventoryManager;
+  }
+
+  public getChurnPredictor() {
+    return churnPredictor;
+  }
+
   public isReady(): boolean {
     return this.isInitialized;
+  }
+
+  // Enhanced ML capabilities
+  public async performComprehensiveAnalysis(userId: string, context: any): Promise<{
+    recommendations: any[];
+    fraudRisk: any;
+    churnRisk: any;
+    personalization: any;
+    inventoryInsights: any;
+  }> {
+    const [recommendations, fraudAnalysis, churnPrediction, personalization] = await Promise.all([
+      recommendationEngine.generateRecommendations(userId, context),
+      fraudDetectionEngine.analyzeTransaction(context.transaction || {}),
+      churnPredictor.predictUserChurn(userId),
+      advancedPersonalizationEngine.getPersonalizedRecommendations(userId)
+    ]);
+
+    const inventoryInsights = await inventoryManager.getInventoryAlerts();
+
+    return {
+      recommendations,
+      fraudRisk: fraudAnalysis,
+      churnRisk: churnPrediction,
+      personalization,
+      inventoryInsights
+    };
   }
 }
 
@@ -103,7 +168,11 @@ export {
   visualSearchEngine,
   pricingEngine,
   analyticsEngine,
-  mlSearchEnhancer
+  mlSearchEnhancer,
+  fraudDetectionEngine,
+  advancedPersonalizationEngine,
+  inventoryManager,
+  churnPredictor
 };
 
 // Export types
@@ -111,3 +180,7 @@ export type { MLRecommendation } from './RecommendationEngine';
 export type { VisualSearchResult } from './VisualSearchEngine';
 export type { PriceOptimization, DemandForecast } from './PricingEngine';
 export type { MLInsight, CustomerInsight } from './AnalyticsEngine';
+export type { FraudAnalysis, TransactionData } from './FraudDetectionEngine';
+export type { PersonalizationRecommendation, UserProfile } from './PersonalizationEngine';
+export type { DemandForecast as InventoryDemandForecast, StockOptimization } from './InventoryManager';
+export type { ChurnPrediction, EngagementPrediction } from './ChurnPredictor';

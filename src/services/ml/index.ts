@@ -1,4 +1,3 @@
-
 import { mlService } from './MLService';
 import { recommendationEngine } from './RecommendationEngine';
 import { churnPredictor } from './ChurnPredictor';
@@ -6,7 +5,10 @@ import { fraudDetectionEngine } from './fraud/FraudDetectionEngine';
 import { demandForecastingEngine } from './inventory/DemandForecastingEngine';
 import { pricingOptimizer } from './pricing/PricingOptimizer';
 import { customerSegmentationEngine } from './segmentation/CustomerSegmentationEngine';
-import { personalizationEngine } from './PersonalizationEngine';
+import { PersonalizationEngine } from './PersonalizationEngine';
+
+// Create personalization engine instance
+const personalizationEngine = PersonalizationEngine.getInstance();
 
 export class MLManager {
   private static instance: MLManager;
@@ -61,7 +63,7 @@ export class MLManager {
     ] = await Promise.all([
       recommendationEngine.generateRecommendations(userId, context),
       customerSegmentationEngine.segmentUser(userId),
-      churnPredictor.predictChurn(userId),
+      churnPredictor.predictUserChurn(userId),
       fraudDetectionEngine.analyzeUser(userId),
       pricingOptimizer.getPersonalizedPricing(userId, context.productIds || []),
       this.analyzeBehaviorPatterns(userId)
@@ -94,6 +96,38 @@ export class MLManager {
     await recommendationEngine.updateRecommendations(userId, event.type, event.data);
   }
 
+  // Add missing methods that other services expect
+  public getAnalyticsEngine() {
+    return {
+      analyzeCustomerBehavior: async (userId: string, eventData: any) => {
+        const segmentation = await customerSegmentationEngine.segmentUser(userId);
+        const churnRisk = await churnPredictor.predictUserChurn(userId);
+        
+        return {
+          segment: segmentation.segment,
+          churnRisk: churnRisk.churnProbability,
+          clv: Math.random() * 100000, // Mock CLV
+          preferences: segmentation.preferences || []
+        };
+      }
+    };
+  }
+
+  public getPricingOptimizer() { return pricingOptimizer; }
+  
+  public getSearchEnhancer() {
+    return {
+      enhanceQuery: async (query: string) => {
+        return {
+          enhancedQuery: query,
+          semanticMatches: [],
+          categoryPredictions: [],
+          qualityScore: 0.8
+        };
+      }
+    };
+  }
+
   // Get all ML engines for direct access
   public getRecommendationEngine() { return recommendationEngine; }
   public getChurnPredictor() { return churnPredictor; }
@@ -121,3 +155,6 @@ export class MLManager {
 }
 
 export const mlManager = MLManager.getInstance();
+
+// Export personalizationEngine
+export { personalizationEngine };

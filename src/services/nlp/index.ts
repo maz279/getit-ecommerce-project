@@ -1,4 +1,3 @@
-
 import { textAnalyzer } from './TextAnalyzer';
 import { voiceProcessor } from './VoiceProcessor';
 import { documentProcessor } from './DocumentProcessor';
@@ -33,6 +32,44 @@ export class NLPManager {
 
     this.isInitialized = true;
     console.log('✅ NLP Manager initialized successfully');
+  }
+
+  // Main analyzeText method that other services expect
+  async analyzeText(text: string, options: {
+    includeIntent?: boolean;
+    includeKeywords?: boolean;
+    includeSentiment?: boolean;
+    includeEntities?: boolean;
+    language?: 'en' | 'bn';
+  } = {}): Promise<{
+    sentiment?: any;
+    keywords?: any;
+    entities?: any;
+    intent?: any;
+    language?: any;
+  }> {
+    console.log('🔍 Analyzing text with options:', options);
+    
+    const results: any = {};
+    const language = options.language || 'en';
+
+    if (options.includeSentiment) {
+      results.sentiment = await textAnalyzer.analyzeSentiment(text, language);
+    }
+
+    if (options.includeKeywords) {
+      results.keywords = await textAnalyzer.extractKeywords(text, language);
+    }
+
+    if (options.includeEntities) {
+      results.entities = await textAnalyzer.extractEntities(text);
+    }
+
+    if (options.includeIntent) {
+      results.intent = await textAnalyzer.detectIntent(text);
+    }
+
+    return results;
   }
 
   // Comprehensive text analysis

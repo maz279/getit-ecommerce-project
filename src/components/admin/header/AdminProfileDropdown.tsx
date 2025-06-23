@@ -42,9 +42,9 @@ export const AdminProfileDropdown: React.FC<AdminProfileDropdownProps> = ({
           </div>
           
           <div className="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
-            <User size={16} className="text-white" />
+            <User size={12} className="text-white" />
           </div>
-          <ChevronDown size={14} className="text-gray-400" />
+          <ChevronDown size={10} className="text-gray-400" />
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-64 bg-white border shadow-lg z-50" align="end">
@@ -58,19 +58,19 @@ export const AdminProfileDropdown: React.FC<AdminProfileDropdownProps> = ({
         <DropdownMenuSeparator />
         
         <DropdownMenuItem className="flex items-center">
-          <Settings size={16} className="mr-2" />
+          <Settings size={12} className="mr-2" />
           Profile Settings
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center">
-          <Key size={16} className="mr-2" />
+          <Key size={12} className="mr-2" />
           Change Password
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center">
-          <Activity size={16} className="mr-2" />
+          <Activity size={12} className="mr-2" />
           Activity Log
         </DropdownMenuItem>
         <DropdownMenuItem className="flex items-center">
-          <ShieldCheck size={16} className="mr-2" />
+          <ShieldCheck size={12} className="mr-2" />
           Two-Factor Authentication
         </DropdownMenuItem>
         
@@ -79,7 +79,7 @@ export const AdminProfileDropdown: React.FC<AdminProfileDropdownProps> = ({
           onClick={handleSignOut}
           className="flex items-center text-red-600"
         >
-          <LogOut size={16} className="mr-2" />
+          <LogOut size={12} className="mr-2" />
           Logout
         </DropdownMenuItem>
       </DropdownMenuContent>

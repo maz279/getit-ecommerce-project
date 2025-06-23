@@ -36,7 +36,7 @@ export const QuickActionsSection: React.FC = () => {
                 size="sm"
                 className={`${action.color} text-white px-3 py-2`}
               >
-                <IconComponent size={16} className="mr-2" />
+                <IconComponent size={12} className="mr-2" />
                 <span className="hidden 2xl:inline">{action.label}</span>
               </Button>
             </TooltipTrigger>

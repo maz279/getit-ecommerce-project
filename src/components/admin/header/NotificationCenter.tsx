@@ -27,7 +27,7 @@ export const NotificationCenter: React.FC = () => {
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Button variant="outline" className="relative p-2">
-          <Bell size={20} className="text-gray-600" />
+          <Bell size={14} className="text-gray-600" />
           {totalNotifications > 0 && (
             <Badge className="absolute -top-2 -right-2 bg-red-500 text-white text-xs px-1.5 py-0.5 rounded-full min-w-[20px] h-5 flex items-center justify-center">
               {totalNotifications}

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Calendar, 
@@ -85,7 +84,7 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
             </Tooltip>
             
             <div className="flex items-center space-x-1">
-              <Users size={12} />
+              <Users size={10} />
               <span className="text-xs">Active: {systemStatus.activeUsers}</span>
             </div>
           </div>
@@ -94,7 +93,7 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
         {/* Current Time & Language/Currency - Compressed */}
         <div className="flex items-center space-x-4">
           <div className="hidden md:flex items-center space-x-1">
-            <Clock size={12} />
+            <Clock size={10} />
             <span className="text-xs">
               {new Date().toLocaleDateString('en-US', { 
                 month: 'short', 
@@ -111,7 +110,7 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 h-6 px-2 text-xs">
-                  <Languages size={12} className="mr-1" />
+                  <Languages size={10} className="mr-1" />
                   {language === 'en' ? 'EN' : 'বাং'}
                 </Button>
               </DropdownMenuTrigger>
@@ -128,7 +127,7 @@ export const SystemStatusBar: React.FC<SystemStatusBarProps> = ({
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
                 <Button variant="ghost" size="sm" className="text-white hover:bg-white/10 h-6 px-2 text-xs">
-                  <DollarSign size={12} className="mr-1" />
+                  <DollarSign size={10} className="mr-1" />
                   {currency}
                 </Button>
               </DropdownMenuTrigger>

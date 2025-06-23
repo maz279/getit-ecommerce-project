@@ -59,6 +59,26 @@ export const getDirectPageMatch = (query: string): string | null => {
   return null;
 };
 
+export const getPageSuggestions = (query: string): string[] => {
+  const normalizedQuery = query.toLowerCase().trim();
+  
+  if (!normalizedQuery) {
+    return [];
+  }
+  
+  const suggestions: string[] = [];
+  
+  // Check all page navigation mappings for partial matches
+  Object.keys(PAGE_NAVIGATION_MAP).forEach(key => {
+    if (key.toLowerCase().includes(normalizedQuery) || normalizedQuery.includes(key.toLowerCase())) {
+      suggestions.push(key);
+    }
+  });
+  
+  // Remove duplicates and limit to 5 suggestions
+  return [...new Set(suggestions)].slice(0, 5);
+};
+
 export const isConversationalQuery = (query: string): boolean => {
   const conversationalPatterns = [
     'show me', 'take me to', 'go to', 'open', 'navigate to',

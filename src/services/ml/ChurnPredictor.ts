@@ -1,4 +1,3 @@
-
 export interface ChurnPrediction {
   userId: string;
   churnProbability: number;
@@ -379,24 +378,21 @@ export class ChurnPredictor {
 
   private calculateOverallEngagement(featureEngagement: any): number {
     const values = Object.values(featureEngagement);
-    const scores: number[] = [];
     
-    // Explicitly filter and convert to numbers
+    if (values.length === 0) return 0;
+    
+    // Calculate sum with explicit type checking
+    let sum = 0;
+    let count = 0;
+    
     for (const value of values) {
       if (typeof value === 'number' && !isNaN(value)) {
-        scores.push(value);
+        sum = sum + Number(value);
+        count++;
       }
     }
     
-    if (scores.length === 0) return 0;
-    
-    // Simple loop to avoid TypeScript inference issues
-    let sum = 0;
-    for (const score of scores) {
-      sum += score;
-    }
-    
-    return sum / scores.length;
+    return count > 0 ? sum / count : 0;
   }
 
   private recommendFeatures(userBehavior: any, featureEngagement: any): string[] {

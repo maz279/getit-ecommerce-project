@@ -46,32 +46,32 @@ export const FeaturedCategories: React.FC = () => {
   };
 
   return (
-    <section className="flex w-full flex-col items-center mt-4 pl-[26px] pr-[9px] max-md:max-w-full max-md:pl-5">
-      <div className="flex w-full max-w-[1383px] items-center gap-px flex-wrap max-md:max-w-full">
-        <button className="bg-gradient-to-r from-blue-500 to-green-500 self-stretch text-sm text-white font-bold whitespace-nowrap text-center w-[22px] h-[22px] my-auto px-1.5 rounded-[50%] hover:from-blue-600 hover:to-green-600 transition-all shadow-md">
+    <section className="flex w-full flex-col items-center mt-4 px-4 max-md:px-2">
+      <div className="flex w-full max-w-7xl items-center gap-2">
+        <button className="bg-gradient-to-r from-blue-500 to-green-500 text-sm text-white font-bold whitespace-nowrap text-center w-[30px] h-[30px] flex items-center justify-center rounded-full hover:from-blue-600 hover:to-green-600 transition-all shadow-md">
           &lt;
         </button>
         
-        <div className="bg-gradient-to-br from-blue-50 via-yellow-50 to-red-50 shadow-[0px_4px_4px_rgba(0,0,0,0.25)] border self-stretch pt-px pb-[17px] rounded-[5px] border-blue-500 border-solid max-md:max-w-full">
-          <div className="bg-gradient-to-r from-blue-500 via-red-500 to-green-500 flex w-full items-stretch gap-5 flex-wrap justify-between px-[15px] py-[9px] rounded-[3px] max-md:max-w-full">
-            <div className="text-white text-base font-bold">
+        <div className="bg-gradient-to-br from-blue-50 via-yellow-50 to-red-50 shadow-lg border flex-1 rounded-lg border-blue-500 border-solid overflow-hidden">
+          <div className="bg-gradient-to-r from-blue-500 via-red-500 to-green-500 flex w-full items-center justify-between px-6 py-3">
+            <div className="text-white text-lg font-bold">
               Search by Category
             </div>
-            <div className="flex items-stretch gap-[5px] text-xs font-semibold">
-              <div className="text-white grow">SEE ALL</div>
+            <div className="flex items-center gap-2 text-sm font-semibold">
+              <div className="text-white">SEE ALL</div>
               <button 
                 onClick={handleSeeAllClick}
-                className="bg-white text-blue-600 whitespace-nowrap px-[5px] py-px rounded-[5px] hover:bg-yellow-100 transition-colors font-bold"
+                className="bg-white text-blue-600 whitespace-nowrap px-3 py-1 rounded-md hover:bg-yellow-100 transition-colors font-bold"
               >
                 &gt;
               </button>
             </div>
           </div>
           
-          <div className="bg-gradient-to-r from-blue-300 via-red-300 to-green-300 flex shrink-0 h-0.5 max-md:max-w-full" />
+          <div className="bg-gradient-to-r from-blue-300 via-red-300 to-green-300 h-1 w-full" />
           
-          <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
-            <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
+          <div className="p-6">
+            <div className="grid grid-cols-8 gap-4 mb-6 max-md:grid-cols-4">
               {categories.slice(0, 8).map((category, index) => (
                 <div 
                   key={index} 
@@ -86,9 +86,7 @@ export const FeaturedCategories: React.FC = () => {
                 </div>
               ))}
             </div>
-          </div>
-          
-          <div className="ml-3.5 mr-5 mt-[7px] max-md:max-w-full max-md:mr-2.5">
+            
             <div className="grid grid-cols-8 gap-4 max-md:grid-cols-4">
               {categories.slice(8, 16).map((category, index) => (
                 <div 
@@ -107,7 +105,7 @@ export const FeaturedCategories: React.FC = () => {
           </div>
         </div>
         
-        <button className="bg-gradient-to-r from-red-500 to-yellow-500 self-stretch text-sm text-white font-bold whitespace-nowrap text-center w-[22px] h-[22px] my-auto px-1.5 rounded-[50%] hover:from-red-600 hover:to-yellow-600 transition-all shadow-md">
+        <button className="bg-gradient-to-r from-red-500 to-yellow-500 text-sm text-white font-bold whitespace-nowrap text-center w-[30px] h-[30px] flex items-center justify-center rounded-full hover:from-red-600 hover:to-yellow-600 transition-all shadow-md">
           &gt;
         </button>
       </div>

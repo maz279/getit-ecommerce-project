@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -649,9 +650,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                   {/* Main Menu Item */}
                   <button
                     onClick={() => {
-                      if (!collapsed) {
-                        toggleMenu(item.id);
-                      }
+                      toggleMenu(item.id);
                       setActiveTab(item.id);
                     }}
                     className={`w-full flex items-center px-3 py-3 text-left hover:bg-gray-50 transition-all duration-200 rounded-lg group border-l-4 ${
@@ -664,36 +663,32 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                         isActive ? 'text-blue-600' : item.color
                       }`} 
                     />
-                    {!collapsed && (
-                      <>
-                        <span className="ml-3 font-medium text-sm flex-1">{item.label}</span>
-                        <div className="flex items-center space-x-2">
-                          {item.badge && (
-                            <BadgeComponent 
-                              className={`text-white text-xs px-2 py-1 ${
-                                item.badge > 50 ? 'bg-red-500' : 
-                                item.badge > 20 ? 'bg-orange-500' : 
-                                'bg-blue-500'
-                              }`}
-                            >
-                              {item.badge}
-                            </BadgeComponent>
-                          )}
-                          {item.subItems && (
-                            <ChevronDown 
-                              size={16} 
-                              className={`transition-transform duration-200 ${
-                                isExpanded ? 'rotate-180' : ''
-                              }`}
-                            />
-                          )}
-                        </div>
-                      </>
-                    )}
+                    <span className="ml-3 font-medium text-sm flex-1">{item.label}</span>
+                    <div className="flex items-center space-x-2">
+                      {item.badge && (
+                        <BadgeComponent 
+                          className={`text-white text-xs px-2 py-1 ${
+                            item.badge > 50 ? 'bg-red-500' : 
+                            item.badge > 20 ? 'bg-orange-500' : 
+                            'bg-blue-500'
+                          }`}
+                        >
+                          {item.badge}
+                        </BadgeComponent>
+                      )}
+                      {item.subItems && (
+                        <ChevronDown 
+                          size={16} 
+                          className={`transition-transform duration-200 ${
+                            isExpanded ? 'rotate-180' : ''
+                          }`}
+                        />
+                      )}
+                    </div>
                   </button>
 
                   {/* Sub Menu Items */}
-                  {!collapsed && item.subItems && isExpanded && (
+                  {item.subItems && isExpanded && (
                     <div className="ml-8 mt-1 space-y-1 border-l-2 border-gray-100 pl-4">
                       {item.subItems.map((subItem) => (
                         <div key={subItem.id}>

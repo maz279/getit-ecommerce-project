@@ -1,11 +1,11 @@
 
 import { SearchResult, SearchServiceConfig } from './types';
 import { SearchIndex } from './SearchIndex';
-import { SearchDataBuilder } from './dataBuilders';
+import { ContentIndexer } from './ContentIndexer';
 
 export class SearchService {
   private searchIndex: SearchIndex;
-  private dataBuilder: SearchDataBuilder;
+  private contentIndexer: ContentIndexer;
   private config: SearchServiceConfig;
 
   constructor(config: SearchServiceConfig = {}) {
@@ -16,10 +16,10 @@ export class SearchService {
     };
     
     this.searchIndex = new SearchIndex();
-    this.dataBuilder = new SearchDataBuilder();
+    this.contentIndexer = new ContentIndexer();
     this.buildSearchIndex();
     
-    console.log('Search service initialized with automatic indexing');
+    console.log('Search service initialized with comprehensive page indexing');
   }
 
   // Subscribe to index changes
@@ -41,7 +41,7 @@ export class SearchService {
   public refreshIndex() {
     this.searchIndex.clearIndex();
     this.buildSearchIndex();
-    console.log('Search index refreshed');
+    console.log('Search index refreshed with all pages');
   }
 
   // Get all indexed items
@@ -52,11 +52,19 @@ export class SearchService {
   // Auto-index new content from various sources
   public autoIndexNewContent() {
     try {
-      this.autoIndexPages();
-      this.autoIndexCategories();
-      this.autoIndexProducts();
+      // Index all content types including all pages
+      const allContent = this.contentIndexer.indexAllContent();
+      const existingItems = this.getIndexedItems();
       
-      console.log('Auto-indexing completed');
+      const newItems = allContent.filter(newItem => 
+        !existingItems.some(existingItem => existingItem.id === newItem.id)
+      );
+      
+      newItems.forEach(item => this.addToIndex(item));
+      
+      if (newItems.length > 0) {
+        console.log(`Auto-indexed ${newItems.length} new items including pages`);
+      }
     } catch (error) {
       console.error('Auto-indexing failed:', error);
     }
@@ -78,90 +86,10 @@ export class SearchService {
   }
 
   private buildSearchIndex() {
-    // Add all data types to index
-    this.dataBuilder.buildPageData().forEach(page => this.addToIndex(page));
-    this.dataBuilder.buildCategoryData().forEach(category => this.addToIndex(category));
-    this.dataBuilder.buildProductData().forEach(product => this.addToIndex(product));
-    this.dataBuilder.buildVendorData().forEach(vendor => this.addToIndex(vendor));
-    this.dataBuilder.buildContentData().forEach(content => this.addToIndex(content));
+    // Add all content to index using ContentIndexer
+    const allContent = this.contentIndexer.indexAllContent();
+    allContent.forEach(item => this.addToIndex(item));
 
-    console.log(`Search index built with ${this.getIndexedItems().length} items`);
-  }
-
-  private autoIndexPages() {
-    const currentPages = this.getIndexedItems().filter(item => item.type === 'page');
-    const knownPageIds = new Set(currentPages.map(page => page.id));
-    
-    const newPages = [
-      {
-        id: 'flash-sale',
-        title: 'Flash Sale | ফ্ল্যাশ সেল',
-        description: 'Limited time offers and lightning deals',
-        type: 'page' as const,
-        url: '/flash-sale',
-        tags: ['sale', 'deals', 'offers', 'ফ্ল্যাশ', 'সেল']
-      },
-      {
-        id: 'best-sellers',
-        title: 'Best Sellers | বেস্ট সেলার',
-        description: 'Most popular products across all categories',
-        type: 'page' as const,
-        url: '/best-sellers',
-        tags: ['popular', 'trending', 'best', 'সেলার']
-      }
-    ].filter(page => !knownPageIds.has(page.id));
-
-    newPages.forEach(page => this.addToIndex(page));
-  }
-
-  private autoIndexCategories() {
-    const existingCategories = this.getIndexedItems().filter(item => item.type === 'category');
-    const categoryTimestamp = localStorage.getItem('categoryIndexTimestamp');
-    const lastCategoryUpdate = categoryTimestamp ? new Date(categoryTimestamp) : new Date(0);
-    
-    const shouldReindex = existingCategories.length === 0 || 
-                          Date.now() - lastCategoryUpdate.getTime() > 24 * 60 * 60 * 1000;
-
-    if (shouldReindex) {
-      existingCategories.forEach(cat => this.removeFromIndex(cat.id));
-      this.dataBuilder.buildCategoryData().forEach(category => this.addToIndex(category));
-      localStorage.setItem('categoryIndexTimestamp', new Date().toISOString());
-    }
-  }
-
-  private autoIndexProducts() {
-    const lastProductCheck = localStorage.getItem('lastProductIndexCheck');
-    const lastCheck = lastProductCheck ? new Date(lastProductCheck) : new Date(0);
-    
-    if (Date.now() - lastCheck.getTime() > 60 * 60 * 1000) {
-      this.addMockNewProducts();
-      localStorage.setItem('lastProductIndexCheck', new Date().toISOString());
-    }
-  }
-
-  private addMockNewProducts() {
-    const newProducts = [
-      {
-        id: `product-${Date.now()}-1`,
-        title: 'iPhone 15 Pro Max',
-        description: 'Latest Apple smartphone with titanium design',
-        type: 'product' as const,
-        url: '/product/iphone-15-pro-max',
-        category: 'Electronics',
-        brand: 'Apple',
-        price: 149999,
-        rating: 4.8,
-        tags: ['smartphone', 'apple', 'iphone', 'mobile', 'new'],
-        dateAdded: new Date(),
-        isActive: true
-      }
-    ];
-
-    newProducts.forEach(product => {
-      const exists = this.getIndexedItems().some(item => item.title === product.title);
-      if (!exists) {
-        this.addToIndex(product);
-      }
-    });
+    console.log(`Search index built with ${this.getIndexedItems().length} items including all pages`);
   }
 }

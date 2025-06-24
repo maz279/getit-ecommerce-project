@@ -14,7 +14,7 @@ interface ActionIconsProps {
 }
 
 export const ActionIcons: React.FC<ActionIconsProps> = ({ language }) => {
-  const { cartItems } = useCart();
+  const { state } = useCart();
   const { user } = useAuth();
   const [currentLanguage, setCurrentLanguage] = React.useState(language);
 
@@ -78,9 +78,9 @@ export const ActionIcons: React.FC<ActionIconsProps> = ({ language }) => {
         aria-label={currentContent.cart}
       >
         <ShoppingCart className="w-5 h-5" />
-        {cartItems.length > 0 && (
+        {state.items.length > 0 && (
           <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
-            {cartItems.length}
+            {state.items.length}
           </span>
         )}
       </Link>

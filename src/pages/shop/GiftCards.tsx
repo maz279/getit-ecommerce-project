@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { Header } from '../components/homepage/Header';
-import { Footer } from '../components/homepage/Footer';
+import { Header } from '@/components/homepage/Header';
+import { Footer } from '@/components/homepage/Footer';
 import { useSEO } from '@/hooks/useSEO';
 
 const GiftCards: React.FC = () => {

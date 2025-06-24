@@ -1,3 +1,4 @@
+
 import { Suspense, lazy } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -8,30 +9,53 @@ import { CartProvider } from "./context/CartContext";
 import { AuthProvider } from "./context/AuthContext";
 import Index from "./pages/Index";
 
-// Lazy load components for better performance
+// Common pages
+const NotFound = lazy(() => import("./pages/common/NotFound"));
+
+// Authentication pages
+const Login = lazy(() => import("./pages/auth/Login"));
+const Register = lazy(() => import("./pages/auth/Register"));
+
+// Shop pages
 const Categories = lazy(() => import("./pages/Categories"));
 const WomensClothing = lazy(() => import("./pages/WomensClothing"));
-const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const BestSellers = lazy(() => import("./pages/BestSellers"));
 const NewArrivals = lazy(() => import("./pages/NewArrivals"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const BulkOrders = lazy(() => import("./pages/BulkOrders"));
-const AboutUs = lazy(() => import("./pages/AboutUs"));
+const Cart = lazy(() => import("./pages/shop/Cart"));
+const GiftCards = lazy(() => import("./pages/shop/GiftCards"));
+const GroupBuy = lazy(() => import("./pages/shop/GroupBuy"));
+const Premium = lazy(() => import("./pages/shop/Premium"));
+
+// Promotions pages
+const FlashSale = lazy(() => import("./pages/promotions/FlashSale"));
+const DailyDeals = lazy(() => import("./pages/promotions/DailyDeals"));
+const MegaSale = lazy(() => import("./pages/promotions/MegaSale"));
+
+// Account pages
+const MyAccount = lazy(() => import("./pages/account/MyAccount"));
+const Orders = lazy(() => import("./pages/account/Orders"));
+const Settings = lazy(() => import("./pages/account/Settings"));
+const PaymentMethods = lazy(() => import("./pages/account/PaymentMethods"));
+
+// Order pages
+const OrderTracking = lazy(() => import("./pages/order/OrderTracking"));
+const TrackOrder = lazy(() => import("./pages/order/TrackOrder"));
+
+// Support pages
+const HelpCenter = lazy(() => import("./pages/support/HelpCenter"));
+
+// Vendor pages
 const VendorCenter = lazy(() => import("./pages/VendorCenter"));
 const VendorRegister = lazy(() => import("./pages/VendorRegister"));
-const FlashSale = lazy(() => import("./pages/FlashSale"));
-const DailyDeals = lazy(() => import("./pages/DailyDeals"));
-const GiftCards = lazy(() => import("./pages/GiftCards"));
-const MegaSale = lazy(() => import("./pages/MegaSale"));
-const GroupBuy = lazy(() => import("./pages/GroupBuy"));
-const Premium = lazy(() => import("./pages/Premium"));
-const TrackOrder = lazy(() => import("./pages/TrackOrder"));
-const PaymentMethods = lazy(() => import("./pages/PaymentMethods"));
-const Orders = lazy(() => import("./pages/Orders"));
-const Settings = lazy(() => import("./pages/Settings"));
-const Cart = lazy(() => import("./pages/Cart"));
-const Login = lazy(() => import("./pages/auth/Login"));
-const Register = lazy(() => import("./pages/auth/Register"));
+const VendorDashboard = lazy(() => import("./pages/vendor/Dashboard"));
+
+// Company pages
+const AboutUs = lazy(() => import("./pages/AboutUs"));
+
+// Admin pages
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 
 const queryClient = new QueryClient();
 
@@ -45,30 +69,56 @@ const App = () => (
           <BrowserRouter>
             <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div></div>}>
               <Routes>
+                {/* Home */}
                 <Route path="/" element={<Index />} />
+                
+                {/* Authentication */}
+                <Route path="/auth/login" element={<Login />} />
+                <Route path="/auth/register" element={<Register />} />
+                
+                {/* Shop */}
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/categories/fashion/womens-fashion" element={<WomensClothing />} />
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/new-arrivals" element={<NewArrivals />} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/bulk-orders" element={<BulkOrders />} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/seller-center" element={<VendorCenter />} />
-                <Route path="/vendor/register" element={<VendorRegister />} />
-                <Route path="/flash-sale" element={<FlashSale />} />
-                <Route path="/daily-deals" element={<DailyDeals />} />
+                <Route path="/cart" element={<Cart />} />
                 <Route path="/gift-cards" element={<GiftCards />} />
-                <Route path="/mega-sale" element={<MegaSale />} />
                 <Route path="/group-buy" element={<GroupBuy />} />
                 <Route path="/premium" element={<Premium />} />
-                <Route path="/track-order" element={<TrackOrder />} />
-                <Route path="/payment-methods" element={<PaymentMethods />} />
+                
+                {/* Promotions */}
+                <Route path="/flash-sale" element={<FlashSale />} />
+                <Route path="/daily-deals" element={<DailyDeals />} />
+                <Route path="/mega-sale" element={<MegaSale />} />
+                
+                {/* Account */}
+                <Route path="/account" element={<MyAccount />} />
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/settings" element={<Settings />} />
-                <Route path="/cart" element={<Cart />} />
-                <Route path="/auth/login" element={<Login />} />
-                <Route path="/auth/register" element={<Register />} />
+                <Route path="/payment-methods" element={<PaymentMethods />} />
+                
+                {/* Orders */}
+                <Route path="/order-tracking" element={<OrderTracking />} />
+                <Route path="/track-order" element={<TrackOrder />} />
+                
+                {/* Support */}
+                <Route path="/help" element={<HelpCenter />} />
+                
+                {/* Vendor */}
+                <Route path="/seller-center" element={<VendorCenter />} />
+                <Route path="/vendor/register" element={<VendorRegister />} />
+                <Route path="/vendor/dashboard" element={<VendorDashboard />} />
+                
+                {/* Company */}
+                <Route path="/about" element={<AboutUs />} />
+                
+                {/* Admin */}
+                <Route path="/admin/dashboard" element={<AdminDashboard />} />
+                
+                {/* 404 */}
+                <Route path="*" element={<NotFound />} />
               </Routes>
             </Suspense>
           </BrowserRouter>

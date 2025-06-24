@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { 
@@ -34,7 +33,6 @@ import {
 } from 'lucide-react';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Badge } from '@/components/ui/badge';
-import { Slider } from '@/components/ui/slider';
 
 interface ComprehensiveAdminSidebarProps {
   activeTab: string;
@@ -781,10 +779,8 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                   max="100"
                   value={sliderValue[0]}
                   onChange={(e) => setSliderValue([parseInt(e.target.value)])}
-                  className="h-12 w-1 bg-gray-300 rounded-lg appearance-none cursor-pointer slider-vertical"
+                  className="h-12 w-1 bg-gray-300 rounded-lg appearance-none cursor-pointer transform -rotate-90 origin-center"
                   style={{
-                    writingMode: 'bt-lr',
-                    WebkitAppearance: 'slider-vertical',
                     width: '4px',
                     height: '48px'
                   }}

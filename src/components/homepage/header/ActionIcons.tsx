@@ -1,56 +1,102 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ShoppingCart, Heart, Bell } from 'lucide-react';
+import { Search, ShoppingCart, Heart, Store } from 'lucide-react';
 import { useCart } from '@/context/CartContext';
+import { useAuth } from '@/context/AuthContext';
+import { UserProfileDropdown } from './UserProfileDropdown';
+import { LanguageSelector } from './LanguageSelector';
+import { HeaderTrustIndicators } from './HeaderTrustIndicators';
+import { AuthButtons } from './AuthButtons';
 
 interface ActionIconsProps {
   language: string;
 }
 
 export const ActionIcons: React.FC<ActionIconsProps> = ({ language }) => {
-  const { state: cartState } = useCart();
+  const { cartItems } = useCart();
+  const { user } = useAuth();
+  const [currentLanguage, setCurrentLanguage] = React.useState(language);
 
   const content = {
     EN: {
-      wishlist: "Wishlist",
-      items: "items"
+      becomeVendor: "Become a Vendor",
+      search: "Search",
+      wishlist: "Wishlist", 
+      cart: "Cart"
     },
     BD: {
+      becomeVendor: "বিক্রেতা হন",
+      search: "খুঁজুন",
       wishlist: "পছন্দের তালিকা",
-      items: "আইটেম"
+      cart: "কার্ট"
     }
   };
 
-  const currentContent = content[language as keyof typeof content];
+  const currentContent = content[currentLanguage as keyof typeof content];
+
+  const handleLanguageChange = (newLanguage: string) => {
+    setCurrentLanguage(newLanguage);
+    // You can add additional language change logic here if needed
+  };
 
   return (
-    <div className="flex items-center gap-1 sm:gap-3">
-      <Link to="/wishlist" className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all group">
-        <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
-        <span className="hidden lg:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity">
-          {currentContent.wishlist}
-        </span>
-      </Link>
+    <div className="flex items-center gap-2 sm:gap-4">
+      {/* Trust Indicators */}
+      <HeaderTrustIndicators language={currentLanguage} />
       
-      <Link to="/cart" className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all group">
-        <ShoppingCart className="w-4 h-4 sm:w-5 sm:h-5" />
-        {cartState.itemCount > 0 && (
-          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-            {cartState.itemCount}
+      {/* Become a Vendor */}
+      <Link
+        to="/vendor/register"
+        className="hidden md:flex items-center gap-2 px-3 py-2 bg-gradient-to-r from-orange-500 to-red-500 text-white rounded-lg hover:from-orange-600 hover:to-red-600 transition-all text-sm font-medium"
+      >
+        <Store className="w-4 h-4" />
+        {currentContent.becomeVendor}
+      </Link>
+
+      {/* Mobile Search Icon */}
+      <button
+        className="md:hidden p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+        aria-label={currentContent.search}
+      >
+        <Search className="w-5 h-5" />
+      </button>
+
+      {/* Wishlist */}
+      <Link
+        to="/wishlist"
+        className="p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+        aria-label={currentContent.wishlist}
+      >
+        <Heart className="w-5 h-5" />
+      </Link>
+
+      {/* Shopping Cart */}
+      <Link
+        to="/cart"
+        className="relative p-2 text-white hover:bg-white/10 rounded-lg transition-colors"
+        aria-label={currentContent.cart}
+      >
+        <ShoppingCart className="w-5 h-5" />
+        {cartItems.length > 0 && (
+          <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+            {cartItems.length}
           </span>
         )}
-        <div className="hidden lg:block absolute top-full left-1/2 transform -translate-x-1/2 mt-2 bg-black text-white text-xs px-2 py-1 rounded opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
-          ৳{cartState.total} - {cartState.itemCount} {currentContent.items}
-        </div>
       </Link>
-      
-      <button className="relative p-1.5 sm:p-2 text-white hover:bg-white hover:bg-opacity-20 rounded-full transition-all group">
-        <Bell className="w-4 h-4 sm:w-5 sm:h-5" />
-        <span className="absolute -top-1 -right-1 bg-red-500 text-white text-xs rounded-full w-4 h-4 flex items-center justify-center">
-          3
-        </span>
-      </button>
+
+      {/* Language Selector */}
+      <LanguageSelector 
+        language={currentLanguage} 
+        onLanguageChange={handleLanguageChange} 
+      />
+
+      {/* User Authentication */}
+      {user ? (
+        <UserProfileDropdown language={currentLanguage} />
+      ) : (
+        <AuthButtons language={currentLanguage} />
+      )}
     </div>
   );
 };

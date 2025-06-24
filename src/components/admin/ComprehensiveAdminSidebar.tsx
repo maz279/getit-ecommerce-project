@@ -784,10 +784,8 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
                   max="100"
                   value={sliderValue}
                   onChange={handleSliderChange}
-                  className="slider-vertical"
+                  className="w-16 h-1 bg-gray-200 rounded-lg appearance-none cursor-pointer slider-vertical"
                   style={{
-                    width: '60px',
-                    height: '4px',
                     transform: 'rotate(-90deg)',
                     transformOrigin: 'center center'
                   }}
@@ -832,36 +830,29 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         </div>
       )}
 
-      {/* Custom CSS for vertical slider */}
-      <style jsx>{`
-        .slider-vertical {
-          -webkit-appearance: none;
-          appearance: none;
-          background: #e2e8f0;
-          border-radius: 2px;
-          outline: none;
-          cursor: pointer;
-        }
-        
-        .slider-vertical::-webkit-slider-thumb {
-          -webkit-appearance: none;
-          appearance: none;
-          width: 12px;
-          height: 12px;
-          background: #3b82f6;
-          border-radius: 50%;
-          cursor: pointer;
-        }
-        
-        .slider-vertical::-moz-range-thumb {
-          width: 12px;
-          height: 12px;
-          background: #3b82f6;
-          border-radius: 50%;
-          cursor: pointer;
-          border: none;
-        }
-      `}</style>
+      {/* Custom CSS for vertical slider using standard style tag */}
+      <style>
+        {`
+          .slider-vertical::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+          }
+          
+          .slider-vertical::-moz-range-thumb {
+            width: 12px;
+            height: 12px;
+            background: #3b82f6;
+            border-radius: 50%;
+            cursor: pointer;
+            border: none;
+          }
+        `}
+      </style>
     </div>
   );
 };

@@ -10,12 +10,12 @@ import Index from "./pages/Index";
 // Lazy load components for better performance
 const Categories = lazy(() => import("./pages/Categories"));
 const WomensClothing = lazy(() => import("./pages/WomensClothing"));
-const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 const BestSellers = lazy(() => import("./pages/BestSellers"));
 const NewArrivals = lazy(() => import("./pages/NewArrivals"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const BulkOrders = lazy(() => import("./pages/BulkOrders"));
-const About = lazy(() => import("./pages/About"));
+const AboutUs = lazy(() => import("./pages/AboutUs"));
 const VendorCenter = lazy(() => import("./pages/VendorCenter"));
 const FlashSale = lazy(() => import("./pages/FlashSale"));
 const DailyDeals = lazy(() => import("./pages/DailyDeals"));
@@ -44,7 +44,7 @@ const App = () => (
             <Route path="/new-arrivals" element={<NewArrivals />} />
             <Route path="/wishlist" element={<Wishlist />} />
             <Route path="/bulk-orders" element={<BulkOrders />} />
-            <Route path="/about" element={<About />} />
+            <Route path="/about" element={<AboutUs />} />
             <Route path="/seller-center" element={<VendorCenter />} />
             <Route path="/flash-sale" element={<FlashSale />} />
             <Route path="/daily-deals" element={<DailyDeals />} />

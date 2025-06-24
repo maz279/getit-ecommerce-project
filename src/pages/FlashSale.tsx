@@ -1,87 +1,33 @@
-import React, { useState } from 'react';
+
+import React from 'react';
 import { Header } from '../components/homepage/Header';
-import { EnhancedFlashSaleHero } from '../components/flashsale/EnhancedFlashSaleHero';
-import { FlashSaleNavigationMap } from '../components/flashsale/FlashSaleNavigationMap';
-import { LightningDealsSection } from '../components/flashsale/LightningDealsSection';
-import { CategoryQuickAccess } from '../components/flashsale/CategoryQuickAccess';
-import { FlashSaleFilters } from '../components/flashsale/FlashSaleFilters';
-import { FlashSaleProductGrid } from '../components/flashsale/FlashSaleProductGrid';
-import { PaymentMethodsSection } from '../components/flashsale/PaymentMethodsSection';
-import { DeliveryOptionsSection } from '../components/flashsale/DeliveryOptionsSection';
-import { CustomerReviewsSection } from '../components/flashsale/CustomerReviewsSection';
-import { TrustIndicatorsSection } from '../components/flashsale/TrustIndicatorsSection';
 import { Footer } from '../components/homepage/Footer';
-import { useFlashSaleTimer } from '../hooks/useFlashSaleTimer';
-import { generateFlashProducts, categories } from '../data/flashSaleData';
+import { useSEO } from '@/hooks/useSEO';
 
 const FlashSale: React.FC = () => {
-  const timeLeft = useFlashSaleTimer({
-    hours: 2,
-    minutes: 34,
-    seconds: 56
-  });
-  
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [sortBy, setSortBy] = useState('popularity');
-  const [showFilters, setShowFilters] = useState(false);
-  const [priceRange, setPriceRange] = useState<[number, number]>([0, 100000]);
-
-  const flashProducts = generateFlashProducts();
-
-  const filteredProducts = flashProducts.filter(product => {
-    if (selectedCategory !== 'all') return Math.random() > 0.3; // Mock filtering
-    return product.salePrice >= priceRange[0] && product.salePrice <= priceRange[1];
+  useSEO({
+    title: 'Flash Sale - GetIt Bangladesh | Limited Time Offers',
+    description: 'Don\'t miss out on incredible flash sale deals! Limited time offers on electronics, fashion, home goods and more.',
+    keywords: 'flash sale, deals, discounts, limited time offers, bangladesh shopping'
   });
 
   return (
-    <div className="bg-gray-50 flex flex-col min-h-screen">
+    <div className="bg-white flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-1">
-        <EnhancedFlashSaleHero timeLeft={timeLeft} />
-        
-        <FlashSaleNavigationMap />
-        
-        <div id="lightning-deals">
-          <LightningDealsSection />
-        </div>
-        
-        <CategoryQuickAccess />
-        
-        <FlashSaleFilters
-          categories={categories}
-          selectedCategory={selectedCategory}
-          onCategoryChange={setSelectedCategory}
-          showFilters={showFilters}
-          onToggleFilters={() => setShowFilters(!showFilters)}
-          sortBy={sortBy}
-          onSortChange={setSortBy}
-          viewMode={viewMode}
-          onViewModeChange={setViewMode}
-          priceRange={priceRange}
-          onPriceRangeChange={setPriceRange}
-        />
-
-        <FlashSaleProductGrid
-          products={filteredProducts}
-          viewMode={viewMode}
-        />
-
-        <div id="payment-methods">
-          <PaymentMethodsSection />
-        </div>
-        
-        <div id="delivery-options">
-          <DeliveryOptionsSection />
-        </div>
-        
-        <div id="customer-reviews">
-          <CustomerReviewsSection />
-        </div>
-        
-        <div id="trust-indicators">
-          <TrustIndicatorsSection />
+      <main className="flex-1 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-red-600 mb-4">⚡ Flash Sale ⚡</h1>
+            <p className="text-lg text-gray-600">Limited time offers - Don't miss out!</p>
+          </div>
+          
+          <div className="bg-gradient-to-r from-red-500 to-pink-500 rounded-lg p-8 text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">🔥 Lightning Deals 🔥</h2>
+            <p className="mb-6">Flash sale products will be displayed here with countdown timers and special discounts.</p>
+            <div className="text-6xl mb-4">⏰</div>
+            <p className="text-lg">Coming Soon - Amazing deals await!</p>
+          </div>
         </div>
       </main>
       

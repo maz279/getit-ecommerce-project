@@ -2,45 +2,33 @@
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
-import { GroupBuyHero } from '../components/groupbuy/GroupBuyHero';
-import { HowItWorksSection } from '../components/groupbuy/HowItWorksSection';
-import { ActiveDealsSection } from '../components/groupbuy/ActiveDealsSection';
-import { SuccessStoriesSection } from '../components/groupbuy/SuccessStoriesSection';
-import { CategoryGroupsSection } from '../components/groupbuy/CategoryGroupsSection';
-import { GroupBuyBenefitsSection } from '../components/groupbuy/GroupBuyBenefitsSection';
-import { CreateGroupSection } from '../components/groupbuy/CreateGroupSection';
-import { PopularGroupsSection } from '../components/groupbuy/PopularGroupsSection';
-import { GroupBuyStatsSection } from '../components/groupbuy/GroupBuyStatsSection';
-import { TrustSafetySection } from '../components/groupbuy/TrustSafetySection';
-import { GroupBuyFAQSection } from '../components/groupbuy/GroupBuyFAQSection';
-import { PaymentMethodsSection } from '../components/groupbuy/PaymentMethodsSection';
-import { SmartRecommendationsSection } from '../components/groupbuy/SmartRecommendationsSection';
-import { CommunityFeaturesSection } from '../components/groupbuy/CommunityFeaturesSection';
-import { MobileFeaturesSection } from '../components/groupbuy/MobileFeaturesSection';
-import { LanguageSupportSection } from '../components/groupbuy/LanguageSupportSection';
+import { useSEO } from '@/hooks/useSEO';
 
 const GroupBuy: React.FC = () => {
+  useSEO({
+    title: 'Group Buy - GetIt Bangladesh | Buy Together, Save More',
+    description: 'Join group buying to get better prices! Team up with other buyers for bulk discounts.',
+    keywords: 'group buy, bulk buying, team buying, group discounts, bangladesh group buy'
+  });
+
   return (
-    <div className="bg-gray-50 flex flex-col min-h-screen">
+    <div className="bg-white flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-1">
-        <GroupBuyHero />
-        <GroupBuyStatsSection />
-        <HowItWorksSection />
-        <ActiveDealsSection />
-        <PopularGroupsSection />
-        <CategoryGroupsSection />
-        <SmartRecommendationsSection />
-        <GroupBuyBenefitsSection />
-        <CommunityFeaturesSection />
-        <CreateGroupSection />
-        <MobileFeaturesSection />
-        <PaymentMethodsSection />
-        <LanguageSupportSection />
-        <SuccessStoriesSection />
-        <TrustSafetySection />
-        <GroupBuyFAQSection />
+      <main className="flex-1 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-teal-600 mb-4">👥 Group Buy 👥</h1>
+            <p className="text-lg text-gray-600">Buy together, save more!</p>
+          </div>
+          
+          <div className="bg-gradient-to-r from-teal-500 to-cyan-500 rounded-lg p-8 text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">🤝 Team Up for Better Prices 🤝</h2>
+            <p className="mb-6">Join group buying campaigns to unlock bulk discounts and special pricing.</p>
+            <div className="text-6xl mb-4">💪</div>
+            <p className="text-lg">Group buying platform launching soon!</p>
+          </div>
+        </div>
       </main>
       
       <Footer />

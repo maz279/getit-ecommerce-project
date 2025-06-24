@@ -53,37 +53,28 @@ export const BulkOrdersNavigationMap: React.FC = () => {
     {
       title: 'Bulk Calculator',
       icon: <Calculator className="w-5 h-5" />,
-      link: '#bulk-calculator',
+      link: '/bulk-orders?tab=calculator',
       description: 'Calculate bulk pricing'
     },
     {
       title: 'Custom Quote',
       icon: <FileText className="w-5 h-5" />,
-      link: '#custom-quote',
+      link: '/bulk-orders?tab=quote',
       description: 'Get personalized quotes'
     },
     {
       title: 'Logistics Support',
       icon: <Truck className="w-5 h-5" />,
-      link: '#logistics',
+      link: '/bulk-orders?tab=logistics',
       description: 'Delivery solutions'
     },
     {
       title: 'Account Manager',
       icon: <Phone className="w-5 h-5" />,
-      link: '#account-manager',
+      link: '/bulk-orders?tab=account-manager',
       description: 'Dedicated support'
     }
   ];
-
-  const handleNavigation = (link: string) => {
-    if (link.startsWith('#')) {
-      const element = document.querySelector(link);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
   return (
     <section className="py-8 bg-white border-b border-gray-200">
@@ -112,15 +103,15 @@ export const BulkOrdersNavigationMap: React.FC = () => {
           <h3 className="text-lg font-bold text-center mb-4">🛠️ Bulk Order Services</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {bulkServices.map((service, index) => (
-              <button
+              <Link
                 key={index}
-                onClick={() => handleNavigation(service.link)}
+                to={service.link}
                 className="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors duration-200 border border-gray-200"
               >
                 <div className="text-blue-600 mb-2 flex justify-center">{service.icon}</div>
                 <h4 className="font-semibold text-sm mb-1 text-gray-800">{service.title}</h4>
                 <p className="text-xs text-gray-600">{service.description}</p>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -129,30 +120,30 @@ export const BulkOrdersNavigationMap: React.FC = () => {
         <div className="mt-8 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-lg p-6 text-white text-center">
           <h3 className="text-xl font-bold mb-2">📦 Bulk Orders Hub 📦</h3>
           <div className="flex flex-wrap justify-center gap-4 mt-4">
-            <button
-              onClick={() => handleNavigation('#bulk-calculator')}
+            <Link
+              to="/bulk-orders?tab=calculator"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               🧮 Price Calculator
-            </button>
-            <button
-              onClick={() => handleNavigation('#minimum-quantities')}
+            </Link>
+            <Link
+              to="/bulk-orders?tab=minimum-quantities"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               📊 Minimum Orders
-            </button>
-            <button
-              onClick={() => handleNavigation('#logistics')}
+            </Link>
+            <Link
+              to="/bulk-orders?tab=logistics"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               🚚 Logistics
-            </button>
-            <button
-              onClick={() => handleNavigation('#custom-quote')}
+            </Link>
+            <Link
+              to="/bulk-orders?tab=quote"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               💼 Custom Quotes
-            </button>
+            </Link>
           </div>
         </div>
       </div>

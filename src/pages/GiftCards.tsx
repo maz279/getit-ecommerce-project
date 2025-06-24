@@ -1,52 +1,34 @@
 
-import React, { useState } from 'react';
+import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
-import { GiftCardHero } from '../components/giftcards/GiftCardHero';
-import { GiftCardDenominations } from '../components/giftcards/GiftCardDenominations';
-import { GiftCardTypes } from '../components/giftcards/GiftCardTypes';
-import { PopularBrands } from '../components/giftcards/PopularBrands';
-import { TrendingGifts } from '../components/giftcards/TrendingGifts';
-import { GiftCardCategories } from '../components/giftcards/GiftCardCategories';
-import { GiftGuides } from '../components/giftcards/GiftGuides';
-import { PurchaseProcess } from '../components/giftcards/PurchaseProcess';
-import { RedemptionProcess } from '../components/giftcards/RedemptionProcess';
-import { GiftCardOccasions } from '../components/giftcards/GiftCardOccasions';
-import { CustomizationOptions } from '../components/giftcards/CustomizationOptions';
-import { DeliveryOptions } from '../components/giftcards/DeliveryOptions';
-import { BulkGiftCards } from '../components/giftcards/BulkGiftCards';
-import { MultiVendorBenefits } from '../components/giftcards/MultiVendorBenefits';
-import { GiftCardBenefits } from '../components/giftcards/GiftCardBenefits';
-import { GiftCardComparison } from '../components/giftcards/GiftCardComparison';
-import { GiftCardReviews } from '../components/giftcards/GiftCardReviews';
-import { RecentlyViewed } from '../components/giftcards/RecentlyViewed';
-import { GiftCardFAQ } from '../components/giftcards/GiftCardFAQ';
+import { useSEO } from '@/hooks/useSEO';
 
 const GiftCards: React.FC = () => {
+  useSEO({
+    title: 'Gift Cards - GetIt Bangladesh | Perfect Gift Solution',
+    description: 'Give the perfect gift with GetIt gift cards. Available in multiple denominations for any occasion.',
+    keywords: 'gift cards, digital gifts, bangladesh gift cards, online gifting'
+  });
+
   return (
-    <div className="bg-gray-50 flex flex-col min-h-screen">
+    <div className="bg-white flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-1">
-        <GiftCardHero />
-        <TrendingGifts />
-        <GiftCardDenominations />
-        <GiftCardTypes />
-        <PopularBrands />
-        <GiftCardCategories />
-        <GiftGuides />
-        <PurchaseProcess />
-        <RedemptionProcess />
-        <GiftCardOccasions />
-        <CustomizationOptions />
-        <DeliveryOptions />
-        <BulkGiftCards />
-        <MultiVendorBenefits />
-        <GiftCardBenefits />
-        <GiftCardComparison />
-        <GiftCardReviews />
-        <RecentlyViewed />
-        <GiftCardFAQ />
+      <main className="flex-1 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-purple-600 mb-4">🎁 Gift Cards 🎁</h1>
+            <p className="text-lg text-gray-600">The perfect gift for any occasion</p>
+          </div>
+          
+          <div className="bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-8 text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">💳 Digital Gift Cards 💳</h2>
+            <p className="mb-6">Purchase and send gift cards instantly. Perfect for birthdays, holidays, and special occasions.</p>
+            <div className="text-6xl mb-4">💝</div>
+            <p className="text-lg">Gift card system launching soon!</p>
+          </div>
+        </div>
       </main>
       
       <Footer />

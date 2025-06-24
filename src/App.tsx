@@ -1,76 +1,64 @@
 
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { AuthProvider } from '@/context/AuthContext';
-import { CartProvider } from '@/context/CartContext';
-import { Toaster } from '@/components/ui/sonner';
+import { Suspense, lazy } from "react";
+import { Toaster } from "@/components/ui/toaster";
+import { Toaster as Sonner } from "@/components/ui/sonner";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Index from "./pages/Index";
 
-// Import existing pages - using correct import syntax
-import Index from '@/pages/Index'; // Homepage
-import Login from '@/pages/auth/Login'; // Default export
-import Register from '@/pages/auth/Register'; // Default export
-import AdminDashboard from '@/pages/admin/Dashboard'; // Default export as AdminDashboard
-import MyAccount from '@/pages/MyAccount'; // Profile page
-import Wishlist from '@/pages/Wishlist';
-import Categories from '@/pages/Categories';
-import AboutUs from '@/pages/AboutUs';
-import HelpCenter from '@/pages/HelpCenter';
-import PrivacyPolicy from '@/pages/PrivacyPolicy';
-import TermsOfService from '@/pages/TermsOfService';
-import NotFound from '@/pages/NotFound';
-import NewArrivals from '@/pages/NewArrivals';
-
-// Import new pages
-import { ProductDetail } from '@/pages/ProductDetail';
-import { SearchResults } from '@/pages/SearchResults';
+// Lazy load components for better performance
+const Categories = lazy(() => import("./pages/Categories"));
+const WomensClothing = lazy(() => import("./pages/WomensClothing"));
+const AdminDashboard = lazy(() => import("./pages/AdminDashboard"));
+const BestSellers = lazy(() => import("./pages/BestSellers"));
+const NewArrivals = lazy(() => import("./pages/NewArrivals"));
+const Wishlist = lazy(() => import("./pages/Wishlist"));
+const BulkOrders = lazy(() => import("./pages/BulkOrders"));
+const About = lazy(() => import("./pages/About"));
+const VendorCenter = lazy(() => import("./pages/VendorCenter"));
+const FlashSale = lazy(() => import("./pages/FlashSale"));
+const DailyDeals = lazy(() => import("./pages/DailyDeals"));
+const GiftCards = lazy(() => import("./pages/GiftCards"));
+const MegaSale = lazy(() => import("./pages/MegaSale"));
+const GroupBuy = lazy(() => import("./pages/GroupBuy"));
+const Premium = lazy(() => import("./pages/Premium"));
+const TrackOrder = lazy(() => import("./pages/TrackOrder"));
+const PaymentMethods = lazy(() => import("./pages/PaymentMethods"));
 
 const queryClient = new QueryClient();
 
-function App() {
-  return (
-    <QueryClientProvider client={queryClient}>
-      <AuthProvider>
-        <CartProvider>
-          <Router>
-            <div className="App">
-              <Routes>
-                <Route path="/" element={<Index />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/register" element={<Register />} />
-                <Route path="/dashboard" element={<AdminDashboard />} />
-                <Route path="/admin" element={<AdminDashboard />} />
-                <Route path="/admin/dashboard" element={<AdminDashboard />} />
-                <Route path="/profile" element={<MyAccount />} />
-                <Route path="/cart" element={<div>Cart Page - Coming Soon</div>} />
-                <Route path="/checkout" element={<div>Checkout Page - Coming Soon</div>} />
-                <Route path="/orders" element={<div>Orders Page - Coming Soon</div>} />
-                <Route path="/wishlist" element={<Wishlist />} />
-                <Route path="/categories" element={<Categories />} />
-                <Route path="/new-arrivals" element={<NewArrivals />} />
-                <Route path="/vendors" element={<div>Vendors Page - Coming Soon</div>} />
-                <Route path="/about" element={<AboutUs />} />
-                <Route path="/contact" element={<div>Contact Page - Coming Soon</div>} />
-                <Route path="/help" element={<HelpCenter />} />
-                <Route path="/privacy" element={<PrivacyPolicy />} />
-                <Route path="/terms" element={<TermsOfService />} />
-                
-                {/* New search-related routes */}
-                <Route path="/product/:id" element={<ProductDetail />} />
-                <Route path="/search" element={<SearchResults />} />
-                <Route path="/vendor/:id" element={<div>Vendor Page - Coming Soon</div>} />
-                <Route path="/brands/:brand" element={<div>Brand Page - Coming Soon</div>} />
-                <Route path="/categories/:category" element={<div>Category Page - Coming Soon</div>} />
-                
-                <Route path="*" element={<NotFound />} />
-              </Routes>
-              <Toaster />
-            </div>
-          </Router>
-        </CartProvider>
-      </AuthProvider>
-    </QueryClientProvider>
-  );
-}
+const App = () => (
+  <QueryClientProvider client={queryClient}>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Suspense fallback={<div className="flex items-center justify-center min-h-screen"><div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div></div>}>
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/categories" element={<Categories />} />
+            <Route path="/categories/fashion/womens-fashion" element={<WomensClothing />} />
+            <Route path="/admin/dashboard" element={<AdminDashboard />} />
+            <Route path="/best-sellers" element={<BestSellers />} />
+            <Route path="/new-arrivals" element={<NewArrivals />} />
+            <Route path="/wishlist" element={<Wishlist />} />
+            <Route path="/bulk-orders" element={<BulkOrders />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/seller-center" element={<VendorCenter />} />
+            <Route path="/flash-sale" element={<FlashSale />} />
+            <Route path="/daily-deals" element={<DailyDeals />} />
+            <Route path="/gift-cards" element={<GiftCards />} />
+            <Route path="/mega-sale" element={<MegaSale />} />
+            <Route path="/group-buy" element={<GroupBuy />} />
+            <Route path="/premium" element={<Premium />} />
+            <Route path="/track-order" element={<TrackOrder />} />
+            <Route path="/payment-methods" element={<PaymentMethods />} />
+          </Routes>
+        </Suspense>
+      </BrowserRouter>
+    </TooltipProvider>
+  </QueryClientProvider>
+);
 
 export default App;

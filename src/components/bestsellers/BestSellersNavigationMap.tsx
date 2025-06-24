@@ -1,5 +1,6 @@
 
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { ShoppingBag, Star, TrendingUp, Award, Gift, Zap } from 'lucide-react';
 
 export const BestSellersNavigationMap: React.FC = () => {
@@ -9,21 +10,24 @@ export const BestSellersNavigationMap: React.FC = () => {
       title: "Top Rated ⭐",
       description: "Products with highest customer ratings - Excellence recognized by real customers with 4.5+ star ratings",
       features: ["Verified Reviews", "Performance Excellence", "Vendor Reliability", "Value for Money"],
-      topCategories: ["Educational Materials", "Kitchen Appliances", "Personal Care", "Traditional Handicrafts"]
+      topCategories: ["Educational Materials", "Kitchen Appliances", "Personal Care", "Traditional Handicrafts"],
+      link: "/categories?sort=rating&min_rating=4.5"
     },
     {
       icon: <TrendingUp className="w-6 h-6" />,
       title: "Most Sold 📈", 
       description: "Items with highest sales volume - Join millions who made these their preferred choice",
       features: ["Essential Needs", "Competitive Pricing", "Fast Delivery", "Multiple Payment Options"],
-      topCategories: ["Mobile Accessories", "Fashion Staples", "Food & Beverages", "Personal Electronics"]
+      topCategories: ["Mobile Accessories", "Fashion Staples", "Food & Beverages", "Personal Electronics"],
+      link: "/categories?sort=sales&order=desc"
     },
     {
       icon: <Zap className="w-6 h-6" />,
       title: "Trending Now 🔥",
       description: "Currently viral products creating buzz across social media in Bangladesh",
       features: ["Social Media Buzz", "Seasonal Relevance", "Influencer Recommendations", "Innovation Factor"],
-      topCategories: ["Festival Fashion", "Smart Home Solutions", "Fitness & Wellness", "Artisan Products"]
+      topCategories: ["Festival Fashion", "Smart Home Solutions", "Fitness & Wellness", "Artisan Products"],
+      link: "/categories?sort=trending&period=week"
     }
   ];
 
@@ -41,7 +45,7 @@ export const BestSellersNavigationMap: React.FC = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {categories.map((category, index) => (
-            <div key={index} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-shadow">
+            <Link key={index} to={category.link} className="bg-white rounded-lg border border-gray-200 p-6 hover:shadow-lg transition-all duration-300 transform hover:scale-105">
               <div className="flex items-center gap-3 mb-4">
                 <div className="text-blue-600">
                   {category.icon}
@@ -73,7 +77,7 @@ export const BestSellersNavigationMap: React.FC = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </Link>
           ))}
         </div>
       </div>

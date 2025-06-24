@@ -2,74 +2,33 @@
 import React from 'react';
 import { Header } from '../components/homepage/Header';
 import { Footer } from '../components/homepage/Footer';
-import { PremiumHero } from '../components/premium/PremiumHero';
-import { MembershipTiers } from '../components/premium/MembershipTiers';
-import { ExclusiveDeals } from '../components/premium/ExclusiveDeals';
-import { PremiumBrands } from '../components/premium/PremiumBrands';
-import { PersonalizedRecommendations } from '../components/premium/PersonalizedRecommendations';
-import { PremiumSupport } from '../components/premium/PremiumSupport';
-import { PremiumPerks } from '../components/premium/PremiumPerks';
 import { useSEO } from '@/hooks/useSEO';
 
 const Premium: React.FC = () => {
   useSEO({
-    title: 'GetIt Premium | Exclusive Membership Benefits | VIP Shopping Experience',
-    description: 'Join GetIt Premium for exclusive deals, free shipping, priority support, and early access to sales. Premium membership with luxury brands and personalized service.',
-    keywords: 'getit premium, vip membership, exclusive deals, free shipping, premium brands, luxury shopping, member benefits, priority support',
-    canonical: 'https://getit-bangladesh.com/premium',
-    ogType: 'website',
-    structuredData: {
-      "@context": "https://schema.org",
-      "@type": "Service",
-      "name": "GetIt Premium Membership",
-      "description": "Exclusive membership program offering VIP shopping experience with premium benefits",
-      "provider": {
-        "@type": "Organization",
-        "name": "GetIt Bangladesh",
-        "url": "https://getit-bangladesh.com"
-      },
-      "hasOfferCatalog": {
-        "@type": "OfferCatalog",
-        "name": "Premium Membership Benefits",
-        "itemListElement": [
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Free Shipping"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service", 
-              "name": "Exclusive Deals"
-            }
-          },
-          {
-            "@type": "Offer",
-            "itemOffered": {
-              "@type": "Service",
-              "name": "Priority Support"
-            }
-          }
-        ]
-      }
-    }
+    title: 'Premium - GetIt Bangladesh | Exclusive Premium Products',
+    description: 'Discover our premium collection of high-quality products and exclusive brands.',
+    keywords: 'premium products, exclusive brands, luxury items, bangladesh premium shopping'
   });
 
   return (
-    <div className="bg-gray-50 flex flex-col min-h-screen">
+    <div className="bg-white flex flex-col min-h-screen">
       <Header />
       
-      <main className="flex-1">
-        <PremiumHero />
-        <MembershipTiers />
-        <ExclusiveDeals />
-        <PremiumBrands />
-        <PersonalizedRecommendations />
-        <PremiumPerks />
-        <PremiumSupport />
+      <main className="flex-1 py-8">
+        <div className="max-w-7xl mx-auto px-4">
+          <div className="text-center mb-8">
+            <h1 className="text-4xl font-bold text-yellow-600 mb-4">⭐ Premium Collection ⭐</h1>
+            <p className="text-lg text-gray-600">Exclusive premium products and brands</p>
+          </div>
+          
+          <div className="bg-gradient-to-r from-yellow-500 to-orange-500 rounded-lg p-8 text-white text-center">
+            <h2 className="text-2xl font-bold mb-4">👑 Premium Experience 👑</h2>
+            <p className="mb-6">Discover our curated collection of premium products from top brands.</p>
+            <div className="text-6xl mb-4">💎</div>
+            <p className="text-lg">Premium collection coming soon!</p>
+          </div>
+        </div>
       </main>
       
       <Footer />

@@ -8,7 +8,7 @@ export const NewArrivalsNavigationMap: React.FC = () => {
     {
       title: '✨ Today\'s New Arrivals',
       description: 'Just arrived today',
-      link: '#today-arrivals',
+      link: '/new-arrivals?filter=today',
       icon: '✨',
       color: 'from-purple-500 to-pink-500'
     },
@@ -53,37 +53,28 @@ export const NewArrivalsNavigationMap: React.FC = () => {
     {
       title: 'Last 24 Hours',
       icon: <Clock className="w-5 h-5" />,
-      link: '#last-24-hours',
+      link: '/new-arrivals?period=24h',
       description: 'Brand new items'
     },
     {
       title: 'This Week',
       icon: <Calendar className="w-5 h-5" />,
-      link: '#this-week',
+      link: '/new-arrivals?period=week',
       description: 'Weekly arrivals'
     },
     {
       title: 'This Month',
       icon: <Sparkles className="w-5 h-5" />,
-      link: '#this-month',
+      link: '/new-arrivals?period=month',
       description: 'Monthly launches'
     },
     {
       title: 'Pre-Orders',
       icon: <Package className="w-5 h-5" />,
-      link: '#pre-orders',
+      link: '/new-arrivals?status=pre-order',
       description: 'Coming soon'
     }
   ];
-
-  const handleNavigation = (link: string) => {
-    if (link.startsWith('#')) {
-      const element = document.querySelector(link);
-      if (element) {
-        element.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
-  };
 
   return (
     <section className="py-8 bg-white border-b border-gray-200">
@@ -92,35 +83,18 @@ export const NewArrivalsNavigationMap: React.FC = () => {
         <div className="mb-8">
           <h3 className="text-xl font-bold text-center mb-6">🆕 New Arrivals by Category 🆕</h3>
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-            {navigationItems.map((item, index) => {
-              if (item.link.startsWith('#')) {
-                return (
-                  <button
-                    key={index}
-                    onClick={() => handleNavigation(item.link)}
-                    className={`bg-gradient-to-r ${item.color} rounded-lg p-4 text-white text-center shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105`}
-                  >
-                    <div className="text-2xl mb-2">{item.icon}</div>
-                    <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                    <p className="text-xs opacity-90">{item.description}</p>
-                    <ArrowRight className="w-4 h-4 mx-auto mt-2" />
-                  </button>
-                );
-              }
-              
-              return (
-                <Link
-                  key={index}
-                  to={item.link}
-                  className={`bg-gradient-to-r ${item.color} rounded-lg p-4 text-white text-center shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105`}
-                >
-                  <div className="text-2xl mb-2">{item.icon}</div>
-                  <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
-                  <p className="text-xs opacity-90">{item.description}</p>
-                  <ArrowRight className="w-4 h-4 mx-auto mt-2" />
-                </Link>
-              );
-            })}
+            {navigationItems.map((item, index) => (
+              <Link
+                key={index}
+                to={item.link}
+                className={`bg-gradient-to-r ${item.color} rounded-lg p-4 text-white text-center shadow-md hover:shadow-lg transition-all duration-300 transform hover:scale-105`}
+              >
+                <div className="text-2xl mb-2">{item.icon}</div>
+                <h4 className="font-semibold text-sm mb-1">{item.title}</h4>
+                <p className="text-xs opacity-90">{item.description}</p>
+                <ArrowRight className="w-4 h-4 mx-auto mt-2" />
+              </Link>
+            ))}
           </div>
         </div>
 
@@ -129,15 +103,15 @@ export const NewArrivalsNavigationMap: React.FC = () => {
           <h3 className="text-lg font-bold text-center mb-4">⏰ Filter by Time</h3>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
             {timeFilters.map((filter, index) => (
-              <button
+              <Link
                 key={index}
-                onClick={() => handleNavigation(filter.link)}
+                to={filter.link}
                 className="bg-gray-50 rounded-lg p-4 text-center hover:bg-gray-100 transition-colors duration-200 border border-gray-200"
               >
                 <div className="text-blue-600 mb-2 flex justify-center">{filter.icon}</div>
                 <h4 className="font-semibold text-sm mb-1 text-gray-800">{filter.title}</h4>
                 <p className="text-xs text-gray-600">{filter.description}</p>
-              </button>
+              </Link>
             ))}
           </div>
         </div>
@@ -146,30 +120,30 @@ export const NewArrivalsNavigationMap: React.FC = () => {
         <div className="mt-8 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg p-6 text-white text-center">
           <h3 className="text-xl font-bold mb-2">🆕 New Arrivals Hub 🆕</h3>
           <div className="flex flex-wrap justify-center gap-4 mt-4">
-            <button
-              onClick={() => handleNavigation('#today-arrivals')}
+            <Link
+              to="/new-arrivals?filter=today"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               ✨ Today's Arrivals
-            </button>
-            <button
-              onClick={() => handleNavigation('#brand-launches')}
+            </Link>
+            <Link
+              to="/new-arrivals?filter=brand-launches"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               🏷️ Brand Launches
-            </button>
-            <button
-              onClick={() => handleNavigation('#seasonal-collections')}
+            </Link>
+            <Link
+              to="/new-arrivals?filter=seasonal"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               🌟 Seasonal Items
-            </button>
-            <button
-              onClick={() => handleNavigation('#pre-orders')}
+            </Link>
+            <Link
+              to="/new-arrivals?status=pre-order"
               className="bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2 text-sm hover:bg-white/30 transition-colors"
             >
               📦 Pre-Orders
-            </button>
+            </Link>
           </div>
         </div>
       </div>

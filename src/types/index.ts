@@ -5,6 +5,7 @@ export interface User {
   email: string;
   phone?: string;
   full_name: string;
+  avatar_url?: string;
   role: 'customer' | 'vendor' | 'admin' | 'moderator';
   is_verified: boolean;
   created_at: string;

@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -5,7 +6,7 @@ import { ComprehensiveAdminSidebar } from '@/components/admin/ComprehensiveAdmin
 import { ComprehensiveMainContent } from '@/components/admin/ComprehensiveMainContent';
 import { AdminDashboardFooter } from '@/components/admin/AdminDashboardFooter';
 
-export const AdminDashboard: React.FC = () => {
+const AdminDashboard: React.FC = () => {
   const [selectedMenu, setSelectedMenu] = useState('dashboard');
   const [selectedSubmenu, setSelectedSubmenu] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
@@ -108,3 +109,5 @@ export const AdminDashboard: React.FC = () => {
     </TooltipProvider>
   );
 };
+
+export default AdminDashboard;

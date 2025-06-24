@@ -380,6 +380,39 @@ export type Database = {
           },
         ]
       }
+      profiles: {
+        Row: {
+          avatar_url: string | null
+          created_at: string | null
+          department: string | null
+          full_name: string
+          id: string
+          phone: string | null
+          role: Database["public"]["Enums"]["user_role"]
+          updated_at: string | null
+        }
+        Insert: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          full_name: string
+          id: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Update: {
+          avatar_url?: string | null
+          created_at?: string | null
+          department?: string | null
+          full_name?: string
+          id?: string
+          phone?: string | null
+          role?: Database["public"]["Enums"]["user_role"]
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       search_index: {
         Row: {
           created_at: string | null
@@ -654,6 +687,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      get_user_role: {
+        Args: { user_id: string }
+        Returns: Database["public"]["Enums"]["user_role"]
+      }
     }
     Enums: {
       order_status:
@@ -670,7 +707,7 @@ export type Database = {
         | "sslcommerz"
         | "cod"
         | "bank_transfer"
-      user_role: "admin" | "moderator" | "vendor" | "customer"
+      user_role: "admin" | "moderator" | "vendor" | "customer" | "user"
       vendor_status: "pending" | "approved" | "suspended" | "rejected"
     }
     CompositeTypes: {
@@ -803,7 +840,7 @@ export const Constants = {
         "cod",
         "bank_transfer",
       ],
-      user_role: ["admin", "moderator", "vendor", "customer"],
+      user_role: ["admin", "moderator", "vendor", "customer", "user"],
       vendor_status: ["pending", "approved", "suspended", "rejected"],
     },
   },

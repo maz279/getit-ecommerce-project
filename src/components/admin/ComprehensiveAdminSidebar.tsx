@@ -746,19 +746,12 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   return (
     <div className={`fixed left-0 top-[120px] bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
       collapsed ? 'w-12' : 'w-56'
-    }`} style={{ bottom: '-504px', height: 'calc(100vh + 504px)' }}>
-      {/* Header */}
+    }`} style={{ bottom: '-648px', height: 'calc(100vh + 648px)' }}>
+      {/* Header with Main Menu text */}
       <div className="flex items-center justify-between p-2 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
         {!collapsed && (
-          <div className="flex items-center space-x-2">
-            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
-              <span className="text-white font-bold text-xs">🏪</span>
-            </div>
-            <div>
-              <span className="font-bold text-sm text-gray-800">GetIt Admin</span>
-              <div className="text-xs text-gray-500">Multi-Vendor Platform</div>
-              <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
-            </div>
+          <div className="flex-1">
+            <span className="font-bold text-lg text-gray-800">Main Menu</span>
           </div>
         )}
         
@@ -771,7 +764,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       </div>
 
       {/* Scrollable Navigation */}
-      <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 344px)' }}>
+      <div className="flex-1 overflow-hidden" style={{ height: 'calc(100vh + 488px)' }}>
         <ScrollArea className="h-full">
           <nav className="p-2">
             {menuItems.map(renderMenuItem)}
@@ -779,10 +772,20 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         </ScrollArea>
       </div>
 
-      {/* Footer */}
+      {/* Footer with GetIt Admin text */}
       {!collapsed && (
-        <div className="absolute left-2 right-2" style={{ bottom: '164px' }}>
+        <div className="absolute left-2 right-2" style={{ bottom: '20px' }}>
           <div className="bg-gradient-to-r from-blue-50 to-purple-50 backdrop-blur-sm rounded-xl p-2 shadow-sm border border-gray-200">
+            <div className="flex items-center space-x-2 mb-2">
+              <div className="w-6 h-6 bg-gradient-to-br from-blue-500 via-purple-600 to-indigo-600 rounded-lg flex items-center justify-center shadow-lg">
+                <span className="text-white font-bold text-xs">🏪</span>
+              </div>
+              <div>
+                <span className="font-bold text-sm text-gray-800">GetIt Admin</span>
+                <div className="text-xs text-gray-500">Multi-Vendor Platform</div>
+                <div className="text-xs text-blue-600 font-medium">v2.0.1</div>
+              </div>
+            </div>
             <div className="text-xs text-gray-600 font-medium">System Status</div>
             <div className="flex items-center mt-1">
               <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>

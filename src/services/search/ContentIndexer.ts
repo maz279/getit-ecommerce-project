@@ -6,7 +6,7 @@ import {
   ProductDataBuilder, 
   VendorDataBuilder, 
   ContentDataBuilder 
-} from './dataBuilders';
+} from './dataBuilders/index';
 
 export class ContentIndexer {
   private pageBuilder = new PageDataBuilder();

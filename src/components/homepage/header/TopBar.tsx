@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Phone, MapPin, Globe } from 'lucide-react';
+import { Phone, MapPin, Globe, Shield, Lock, Award, Store, LogIn, UserPlus } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 interface TopBarProps {
@@ -23,30 +23,30 @@ export const TopBar: React.FC<TopBarProps> = ({ language, toggleLanguage }) => {
       hotline: "Hotline: 16263 (24/7 Customer Support)",
       location: "Dhaka, Bangladesh",
       becomeVendor: "Become a Vendor",
-      trackOrder: "Track Order",
-      helpCenter: "Help Center",
+      secure: "Secure",
+      verified: "Verified",
       myAccount: "My Account",
       logout: "Logout",
-      login: "Login",
-      register: "Register"
+      signIn: "Sign In",
+      signUp: "Sign Up"
     },
     BD: {
       hotline: "হটলাইন: ১৬২৬৩ (২৪/৭ গ্রাহক সেবা)",
       location: "ঢাকা, বাংলাদেশ",
       becomeVendor: "বিক্রেতা হন",
-      trackOrder: "অর্ডার ট্র্যাক করুন",
-      helpCenter: "সহায়তা কেন্দ্র",
+      secure: "নিরাপদ",
+      verified: "যাচাইকৃত",
       myAccount: "আমার অ্যাকাউন্ট",
       logout: "লগআউট",
-      login: "লগইন",
-      register: "নিবন্ধন"
+      signIn: "লগইন",
+      signUp: "নিবন্ধন"
     }
   };
 
   const currentContent = content[language as keyof typeof content];
 
   return (
-    <div className="bg-gray-800 text-white py-2 px-4 text-xs hidden md:block">
+    <div className="bg-gray-800 text-white py-2 px-4 text-xs">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         {/* Left Side */}
         <div className="flex items-center gap-6">
@@ -67,20 +67,40 @@ export const TopBar: React.FC<TopBarProps> = ({ language, toggleLanguage }) => {
           </button>
         </div>
 
-        {/* Right Side */}
+        {/* Right Side - Trust Indicators, Become Vendor, Auth */}
         <div className="flex items-center gap-4 text-xs">
-          <Link to="/vendor/register" className="hover:text-yellow-300 transition-colors">
+          {/* Trust Indicators */}
+          <div className="flex items-center gap-4 text-white/80">
+            <div className="flex items-center gap-1">
+              <Shield className="w-3 h-3" />
+              <span>{currentContent.secure}</span>
+            </div>
+            
+            <div className="flex items-center gap-1">
+              <Lock className="w-3 h-3" />
+              <span>SSL</span>
+            </div>
+            
+            <div className="flex items-center gap-1">
+              <Award className="w-3 h-3" />
+              <span>{currentContent.verified}</span>
+            </div>
+          </div>
+
+          <span className="text-gray-400">|</span>
+
+          {/* Become a Vendor */}
+          <Link 
+            to="/vendor/register" 
+            className="flex items-center gap-1 hover:text-yellow-300 transition-colors"
+          >
+            <Store className="w-3 h-3" />
             {currentContent.becomeVendor}
           </Link>
-          <span>|</span>
-          <Link to="/track-order" className="hover:text-yellow-300 transition-colors">
-            {currentContent.trackOrder}
-          </Link>
-          <span>|</span>
-          <Link to="/help" className="hover:text-yellow-300 transition-colors">
-            {currentContent.helpCenter}
-          </Link>
-          <span>|</span>
+
+          <span className="text-gray-400">|</span>
+
+          {/* Authentication */}
           {user ? (
             <div className="flex items-center gap-2">
               <Link to="/account" className="hover:text-yellow-300 transition-colors">
@@ -94,13 +114,20 @@ export const TopBar: React.FC<TopBarProps> = ({ language, toggleLanguage }) => {
               </button>
             </div>
           ) : (
-            <div className="flex items-center gap-2">
-              <Link to="/auth/login" className="hover:text-yellow-300 transition-colors">
-                {currentContent.login}
+            <div className="flex items-center gap-3">
+              <Link 
+                to="/auth/login" 
+                className="flex items-center gap-1 hover:text-yellow-300 transition-colors"
+              >
+                <LogIn className="w-3 h-3" />
+                {currentContent.signIn}
               </Link>
-              <span>/</span>
-              <Link to="/auth/register" className="hover:text-yellow-300 transition-colors">
-                {currentContent.register}
+              <Link 
+                to="/auth/register" 
+                className="flex items-center gap-1 hover:text-yellow-300 transition-colors"
+              >
+                <UserPlus className="w-3 h-3" />
+                {currentContent.signUp}
               </Link>
             </div>
           )}

@@ -773,17 +773,24 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
         {!collapsed && (
           <div className="flex flex-col items-center space-y-2 ml-3">
             <span className="text-xs text-gray-600 font-medium">Control</span>
-            <div className="h-20 flex justify-center">
-              <Slider
-                value={sliderValue}
-                onValueChange={setSliderValue}
-                max={100}
-                step={1}
-                orientation="vertical"
-                className="h-full"
-              />
+            <div className="h-16 w-4 flex items-center justify-center">
+              <div className="h-full flex items-center">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliderValue[0]}
+                  onChange={(e) => setSliderValue([parseInt(e.target.value)])}
+                  className="h-12 w-1 bg-gray-300 rounded-lg appearance-none cursor-pointer slider-vertical"
+                  style={{
+                    writingMode: 'bt-lr',
+                    WebkitAppearance: 'slider-vertical',
+                    width: '4px',
+                    height: '48px'
+                  }}
+                />
+              </div>
             </div>
-            <span className="text-xs text-gray-500">{sliderValue[0]}%</span>
           </div>
         )}
       </div>

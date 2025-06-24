@@ -70,6 +70,7 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   setCollapsed
 }) => {
   const [expandedMenus, setExpandedMenus] = useState<Set<string>>(new Set(['dashboard']));
+  const [sliderValue, setSliderValue] = useState(50);
 
   const toggleMenu = (menuId: string) => {
     const newExpanded = new Set(expandedMenus);
@@ -79,6 +80,11 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       newExpanded.add(menuId);
     }
     setExpandedMenus(newExpanded);
+  };
+
+  const handleSliderChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSliderValue(parseInt(e.target.value));
+    console.log('Slider value changed to:', e.target.value);
   };
 
   const menuItems: MenuItem[] = [
@@ -747,22 +753,50 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
     <div className={`fixed left-0 top-[120px] bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
       collapsed ? 'w-12' : 'w-56'
     }`} style={{ bottom: '-648px', height: 'calc(100vh + 648px)' }}>
-      {/* Header with Main Menu text - removed slider */}
+      {/* Header with Main Menu text and Vertical Slider */}
       <div className="flex p-2 border-b border-gray-200 bg-white/90 backdrop-blur-sm">
-        <div className="flex items-center justify-between w-full">
-          {!collapsed && (
-            <div className="flex-1">
-              <span className="font-bold text-lg text-gray-800">Main Menu</span>
-            </div>
-          )}
-          
-          <button
-            onClick={() => setCollapsed(!collapsed)}
-            className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
-          >
-            {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
-          </button>
+        <div className="flex flex-col flex-1">
+          <div className="flex items-center justify-between mb-2">
+            {!collapsed && (
+              <div className="flex-1">
+                <span className="font-bold text-lg text-gray-800">Main Menu</span>
+              </div>
+            )}
+            
+            <button
+              onClick={() => setCollapsed(!collapsed)}
+              className="p-1.5 rounded-lg hover:bg-gray-200 transition-colors"
+            >
+              {collapsed ? <ChevronRight size={14} /> : <ChevronLeft size={14} />}
+            </button>
+          </div>
         </div>
+        
+        {/* Vertical Slider */}
+        {!collapsed && (
+          <div className="flex flex-col items-center space-y-2 ml-3">
+            <span className="text-xs text-gray-600 font-medium">Brightness</span>
+            <div className="h-16 w-4 flex items-center justify-center">
+              <div className="relative h-full flex items-center">
+                <input
+                  type="range"
+                  min="0"
+                  max="100"
+                  value={sliderValue}
+                  onChange={handleSliderChange}
+                  className="slider-vertical"
+                  style={{
+                    width: '60px',
+                    height: '4px',
+                    transform: 'rotate(-90deg)',
+                    transformOrigin: 'center center'
+                  }}
+                />
+              </div>
+            </div>
+            <span className="text-xs text-gray-500">{sliderValue}%</span>
+          </div>
+        )}
       </div>
 
       {/* Scrollable Navigation */}
@@ -797,6 +831,37 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
           </div>
         </div>
       )}
+
+      {/* Custom CSS for vertical slider */}
+      <style jsx>{`
+        .slider-vertical {
+          -webkit-appearance: none;
+          appearance: none;
+          background: #e2e8f0;
+          border-radius: 2px;
+          outline: none;
+          cursor: pointer;
+        }
+        
+        .slider-vertical::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          appearance: none;
+          width: 12px;
+          height: 12px;
+          background: #3b82f6;
+          border-radius: 50%;
+          cursor: pointer;
+        }
+        
+        .slider-vertical::-moz-range-thumb {
+          width: 12px;
+          height: 12px;
+          background: #3b82f6;
+          border-radius: 50%;
+          cursor: pointer;
+          border: none;
+        }
+      `}</style>
     </div>
   );
 };

@@ -9,6 +9,57 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      assessment_documents: {
+        Row: {
+          assessment_id: string | null
+          created_at: string
+          document_category: string
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          mime_type: string | null
+          uploaded_by: string
+        }
+        Insert: {
+          assessment_id?: string | null
+          created_at?: string
+          document_category: string
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          uploaded_by: string
+        }
+        Update: {
+          assessment_id?: string | null
+          created_at?: string
+          document_category?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          mime_type?: string | null
+          uploaded_by?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "assessment_documents_assessment_id_fkey"
+            columns: ["assessment_id"]
+            isOneToOne: false
+            referencedRelation: "qualitative_assessments"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "assessment_documents_uploaded_by_fkey"
+            columns: ["uploaded_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       borrowers: {
         Row: {
           created_at: string
@@ -451,6 +502,109 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      qualitative_assessments: {
+        Row: {
+          approved_at: string | null
+          approved_by: string | null
+          assessor_id: string
+          borrower_id: string | null
+          business_outlook: string
+          business_outlook_score: number
+          completed_at: string | null
+          created_at: string
+          id: string
+          industry_comments: string | null
+          industry_risk_level: string
+          industry_risk_score: number
+          industry_sector: string
+          management_comments: string | null
+          management_experience_rating: number | null
+          management_quality_score: number
+          management_track_record_rating: number | null
+          outlook_comments: string | null
+          outlook_score: number | null
+          status: string | null
+          succession_plan_exists: boolean | null
+          total_qualitative_score: number
+          updated_at: string
+          weightage_config: Json | null
+        }
+        Insert: {
+          approved_at?: string | null
+          approved_by?: string | null
+          assessor_id: string
+          borrower_id?: string | null
+          business_outlook: string
+          business_outlook_score?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          industry_comments?: string | null
+          industry_risk_level: string
+          industry_risk_score?: number
+          industry_sector: string
+          management_comments?: string | null
+          management_experience_rating?: number | null
+          management_quality_score?: number
+          management_track_record_rating?: number | null
+          outlook_comments?: string | null
+          outlook_score?: number | null
+          status?: string | null
+          succession_plan_exists?: boolean | null
+          total_qualitative_score?: number
+          updated_at?: string
+          weightage_config?: Json | null
+        }
+        Update: {
+          approved_at?: string | null
+          approved_by?: string | null
+          assessor_id?: string
+          borrower_id?: string | null
+          business_outlook?: string
+          business_outlook_score?: number
+          completed_at?: string | null
+          created_at?: string
+          id?: string
+          industry_comments?: string | null
+          industry_risk_level?: string
+          industry_risk_score?: number
+          industry_sector?: string
+          management_comments?: string | null
+          management_experience_rating?: number | null
+          management_quality_score?: number
+          management_track_record_rating?: number | null
+          outlook_comments?: string | null
+          outlook_score?: number | null
+          status?: string | null
+          succession_plan_exists?: boolean | null
+          total_qualitative_score?: number
+          updated_at?: string
+          weightage_config?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "qualitative_assessments_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qualitative_assessments_assessor_id_fkey"
+            columns: ["assessor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "qualitative_assessments_borrower_id_fkey"
+            columns: ["borrower_id"]
+            isOneToOne: false
+            referencedRelation: "borrowers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       search_index: {
         Row: {

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
@@ -27,15 +26,22 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   console.log('ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
-    // Handle dashboard and its submenus - this is the key fix
+    // Handle dashboard and its submenus - fixed routing logic
     if (selectedMenu === 'dashboard' || 
         ['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
          'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
          'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
          'system-logs', 'quick-actions', 'executive-summary'].includes(selectedMenu)) {
-      // If selectedMenu is a dashboard submenu, pass it as selectedSubmenu
+      // Use selectedSubmenu when selectedMenu is 'dashboard', otherwise use selectedMenu as the submenu
       const submenu = selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu;
+      console.log('DashboardContent will receive submenu:', submenu);
       return <DashboardContent selectedSubmenu={submenu} />;
+    }
+
+    // Handle specific dashboard submenus that might come in as selectedMenu
+    if (['real-time-metrics', 'kpi-monitoring', 'performance-insights'].includes(selectedMenu)) {
+      console.log('Dashboard submenu detected, routing to:', selectedMenu);
+      return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
     // Handle user management - removed customer management references
@@ -117,7 +123,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SettingsContent selectedSubmenu={selectedMenu === 'settings' ? selectedSubmenu : selectedMenu} />;
     }
 
-    // Default to dashboard with overview submenu
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

@@ -35,10 +35,13 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       case 'analytics':
         return <AnalyticsDashboard />;
       case 'real-time-metrics':
+        console.log('Rendering RealtimeMetricsSection');
         return <RealtimeMetricsSection />;
       case 'kpi-monitoring':
+        console.log('Rendering KPIMonitoringDashboard');
         return <KPIMonitoringDashboard />;
       case 'performance-insights':
+        console.log('Rendering PerformanceInsightsDashboard');
         return <PerformanceInsightsDashboard />;
       case 'revenue-analytics':
         return <RevenueAnalytics 

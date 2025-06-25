@@ -9,6 +9,45 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      borrowers: {
+        Row: {
+          created_at: string
+          created_by: string
+          id: string
+          industry: string
+          loan_amount: number
+          name: string
+          risk_rating: string | null
+          score: number | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          id?: string
+          industry: string
+          loan_amount: number
+          name: string
+          risk_rating?: string | null
+          score?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          id?: string
+          industry?: string
+          loan_amount?: number
+          name?: string
+          risk_rating?: string | null
+          score?: number | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
       cart_items: {
         Row: {
           created_at: string | null
@@ -577,7 +616,6 @@ export type Database = {
           id: string
           is_verified: boolean | null
           phone: string | null
-          role: Database["public"]["Enums"]["user_role"]
           updated_at: string
         }
         Insert: {
@@ -587,7 +625,6 @@ export type Database = {
           id?: string
           is_verified?: boolean | null
           phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
         Update: {
@@ -597,7 +634,6 @@ export type Database = {
           id?: string
           is_verified?: boolean | null
           phone?: string | null
-          role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string
         }
         Relationships: []
@@ -686,10 +722,6 @@ export type Database = {
       clean_expired_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
-      }
-      get_user_role: {
-        Args: { user_id: string }
-        Returns: Database["public"]["Enums"]["user_role"]
       }
     }
     Enums: {

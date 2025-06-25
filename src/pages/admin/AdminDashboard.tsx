@@ -54,11 +54,12 @@ const AdminDashboard: React.FC = () => {
     }
     
     // Handle compound menu items (menu-submenu format) for other cases
+    // BUT SKIP sales and user management ones as they're handled above
     if (menu.includes('-') && !salesManagementSubmenus.includes(menu) && !userManagementSubmenus.includes(menu)) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
-      // Handle other compound menus (but skip user-management and sales ones as they're handled above)
+      // Handle other compound menus
       if (parts.length >= 2) {
         const [mainMenu, subMenu] = parts;
         console.log(`🎯 Setting mainMenu: ${mainMenu}, subMenu: ${subMenu}`);

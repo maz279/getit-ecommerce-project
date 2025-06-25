@@ -15,6 +15,9 @@ import {
   ExecutiveSummarySection
 } from './sections';
 import { OverviewDashboard } from './sections/OverviewDashboard';
+import { AnalyticsDashboard } from './sections/AnalyticsDashboard';
+import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
+import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
 
 interface DashboardContentProps {
   selectedSubmenu: string;
@@ -29,8 +32,14 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
     switch (selectedSubmenu) {
       case 'overview':
         return <OverviewDashboard />;
+      case 'analytics':
+        return <AnalyticsDashboard />;
       case 'real-time-metrics':
         return <RealtimeMetricsSection />;
+      case 'kpi-monitoring':
+        return <KPIMonitoringDashboard />;
+      case 'performance-insights':
+        return <PerformanceInsightsDashboard />;
       case 'revenue-analytics':
         return <RevenueAnalytics 
           selectedTimeRange={selectedTimeRange}

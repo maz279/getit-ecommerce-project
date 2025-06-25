@@ -23,20 +23,27 @@ const AdminDashboard: React.FC = () => {
   const handleMenuChange = (menu: string) => {
     console.log('🎯 AdminDashboard handleMenuChange called with:', menu);
     
-    // Handle compound menu items (menu-submenu format)
+    // Define user-management related submenus
+    const userManagementSubmenus = [
+      'admin-users', 'admin-list', 'role-management', 'permissions', 
+      'activity-logs', 'user-analytics', 'registration-trends', 
+      'activity-reports', 'demographics'
+    ];
+    
+    // Check if this is a user-management submenu
+    if (userManagementSubmenus.includes(menu)) {
+      console.log('✅ User management submenu detected:', menu);
+      setSelectedMenu('user-management');
+      setSelectedSubmenu(menu);
+      return;
+    }
+    
+    // Handle compound menu items (menu-submenu format) for other cases
     if (menu.includes('-')) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
-      // Special handling for admin-related menus
-      if (menu === 'admin-users' || menu === 'admin-list') {
-        console.log('✅ Admin menu detected, setting user-management + submenu');
-        setSelectedMenu('user-management');
-        setSelectedSubmenu(menu);
-        return;
-      }
-      
-      // Handle other compound menus
+      // Handle other compound menus (but skip user-management ones as they're handled above)
       if (parts.length >= 2) {
         const [mainMenu, subMenu] = parts;
         console.log(`🎯 Setting mainMenu: ${mainMenu}, subMenu: ${subMenu}`);

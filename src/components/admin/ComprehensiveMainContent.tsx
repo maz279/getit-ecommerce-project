@@ -31,18 +31,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     console.log('  - selectedMenu:', selectedMenu, '(type:', typeof selectedMenu, ')');
     console.log('  - selectedSubmenu:', selectedSubmenu, '(type:', typeof selectedSubmenu, ')');
     
-    // PRIORITY FIX: Handle admin-related routing FIRST
-    const adminRelatedMenus = ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 'user-analytics', 'registration-trends', 'activity-reports', 'demographics'];
-    
-    if (adminRelatedMenus.includes(selectedSubmenu) || adminRelatedMenus.includes(selectedMenu)) {
-      console.log('✅ ADMIN ROUTING DETECTED - routing to UserManagementContent');
-      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
-      const submenuToPass = adminRelatedMenus.includes(selectedSubmenu) ? selectedSubmenu : selectedMenu;
-      console.log('   submenuToPass:', submenuToPass);
-      return <UserManagementContent selectedSubmenu={submenuToPass} />;
-    }
-
-    // Handle user-management explicitly
+    // Handle user-management explicitly first
     if (selectedMenu === 'user-management') {
       console.log('✅ USER MANAGEMENT MAIN MENU - routing to UserManagementContent');
       console.log('   selectedSubmenu:', selectedSubmenu);

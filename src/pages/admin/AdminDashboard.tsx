@@ -33,7 +33,7 @@ const AdminDashboard: React.FC = () => {
     // Define sales-management related submenus
     const salesManagementSubmenus = [
       'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 
-      'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis'
+      'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking'
     ];
     
     // Check if this is a user-management submenu
@@ -53,7 +53,7 @@ const AdminDashboard: React.FC = () => {
     }
     
     // Handle compound menu items (menu-submenu format) for other cases
-    if (menu.includes('-')) {
+    if (menu.includes('-') && !salesManagementSubmenus.includes(menu) && !userManagementSubmenus.includes(menu)) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       

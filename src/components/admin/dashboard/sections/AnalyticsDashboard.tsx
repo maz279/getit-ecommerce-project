@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   BarChart, 
@@ -43,7 +42,10 @@ import {
   Smartphone,
   Clock,
   ArrowUp,
-  ArrowDown
+  ArrowDown,
+  Package,
+  AlertTriangle,
+  XCircle
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';

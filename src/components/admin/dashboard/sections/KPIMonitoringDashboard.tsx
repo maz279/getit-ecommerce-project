@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -6,45 +5,24 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { LineChart, Line, AreaChart, Area, BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, PieChart, Pie, Cell, RadialBarChart, RadialBar, ComposedChart } from 'recharts';
 import { 
   Target, 
   TrendingUp, 
   TrendingDown, 
-  Users, 
-  ShoppingCart, 
-  DollarSign, 
-  Package, 
-  Eye, 
-  MousePointer, 
-  Timer,
-  AlertTriangle,
-  CheckCircle,
-  Clock,
-  Zap,
-  Globe,
-  Smartphone,
-  Monitor,
-  RefreshCw,
-  ArrowUpRight,
-  ArrowDownRight,
-  Calendar,
-  Award,
-  Building,
-  Percent,
-  BarChart3,
-  PieChart as PieChartIcon,
-  Settings,
   Download,
   Filter,
-  Plus
+  Plus,
+  Calendar,
+  Award,
+  Settings
 } from 'lucide-react';
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from '@/components/ui/form';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useForm } from 'react-hook-form';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { KPIOverviewTab } from './kpi/KPIOverviewTab';
+import { KPITrendsTab } from './kpi/KPITrendsTab';
+import { KPIGoalsTab } from './kpi/KPIGoalsTab';
 
 // KPI Data Types
 interface KPIMetric {
@@ -93,29 +71,6 @@ const generateKPIData = () => {
   ];
   return kpis;
 };
-
-const monthlyTrendData = [
-  { month: 'Jan', revenue: 2200000, customers: 15000, orders: 1200, aov: 1833, conversionRate: 3.2 },
-  { month: 'Feb', revenue: 2400000, customers: 16500, orders: 1350, aov: 1778, conversionRate: 3.4 },
-  { month: 'Mar', revenue: 2650000, customers: 18200, orders: 1450, aov: 1828, conversionRate: 3.6 },
-  { month: 'Apr', revenue: 2750000, customers: 19500, orders: 1520, aov: 1809, conversionRate: 3.7 },
-  { month: 'May', revenue: 2820000, customers: 20800, orders: 1580, aov: 1785, conversionRate: 3.8 },
-  { month: 'Jun', revenue: 2850000, customers: 21500, orders: 1620, aov: 1759, conversionRate: 3.8 },
-];
-
-const categoryPerformanceData = [
-  { category: 'Electronics', revenue: 1200000, target: 1100000, growth: 9.1 },
-  { category: 'Fashion', revenue: 850000, target: 900000, growth: -5.6 },
-  { category: 'Home & Garden', revenue: 450000, target: 500000, growth: -10.0 },
-  { category: 'Sports', revenue: 350000, target: 400000, growth: -12.5 },
-];
-
-const goalProgressData = [
-  { goal: 'Q2 Revenue Target', current: 8500000, target: 9000000, progress: 94.4, status: 'on-track' },
-  { goal: 'Customer Acquisition', current: 62000, target: 75000, progress: 82.7, status: 'at-risk' },
-  { goal: 'Market Share Growth', current: 12.5, target: 15.0, progress: 83.3, status: 'on-track' },
-  { goal: 'Operational Efficiency', current: 78, target: 85, progress: 91.8, status: 'on-track' },
-];
 
 export const KPIMonitoringDashboard: React.FC = () => {
   const [kpiData, setKpiData] = useState<KPIMetric[]>(generateKPIData());
@@ -223,239 +178,21 @@ export const KPIMonitoringDashboard: React.FC = () => {
           <TabsTrigger value="settings">Settings</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="overview" className="space-y-6">
-          {/* KPI Summary Cards */}
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {filteredKPIs.slice(0, 8).map((kpi) => (
-              <Card key={kpi.id} className="hover:shadow-md transition-shadow">
-                <CardHeader className="pb-2">
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-sm font-medium text-gray-600">{kpi.name}</CardTitle>
-                    <Badge className={`text-xs ${getStatusColor(kpi.status)}`}>
-                      {kpi.status.replace('-', ' ')}
-                    </Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    <div className="flex items-baseline gap-2">
-                      <span className="text-2xl font-bold">
-                        {kpi.unit === 'BDT' ? `${(kpi.value / 1000).toFixed(0)}K` : kpi.value.toLocaleString()}
-                      </span>
-                      <span className="text-sm text-gray-500">{kpi.unit !== 'BDT' ? kpi.unit : ''}</span>
-                    </div>
-                    
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-xs text-gray-500">
-                        <span>Target: {kpi.unit === 'BDT' ? `${(kpi.target / 1000).toFixed(0)}K` : kpi.target.toLocaleString()}</span>
-                        <span>{((kpi.value / kpi.target) * 100).toFixed(1)}%</span>
-                      </div>
-                      <Progress value={(kpi.value / kpi.target) * 100} className="h-2" />
-                    </div>
-                    
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-1">
-                        {getTrendIcon(kpi.trend)}
-                        <span className={`text-xs font-medium ${kpi.trend > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {Math.abs(kpi.trend).toFixed(1)}%
-                        </span>
-                      </div>
-                      <Badge variant="outline" className="text-xs">
-                        {kpi.category}
-                      </Badge>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-
-          {/* Performance Heatmap */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <BarChart3 className="w-5 h-5" />
-                KPI Performance Matrix
-              </CardTitle>
-              <CardDescription>Performance vs Target achievement across all KPIs</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-                <div>
-                  <h3 className="font-semibold mb-4">Achievement Rate by Category</h3>
-                  <ChartContainer
-                    config={{
-                      achievement: { label: "Achievement %", color: "#8884d8" }
-                    }}
-                    className="h-64"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <BarChart data={[
-                        { category: 'Revenue', achievement: 85.2, target: 100 },
-                        { category: 'Customer', achievement: 72.8, target: 100 },
-                        { category: 'Operations', achievement: 68.5, target: 100 },
-                        { category: 'Marketing', achievement: 78.9, target: 100 }
-                      ]}>
-                        <CartesianGrid strokeDasharray="3 3" />
-                        <XAxis dataKey="category" />
-                        <YAxis />
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                        <Bar dataKey="achievement" fill="#8884d8" />
-                        <Bar dataKey="target" fill="#e0e0e0" opacity={0.3} />
-                      </BarChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </div>
-                
-                <div>
-                  <h3 className="font-semibold mb-4">Priority Distribution</h3>
-                  <ChartContainer
-                    config={{
-                      high: { label: "High Priority", color: "#ff4d4f" },
-                      medium: { label: "Medium Priority", color: "#faad14" },
-                      low: { label: "Low Priority", color: "#52c41a" }
-                    }}
-                    className="h-64"
-                  >
-                    <ResponsiveContainer width="100%" height="100%">
-                      <PieChart>
-                        <Pie
-                          data={[
-                            { name: 'High Priority', value: 7, color: '#ff4d4f' },
-                            { name: 'Medium Priority', value: 4, color: '#faad14' },
-                            { name: 'Low Priority', value: 1, color: '#52c41a' }
-                          ]}
-                          cx="50%"
-                          cy="50%"
-                          outerRadius={80}
-                          dataKey="value"
-                          label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
-                        >
-                          {[
-                            { name: 'High Priority', value: 7, color: '#ff4d4f' },
-                            { name: 'Medium Priority', value: 4, color: '#faad14' },
-                            { name: 'Low Priority', value: 1, color: '#52c41a' }
-                          ].map((entry, index) => (
-                            <Cell key={`cell-${index}`} fill={entry.color} />
-                          ))}
-                        </Pie>
-                        <ChartTooltip content={<ChartTooltipContent />} />
-                      </PieChart>
-                    </ResponsiveContainer>
-                  </ChartContainer>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="overview">
+          <KPIOverviewTab 
+            filteredKPIs={filteredKPIs}
+            getStatusColor={getStatusColor}
+            getTrendIcon={getTrendIcon}
+          />
         </TabsContent>
 
-        <TabsContent value="trends" className="space-y-6">
-          {/* Monthly Trends */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <TrendingUp className="w-5 h-5" />
-                KPI Trends Over Time
-              </CardTitle>
-              <CardDescription>Historical performance tracking for key metrics</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <ChartContainer
-                config={{
-                  revenue: { label: "Revenue (M)", color: "#8884d8" },
-                  customers: { label: "Customers (K)", color: "#82ca9d" },
-                  aov: { label: "AOV (K)", color: "#ffc658" },
-                  conversionRate: { label: "Conversion %", color: "#ff7c7c" }
-                }}
-                className="h-96"
-              >
-                <ResponsiveContainer width="100%" height="100%">
-                  <ComposedChart data={monthlyTrendData}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="month" />
-                    <YAxis yAxisId="left" />
-                    <YAxis yAxisId="right" orientation="right" />
-                    <ChartTooltip content={<ChartTooltipContent />} />
-                    <Bar yAxisId="left" dataKey="revenue" fill="#8884d8" name="Revenue" />
-                    <Line yAxisId="right" type="monotone" dataKey="conversionRate" stroke="#ff7c7c" strokeWidth={2} name="Conversion Rate" />
-                  </ComposedChart>
-                </ResponsiveContainer>
-              </ChartContainer>
-            </CardContent>
-          </Card>
-
-          {/* Category Performance */}
-          <Card>
-            <CardHeader>
-              <CardTitle>Category Performance Analysis</CardTitle>
-              <CardDescription>Revenue performance by product category</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-4">
-                {categoryPerformanceData.map((category, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 bg-gray-50 rounded-lg">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                        <Package className="w-6 h-6 text-blue-600" />
-                      </div>
-                      <div>
-                        <h3 className="font-semibold">{category.category}</h3>
-                        <p className="text-sm text-gray-500">Target: BDT {(category.target / 1000).toFixed(0)}K</p>
-                      </div>
-                    </div>
-                    <div className="text-right">
-                      <p className="text-lg font-bold">BDT {(category.revenue / 1000).toFixed(0)}K</p>
-                      <div className="flex items-center gap-1">
-                        {category.growth > 0 ? 
-                          <TrendingUp className="w-4 h-4 text-green-500" /> : 
-                          <TrendingDown className="w-4 h-4 text-red-500" />
-                        }
-                        <span className={`text-sm font-medium ${category.growth > 0 ? 'text-green-600' : 'text-red-600'}`}>
-                          {Math.abs(category.growth).toFixed(1)}%
-                        </span>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
+        <TabsContent value="trends">
+          <KPITrendsTab />
         </TabsContent>
 
-        <TabsContent value="goals" className="space-y-6">
-          {/* Goal Progress Tracking */}
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center gap-2">
-                <Target className="w-5 h-5" />
-                Goal Progress Tracking
-              </CardTitle>
-              <CardDescription>Current progress towards strategic goals and objectives</CardDescription>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                {goalProgressData.map((goal, index) => (
-                  <div key={index} className="space-y-3">
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-semibold">{goal.goal}</h3>
-                      <Badge className={getStatusColor(goal.status)}>
-                        {goal.status.replace('-', ' ')}
-                      </Badge>
-                    </div>
-                    <div className="space-y-2">
-                      <div className="flex justify-between text-sm text-gray-600">
-                        <span>Current: {goal.current.toLocaleString()}</span>
-                        <span>Target: {goal.target.toLocaleString()}</span>
-                        <span>{goal.progress.toFixed(1)}%</span>
-                      </div>
-                      <Progress value={goal.progress} className="h-3" />
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-
+        <TabsContent value="goals">
+          <KPIGoalsTab getStatusColor={getStatusColor} />
+          
           {/* Goal Setting Form */}
           {showGoalForm && (
             <Card>

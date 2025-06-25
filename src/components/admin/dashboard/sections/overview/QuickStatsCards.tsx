@@ -66,18 +66,20 @@ export const QuickStatsCards: React.FC = () => {
         const TrendIcon = stat.trend === 'up' ? ArrowUp : ArrowDown;
         
         return (
-          <Card key={index} className={`bg-gradient-to-r ${stat.gradient} ${stat.border}`}>
+          <Card key={index} className={`bg-gradient-to-r ${stat.gradient} ${stat.border} hover:shadow-lg transition-shadow duration-300`}>
             <CardContent className="p-6">
               <div className="flex items-center justify-between">
-                <div>
-                  <p className={`${stat.textColor} text-sm font-medium`}>{stat.title}</p>
-                  <p className={`text-3xl font-bold ${stat.valueColor}`}>{stat.value}</p>
-                  <p className={`text-sm ${stat.textColor} flex items-center`}>
+                <div className="flex-1">
+                  <p className={`${stat.textColor} text-sm font-medium mb-2`}>{stat.title}</p>
+                  <p className={`text-3xl font-bold ${stat.valueColor} mb-2`}>{stat.value}</p>
+                  <div className={`text-sm ${stat.textColor} flex items-center`}>
                     <TrendIcon className="w-4 h-4 mr-1" />
-                    {stat.change} from last month
-                  </p>
+                    <span>{stat.change} from last month</span>
+                  </div>
                 </div>
-                <IconComponent className={`w-12 h-12 ${stat.textColor.replace('text-', 'text-').replace('-600', '-500')}`} />
+                <div className="ml-4">
+                  <IconComponent className={`w-12 h-12 ${stat.textColor.replace('text-', 'text-').replace('-600', '-500')}`} />
+                </div>
               </div>
             </CardContent>
           </Card>

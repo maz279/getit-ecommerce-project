@@ -8,7 +8,9 @@ import {
   Settings,
   Users,
   Package,
-  ShoppingCart
+  ShoppingCart,
+  Send,
+  Save
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -21,6 +23,10 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 export const QuickActionsForm: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [announcement, setAnnouncement] = useState('');
+  const [productName, setProductName] = useState('');
+  const [productPrice, setProductPrice] = useState('');
+  const [userName, setUserName] = useState('');
+  const [userEmail, setUserEmail] = useState('');
 
   const quickActions = [
     { icon: Plus, label: 'Add Product', color: 'bg-green-500' },
@@ -32,6 +38,25 @@ export const QuickActionsForm: React.FC = () => {
     { icon: Settings, label: 'Settings', color: 'bg-gray-500' },
     { icon: Search, label: 'Advanced Search', color: 'bg-teal-500' }
   ];
+
+  const handleAddProduct = () => {
+    console.log('Adding product:', { name: productName, price: productPrice });
+    // Reset form
+    setProductName('');
+    setProductPrice('');
+  };
+
+  const handleAddUser = () => {
+    console.log('Adding user:', { name: userName, email: userEmail });
+    // Reset form
+    setUserName('');
+    setUserEmail('');
+  };
+
+  const handleSendAnnouncement = () => {
+    console.log('Sending announcement:', announcement);
+    setAnnouncement('');
+  };
 
   return (
     <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
@@ -48,12 +73,12 @@ export const QuickActionsForm: React.FC = () => {
                 <Button
                   key={index}
                   variant="outline"
-                  className="h-16 flex flex-col items-center justify-center space-y-2"
+                  className="h-16 flex flex-col items-center justify-center space-y-2 hover:bg-gray-50 transition-colors"
                 >
                   <div className={`w-8 h-8 ${action.color} rounded-full flex items-center justify-center`}>
                     <IconComponent className="w-4 h-4 text-white" />
                   </div>
-                  <span className="text-xs">{action.label}</span>
+                  <span className="text-xs font-medium">{action.label}</span>
                 </Button>
               );
             })}
@@ -61,18 +86,98 @@ export const QuickActionsForm: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Admin Forms */}
+      {/* Data Entry Forms */}
       <Card>
         <CardHeader>
-          <CardTitle>Admin Controls</CardTitle>
+          <CardTitle>Quick Data Entry</CardTitle>
         </CardHeader>
         <CardContent>
-          <Tabs defaultValue="search" className="w-full">
-            <TabsList className="grid w-full grid-cols-3">
+          <Tabs defaultValue="product" className="w-full">
+            <TabsList className="grid w-full grid-cols-4">
+              <TabsTrigger value="product">Product</TabsTrigger>
+              <TabsTrigger value="user">User</TabsTrigger>
               <TabsTrigger value="search">Search</TabsTrigger>
               <TabsTrigger value="announce">Announce</TabsTrigger>
-              <TabsTrigger value="settings">Settings</TabsTrigger>
             </TabsList>
+
+            <TabsContent value="product" className="space-y-4">
+              <div>
+                <Label htmlFor="product-name">Product Name</Label>
+                <Input
+                  id="product-name"
+                  placeholder="Enter product name..."
+                  value={productName}
+                  onChange={(e) => setProductName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="product-price">Price (৳)</Label>
+                <Input
+                  id="product-price"
+                  type="number"
+                  placeholder="0.00"
+                  value={productPrice}
+                  onChange={(e) => setProductPrice(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="product-category">Category</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select category" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="electronics">Electronics</SelectItem>
+                    <SelectItem value="fashion">Fashion</SelectItem>
+                    <SelectItem value="home">Home & Garden</SelectItem>
+                    <SelectItem value="books">Books</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleAddProduct} className="w-full">
+                <Save className="w-4 h-4 mr-2" />
+                Add Product
+              </Button>
+            </TabsContent>
+
+            <TabsContent value="user" className="space-y-4">
+              <div>
+                <Label htmlFor="user-name">Full Name</Label>
+                <Input
+                  id="user-name"
+                  placeholder="Enter user name..."
+                  value={userName}
+                  onChange={(e) => setUserName(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="user-email">Email</Label>
+                <Input
+                  id="user-email"
+                  type="email"
+                  placeholder="user@example.com"
+                  value={userEmail}
+                  onChange={(e) => setUserEmail(e.target.value)}
+                />
+              </div>
+              <div>
+                <Label htmlFor="user-role">Role</Label>
+                <Select>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Select role" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="user">User</SelectItem>
+                    <SelectItem value="admin">Admin</SelectItem>
+                    <SelectItem value="vendor">Vendor</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <Button onClick={handleAddUser} className="w-full">
+                <Save className="w-4 h-4 mr-2" />
+                Add User
+              </Button>
+            </TabsContent>
 
             <TabsContent value="search" className="space-y-4">
               <div>
@@ -131,37 +236,10 @@ export const QuickActionsForm: React.FC = () => {
                   </SelectContent>
                 </Select>
               </div>
-              <Button className="w-full">Send Announcement</Button>
-            </TabsContent>
-
-            <TabsContent value="settings" className="space-y-4">
-              <div className="grid grid-cols-2 gap-4">
-                <div>
-                  <Label htmlFor="maintenance-mode">Maintenance Mode</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="registration">New Registrations</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="enabled">Enabled</SelectItem>
-                      <SelectItem value="disabled">Disabled</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-              <Button className="w-full">Update Settings</Button>
+              <Button onClick={handleSendAnnouncement} className="w-full">
+                <Send className="w-4 h-4 mr-2" />
+                Send Announcement
+              </Button>
             </TabsContent>
           </Tabs>
         </CardContent>

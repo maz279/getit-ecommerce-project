@@ -24,12 +24,17 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   selectedMenu,
   selectedSubmenu
 }) => {
-  console.log('ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+  console.log('🌟 ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
+    // Add comprehensive debugging
+    console.log('🔍 ComprehensiveMainContent renderContent Debug:');
+    console.log('  - selectedMenu:', selectedMenu, '(type:', typeof selectedMenu, ')');
+    console.log('  - selectedSubmenu:', selectedSubmenu, '(type:', typeof selectedSubmenu, ')');
+    
     // Handle dashboard and its submenus with proper routing
     if (selectedMenu === 'dashboard') {
-      console.log('Dashboard section - submenu:', selectedSubmenu);
+      console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     }
 
@@ -43,7 +48,8 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     ];
 
     if (dashboardSubmenus.includes(selectedMenu)) {
-      console.log('Dashboard submenu detected as selectedMenu:', selectedMenu);
+      console.log('✅ Dashboard submenu detected as selectedMenu:', selectedMenu);
+      console.log('   Passing to DashboardContent with selectedSubmenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
@@ -127,7 +133,9 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     }
 
     // Default fallback
-    console.log('No matching menu found, defaulting to dashboard overview');
+    console.log('⚠️ No matching menu found, defaulting to dashboard overview');
+    console.log('   selectedMenu was:', selectedMenu);
+    console.log('   selectedSubmenu was:', selectedSubmenu);
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

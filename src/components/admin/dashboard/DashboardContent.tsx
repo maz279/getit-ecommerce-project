@@ -1,5 +1,5 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { 
   RevenueAnalytics, 
   UserActivity,
@@ -26,63 +26,76 @@ interface DashboardContentProps {
 export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubmenu }) => {
   const [selectedTimeRange, setSelectedTimeRange] = useState('7d');
 
+  useEffect(() => {
+    console.log('=== DashboardContent Debug Info ===');
+    console.log('Received selectedSubmenu prop:', selectedSubmenu);
+    console.log('Type of selectedSubmenu:', typeof selectedSubmenu);
+    console.log('selectedSubmenu length:', selectedSubmenu?.length);
+    console.log('=================================');
+  }, [selectedSubmenu]);
+
   const getContent = () => {
-    console.log('DashboardContent - selectedSubmenu:', selectedSubmenu);
+    console.log('🔍 DashboardContent getContent - selectedSubmenu:', selectedSubmenu);
     
-    switch (selectedSubmenu) {
+    // Normalize the submenu value to handle any whitespace or case issues
+    const normalizedSubmenu = selectedSubmenu?.toString().trim().toLowerCase();
+    console.log('🔍 Normalized submenu:', normalizedSubmenu);
+    
+    switch (normalizedSubmenu) {
       case 'overview':
-        console.log('Rendering OverviewDashboard');
+        console.log('✅ Rendering OverviewDashboard');
         return <OverviewDashboard />;
       case 'analytics':
-        console.log('Rendering AnalyticsDashboard');
+        console.log('✅ Rendering AnalyticsDashboard');
         return <AnalyticsDashboard />;
       case 'real-time-metrics':
-        console.log('Rendering RealtimeMetricsSection');
+        console.log('✅ Rendering RealtimeMetricsSection');
         return <RealtimeMetricsSection />;
       case 'kpi-monitoring':
-        console.log('Rendering KPIMonitoringDashboard');
+        console.log('✅ Rendering KPIMonitoringDashboard');
         return <KPIMonitoringDashboard />;
       case 'performance-insights':
-        console.log('Rendering PerformanceInsightsDashboard');
+        console.log('✅ Rendering PerformanceInsightsDashboard');
         return <PerformanceInsightsDashboard />;
       case 'revenue-analytics':
-        console.log('Rendering RevenueAnalytics');
+        console.log('✅ Rendering RevenueAnalytics');
         return <RevenueAnalytics 
           selectedTimeRange={selectedTimeRange}
           setSelectedTimeRange={setSelectedTimeRange}
         />;
       case 'user-activity':
-        console.log('Rendering UserActivity');
+        console.log('✅ Rendering UserActivity');
         return <UserActivity />;
       case 'vendor-performance':
-        console.log('Rendering VendorPerformanceSection');
+        console.log('✅ Rendering VendorPerformanceSection');
         return <VendorPerformanceSection />;
       case 'order-insights':
-        console.log('Rendering OrderInsightsSection');
+        console.log('✅ Rendering OrderInsightsSection');
         return <OrderInsightsSection />;
       case 'inventory-alerts':
-        console.log('Rendering InventoryAlertsSection');
+        console.log('✅ Rendering InventoryAlertsSection');
         return <InventoryAlertsSection />;
       case 'platform-performance':
-        console.log('Rendering PlatformPerformanceSection');
+        console.log('✅ Rendering PlatformPerformanceSection');
         return <PlatformPerformanceSection />;
       case 'system-health':
-        console.log('Rendering SystemHealthSection');
+        console.log('✅ Rendering SystemHealthSection');
         return <SystemHealthSection />;
       case 'security-monitoring':
-        console.log('Rendering SecurityMonitoringSection');
+        console.log('✅ Rendering SecurityMonitoringSection');
         return <SecurityMonitoringSection />;
       case 'system-logs':
-        console.log('Rendering SystemLogsSection');
+        console.log('✅ Rendering SystemLogsSection');
         return <SystemLogsSection />;
       case 'quick-actions':
-        console.log('Rendering QuickActionsSection');
+        console.log('✅ Rendering QuickActionsSection');
         return <QuickActionsSection />;
       case 'executive-summary':
-        console.log('Rendering ExecutiveSummarySection');
+        console.log('✅ Rendering ExecutiveSummarySection');
         return <ExecutiveSummarySection />;
       default:
-        console.log('DashboardContent - no matching submenu, showing default overview');
+        console.log('⚠️ DashboardContent - no matching submenu found for:', normalizedSubmenu);
+        console.log('⚠️ Falling back to OverviewDashboard');
         return <OverviewDashboard />;
     }
   };

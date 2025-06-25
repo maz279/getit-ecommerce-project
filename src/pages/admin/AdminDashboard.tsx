@@ -34,7 +34,7 @@ const AdminDashboard: React.FC = () => {
     const salesManagementSubmenus = [
       'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 
       'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking',
-      'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports'
+      'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis'
     ];
     
     // Check if this is a user-management submenu

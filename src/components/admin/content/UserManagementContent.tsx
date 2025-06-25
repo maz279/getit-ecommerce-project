@@ -4,6 +4,7 @@ import { UserManagementForm } from './forms/UserManagementForm';
 import { RoleManagementForm } from './forms/RoleManagementForm';
 import { PermissionsManagementForm } from './forms/PermissionsManagementForm';
 import { ActivityLogsForm } from './forms/ActivityLogsForm';
+import { ActivityReportsForm } from './forms/ActivityReportsForm';
 import { RegistrationTrendsForm } from './forms/RegistrationTrendsForm';
 import { AdminListManagement } from '../dashboard/sections/AdminListManagement';
 
@@ -34,14 +35,14 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
       case 'activity-logs':
         console.log('✅ Rendering ActivityLogsForm for activity-logs');
         return <ActivityLogsForm />;
+      case 'activity-reports':
+        console.log('✅ Rendering ActivityReportsForm for activity-reports');
+        return <ActivityReportsForm />;
       case 'registration-trends':
         console.log('✅ Rendering RegistrationTrendsForm for registration-trends');
         return <RegistrationTrendsForm />;
       case 'user-analytics':
         console.log('✅ Rendering UserManagementForm for user-analytics');
-        return <UserManagementForm />;
-      case 'activity-reports':
-        console.log('✅ Rendering UserManagementForm for activity-reports');
         return <UserManagementForm />;
       case 'demographics':
         console.log('✅ Rendering UserManagementForm for demographics');

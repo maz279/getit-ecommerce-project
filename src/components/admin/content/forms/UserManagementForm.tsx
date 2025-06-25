@@ -145,7 +145,7 @@ export const UserManagementForm: React.FC = () => {
                   Advanced Filter
                 </Button>
               </div>
-            </div>
+            </CardContent>
           </Card>
 
           {/* Users Table */}

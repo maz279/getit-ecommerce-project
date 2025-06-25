@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -10,7 +9,7 @@ import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid, BarChart, Bar, ComposedChart, AreaChart, Area, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, Radar } from 'recharts';
-import { TrendingUp, TrendingDown, BarChart3, Compare, Calendar, Download, RefreshCw, Plus, Target, ArrowUpRight, ArrowDownRight, Filter, Eye } from 'lucide-react';
+import { TrendingUp, TrendingDown, BarChart3, Calendar, Download, RefreshCw, Plus, Target, ArrowUpRight, ArrowDownRight, Filter, Eye } from 'lucide-react';
 
 // Sample data for comparative analysis
 const periodComparison = [
@@ -100,7 +99,7 @@ export const ComparativeAnalysisContent: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Compare className="w-8 h-8 text-blue-600" />
+            <BarChart3 className="w-8 h-8 text-blue-600" />
             Comparative Analysis
           </h1>
           <p className="text-gray-600 mt-1">Compare performance across periods, competitors, and benchmarks</p>
@@ -651,7 +650,7 @@ export const ComparativeAnalysisContent: React.FC = () => {
                   </div>
                   <div className="flex gap-3 pt-4">
                     <Button onClick={generateComparison} className="flex-1">
-                      <Compare className="w-4 h-4 mr-2" />
+                      <BarChart3 className="w-4 h-4 mr-2" />
                       Generate Analysis
                     </Button>
                     <Button variant="outline">

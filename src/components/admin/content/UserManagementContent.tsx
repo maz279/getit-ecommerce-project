@@ -2,6 +2,7 @@
 import React from 'react';
 import { UserManagementForm } from './forms/UserManagementForm';
 import { RoleManagementForm } from './forms/RoleManagementForm';
+import { PermissionsManagementForm } from './forms/PermissionsManagementForm';
 import { AdminListManagement } from '../dashboard/sections/AdminListManagement';
 
 interface UserManagementContentProps {
@@ -26,8 +27,8 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
         console.log('✅ Rendering RoleManagementForm for role-management');
         return <RoleManagementForm />;
       case 'permissions':
-        console.log('✅ Rendering RoleManagementForm for permissions');
-        return <RoleManagementForm />;
+        console.log('✅ Rendering PermissionsManagementForm for permissions');
+        return <PermissionsManagementForm />;
       case 'activity-logs':
         console.log('✅ Rendering UserManagementForm for activity-logs');
         return <UserManagementForm />;

@@ -7,6 +7,7 @@ import { SalesOverviewContent } from './salesManagement/SalesOverviewContent';
 import { RevenueAnalyticsContent } from './salesManagement/RevenueAnalyticsContent';
 import { SalesForecastContent } from './salesManagement/SalesForecastContent';
 import { RevenueDashboardContent } from './salesManagement/RevenueDashboardContent';
+import { ProfitMarginContent } from './salesManagement/ProfitMarginContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -28,6 +29,9 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'revenue-dashboard':
         console.log('✅ Rendering RevenueDashboardContent');
         return <RevenueDashboardContent />;
+      case 'profit-margins':
+        console.log('✅ Rendering ProfitMarginContent');
+        return <ProfitMarginContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;

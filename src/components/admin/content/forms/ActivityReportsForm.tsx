@@ -1,6 +1,5 @@
-
 import React, { useState } from 'react';
-import { BarChart, FileText, TrendingUp, Users, Calendar, Download, Filter, RefreshCw } from 'lucide-react';
+import { BarChart as BarChartIcon, FileText, TrendingUp, Users, Calendar, Download, Filter, RefreshCw } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
@@ -9,7 +8,7 @@ import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Badge } from '@/components/ui/badge';
 import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { BarChart as RechartsBarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, ResponsiveContainer, LineChart, Line, PieChart, Pie, Cell, AreaChart, Area } from 'recharts';
 
 // Mock data for activity reports
 const activitySummaryData = [
@@ -105,7 +104,7 @@ export const ActivityReportsForm: React.FC = () => {
                 <p className="text-sm text-green-600 mt-1">+15.3% from last month</p>
               </div>
               <div className="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center">
-                <BarChart className="w-6 h-6 text-blue-600" />
+                <BarChartIcon className="w-6 h-6 text-blue-600" />
               </div>
             </div>
           </CardContent>

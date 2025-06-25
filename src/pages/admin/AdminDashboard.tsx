@@ -38,7 +38,7 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include processing-orders
+    // Define order-management related submenus - UPDATED to include shipped-orders
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',

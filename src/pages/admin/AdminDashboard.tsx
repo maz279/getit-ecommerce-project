@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -44,7 +43,7 @@ const AdminDashboard: React.FC = () => {
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
       'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
       'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests',
-      'order-analytics', 'order-reports', 'fulfillment-center'
+      'order-analytics', 'order-reports', 'fulfillment-center', 'order-search'
     ];
     
     // Check if this is a user-management submenu

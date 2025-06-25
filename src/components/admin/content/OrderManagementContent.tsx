@@ -6,6 +6,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { AllOrdersContent } from './forms/orderManagement/AllOrdersContent';
+import { OrderSearchContent } from './forms/orderManagement/OrderSearchContent';
 
 interface OrderManagementContentProps {
   selectedSubmenu: string;
@@ -171,6 +172,9 @@ export const OrderManagementContent: React.FC<OrderManagementContentProps> = ({ 
     switch (selectedSubmenu) {
       case 'all-orders':
         return <AllOrdersContent />;
+      case 'order-search':
+      case 'search':
+        return <OrderSearchContent />;
       case 'order-overview':
       case 'order-processing':
       case 'orders':

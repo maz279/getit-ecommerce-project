@@ -55,13 +55,13 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     }
 
     // Handle order management and order-related submenus
-    if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu.startsWith('order-') || 
-        ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center'].includes(selectedMenu)) {
+    if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu === 'order' || selectedMenu.startsWith('order-') || 
+        ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center', 'order-search'].includes(selectedMenu)) {
       console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is an order submenu, pass it as selectedSubmenu
-      const submenu = ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center'].includes(selectedMenu) 
+      const submenu = ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center', 'order-search'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       

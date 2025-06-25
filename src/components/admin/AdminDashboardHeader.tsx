@@ -7,6 +7,7 @@ import {
   Languages, 
   DollarSign 
 } from 'lucide-react';
+import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
 import {
   DropdownMenu,
@@ -60,21 +61,25 @@ export const AdminDashboardHeader: React.FC<AdminDashboardHeaderProps> = ({
         setCurrency={setCurrency}
       />
 
-      {/* Main Header with blended background */}
+      {/* Main Header with enhanced layout */}
       <div className="h-[70px] bg-gradient-to-r from-blue-100 via-purple-100 to-indigo-100 flex items-center justify-between px-6">
-        {/* Left Section - Logo only */}
+        {/* Left Section - Enhanced Logo with GETIT text and navigation */}
         <div className="flex items-center space-x-4">
-          <div className="flex items-center space-x-3">
+          <Link to="/" className="flex items-center space-x-3 hover:opacity-80 transition-opacity">
             <div className="w-10 h-10 bg-gradient-to-br from-blue-600 via-purple-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
               <div className="w-6 h-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-md flex items-center justify-center">
                 <span className="text-white font-bold text-xs">G</span>
               </div>
             </div>
-          </div>
+            <div className="flex flex-col">
+              <span className="text-xl font-bold text-gray-800">GETIT</span>
+              <span className="text-xs text-gray-600">Admin Portal</span>
+            </div>
+          </Link>
         </div>
 
-        {/* Center Section - Smaller Enhanced AI Search moved up */}
-        <div className="flex flex-1 max-w-xl mx-6 -mt-2">
+        {/* Center Section - Enhanced Search moved slightly right */}
+        <div className="flex flex-1 max-w-xl mx-8 ml-12 -mt-2">
           <div className="relative w-full">
             <EnhancedAdminSearchBar />
           </div>

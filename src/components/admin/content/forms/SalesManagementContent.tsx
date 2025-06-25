@@ -1,10 +1,10 @@
 
 import React from 'react';
-import { DailySalesForm } from './forms/DailySalesForm';
-import { MonthlySalesForm } from './forms/MonthlySalesForm';
-import { YearlySalesForm } from './forms/YearlySalesForm';
-import { SalesOverviewContent } from './forms/salesManagement/SalesOverviewContent';
-import { RevenueAnalyticsContent } from './forms/salesManagement/RevenueAnalyticsContent';
+import { DailySalesForm } from './DailySalesForm';
+import { MonthlySalesForm } from './MonthlySalesForm';
+import { YearlySalesForm } from './YearlySalesForm';
+import { SalesOverviewContent } from './salesManagement/SalesOverviewContent';
+import { RevenueAnalyticsContent } from './salesManagement/RevenueAnalyticsContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;

@@ -168,6 +168,7 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
     switch (selectedSubmenu) {
       case 'sales-overview':
       case 'sales':
+      case 'overview': // Add fallback for when coming from sales menu
         return renderSalesOverview();
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
@@ -190,6 +191,7 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
           </div>
         );
       default:
+        console.log('⚠️ SalesManagementContent - defaulting to sales overview for:', selectedSubmenu);
         return renderSalesOverview();
     }
   };

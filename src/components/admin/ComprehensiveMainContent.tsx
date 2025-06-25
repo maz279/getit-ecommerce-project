@@ -38,6 +38,22 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <UserManagementContent selectedSubmenu={selectedSubmenu} />;
     }
 
+    // Handle sales management and sales-related submenus
+    if (selectedMenu === 'sales' || selectedMenu === 'sales-management' || 
+        selectedMenu.startsWith('sales-') || 
+        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard'].includes(selectedMenu)) {
+      console.log('✅ SALES MANAGEMENT - routing to SalesManagementContent');
+      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+      
+      // If selectedMenu is a sales submenu, pass it as selectedSubmenu
+      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard'].includes(selectedMenu) 
+        ? selectedMenu 
+        : selectedSubmenu;
+      
+      console.log('   Final submenu passed:', submenu);
+      return <SalesManagementContent selectedSubmenu={submenu} />;
+    }
+
     // Handle dashboard and its submenus
     if (selectedMenu === 'dashboard') {
       console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
@@ -56,12 +72,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       console.log('✅ Dashboard submenu detected as selectedMenu:', selectedMenu);
       console.log('   Passing to DashboardContent with selectedSubmenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
-    }
-
-    // Handle sales management
-    if (selectedMenu === 'sales' || selectedMenu.startsWith('sales-') || 
-        ['sales-overview', 'revenue-analytics', 'sales-reports', 'daily-sales', 'monthly-trends', 'yearly-reports', 'sales-forecast', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking', 'detailed-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu)) {
-      return <SalesManagementContent selectedSubmenu={selectedMenu === 'sales' ? selectedSubmenu : selectedMenu} />;
     }
 
     // Handle order management

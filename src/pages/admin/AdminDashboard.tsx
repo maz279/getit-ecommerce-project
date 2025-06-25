@@ -30,10 +30,24 @@ const AdminDashboard: React.FC = () => {
       'activity-reports', 'demographics'
     ];
     
+    // Define sales-management related submenus
+    const salesManagementSubmenus = [
+      'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 
+      'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis'
+    ];
+    
     // Check if this is a user-management submenu
     if (userManagementSubmenus.includes(menu)) {
       console.log('✅ User management submenu detected:', menu);
       setSelectedMenu('user-management');
+      setSelectedSubmenu(menu);
+      return;
+    }
+    
+    // Check if this is a sales-management submenu
+    if (salesManagementSubmenus.includes(menu)) {
+      console.log('✅ Sales management submenu detected:', menu);
+      setSelectedMenu('sales');
       setSelectedSubmenu(menu);
       return;
     }
@@ -43,7 +57,7 @@ const AdminDashboard: React.FC = () => {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
-      // Handle other compound menus (but skip user-management ones as they're handled above)
+      // Handle other compound menus (but skip user-management and sales ones as they're handled above)
       if (parts.length >= 2) {
         const [mainMenu, subMenu] = parts;
         console.log(`🎯 Setting mainMenu: ${mainMenu}, subMenu: ${subMenu}`);
@@ -64,6 +78,10 @@ const AdminDashboard: React.FC = () => {
         break;
       case 'user-management':
         setSelectedSubmenu('admin-users'); // Default to admin users
+        break;
+      case 'sales':
+      case 'sales-management':
+        setSelectedSubmenu('sales-overview'); // Default to sales overview
         break;
       case 'vendor-management':
         setSelectedSubmenu('vendor-directory');

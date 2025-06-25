@@ -32,14 +32,47 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     console.log('  - selectedMenu:', selectedMenu, '(type:', typeof selectedMenu, ')');
     console.log('  - selectedSubmenu:', selectedSubmenu, '(type:', typeof selectedSubmenu, ')');
     
+    // MAIN FIX: Handle the incorrectly split dashboard submenu names
+    // When sidebar passes "real" + "time", we need to reconstruct "real-time-metrics"
+    // When sidebar passes "kpi" + "monitoring", we need to reconstruct "kpi-monitoring"  
+    // When sidebar passes "performance" + "insights", we need to reconstruct "performance-insights"
+    
+    let actualSubmenu = selectedSubmenu;
+    
+    if (selectedMenu === 'real' && selectedSubmenu === 'time') {
+      console.log('🔧 FIXING: real + time -> real-time-metrics');
+      actualSubmenu = 'real-time-metrics';
+    } else if (selectedMenu === 'kpi' && selectedSubmenu === 'monitoring') {
+      console.log('🔧 FIXING: kpi + monitoring -> kpi-monitoring');
+      actualSubmenu = 'kpi-monitoring';
+    } else if (selectedMenu === 'performance' && selectedSubmenu === 'insights') {
+      console.log('🔧 FIXING: performance + insights -> performance-insights');
+      actualSubmenu = 'performance-insights';
+    }
+
     // Handle dashboard and its submenus with proper routing
     if (selectedMenu === 'dashboard') {
       console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     }
 
+    // Handle the reconstructed dashboard submenus
+    if (actualSubmenu === 'real-time-metrics') {
+      console.log('✅ Real-time metrics submenu detected');
+      return <DashboardContent selectedSubmenu="real-time-metrics" />;
+    }
+    
+    if (actualSubmenu === 'kpi-monitoring') {
+      console.log('✅ KPI monitoring submenu detected');
+      return <DashboardContent selectedSubmenu="kpi-monitoring" />;
+    }
+    
+    if (actualSubmenu === 'performance-insights') {
+      console.log('✅ Performance insights submenu detected');
+      return <DashboardContent selectedSubmenu="performance-insights" />;
+    }
+
     // Handle specific dashboard submenus when they come in as selectedMenu
-    // This is the key fix - checking for the exact dashboard submenu names
     const dashboardSubmenus = [
       'overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
       'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
@@ -136,6 +169,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     console.log('⚠️ No matching menu found, defaulting to dashboard overview');
     console.log('   selectedMenu was:', selectedMenu);
     console.log('   selectedSubmenu was:', selectedSubmenu);
+    console.log('   actualSubmenu was:', actualSubmenu);
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

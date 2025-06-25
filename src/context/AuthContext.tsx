@@ -59,14 +59,60 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      const { data, error } = await supabase
+      // First try to get from profiles table (which has role)
+      const { data: profileData, error: profileError } = await supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', userId)
+        .single();
+
+      if (profileData && !profileError) {
+        // Convert profiles data to AppUser format
+        const appUser: AppUser = {
+          id: profileData.id,
+          email: profileData.id, // We'll get email from auth user
+          full_name: profileData.full_name,
+          phone: profileData.phone,
+          avatar_url: profileData.avatar_url,
+          role: profileData.role,
+          is_verified: true, // Default for authenticated users
+          created_at: profileData.created_at,
+          updated_at: profileData.updated_at
+        };
+
+        // Get email from auth user
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user?.email) {
+          appUser.email = user.email;
+        }
+
+        setUserProfile(appUser);
+        return;
+      }
+
+      // Fallback: try users table and create profile if needed
+      const { data: userData, error: userError } = await supabase
         .from('users')
         .select('*')
         .eq('id', userId)
         .single();
 
-      if (error) throw error;
-      setUserProfile(data);
+      if (userData && !userError) {
+        // Create profile entry if it doesn't exist
+        const { error: insertError } = await supabase
+          .from('profiles')
+          .insert({
+            id: userData.id,
+            full_name: userData.full_name,
+            phone: userData.phone,
+            role: 'user' // Default role
+          });
+
+        if (!insertError) {
+          // Fetch the newly created profile
+          await fetchUserProfile(userId);
+        }
+      }
     } catch (error) {
       console.error('Error fetching user profile:', error);
     }
@@ -140,7 +186,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     if (!user) throw new Error('No user logged in');
     
     const { error } = await supabase
-      .from('users')
+      .from('profiles')
       .update(profileData)
       .eq('id', user.id);
 

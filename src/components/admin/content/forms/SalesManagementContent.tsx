@@ -1,0 +1,45 @@
+
+import React from 'react';
+import { DailySalesForm } from './forms/DailySalesForm';
+import { MonthlySalesForm } from './forms/MonthlySalesForm';
+import { YearlySalesForm } from './forms/YearlySalesForm';
+import { SalesOverviewContent } from './forms/salesManagement/SalesOverviewContent';
+import { RevenueAnalyticsContent } from './forms/salesManagement/RevenueAnalyticsContent';
+
+interface SalesManagementContentProps {
+  selectedSubmenu: string;
+}
+
+export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ selectedSubmenu }) => {
+  const getContent = () => {
+    console.log('🔍 SalesManagementContent - selectedSubmenu:', selectedSubmenu);
+    
+    switch (selectedSubmenu) {
+      case 'sales-overview':
+      case 'sales':
+      case 'overview': // Add fallback for when coming from sales menu
+        return <SalesOverviewContent />;
+      case 'daily-sales':
+        console.log('✅ Rendering DailySalesForm');
+        return <DailySalesForm />;
+      case 'monthly-trends':
+        console.log('✅ Rendering MonthlySalesForm');
+        return <MonthlySalesForm />;
+      case 'yearly-reports':
+        console.log('✅ Rendering YearlySalesForm');
+        return <YearlySalesForm />;
+      case 'revenue-analytics':
+      case 'revenue-dashboard':
+        return <RevenueAnalyticsContent />;
+      default:
+        console.log('⚠️ SalesManagementContent - defaulting to sales overview for:', selectedSubmenu);
+        return <SalesOverviewContent />;
+    }
+  };
+
+  return (
+    <div className="p-6">
+      {getContent()}
+    </div>
+  );
+};

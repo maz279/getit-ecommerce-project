@@ -34,10 +34,15 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     }
 
     // Handle specific dashboard submenus when they come in as selectedMenu
-    if (['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
-         'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
-         'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
-         'system-logs', 'quick-actions', 'executive-summary'].includes(selectedMenu)) {
+    // This is the key fix - checking for the exact dashboard submenu names
+    const dashboardSubmenus = [
+      'overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
+      'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
+      'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
+      'system-logs', 'quick-actions', 'executive-summary'
+    ];
+
+    if (dashboardSubmenus.includes(selectedMenu)) {
       console.log('Dashboard submenu detected as selectedMenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }

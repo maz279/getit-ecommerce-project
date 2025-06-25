@@ -6,7 +6,6 @@ import {
   InventoryAlertsSection,
   SecurityMonitoringSection,
   SystemLogsSection,
-  RealtimeMetricsSection,
   VendorPerformanceSection,
   OrderInsightsSection,
   PlatformPerformanceSection,
@@ -18,6 +17,7 @@ import { OverviewDashboard } from './sections/OverviewDashboard';
 import { AnalyticsDashboard } from './sections/AnalyticsDashboard';
 import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
 import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
+import { RealtimeMetricsSection } from './sections/RealtimeMetricsSection';
 
 interface DashboardContentProps {
   selectedSubmenu: string;

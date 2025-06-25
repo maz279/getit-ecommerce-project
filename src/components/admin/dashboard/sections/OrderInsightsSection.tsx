@@ -1,232 +1,299 @@
 
-import React from 'react';
-import { ShoppingCart, TrendingUp, Clock, MapPin, CreditCard, Truck } from 'lucide-react';
+import React, { useState } from 'react';
+import { 
+  ShoppingCart, 
+  TrendingUp, 
+  Clock, 
+  Package, 
+  Truck,
+  AlertCircle,
+  CheckCircle,
+  XCircle,
+  Filter
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
 import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Progress } from '@/components/ui/progress';
+import {
+  LineChart,
+  Line,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer,
+  PieChart,
+  Pie,
+  Cell
+} from 'recharts';
 
-export const OrderInsightsSection: React.FC = () => (
-  <div className="space-y-6">
-    <div className="flex items-center justify-between">
-      <h2 className="text-2xl font-bold flex items-center">
-        <ShoppingCart className="h-6 w-6 mr-2 text-purple-600" />
-        Order Insights & Analytics
-      </h2>
-      <div className="flex space-x-2">
-        <Button variant="outline" size="sm">Today</Button>
-        <Button variant="outline" size="sm">This Week</Button>
-        <Button variant="outline" size="sm">This Month</Button>
+export const OrderInsightsSection: React.FC = () => {
+  const [selectedPeriod, setSelectedPeriod] = useState('30d');
+  const [filterStatus, setFilterStatus] = useState('all');
+
+  const orderStats = [
+    { status: 'Pending', count: 156, color: '#f59e0b', percentage: 12 },
+    { status: 'Processing', count: 234, color: '#3b82f6', percentage: 18 },
+    { status: 'Shipped', count: 567, color: '#8b5cf6', percentage: 43 },
+    { status: 'Delivered', count: 1289, color: '#10b981', percentage: 27 }
+  ];
+
+  const orderTrends = [
+    { date: '2024-06-01', orders: 145, revenue: 285000, avgValue: 1965 },
+    { date: '2024-06-02', orders: 167, revenue: 324000, avgValue: 1940 },
+    { date: '2024-06-03', orders: 189, revenue: 378000, avgValue: 2000 },
+    { date: '2024-06-04', orders: 156, revenue: 298000, avgValue: 1910 },
+    { date: '2024-06-05', orders: 234, revenue: 456000, avgValue: 1949 },
+    { date: '2024-06-06', orders: 278, revenue: 534000, avgValue: 1921 },
+    { date: '2024-06-07', orders: 198, revenue: 387000, avgValue: 1955 }
+  ];
+
+  const recentOrders = [
+    { 
+      id: '#12567', 
+      customer: 'Ahmed Rahman', 
+      items: 3, 
+      total: 45600, 
+      status: 'processing', 
+      time: '5 min ago',
+      vendor: 'TechHub BD'
+    },
+    { 
+      id: '#12566', 
+      customer: 'Fatima Khan', 
+      items: 1, 
+      total: 125000, 
+      status: 'shipped', 
+      time: '12 min ago',
+      vendor: 'Electronics Pro'
+    },
+    { 
+      id: '#12565', 
+      customer: 'Mohammad Ali', 
+      items: 2, 
+      total: 8500, 
+      status: 'delivered', 
+      time: '18 min ago',
+      vendor: 'Fashion Point'
+    },
+    { 
+      id: '#12564', 
+      customer: 'Rashida Begum', 
+      items: 4, 
+      total: 23400, 
+      status: 'pending', 
+      time: '25 min ago',
+      vendor: 'Home Essentials'
+    }
+  ];
+
+  const getStatusIcon = (status: string) => {
+    switch (status) {
+      case 'pending': return <Clock className="w-4 h-4" />;
+      case 'processing': return <Package className="w-4 h-4" />;
+      case 'shipped': return <Truck className="w-4 h-4" />;
+      case 'delivered': return <CheckCircle className="w-4 h-4" />;
+      default: return <AlertCircle className="w-4 h-4" />;
+    }
+  };
+
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'pending': return 'bg-yellow-100 text-yellow-800';
+      case 'processing': return 'bg-blue-100 text-blue-800';
+      case 'shipped': return 'bg-purple-100 text-purple-800';
+      case 'delivered': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  return (
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Order Insights</h1>
+          <p className="text-gray-600 mt-1">Comprehensive order analytics and management</p>
+        </div>
+        <div className="flex space-x-2">
+          <Select value={selectedPeriod} onValueChange={setSelectedPeriod}>
+            <SelectTrigger className="w-32">
+              <SelectValue />
+            </SelectTrigger>
+            <SelectContent>
+              <SelectItem value="7d">7 Days</SelectItem>
+              <SelectItem value="30d">30 Days</SelectItem>
+              <SelectItem value="90d">90 Days</SelectItem>
+            </SelectContent>
+          </Select>
+          <Button>Export Report</Button>
+        </div>
       </div>
-    </div>
 
-    {/* Order Statistics */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <Card className="border-purple-200 bg-purple-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-purple-700">Orders Today</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-purple-600">324</div>
-          <div className="flex items-center mt-1">
-            <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-            <span className="text-xs text-gray-500">+12% from yesterday</span>
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card className="border-green-200 bg-green-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-green-700">Revenue Today</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-green-600">৳45,890</div>
-          <span className="text-xs text-gray-500">Average: ৳142 per order</span>
-        </CardContent>
-      </Card>
-
-      <Card className="border-blue-200 bg-blue-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-blue-700">Pending Orders</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-blue-600">67</div>
-          <span className="text-xs text-gray-500">Awaiting processing</span>
-        </CardContent>
-      </Card>
-
-      <Card className="border-orange-200 bg-orange-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm text-orange-700">Completion Rate</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-orange-600">94.5%</div>
-          <Progress value={94.5} className="mt-2" />
-        </CardContent>
-      </Card>
-    </div>
-
-    {/* Order Status Distribution */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Clock className="h-5 w-5 mr-2" />
-          Order Status Distribution
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-          {[
-            { status: 'Confirmed', count: 89, color: 'bg-blue-500', percentage: 35 },
-            { status: 'Processing', count: 67, color: 'bg-yellow-500', percentage: 27 },
-            { status: 'Shipped', count: 45, color: 'bg-purple-500', percentage: 18 },
-            { status: 'Delivered', count: 32, color: 'bg-green-500', percentage: 13 },
-            { status: 'Cancelled', count: 18, color: 'bg-red-500', percentage: 7 }
-          ].map((item, index) => (
-            <div key={index} className="text-center p-4 border rounded-lg">
-              <div className={`w-12 h-12 ${item.color} rounded-full mx-auto mb-2 flex items-center justify-center text-white font-bold`}>
-                {item.count}
-              </div>
-              <div className="font-semibold text-sm">{item.status}</div>
-              <div className="text-xs text-gray-500">{item.percentage}%</div>
-              <Progress value={item.percentage} className="mt-2" />
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Regional Order Distribution */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <MapPin className="h-5 w-5 mr-2" />
-          Orders by Region
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
-            {[
-              { region: 'Dhaka Division', orders: 145, revenue: '৳18,450', growth: '+15%' },
-              { region: 'Chittagong Division', orders: 89, revenue: '৳12,300', growth: '+8%' },
-              { region: 'Sylhet Division', orders: 67, revenue: '৳8,900', growth: '+12%' },
-              { region: 'Rajshahi Division', orders: 45, revenue: '৳5,600', growth: '+5%' }
-            ].map((region, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+      {/* Order Status Overview */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {orderStats.map((stat, index) => (
+          <Card key={index} className="hover:shadow-lg transition-shadow">
+            <CardContent className="p-6">
+              <div className="flex items-center justify-between">
                 <div>
-                  <div className="font-semibold">{region.region}</div>
-                  <div className="text-sm text-gray-500">{region.orders} orders</div>
+                  <p className="text-sm font-medium text-gray-600">{stat.status} Orders</p>
+                  <p className="text-3xl font-bold" style={{ color: stat.color }}>{stat.count}</p>
+                  <Progress value={stat.percentage} className="mt-2" />
+                  <p className="text-xs text-gray-500 mt-1">{stat.percentage}% of total</p>
                 </div>
-                <div className="text-right">
-                  <div className="font-bold text-green-600">{region.revenue}</div>
-                  <Badge variant="secondary" className="text-xs">
-                    {region.growth}
-                  </Badge>
-                </div>
-              </div>
-            ))}
-          </div>
-          <div className="space-y-4">
-            {[
-              { region: 'Khulna Division', orders: 34, revenue: '৳4,200', growth: '+3%' },
-              { region: 'Barisal Division', orders: 28, revenue: '৳3,400', growth: '+7%' },
-              { region: 'Rangpur Division', orders: 23, revenue: '৳2,800', growth: '+2%' },
-              { region: 'Mymensingh Division', orders: 19, revenue: '৳2,100', growth: '+4%' }
-            ].map((region, index) => (
-              <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                <div>
-                  <div className="font-semibold">{region.region}</div>
-                  <div className="text-sm text-gray-500">{region.orders} orders</div>
-                </div>
-                <div className="text-right">
-                  <div className="font-bold text-green-600">{region.revenue}</div>
-                  <Badge variant="secondary" className="text-xs">
-                    {region.growth}
-                  </Badge>
+                <div className="w-12 h-12 rounded-full flex items-center justify-center" style={{ backgroundColor: `${stat.color}20` }}>
+                  {getStatusIcon(stat.status.toLowerCase())}
                 </div>
               </div>
-            ))}
-          </div>
-        </div>
-      </CardContent>
-    </Card>
+            </CardContent>
+          </Card>
+        ))}
+      </div>
 
-    {/* Payment & Delivery Insights */}
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {/* Order Trends Chart */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <TrendingUp className="w-5 h-5 mr-2" />
+              Order Volume Trends
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <LineChart data={orderTrends}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Line 
+                  type="monotone" 
+                  dataKey="orders" 
+                  stroke="#8884d8" 
+                  strokeWidth={2}
+                  name="Orders"
+                />
+              </LineChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>Revenue vs Orders</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <ResponsiveContainer width="100%" height={300}>
+              <BarChart data={orderTrends}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="date" />
+                <YAxis />
+                <Tooltip />
+                <Bar dataKey="revenue" fill="#82ca9d" name="Revenue (৳)" />
+              </BarChart>
+            </ResponsiveContainer>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Recent Orders */}
       <Card>
         <CardHeader>
-          <CardTitle className="flex items-center">
-            <CreditCard className="h-5 w-5 mr-2" />
-            Payment Methods
-          </CardTitle>
+          <div className="flex items-center justify-between">
+            <CardTitle>Recent Orders</CardTitle>
+            <div className="flex space-x-2">
+              <Select value={filterStatus} onValueChange={setFilterStatus}>
+                <SelectTrigger className="w-32">
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="processing">Processing</SelectItem>
+                  <SelectItem value="shipped">Shipped</SelectItem>
+                  <SelectItem value="delivered">Delivered</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline" size="sm">
+                <Filter className="w-4 h-4 mr-2" />
+                Filter
+              </Button>
+            </div>
+          </div>
         </CardHeader>
         <CardContent>
-          <div className="space-y-3">
-            {[
-              { method: 'Cash on Delivery', percentage: 45, count: 146 },
-              { method: 'bKash', percentage: 25, count: 81 },
-              { method: 'Nagad', percentage: 15, count: 49 },
-              { method: 'Rocket', percentage: 10, count: 32 },
-              { method: 'Bank Card', percentage: 5, count: 16 }
-            ].map((payment, index) => (
-              <div key={index} className="flex items-center justify-between">
-                <div className="flex items-center space-x-3">
-                  <div className="w-3 h-3 bg-blue-500 rounded-full"></div>
-                  <span className="text-sm">{payment.method}</span>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <span className="text-sm font-medium">{payment.count}</span>
-                  <div className="w-20">
-                    <Progress value={payment.percentage} />
+          <div className="space-y-4">
+            {recentOrders.map((order) => (
+              <div key={order.id} className="flex items-center justify-between p-4 border rounded-lg hover:bg-gray-50">
+                <div className="flex items-center space-x-4">
+                  <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                    {getStatusIcon(order.status)}
                   </div>
-                  <span className="text-xs text-gray-500">{payment.percentage}%</span>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
-
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center">
-            <Truck className="h-5 w-5 mr-2" />
-            Delivery Performance
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-4">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="text-center p-3 bg-green-50 rounded-lg">
-                <div className="text-xl font-bold text-green-600">2.3</div>
-                <div className="text-xs text-gray-600">Avg Delivery Days</div>
-              </div>
-              <div className="text-center p-3 bg-blue-50 rounded-lg">
-                <div className="text-xl font-bold text-blue-600">94%</div>
-                <div className="text-xs text-gray-600">On-time Delivery</div>
-              </div>
-            </div>
-            <div className="space-y-2">
-              {[
-                { service: 'Same Day Delivery', orders: 45, percentage: 35 },
-                { service: 'Next Day Delivery', orders: 67, percentage: 52 },
-                { service: 'Standard Delivery', orders: 89, percentage: 69 }
-              ].map((delivery, index) => (
-                <div key={index} className="flex items-center justify-between">
-                  <span className="text-sm">{delivery.service}</span>
-                  <div className="flex items-center space-x-2">
-                    <span className="text-sm font-medium">{delivery.orders}</span>
-                    <div className="w-16">
-                      <Progress value={delivery.percentage} />
+                  <div>
+                    <div className="flex items-center space-x-2">
+                      <p className="font-medium">{order.id}</p>
+                      <Badge className={getStatusColor(order.status)}>
+                        {order.status}
+                      </Badge>
                     </div>
+                    <p className="text-sm text-gray-600">{order.customer} • {order.vendor}</p>
+                    <p className="text-xs text-gray-500">{order.items} items • {order.time}</p>
                   </div>
                 </div>
-              ))}
-            </div>
+                <div className="text-right">
+                  <p className="font-bold text-green-600">৳{order.total.toLocaleString()}</p>
+                  <div className="flex space-x-2 mt-2">
+                    <Button variant="outline" size="sm">View</Button>
+                    <Button variant="outline" size="sm">Edit</Button>
+                  </div>
+                </div>
+              </div>
+            ))}
           </div>
         </CardContent>
       </Card>
+
+      {/* Order Management Tools */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Order Management Settings</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <Label htmlFor="auto-confirm">Auto-confirm Orders</Label>
+              <Select defaultValue="disabled">
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="enabled">Enabled</SelectItem>
+                  <SelectItem value="disabled">Disabled</SelectItem>
+                </SelectContent>
+              </Select>
+            </div>
+            <div>
+              <Label htmlFor="processing-time">Default Processing Time (hours)</Label>
+              <Input id="processing-time" type="number" defaultValue="24" />
+            </div>
+            <div>
+              <Label htmlFor="notification-threshold">Low Stock Alert Threshold</Label>
+              <Input id="notification-threshold" type="number" defaultValue="10" />
+            </div>
+            <div>
+              <Label htmlFor="refund-policy">Refund Window (days)</Label>
+              <Input id="refund-policy" type="number" defaultValue="7" />
+            </div>
+          </div>
+          <Button>Save Settings</Button>
+        </CardContent>
+      </Card>
     </div>
-  </div>
-);
+  );
+};

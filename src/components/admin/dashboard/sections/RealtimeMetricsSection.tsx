@@ -1,145 +1,268 @@
 
-import React from 'react';
-import { Activity, Users, ShoppingCart, TrendingUp, Zap, Eye, Clock, Globe } from 'lucide-react';
+import React, { useState, useEffect } from 'react';
+import { 
+  Activity, 
+  Users, 
+  ShoppingCart, 
+  DollarSign, 
+  TrendingUp, 
+  Eye,
+  Clock,
+  Zap
+} from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { Badge } from '@/components/ui/badge';
+import { Button } from '@/components/ui/button';
+import {
+  LineChart,
+  Line,
+  AreaChart,
+  Area,
+  XAxis,
+  YAxis,
+  CartesianGrid,
+  Tooltip,
+  ResponsiveContainer
+} from 'recharts';
 
-export const RealtimeMetricsSection: React.FC = () => (
-  <div className="space-y-6">
-    <div className="flex items-center justify-between">
-      <h2 className="text-2xl font-bold flex items-center">
-        <Activity className="h-6 w-6 mr-2 text-blue-600" />
-        Real-time Metrics
-      </h2>
-      <div className="flex items-center space-x-2">
-        <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse"></div>
-        <span className="text-sm text-gray-600">Live Data</span>
+export const RealtimeMetricsSection: React.FC = () => {
+  const [metrics, setMetrics] = useState({
+    activeUsers: 2345,
+    salesPerMinute: 15,
+    conversionRate: 3.2,
+    serverLoad: 65
+  });
+
+  // Simulate real-time updates
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setMetrics(prev => ({
+        activeUsers: prev.activeUsers + Math.floor(Math.random() * 10 - 5),
+        salesPerMinute: Math.max(0, prev.salesPerMinute + Math.floor(Math.random() * 6 - 3)),
+        conversionRate: Math.max(0, prev.conversionRate + (Math.random() * 0.4 - 0.2)),
+        serverLoad: Math.max(0, Math.min(100, prev.serverLoad + Math.floor(Math.random() * 10 - 5)))
+      }));
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const realtimeData = [
+    { time: '00:00', users: 1200, sales: 850, orders: 45 },
+    { time: '00:05', users: 1350, sales: 920, orders: 52 },
+    { time: '00:10', users: 1480, sales: 1100, orders: 48 },
+    { time: '00:15', users: 1650, sales: 1250, orders: 61 },
+    { time: '00:20', users: 1820, sales: 1400, orders: 55 },
+    { time: '00:25', users: 2100, sales: 1650, orders: 68 },
+    { time: '00:30', users: 2345, sales: 1850, orders: 72 }
+  ];
+
+  return (
+    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-3xl font-bold text-gray-900">Real-time Metrics</h1>
+          <p className="text-gray-600 mt-1">Live platform performance dashboard</p>
+        </div>
+        <div className="flex space-x-2">
+          <Badge variant="default" className="bg-green-500">
+            <div className="w-2 h-2 bg-white rounded-full animate-pulse mr-2"></div>
+            Live
+          </Badge>
+          <Button>Export Data</Button>
+        </div>
       </div>
-    </div>
 
-    {/* Key Metrics Grid */}
-    <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-      <Card className="border-green-200 bg-green-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm flex items-center text-green-700">
-            <Users className="h-4 w-4 mr-2" />
-            Active Users
+      {/* Real-time Metrics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <Card className="bg-gradient-to-r from-blue-50 to-blue-100 border-blue-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-blue-600 text-sm font-medium flex items-center">
+                  <Activity className="w-4 h-4 mr-2" />
+                  Active Users
+                </p>
+                <p className="text-3xl font-bold text-blue-900">{metrics.activeUsers.toLocaleString()}</p>
+                <p className="text-sm text-blue-600">Currently online</p>
+              </div>
+              <div className="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center">
+                <Users className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-r from-green-50 to-green-100 border-green-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-green-600 text-sm font-medium flex items-center">
+                  <Zap className="w-4 h-4 mr-2" />
+                  Sales/Minute
+                </p>
+                <p className="text-3xl font-bold text-green-900">{metrics.salesPerMinute}</p>
+                <p className="text-sm text-green-600">Live transactions</p>
+              </div>
+              <div className="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center">
+                <ShoppingCart className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-r from-purple-50 to-purple-100 border-purple-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-purple-600 text-sm font-medium flex items-center">
+                  <TrendingUp className="w-4 h-4 mr-2" />
+                  Conversion Rate
+                </p>
+                <p className="text-3xl font-bold text-purple-900">{metrics.conversionRate.toFixed(1)}%</p>
+                <p className="text-sm text-purple-600">Real-time rate</p>
+              </div>
+              <div className="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center">
+                <Eye className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="bg-gradient-to-r from-orange-50 to-orange-100 border-orange-200">
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-orange-600 text-sm font-medium flex items-center">
+                  <Clock className="w-4 h-4 mr-2" />
+                  Server Load
+                </p>
+                <p className="text-3xl font-bold text-orange-900">{metrics.serverLoad}%</p>
+                <Progress value={metrics.serverLoad} className="mt-2" />
+              </div>
+              <div className="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center">
+                <Activity className="w-6 h-6 text-white" />
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
+
+      {/* Real-time Chart */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Activity className="w-5 h-5 mr-2" />
+            Live Activity Stream
           </CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="text-2xl font-bold text-green-600">1,234</div>
-          <div className="flex items-center mt-1">
-            <div className="w-2 h-2 bg-green-500 rounded-full animate-pulse mr-2"></div>
-            <span className="text-xs text-gray-500">+12% from last hour</span>
-          </div>
+          <ResponsiveContainer width="100%" height={400}>
+            <AreaChart data={realtimeData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="time" />
+              <YAxis />
+              <Tooltip />
+              <Area 
+                type="monotone" 
+                dataKey="users" 
+                stackId="1"
+                stroke="#8884d8" 
+                fill="#8884d8" 
+                fillOpacity={0.6} 
+                name="Active Users"
+              />
+              <Area 
+                type="monotone" 
+                dataKey="sales" 
+                stackId="2"
+                stroke="#82ca9d" 
+                fill="#82ca9d" 
+                fillOpacity={0.6} 
+                name="Sales (৳)"
+              />
+              <Area 
+                type="monotone" 
+                dataKey="orders" 
+                stackId="3"
+                stroke="#ffc658" 
+                fill="#ffc658" 
+                fillOpacity={0.6} 
+                name="Orders"
+              />
+            </AreaChart>
+          </ResponsiveContainer>
         </CardContent>
       </Card>
 
-      <Card className="border-blue-200 bg-blue-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm flex items-center text-blue-700">
-            <ShoppingCart className="h-4 w-4 mr-2" />
-            Orders/Hour
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-blue-600">89</div>
-          <div className="flex items-center mt-1">
-            <TrendingUp className="h-3 w-3 text-green-500 mr-1" />
-            <span className="text-xs text-gray-500">+5% increase</span>
-          </div>
-        </CardContent>
-      </Card>
+      {/* Live Events Feed */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle>Live Events Feed</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-3 max-h-96 overflow-y-auto">
+              {[
+                { type: 'sale', message: 'New order #12345 - Samsung Galaxy S23', amount: '৳85,000', time: 'Just now' },
+                { type: 'user', message: 'New user registration: john.doe@email.com', time: '2 min ago' },
+                { type: 'sale', message: 'Order completed #12344 - iPhone 14 Pro', amount: '৳125,000', time: '3 min ago' },
+                { type: 'alert', message: 'Low stock alert: MacBook Air M2', time: '5 min ago' },
+                { type: 'sale', message: 'New order #12343 - Nike Air Max', amount: '৳12,500', time: '7 min ago' }
+              ].map((event, index) => (
+                <div key={index} className="flex items-center justify-between p-3 border rounded-lg bg-gray-50">
+                  <div className="flex items-center space-x-3">
+                    <div className={`w-3 h-3 rounded-full ${
+                      event.type === 'sale' ? 'bg-green-500' : 
+                      event.type === 'user' ? 'bg-blue-500' : 'bg-yellow-500'
+                    }`}></div>
+                    <div>
+                      <p className="text-sm font-medium">{event.message}</p>
+                      {event.amount && <p className="text-xs text-green-600 font-bold">{event.amount}</p>}
+                    </div>
+                  </div>
+                  <span className="text-xs text-gray-500">{event.time}</span>
+                </div>
+              ))}
+            </div>
+          </CardContent>
+        </Card>
 
-      <Card className="border-purple-200 bg-purple-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm flex items-center text-purple-700">
-            <Zap className="h-4 w-4 mr-2" />
-            Server Load
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-purple-600">65%</div>
-          <Progress value={65} className="mt-2" />
-        </CardContent>
-      </Card>
-
-      <Card className="border-orange-200 bg-orange-50">
-        <CardHeader className="pb-2">
-          <CardTitle className="text-sm flex items-center text-orange-700">
-            <Eye className="h-4 w-4 mr-2" />
-            Page Views
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold text-orange-600">45.2K</div>
-          <span className="text-xs text-gray-500">Today</span>
-        </CardContent>
-      </Card>
-    </div>
-
-    {/* Live Activity Feed */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Clock className="h-5 w-5 mr-2" />
-          Live Activity Feed
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="space-y-3 max-h-96 overflow-y-auto">
-          {[
-            { action: 'New Order', user: 'Customer #1234', time: '2 seconds ago', type: 'order' },
-            { action: 'User Registration', user: 'john@example.com', time: '15 seconds ago', type: 'user' },
-            { action: 'Payment Received', user: 'Order #5678', time: '32 seconds ago', type: 'payment' },
-            { action: 'Product Review', user: 'Customer #9876', time: '1 minute ago', type: 'review' },
-            { action: 'Vendor Login', user: 'TechStore BD', time: '2 minutes ago', type: 'vendor' }
-          ].map((activity, index) => (
-            <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-              <div className="flex items-center space-x-3">
-                <Badge variant={
-                  activity.type === 'order' ? 'default' : 
-                  activity.type === 'payment' ? 'secondary' : 'outline'
-                }>
-                  {activity.type}
-                </Badge>
-                <div>
-                  <span className="text-sm font-medium">{activity.action}</span>
-                  <div className="text-xs text-gray-500">{activity.user}</div>
+        <Card>
+          <CardHeader>
+            <CardTitle>Performance Alerts</CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="space-y-4">
+              <div className="p-4 border-l-4 border-yellow-400 bg-yellow-50">
+                <div className="flex">
+                  <div className="ml-3">
+                    <p className="text-sm text-yellow-800">High Traffic Alert</p>
+                    <p className="text-xs text-yellow-600 mt-1">Traffic increased by 45% in the last hour</p>
+                  </div>
                 </div>
               </div>
-              <span className="text-xs text-gray-400">{activity.time}</span>
+              <div className="p-4 border-l-4 border-green-400 bg-green-50">
+                <div className="flex">
+                  <div className="ml-3">
+                    <p className="text-sm text-green-800">Sales Milestone</p>
+                    <p className="text-xs text-green-600 mt-1">Reached ৳1M in sales today</p>
+                  </div>
+                </div>
+              </div>
+              <div className="p-4 border-l-4 border-red-400 bg-red-50">
+                <div className="flex">
+                  <div className="ml-3">
+                    <p className="text-sm text-red-800">System Alert</p>
+                    <p className="text-xs text-red-600 mt-1">Database response time above threshold</p>
+                  </div>
+                </div>
+              </div>
             </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-
-    {/* Geographic Distribution */}
-    <Card>
-      <CardHeader>
-        <CardTitle className="flex items-center">
-          <Globe className="h-5 w-5 mr-2" />
-          Geographic Distribution (Live)
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-          {[
-            { city: 'Dhaka', users: 456, percentage: 45 },
-            { city: 'Chittagong', users: 234, percentage: 23 },
-            { city: 'Sylhet', users: 123, percentage: 12 },
-            { city: 'Rajshahi', users: 89, percentage: 9 }
-          ].map((location, index) => (
-            <div key={index} className="text-center p-3 border rounded-lg">
-              <div className="font-bold text-lg">{location.users}</div>
-              <div className="text-sm text-gray-600">{location.city}</div>
-              <Progress value={location.percentage} className="mt-2" />
-            </div>
-          ))}
-        </div>
-      </CardContent>
-    </Card>
-  </div>
-);
+          </CardContent>
+        </Card>
+      </div>
+    </div>
+  );
+};

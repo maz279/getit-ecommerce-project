@@ -12,6 +12,7 @@ import { CostAnalysisContent } from './salesManagement/CostAnalysisContent';
 import { ROITrackingContent } from './salesManagement/ROITrackingContent';
 import { DetailedReportsContent } from './salesManagement/DetailedReportsContent';
 import { ComparativeAnalysisContent } from './salesManagement/ComparativeAnalysisContent';
+import { ExportDataContent } from './salesManagement/ExportDataContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -49,6 +50,9 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'comparative-analysis':
         console.log('✅ Rendering ComparativeAnalysisContent');
         return <ComparativeAnalysisContent />;
+      case 'export-data':
+        console.log('✅ Rendering ExportDataContent');
+        return <ExportDataContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;

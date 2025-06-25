@@ -6,6 +6,7 @@ import { YearlySalesForm } from './YearlySalesForm';
 import { SalesOverviewContent } from './salesManagement/SalesOverviewContent';
 import { RevenueAnalyticsContent } from './salesManagement/RevenueAnalyticsContent';
 import { SalesForecastContent } from './salesManagement/SalesForecastContent';
+import { RevenueDashboardContent } from './salesManagement/RevenueDashboardContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -24,6 +25,9 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'forecast':
         console.log('✅ Rendering SalesForecastContent');
         return <SalesForecastContent />;
+      case 'revenue-dashboard':
+        console.log('✅ Rendering RevenueDashboardContent');
+        return <RevenueDashboardContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;
@@ -34,7 +38,6 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
         console.log('✅ Rendering YearlySalesForm');
         return <YearlySalesForm />;
       case 'revenue-analytics':
-      case 'revenue-dashboard':
         return <RevenueAnalyticsContent />;
       default:
         console.log('⚠️ SalesManagementContent - defaulting to sales overview for:', selectedSubmenu);

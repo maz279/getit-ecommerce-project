@@ -25,7 +25,7 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
     switch (selectedSubmenu) {
       case 'sales-overview':
       case 'sales':
-      case 'overview': // Add fallback for when coming from sales menu
+      case 'overview':
         return <SalesOverviewContent />;
       case 'sales-forecast':
       case 'forecast':
@@ -51,7 +51,7 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
         console.log('✅ Rendering ComparativeAnalysisContent');
         return <ComparativeAnalysisContent />;
       case 'export-data':
-        console.log('✅ Rendering ExportDataContent');
+        console.log('✅ Rendering ExportDataContent for export-data');
         return <ExportDataContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');

@@ -7,8 +7,13 @@ export const KPIMonitoringDashboard: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h1 className="text-4xl font-bold text-gray-900 mb-2">📊 KPI Monitoring Dashboard</h1>
-          <p className="text-gray-600 text-lg">Key Performance Indicators monitoring and analytics</p>
+          <p className="text-gray-600 text-lg">Key Performance Indicators monitoring and comprehensive analytics</p>
         </div>
+      </div>
+      
+      {/* Empty content as requested */}
+      <div className="bg-white rounded-lg shadow-sm border p-8 text-center">
+        <p className="text-gray-500">KPI monitoring content will be implemented here</p>
       </div>
     </div>
   );

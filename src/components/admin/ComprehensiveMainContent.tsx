@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
@@ -26,25 +27,22 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   console.log('ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
-    // Handle dashboard and its submenus - fixed routing logic
-    if (selectedMenu === 'dashboard' || 
-        ['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
+    // Handle dashboard and its submenus with proper routing
+    if (selectedMenu === 'dashboard') {
+      console.log('Dashboard section - submenu:', selectedSubmenu);
+      return <DashboardContent selectedSubmenu={selectedSubmenu} />;
+    }
+
+    // Handle specific dashboard submenus when they come in as selectedMenu
+    if (['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
          'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
          'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
          'system-logs', 'quick-actions', 'executive-summary'].includes(selectedMenu)) {
-      // Use selectedSubmenu when selectedMenu is 'dashboard', otherwise use selectedMenu as the submenu
-      const submenu = selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu;
-      console.log('DashboardContent will receive submenu:', submenu);
-      return <DashboardContent selectedSubmenu={submenu} />;
-    }
-
-    // Handle specific dashboard submenus that might come in as selectedMenu
-    if (['real-time-metrics', 'kpi-monitoring', 'performance-insights'].includes(selectedMenu)) {
-      console.log('Dashboard submenu detected, routing to:', selectedMenu);
+      console.log('Dashboard submenu detected as selectedMenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
-    // Handle user management - removed customer management references
+    // Handle user management
     if (selectedMenu === 'user-management' || selectedMenu.startsWith('admin-') || 
         ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
          'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedMenu)) {
@@ -69,7 +67,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <ProductManagementContent selectedSubmenu={selectedMenu === 'products' ? selectedSubmenu : selectedMenu} />;
     }
 
-    // Handle customer management (legacy - separate from user management)
+    // Handle customer management
     if (selectedMenu === 'customers' || selectedMenu.startsWith('customer-') || 
         ['customer-database', 'customer-analytics', 'customer-support', 'all-customers', 'customer-segments', 'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews'].includes(selectedMenu)) {
       return <CustomerManagementContent selectedSubmenu={selectedMenu === 'customers' ? selectedSubmenu : selectedMenu} />;
@@ -123,6 +121,8 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SettingsContent selectedSubmenu={selectedMenu === 'settings' ? selectedSubmenu : selectedMenu} />;
     }
 
+    // Default fallback
+    console.log('No matching menu found, defaulting to dashboard overview');
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

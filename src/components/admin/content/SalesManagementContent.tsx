@@ -5,6 +5,7 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
+import { DailySalesForm } from './forms/DailySalesForm';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -112,55 +113,6 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
     </div>
   );
 
-  const renderDailySales = () => (
-    <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Daily Sales Analytics</h1>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <TrendingUp className="h-5 w-5 mr-2" />
-              Today's Performance
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-3xl font-bold text-green-600 mb-2">৳456,789</div>
-            <Badge className="bg-green-100 text-green-800">+12.5% vs yesterday</Badge>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardHeader>
-            <CardTitle>Hourly Breakdown</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-32 bg-gradient-to-r from-blue-100 to-purple-100 rounded flex items-center justify-center">
-              <p className="text-gray-600">Hourly sales chart</p>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle>Peak Hours</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>2:00 PM - 4:00 PM</span>
-                <Badge>Peak</Badge>
-              </div>
-              <div className="flex justify-between">
-                <span>8:00 PM - 10:00 PM</span>
-                <Badge variant="secondary">High</Badge>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
-    </div>
-  );
-
   const renderRevenueAnalytics = () => (
     <div className="space-y-6">
       <h1 className="text-3xl font-bold text-gray-900">Revenue Analytics</h1>
@@ -211,12 +163,15 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
   );
 
   const getContent = () => {
+    console.log('🔍 SalesManagementContent - selectedSubmenu:', selectedSubmenu);
+    
     switch (selectedSubmenu) {
       case 'sales-overview':
       case 'sales':
         return renderSalesOverview();
       case 'daily-sales':
-        return renderDailySales();
+        console.log('✅ Rendering DailySalesForm');
+        return <DailySalesForm />;
       case 'revenue-analytics':
       case 'revenue-dashboard':
         return renderRevenueAnalytics();

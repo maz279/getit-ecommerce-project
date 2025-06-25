@@ -6,6 +6,7 @@ import { PermissionsManagementForm } from './forms/PermissionsManagementForm';
 import { ActivityLogsForm } from './forms/ActivityLogsForm';
 import { ActivityReportsForm } from './forms/ActivityReportsForm';
 import { RegistrationTrendsForm } from './forms/RegistrationTrendsForm';
+import { DemographicsForm } from './forms/DemographicsForm';
 import { AdminListManagement } from '../dashboard/sections/AdminListManagement';
 
 interface UserManagementContentProps {
@@ -45,8 +46,8 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
         console.log('✅ Rendering UserManagementForm for user-analytics');
         return <UserManagementForm />;
       case 'demographics':
-        console.log('✅ Rendering UserManagementForm for demographics');
-        return <UserManagementForm />;
+        console.log('✅ Rendering DemographicsForm for demographics');
+        return <DemographicsForm />;
       default:
         console.log('⚠️ No matching submenu, defaulting to AdminListManagement for admin users');
         console.log('   selectedSubmenu was:', selectedSubmenu);

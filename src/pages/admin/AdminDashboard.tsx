@@ -19,16 +19,44 @@ const AdminDashboard: React.FC = () => {
     avatar: null
   };
 
-  // Handle menu changes and set appropriate default submenu
+  // Enhanced menu change handler with better routing logic
   const handleMenuChange = (menu: string) => {
+    console.log('🎯 AdminDashboard handleMenuChange called with:', menu);
+    
+    // Handle compound menu items (menu-submenu format)
+    if (menu.includes('-')) {
+      const parts = menu.split('-');
+      console.log('🔍 Split menu parts:', parts);
+      
+      // Special handling for admin-related menus
+      if (menu === 'admin-users' || menu === 'admin-list') {
+        console.log('✅ Admin menu detected, setting user-management + submenu');
+        setSelectedMenu('user-management');
+        setSelectedSubmenu(menu);
+        return;
+      }
+      
+      // Handle other compound menus
+      if (parts.length >= 2) {
+        const [mainMenu, subMenu] = parts;
+        console.log(`🎯 Setting mainMenu: ${mainMenu}, subMenu: ${subMenu}`);
+        setSelectedMenu(mainMenu);
+        setSelectedSubmenu(subMenu);
+        return;
+      }
+    }
+
+    // Handle simple menu changes
     setSelectedMenu(menu);
+    console.log('📝 Menu set to:', menu);
+    
     // Set default submenu based on menu selection
     switch (menu) {
       case 'dashboard':
         setSelectedSubmenu('overview');
         break;
       case 'user-management':
-        setSelectedSubmenu('customer-management');
+        setSelectedSubmenu('admin-users'); // Default to admin users
         break;
       case 'vendor-management':
         setSelectedSubmenu('vendor-directory');
@@ -62,8 +90,9 @@ const AdminDashboard: React.FC = () => {
     }
   };
 
-  // Handle submenu changes for dashboard items
+  // Handle submenu changes
   const handleSubmenuChange = (submenu: string) => {
+    console.log('🎯 AdminDashboard handleSubmenuChange called with:', submenu);
     setSelectedSubmenu(submenu);
   };
 
@@ -78,15 +107,7 @@ const AdminDashboard: React.FC = () => {
           {/* Collapsible Sidebar */}
           <ComprehensiveAdminSidebar
             activeTab={selectedMenu}
-            setActiveTab={(tab: string) => {
-              if (tab.includes('-')) {
-                const [menu, submenu] = tab.split('-', 2);
-                setSelectedMenu(menu);
-                setSelectedSubmenu(submenu);
-              } else {
-                handleMenuChange(tab);
-              }
-            }}
+            setActiveTab={handleMenuChange}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />

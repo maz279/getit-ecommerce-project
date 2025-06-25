@@ -27,56 +27,32 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   console.log('🌟 ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
-    // Add comprehensive debugging for the admin list issue
     console.log('🔍 ComprehensiveMainContent renderContent Debug:');
     console.log('  - selectedMenu:', selectedMenu, '(type:', typeof selectedMenu, ')');
     console.log('  - selectedSubmenu:', selectedSubmenu, '(type:', typeof selectedSubmenu, ')');
     
-    // MAIN FIX: Handle the incorrectly split dashboard submenu names
-    // When sidebar passes "real" + "time", we need to reconstruct "real-time-metrics"
-    // When sidebar passes "kpi" + "monitoring", we need to reconstruct "kpi-monitoring"  
-    // When sidebar passes "performance" + "insights", we need to reconstruct "performance-insights"
+    // PRIORITY FIX: Handle admin-related routing FIRST
+    const adminRelatedMenus = ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 'user-analytics', 'registration-trends', 'activity-reports', 'demographics'];
     
-    let actualSubmenu = selectedSubmenu;
-    
-    if (selectedMenu === 'real' && selectedSubmenu === 'time') {
-      console.log('🔧 FIXING: real + time -> real-time-metrics');
-      actualSubmenu = 'real-time-metrics';
-    } else if (selectedMenu === 'kpi' && selectedSubmenu === 'monitoring') {
-      console.log('🔧 FIXING: kpi + monitoring -> kpi-monitoring');
-      actualSubmenu = 'kpi-monitoring';
-    } else if (selectedMenu === 'performance' && selectedSubmenu === 'insights') {
-      console.log('🔧 FIXING: performance + insights -> performance-insights');
-      actualSubmenu = 'performance-insights';
-    }
-
-    // FIX FOR ADMIN LIST ISSUE: Handle admin-users and admin-list specifically
-    if (selectedMenu === 'admin-users' || selectedMenu === 'admin-list' || selectedSubmenu === 'admin-users' || selectedSubmenu === 'admin-list') {
-      console.log('✅ ADMIN LIST DETECTED - routing to UserManagementContent');
+    if (adminRelatedMenus.includes(selectedSubmenu) || adminRelatedMenus.includes(selectedMenu)) {
+      console.log('✅ ADMIN ROUTING DETECTED - routing to UserManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
-      return <UserManagementContent selectedSubmenu={selectedMenu === 'admin-users' || selectedMenu === 'admin-list' ? selectedMenu : selectedSubmenu} />;
+      const submenuToPass = adminRelatedMenus.includes(selectedSubmenu) ? selectedSubmenu : selectedMenu;
+      console.log('   submenuToPass:', submenuToPass);
+      return <UserManagementContent selectedSubmenu={submenuToPass} />;
     }
 
-    // Handle dashboard and its submenus with proper routing
+    // Handle user-management explicitly
+    if (selectedMenu === 'user-management') {
+      console.log('✅ USER MANAGEMENT MAIN MENU - routing to UserManagementContent');
+      console.log('   selectedSubmenu:', selectedSubmenu);
+      return <UserManagementContent selectedSubmenu={selectedSubmenu} />;
+    }
+
+    // Handle dashboard and its submenus
     if (selectedMenu === 'dashboard') {
       console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
-    }
-
-    // Handle the reconstructed dashboard submenus
-    if (actualSubmenu === 'real-time-metrics') {
-      console.log('✅ Real-time metrics submenu detected');
-      return <DashboardContent selectedSubmenu="real-time-metrics" />;
-    }
-    
-    if (actualSubmenu === 'kpi-monitoring') {
-      console.log('✅ KPI monitoring submenu detected');
-      return <DashboardContent selectedSubmenu="kpi-monitoring" />;
-    }
-    
-    if (actualSubmenu === 'performance-insights') {
-      console.log('✅ Performance insights submenu detected');
-      return <DashboardContent selectedSubmenu="performance-insights" />;
     }
 
     // Handle specific dashboard submenus when they come in as selectedMenu
@@ -91,25 +67,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       console.log('✅ Dashboard submenu detected as selectedMenu:', selectedMenu);
       console.log('   Passing to DashboardContent with selectedSubmenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
-    }
-
-    // Handle user management - ENHANCED WITH BETTER ADMIN LIST DETECTION
-    if (selectedMenu === 'user-management' || 
-        selectedMenu.startsWith('admin-') || 
-        selectedSubmenu.startsWith('admin-') ||
-        ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
-         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedMenu) ||
-        ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
-         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedSubmenu)) {
-      
-      console.log('✅ USER MANAGEMENT DETECTED');
-      console.log('   selectedMenu:', selectedMenu);
-      console.log('   selectedSubmenu:', selectedSubmenu);
-      
-      const submenuToPass = selectedMenu === 'user-management' ? selectedSubmenu : selectedMenu;
-      console.log('   submenuToPass:', submenuToPass);
-      
-      return <UserManagementContent selectedSubmenu={submenuToPass} />;
     }
 
     // Handle sales management
@@ -188,7 +145,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     console.log('⚠️ No matching menu found, defaulting to dashboard overview');
     console.log('   selectedMenu was:', selectedMenu);
     console.log('   selectedSubmenu was:', selectedSubmenu);
-    console.log('   actualSubmenu was:', actualSubmenu);
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

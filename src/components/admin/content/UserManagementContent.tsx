@@ -43,9 +43,9 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
         console.log('✅ Rendering UserManagementForm for demographics');
         return <UserManagementForm />;
       default:
-        console.log('⚠️ No matching submenu, defaulting to UserManagementForm');
+        console.log('⚠️ No matching submenu, defaulting to AdminListManagement for admin users');
         console.log('   selectedSubmenu was:', selectedSubmenu);
-        return <UserManagementForm />;
+        return <AdminListManagement />;
     }
   };
 

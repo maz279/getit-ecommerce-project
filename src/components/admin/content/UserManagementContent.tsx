@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { UserManagementForm } from './forms/UserManagementForm';
+import { AdminListManagement } from '../dashboard/sections/AdminListManagement';
 
 interface UserManagementContentProps {
   selectedSubmenu: string;
@@ -13,6 +14,7 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
     switch (selectedSubmenu) {
       case 'admin-users':
       case 'admin-list':
+        return <AdminListManagement />;
       case 'role-management':
       case 'permissions':
       case 'activity-logs':

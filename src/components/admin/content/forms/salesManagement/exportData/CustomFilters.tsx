@@ -60,7 +60,7 @@ export const CustomFilters: React.FC<CustomFiltersProps> = ({
                 <SelectValue placeholder="All categories" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Categories</SelectItem>
+                <SelectItem value="all">All Categories</SelectItem>
                 <SelectItem value="electronics">Electronics</SelectItem>
                 <SelectItem value="fashion">Fashion</SelectItem>
                 <SelectItem value="home-garden">Home & Garden</SelectItem>
@@ -76,7 +76,7 @@ export const CustomFilters: React.FC<CustomFiltersProps> = ({
                 <SelectValue placeholder="All statuses" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">All Statuses</SelectItem>
+                <SelectItem value="all">All Statuses</SelectItem>
                 <SelectItem value="completed">Completed</SelectItem>
                 <SelectItem value="pending">Pending</SelectItem>
                 <SelectItem value="shipped">Shipped</SelectItem>

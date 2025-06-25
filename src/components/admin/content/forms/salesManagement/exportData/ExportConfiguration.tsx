@@ -57,7 +57,7 @@ export const ExportConfiguration: React.FC<ExportConfigurationProps> = ({
                 <SelectValue placeholder="Select a template" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">No Template</SelectItem>
+                <SelectItem value="none">No Template</SelectItem>
                 {exportTemplates.map((template) => (
                   <SelectItem key={template.id} value={template.id.toString()}>
                     {template.name}

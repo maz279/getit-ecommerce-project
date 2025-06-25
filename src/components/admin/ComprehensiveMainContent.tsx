@@ -27,7 +27,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   console.log('🌟 ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
-    // Add comprehensive debugging
+    // Add comprehensive debugging for the admin list issue
     console.log('🔍 ComprehensiveMainContent renderContent Debug:');
     console.log('  - selectedMenu:', selectedMenu, '(type:', typeof selectedMenu, ')');
     console.log('  - selectedSubmenu:', selectedSubmenu, '(type:', typeof selectedSubmenu, ')');
@@ -48,6 +48,13 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     } else if (selectedMenu === 'performance' && selectedSubmenu === 'insights') {
       console.log('🔧 FIXING: performance + insights -> performance-insights');
       actualSubmenu = 'performance-insights';
+    }
+
+    // FIX FOR ADMIN LIST ISSUE: Handle admin-users and admin-list specifically
+    if (selectedMenu === 'admin-users' || selectedMenu === 'admin-list' || selectedSubmenu === 'admin-users' || selectedSubmenu === 'admin-list') {
+      console.log('✅ ADMIN LIST DETECTED - routing to UserManagementContent');
+      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+      return <UserManagementContent selectedSubmenu={selectedMenu === 'admin-users' || selectedMenu === 'admin-list' ? selectedMenu : selectedSubmenu} />;
     }
 
     // Handle dashboard and its submenus with proper routing
@@ -86,11 +93,23 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
-    // Handle user management
-    if (selectedMenu === 'user-management' || selectedMenu.startsWith('admin-') || 
+    // Handle user management - ENHANCED WITH BETTER ADMIN LIST DETECTION
+    if (selectedMenu === 'user-management' || 
+        selectedMenu.startsWith('admin-') || 
+        selectedSubmenu.startsWith('admin-') ||
         ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
-         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedMenu)) {
-      return <UserManagementContent selectedSubmenu={selectedMenu === 'user-management' ? selectedSubmenu : selectedMenu} />;
+         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedMenu) ||
+        ['admin-users', 'admin-list', 'role-management', 'permissions', 'activity-logs', 
+         'user-analytics', 'registration-trends', 'activity-reports', 'demographics'].includes(selectedSubmenu)) {
+      
+      console.log('✅ USER MANAGEMENT DETECTED');
+      console.log('   selectedMenu:', selectedMenu);
+      console.log('   selectedSubmenu:', selectedSubmenu);
+      
+      const submenuToPass = selectedMenu === 'user-management' ? selectedSubmenu : selectedMenu;
+      console.log('   submenuToPass:', submenuToPass);
+      
+      return <UserManagementContent selectedSubmenu={submenuToPass} />;
     }
 
     // Handle sales management

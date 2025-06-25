@@ -15,7 +15,13 @@ import {
   CartesianGrid, 
   Tooltip, 
   Legend, 
-  ResponsiveContainer 
+  ResponsiveContainer,
+  RadarChart,
+  Radar,
+  PolarGrid,
+  PolarAngleAxis,
+  PolarRadiusAxis,
+  ComposedChart
 } from 'recharts';
 import { 
   TrendingUp, 
@@ -29,7 +35,15 @@ import {
   Download,
   Settings,
   Calendar,
-  Filter
+  Filter,
+  BarChart3,
+  PieChart as PieChartIcon,
+  Activity,
+  Globe,
+  Smartphone,
+  Clock,
+  ArrowUp,
+  ArrowDown
 } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -38,36 +52,59 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
+import { Progress } from '@/components/ui/progress';
 
 export const AnalyticsDashboard: React.FC = () => {
   const [selectedPeriod, setSelectedPeriod] = useState('7d');
   const [analyticsType, setAnalyticsType] = useState('sales');
 
-  // Sample data for analytics
+  // Enhanced sample data for analytics
   const salesData = [
-    { name: 'Jan', sales: 65000, profit: 28000, orders: 450 },
-    { name: 'Feb', sales: 75000, profit: 32000, orders: 520 },
-    { name: 'Mar', sales: 85000, profit: 38000, orders: 680 },
-    { name: 'Apr', sales: 95000, profit: 45000, orders: 750 },
-    { name: 'May', sales: 105000, profit: 52000, orders: 820 },
-    { name: 'Jun', sales: 125000, profit: 62000, orders: 950 }
+    { name: 'Jan', sales: 65000, profit: 28000, orders: 450, customers: 320 },
+    { name: 'Feb', sales: 75000, profit: 32000, orders: 520, customers: 380 },
+    { name: 'Mar', sales: 85000, profit: 38000, orders: 680, customers: 450 },
+    { name: 'Apr', sales: 95000, profit: 45000, orders: 750, customers: 520 },
+    { name: 'May', sales: 105000, profit: 52000, orders: 820, customers: 580 },
+    { name: 'Jun', sales: 125000, profit: 62000, orders: 950, customers: 650 }
   ];
 
   const categoryData = [
-    { name: 'Electronics', value: 35000, color: '#0088FE' },
-    { name: 'Fashion', value: 28000, color: '#00C49F' },
-    { name: 'Home & Garden', value: 22000, color: '#FFBB28' },
-    { name: 'Books', value: 15000, color: '#FF8042' },
-    { name: 'Sports', value: 12000, color: '#8884d8' }
+    { name: 'Electronics', value: 35000, color: '#0088FE', percentage: 31.2 },
+    { name: 'Fashion', value: 28000, color: '#00C49F', percentage: 25.0 },
+    { name: 'Home & Garden', value: 22000, color: '#FFBB28', percentage: 19.6 },
+    { name: 'Books', value: 15000, color: '#FF8042', percentage: 13.4 },
+    { name: 'Sports', value: 12000, color: '#8884d8', percentage: 10.7 }
   ];
 
   const customerBehaviorData = [
-    { time: '00:00', pageViews: 1200, uniqueVisitors: 850, bounceRate: 45 },
-    { time: '04:00', pageViews: 800, uniqueVisitors: 620, bounceRate: 48 },
-    { time: '08:00', pageViews: 2500, uniqueVisitors: 1800, bounceRate: 35 },
-    { time: '12:00', pageViews: 3200, uniqueVisitors: 2400, bounceRate: 28 },
-    { time: '16:00', pageViews: 2800, uniqueVisitors: 2100, bounceRate: 32 },
-    { time: '20:00', pageViews: 1800, uniqueVisitors: 1350, bounceRate: 40 }
+    { time: '00:00', pageViews: 1200, uniqueVisitors: 850, bounceRate: 45, sessionDuration: 3.2 },
+    { time: '04:00', pageViews: 800, uniqueVisitors: 620, bounceRate: 48, sessionDuration: 2.8 },
+    { time: '08:00', pageViews: 2500, uniqueVisitors: 1800, bounceRate: 35, sessionDuration: 4.1 },
+    { time: '12:00', pageViews: 3200, uniqueVisitors: 2400, bounceRate: 28, sessionDuration: 5.2 },
+    { time: '16:00', pageViews: 2800, uniqueVisitors: 2100, bounceRate: 32, sessionDuration: 4.8 },
+    { time: '20:00', pageViews: 1800, uniqueVisitors: 1350, bounceRate: 40, sessionDuration: 3.5 }
+  ];
+
+  const performanceMetrics = [
+    { metric: 'Conversion Rate', value: 3.2, target: 4.0, trend: 'up' },
+    { metric: 'Customer Satisfaction', value: 4.6, target: 4.8, trend: 'up' },
+    { metric: 'Page Load Speed', value: 2.1, target: 1.5, trend: 'down' },
+    { metric: 'Cart Abandonment', value: 68.5, target: 60.0, trend: 'down' },
+    { metric: 'Return Rate', value: 3.2, target: 2.5, trend: 'down' },
+  ];
+
+  const trafficSources = [
+    { source: 'Organic Search', visitors: 45000, percentage: 42.5, color: '#8884d8' },
+    { source: 'Direct', visitors: 28000, percentage: 26.4, color: '#82ca9d' },
+    { source: 'Social Media', visitors: 18000, percentage: 17.0, color: '#ffc658' },
+    { source: 'Paid Ads', visitors: 12000, percentage: 11.3, color: '#ff7300' },
+    { source: 'Email', visitors: 3000, percentage: 2.8, color: '#00ff88' }
+  ];
+
+  const deviceAnalytics = [
+    { device: 'Mobile', sessions: 58000, percentage: 52.3, color: '#0088FE' },
+    { device: 'Desktop', sessions: 42000, percentage: 37.8, color: '#00C49F' },
+    { device: 'Tablet', sessions: 11000, percentage: 9.9, color: '#FFBB28' }
   ];
 
   return (
@@ -101,13 +138,46 @@ export const AnalyticsDashboard: React.FC = () => {
         </div>
       </div>
 
+      {/* Key Metrics Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6 mb-8">
+        {[
+          { title: 'Total Revenue', value: '৳2,450,000', change: '+12.5%', trend: 'up', icon: DollarSign, color: 'text-green-600' },
+          { title: 'Total Orders', value: '4,165', change: '+8.2%', trend: 'up', icon: ShoppingCart, color: 'text-blue-600' },
+          { title: 'New Customers', value: '1,823', change: '+15.3%', trend: 'up', icon: Users, color: 'text-purple-600' },
+          { title: 'Page Views', value: '156,789', change: '-2.1%', trend: 'down', icon: Eye, color: 'text-orange-600' },
+          { title: 'Conversion Rate', value: '3.2%', change: '+0.5%', trend: 'up', icon: Target, color: 'text-indigo-600' }
+        ].map((metric, index) => {
+          const IconComponent = metric.icon;
+          const TrendIcon = metric.trend === 'up' ? ArrowUp : ArrowDown;
+          
+          return (
+            <Card key={index} className="relative overflow-hidden">
+              <CardContent className="p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <div className={`p-3 rounded-full bg-gray-100`}>
+                    <IconComponent className={`w-6 h-6 ${metric.color}`} />
+                  </div>
+                  <div className={`flex items-center text-sm ${metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                    <TrendIcon className="w-4 h-4 mr-1" />
+                    {metric.change}
+                  </div>
+                </div>
+                <h3 className="text-sm font-medium text-gray-500 mb-1">{metric.title}</h3>
+                <p className="text-2xl font-bold text-gray-900">{metric.value}</p>
+              </CardContent>
+            </Card>
+          );
+        })}
+      </div>
+
       {/* Analytics Tabs */}
       <Tabs value={analyticsType} onValueChange={setAnalyticsType} className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
+        <TabsList className="grid w-full grid-cols-5">
           <TabsTrigger value="sales">Sales Analytics</TabsTrigger>
           <TabsTrigger value="customer">Customer Analytics</TabsTrigger>
+          <TabsTrigger value="traffic">Traffic Analytics</TabsTrigger>
           <TabsTrigger value="product">Product Analytics</TabsTrigger>
-          <TabsTrigger value="marketing">Marketing Analytics</TabsTrigger>
+          <TabsTrigger value="performance">Performance Analytics</TabsTrigger>
         </TabsList>
 
         {/* Sales Analytics */}
@@ -115,18 +185,19 @@ export const AnalyticsDashboard: React.FC = () => {
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Sales Trend Analysis</CardTitle>
+                <CardTitle>Revenue & Profit Trend</CardTitle>
               </CardHeader>
               <CardContent>
                 <ResponsiveContainer width="100%" height={300}>
-                  <AreaChart data={salesData}>
+                  <ComposedChart data={salesData}>
                     <CartesianGrid strokeDasharray="3 3" />
                     <XAxis dataKey="name" />
                     <YAxis />
                     <Tooltip />
-                    <Area type="monotone" dataKey="sales" stackId="1" stroke="#8884d8" fill="#8884d8" />
-                    <Area type="monotone" dataKey="profit" stackId="1" stroke="#82ca9d" fill="#82ca9d" />
-                  </AreaChart>
+                    <Legend />
+                    <Bar dataKey="sales" fill="#8884d8" name="Sales" />
+                    <Line type="monotone" dataKey="profit" stroke="#82ca9d" name="Profit" strokeWidth={3} />
+                  </ComposedChart>
                 </ResponsiveContainer>
               </CardContent>
             </Card>
@@ -145,13 +216,13 @@ export const AnalyticsDashboard: React.FC = () => {
                       outerRadius={80}
                       fill="#8884d8"
                       dataKey="value"
+                      label={({ name, percentage }) => `${name}: ${percentage}%`}
                     >
                       {categoryData.map((entry, index) => (
                         <Cell key={`cell-${index}`} fill={entry.color} />
                       ))}
                     </Pie>
-                    <Tooltip />
-                    <Legend />
+                    <Tooltip formatter={(value) => [`৳${value.toLocaleString()}`, 'Sales']} />
                   </PieChart>
                 </ResponsiveContainer>
               </CardContent>
@@ -161,10 +232,10 @@ export const AnalyticsDashboard: React.FC = () => {
           {/* Sales Data Entry Form */}
           <Card>
             <CardHeader>
-              <CardTitle>Manual Sales Entry</CardTitle>
+              <CardTitle>Manual Sales Data Entry</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
                 <div>
                   <Label htmlFor="sale-amount">Sale Amount (৳)</Label>
                   <Input id="sale-amount" type="number" placeholder="0.00" />
@@ -179,12 +250,18 @@ export const AnalyticsDashboard: React.FC = () => {
                       <SelectItem value="electronics">Electronics</SelectItem>
                       <SelectItem value="fashion">Fashion</SelectItem>
                       <SelectItem value="home">Home & Garden</SelectItem>
+                      <SelectItem value="books">Books</SelectItem>
+                      <SelectItem value="sports">Sports</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <div>
                   <Label htmlFor="sale-date">Date</Label>
                   <Input id="sale-date" type="date" />
+                </div>
+                <div>
+                  <Label htmlFor="customer-id">Customer ID</Label>
+                  <Input id="customer-id" placeholder="Optional" />
                 </div>
                 <div className="flex items-end">
                   <Button className="w-full">Add Sale Record</Button>
@@ -196,54 +273,175 @@ export const AnalyticsDashboard: React.FC = () => {
 
         {/* Customer Analytics */}
         <TabsContent value="customer" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Customer Behavior Analysis</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <ResponsiveContainer width="100%" height={300}>
-                <LineChart data={customerBehaviorData}>
-                  <CartesianGrid strokeDasharray="3 3" />
-                  <XAxis dataKey="time" />
-                  <YAxis />
-                  <Tooltip />
-                  <Legend />
-                  <Line type="monotone" dataKey="pageViews" stroke="#8884d8" />
-                  <Line type="monotone" dataKey="uniqueVisitors" stroke="#82ca9d" />
-                  <Line type="monotone" dataKey="bounceRate" stroke="#ffc658" />
-                </LineChart>
-              </ResponsiveContainer>
-            </CardContent>
-          </Card>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Customer Behavior Over Time</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <LineChart data={customerBehaviorData}>
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis dataKey="time" />
+                    <YAxis />
+                    <Tooltip />
+                    <Legend />
+                    <Line type="monotone" dataKey="pageViews" stroke="#8884d8" name="Page Views" />
+                    <Line type="monotone" dataKey="uniqueVisitors" stroke="#82ca9d" name="Unique Visitors" />
+                    <Line type="monotone" dataKey="sessionDuration" stroke="#ffc658" name="Avg Session (min)" />
+                  </LineChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
 
-          {/* Customer Feedback Form */}
+            <Card>
+              <CardHeader>
+                <CardTitle>Customer Segments</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  {[
+                    { segment: 'VIP Customers', count: 1250, percentage: 8.5, color: 'bg-purple-500' },
+                    { segment: 'Regular Customers', count: 6800, percentage: 46.2, color: 'bg-blue-500' },
+                    { segment: 'New Customers', count: 4200, percentage: 28.5, color: 'bg-green-500' },
+                    { segment: 'Inactive Customers', count: 2480, percentage: 16.8, color: 'bg-gray-500' }
+                  ].map((item, index) => (
+                    <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
+                      <div className="flex items-center space-x-3">
+                        <div className={`w-4 h-4 rounded ${item.color}`}></div>
+                        <span className="font-medium">{item.segment}</span>
+                      </div>
+                      <div className="text-right">
+                        <p className="font-bold">{item.count.toLocaleString()}</p>
+                        <p className="text-sm text-gray-500">{item.percentage}%</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Customer Data Entry Form */}
           <Card>
             <CardHeader>
-              <CardTitle>Customer Feedback Analysis</CardTitle>
+              <CardTitle>Customer Analytics Data Entry</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                 <div>
-                  <Label htmlFor="customer-id">Customer ID</Label>
-                  <Input id="customer-id" placeholder="Enter customer ID" />
-                </div>
-                <div>
-                  <Label htmlFor="feedback-rating">Rating</Label>
+                  <Label htmlFor="customer-segment">Customer Segment</Label>
                   <Select>
                     <SelectTrigger>
-                      <SelectValue placeholder="Select rating" />
+                      <SelectValue placeholder="Select segment" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="5">5 Stars</SelectItem>
-                      <SelectItem value="4">4 Stars</SelectItem>
-                      <SelectItem value="3">3 Stars</SelectItem>
-                      <SelectItem value="2">2 Stars</SelectItem>
-                      <SelectItem value="1">1 Star</SelectItem>
+                      <SelectItem value="vip">VIP Customer</SelectItem>
+                      <SelectItem value="regular">Regular Customer</SelectItem>
+                      <SelectItem value="new">New Customer</SelectItem>
+                      <SelectItem value="inactive">Inactive Customer</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
+                <div>
+                  <Label htmlFor="customer-value">Customer Value (৳)</Label>
+                  <Input id="customer-value" type="number" placeholder="0.00" />
+                </div>
+                <div>
+                  <Label htmlFor="engagement-score">Engagement Score</Label>
+                  <Input id="engagement-score" type="number" min="1" max="10" placeholder="1-10" />
+                </div>
                 <div className="flex items-end">
-                  <Button className="w-full">Analyze Feedback</Button>
+                  <Button className="w-full">Update Customer Data</Button>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        {/* Traffic Analytics */}
+        <TabsContent value="traffic" className="space-y-6">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Traffic Sources</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <BarChart data={trafficSources} layout="horizontal">
+                    <CartesianGrid strokeDasharray="3 3" />
+                    <XAxis type="number" />
+                    <YAxis dataKey="source" type="category" width={100} />
+                    <Tooltip />
+                    <Bar dataKey="visitors" fill="#8884d8" />
+                  </BarChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Device Analytics</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <ResponsiveContainer width="100%" height={300}>
+                  <PieChart>
+                    <Pie
+                      data={deviceAnalytics}
+                      cx="50%"
+                      cy="50%"
+                      outerRadius={80}
+                      fill="#8884d8"
+                      dataKey="sessions"
+                      label={({ device, percentage }) => `${device}: ${percentage}%`}
+                    >
+                      {deviceAnalytics.map((entry, index) => (
+                        <Cell key={`cell-${index}`} fill={entry.color} />
+                      ))}
+                    </Pie>
+                    <Tooltip formatter={(value) => [value.toLocaleString(), 'Sessions']} />
+                  </PieChart>
+                </ResponsiveContainer>
+              </CardContent>
+            </Card>
+          </div>
+
+          {/* Traffic Data Entry Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Traffic Analytics Data Entry</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-5 gap-4">
+                <div>
+                  <Label htmlFor="traffic-source">Traffic Source</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select source" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="organic">Organic Search</SelectItem>
+                      <SelectItem value="direct">Direct</SelectItem>
+                      <SelectItem value="social">Social Media</SelectItem>
+                      <SelectItem value="paid">Paid Ads</SelectItem>
+                      <SelectItem value="email">Email</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="visitors-count">Visitors</Label>
+                  <Input id="visitors-count" type="number" placeholder="0" />
+                </div>
+                <div>
+                  <Label htmlFor="bounce-rate">Bounce Rate (%)</Label>
+                  <Input id="bounce-rate" type="number" placeholder="0" />
+                </div>
+                <div>
+                  <Label htmlFor="avg-session">Avg Session Duration (min)</Label>
+                  <Input id="avg-session" type="number" step="0.1" placeholder="0.0" />
+                </div>
+                <div className="flex items-end">
+                  <Button className="w-full">Add Traffic Data</Button>
                 </div>
               </div>
             </CardContent>
@@ -257,54 +455,130 @@ export const AnalyticsDashboard: React.FC = () => {
               <CardTitle>Product Performance Metrics</CardTitle>
             </CardHeader>
             <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+                {[
+                  { title: 'Total Products', value: '12,456', change: '+234', icon: Package, color: 'text-blue-600' },
+                  { title: 'Best Sellers', value: '1,847', change: '+89', icon: TrendingUp, color: 'text-green-600' },
+                  { title: 'Low Stock Items', value: '156', change: '-23', icon: AlertTriangle, color: 'text-orange-600' },
+                  { title: 'Out of Stock', value: '34', change: '-12', icon: XCircle, color: 'text-red-600' }
+                ].map((metric, index) => {
+                  const IconComponent = metric.icon;
+                  return (
+                    <div key={index} className="text-center p-6 border rounded-lg bg-white">
+                      <div className={`mx-auto mb-4 p-3 rounded-full bg-gray-100 w-fit`}>
+                        <IconComponent className={`w-8 h-8 ${metric.color}`} />
+                      </div>
+                      <h3 className="text-2xl font-bold text-gray-900 mb-1">{metric.value}</h3>
+                      <p className="text-gray-600 mb-2">{metric.title}</p>
+                      <Badge variant="outline" className="text-sm">
+                        {metric.change} this month
+                      </Badge>
+                    </div>
+                  );
+                })}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Product Data Entry Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Product Analytics Data Entry</CardTitle>
+            </CardHeader>
+            <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-                <div className="text-center p-4 border rounded-lg">
-                  <h3 className="text-2xl font-bold text-blue-600">156,789</h3>
-                  <p className="text-gray-600">Total Products</p>
+                <div>
+                  <Label htmlFor="product-category">Product Category</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select category" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="electronics">Electronics</SelectItem>
+                      <SelectItem value="fashion">Fashion</SelectItem>
+                      <SelectItem value="home">Home & Garden</SelectItem>
+                      <SelectItem value="books">Books</SelectItem>
+                    </SelectContent>
+                  </Select>
                 </div>
-                <div className="text-center p-4 border rounded-lg">
-                  <h3 className="text-2xl font-bold text-green-600">98.5%</h3>
-                  <p className="text-gray-600">In Stock</p>
+                <div>
+                  <Label htmlFor="product-views">Product Views</Label>
+                  <Input id="product-views" type="number" placeholder="0" />
                 </div>
-                <div className="text-center p-4 border rounded-lg">
-                  <h3 className="text-2xl font-bold text-orange-600">2,345</h3>
-                  <p className="text-gray-600">Low Stock</p>
+                <div>
+                  <Label htmlFor="conversion-rate">Conversion Rate (%)</Label>
+                  <Input id="conversion-rate" type="number" step="0.1" placeholder="0.0" />
                 </div>
-                <div className="text-center p-4 border rounded-lg">
-                  <h3 className="text-2xl font-bold text-red-600">456</h3>
-                  <p className="text-gray-600">Out of Stock</p>
+                <div className="flex items-end">
+                  <Button className="w-full">Update Product Analytics</Button>
                 </div>
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Marketing Analytics */}
-        <TabsContent value="marketing" className="space-y-6">
+        {/* Performance Analytics */}
+        <TabsContent value="performance" className="space-y-6">
           <Card>
             <CardHeader>
-              <CardTitle>Campaign Performance</CardTitle>
+              <CardTitle>Performance Metrics Overview</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-4">
-                {[
-                  { name: 'Summer Sale 2024', clicks: 12500, conversions: 850, ctr: '6.8%', status: 'Active' },
-                  { name: 'Electronics Mega Deal', clicks: 8900, conversions: 620, ctr: '7.0%', status: 'Active' },
-                  { name: 'Fashion Week Special', clicks: 6700, conversions: 480, ctr: '7.2%', status: 'Completed' }
-                ].map((campaign, index) => (
+              <div className="space-y-6">
+                {performanceMetrics.map((metric, index) => (
                   <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <h4 className="font-semibold">{campaign.name}</h4>
-                      <p className="text-sm text-gray-600">{campaign.clicks} clicks • {campaign.conversions} conversions</p>
+                    <div className="flex-1">
+                      <h4 className="font-semibold text-gray-900 mb-2">{metric.metric}</h4>
+                      <div className="flex items-center space-x-4">
+                        <span className="text-2xl font-bold">{metric.value}</span>
+                        <span className="text-sm text-gray-500">Target: {metric.target}</span>
+                      </div>
+                      <Progress 
+                        value={(metric.value / metric.target) * 100} 
+                        className="mt-2 h-2" 
+                      />
                     </div>
-                    <div className="flex items-center space-x-4">
-                      <span className="text-lg font-bold">{campaign.ctr}</span>
-                      <Badge variant={campaign.status === 'Active' ? 'default' : 'secondary'}>
-                        {campaign.status}
-                      </Badge>
+                    <div className={`ml-4 flex items-center ${metric.trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                      {metric.trend === 'up' ? <ArrowUp className="w-5 h-5" /> : <ArrowDown className="w-5 h-5" />}
                     </div>
                   </div>
                 ))}
+              </div>
+            </CardContent>
+          </Card>
+
+          {/* Performance Data Entry Form */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Performance Metrics Data Entry</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+                <div>
+                  <Label htmlFor="metric-type">Metric Type</Label>
+                  <Select>
+                    <SelectTrigger>
+                      <SelectValue placeholder="Select metric" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="conversion">Conversion Rate</SelectItem>
+                      <SelectItem value="satisfaction">Customer Satisfaction</SelectItem>
+                      <SelectItem value="load-speed">Page Load Speed</SelectItem>
+                      <SelectItem value="abandonment">Cart Abandonment</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div>
+                  <Label htmlFor="metric-value">Current Value</Label>
+                  <Input id="metric-value" type="number" step="0.1" placeholder="0.0" />
+                </div>
+                <div>
+                  <Label htmlFor="target-value">Target Value</Label>
+                  <Input id="target-value" type="number" step="0.1" placeholder="0.0" />
+                </div>
+                <div className="flex items-end">
+                  <Button className="w-full">Update Performance Metric</Button>
+                </div>
               </div>
             </CardContent>
           </Card>

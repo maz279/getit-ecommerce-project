@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
@@ -27,8 +28,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   
   const renderContent = () => {
     // Handle dashboard and its submenus - this is the key fix
-    if (selectedMenu === 'dashboard') {
-      return <DashboardContent selectedSubmenu={selectedSubmenu} />;
+    if (selectedMenu === 'dashboard' || 
+        ['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
+         'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
+         'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
+         'system-logs', 'quick-actions', 'executive-summary'].includes(selectedMenu)) {
+      // If selectedMenu is a dashboard submenu, pass it as selectedSubmenu
+      const submenu = selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu;
+      return <DashboardContent selectedSubmenu={submenu} />;
     }
 
     // Handle user management - removed customer management references
@@ -74,7 +81,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <MarketingContent selectedSubmenu={selectedMenu === 'marketing' ? selectedSubmenu : selectedMenu} />;
     }
 
-    // Handle analytics
+    // Handle analytics (separate from dashboard analytics)
     if (selectedMenu === 'analytics' || selectedMenu.startsWith('analytics-') || selectedMenu.startsWith('business-') || selectedMenu.startsWith('financial-') || selectedMenu.startsWith('operational-') || 
         ['business-intelligence', 'financial-reports', 'operational-reports', 'executive-dashboard', 'key-metrics', 'trend-analysis', 'predictive-analytics', 'profit-loss', 'cash-flow', 'tax-reports', 'audit-reports', 'inventory-reports', 'shipping-reports', 'performance-reports'].includes(selectedMenu)) {
       return <AnalyticsContent selectedSubmenu={selectedMenu === 'analytics' ? selectedSubmenu : selectedMenu} />;

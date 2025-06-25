@@ -26,10 +26,9 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
   console.log('ComprehensiveMainContent - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
   const renderContent = () => {
-    // Handle dashboard and its submenus
-    if (selectedMenu === 'dashboard' || selectedMenu.startsWith('dashboard-') || 
-        ['overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights'].includes(selectedMenu)) {
-      return <DashboardContent selectedSubmenu={selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu} />;
+    // Handle dashboard and its submenus - this is the key fix
+    if (selectedMenu === 'dashboard') {
+      return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     }
 
     // Handle user management - removed customer management references
@@ -111,7 +110,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SettingsContent selectedSubmenu={selectedMenu === 'settings' ? selectedSubmenu : selectedMenu} />;
     }
 
-    // Default to dashboard
+    // Default to dashboard with overview submenu
     return <DashboardContent selectedSubmenu="overview" />;
   };
 

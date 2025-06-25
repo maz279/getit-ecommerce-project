@@ -5,6 +5,7 @@ import { OrderSearchContent } from './forms/orderManagement/OrderSearchContent';
 import { OrderProcessingContent } from './forms/orderManagement/OrderProcessingContent';
 import { OrderTrackingContent } from './forms/orderManagement/OrderTrackingContent';
 import { OrderSubmenuContent } from './forms/orderManagement/OrderSubmenuContent';
+import { OrderTimelineContent } from './forms/orderManagement/OrderTimelineContent';
 
 interface OrderManagementContentProps {
   selectedSubmenu: string;
@@ -18,6 +19,9 @@ export const OrderManagementContent: React.FC<OrderManagementContentProps> = ({ 
       case 'order-search':
       case 'search':
         return <OrderSearchContent />;
+      case 'order-timeline':
+      case 'timeline':
+        return <OrderTimelineContent />;
       case 'order-overview':
       case 'order-processing':
       case 'orders':

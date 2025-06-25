@@ -38,6 +38,15 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
+    // Define order-management related submenus
+    const orderManagementSubmenus = [
+      'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
+      'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
+      'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
+      'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests',
+      'order-analytics', 'order-reports', 'fulfillment-center'
+    ];
+    
     // Check if this is a user-management submenu
     if (userManagementSubmenus.includes(menu)) {
       console.log('✅ User management submenu detected:', menu);
@@ -54,9 +63,20 @@ const AdminDashboard: React.FC = () => {
       return;
     }
     
+    // Check if this is an order-management submenu
+    if (orderManagementSubmenus.includes(menu)) {
+      console.log('✅ Order management submenu detected:', menu);
+      setSelectedMenu('order-management');
+      setSelectedSubmenu(menu);
+      return;
+    }
+    
     // Handle compound menu items (menu-submenu format) for other cases
-    // BUT SKIP sales and user management ones as they're handled above
-    if (menu.includes('-') && !salesManagementSubmenus.includes(menu) && !userManagementSubmenus.includes(menu)) {
+    // BUT SKIP sales, user management, and order management ones as they're handled above
+    if (menu.includes('-') && 
+        !salesManagementSubmenus.includes(menu) && 
+        !userManagementSubmenus.includes(menu) &&
+        !orderManagementSubmenus.includes(menu)) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
@@ -86,14 +106,14 @@ const AdminDashboard: React.FC = () => {
       case 'sales-management':
         setSelectedSubmenu('sales-overview'); // Default to sales overview
         break;
+      case 'order-management':
+        setSelectedSubmenu('order-overview'); // Default to order overview
+        break;
       case 'vendor-management':
         setSelectedSubmenu('vendor-directory');
         break;
       case 'product-management':
         setSelectedSubmenu('product-catalog');
-        break;
-      case 'order-management':
-        setSelectedSubmenu('order-overview');
         break;
       case 'analytics-reports':
         setSelectedSubmenu('business-intelligence');

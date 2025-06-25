@@ -54,6 +54,21 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SalesManagementContent selectedSubmenu={submenu} />;
     }
 
+    // Handle order management and order-related submenus
+    if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu.startsWith('order-') || 
+        ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center'].includes(selectedMenu)) {
+      console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');
+      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+      
+      // If selectedMenu is an order submenu, pass it as selectedSubmenu
+      const submenu = ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center'].includes(selectedMenu) 
+        ? selectedMenu 
+        : selectedSubmenu;
+      
+      console.log('   Final submenu passed:', submenu);
+      return <OrderManagementContent selectedSubmenu={submenu} />;
+    }
+
     // Handle dashboard and its submenus
     if (selectedMenu === 'dashboard') {
       console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
@@ -72,12 +87,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       console.log('✅ Dashboard submenu detected as selectedMenu:', selectedMenu);
       console.log('   Passing to DashboardContent with selectedSubmenu:', selectedMenu);
       return <DashboardContent selectedSubmenu={selectedMenu} />;
-    }
-
-    // Handle order management
-    if (selectedMenu === 'orders' || selectedMenu.startsWith('order-') || 
-        ['order-processing', 'order-tracking', 'returns-refunds', 'new-orders', 'pending-orders', 'confirmed-orders', 'shipped-orders', 'delivered-orders', 'live-tracking', 'delivery-status', 'shipment-updates', 'return-requests', 'refund-processing', 'exchange-requests'].includes(selectedMenu)) {
-      return <OrderManagementContent selectedSubmenu={selectedMenu === 'orders' ? selectedSubmenu : selectedMenu} />;
     }
 
     // Handle product management

@@ -1,8 +1,7 @@
-
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
-import { SalesManagementContent } from './content/SalesManagementContent';
+import { SalesManagementContent } from './content/forms/SalesManagementContent';
 import { OrderManagementContent } from './content/OrderManagementContent';
 import { ProductManagementContent } from './content/ProductManagementContent';
 import { CustomerManagementContent } from './content/CustomerManagementContent';
@@ -41,12 +40,12 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     // Handle sales management and sales-related submenus
     if (selectedMenu === 'sales' || selectedMenu === 'sales-management' || 
         selectedMenu.startsWith('sales-') || 
-        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard'].includes(selectedMenu)) {
+        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast'].includes(selectedMenu)) {
       console.log('✅ SALES MANAGEMENT - routing to SalesManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a sales submenu, pass it as selectedSubmenu
-      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard'].includes(selectedMenu) 
+      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       

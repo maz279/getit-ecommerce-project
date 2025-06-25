@@ -5,6 +5,7 @@ import { MonthlySalesForm } from './MonthlySalesForm';
 import { YearlySalesForm } from './YearlySalesForm';
 import { SalesOverviewContent } from './salesManagement/SalesOverviewContent';
 import { RevenueAnalyticsContent } from './salesManagement/RevenueAnalyticsContent';
+import { SalesForecastContent } from './salesManagement/SalesForecastContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -19,6 +20,10 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'sales':
       case 'overview': // Add fallback for when coming from sales menu
         return <SalesOverviewContent />;
+      case 'sales-forecast':
+      case 'forecast':
+        console.log('✅ Rendering SalesForecastContent');
+        return <SalesForecastContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;

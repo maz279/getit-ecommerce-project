@@ -10,6 +10,7 @@ import { RevenueDashboardContent } from './salesManagement/RevenueDashboardConte
 import { ProfitMarginContent } from './salesManagement/ProfitMarginContent';
 import { CostAnalysisContent } from './salesManagement/CostAnalysisContent';
 import { ROITrackingContent } from './salesManagement/ROITrackingContent';
+import { DetailedReportsContent } from './salesManagement/DetailedReportsContent';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -40,6 +41,10 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'roi-tracking':
         console.log('✅ Rendering ROITrackingContent');
         return <ROITrackingContent />;
+      case 'detailed-reports':
+      case 'sales-reports':
+        console.log('✅ Rendering DetailedReportsContent');
+        return <DetailedReportsContent />;
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;

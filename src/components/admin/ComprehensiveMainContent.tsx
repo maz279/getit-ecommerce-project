@@ -41,12 +41,12 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     // Handle sales management and sales-related submenus
     if (selectedMenu === 'sales' || selectedMenu === 'sales-management' || 
         selectedMenu.startsWith('sales-') || 
-        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking'].includes(selectedMenu)) {
+        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports'].includes(selectedMenu)) {
       console.log('✅ SALES MANAGEMENT - routing to SalesManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a sales submenu, pass it as selectedSubmenu
-      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking'].includes(selectedMenu) 
+      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       

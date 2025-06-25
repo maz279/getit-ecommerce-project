@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { TrendingUp, DollarSign, BarChart3, PieChart, Download, RefreshCw } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -6,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { DailySalesForm } from './forms/DailySalesForm';
+import { MonthlySalesForm } from './forms/MonthlySalesForm';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -173,16 +173,12 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;
+      case 'monthly-trends':
+        console.log('✅ Rendering MonthlySalesForm');
+        return <MonthlySalesForm />;
       case 'revenue-analytics':
       case 'revenue-dashboard':
         return renderRevenueAnalytics();
-      case 'monthly-trends':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Monthly Sales Trends</h1>
-            <p className="text-gray-600">Monthly trends analysis and forecasting...</p>
-          </div>
-        );
       case 'yearly-reports':
         return (
           <div className="p-6">

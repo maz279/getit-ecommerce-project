@@ -6,6 +6,7 @@ import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { DailySalesForm } from './forms/DailySalesForm';
 import { MonthlySalesForm } from './forms/MonthlySalesForm';
+import { YearlySalesForm } from './forms/YearlySalesForm';
 
 interface SalesManagementContentProps {
   selectedSubmenu: string;
@@ -176,16 +177,12 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'monthly-trends':
         console.log('✅ Rendering MonthlySalesForm');
         return <MonthlySalesForm />;
+      case 'yearly-reports':
+        console.log('✅ Rendering YearlySalesForm');
+        return <YearlySalesForm />;
       case 'revenue-analytics':
       case 'revenue-dashboard':
         return renderRevenueAnalytics();
-      case 'yearly-reports':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Yearly Sales Reports</h1>
-            <p className="text-gray-600">Comprehensive yearly sales reporting...</p>
-          </div>
-        );
       default:
         console.log('⚠️ SalesManagementContent - defaulting to sales overview for:', selectedSubmenu);
         return renderSalesOverview();

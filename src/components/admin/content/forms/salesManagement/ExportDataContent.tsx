@@ -10,7 +10,7 @@ import { Checkbox } from '@/components/ui/checkbox';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { Textarea } from '@/components/ui/textarea';
-import { Download, FileText, Database, Calendar, Filter, Settings, RefreshCw, Eye, Clock, CheckCircle, AlertCircle, FileSpreadsheet, FileImage, FilePdf } from 'lucide-react';
+import { Download, FileText, Database, Calendar, Filter, Settings, RefreshCw, Eye, Clock, CheckCircle, AlertCircle, FileSpreadsheet, FileImage } from 'lucide-react';
 
 // Sample data for exports
 const recentExports = [
@@ -91,7 +91,7 @@ export const ExportDataContent: React.FC = () => {
     switch (type.toLowerCase()) {
       case 'excel': return <FileSpreadsheet className="w-4 h-4 text-green-600" />;
       case 'csv': return <FileText className="w-4 h-4 text-blue-600" />;
-      case 'pdf': return <FilePdf className="w-4 h-4 text-red-600" />;
+      case 'pdf': return <FileText className="w-4 h-4 text-red-600" />;
       default: return <FileText className="w-4 h-4 text-gray-600" />;
     }
   };
@@ -315,7 +315,7 @@ export const ExportDataContent: React.FC = () => {
                         <Checkbox
                           id="schedule"
                           checked={scheduleExport}
-                          onCheckedChange={setScheduleExport}
+                          onCheckedChange={(checked) => setScheduleExport(checked === true)}
                         />
                         <Label htmlFor="schedule" className="text-sm">Schedule this export</Label>
                       </div>
@@ -340,7 +340,7 @@ export const ExportDataContent: React.FC = () => {
                         <Checkbox
                           id="email"
                           checked={emailNotification}
-                          onCheckedChange={setEmailNotification}
+                          onCheckedChange={(checked) => setEmailNotification(checked === true)}
                         />
                         <Label htmlFor="email" className="text-sm">Email when ready</Label>
                       </div>

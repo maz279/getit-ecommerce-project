@@ -10,6 +10,7 @@ import { BulkActionsContent } from './forms/orderManagement/BulkActionsContent';
 import { NewOrdersContent } from './forms/orderManagement/NewOrdersContent';
 import { ProcessingOrdersContent } from './forms/orderManagement/ProcessingOrdersContent';
 import { ShippedOrdersContent } from './forms/orderManagement/ShippedOrdersContent';
+import { DeliveredOrdersContent } from './forms/orderManagement/DeliveredOrdersContent';
 
 interface OrderManagementContentProps {
   selectedSubmenu: string;
@@ -35,6 +36,8 @@ export const OrderManagementContent: React.FC<OrderManagementContentProps> = ({ 
         return <ProcessingOrdersContent />;
       case 'shipped-orders':
         return <ShippedOrdersContent />;
+      case 'delivered-orders':
+        return <DeliveredOrdersContent />;
       case 'order-overview':
       case 'order-processing':
       case 'orders':

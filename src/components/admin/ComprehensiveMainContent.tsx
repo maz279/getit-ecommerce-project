@@ -53,7 +53,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SalesManagementContent selectedSubmenu={submenu} />;
     }
 
-    // Handle order management and order-related submenus - UPDATED to include shipped-orders
+    // Handle order management and order-related submenus - UPDATED to include delivered-orders
     if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu === 'order' || selectedMenu.startsWith('order-') || 
         ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests', 'order-analytics', 'order-reports', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing'].includes(selectedMenu)) {
       console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');

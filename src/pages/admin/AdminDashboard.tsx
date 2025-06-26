@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -49,6 +50,13 @@ const AdminDashboard: React.FC = () => {
       'payment-analytics', 'payment-disputes', 'payment-methods',
       'failed-payments'
     ];
+
+    // Define logistics-management related submenus - NEW
+    const logisticsManagementSubmenus = [
+      'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
+      'delivery-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
+      'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'
+    ];
     
     // Check if this is a user-management submenu
     if (userManagementSubmenus.includes(menu)) {
@@ -73,13 +81,22 @@ const AdminDashboard: React.FC = () => {
       setSelectedSubmenu(menu);
       return;
     }
+
+    // Check if this is a logistics-management submenu - NEW
+    if (logisticsManagementSubmenus.includes(menu)) {
+      console.log('✅ Logistics management submenu detected:', menu);
+      setSelectedMenu('logistics');
+      setSelectedSubmenu(menu);
+      return;
+    }
     
     // Handle compound menu items (menu-submenu format) for other cases
-    // BUT SKIP sales, user management, and order management ones as they're handled above
+    // BUT SKIP sales, user management, order management, and logistics ones as they're handled above
     if (menu.includes('-') && 
         !salesManagementSubmenus.includes(menu) && 
         !userManagementSubmenus.includes(menu) &&
-        !orderManagementSubmenus.includes(menu)) {
+        !orderManagementSubmenus.includes(menu) &&
+        !logisticsManagementSubmenus.includes(menu)) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
@@ -111,6 +128,9 @@ const AdminDashboard: React.FC = () => {
         break;
       case 'order-management':
         setSelectedSubmenu('order-overview'); // Default to order overview
+        break;
+      case 'logistics':
+        setSelectedSubmenu('logistics-overview'); // Default to logistics overview
         break;
       case 'vendor-management':
         setSelectedSubmenu('vendor-directory');

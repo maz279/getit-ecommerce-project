@@ -69,6 +69,21 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <OrderManagementContent selectedSubmenu={submenu} />;
     }
 
+    // Handle logistics management and logistics-related submenus - UPDATED
+    if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
+        ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'].includes(selectedMenu)) {
+      console.log('✅ LOGISTICS MANAGEMENT - routing to LogisticsContent');
+      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+      
+      // If selectedMenu is a logistics submenu, pass it as selectedSubmenu
+      const submenu = ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'].includes(selectedMenu) 
+        ? selectedMenu 
+        : selectedSubmenu;
+      
+      console.log('   Final submenu passed:', submenu);
+      return <LogisticsContent selectedSubmenu={submenu} />;
+    }
+
     // Handle dashboard and its submenus
     if (selectedMenu === 'dashboard') {
       console.log('✅ Dashboard section detected - submenu:', selectedSubmenu);
@@ -123,12 +138,6 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     if (selectedMenu === 'payments' || selectedMenu.startsWith('payment-') || selectedMenu.startsWith('financial-') || 
         ['payment-processing', 'financial-management', 'transaction-monitoring', 'payment-gateways', 'failed-payments', 'payment-analytics', 'revenue-tracking', 'expense-management', 'budget-planning', 'financial-forecasting'].includes(selectedMenu)) {
       return <PaymentManagementContent selectedSubmenu={selectedMenu === 'payments' ? selectedSubmenu : selectedMenu} />;
-    }
-
-    // Handle logistics
-    if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || selectedMenu.startsWith('warehouse-') || 
-        ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control'].includes(selectedMenu)) {
-      return <LogisticsContent selectedSubmenu={selectedMenu === 'logistics' ? selectedSubmenu : selectedMenu} />;
     }
 
     // Handle communications

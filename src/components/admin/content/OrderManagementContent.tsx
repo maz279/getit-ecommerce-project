@@ -13,6 +13,7 @@ import { ShippedOrdersContent } from './forms/orderManagement/ShippedOrdersConte
 import { DeliveredOrdersContent } from './forms/orderManagement/DeliveredOrdersContent';
 import { PaymentStatusContent } from './forms/orderManagement/PaymentStatusContent';
 import { PaymentMethodsContent } from './forms/orderManagement/PaymentMethodsContent';
+import { FailedPaymentsContent } from './forms/orderManagement/FailedPaymentsContent';
 
 interface OrderManagementContentProps {
   selectedSubmenu: string;
@@ -50,6 +51,8 @@ export const OrderManagementContent: React.FC<OrderManagementContentProps> = ({ 
         return <PaymentStatusContent />;
       case 'payment-methods':
         return <PaymentMethodsContent />;
+      case 'failed-payments':
+        return <FailedPaymentsContent />;
       case 'order-overview':
       case 'order-processing':
       case 'orders':

@@ -1,3 +1,4 @@
+
 // Core types for the GETIT ecommerce platform
 export interface User {
   id: string;
@@ -5,7 +6,7 @@ export interface User {
   phone?: string;
   full_name: string;
   avatar_url?: string;
-  role: 'customer' | 'vendor' | 'admin' | 'moderator' | 'user';
+  role: 'customer' | 'vendor' | 'admin' | 'moderator' | 'user' | 'super_admin';
   is_verified: boolean;
   created_at: string;
   updated_at: string;

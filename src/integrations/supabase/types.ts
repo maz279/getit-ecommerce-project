@@ -893,7 +893,13 @@ export type Database = {
         | "sslcommerz"
         | "cod"
         | "bank_transfer"
-      user_role: "admin" | "moderator" | "vendor" | "customer" | "user"
+      user_role:
+        | "admin"
+        | "moderator"
+        | "vendor"
+        | "customer"
+        | "user"
+        | "super_admin"
       vendor_status: "pending" | "approved" | "suspended" | "rejected"
     }
     CompositeTypes: {
@@ -1026,7 +1032,14 @@ export const Constants = {
         "cod",
         "bank_transfer",
       ],
-      user_role: ["admin", "moderator", "vendor", "customer", "user"],
+      user_role: [
+        "admin",
+        "moderator",
+        "vendor",
+        "customer",
+        "user",
+        "super_admin",
+      ],
       vendor_status: ["pending", "approved", "suspended", "rejected"],
     },
   },

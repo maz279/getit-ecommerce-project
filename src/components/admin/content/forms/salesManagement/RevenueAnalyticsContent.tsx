@@ -14,7 +14,7 @@ export const RevenueAnalyticsContent: React.FC = () => {
     <div className="space-y-6">
       <RevenueAnalyticsHeader />
       
-      <RevenueMetricsCards data={mockRevenueAnalyticsData.metrics} />
+      <RevenueMetricsCards metrics={mockRevenueAnalyticsData.metrics} />
 
       <Tabs defaultValue="overview" className="w-full">
         <TabsList className="grid w-full grid-cols-6">

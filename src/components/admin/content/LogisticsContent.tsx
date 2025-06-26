@@ -2,6 +2,7 @@
 import React from 'react';
 import { CourierPartnersContent } from './forms/logistics/CourierPartnersContent';
 import { DeliveryTrackingContent } from './forms/logistics/DeliveryTrackingContent';
+import { ShippingZonesContent } from './forms/logistics/ShippingZonesContent';
 
 interface LogisticsContentProps {
   selectedSubmenu: string;
@@ -14,6 +15,8 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
         return <CourierPartnersContent />;
       case 'delivery-tracking':
         return <DeliveryTrackingContent />;
+      case 'delivery-zones':
+        return <ShippingZonesContent />;
       case 'shipping-management':
         return (
           <div className="p-6">
@@ -33,13 +36,6 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
           <div className="p-6">
             <h1 className="text-2xl font-bold mb-6">Shipping Rates</h1>
             <p className="text-gray-600">Shipping rates content for {selectedSubmenu}</p>
-          </div>
-        );
-      case 'delivery-zones':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Delivery Zones</h1>
-            <p className="text-gray-600">Delivery zones content for {selectedSubmenu}</p>
           </div>
         );
       case 'shipping-analytics':

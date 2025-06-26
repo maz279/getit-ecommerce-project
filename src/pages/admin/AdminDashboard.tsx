@@ -33,17 +33,17 @@ const AdminDashboard: React.FC = () => {
     const salesManagementSubmenus = [
       'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 
       'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking',
-      'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis',
+      'sales-reports', 'detailed-reports', 'summary-reports', 'comparative-analysis',
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include order-reports
+    // Define order-management related submenus - UPDATED to include performance metrics
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
       'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
       'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests',
-      'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis',
+      'order-analytics', 'order-reports', 'performance-reports', 'performance-metrics',
       'fulfillment-center', 'order-search', 'order-timeline',
       'bulk-actions', 'bulk', 'new-orders', 'order-processing',
       'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',

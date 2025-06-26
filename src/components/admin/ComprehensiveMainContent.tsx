@@ -40,12 +40,12 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     // Handle sales management and sales-related submenus
     if (selectedMenu === 'sales' || selectedMenu === 'sales-management' || 
         selectedMenu.startsWith('sales-') || 
-        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu)) {
+        ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu)) {
       console.log('✅ SALES MANAGEMENT - routing to SalesManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a sales submenu, pass it as selectedSubmenu
-      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu) 
+      const submenu = ['daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 'sales-reports', 'detailed-reports', 'summary-reports', 'comparative-analysis', 'export-data'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       
@@ -53,14 +53,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SalesManagementContent selectedSubmenu={submenu} />;
     }
 
-    // Handle order management and order-related submenus - UPDATED to include order-reports
+    // Handle order management and order-related submenus - UPDATED to include performance-reports
     if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu === 'order' || selectedMenu.startsWith('order-') || 
-        ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'].includes(selectedMenu)) {
+        ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'performance-metrics', 'comparative-analysis', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'].includes(selectedMenu)) {
       console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is an order submenu, pass it as selectedSubmenu
-      const submenu = ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'].includes(selectedMenu) 
+      const submenu = ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'performance-metrics', 'comparative-analysis', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       
@@ -89,7 +89,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     }
 
-    // Handle specific dashboard submenus when they come in as selectedMenu
+    // Handle specific dashboard submenus when they come in as selectedMenu - UPDATED to exclude performance-reports
     const dashboardSubmenus = [
       'overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
       'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 

@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -38,16 +37,16 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include payment-related submenus AND failed-payments
+    // Define order-management related submenus - UPDATED to include refund-processing
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
       'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
-      'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests',
+      'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests',
       'order-analytics', 'order-reports', 'fulfillment-center', 'order-search', 'order-timeline',
       'bulk-actions', 'bulk', 'new-orders', 'order-processing',
       'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',
-      'payment-analytics', 'payment-disputes', 'refund-management', 'payment-methods',
+      'payment-analytics', 'payment-disputes', 'payment-methods',
       'failed-payments'
     ];
     

@@ -1,10 +1,10 @@
-
 import React from 'react';
 import { Package, Plus, Upload, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
+import { AllProductsContent } from './forms/productManagement/AllProductsContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -208,6 +208,8 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
       case 'product-catalog':
       case 'products':
         return renderProductCatalog();
+      case 'all-products':
+        return <AllProductsContent />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

@@ -1,56 +1,73 @@
 
-import React from 'react';
-import { DollarSign, PieChart } from 'lucide-react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
+import React, { useState } from 'react';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { RevenueAnalyticsHeader } from './revenueAnalytics/RevenueAnalyticsHeader';
+import { RevenueMetricsCards } from './revenueAnalytics/RevenueMetricsCards';
+import { RevenueOverviewTab } from './revenueAnalytics/RevenueOverviewTab';
+import { mockRevenueAnalyticsData } from './revenueAnalytics/mockData';
 
 export const RevenueAnalyticsContent: React.FC = () => {
+  const [selectedTimeRange, setSelectedTimeRange] = useState('6m');
+  const [selectedRegion, setSelectedRegion] = useState('all');
+
   return (
     <div className="space-y-6">
-      <h1 className="text-3xl font-bold text-gray-900">Revenue Analytics</h1>
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-        <Card>
-          <CardHeader>
-            <CardTitle className="flex items-center">
-              <DollarSign className="h-5 w-5 mr-2" />
-              Revenue Breakdown
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="h-64 bg-gradient-to-br from-green-50 to-emerald-100 rounded-lg flex items-center justify-center">
-              <div className="text-center">
-                <PieChart className="h-16 w-16 text-green-500 mx-auto mb-4" />
-                <p className="text-gray-600">Revenue Distribution Chart</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
+      <RevenueAnalyticsHeader />
+      
+      <RevenueMetricsCards data={mockRevenueAnalyticsData.metrics} />
 
-        <Card>
-          <CardHeader>
-            <CardTitle>Monthly Comparison</CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="space-y-4">
-              {[
-                { month: 'Current Month', amount: '৳12.4M', change: '+8.2%', positive: true },
-                { month: 'Last Month', amount: '৳11.5M', change: '+5.1%', positive: true },
-                { month: 'Same Month Last Year', amount: '৳10.2M', change: '+21.6%', positive: true }
-              ].map((item, index) => (
-                <div key={index} className="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
-                  <div>
-                    <p className="font-medium">{item.month}</p>
-                    <p className="text-lg font-bold">{item.amount}</p>
-                  </div>
-                  <Badge className={item.positive ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}>
-                    {item.change}
-                  </Badge>
-                </div>
-              ))}
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-6">
+          <TabsTrigger value="overview">📊 Overview</TabsTrigger>
+          <TabsTrigger value="channels">🎯 Channels</TabsTrigger>
+          <TabsTrigger value="categories">📦 Categories</TabsTrigger>
+          <TabsTrigger value="regions">🗺️ Regions</TabsTrigger>
+          <TabsTrigger value="forecasting">🔮 Forecasting</TabsTrigger>
+          <TabsTrigger value="insights">💡 Insights</TabsTrigger>
+        </TabsList>
+
+        <TabsContent value="overview" className="mt-6">
+          <RevenueOverviewTab 
+            trendData={mockRevenueAnalyticsData.trendData}
+            channelData={mockRevenueAnalyticsData.channelData}
+          />
+        </TabsContent>
+
+        <TabsContent value="channels" className="mt-6">
+          <div className="text-center py-20 bg-gray-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Channel Analytics</h3>
+            <p className="text-gray-600">Detailed channel performance analysis</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="categories" className="mt-6">
+          <div className="text-center py-20 bg-gray-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Category Performance</h3>
+            <p className="text-gray-600">Revenue breakdown by product categories</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="regions" className="mt-6">
+          <div className="text-center py-20 bg-gray-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Regional Analysis</h3>
+            <p className="text-gray-600">Geographic revenue distribution</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="forecasting" className="mt-6">
+          <div className="text-center py-20 bg-gray-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Revenue Forecasting</h3>
+            <p className="text-gray-600">AI-powered revenue predictions</p>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="insights" className="mt-6">
+          <div className="text-center py-20 bg-gray-50 rounded-lg">
+            <h3 className="text-xl font-semibold mb-2">Business Insights</h3>
+            <p className="text-gray-600">Actionable revenue insights and recommendations</p>
+          </div>
+        </TabsContent>
+      </Tabs>
     </div>
   );
 };

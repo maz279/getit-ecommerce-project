@@ -38,14 +38,16 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include delivered-orders
+    // Define order-management related submenus - UPDATED to include payment-related submenus
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
       'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
       'returns-refunds', 'return-requests', 'refund-processing', 'exchange-requests',
       'order-analytics', 'order-reports', 'fulfillment-center', 'order-search', 'order-timeline',
-      'bulk-actions', 'bulk', 'new-orders', 'order-processing'
+      'bulk-actions', 'bulk', 'new-orders', 'order-processing',
+      'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',
+      'payment-analytics', 'payment-disputes', 'refund-management', 'payment-methods'
     ];
     
     // Check if this is a user-management submenu

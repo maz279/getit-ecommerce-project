@@ -16,6 +16,7 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
       case 'delivery-tracking':
         return <DeliveryTrackingContent />;
       case 'delivery-zones':
+      case 'shipping-zones': // Added this case to handle both routing patterns
         return <ShippingZonesContent />;
       case 'shipping-management':
         return (

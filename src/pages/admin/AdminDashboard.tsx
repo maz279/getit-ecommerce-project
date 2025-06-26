@@ -51,10 +51,10 @@ const AdminDashboard: React.FC = () => {
       'failed-payments'
     ];
 
-    // Define logistics-management related submenus - NEW
+    // Define logistics-management related submenus - UPDATED to include shipping-zones
     const logisticsManagementSubmenus = [
       'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
-      'delivery-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
+      'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'
     ];
     
@@ -82,7 +82,7 @@ const AdminDashboard: React.FC = () => {
       return;
     }
 
-    // Check if this is a logistics-management submenu - NEW
+    // Check if this is a logistics-management submenu - UPDATED
     if (logisticsManagementSubmenus.includes(menu)) {
       console.log('✅ Logistics management submenu detected:', menu);
       setSelectedMenu('logistics');

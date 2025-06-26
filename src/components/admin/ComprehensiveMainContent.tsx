@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
@@ -53,7 +54,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <SalesManagementContent selectedSubmenu={submenu} />;
     }
 
-    // Handle order management and order-related submenus - UPDATED to include performance-reports
+    // Handle order management and order-related submenus
     if (selectedMenu === 'order-management' || selectedMenu === 'orders' || selectedMenu === 'order' || selectedMenu.startsWith('order-') || 
         ['all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'performance-metrics', 'comparative-analysis', 'fulfillment-center', 'order-search', 'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'].includes(selectedMenu)) {
       console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');
@@ -68,7 +69,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <OrderManagementContent selectedSubmenu={submenu} />;
     }
 
-    // Handle logistics management and logistics-related submenus - UPDATED to include refund-processing
+    // Handle logistics management and logistics-related submenus
     if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
         ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'].includes(selectedMenu)) {
       console.log('✅ LOGISTICS MANAGEMENT - routing to LogisticsContent');
@@ -89,7 +90,7 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     }
 
-    // Handle specific dashboard submenus when they come in as selectedMenu - UPDATED to exclude performance-reports
+    // Handle specific dashboard submenus when they come in as selectedMenu
     const dashboardSubmenus = [
       'overview', 'analytics', 'real-time-metrics', 'kpi-monitoring', 'performance-insights', 
       'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
@@ -103,10 +104,19 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
-    // Handle product management
-    if (selectedMenu === 'products' || selectedMenu.startsWith('product-') || 
-        ['product-catalog', 'inventory-management', 'product-analytics', 'all-products', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization'].includes(selectedMenu)) {
-      return <ProductManagementContent selectedSubmenu={selectedMenu === 'products' ? selectedSubmenu : selectedMenu} />;
+    // Handle product management and product-related submenus - UPDATED
+    if (selectedMenu === 'product-management' || selectedMenu === 'products' || selectedMenu.startsWith('product-') || 
+        ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization'].includes(selectedMenu)) {
+      console.log('✅ PRODUCT MANAGEMENT - routing to ProductManagementContent');
+      console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+      
+      // If selectedMenu is a product submenu, pass it as selectedSubmenu
+      const submenu = ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization'].includes(selectedMenu) 
+        ? selectedMenu 
+        : selectedSubmenu;
+      
+      console.log('   Final submenu passed:', submenu);
+      return <ProductManagementContent selectedSubmenu={submenu} />;
     }
 
     // Handle customer management

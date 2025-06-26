@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -37,7 +38,7 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include performance metrics
+    // Define order-management related submenus
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
@@ -57,6 +58,14 @@ const AdminDashboard: React.FC = () => {
       'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
+
+    // Define product-management related submenus - UPDATED
+    const productManagementSubmenus = [
+      'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
+      'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
+      'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
+      'trending-products', 'price-optimization'
+    ];
     
     // Check if this is a user-management submenu
     if (userManagementSubmenus.includes(menu)) {
@@ -74,7 +83,7 @@ const AdminDashboard: React.FC = () => {
       return;
     }
     
-    // Check if this is an order-management submenu - UPDATED
+    // Check if this is an order-management submenu
     if (orderManagementSubmenus.includes(menu)) {
       console.log('✅ Order management submenu detected:', menu);
       setSelectedMenu('order-management');
@@ -89,14 +98,22 @@ const AdminDashboard: React.FC = () => {
       setSelectedSubmenu(menu);
       return;
     }
+
+    // Check if this is a product-management submenu - NEW
+    if (productManagementSubmenus.includes(menu)) {
+      console.log('✅ Product management submenu detected:', menu);
+      setSelectedMenu('product-management');
+      setSelectedSubmenu(menu);
+      return;
+    }
     
     // Handle compound menu items (menu-submenu format) for other cases
-    // BUT SKIP sales, user management, order management, and logistics ones as they're handled above
     if (menu.includes('-') && 
         !salesManagementSubmenus.includes(menu) && 
         !userManagementSubmenus.includes(menu) &&
         !orderManagementSubmenus.includes(menu) &&
-        !logisticsManagementSubmenus.includes(menu)) {
+        !logisticsManagementSubmenus.includes(menu) &&
+        !productManagementSubmenus.includes(menu)) {
       const parts = menu.split('-');
       console.log('🔍 Split menu parts:', parts);
       
@@ -120,17 +137,17 @@ const AdminDashboard: React.FC = () => {
         setSelectedSubmenu('overview');
         break;
       case 'user-management':
-        setSelectedSubmenu('admin-users'); // Default to admin users
+        setSelectedSubmenu('admin-users');
         break;
       case 'sales':
       case 'sales-management':
-        setSelectedSubmenu('sales-overview'); // Default to sales overview
+        setSelectedSubmenu('sales-overview');
         break;
       case 'order-management':
-        setSelectedSubmenu('order-overview'); // Default to order overview
+        setSelectedSubmenu('order-overview');
         break;
       case 'logistics':
-        setSelectedSubmenu('logistics-overview'); // Default to logistics overview
+        setSelectedSubmenu('logistics-overview');
         break;
       case 'vendor-management':
         setSelectedSubmenu('vendor-directory');

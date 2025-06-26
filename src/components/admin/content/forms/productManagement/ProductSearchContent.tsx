@@ -8,19 +8,20 @@ import { SearchAnalyticsTab } from './productSearch/SearchAnalyticsTab';
 import { SearchHistoryTab } from './productSearch/SearchHistoryTab';
 import { SearchConfigurationTab } from './productSearch/SearchConfigurationTab';
 import { mockProductSearchData } from './productSearch/mockData';
+import { SearchFilters } from './productSearch/types';
 
 export const ProductSearchContent: React.FC = () => {
   const [searchResults, setSearchResults] = useState(mockProductSearchData.searchResults);
   const [searchQuery, setSearchQuery] = useState('');
-  const [filters, setFilters] = useState({
+  const [filters, setFilters] = useState<SearchFilters>({
     category: 'all',
-    priceRange: [0, 100000],
+    priceRange: [0, 100000] as [number, number],
     rating: 0,
     availability: 'all',
     vendor: 'all'
   });
 
-  const handleSearch = (query: string, newFilters?: any) => {
+  const handleSearch = (query: string, newFilters?: SearchFilters) => {
     setSearchQuery(query);
     if (newFilters) {
       setFilters(newFilters);

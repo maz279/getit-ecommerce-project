@@ -37,20 +37,21 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus
+    // Define order-management related submenus - UPDATED to include order-reports
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
       'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
       'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests',
-      'order-analytics', 'order-reports', 'fulfillment-center', 'order-search', 'order-timeline',
+      'order-analytics', 'order-reports', 'detailed-reports', 'summary-reports', 'performance-reports', 'comparative-analysis',
+      'fulfillment-center', 'order-search', 'order-timeline',
       'bulk-actions', 'bulk', 'new-orders', 'order-processing',
       'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',
       'payment-analytics', 'payment-disputes', 'payment-methods',
       'failed-payments'
     ];
 
-    // Define logistics-management related submenus - UPDATED to include delivery-performance
+    // Define logistics-management related submenus
     const logisticsManagementSubmenus = [
       'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
       'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
@@ -73,7 +74,7 @@ const AdminDashboard: React.FC = () => {
       return;
     }
     
-    // Check if this is an order-management submenu
+    // Check if this is an order-management submenu - UPDATED
     if (orderManagementSubmenus.includes(menu)) {
       console.log('✅ Order management submenu detected:', menu);
       setSelectedMenu('order-management');
@@ -81,7 +82,7 @@ const AdminDashboard: React.FC = () => {
       return;
     }
 
-    // Check if this is a logistics-management submenu - UPDATED
+    // Check if this is a logistics-management submenu
     if (logisticsManagementSubmenus.includes(menu)) {
       console.log('✅ Logistics management submenu detected:', menu);
       setSelectedMenu('logistics');

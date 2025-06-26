@@ -68,14 +68,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <OrderManagementContent selectedSubmenu={submenu} />;
     }
 
-    // Handle logistics management and logistics-related submenus - UPDATED to include shipping-zones
+    // Handle logistics management and logistics-related submenus - UPDATED to include delivery-performance
     if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
-        ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'].includes(selectedMenu)) {
+        ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'].includes(selectedMenu)) {
       console.log('✅ LOGISTICS MANAGEMENT - routing to LogisticsContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a logistics submenu, pass it as selectedSubmenu
-      const submenu = ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'].includes(selectedMenu) 
+      const submenu = ['shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       

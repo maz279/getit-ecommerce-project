@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -38,7 +37,7 @@ const AdminDashboard: React.FC = () => {
       'export-data', 'sales-forecast'
     ];
     
-    // Define order-management related submenus - UPDATED to include refund-processing
+    // Define order-management related submenus
     const orderManagementSubmenus = [
       'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
       'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
@@ -51,11 +50,11 @@ const AdminDashboard: React.FC = () => {
       'failed-payments'
     ];
 
-    // Define logistics-management related submenus - UPDATED to include shipping-zones
+    // Define logistics-management related submenus - UPDATED to include delivery-performance
     const logisticsManagementSubmenus = [
       'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
       'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
-      'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics'
+      'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
     
     // Check if this is a user-management submenu

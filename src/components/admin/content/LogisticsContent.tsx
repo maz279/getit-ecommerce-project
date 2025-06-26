@@ -3,6 +3,7 @@ import React from 'react';
 import { CourierPartnersContent } from './forms/logistics/CourierPartnersContent';
 import { DeliveryTrackingContent } from './forms/logistics/DeliveryTrackingContent';
 import { ShippingZonesContent } from './forms/logistics/ShippingZonesContent';
+import { DeliveryPerformanceContent } from './forms/logistics/DeliveryPerformanceContent';
 
 interface LogisticsContentProps {
   selectedSubmenu: string;
@@ -16,8 +17,10 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
       case 'delivery-tracking':
         return <DeliveryTrackingContent />;
       case 'delivery-zones':
-      case 'shipping-zones': // Added this case to handle both routing patterns
+      case 'shipping-zones':
         return <ShippingZonesContent />;
+      case 'delivery-performance':
+        return <DeliveryPerformanceContent />;
       case 'shipping-management':
         return (
           <div className="p-6">

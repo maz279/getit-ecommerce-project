@@ -86,13 +86,13 @@ export const ProductsOverviewTab: React.FC<ProductsOverviewTabProps> = ({
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-            <div>
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
               <Input
                 placeholder="Search products, SKU..."
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-full"
-                icon={<Search className="h-4 w-4" />}
+                className="pl-10"
               />
             </div>
             <Select value={selectedCategory} onValueChange={setSelectedCategory}>

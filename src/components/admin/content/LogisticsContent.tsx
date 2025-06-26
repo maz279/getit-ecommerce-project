@@ -1,6 +1,7 @@
 
 import React from 'react';
 import { CourierPartnersContent } from './forms/logistics/CourierPartnersContent';
+import { DeliveryTrackingContent } from './forms/logistics/DeliveryTrackingContent';
 
 interface LogisticsContentProps {
   selectedSubmenu: string;
@@ -11,6 +12,8 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
     switch (selectedSubmenu) {
       case 'courier-partners':
         return <CourierPartnersContent />;
+      case 'delivery-tracking':
+        return <DeliveryTrackingContent />;
       case 'shipping-management':
         return (
           <div className="p-6">

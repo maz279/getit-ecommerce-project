@@ -59,12 +59,12 @@ const AdminDashboard: React.FC = () => {
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
 
-    // Define product-management related submenus - UPDATED
+    // Define product-management related submenus - UPDATED with product-search
     const productManagementSubmenus = [
       'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
       'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
       'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
-      'trending-products', 'price-optimization'
+      'trending-products', 'price-optimization', 'product-search'
     ];
     
     // Check if this is a user-management submenu
@@ -99,7 +99,7 @@ const AdminDashboard: React.FC = () => {
       return;
     }
 
-    // Check if this is a product-management submenu - NEW
+    // Check if this is a product-management submenu - UPDATED
     if (productManagementSubmenus.includes(menu)) {
       console.log('✅ Product management submenu detected:', menu);
       setSelectedMenu('product-management');

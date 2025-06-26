@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
 import { AllProductsContent } from './forms/productManagement/AllProductsContent';
+import { ProductSearchContent } from './forms/productManagement/ProductSearchContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -204,12 +205,16 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
   );
 
   const getContent = () => {
+    console.log('🔍 ProductManagementContent getContent - selectedSubmenu:', selectedSubmenu);
+    
     switch (selectedSubmenu) {
       case 'product-catalog':
       case 'products':
         return renderProductCatalog();
       case 'all-products':
         return <AllProductsContent />;
+      case 'product-search':
+        return <ProductSearchContent />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

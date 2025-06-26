@@ -4,13 +4,18 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Checkbox } from '@/components/ui/checkbox';
-import { DatePicker } from '@/components/ui/calendar';
-import { Download, FileText, Calendar, Settings } from 'lucide-react';
+import { Popover, PopoverContent, PopoverTrigger } from '@/components/ui/popover';
+import { Calendar } from '@/components/ui/calendar';
+import { Download, FileText, Calendar as CalendarIcon, Settings } from 'lucide-react';
+import { format } from 'date-fns';
+import { cn } from '@/lib/utils';
 
 export const ExportReportsTab: React.FC = () => {
   const [exportFormat, setExportFormat] = useState('xlsx');
   const [dateRange, setDateRange] = useState('30d');
   const [selectedReports, setSelectedReports] = useState<string[]>(['sales', 'orders']);
+  const [customStartDate, setCustomStartDate] = useState<Date>();
+  const [customEndDate, setCustomEndDate] = useState<Date>();
 
   const reportTypes = [
     { id: 'sales', label: 'Sales Reports', description: 'Revenue, trends, and performance metrics' },
@@ -70,11 +75,65 @@ export const ExportReportsTab: React.FC = () => {
               </Select>
             </div>
 
+            {dateRange === 'custom' && (
+              <div className="space-y-4">
+                <div>
+                  <label className="text-sm font-medium mb-2 block">Start Date</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !customStartDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {customStartDate ? format(customStartDate, "PPP") : <span>Pick start date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={customStartDate}
+                        onSelect={setCustomStartDate}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+                
+                <div>
+                  <label className="text-sm font-medium mb-2 block">End Date</label>
+                  <Popover>
+                    <PopoverTrigger asChild>
+                      <Button
+                        variant="outline"
+                        className={cn(
+                          "w-full justify-start text-left font-normal",
+                          !customEndDate && "text-muted-foreground"
+                        )}
+                      >
+                        <CalendarIcon className="mr-2 h-4 w-4" />
+                        {customEndDate ? format(customEndDate, "PPP") : <span>Pick end date</span>}
+                      </Button>
+                    </PopoverTrigger>
+                    <PopoverContent className="w-auto p-0">
+                      <Calendar
+                        mode="single"
+                        selected={customEndDate}
+                        onSelect={setCustomEndDate}
+                        initialFocus
+                        className="pointer-events-auto"
+                      />
+                    </PopoverContent>
+                  </Popover>
+                </div>
+              </div>
+            )}
+
             <div className="flex space-x-4">
-              <Button variant="outline" className="flex-1">
-                <Calendar className="h-4 w-4 mr-2" />
-                Custom Date Range
-              </Button>
               <Button variant="outline" className="flex-1">
                 <Settings className="h-4 w-4 mr-2" />
                 Advanced Options
@@ -127,7 +186,7 @@ export const ExportReportsTab: React.FC = () => {
               Generate Summary Report
             </Button>
             <Button variant="outline" className="w-full" size="lg">
-              <Calendar className="h-5 w-5 mr-2" />
+              <CalendarIcon className="h-5 w-5 mr-2" />
               Schedule Export
             </Button>
           </div>
@@ -136,7 +195,10 @@ export const ExportReportsTab: React.FC = () => {
             <h4 className="font-medium text-blue-900 mb-2">Export Summary</h4>
             <div className="text-sm text-blue-700 space-y-1">
               <p>• Format: {exportFormat.toUpperCase()}</p>
-              <p>• Date Range: {dateRange}</p>
+              <p>• Date Range: {dateRange === 'custom' ? 'Custom range' : dateRange}</p>
+              {dateRange === 'custom' && customStartDate && customEndDate && (
+                <p>• Custom Range: {format(customStartDate, "PPP")} to {format(customEndDate, "PPP")}</p>
+              )}
               <p>• Selected Reports: {selectedReports.length} of {reportTypes.length}</p>
               <p>• Estimated file size: ~2.5 MB</p>
             </div>

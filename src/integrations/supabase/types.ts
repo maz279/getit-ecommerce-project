@@ -9,6 +9,39 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ai_detection_settings: {
+        Row: {
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          is_enabled: boolean | null
+          setting_name: string
+          setting_type: string
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          setting_name: string
+          setting_type: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          setting_name?: string
+          setting_type?: string
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Relationships: []
+      }
       assessment_documents: {
         Row: {
           assessment_id: string | null
@@ -606,6 +639,160 @@ export type Database = {
           },
         ]
       }
+      rating_disputes: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          dispute_description: string | null
+          dispute_reason: string
+          dispute_status: string | null
+          id: string
+          priority_level: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          review_id: string | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          dispute_description?: string | null
+          dispute_reason: string
+          dispute_status?: string | null
+          id?: string
+          priority_level?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          review_id?: string | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          dispute_description?: string | null
+          dispute_reason?: string
+          dispute_status?: string | null
+          id?: string
+          priority_level?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          review_id?: string | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "rating_disputes_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "product_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      rating_policies: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          effective_date: string | null
+          id: string
+          is_active: boolean | null
+          policy_content: string
+          policy_name: string
+          policy_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          effective_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          policy_content: string
+          policy_name: string
+          policy_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          effective_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          policy_content?: string
+          policy_name?: string
+          policy_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      review_moderation: {
+        Row: {
+          created_at: string | null
+          customer_name: string | null
+          flags: Json | null
+          id: string
+          moderation_notes: string | null
+          moderation_status: string | null
+          moderator_id: string | null
+          priority_level: string | null
+          product_name: string | null
+          rating: number | null
+          review_id: string | null
+          review_text: string | null
+          risk_score: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          customer_name?: string | null
+          flags?: Json | null
+          id?: string
+          moderation_notes?: string | null
+          moderation_status?: string | null
+          moderator_id?: string | null
+          priority_level?: string | null
+          product_name?: string | null
+          rating?: number | null
+          review_id?: string | null
+          review_text?: string | null
+          risk_score?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          customer_name?: string | null
+          flags?: Json | null
+          id?: string
+          moderation_notes?: string | null
+          moderation_status?: string | null
+          moderator_id?: string | null
+          priority_level?: string | null
+          product_name?: string | null
+          rating?: number | null
+          review_id?: string | null
+          review_text?: string | null
+          risk_score?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_moderation_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "product_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       search_index: {
         Row: {
           created_at: string | null
@@ -789,6 +976,45 @@ export type Database = {
           is_verified?: boolean | null
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      vendor_ratings: {
+        Row: {
+          communication_rating: number | null
+          created_at: string | null
+          customer_service_rating: number | null
+          delivery_speed_rating: number | null
+          id: string
+          overall_rating: number | null
+          product_quality_rating: number | null
+          total_reviews: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          communication_rating?: number | null
+          created_at?: string | null
+          customer_service_rating?: number | null
+          delivery_speed_rating?: number | null
+          id?: string
+          overall_rating?: number | null
+          product_quality_rating?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          communication_rating?: number | null
+          created_at?: string | null
+          customer_service_rating?: number | null
+          delivery_speed_rating?: number | null
+          id?: string
+          overall_rating?: number | null
+          product_quality_rating?: number | null
+          total_reviews?: number | null
+          updated_at?: string | null
+          vendor_id?: string
         }
         Relationships: []
       }

@@ -1,114 +1,94 @@
 
 import { 
+  dashboardSubmenus,
   userManagementSubmenus, 
   salesManagementSubmenus, 
-  orderManagementSubmenus, 
-  logisticsManagementSubmenus, 
+  orderManagementSubmenus,
+  logisticsManagementSubmenus,
   productManagementSubmenus 
 } from './routingUtils';
 
 export const getDefaultSubmenu = (menu: string): string => {
   switch (menu) {
-    case 'dashboard':
-      return 'overview';
-    case 'user-management':
-      return 'admin-users';
-    case 'sales':
-    case 'sales-management':
-      return 'sales-overview';
-    case 'order-management':
-      return 'order-overview';
-    case 'logistics':
-      return 'logistics-overview';
-    case 'vendor-management':
-      return 'vendor-directory';
-    case 'product-management':
-      return 'product-catalog';
-    case 'analytics-reports':
-      return 'business-intelligence';
-    case 'marketing-promotions':
-      return 'campaign-management';
-    case 'content-management':
-      return 'cms-pages';
-    case 'financial-management':
-      return 'revenue-dashboard';
-    case 'system-administration':
-      return 'platform-settings';
-    case 'communication':
-      return 'customer-support';
-    default:
-      return 'overview';
+    case 'dashboard': return 'overview';
+    case 'user-management': return 'admin-users';
+    case 'sales-management': return 'sales-overview';
+    case 'order-management': return 'order-overview';
+    case 'logistics-management': return 'logistics-overview';
+    case 'product-management': return 'product-catalog';
+    case 'customer-management': return 'customer-database';
+    case 'vendor-management': return 'vendor-directory';
+    case 'marketing': return 'campaigns';
+    case 'analytics': return 'business-intelligence';
+    case 'payment-management': return 'payment-processing';
+    case 'communications': return 'notifications';
+    case 'security': return 'security-monitoring';
+    case 'settings': return 'system-settings';
+    default: return 'overview';
   }
 };
 
-export const handleSpecialCases = (menu: string): { selectedMenu: string; selectedSubmenu: string } | null => {
-  // Handle special case for product-import-export
-  if (menu === 'product-import-export') {
-    console.log('✅ Special case: product-import-export detected');
-    return { selectedMenu: 'product-management', selectedSubmenu: 'import-export' };
+export const handleSpecialCases = (menu: string) => {
+  // Handle direct dashboard submenu navigation
+  if (dashboardSubmenus.includes(menu)) {
+    console.log('🎯 Special case: Dashboard submenu detected:', menu);
+    return {
+      selectedMenu: 'dashboard',
+      selectedSubmenu: menu
+    };
   }
-
-  // Handle special case for category-structure
-  if (menu === 'category-structure') {
-    console.log('✅ Special case: category-structure detected');
-    return { selectedMenu: 'product-management', selectedSubmenu: 'category-structure' };
-  }
-
+  
   return null;
 };
 
-export const handleSubmenuRouting = (menu: string): { selectedMenu: string; selectedSubmenu: string } | null => {
-  // Check if this is a user-management submenu
+export const handleSubmenuRouting = (menu: string) => {
+  console.log('🔍 Checking submenu routing for:', menu);
+  
   if (userManagementSubmenus.includes(menu)) {
-    console.log('✅ User management submenu detected:', menu);
-    return { selectedMenu: 'user-management', selectedSubmenu: menu };
+    console.log('✅ Found in user management submenus');
+    return {
+      selectedMenu: 'user-management',
+      selectedSubmenu: menu
+    };
   }
   
-  // Check if this is a sales-management submenu
   if (salesManagementSubmenus.includes(menu)) {
-    console.log('✅ Sales management submenu detected:', menu);
-    return { selectedMenu: 'sales', selectedSubmenu: menu };
+    console.log('✅ Found in sales management submenus');
+    return {
+      selectedMenu: 'sales-management',
+      selectedSubmenu: menu
+    };
   }
   
-  // Check if this is an order-management submenu
   if (orderManagementSubmenus.includes(menu)) {
-    console.log('✅ Order management submenu detected:', menu);
-    return { selectedMenu: 'order-management', selectedSubmenu: menu };
+    console.log('✅ Found in order management submenus');
+    return {
+      selectedMenu: 'order-management',
+      selectedSubmenu: menu
+    };
   }
-
-  // Check if this is a logistics-management submenu
+  
   if (logisticsManagementSubmenus.includes(menu)) {
-    console.log('✅ Logistics management submenu detected:', menu);
-    return { selectedMenu: 'logistics', selectedSubmenu: menu };
+    console.log('✅ Found in logistics management submenus');
+    return {
+      selectedMenu: 'logistics-management',
+      selectedSubmenu: menu
+    };
   }
-
-  // Check if this is a product-management submenu
+  
   if (productManagementSubmenus.includes(menu)) {
-    console.log('✅ Product management submenu detected:', menu);
-    return { selectedMenu: 'product-management', selectedSubmenu: menu };
+    console.log('✅ Found in product management submenus');
+    return {
+      selectedMenu: 'product-management',
+      selectedSubmenu: menu
+    };
   }
-
+  
   return null;
 };
 
-export const handleCompoundMenus = (menu: string): { selectedMenu: string; selectedSubmenu: string } | null => {
-  // Handle compound menu items (menu-submenu format) for other cases
-  if (menu.includes('-') && 
-      !salesManagementSubmenus.includes(menu) && 
-      !userManagementSubmenus.includes(menu) &&
-      !orderManagementSubmenus.includes(menu) &&
-      !logisticsManagementSubmenus.includes(menu) &&
-      !productManagementSubmenus.includes(menu)) {
-    const parts = menu.split('-');
-    console.log('🔍 Split menu parts:', parts);
-    
-    // Handle other compound menus
-    if (parts.length >= 2) {
-      const [mainMenu, subMenu] = parts;
-      console.log(`🎯 Setting mainMenu: ${mainMenu}, subMenu: ${subMenu}`);
-      return { selectedMenu: mainMenu, selectedSubmenu: subMenu };
-    }
-  }
-
+export const handleCompoundMenus = (menu: string) => {
+  // Remove the problematic compound menu splitting logic
+  // All dashboard submenus should be handled by handleSpecialCases
   return null;
 };

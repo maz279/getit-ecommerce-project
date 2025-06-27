@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { AllCustomersContent } from './AllCustomersContent';
 import { CustomerAnalyticsContent } from './CustomerAnalyticsContent';
@@ -9,6 +10,7 @@ import { CustomerOverviewContent } from './CustomerOverviewContent';
 import { CustomerSearchContent } from './CustomerSearchContent';
 import { PurchaseHistoryContent } from './PurchaseHistoryContent';
 import { LoyaltyAnalysisContent } from './LoyaltyAnalysisContent';
+import { CLVContent } from './CLVContent';
 
 interface CustomerManagementRouterProps {
   selectedSubmenu: string;
@@ -39,9 +41,11 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
       console.log('✅ Routing to CustomerSegmentsContent');
       return <CustomerSegmentsContent />;
     case 'vip-customers':
-    case 'customer-lifetime-value':
       console.log('✅ Routing to VIPCustomersContent');
       return <VIPCustomersContent />;
+    case 'customer-lifetime-value':
+      console.log('✅ Routing to CLVContent');
+      return <CLVContent />;
     case 'customer-behavior':
     case 'customer-engagement':
       console.log('✅ Routing to CustomerBehaviorContent');

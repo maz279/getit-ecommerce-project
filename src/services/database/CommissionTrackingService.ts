@@ -1,26 +1,25 @@
-
 import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
+import { Json } from '@/integrations/supabase/types';
 
 // Export all the interfaces so they can be imported by other components
 export interface VendorCommission {
   id: string;
   vendor_id: string;
-  order_id: string | null;
-  product_id: string | null;
+  order_id?: string;
+  product_id?: string;
   transaction_id: string;
-  commission_type: 'product_sale' | 'service_fee' | 'advertising' | 'subscription' | 'penalty' | 'bonus';
   commission_rate: number;
   gross_amount: number;
   commission_amount: number;
-  platform_fee: number;
   net_commission: number;
-  status: 'pending' | 'calculated' | 'approved' | 'paid' | 'disputed' | 'refunded';
-  payment_status: 'unpaid' | 'processing' | 'paid' | 'failed' | 'cancelled';
+  platform_fee: number;
+  status: 'pending' | 'approved' | 'paid' | 'disputed' | 'cancelled';
+  payment_status: 'unpaid' | 'paid' | 'failed' | 'processing';
+  commission_type: 'product_sale' | 'service_fee' | 'advertising' | 'subscription' | 'penalty' | 'bonus';
   transaction_date: string;
-  calculation_date: string;
-  payment_due_date?: string;
   payment_date?: string;
+  payment_due_date?: string;
+  calculation_date: string;
   category?: string;
   payment_method?: string;
   currency: string;
@@ -28,34 +27,35 @@ export interface VendorCommission {
   notes?: string;
   created_by?: string;
   approved_by?: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface VendorCommissionRate {
   id: string;
   vendor_id: string;
+  rate_type: 'percentage' | 'fixed' | 'tiered';
+  base_rate: number;
   category_id?: string;
   product_type?: string;
-  rate_type: 'percentage' | 'fixed_amount' | 'tiered';
-  base_rate: number;
   minimum_amount: number;
   maximum_amount?: number;
-  tier_rates: any[];
+  tier_rates: any[]; // Changed from Json to any[]
+  platform_fee_rate: number;
+  processing_fee: number;
   effective_from: string;
   effective_to?: string;
   is_active: boolean;
-  platform_fee_rate: number;
-  processing_fee: number;
   created_by: string;
-  created_at: string;
-  updated_at: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CommissionPayout {
   id: string;
   vendor_id: string;
   payout_batch_id: string;
+  commission_ids: string[]; // Changed from Json to string[]
   total_commission: number;
   platform_fees: number;
   tax_deductions: number;
@@ -63,17 +63,16 @@ export interface CommissionPayout {
   net_payout_amount: number;
   period_start: string;
   period_end: string;
-  payment_method: 'bank_transfer' | 'mobile_banking' | 'digital_wallet' | 'check' | 'cash';
-  payment_reference?: string;
-  bank_account_info?: any;
+  payment_method: 'bank_transfer' | 'mobile_wallet' | 'check' | 'digital_wallet';
+  bank_account_info?: any; // Changed from Json to any for easier handling
   status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
   scheduled_date?: string;
   processed_date?: string;
-  commission_ids: string[];
-  notes?: string;
   processed_by?: string;
-  created_at: string;
-  updated_at: string;
+  payment_reference?: string;
+  notes?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface CommissionDispute {
@@ -200,7 +199,6 @@ export class CommissionTrackingService {
           order_id: 'order-123',
           product_id: 'product-456',
           transaction_id: 'TXN-001',
-          commission_type: 'product_sale',
           commission_rate: 8.5,
           gross_amount: 1000,
           commission_amount: 85,
@@ -220,19 +218,23 @@ export class CommissionTrackingService {
     }
   }
 
-  static async getCommissionRates(): Promise<VendorCommissionRate[]> {
+  static async getCommissionRates(vendorId?: string): Promise<VendorCommissionRate[]> {
     try {
-      const { data, error } = await supabase
-        .from('vendor_commission_rates')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+      let query = supabase.from('vendor_commission_rates').select('*');
+      
+      if (vendorId) {
+        query = query.eq('vendor_id', vendorId);
+      }
+      
+      const { data, error } = await query;
+      
       if (error) throw error;
       
+      // Convert the data to match our interface, handling Json types properly
       return (data || []).map(item => ({
         ...item,
-        rate_type: item.rate_type as VendorCommissionRate['rate_type']
-      }));
+        tier_rates: Array.isArray(item.tier_rates) ? item.tier_rates : []
+      })) as VendorCommissionRate[];
     } catch (error) {
       console.error('Error fetching commission rates:', error);
       // Return mock data for development
@@ -240,15 +242,21 @@ export class CommissionTrackingService {
         {
           id: '1',
           vendor_id: 'vendor-1',
-          product_type: 'Electronics',
-          rate_type: 'percentage',
-          base_rate: 8.5,
+          rate_type: 'percentage' as const,
+          base_rate: 12.5,
+          category_id: 'electronics',
+          product_type: 'smartphone',
           minimum_amount: 0,
-          tier_rates: [],
-          effective_from: '2024-01-01',
-          is_active: true,
+          maximum_amount: 50000,
+          tier_rates: [
+            { min: 0, max: 10000, rate: 10 },
+            { min: 10001, max: 50000, rate: 12.5 }
+          ],
           platform_fee_rate: 2.5,
-          processing_fee: 0,
+          processing_fee: 50,
+          effective_from: '2024-01-01',
+          effective_to: '2024-12-31',
+          is_active: true,
           created_by: 'admin-1',
           created_at: '2024-01-01T00:00:00Z',
           updated_at: '2024-01-01T00:00:00Z'
@@ -257,21 +265,26 @@ export class CommissionTrackingService {
     }
   }
 
-  static async getPayouts(): Promise<CommissionPayout[]> {
+  static async getPayouts(vendorId?: string): Promise<CommissionPayout[]> {
     try {
-      const { data, error } = await supabase
-        .from('commission_payouts')
-        .select('*')
-        .order('created_at', { ascending: false });
-
+      let query = supabase.from('commission_payouts').select('*');
+      
+      if (vendorId) {
+        query = query.eq('vendor_id', vendorId);
+      }
+      
+      const { data, error } = await query;
+      
       if (error) throw error;
       
+      // Convert the data to match our interface, handling Json types properly
       return (data || []).map(item => ({
         ...item,
-        payment_method: item.payment_method as CommissionPayout['payment_method'],
-        status: item.status as CommissionPayout['status'],
-        commission_ids: Array.isArray(item.commission_ids) ? item.commission_ids : []
-      }));
+        commission_ids: Array.isArray(item.commission_ids) ? 
+          item.commission_ids.map(id => String(id)) : 
+          [],
+        bank_account_info: item.bank_account_info || {}
+      })) as CommissionPayout[];
     } catch (error) {
       console.error('Error fetching payouts:', error);
       // Return mock data for development
@@ -279,19 +292,29 @@ export class CommissionTrackingService {
         {
           id: '1',
           vendor_id: 'vendor-1',
-          payout_batch_id: 'BATCH-001',
-          total_commission: 1000,
-          platform_fees: 50,
-          tax_deductions: 100,
+          payout_batch_id: 'BATCH-2024-001',
+          commission_ids: ['comm-1', 'comm-2', 'comm-3'],
+          total_commission: 15000,
+          platform_fees: 750,
+          tax_deductions: 2250,
           other_deductions: 0,
-          net_payout_amount: 850,
+          net_payout_amount: 12000,
           period_start: '2024-01-01',
           period_end: '2024-01-31',
-          payment_method: 'bank_transfer',
-          status: 'pending',
-          commission_ids: ['comm-1', 'comm-2'],
+          payment_method: 'bank_transfer' as const,
+          bank_account_info: {
+            account_name: 'Vendor Account',
+            account_number: '****1234',
+            bank_name: 'Example Bank'
+          },
+          status: 'completed' as const,
+          scheduled_date: '2024-02-01',
+          processed_date: '2024-02-01T10:30:00Z',
+          processed_by: 'admin-1',
+          payment_reference: 'TXN123456789',
+          notes: 'Monthly payout for January 2024',
           created_at: '2024-02-01T00:00:00Z',
-          updated_at: '2024-02-01T00:00:00Z'
+          updated_at: '2024-02-01T10:30:00Z'
         }
       ];
     }

@@ -46,7 +46,9 @@ export const productManagementSubmenus = [
   'category-rules', 'category-seo', 'category-performance', 'category-analytics',
   'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
   // Product moderation submenus - EXPLICITLY LISTED
-  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products'
+  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
+  // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
+  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
 ];
 
 // Define dashboard-related submenus (removing category-analytics from here)

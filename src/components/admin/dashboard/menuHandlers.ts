@@ -44,7 +44,21 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // PRIORITY 1: Handle product moderation submenus FIRST with both singular and plural forms
+  // PRIORITY 1: Handle stock and inventory submenus FIRST
+  const stockInventorySubmenus = [
+    'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
+  ];
+  
+  if (stockInventorySubmenus.includes(menu)) {
+    console.log('✅ PRIORITY: Found in stock/inventory submenus - routing to product management');
+    console.log('🔍 Stock/Inventory submenu:', menu);
+    return {
+      selectedMenu: 'product-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 2: Handle product moderation submenus with both singular and plural forms
   const productModerationSubmenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 

@@ -43,7 +43,9 @@ export const productSubmenus = [
   'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 'category-performance',
   'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
   // Product moderation submenus - EXPLICITLY LISTED TO ENSURE PROPER ROUTING
-  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products'
+  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
+  // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
+  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
 ];
 
 // Customer management submenus

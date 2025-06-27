@@ -29,7 +29,19 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🌟 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
-  // PRIORITY: Handle product moderation submenus FIRST (with both singular and plural forms)
+  // PRIORITY 1: Handle stock-overview and inventory-related submenus FIRST
+  const stockInventoryMenus = [
+    'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
+  ];
+  
+  if (stockInventoryMenus.includes(selectedMenu) || stockInventoryMenus.includes(selectedSubmenu)) {
+    console.log('✅ STOCK/INVENTORY DETECTED - routing to ProductManagementContent');
+    console.log('🔍 Stock/Inventory selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+    const stockSubmenu = stockInventoryMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    return <ProductManagementContent selectedSubmenu={stockSubmenu} />;
+  }
+  
+  // PRIORITY 2: Handle product moderation submenus (with both singular and plural forms)
   const productModerationMenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 

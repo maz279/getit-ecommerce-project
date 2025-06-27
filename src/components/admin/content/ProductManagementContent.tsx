@@ -13,6 +13,7 @@ import { CategoryStructureContent } from './forms/productManagement/CategoryStru
 import { CategoryPerformanceContent } from './forms/productManagement/CategoryPerformanceContent';
 import { CategoryAnalyticsContent } from './forms/productManagement/CategoryAnalyticsContent';
 import { SeasonalCategoriesContent } from './forms/productManagement/SeasonalCategoriesContent';
+import { StockOverviewContent } from './forms/productManagement/StockOverviewContent';
 // Import new product moderation components
 import { PendingApprovalContent } from './forms/productManagement/PendingApprovalContent';
 import { ContentReviewContent } from './forms/productManagement/ContentReviewContent';
@@ -220,6 +221,15 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
     console.log('🔍 ProductManagementContent getContent - selectedSubmenu:', selectedSubmenu);
     
     switch (selectedSubmenu) {
+      // Stock and inventory related routes - PRIORITY ROUTING
+      case 'stock-overview':
+      case 'inventory-overview':
+        console.log('✅ Routing to StockOverviewContent');
+        return <StockOverviewContent />;
+      case 'stock-management':
+      case 'inventory-tracking':
+      case 'stock-analytics':
+        return <StockOverviewContent />;
       case 'product-catalog':
       case 'products':
         return renderProductCatalog();

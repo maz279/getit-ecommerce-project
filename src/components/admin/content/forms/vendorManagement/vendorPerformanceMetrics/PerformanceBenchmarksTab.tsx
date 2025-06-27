@@ -182,7 +182,7 @@ export const PerformanceBenchmarksTab: React.FC<PerformanceBenchmarksTabProps> =
             <div className="text-center p-4 bg-red-50 rounded-lg">
               <div className="text-2xl font-bold text-red-600">0</div>
               <div className="text-sm text-red-700">Below Threshold</div>
-              <div className="text-xs text-gray-600">< Minimum required</div>
+              <div className="text-xs text-gray-600">&lt; Minimum required</div>
             </div>
           </div>
         </CardContent>

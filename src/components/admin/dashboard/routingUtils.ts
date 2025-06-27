@@ -63,7 +63,7 @@ export const customerManagementSubmenus = [
   'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Define vendor-management related submenus - COMPREHENSIVE LIST
+// Define vendor-management related submenus - COMPREHENSIVE LIST - CRITICAL FIX
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
   'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
@@ -71,10 +71,10 @@ export const vendorManagementSubmenus = [
   'vendor-payments', 'payments', 'commission-management', 'vendor-support', 'support'
 ];
 
-// Define dashboard-related submenus (removing category-analytics from here)
+// Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS
 export const dashboardSubmenus = [
   'overview', 'analytics', 'real-time-metrics', 'realtime-metrics', 'kpi-monitoring', 'kpi_monitoring',
   'performance-insights', 'performance_insights', 'revenue-analytics', 'user-activity', 
-  'vendor-performance', 'order-insights', 'inventory-alerts', 'platform-performance', 
+  'order-insights', 'inventory-alerts', 'platform-performance', 
   'system-health', 'security-monitoring', 'system-logs', 'quick-actions', 'executive-summary'
 ];

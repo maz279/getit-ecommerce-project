@@ -45,9 +45,9 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // PRIORITY 1: Handle vendor management submenus FIRST
+  // PRIORITY 1: Handle vendor management submenus FIRST - CRITICAL FIX
   if (vendorManagementSubmenus.includes(menu)) {
-    console.log('✅ PRIORITY: Found in vendor management submenus - routing to vendor management');
+    console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
     console.log('🔍 Vendor management submenu:', menu);
     return {
       selectedMenu: 'vendor-management',

@@ -23,11 +23,8 @@ export const useSearchState = ({ searchQuery, setSearchQuery, isAIMode }: UseSea
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const aiSearch = useAISearch({
-    enabled: isAIMode,
-    searchQuery,
-    onSearchComplete: () => setShowResults(true)
-  });
+  // Call useAISearch without arguments as it likely manages its own state internally
+  const aiSearch = useAISearch();
 
   const handleInputChange = (value: string) => {
     setSearchQuery(value);

@@ -6,6 +6,11 @@ import { SearchSuggestions } from './SearchSuggestions';
 import { SearchResults } from './SearchResults';
 import { SearchFilters } from './SearchFilters';
 
+interface PageSuggestion {
+  title: string;
+  path: string;
+}
+
 interface MobileSearchBarProps {
   showMobileSearch: boolean;
   searchQuery: string;
@@ -38,8 +43,8 @@ interface MobileSearchBarProps {
   onResultClick: (result: any) => void;
   
   // Page navigation
-  pageSuggestions: string[];
-  onPageNavigate: (pageName: string) => void;
+  pageSuggestions: PageSuggestion[];
+  onPageNavigate: (path: string) => void;
   
   language: string;
 }
@@ -118,11 +123,11 @@ export const MobileSearchBar: React.FC<MobileSearchBarProps> = ({
                   {pageSuggestions.map((page, index) => (
                     <button
                       key={`page-${index}`}
-                      onClick={() => onPageNavigate(page)}
+                      onClick={() => onPageNavigate(page.path)}
                       className="w-full text-left px-2 py-1.5 hover:bg-blue-50 rounded text-sm text-blue-600"
                     >
                       <span className="w-3 h-3 inline mr-2">🏠</span>
-                      {page}
+                      {page.title}
                     </button>
                   ))}
                 </div>

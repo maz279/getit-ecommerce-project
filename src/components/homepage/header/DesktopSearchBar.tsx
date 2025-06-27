@@ -7,6 +7,11 @@ import { SearchResults } from './SearchResults';
 import { SearchFilters } from './SearchFilters';
 import { TrendingSearches } from './TrendingSearches';
 
+interface PageSuggestion {
+  title: string;
+  path: string;
+}
+
 interface DesktopSearchBarProps {
   searchQuery: string;
   onInputChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
@@ -43,8 +48,8 @@ interface DesktopSearchBarProps {
   onTrendingClick: (search: string) => void;
   
   // Page navigation
-  pageSuggestions: string[];
-  onPageNavigate: (pageName: string) => void;
+  pageSuggestions: PageSuggestion[];
+  onPageNavigate: (path: string) => void;
   
   language: string;
 }

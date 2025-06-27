@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface ReviewModerationData {
@@ -15,6 +14,8 @@ export interface ReviewModerationData {
   priority_level: 'low' | 'medium' | 'high';
   moderator_id?: string;
   moderation_notes?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface RatingDisputeData {
@@ -28,6 +29,9 @@ export interface RatingDisputeData {
   priority_level: 'low' | 'medium' | 'high';
   resolution_notes?: string;
   resolved_by?: string;
+  created_at?: string;
+  updated_at?: string;
+  resolved_at?: string;
 }
 
 export interface RatingPolicyData {
@@ -38,6 +42,8 @@ export interface RatingPolicyData {
   is_active: boolean;
   effective_date: string;
   created_by: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface AIDetectionSetting {

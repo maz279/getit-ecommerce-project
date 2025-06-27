@@ -52,11 +52,14 @@ export const productSubmenus = [
   'market-trends', 'market-trend', 'trends', 'trend-analysis', 'market-analysis'
 ];
 
-// Customer management submenus
+// Customer management submenus - ENHANCED TO INCLUDE ALL CUSTOMER-RELATED SUBMENUS
 export const customerSubmenus = [
   'customer-database', 'customer-analytics', 'customer-support', 'all-customers', 'customer-segments', 
   'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
-  'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews'
+  'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews',
+  // Additional customer management submenus
+  'customer-overview', 'customer-insights', 'customer-engagement', 'customer-retention',
+  'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
 // Vendor management submenus

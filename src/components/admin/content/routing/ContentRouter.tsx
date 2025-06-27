@@ -29,7 +29,23 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🌟 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
-  // PRIORITY 1: Handle stock-overview and inventory-related submenus FIRST
+  // PRIORITY 1: Handle customer management submenus FIRST
+  const customerManagementMenus = [
+    'all-customers', 'customer-database', 'customer-analytics', 'customer-support', 'customer-segments', 
+    'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
+    'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews',
+    'customer-overview', 'customer-insights', 'customer-engagement', 'customer-retention',
+    'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
+  ];
+  
+  if (customerManagementMenus.includes(selectedMenu) || customerManagementMenus.includes(selectedSubmenu)) {
+    console.log('✅ CUSTOMER MANAGEMENT DETECTED - routing to CustomerManagementContent');
+    console.log('🔍 Customer management selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+    const customerSubmenu = customerManagementMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    return <CustomerManagementContent selectedSubmenu={customerSubmenu} />;
+  }
+  
+  // PRIORITY 2: Handle stock-overview and inventory-related submenus
   const stockInventoryMenus = [
     'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
   ];
@@ -41,7 +57,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <ProductManagementContent selectedSubmenu={stockSubmenu} />;
   }
   
-  // PRIORITY 2: Handle product moderation submenus (with both singular and plural forms)
+  // PRIORITY 3: Handle product moderation submenus (with both singular and plural forms)
   const productModerationMenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 
@@ -115,9 +131,10 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <ProductManagementContent selectedSubmenu={submenu} />;
   }
 
-  // Handle customer management
+  // Handle customer management - FALLBACK FOR REMAINING CASES
   if (selectedMenu === 'customers' || selectedMenu.startsWith('customer-') || 
       customerSubmenus.includes(selectedMenu)) {
+    console.log('✅ CUSTOMER MANAGEMENT FALLBACK - routing to CustomerManagementContent');
     const submenu = selectedMenu === 'customers' ? selectedSubmenu : selectedMenu;
     return <CustomerManagementContent selectedSubmenu={submenu} />;
   }

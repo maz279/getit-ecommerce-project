@@ -44,7 +44,22 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <LogisticsContent selectedSubmenu={logisticsSubmenu} />;
   }
   
-  // PRIORITY 2: Handle customer management submenus
+  // PRIORITY 2: Handle vendor management submenus - EXPANDED DETECTION
+  const vendorManagementMenus = [
+    'vendor-directory', 'active-vendors', 'vendor-onboarding', 'vendor-verification',
+    'vendor-performance', 'vendor-analytics', 'vendor-payments', 'vendor-support',
+    'vendor-dashboard', 'vendor-profile', 'vendor-products', 'vendor-orders',
+    'commission-management', 'vendor-reviews', 'vendor-settlements', 'vendor-kyc'
+  ];
+  
+  if (vendorManagementMenus.includes(selectedMenu) || vendorManagementMenus.includes(selectedSubmenu)) {
+    console.log('✅ VENDOR MANAGEMENT DETECTED - routing to VendorManagementContent');
+    console.log('🔍 Vendor management selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+    const vendorSubmenu = vendorManagementMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    return <VendorManagementContent selectedSubmenu={vendorSubmenu} />;
+  }
+  
+  // PRIORITY 3: Handle customer management submenus
   const customerManagementMenus = [
     'all-customers', 'customer-database', 'customer-analytics', 'customer-support', 'customer-segments', 
     'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
@@ -60,7 +75,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <CustomerManagementContent selectedSubmenu={customerSubmenu} />;
   }
   
-  // PRIORITY 3: Handle stock-overview and inventory-related submenus
+  // PRIORITY 4: Handle stock-overview and inventory-related submenus
   const stockInventoryMenus = [
     'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
   ];
@@ -72,7 +87,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <ProductManagementContent selectedSubmenu={stockSubmenu} />;
   }
   
-  // PRIORITY 4: Handle product moderation submenus
+  // PRIORITY 5: Handle product moderation submenus
   const productModerationMenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 
@@ -145,9 +160,10 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <CustomerManagementContent selectedSubmenu={submenu} />;
   }
 
-  // Handle vendor management
+  // Handle vendor management - FALLBACK
   if (selectedMenu === 'vendors' || selectedMenu.startsWith('vendor-') || 
       vendorSubmenus.includes(selectedMenu)) {
+    console.log('✅ VENDOR MANAGEMENT FALLBACK - routing to VendorManagementContent');
     const submenu = selectedMenu === 'vendors' ? selectedSubmenu : selectedMenu;
     return <VendorManagementContent selectedSubmenu={submenu} />;
   }

@@ -40,7 +40,7 @@ export const productSubmenus = [
   'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 
   'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 
   'product-export', 'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 
-  'category-attributes', 'category-rules', 'category-analytics', 'category-seo'
+  'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 'category-performance'
 ];
 
 // Customer management submenus

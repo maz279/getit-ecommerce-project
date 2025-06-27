@@ -43,7 +43,7 @@ export const productManagementSubmenus = [
   'trending-products', 'price-optimization', 'product-search', 'featured-products',
   'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
-  'category-rules', 'category-analytics', 'category-seo'
+  'category-rules', 'category-analytics', 'category-seo', 'category-performance'
 ];
 
 // Define dashboard-related submenus

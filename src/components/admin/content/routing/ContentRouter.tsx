@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardContent } from '../../dashboard/DashboardContent';
 import { UserManagementContent } from '../UserManagementContent';
@@ -29,6 +28,14 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🌟 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
+  // Handle product moderation submenus FIRST (before other routing)
+  const productModerationMenus = ['pending-approval', 'content-review', 'quality-control', 'rejected-products', 'product-moderation'];
+  if (productModerationMenus.includes(selectedMenu)) {
+    console.log('✅ PRODUCT MODERATION DETECTED - routing to ProductManagementContent');
+    console.log('🔍 Product moderation menu:', selectedMenu);
+    return <ProductManagementContent selectedSubmenu={selectedMenu} />;
+  }
+
   // Handle user-management explicitly first
   if (selectedMenu === 'user-management') {
     console.log('✅ USER MANAGEMENT MAIN MENU - routing to UserManagementContent');
@@ -51,7 +58,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <OrderManagementContent selectedSubmenu={submenu} />;
   }
 
-  // Handle logistics management
+  // Handle logistics management (REMOVED quality-control from here)
   if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || 
       selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
       logisticsSubmenus.includes(selectedMenu)) {
@@ -70,8 +77,6 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
   // Handle product management - ENHANCED WITH BETTER DETECTION
   if (selectedMenu === 'product-management' || selectedMenu === 'products' || 
       selectedMenu.startsWith('product-') || selectedMenu.startsWith('category-') ||
-      selectedMenu === 'pending-approval' || selectedMenu === 'content-review' ||
-      selectedMenu === 'quality-control' || selectedMenu === 'rejected-products' ||
       productSubmenus.includes(selectedMenu)) {
     console.log('✅ PRODUCT MANAGEMENT - routing to ProductManagementContent');
     console.log('🔍 Selected menu for product management:', selectedMenu);

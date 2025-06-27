@@ -28,14 +28,14 @@ export const orderManagementSubmenus = [
   'failed-payments'
 ];
 
-// Define logistics-management related submenus
+// Define logistics-management related submenus (REMOVED quality-control to avoid conflict)
 export const logisticsManagementSubmenus = [
   'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
-  'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control',
+  'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations',
   'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
 ];
 
-// Define product-management related submenus
+// Define product-management related submenus (INCLUDING all product moderation submenus)
 export const productManagementSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
   'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
@@ -45,7 +45,7 @@ export const productManagementSubmenus = [
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
   'category-rules', 'category-seo', 'category-performance', 'category-analytics',
   'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
-  // Product moderation submenus
+  // Product moderation submenus - EXPLICITLY LISTED
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products'
 ];
 

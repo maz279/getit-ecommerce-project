@@ -84,11 +84,16 @@ export const vendorManagementSubmenus = [
   'tin-verification', 'tin-review', 'tax-verification', 'tin-validation', 'tin-approval',
   'tax-compliance', 'tin-analytics', 'tax-registration', 'tin-documents', 'tax-authority-verification',
   'expired-tin', 'tin-renewal', 'tax-status-check', 'tin-compliance-monitoring',
-  // NID VERIFICATION SUBMENUS - NEW ADDITION
+  // NID VERIFICATION SUBMENUS
   'nid-verification', 'nid-review', 'national-id-verification', 'nid-validation', 'nid-approval',
   'identity-compliance', 'nid-analytics', 'national-id-registration', 'nid-documents', 'identity-authority-verification',
   'expired-nid', 'nid-renewal', 'identity-status-check', 'nid-compliance-monitoring', 'biometric-verification',
-  'face-matching', 'identity-fraud-detection', 'nid-blacklist-check', 'identity-verification-api'
+  'face-matching', 'identity-fraud-detection', 'nid-blacklist-check', 'identity-verification-api',
+  // BANK ACCOUNT VERIFICATION SUBMENUS - NEW ADDITION
+  'bank-account-verification', 'bank-verification', 'banking-verification', 'account-validation', 'bank-approval',
+  'banking-compliance', 'bank-analytics', 'financial-verification', 'bank-documents', 'banking-authority-verification',
+  'failed-bank-verification', 'bank-renewal', 'banking-status-check', 'bank-compliance-monitoring', 'financial-audit',
+  'payment-method-verification', 'banking-fraud-detection', 'account-ownership-verification', 'banking-api-integration'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

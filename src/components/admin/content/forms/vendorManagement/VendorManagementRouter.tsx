@@ -15,6 +15,7 @@ import { DocumentReviewContent } from './DocumentReviewContent';
 import { TradeLicenseVerificationContent } from './TradeLicenseVerificationContent';
 import { TinVerificationContent } from './TinVerificationContent';
 import { NidVerificationContent } from './NidVerificationContent';
+import { BankAccountVerificationContent } from './BankAccountVerificationContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -142,6 +143,27 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'identity-verification-api':
       console.log('✅ Routing to NidVerificationContent');
       return <NidVerificationContent />;
+    case 'bank-account-verification':
+    case 'bank-verification':
+    case 'banking-verification':
+    case 'account-validation':
+    case 'bank-approval':
+    case 'banking-compliance':
+    case 'bank-analytics':
+    case 'financial-verification':
+    case 'bank-documents':
+    case 'banking-authority-verification':
+    case 'failed-bank-verification':
+    case 'bank-renewal':
+    case 'banking-status-check':
+    case 'bank-compliance-monitoring':
+    case 'financial-audit':
+    case 'payment-method-verification':
+    case 'banking-fraud-detection':
+    case 'account-ownership-verification':
+    case 'banking-api-integration':
+      console.log('✅ Routing to BankAccountVerificationContent');
+      return <BankAccountVerificationContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

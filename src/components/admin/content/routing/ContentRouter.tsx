@@ -29,7 +29,22 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🌟 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
-  // PRIORITY 1: Handle customer management submenus FIRST
+  // PRIORITY 1: Handle logistics and shipping submenus FIRST
+  const logisticsMenus = [
+    'logistics', 'shipping-management', 'warehouse-operations', 'courier-partners', 
+    'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 
+    'pick-pack-operations', 'logistics-overview', 'delivery-tracking', 'shipping-labels', 
+    'return-logistics', 'delivery-performance'
+  ];
+  
+  if (logisticsMenus.includes(selectedMenu) || logisticsMenus.includes(selectedSubmenu)) {
+    console.log('✅ LOGISTICS DETECTED - routing to LogisticsContent');
+    console.log('🔍 Logistics selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
+    const logisticsSubmenu = logisticsMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    return <LogisticsContent selectedSubmenu={logisticsSubmenu} />;
+  }
+  
+  // PRIORITY 2: Handle customer management submenus
   const customerManagementMenus = [
     'all-customers', 'customer-database', 'customer-analytics', 'customer-support', 'customer-segments', 
     'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
@@ -45,7 +60,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <CustomerManagementContent selectedSubmenu={customerSubmenu} />;
   }
   
-  // PRIORITY 2: Handle stock-overview and inventory-related submenus
+  // PRIORITY 3: Handle stock-overview and inventory-related submenus
   const stockInventoryMenus = [
     'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
   ];
@@ -57,7 +72,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <ProductManagementContent selectedSubmenu={stockSubmenu} />;
   }
   
-  // PRIORITY 3: Handle product moderation submenus (with both singular and plural forms)
+  // PRIORITY 4: Handle product moderation submenus
   const productModerationMenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 
@@ -102,15 +117,6 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     console.log('✅ ORDER MANAGEMENT - routing to OrderManagementContent');
     const submenu = orderSubmenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
     return <OrderManagementContent selectedSubmenu={submenu} />;
-  }
-
-  // Handle logistics management
-  if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || 
-      selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
-      logisticsSubmenus.includes(selectedMenu)) {
-    console.log('✅ LOGISTICS MANAGEMENT - routing to LogisticsContent');
-    const submenu = logisticsSubmenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
-    return <LogisticsContent selectedSubmenu={submenu} />;
   }
 
   // Handle dashboard

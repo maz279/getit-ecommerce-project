@@ -1,521 +1,520 @@
-
 import React, { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
 import { Progress } from '@/components/ui/progress';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { 
-  Star, Award, TrendingUp, AlertTriangle, Save, Download, 
-  FileText, BarChart3, Users, Package, Clock, DollarSign,
-  Shield, CheckCircle, XCircle, Eye, MessageSquare, 
-  RefreshCw, Filter, Search, Calendar
+  Star, 
+  TrendingUp, 
+  TrendingDown, 
+  Award, 
+  Target, 
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Users,
+  Package,
+  Truck,
+  Shield
 } from 'lucide-react';
-import { VendorScorecardData } from './types';
+import { VendorScorecard } from './types';
 
 interface VendorScorecardTabProps {
-  scorecard: VendorScorecardData;
+  scorecard: VendorScorecard;
 }
 
 export const VendorScorecardTab: React.FC<VendorScorecardTabProps> = ({ scorecard }) => {
-  const [activeTab, setActiveTab] = useState('overview');
-  const [selectedVendor, setSelectedVendor] = useState('techbd');
-  const [newRating, setNewRating] = useState(0);
-  const [reviewText, setReviewText] = useState('');
+  const [selectedVendor, setSelectedVendor] = useState<string>('vendor-1');
 
-  // Mock comprehensive vendor data (Amazon/Shopee level)
-  const vendorDetails = {
-    techbd: {
-      name: 'TechBD Electronics',
-      businessName: 'TechBD Solutions Ltd.',
-      logo: '/api/placeholder/64/64',
-      category: 'Electronics & Gadgets',
-      joinDate: '2021-03-15',
-      location: 'Dhaka, Bangladesh',
-      overallScore: 9.2,
-      tier: 'Premium Partner',
-      certifications: ['ISO 9001', 'CE Certified', 'RoHS Compliant'],
-      performanceMetrics: {
-        orderFulfillment: 96.8,
-        onTimeDelivery: 94.2,
-        customerSatisfaction: 4.6,
-        productQuality: 9.1,
-        responsiveness: 92.5,
-        compliance: 98.2
+  const mockScorecard: VendorScorecard = {
+    vendorId: 'vendor-1',
+    period: 'Q4 2024',
+    categories: {
+      orderManagement: {
+        score: 92,
+        metrics: {
+          fulfillmentRate: 98.5,
+          processingTime: 2.3,
+          accuracyRate: 96.8,
+          cancellationRate: 1.2
+        }
       },
-      monthlyStats: {
-        totalOrders: 2847,
-        revenue: 45600000,
-        returnRate: 1.2,
-        disputes: 3,
-        avgResponseTime: '2.3 hours',
-        customerRating: 4.6
+      customerService: {
+        score: 88,
+        metrics: {
+          responseTime: 4.2,
+          resolutionRate: 94.5,
+          satisfactionScore: 4.6,
+          communicationQuality: 87.3
+        }
       },
-      strengths: [
-        'Excellent product quality',
-        'Fast shipping',
-        'Responsive customer service',
-        'Wide product range'
-      ],
-      improvements: [
-        'Packaging optimization',
-        'Inventory management',
-        'Price competitiveness'
-      ],
-      recentReviews: [
-        { id: 1, rating: 5, text: 'Excellent quality products and fast delivery', date: '2024-01-15', customer: 'Ahmed K.' },
-        { id: 2, rating: 4, text: 'Good service but could improve packaging', date: '2024-01-12', customer: 'Fatima S.' },
-        { id: 3, rating: 5, text: 'Always reliable, highly recommended', date: '2024-01-10', customer: 'Mahmud R.' }
-      ]
-    }
+      productQuality: {
+        score: 95,
+        metrics: {
+          defectRate: 0.8,
+          returnRate: 2.1,
+          qualityRating: 4.7,
+          complianceScore: 98.2
+        }
+      },
+      logistics: {
+        score: 89,
+        metrics: {
+          onTimeDelivery: 96.3,
+          shippingAccuracy: 98.1,
+          packagingQuality: 92.4,
+          trackingUpdates: 95.7
+        }
+      },
+      businessCompliance: {
+        score: 97,
+        metrics: {
+          documentCompliance: 100,
+          policyAdherence: 96.8,
+          legalCompliance: 98.5,
+          ethicalStandards: 94.2
+        }
+      }
+    },
+    recommendations: [
+      'Improve customer service response time to under 2 hours',
+      'Enhance packaging quality standards',
+      'Implement better inventory management system'
+    ],
+    improvementPlan: [
+      'Customer service training program - 30 days',
+      'Packaging quality audit - 15 days',
+      'Inventory system upgrade - 60 days'
+    ]
   };
 
-  const currentVendor = vendorDetails[selectedVendor as keyof typeof vendorDetails];
-
   const getScoreColor = (score: number) => {
-    if (score >= 9) return 'text-green-600';
-    if (score >= 8) return 'text-blue-600';
-    if (score >= 7) return 'text-yellow-600';
-    if (score >= 6) return 'text-orange-600';
+    if (score >= 95) return 'text-green-600';
+    if (score >= 85) return 'text-blue-600';
+    if (score >= 70) return 'text-yellow-600';
     return 'text-red-600';
   };
 
-  const getTierBadge = (tier: string) => {
-    const colors = {
-      'Premium Partner': 'bg-purple-100 text-purple-800',
-      'Gold Seller': 'bg-yellow-100 text-yellow-800',
-      'Silver Seller': 'bg-gray-100 text-gray-800',
-      'Bronze Seller': 'bg-orange-100 text-orange-800'
-    };
-    return colors[tier as keyof typeof colors] || 'bg-gray-100 text-gray-800';
+  const getScoreBadgeVariant = (score: number) => {
+    if (score >= 95) return 'default';
+    if (score >= 85) return 'secondary';
+    if (score >= 70) return 'outline';
+    return 'destructive';
   };
+
+  const overallScore = Math.round(
+    (mockScorecard.categories.orderManagement.score +
+     mockScorecard.categories.customerService.score +
+     mockScorecard.categories.productQuality.score +
+     mockScorecard.categories.logistics.score +
+     mockScorecard.categories.businessCompliance.score) / 5
+  );
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
+      {/* Vendor Scorecard Header */}
       <Card>
         <CardHeader>
           <div className="flex items-center justify-between">
             <div>
-              <CardTitle className="flex items-center text-2xl">
-                <Award className="h-6 w-6 mr-3 text-gold-600" />
-                Vendor Scorecard Dashboard
+              <CardTitle className="flex items-center space-x-2">
+                <Award className="h-6 w-6 text-yellow-600" />
+                <span>Vendor Performance Scorecard</span>
               </CardTitle>
               <p className="text-sm text-gray-600 mt-1">
-                Comprehensive vendor performance evaluation and rating system
+                Comprehensive vendor performance evaluation for {mockScorecard.period}
               </p>
             </div>
-            <div className="flex items-center space-x-3">
-              <Select value={selectedVendor} onValueChange={setSelectedVendor}>
-                <SelectTrigger className="w-48">
-                  <SelectValue placeholder="Select Vendor" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="techbd">TechBD Electronics</SelectItem>
-                  <SelectItem value="fashionista">Fashionista</SelectItem>
-                  <SelectItem value="homeneeds">HomeNeeds</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline" size="sm">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Refresh Data
-              </Button>
-              <Button variant="outline" size="sm">
-                <Download className="h-4 w-4 mr-2" />
-                Export Report
-              </Button>
+            <div className="flex items-center space-x-4">
+              <div className="text-center">
+                <div className={`text-3xl font-bold ${getScoreColor(overallScore)}`}>
+                  {overallScore}
+                </div>
+                <div className="text-sm text-gray-600">Overall Score</div>
+              </div>
+              <Badge variant={getScoreBadgeVariant(overallScore)} className="text-lg px-3 py-1">
+                {overallScore >= 95 ? 'Excellent' : 
+                 overallScore >= 85 ? 'Good' : 
+                 overallScore >= 70 ? 'Average' : 'Needs Improvement'}
+              </Badge>
             </div>
           </div>
         </CardHeader>
       </Card>
 
-      {/* Vendor Overview Card */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-start space-x-6">
-            <div className="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
-              <span className="text-white font-bold text-xl">TB</span>
-            </div>
-            <div className="flex-1">
-              <div className="flex items-center justify-between mb-2">
-                <div>
-                  <h2 className="text-xl font-bold">{currentVendor.name}</h2>
-                  <p className="text-gray-600">{currentVendor.businessName}</p>
-                </div>
-                <div className="text-right">
-                  <div className={`text-3xl font-bold ${getScoreColor(currentVendor.overallScore)}`}>
-                    {currentVendor.overallScore}/10
-                  </div>
-                  <p className="text-sm text-gray-500">Overall Score</p>
-                </div>
-              </div>
-              
-              <div className="flex items-center space-x-4 mb-4">
-                <Badge className={getTierBadge(currentVendor.tier)}>
-                  {currentVendor.tier}
-                </Badge>
-                <span className="text-sm text-gray-600">{currentVendor.category}</span>
-                <span className="text-sm text-gray-600">📍 {currentVendor.location}</span>
-                <span className="text-sm text-gray-600">
-                  Joined {new Date(currentVendor.joinDate).toLocaleDateString()}
-                </span>
-              </div>
-
-              <div className="flex items-center space-x-6">
-                <div className="flex items-center">
-                  <Star className="h-4 w-4 text-yellow-500 mr-1" />
-                  <span className="font-medium">{currentVendor.monthlyStats.customerRating}</span>
-                  <span className="text-sm text-gray-500 ml-1">rating</span>
-                </div>
-                <div className="text-sm">
-                  <span className="font-medium">{currentVendor.monthlyStats.totalOrders.toLocaleString()}</span>
-                  <span className="text-gray-500 ml-1">orders this month</span>
-                </div>
-                <div className="text-sm">
-                  <span className="font-medium">৳{(currentVendor.monthlyStats.revenue / 1000000).toFixed(1)}M</span>
-                  <span className="text-gray-500 ml-1">revenue</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Main Tabs */}
-      <Tabs value={activeTab} onValueChange={setActiveTab}>
-        <TabsList className="grid w-full grid-cols-6">
-          <TabsTrigger value="overview">Performance Overview</TabsTrigger>
-          <TabsTrigger value="metrics">Key Metrics</TabsTrigger>
-          <TabsTrigger value="quality">Quality Assessment</TabsTrigger>
-          <TabsTrigger value="reviews">Reviews & Ratings</TabsTrigger>
-          <TabsTrigger value="compliance">Compliance Status</TabsTrigger>
-          <TabsTrigger value="improvement">Improvement Plan</TabsTrigger>
+      <Tabs defaultValue="overview" className="space-y-6">
+        <TabsList className="grid w-full grid-cols-5">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="performance">Performance</TabsTrigger>
+          <TabsTrigger value="quality">Quality</TabsTrigger>
+          <TabsTrigger value="compliance">Compliance</TabsTrigger>
+          <TabsTrigger value="improvement">Improvement</TabsTrigger>
         </TabsList>
 
-        {/* Performance Overview Tab */}
         <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {Object.entries(currentVendor.performanceMetrics).map(([key, value]) => (
-              <Card key={key}>
-                <CardContent className="p-4">
-                  <div className="flex items-center justify-between mb-2">
-                    <span className="text-sm font-medium capitalize">
-                      {key.replace(/([A-Z])/g, ' $1').trim()}
-                    </span>
-                    <span className="text-lg font-bold">{value}%</span>
+          {/* Performance Categories Overview */}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Package className="h-5 w-5 text-blue-600" />
+                  <span>Order Management</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-blue-600">
+                    {mockScorecard.categories.orderManagement.score}
+                  </span>
+                  <Badge variant="default">Excellent</Badge>
+                </div>
+                <Progress value={mockScorecard.categories.orderManagement.score} className="mb-3" />
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Fulfillment Rate:</span>
+                    <span className="font-medium">{mockScorecard.categories.orderManagement.metrics.fulfillmentRate}%</span>
                   </div>
-                  <Progress value={value} className="h-2" />
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+                  <div className="flex justify-between">
+                    <span>Processing Time:</span>
+                    <span className="font-medium">{mockScorecard.categories.orderManagement.metrics.processingTime}h</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
 
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Users className="h-5 w-5 text-green-600" />
+                  <span>Customer Service</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-green-600">
+                    {mockScorecard.categories.customerService.score}
+                  </span>
+                  <Badge variant="secondary">Good</Badge>
+                </div>
+                <Progress value={mockScorecard.categories.customerService.score} className="mb-3" />
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Response Time:</span>
+                    <span className="font-medium">{mockScorecard.categories.customerService.metrics.responseTime}h</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Satisfaction:</span>
+                    <span className="font-medium">{mockScorecard.categories.customerService.metrics.satisfactionScore}/5</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Star className="h-5 w-5 text-purple-600" />
+                  <span>Product Quality</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-purple-600">
+                    {mockScorecard.categories.productQuality.score}
+                  </span>
+                  <Badge variant="default">Excellent</Badge>
+                </div>
+                <Progress value={mockScorecard.categories.productQuality.score} className="mb-3" />
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Quality Rating:</span>
+                    <span className="font-medium">{mockScorecard.categories.productQuality.metrics.qualityRating}/5</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Return Rate:</span>
+                    <span className="font-medium">{mockScorecard.categories.productQuality.metrics.returnRate}%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Truck className="h-5 w-5 text-orange-600" />
+                  <span>Logistics</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-orange-600">
+                    {mockScorecard.categories.logistics.score}
+                  </span>
+                  <Badge variant="secondary">Good</Badge>
+                </div>
+                <Progress value={mockScorecard.categories.logistics.score} className="mb-3" />
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>On-Time Delivery:</span>
+                    <span className="font-medium">{mockScorecard.categories.logistics.metrics.onTimeDelivery}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Shipping Accuracy:</span>
+                    <span className="font-medium">{mockScorecard.categories.logistics.metrics.shippingAccuracy}%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="pb-3">
+                <CardTitle className="flex items-center space-x-2 text-lg">
+                  <Shield className="h-5 w-5 text-indigo-600" />
+                  <span>Business Compliance</span>
+                </CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="flex items-center justify-between mb-3">
+                  <span className="text-2xl font-bold text-indigo-600">
+                    {mockScorecard.categories.businessCompliance.score}
+                  </span>
+                  <Badge variant="default">Excellent</Badge>
+                </div>
+                <Progress value={mockScorecard.categories.businessCompliance.score} className="mb-3" />
+                <div className="space-y-1 text-sm">
+                  <div className="flex justify-between">
+                    <span>Document Compliance:</span>
+                    <span className="font-medium">{mockScorecard.categories.businessCompliance.metrics.documentCompliance}%</span>
+                  </div>
+                  <div className="flex justify-between">
+                    <span>Legal Compliance:</span>
+                    <span className="font-medium">{mockScorecard.categories.businessCompliance.metrics.legalCompliance}%</span>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="performance" className="space-y-6">
+          {/* Detailed Performance Metrics */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2 text-green-600" />
-                  Strengths
-                </CardTitle>
+                <CardTitle>Performance Trends</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
-                  {currentVendor.strengths.map((strength, index) => (
-                    <li key={index} className="flex items-center">
-                      <CheckCircle className="h-4 w-4 text-green-600 mr-2" />
-                      {strength}
-                    </li>
-                  ))}
-                </ul>
+                <div className="space-y-4">
+                  <div className="flex items-center justify-between p-3 bg-green-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <TrendingUp className="h-5 w-5 text-green-600" />
+                      <div>
+                        <p className="font-medium">Order Fulfillment</p>
+                        <p className="text-sm text-gray-600">Improved by 3.2% this quarter</p>
+                      </div>
+                    </div>
+                    <Badge variant="default" className="bg-green-100 text-green-800">
+                      +3.2%
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-3 bg-blue-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <TrendingUp className="h-5 w-5 text-blue-600" />
+                      <div>
+                        <p className="font-medium">Customer Satisfaction</p>
+                        <p className="text-sm text-gray-600">Steady improvement</p>
+                      </div>
+                    </div>
+                    <Badge variant="secondary" className="bg-blue-100 text-blue-800">
+                      +1.8%
+                    </Badge>
+                  </div>
+                  
+                  <div className="flex items-center justify-between p-3 bg-yellow-50 rounded-lg">
+                    <div className="flex items-center space-x-3">
+                      <TrendingDown className="h-5 w-5 text-yellow-600" />
+                      <div>
+                        <p className="font-medium">Response Time</p>
+                        <p className="text-sm text-gray-600">Needs attention</p>
+                      </div>
+                    </div>
+                    <Badge variant="outline" className="bg-yellow-100 text-yellow-800">
+                      -0.5%
+                    </Badge>
+                  </div>
+                </div>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle className="flex items-center">
-                  <AlertTriangle className="h-5 w-5 mr-2 text-orange-600" />
-                  Areas for Improvement
-                </CardTitle>
+                <CardTitle>Key Performance Indicators</CardTitle>
               </CardHeader>
               <CardContent>
-                <ul className="space-y-2">
-                  {currentVendor.improvements.map((improvement, index) => (
-                    <li key={index} className="flex items-center">
-                      <XCircle className="h-4 w-4 text-orange-600 mr-2" />
-                      {improvement}
-                    </li>
-                  ))}
-                </ul>
+                <div className="space-y-4">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium">Order Accuracy</span>
+                      <span className="text-sm text-gray-600">96.8%</span>
+                    </div>
+                    <Progress value={96.8} />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium">Delivery Performance</span>
+                      <span className="text-sm text-gray-600">89.3%</span>
+                    </div>
+                    <Progress value={89.3} />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium">Quality Standards</span>
+                      <span className="text-sm text-gray-600">95.1%</span>
+                    </div>
+                    <Progress value={95.1} />
+                  </div>
+                  
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="text-sm font-medium">Compliance Score</span>
+                      <span className="text-sm text-gray-600">97.0%</span>
+                    </div>
+                    <Progress value={97.0} />
+                  </div>
+                </div>
               </CardContent>
             </Card>
           </div>
         </TabsContent>
 
-        {/* Key Metrics Tab */}
-        <TabsContent value="metrics" className="space-y-6">
-          <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
-            <Card>
-              <CardContent className="p-6 text-center">
-                <Package className="h-8 w-8 mx-auto mb-2 text-blue-600" />
-                <div className="text-2xl font-bold">{currentVendor.monthlyStats.totalOrders.toLocaleString()}</div>
-                <div className="text-sm text-gray-600">Total Orders</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <DollarSign className="h-8 w-8 mx-auto mb-2 text-green-600" />
-                <div className="text-2xl font-bold">৳{(currentVendor.monthlyStats.revenue / 1000000).toFixed(1)}M</div>
-                <div className="text-sm text-gray-600">Monthly Revenue</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <RefreshCw className="h-8 w-8 mx-auto mb-2 text-orange-600" />
-                <div className="text-2xl font-bold">{currentVendor.monthlyStats.returnRate}%</div>
-                <div className="text-sm text-gray-600">Return Rate</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <AlertTriangle className="h-8 w-8 mx-auto mb-2 text-red-600" />
-                <div className="text-2xl font-bold">{currentVendor.monthlyStats.disputes}</div>
-                <div className="text-sm text-gray-600">Active Disputes</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <Clock className="h-8 w-8 mx-auto mb-2 text-purple-600" />
-                <div className="text-2xl font-bold">{currentVendor.monthlyStats.avgResponseTime}</div>
-                <div className="text-sm text-gray-600">Avg Response Time</div>
-              </CardContent>
-            </Card>
-            <Card>
-              <CardContent className="p-6 text-center">
-                <Star className="h-8 w-8 mx-auto mb-2 text-yellow-600" />
-                <div className="text-2xl font-bold">{currentVendor.monthlyStats.customerRating}</div>
-                <div className="text-sm text-gray-600">Customer Rating</div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        {/* Quality Assessment Tab */}
         <TabsContent value="quality" className="space-y-6">
+          {/* Quality Assessment */}
           <Card>
             <CardHeader>
-              <CardTitle>Quality Assessment Form</CardTitle>
-              <p className="text-sm text-gray-600">Evaluate vendor performance across key quality dimensions</p>
+              <CardTitle>Quality Assessment & Control</CardTitle>
             </CardHeader>
-            <CardContent className="space-y-6">
+            <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">Product Quality Rating</label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="excellent">Excellent (9-10)</SelectItem>
-                      <SelectItem value="good">Good (7-8)</SelectItem>
-                      <SelectItem value="average">Average (5-6)</SelectItem>
-                      <SelectItem value="poor">Poor (1-4)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <h4 className="font-semibold mb-3">Product Quality Metrics</h4>
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Defect Rate</span>
+                      <Badge variant="default" className="bg-green-100 text-green-800">
+                        0.8%
+                      </Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Return Rate</span>
+                      <Badge variant="secondary">2.1%</Badge>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span className="text-sm">Customer Rating</span>
+                      <div className="flex items-center space-x-1">
+                        <Star className="h-4 w-4 fill-yellow-400 text-yellow-400" />
+                        <span className="text-sm font-medium">4.7/5</span>
+                      </div>
+                    </div>
+                  </div>
                 </div>
+                
                 <div>
-                  <label className="block text-sm font-medium mb-2">Service Quality Rating</label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="excellent">Excellent (9-10)</SelectItem>
-                      <SelectItem value="good">Good (7-8)</SelectItem>
-                      <SelectItem value="average">Average (5-6)</SelectItem>
-                      <SelectItem value="poor">Poor (1-4)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Delivery Performance</label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="excellent">Excellent (9-10)</SelectItem>
-                      <SelectItem value="good">Good (7-8)</SelectItem>
-                      <SelectItem value="average">Average (5-6)</SelectItem>
-                      <SelectItem value="poor">Poor (1-4)</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Communication Quality</label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select rating" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="excellent">Excellent (9-10)</SelectItem>
-                      <SelectItem value="good">Good (7-8)</SelectItem>
-                      <SelectItem value="average">Average (5-6)</SelectItem>
-                      <SelectItem value="poor">Poor (1-4)</SelectItem>
-                    </SelectContent>
-                  </Select>
+                  <h4 className="font-semibold mb-3">Quality Control Actions</h4>
+                  <div className="space-y-2">
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <CheckCircle className="h-4 w-4 mr-2" />
+                      Schedule Quality Audit
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <AlertTriangle className="h-4 w-4 mr-2" />
+                      Report Quality Issue
+                    </Button>
+                    <Button variant="outline" size="sm" className="w-full justify-start">
+                      <Target className="h-4 w-4 mr-2" />
+                      Set Quality Goals
+                    </Button>
+                  </div>
                 </div>
               </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Assessment Comments</label>
-                <Textarea 
-                  placeholder="Provide detailed feedback and recommendations..."
-                  className="h-24"
-                />
-              </div>
-              <Button className="w-full">
-                <Save className="h-4 w-4 mr-2" />
-                Save Assessment
-              </Button>
             </CardContent>
           </Card>
         </TabsContent>
 
-        {/* Reviews & Ratings Tab */}
-        <TabsContent value="reviews" className="space-y-6">
+        <TabsContent value="compliance" className="space-y-6">
+          {/* Compliance Overview */}
+          <Card>
+            <CardHeader>
+              <CardTitle>Compliance & Regulatory Status</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="text-center p-4 bg-green-50 rounded-lg">
+                  <CheckCircle className="h-8 w-8 text-green-600 mx-auto mb-2" />
+                  <p className="font-semibold text-green-800">Document Compliance</p>
+                  <p className="text-2xl font-bold text-green-600">100%</p>
+                </div>
+                
+                <div className="text-center p-4 bg-blue-50 rounded-lg">
+                  <Shield className="h-8 w-8 text-blue-600 mx-auto mb-2" />
+                  <p className="font-semibold text-blue-800">Policy Adherence</p>
+                  <p className="text-2xl font-bold text-blue-600">96.8%</p>
+                </div>
+                
+                <div className="text-center p-4 bg-purple-50 rounded-lg">
+                  <Award className="h-8 w-8 text-purple-600 mx-auto mb-2" />
+                  <p className="font-semibold text-purple-800">Legal Compliance</p>
+                  <p className="text-2xl font-bold text-purple-600">98.5%</p>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="improvement" className="space-y-6">
+          {/* Improvement Plan */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <Card>
               <CardHeader>
-                <CardTitle>Add New Review</CardTitle>
+                <CardTitle className="flex items-center space-x-2">
+                  <Target className="h-5 w-5" />
+                  <span>Recommendations</span>
+                </CardTitle>
               </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Rating</label>
-                  <div className="flex items-center space-x-2">
-                    {[1, 2, 3, 4, 5].map((star) => (
-                      <Star
-                        key={star}
-                        className={`h-6 w-6 cursor-pointer ${
-                          star <= newRating ? 'text-yellow-500 fill-current' : 'text-gray-300'
-                        }`}
-                        onClick={() => setNewRating(star)}
-                      />
-                    ))}
-                  </div>
+              <CardContent>
+                <div className="space-y-3">
+                  {mockScorecard.recommendations.map((recommendation, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-yellow-50 rounded-lg">
+                      <AlertTriangle className="h-5 w-5 text-yellow-600 mt-0.5" />
+                      <p className="text-sm">{recommendation}</p>
+                    </div>
+                  ))}
                 </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Review Text</label>
-                  <Textarea
-                    value={reviewText}
-                    onChange={(e) => setReviewText(e.target.value)}
-                    placeholder="Share your experience with this vendor..."
-                    className="h-24"
-                  />
-                </div>
-                <Button className="w-full">
-                  <MessageSquare className="h-4 w-4 mr-2" />
-                  Submit Review
-                </Button>
               </CardContent>
             </Card>
 
             <Card>
               <CardHeader>
-                <CardTitle>Recent Reviews</CardTitle>
+                <CardTitle className="flex items-center space-x-2">
+                  <Clock className="h-5 w-5" />
+                  <span>Improvement Plan</span>
+                </CardTitle>
               </CardHeader>
               <CardContent>
-                <div className="space-y-4">
-                  {currentVendor.recentReviews.map((review) => (
-                    <div key={review.id} className="border-b pb-3 last:border-b-0">
-                      <div className="flex items-center justify-between mb-2">
-                        <div className="flex items-center space-x-2">
-                          <div className="flex">
-                            {[...Array(5)].map((_, i) => (
-                              <Star
-                                key={i}
-                                className={`h-4 w-4 ${
-                                  i < review.rating ? 'text-yellow-500 fill-current' : 'text-gray-300'
-                                }`}
-                              />
-                            ))}
-                          </div>
-                          <span className="text-sm font-medium">{review.customer}</span>
-                        </div>
-                        <span className="text-xs text-gray-500">{review.date}</span>
-                      </div>
-                      <p className="text-sm text-gray-700">{review.text}</p>
+                <div className="space-y-3">
+                  {mockScorecard.improvementPlan.map((plan, index) => (
+                    <div key={index} className="flex items-start space-x-3 p-3 bg-blue-50 rounded-lg">
+                      <CheckCircle className="h-5 w-5 text-blue-600 mt-0.5" />
+                      <p className="text-sm">{plan}</p>
                     </div>
                   ))}
                 </div>
               </CardContent>
             </Card>
           </div>
-        </TabsContent>
-
-        {/* Compliance Status Tab */}
-        <TabsContent value="compliance" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle className="flex items-center">
-                <Shield className="h-5 w-5 mr-2 text-green-600" />
-                Compliance & Certifications
-              </CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {currentVendor.certifications.map((cert, index) => (
-                  <div key={index} className="flex items-center p-3 bg-green-50 rounded-lg">
-                    <CheckCircle className="h-5 w-5 text-green-600 mr-2" />
-                    <span className="font-medium">{cert}</span>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        {/* Improvement Plan Tab */}
-        <TabsContent value="improvement" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Vendor Improvement Action Plan</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div>
-                  <label className="block text-sm font-medium mb-2">Priority Area</label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select area" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="quality">Product Quality</SelectItem>
-                      <SelectItem value="delivery">Delivery Performance</SelectItem>
-                      <SelectItem value="service">Customer Service</SelectItem>
-                      <SelectItem value="pricing">Pricing Strategy</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <label className="block text-sm font-medium mb-2">Target Completion</label>
-                  <Input type="date" />
-                </div>
-              </div>
-              <div>
-                <label className="block text-sm font-medium mb-2">Action Plan Details</label>
-                <Textarea 
-                  placeholder="Describe specific actions, milestones, and expected outcomes..."
-                  className="h-32"
-                />
-              </div>
-              <Button className="w-full">
-                <Save className="h-4 w-4 mr-2" />
-                Create Improvement Plan
-              </Button>
-            </CardContent>
-          </Card>
         </TabsContent>
       </Tabs>
     </div>

@@ -6,130 +6,119 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Textarea } from '@/components/ui/textarea';
 import { Progress } from '@/components/ui/progress';
 import { 
-  Shield, CheckCircle, XCircle, AlertTriangle, Star, Target, 
-  Search, Filter, Download, RefreshCw, Eye, Settings, BarChart3,
-  Award, Zap, TrendingUp, Clock, Users, Package, ThumbsUp
+  Shield, CheckCircle, XCircle, AlertTriangle, Eye, Edit, MessageSquare,
+  Search, Filter, Download, RefreshCw, Calendar, User, Package,
+  Star, Flag, ArrowRight, MoreHorizontal, FileText, Image, Tag,
+  TrendingUp, Clock, Award, Target, Settings
 } from 'lucide-react';
 
-interface QualityControlItem {
+interface QualityIssue {
   id: string;
   productName: string;
   vendor: string;
   category: string;
-  qualityScore: number;
-  status: 'pending' | 'in-progress' | 'passed' | 'failed' | 'needs-improvement';
-  checkpoints: {
-    imageQuality: number;
-    descriptionAccuracy: number;
-    specificationCompleteness: number;
-    pricingConsistency: number;
-    categoryPlacement: number;
-  };
-  issues: string[];
-  submittedDate: string;
-  reviewedBy?: string;
-  priority: 'high' | 'medium' | 'low';
+  issueType: 'image-quality' | 'description-accuracy' | 'specification-mismatch' | 'policy-violation';
+  severity: 'high' | 'medium' | 'low';
+  reportedDate: string;
+  status: 'open' | 'in-review' | 'resolved' | 'escalated';
+  assignedTo?: string;
+  description: string;
+  images: number;
+  price: number;
 }
 
 export const QualityControlContent: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
+  const [selectedSeverity, setSelectedSeverity] = useState('all');
   const [searchTerm, setSearchTerm] = useState('');
 
-  // Mock data for quality control items
-  const qualityItems: QualityControlItem[] = [
+  // Mock data for quality control issues
+  const qualityIssues: QualityIssue[] = [
     {
       id: '1',
-      productName: 'Professional DSLR Camera',
-      vendor: 'Camera World BD',
-      category: 'Electronics > Cameras',
-      qualityScore: 92,
-      status: 'passed',
-      checkpoints: {
-        imageQuality: 95,
-        descriptionAccuracy: 90,
-        specificationCompleteness: 88,
-        pricingConsistency: 94,
-        categoryPlacement: 93
-      },
-      issues: [],
-      submittedDate: '2024-01-15',
-      reviewedBy: 'Alex Quality Inspector',
-      priority: 'high'
+      productName: 'Wireless Bluetooth Headphones',
+      vendor: 'AudioTech Solutions',
+      category: 'Electronics > Audio',
+      issueType: 'image-quality',
+      severity: 'high',
+      reportedDate: '2024-01-15',
+      status: 'open',
+      assignedTo: 'Sarah QC',
+      description: 'Product images are blurry and do not show actual product details clearly',
+      images: 3,
+      price: 2500
     },
     {
       id: '2',
-      productName: 'Bluetooth Speaker Set',
-      vendor: 'Audio Excellence',
-      category: 'Electronics > Audio',
-      qualityScore: 67,
-      status: 'needs-improvement',
-      checkpoints: {
-        imageQuality: 75,
-        descriptionAccuracy: 60,
-        specificationCompleteness: 55,
-        pricingConsistency: 80,
-        categoryPlacement: 65
-      },
-      issues: [
-        'Product images are blurry',
-        'Missing technical specifications',
-        'Description contains typos'
-      ],
-      submittedDate: '2024-01-14',
-      priority: 'medium'
+      productName: 'Cotton Summer Dress',
+      vendor: 'Fashion Forward Ltd',
+      category: 'Fashion > Women\'s Clothing',
+      issueType: 'description-accuracy',
+      severity: 'medium',
+      reportedDate: '2024-01-14',
+      status: 'in-review',
+      assignedTo: 'Mike QC',
+      description: 'Product description mentions premium cotton but fabric composition shows blend',
+      images: 6,
+      price: 1200
     },
     {
       id: '3',
-      productName: 'Gaming Keyboard RGB',
-      vendor: 'Gaming Gear Pro',
-      category: 'Electronics > Gaming',
-      qualityScore: 43,
-      status: 'failed',
-      checkpoints: {
-        imageQuality: 40,
-        descriptionAccuracy: 35,
-        specificationCompleteness: 50,
-        pricingConsistency: 45,
-        categoryPlacement: 45
-      },
-      issues: [
-        'Poor quality product images',
-        'Misleading product description',
-        'Incomplete technical specifications',
-        'Price inconsistency with market standards'
-      ],
-      submittedDate: '2024-01-13',
-      priority: 'high'
+      productName: 'Gaming Mechanical Keyboard',
+      vendor: 'GameZone Electronics',
+      category: 'Electronics > Computer Accessories',
+      issueType: 'specification-mismatch',
+      severity: 'high',
+      reportedDate: '2024-01-13',
+      status: 'escalated',
+      description: 'Listed as RGB backlit but customer reports no lighting functionality',
+      images: 8,
+      price: 4500
     }
   ];
 
   const getStatusColor = (status: string) => {
     switch (status) {
-      case 'pending': return 'bg-yellow-100 text-yellow-800';
-      case 'in-progress': return 'bg-blue-100 text-blue-800';
-      case 'passed': return 'bg-green-100 text-green-800';
-      case 'failed': return 'bg-red-100 text-red-800';
-      case 'needs-improvement': return 'bg-orange-100 text-orange-800';
+      case 'open': return 'bg-red-100 text-red-800';
+      case 'in-review': return 'bg-blue-100 text-blue-800';
+      case 'resolved': return 'bg-green-100 text-green-800';
+      case 'escalated': return 'bg-purple-100 text-purple-800';
       default: return 'bg-gray-100 text-gray-800';
     }
   };
 
-  const getQualityScoreColor = (score: number) => {
-    if (score >= 80) return 'text-green-600';
-    if (score >= 60) return 'text-orange-600';
-    return 'text-red-600';
+  const getSeverityColor = (severity: string) => {
+    switch (severity) {
+      case 'high': return 'bg-red-100 text-red-800';
+      case 'medium': return 'bg-yellow-100 text-yellow-800';
+      case 'low': return 'bg-green-100 text-green-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
-  const getQualityGrade = (score: number) => {
-    if (score >= 90) return 'A+';
-    if (score >= 80) return 'A';
-    if (score >= 70) return 'B+';
-    if (score >= 60) return 'B';
-    if (score >= 50) return 'C';
-    return 'F';
+  const getIssueTypeLabel = (type: string) => {
+    switch (type) {
+      case 'image-quality': return 'Image Quality';
+      case 'description-accuracy': return 'Description Accuracy';
+      case 'specification-mismatch': return 'Specification Mismatch';
+      case 'policy-violation': return 'Policy Violation';
+      default: return type;
+    }
+  };
+
+  const handleResolve = (issueId: string) => {
+    console.log('Resolving issue:', issueId);
+  };
+
+  const handleEscalate = (issueId: string) => {
+    console.log('Escalating issue:', issueId);
+  };
+
+  const handleAssign = (issueId: string) => {
+    console.log('Assigning issue:', issueId);
   };
 
   return (
@@ -139,21 +128,21 @@ export const QualityControlContent: React.FC = () => {
         <div className="flex items-center justify-between">
           <div>
             <h1 className="text-3xl font-bold text-gray-800 flex items-center">
-              <Shield className="mr-3 h-8 w-8 text-green-600" />
+              <Shield className="mr-3 h-8 w-8 text-blue-600" />
               Quality Control Dashboard
             </h1>
             <p className="text-sm text-gray-600 mt-2">
               🗂️ Product Management → Product Moderation → Quality Control
             </p>
             <p className="text-xs text-gray-500 mt-1 flex items-center">
-              <Target className="h-3 w-3 mr-1" />
-              Automated quality assessment and manual verification system
+              <Award className="h-3 w-3 mr-1" />
+              Monitor and manage product quality standards
             </p>
           </div>
           <div className="flex space-x-2">
             <Button variant="outline" size="sm">
-              <Settings className="h-4 w-4 mr-2" />
-              Quality Standards
+              <Filter className="h-4 w-4 mr-2" />
+              Advanced Filters
             </Button>
             <Button variant="outline" size="sm">
               <Download className="h-4 w-4 mr-2" />
@@ -168,17 +157,30 @@ export const QualityControlContent: React.FC = () => {
       </div>
 
       {/* KPI Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-5 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
-              <Package className="h-4 w-4 mr-2" />
-              Total Products
+              <AlertTriangle className="h-4 w-4 mr-2" />
+              Open Issues
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">2,847</div>
-            <div className="text-sm text-gray-600">Quality checked</div>
+            <div className="text-2xl font-bold text-red-600">42</div>
+            <div className="text-sm text-gray-600">+8 from yesterday</div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="pb-2">
+            <CardTitle className="text-sm font-medium flex items-center">
+              <Eye className="h-4 w-4 mr-2" />
+              Under Review
+            </CardTitle>
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold text-blue-600">18</div>
+            <div className="text-sm text-gray-600">Average: 1.5 days</div>
           </CardContent>
         </Card>
 
@@ -186,149 +188,49 @@ export const QualityControlContent: React.FC = () => {
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
               <CheckCircle className="h-4 w-4 mr-2" />
-              Passed QC
+              Resolved Today
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-green-600">2,456</div>
-            <div className="text-sm text-gray-600">86.3% pass rate</div>
+            <div className="text-2xl font-bold text-green-600">24</div>
+            <div className="text-sm text-gray-600">89% resolution rate</div>
           </CardContent>
         </Card>
 
         <Card>
           <CardHeader className="pb-2">
             <CardTitle className="text-sm font-medium flex items-center">
-              <AlertTriangle className="h-4 w-4 mr-2" />
-              Needs Improvement
+              <Target className="h-4 w-4 mr-2" />
+              Quality Score
             </CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold text-orange-600">287</div>
-            <div className="text-sm text-gray-600">Minor issues found</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <XCircle className="h-4 w-4 mr-2" />
-              Failed QC
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-red-600">104</div>
-            <div className="text-sm text-gray-600">Major issues found</div>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="pb-2">
-            <CardTitle className="text-sm font-medium flex items-center">
-              <Star className="h-4 w-4 mr-2" />
-              Avg Quality Score
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold text-blue-600">84.2</div>
-            <div className="text-sm text-gray-600">Grade: A</div>
+            <div className="text-2xl font-bold text-green-600">92.5%</div>
+            <div className="text-sm text-gray-600">+2.1% this month</div>
           </CardContent>
         </Card>
       </div>
 
       {/* Main Content */}
-      <Tabs defaultValue="quality-overview" className="space-y-6">
+      <Tabs defaultValue="issues-list" className="space-y-6">
         <TabsList className="grid w-full grid-cols-5">
-          <TabsTrigger value="quality-overview">📊 Overview</TabsTrigger>
-          <TabsTrigger value="inspection-queue">🔍 Inspection Queue</TabsTrigger>
-          <TabsTrigger value="quality-standards">📋 Standards</TabsTrigger>
-          <TabsTrigger value="performance-metrics">📈 Metrics</TabsTrigger>
-          <TabsTrigger value="automation-rules">⚙️ Automation</TabsTrigger>
+          <TabsTrigger value="issues-list">🔍 Issues List</TabsTrigger>
+          <TabsTrigger value="quality-metrics">📊 Quality Metrics</TabsTrigger>
+          <TabsTrigger value="inspector-performance">👥 Inspector Performance</TabsTrigger>
+          <TabsTrigger value="quality-standards">📋 Quality Standards</TabsTrigger>
+          <TabsTrigger value="reports">📈 Reports</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="quality-overview">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {/* Quality Overview Chart */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Quality Distribution</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-4">
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Grade A+ (90-100)</span>
-                      <span className="font-medium text-green-600">34%</span>
-                    </div>
-                    <Progress value={34} className="h-2" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Grade A (80-89)</span>
-                      <span className="font-medium text-green-600">42%</span>
-                    </div>
-                    <Progress value={42} className="h-2" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Grade B (60-79)</span>
-                      <span className="font-medium text-orange-600">18%</span>
-                    </div>
-                    <Progress value={18} className="h-2" />
-                  </div>
-                  <div className="space-y-2">
-                    <div className="flex justify-between">
-                      <span>Grade C-F (0-59)</span>
-                      <span className="font-medium text-red-600">6%</span>
-                    </div>
-                    <Progress value={6} className="h-2" />
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-
-            {/* Top Quality Issues */}
-            <Card>
-              <CardHeader>
-                <CardTitle>Common Quality Issues</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-3">
-                  <div className="flex justify-between items-center p-3 border rounded">
-                    <span className="text-sm">Poor image quality</span>
-                    <Badge className="bg-red-100 text-red-800">287 cases</Badge>
-                  </div>
-                  <div className="flex justify-between items-center p-3 border rounded">
-                    <span className="text-sm">Incomplete descriptions</span>
-                    <Badge className="bg-orange-100 text-orange-800">156 cases</Badge>
-                  </div>
-                  <div className="flex justify-between items-center p-3 border rounded">
-                    <span className="text-sm">Missing specifications</span>
-                    <Badge className="bg-orange-100 text-orange-800">134 cases</Badge>
-                  </div>
-                  <div className="flex justify-between items-center p-3 border rounded">
-                    <span className="text-sm">Pricing inconsistencies</span>
-                    <Badge className="bg-yellow-100 text-yellow-800">89 cases</Badge>
-                  </div>
-                  <div className="flex justify-between items-center p-3 border rounded">
-                    <span className="text-sm">Wrong categorization</span>
-                    <Badge className="bg-yellow-100 text-yellow-800">67 cases</Badge>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="inspection-queue">
+        <TabsContent value="issues-list">
           <Card>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle>Quality Inspection Queue</CardTitle>
+                <CardTitle>Quality Control Issues</CardTitle>
                 <div className="flex items-center space-x-2">
                   <div className="relative">
                     <Search className="absolute left-2 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     <Input
-                      placeholder="Search products..."
+                      placeholder="Search issues..."
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
                       className="pl-8 w-64"
@@ -340,22 +242,21 @@ export const QualityControlContent: React.FC = () => {
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="all">All Status</SelectItem>
-                      <SelectItem value="pending">Pending</SelectItem>
-                      <SelectItem value="in-progress">In Progress</SelectItem>
-                      <SelectItem value="passed">Passed</SelectItem>
-                      <SelectItem value="failed">Failed</SelectItem>
-                      <SelectItem value="needs-improvement">Needs Improvement</SelectItem>
+                      <SelectItem value="open">Open</SelectItem>
+                      <SelectItem value="in-review">In Review</SelectItem>
+                      <SelectItem value="resolved">Resolved</SelectItem>
+                      <SelectItem value="escalated">Escalated</SelectItem>
                     </SelectContent>
                   </Select>
-                  <Select value={selectedCategory} onValueChange={setSelectedCategory}>
-                    <SelectTrigger className="w-40">
-                      <SelectValue placeholder="Category" />
+                  <Select value={selectedSeverity} onValueChange={setSelectedSeverity}>
+                    <SelectTrigger className="w-32">
+                      <SelectValue placeholder="Severity" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      <SelectItem value="electronics">Electronics</SelectItem>
-                      <SelectItem value="fashion">Fashion</SelectItem>
-                      <SelectItem value="home">Home & Garden</SelectItem>
+                      <SelectItem value="all">All Severity</SelectItem>
+                      <SelectItem value="high">High</SelectItem>
+                      <SelectItem value="medium">Medium</SelectItem>
+                      <SelectItem value="low">Low</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -363,115 +264,211 @@ export const QualityControlContent: React.FC = () => {
             </CardHeader>
             <CardContent>
               <div className="space-y-4">
-                {qualityItems.map((item) => (
-                  <div key={item.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
+                {qualityIssues.map((issue) => (
+                  <div key={issue.id} className="border rounded-lg p-4 hover:bg-gray-50 transition-colors">
                     <div className="flex items-start justify-between">
                       <div className="flex-1">
                         <div className="flex items-center space-x-3 mb-2">
-                          <h3 className="font-semibold text-lg">{item.productName}</h3>
-                          <Badge className={getStatusColor(item.status)}>
-                            {item.status.replace('-', ' ')}
+                          <h3 className="font-semibold text-lg">{issue.productName}</h3>
+                          <Badge className={getStatusColor(issue.status)}>
+                            {issue.status.replace('-', ' ')}
                           </Badge>
-                          <div className="flex items-center space-x-1">
-                            <Award className="h-4 w-4" />
-                            <span className={`font-bold ${getQualityScoreColor(item.qualityScore)}`}>
-                              {item.qualityScore} ({getQualityGrade(item.qualityScore)})
-                            </span>
-                          </div>
+                          <Badge className={getSeverityColor(issue.severity)}>
+                            {issue.severity} severity
+                          </Badge>
+                          <Badge variant="outline">
+                            {getIssueTypeLabel(issue.issueType)}
+                          </Badge>
                         </div>
                         
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 text-sm mb-3">
                           <div>
                             <p className="text-gray-600">Vendor</p>
-                            <p className="font-medium">{item.vendor}</p>
+                            <p className="font-medium">{issue.vendor}</p>
                           </div>
                           <div>
                             <p className="text-gray-600">Category</p>
-                            <p className="font-medium">{item.category}</p>
+                            <p className="font-medium">{issue.category}</p>
                           </div>
                           <div>
-                            <p className="text-gray-600">Priority</p>
-                            <p className="font-medium">{item.priority}</p>
+                            <p className="text-gray-600">Price</p>
+                            <p className="font-medium text-green-600">৳{issue.price.toLocaleString()}</p>
                           </div>
                           <div>
-                            <p className="text-gray-600">Submitted</p>
-                            <p className="font-medium">{item.submittedDate}</p>
+                            <p className="text-gray-600">Reported</p>
+                            <p className="font-medium">{issue.reportedDate}</p>
                           </div>
                         </div>
                         
-                        {/* Quality Checkpoints */}
-                        <div className="bg-gray-50 p-3 rounded mb-3">
-                          <h4 className="font-medium text-sm mb-2">Quality Checkpoints:</h4>
-                          <div className="grid grid-cols-2 md:grid-cols-5 gap-2 text-xs">
-                            <div className="text-center">
-                              <p className="text-gray-600">Images</p>
-                              <p className={`font-bold ${getQualityScoreColor(item.checkpoints.imageQuality)}`}>
-                                {item.checkpoints.imageQuality}%
-                              </p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-gray-600">Description</p>
-                              <p className={`font-bold ${getQualityScoreColor(item.checkpoints.descriptionAccuracy)}`}>
-                                {item.checkpoints.descriptionAccuracy}%
-                              </p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-gray-600">Specs</p>
-                              <p className={`font-bold ${getQualityScoreColor(item.checkpoints.specificationCompleteness)}`}>
-                                {item.checkpoints.specificationCompleteness}%
-                              </p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-gray-600">Pricing</p>
-                              <p className={`font-bold ${getQualityScoreColor(item.checkpoints.pricingConsistency)}`}>
-                                {item.checkpoints.pricingConsistency}%
-                              </p>
-                            </div>
-                            <div className="text-center">
-                              <p className="text-gray-600">Category</p>
-                              <p className={`font-bold ${getQualityScoreColor(item.checkpoints.categoryPlacement)}`}>
-                                {item.checkpoints.categoryPlacement}%
-                              </p>
-                            </div>
-                          </div>
+                        <div className="flex items-center space-x-4 text-sm text-gray-600 mb-3">
+                          <span className="flex items-center">
+                            <Image className="h-4 w-4 mr-1" />
+                            {issue.images} images
+                          </span>
+                          {issue.assignedTo && (
+                            <span className="flex items-center">
+                              <User className="h-4 w-4 mr-1" />
+                              Assigned to: {issue.assignedTo}
+                            </span>
+                          )}
                         </div>
                         
-                        {/* Issues */}
-                        {item.issues.length > 0 && (
-                          <div className="bg-red-50 border-l-4 border-red-500 p-3 mb-3">
-                            <h4 className="font-medium text-red-800 text-sm mb-2">Issues Found:</h4>
-                            <ul className="text-sm text-red-700 space-y-1">
-                              {item.issues.map((issue, index) => (
-                                <li key={index}>• {issue}</li>
-                              ))}
-                            </ul>
-                          </div>
-                        )}
-                        
-                        {item.reviewedBy && (
-                          <p className="text-sm text-gray-600">
-                            Reviewed by: <span className="font-medium">{item.reviewedBy}</span>
-                          </p>
-                        )}
+                        <p className="text-sm text-gray-700 mb-3">{issue.description}</p>
                       </div>
                       
                       <div className="flex flex-col space-y-2 ml-4">
-                        <Button size="sm" className="bg-green-600 hover:bg-green-700">
+                        <Button size="sm" className="bg-green-600 hover:bg-green-700" onClick={() => handleResolve(issue.id)}>
                           <CheckCircle className="h-4 w-4 mr-1" />
-                          Pass
+                          Resolve
                         </Button>
-                        <Button size="sm" variant="destructive">
-                          <XCircle className="h-4 w-4 mr-1" />
-                          Fail
+                        <Button size="sm" variant="destructive" onClick={() => handleEscalate(issue.id)}>
+                          <Flag className="h-4 w-4 mr-1" />
+                          Escalate
                         </Button>
-                        <Button size="sm" variant="outline">
-                          <AlertTriangle className="h-4 w-4 mr-1" />
-                          Flag Issues
+                        <Button size="sm" variant="outline" onClick={() => handleAssign(issue.id)}>
+                          <User className="h-4 w-4 mr-1" />
+                          Assign
                         </Button>
                         <Button size="sm" variant="ghost">
                           <Eye className="h-4 w-4 mr-1" />
-                          Inspect
+                          View Details
                         </Button>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="quality-metrics">
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Quality Score Trends</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>Overall Quality Score</span>
+                    <span className="text-2xl font-bold text-green-600">92.5%</span>
+                  </div>
+                  <Progress value={92.5} className="h-3" />
+                  
+                  <div className="space-y-3">
+                    <div className="flex justify-between items-center">
+                      <span>Image Quality</span>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={89} className="h-2 w-24" />
+                        <span className="text-sm font-medium">89%</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Description Accuracy</span>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={94} className="h-2 w-24" />
+                        <span className="text-sm font-medium">94%</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Specification Match</span>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={91} className="h-2 w-24" />
+                        <span className="text-sm font-medium">91%</span>
+                      </div>
+                    </div>
+                    <div className="flex justify-between items-center">
+                      <span>Policy Compliance</span>
+                      <div className="flex items-center space-x-2">
+                        <Progress value={96} className="h-2 w-24" />
+                        <span className="text-sm font-medium">96%</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Issue Distribution</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <div className="space-y-4">
+                  <div className="flex justify-between items-center">
+                    <span>Image Quality Issues</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="bg-red-500 h-2 rounded-full w-12"></div>
+                      </div>
+                      <span className="text-sm font-medium">35%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Description Issues</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="bg-yellow-500 h-2 rounded-full w-10"></div>
+                      </div>
+                      <span className="text-sm font-medium">28%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Spec Mismatches</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="bg-orange-500 h-2 rounded-full w-8"></div>
+                      </div>
+                      <span className="text-sm font-medium">22%</span>
+                    </div>
+                  </div>
+                  <div className="flex justify-between items-center">
+                    <span>Policy Violations</span>
+                    <div className="flex items-center space-x-2">
+                      <div className="w-16 bg-gray-200 rounded-full h-2">
+                        <div className="bg-purple-500 h-2 rounded-full w-6"></div>
+                      </div>
+                      <span className="text-sm font-medium">15%</span>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="inspector-performance">
+          <Card>
+            <CardHeader>
+              <CardTitle>Quality Inspector Performance</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-4">
+                {[
+                  { name: 'Sarah QC', resolved: 156, accuracy: 96.5, avgTime: '2.3 hours' },
+                  { name: 'Mike QC', resolved: 142, accuracy: 94.2, avgTime: '2.8 hours' },
+                  { name: 'Lisa QC', resolved: 138, accuracy: 97.1, avgTime: '2.1 hours' },
+                  { name: 'John QC', resolved: 129, accuracy: 93.8, avgTime: '3.2 hours' }
+                ].map((inspector, index) => (
+                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
+                    <div className="flex items-center space-x-4">
+                      <div className="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center">
+                        <User className="h-5 w-5 text-blue-600" />
+                      </div>
+                      <div>
+                        <p className="font-medium">{inspector.name}</p>
+                        <p className="text-sm text-gray-600">{inspector.resolved} issues resolved</p>
+                      </div>
+                    </div>
+                    <div className="flex space-x-6 text-sm">
+                      <div className="text-center">
+                        <p className="text-gray-600">Accuracy</p>
+                        <p className="font-medium text-green-600">{inspector.accuracy}%</p>
+                      </div>
+                      <div className="text-center">
+                        <p className="text-gray-600">Avg Time</p>
+                        <p className="font-medium">{inspector.avgTime}</p>
                       </div>
                     </div>
                   </div>
@@ -484,79 +481,42 @@ export const QualityControlContent: React.FC = () => {
         <TabsContent value="quality-standards">
           <Card>
             <CardHeader>
-              <CardTitle>Quality Standards Configuration</CardTitle>
+              <CardTitle>Quality Standards & Guidelines</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-6">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-4">
-                    <h3 className="font-medium">Image Quality Standards</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Minimum Resolution</span>
-                        <span className="font-medium">800x600 px</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Image Clarity Score</span>
-                        <span className="font-medium">≥ 7.5/10</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Background Quality</span>
-                        <span className="font-medium">Professional</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Multiple Angles</span>
-                        <span className="font-medium">≥ 3 images</span>
-                      </div>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div className="space-y-4">
+                  <h3 className="font-medium text-lg">Image Quality Standards</h3>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-green-50 border border-green-200 rounded">
+                      <p className="font-medium text-green-800">Minimum Resolution</p>
+                      <p className="text-sm text-green-700">800x800 pixels minimum, 1200x1200 recommended</p>
                     </div>
-                  </div>
-                  
-                  <div className="space-y-4">
-                    <h3 className="font-medium">Content Quality Standards</h3>
-                    <div className="space-y-3">
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Description Length</span>
-                        <span className="font-medium">≥ 100 words</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Specification Completeness</span>
-                        <span className="font-medium">≥ 80%</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Grammar Score</span>
-                        <span className="font-medium">≥ 8.0/10</span>
-                      </div>
-                      <div className="flex justify-between items-center p-3 border rounded">
-                        <span>Factual Accuracy</span>
-                        <span className="font-medium">100%</span>
-                      </div>
+                    <div className="p-3 bg-blue-50 border border-blue-200 rounded">
+                      <p className="font-medium text-blue-800">Image Clarity</p>
+                      <p className="text-sm text-blue-700">Clear focus, proper lighting, no blur or distortion</p>
+                    </div>
+                    <div className="p-3 bg-purple-50 border border-purple-200 rounded">
+                      <p className="font-medium text-purple-800">Background Standards</p>
+                      <p className="text-sm text-purple-700">Clean white/neutral background preferred</p>
                     </div>
                   </div>
                 </div>
                 
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-medium mb-2">Quality Scoring Algorithm</h3>
-                  <p className="text-sm text-gray-600 mb-4">Configure how different quality factors are weighted in the overall score.</p>
-                  <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
-                    <div className="text-center">
-                      <p className="text-sm font-medium">Images</p>
-                      <p className="text-lg font-bold text-blue-600">30%</p>
+                <div className="space-y-4">
+                  <h3 className="font-medium text-lg">Content Requirements</h3>
+                  <div className="space-y-3">
+                    <div className="p-3 bg-orange-50 border border-orange-200 rounded">
+                      <p className="font-medium text-orange-800">Description Accuracy</p>
+                      <p className="text-sm text-orange-700">Must match actual product specifications</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium">Description</p>
-                      <p className="text-lg font-bold text-blue-600">25%</p>
+                    <div className="p-3 bg-red-50 border border-red-200 rounded">
+                      <p className="font-medium text-red-800">Prohibited Content</p>
+                      <p className="text-sm text-red-700">No misleading claims, false information, or inappropriate content</p>
                     </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium">Specifications</p>
-                      <p className="text-lg font-bold text-blue-600">20%</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium">Pricing</p>
-                      <p className="text-lg font-bold text-blue-600">15%</p>
-                    </div>
-                    <div className="text-center">
-                      <p className="text-sm font-medium">Categorization</p>
-                      <p className="text-lg font-bold text-blue-600">10%</p>
+                    <div className="p-3 bg-gray-50 border border-gray-200 rounded">
+                      <p className="font-medium text-gray-800">Compliance Requirements</p>
+                      <p className="text-sm text-gray-700">Must meet platform policies and local regulations</p>
                     </div>
                   </div>
                 </div>
@@ -565,113 +525,53 @@ export const QualityControlContent: React.FC = () => {
           </Card>
         </TabsContent>
 
-        <TabsContent value="performance-metrics">
+        <TabsContent value="reports">
           <Card>
             <CardHeader>
-              <CardTitle>Quality Control Performance</CardTitle>
+              <CardTitle>Quality Control Reports</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div className="space-y-4">
-                  <h3 className="font-medium">Daily Performance</h3>
+                  <h3 className="font-medium">Daily Quality Metrics</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span>Products Inspected</span>
-                      <span className="font-medium">342</span>
+                      <span>Issues Identified</span>
+                      <span className="font-medium">127</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Average Inspection Time</span>
-                      <span className="font-medium">2.3 minutes</span>
+                      <span>Issues Resolved</span>
+                      <span className="font-medium text-green-600">98</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Pass Rate</span>
-                      <span className="font-medium text-green-600">86.3%</span>
+                      <span>Resolution Rate</span>
+                      <span className="font-medium">77.2%</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Average Quality Score</span>
-                      <span className="font-medium text-blue-600">84.2</span>
+                      <span>Average Resolution Time</span>
+                      <span className="font-medium">2.4 hours</span>
                     </div>
                   </div>
                 </div>
                 
                 <div className="space-y-4">
-                  <h3 className="font-medium">Quality Trends</h3>
+                  <h3 className="font-medium">Top Issue Categories</h3>
                   <div className="space-y-2">
                     <div className="flex justify-between">
-                      <span>Weekly Improvement</span>
-                      <span className="font-medium text-green-600">+3.2%</span>
+                      <span>Image Quality</span>
+                      <span className="font-medium">42 issues</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Monthly Improvement</span>
-                      <span className="font-medium text-green-600">+8.7%</span>
+                      <span>Description Mismatch</span>
+                      <span className="font-medium">31 issues</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Top Category</span>
-                      <span className="font-medium">Electronics (89.2)</span>
+                      <span>Spec Inconsistency</span>
+                      <span className="font-medium">28 issues</span>
                     </div>
                     <div className="flex justify-between">
-                      <span>Needs Attention</span>
-                      <span className="font-medium text-orange-600">Fashion (73.4)</span>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="automation-rules">
-          <Card>
-            <CardHeader>
-              <CardTitle>Quality Control Automation</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="space-y-6">
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-medium mb-2">Auto-Pass Rules</h3>
-                  <p className="text-sm text-gray-600 mb-4">Products meeting these criteria will automatically pass QC.</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-green-50 rounded">
-                      <span className="text-sm">Quality Score ≥ 90 + Trusted Vendor</span>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-green-50 rounded">
-                      <span className="text-sm">All checkpoints ≥ 85%</span>
-                      <Badge className="bg-green-100 text-green-800">Active</Badge>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-medium mb-2">Auto-Flag Rules</h3>
-                  <p className="text-sm text-gray-600 mb-4">Products meeting these criteria will be automatically flagged for manual review.</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-red-50 rounded">
-                      <span className="text-sm">Quality Score < 60</span>
-                      <Badge className="bg-red-100 text-red-800">Active</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-red-50 rounded">
-                      <span className="text-sm">Any checkpoint < 50%</span>
-                      <Badge className="bg-red-100 text-red-800">Active</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-orange-50 rounded">
-                      <span className="text-sm">New vendor (< 10 products)</span>
-                      <Badge className="bg-orange-100 text-orange-800">Active</Badge>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="p-4 border rounded-lg">
-                  <h3 className="font-medium mb-2">Notification Rules</h3>
-                  <p className="text-sm text-gray-600 mb-4">Automated notifications for quality events.</p>
-                  <div className="space-y-2">
-                    <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
-                      <span className="text-sm">Notify vendor on QC failure</span>
-                      <Badge className="bg-blue-100 text-blue-800">Active</Badge>
-                    </div>
-                    <div className="flex justify-between items-center p-2 bg-blue-50 rounded">
-                      <span className="text-sm">Weekly quality report to vendors</span>
-                      <Badge className="bg-blue-100 text-blue-800">Active</Badge>
+                      <span>Policy Violations</span>
+                      <span className="font-medium">26 issues</span>
                     </div>
                   </div>
                 </div>

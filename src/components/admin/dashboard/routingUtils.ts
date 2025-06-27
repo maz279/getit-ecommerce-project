@@ -45,3 +45,11 @@ export const productManagementSubmenus = [
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
   'category-rules', 'category-analytics', 'category-seo'
 ];
+
+// Define dashboard-related submenus
+export const dashboardSubmenus = [
+  'overview', 'analytics', 'real-time-metrics', 'realtime-metrics', 'kpi-monitoring', 'kpi_monitoring',
+  'performance-insights', 'performance_insights', 'revenue-analytics', 'user-activity', 
+  'vendor-performance', 'order-insights', 'inventory-alerts', 'platform-performance', 
+  'system-health', 'security-monitoring', 'system-logs', 'quick-actions', 'executive-summary'
+];

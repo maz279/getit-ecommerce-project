@@ -1,3 +1,4 @@
+
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -58,14 +59,22 @@ const AdminDashboard: React.FC = () => {
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
 
-    // Define product-management related submenus - UPDATED with import-export
+    // Define product-management related submenus - UPDATED with proper import-export handling
     const productManagementSubmenus = [
       'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
       'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
       'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
       'trending-products', 'price-optimization', 'product-search', 'featured-products',
-      'import-export', 'product-import', 'product-export', 'bulk-operations'
+      'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export'
     ];
+    
+    // Handle special case for product-import-export
+    if (menu === 'product-import-export') {
+      console.log('✅ Special case: product-import-export detected');
+      setSelectedMenu('product-management');
+      setSelectedSubmenu('import-export');
+      return;
+    }
     
     // Check if this is a user-management submenu
     if (userManagementSubmenus.includes(menu)) {

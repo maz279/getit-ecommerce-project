@@ -17,6 +17,7 @@ import { ProductCatalogOverview } from './ProductCatalogOverview';
 import { InventoryManagementOverview } from './InventoryManagementOverview';
 import { LowStockAlertsContent } from './LowStockAlertsContent';
 import { InventoryReportsContent } from './InventoryReportsContent';
+import { WarehouseManagementContent } from './WarehouseManagementContent';
 
 interface ProductManagementRouterProps {
   selectedSubmenu: string;
@@ -41,6 +42,11 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'inventory-analytics':
       console.log('✅ Routing to InventoryReportsContent');
       return <InventoryReportsContent />;
+    case 'warehouse-management':
+    case 'warehouse-operations':
+    case 'warehouse-analytics':
+      console.log('✅ Routing to WarehouseManagementContent');
+      return <WarehouseManagementContent />;
     case 'stock-management':
     case 'inventory-tracking':
     case 'stock-analytics':

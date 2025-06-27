@@ -37,11 +37,12 @@ export const logisticsSubmenus = [
 export const productSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 
   'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
-  'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 
-  'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 
-  'product-export', 'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 
-  'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 'category-performance',
-  'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
+  'warehouse-management', 'warehouse-operations', 'warehouse-analytics', 'best-sellers', 'product-performance', 
+  'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 
+  'product-import', 'product-export', 'bulk-operations', 'category-management', 'category-structure', 
+  'category-hierarchy', 'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 
+  'category-performance', 'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 
+  'seasonal-analytics',
   // Product moderation submenus - EXPLICITLY LISTED TO ENSURE PROPER ROUTING
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
   // Stock and inventory related submenus - ADDED FOR PROPER ROUTING

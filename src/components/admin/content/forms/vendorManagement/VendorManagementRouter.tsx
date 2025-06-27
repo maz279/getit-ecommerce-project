@@ -8,6 +8,7 @@ import { VendorPerformanceContent } from './VendorPerformanceContent';
 import { VendorAnalyticsContent } from './VendorAnalyticsContent';
 import { VendorPaymentsContent } from './VendorPaymentsContent';
 import { VendorSupportContent } from './VendorSupportContent';
+import { PendingApplicationsContent } from './PendingApplicationsContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -25,6 +26,11 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'active':
       console.log('✅ Routing to ActiveVendorsContent');
       return <ActiveVendorsContent />;
+    case 'pending-application':
+    case 'pending-applications':
+    case 'applications':
+      console.log('✅ Routing to PendingApplicationsContent');
+      return <PendingApplicationsContent />;
     case 'vendor-onboarding':
     case 'onboarding':
       console.log('✅ Routing to VendorOnboardingContent');
@@ -35,7 +41,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       return <VendorVerificationContent />;
     case 'vendor-performance':
     case 'performance':
-      console.log('✅ Routing to VendorPerformanceContent');
+      console.log('✅ Routing to VendorPerformanceContent');  
       return <VendorPerformanceContent />;
     case 'vendor-analytics':
     case 'analytics':

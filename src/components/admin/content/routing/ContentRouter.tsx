@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { DashboardContent } from '../../dashboard/DashboardContent';
 import { UserManagementContent } from '../UserManagementContent';
@@ -49,7 +48,8 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     'vendor-directory', 'active-vendors', 'vendor-onboarding', 'vendor-verification',
     'vendor-performance', 'vendor-analytics', 'vendor-payments', 'vendor-support',
     'vendor-dashboard', 'vendor-profile', 'vendor-products', 'vendor-orders',
-    'commission-management', 'vendor-reviews', 'vendor-settlements', 'vendor-kyc'
+    'commission-management', 'vendor-reviews', 'vendor-settlements', 'vendor-kyc',
+    'pending-application', 'pending-applications', 'applications'
   ];
   
   if (vendorManagementMenus.includes(selectedMenu) || vendorManagementMenus.includes(selectedSubmenu)) {

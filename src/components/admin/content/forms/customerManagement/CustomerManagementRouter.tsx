@@ -7,6 +7,7 @@ import { CustomerSegmentsContent } from './CustomerSegmentsContent';
 import { VIPCustomersContent } from './VIPCustomersContent';
 import { CustomerBehaviorContent } from './CustomerBehaviorContent';
 import { CustomerOverviewContent } from './CustomerOverviewContent';
+import { CustomerSearchContent } from './CustomerSearchContent';
 
 interface CustomerManagementRouterProps {
   selectedSubmenu: string;
@@ -20,6 +21,9 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
     case 'customer-database':
       console.log('✅ Routing to AllCustomersContent');
       return <AllCustomersContent />;
+    case 'customer-search':
+      console.log('✅ Routing to CustomerSearchContent');
+      return <CustomerSearchContent />;
     case 'customer-analytics':
     case 'customer-insights':
       console.log('✅ Routing to CustomerAnalyticsContent');

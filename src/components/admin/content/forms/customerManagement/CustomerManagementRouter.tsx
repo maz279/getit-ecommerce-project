@@ -12,6 +12,7 @@ import { CustomerSearchContent } from './CustomerSearchContent';
 import { PurchaseHistoryContent } from './PurchaseHistoryContent';
 import { LoyaltyAnalysisContent } from './LoyaltyAnalysisContent';
 import { CLVContent } from './CLVContent';
+import { FeedbackReviewsContent } from './FeedbackReviewsContent';
 
 interface CustomerManagementRouterProps {
   selectedSubmenu: string;
@@ -39,6 +40,11 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
     case 'live-chat':
       console.log('✅ Routing to LiveChatContent');
       return <LiveChatContent />;
+    case 'feedback-reviews':
+    case 'customer-feedback':
+    case 'reviews-management':
+      console.log('✅ Routing to FeedbackReviewsContent');
+      return <FeedbackReviewsContent />;
     case 'customer-segments':
     case 'customer-demographics':
       console.log('✅ Routing to CustomerSegmentsContent');

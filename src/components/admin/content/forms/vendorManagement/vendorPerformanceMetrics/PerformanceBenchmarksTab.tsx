@@ -19,14 +19,6 @@ export const PerformanceBenchmarksTab: React.FC<PerformanceBenchmarksTabProps> =
     return { status: 'below-threshold', color: 'bg-red-100 text-red-800' };
   };
 
-  const getProgressColor = (value: number, benchmark: PerformanceBenchmark) => {
-    const percentage = (value / benchmark.topPerformers) * 100;
-    if (percentage >= 95) return 'bg-green-500';
-    if (percentage >= 80) return 'bg-blue-500';
-    if (percentage >= 60) return 'bg-yellow-500';
-    return 'bg-red-500';
-  };
-
   // Mock current performance data
   const currentPerformance = {
     'Order Fulfillment Rate': 94.2,

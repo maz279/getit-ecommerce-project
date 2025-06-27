@@ -31,6 +31,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
     console.log('Received selectedSubmenu prop:', selectedSubmenu);
     console.log('Type of selectedSubmenu:', typeof selectedSubmenu);
     console.log('selectedSubmenu length:', selectedSubmenu?.length);
+    console.log('JSON.stringify selectedSubmenu:', JSON.stringify(selectedSubmenu));
     console.log('=================================');
   }, [selectedSubmenu]);
 
@@ -41,6 +42,22 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
     const normalizedSubmenu = selectedSubmenu?.toString().trim().toLowerCase();
     console.log('🔍 Normalized submenu:', normalizedSubmenu);
     
+    // Add explicit checks for the problematic submenus
+    if (normalizedSubmenu === 'real-time-metrics' || normalizedSubmenu === 'realtime-metrics') {
+      console.log('✅ Matched real-time-metrics, rendering RealtimeMetricsSection');
+      return <RealtimeMetricsSection />;
+    }
+    
+    if (normalizedSubmenu === 'kpi-monitoring' || normalizedSubmenu === 'kpi_monitoring') {
+      console.log('✅ Matched kpi-monitoring, rendering KPIMonitoringDashboard');
+      return <KPIMonitoringDashboard />;
+    }
+    
+    if (normalizedSubmenu === 'performance-insights' || normalizedSubmenu === 'performance_insights') {
+      console.log('✅ Matched performance-insights, rendering PerformanceInsightsDashboard');
+      return <PerformanceInsightsDashboard />;
+    }
+    
     switch (normalizedSubmenu) {
       case 'overview':
         console.log('✅ Rendering OverviewDashboard');
@@ -49,21 +66,6 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       case 'analytics':
         console.log('✅ Rendering AnalyticsDashboard');
         return <AnalyticsDashboard />;
-      
-      case 'real-time-metrics':
-      case 'realtime-metrics':
-        console.log('✅ Rendering RealtimeMetricsSection');
-        return <RealtimeMetricsSection />;
-      
-      case 'kpi-monitoring':
-      case 'kpi_monitoring':
-        console.log('✅ Rendering KPIMonitoringDashboard');
-        return <KPIMonitoringDashboard />;
-      
-      case 'performance-insights':
-      case 'performance_insights':
-        console.log('✅ Rendering PerformanceInsightsDashboard');
-        return <PerformanceInsightsDashboard />;
       
       case 'revenue-analytics':
         console.log('✅ Rendering RevenueAnalytics');

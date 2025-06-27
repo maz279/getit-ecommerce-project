@@ -19,6 +19,7 @@ import { LowStockAlertsContent } from './LowStockAlertsContent';
 import { InventoryReportsContent } from './InventoryReportsContent';
 import { WarehouseManagementContent } from './WarehouseManagementContent';
 import { BestSellersContent } from './BestSellersContent';
+import { MarketTrendsContent } from './MarketTrendsContent';
 
 interface ProductManagementRouterProps {
   selectedSubmenu: string;
@@ -59,6 +60,14 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'bestsellers':
       console.log('✅ Routing to BestSellersContent');
       return <BestSellersContent />;
+    // Market trends routes - ADDED PRIORITY ROUTING
+    case 'market-trends':
+    case 'market-trend':
+    case 'trends':
+    case 'trend-analysis':
+    case 'market-analysis':
+      console.log('✅ Routing to MarketTrendsContent');
+      return <MarketTrendsContent />;
     case 'product-catalog':
     case 'products':
       return <ProductCatalogOverview />;

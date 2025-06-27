@@ -103,14 +103,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
-    // Handle product management and product-related submenus - UPDATED with product-search
+    // Handle product management and product-related submenus - UPDATED with featured-products
     if (selectedMenu === 'product-management' || selectedMenu === 'products' || selectedMenu.startsWith('product-') || 
-        ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search'].includes(selectedMenu)) {
+        ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products'].includes(selectedMenu)) {
       console.log('✅ PRODUCT MANAGEMENT - routing to ProductManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a product submenu, pass it as selectedSubmenu
-      const submenu = ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search'].includes(selectedMenu) 
+      const submenu = ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       

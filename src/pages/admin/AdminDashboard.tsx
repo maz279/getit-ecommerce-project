@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -59,12 +58,12 @@ const AdminDashboard: React.FC = () => {
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
 
-    // Define product-management related submenus - UPDATED with product-search
+    // Define product-management related submenus - UPDATED with featured-products
     const productManagementSubmenus = [
       'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
       'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
       'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
-      'trending-products', 'price-optimization', 'product-search'
+      'trending-products', 'price-optimization', 'product-search', 'featured-products'
     ];
     
     // Check if this is a user-management submenu

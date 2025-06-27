@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { VendorDirectoryContent } from './VendorDirectoryContent';
 import { ActiveVendorsContent } from './ActiveVendorsContent';
@@ -9,6 +10,7 @@ import { VendorPaymentsContent } from './VendorPaymentsContent';
 import { VendorSupportContent } from './VendorSupportContent';
 import { PendingApplicationsContent } from './PendingApplicationsContent';
 import { SuspendedVendorsContent } from './SuspendedVendorsContent';
+import { VendorSearchContent } from './VendorSearchContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -60,6 +62,16 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'support':
       console.log('✅ Routing to VendorSupportContent');
       return <VendorSupportContent />;
+    case 'vendor-search':
+    case 'search-vendors':
+    case 'find-vendors':
+    case 'vendor-finder':
+    case 'advanced-vendor-search':
+    case 'vendor-database-search':
+    case 'vendor-lookup':
+    case 'search-directory':
+      console.log('✅ Routing to VendorSearchContent');
+      return <VendorSearchContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

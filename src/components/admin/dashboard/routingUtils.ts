@@ -63,12 +63,15 @@ export const customerManagementSubmenus = [
   'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Define vendor-management related submenus - COMPREHENSIVE LIST - CRITICAL FIX
+// Define vendor-management related submenus - COMPREHENSIVE LIST WITH VENDOR SEARCH
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
   'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
   'vendor-verification', 'verification', 'vendor-performance', 'performance', 'vendor-analytics', 'analytics',
-  'vendor-payments', 'payments', 'commission-management', 'vendor-support', 'support'
+  'vendor-payments', 'payments', 'commission-management', 'vendor-support', 'support',
+  // VENDOR SEARCH SUBMENUS - CRITICAL ADDITION
+  'vendor-search', 'search-vendors', 'find-vendors', 'vendor-finder', 'advanced-vendor-search',
+  'vendor-database-search', 'vendor-lookup', 'search-directory'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

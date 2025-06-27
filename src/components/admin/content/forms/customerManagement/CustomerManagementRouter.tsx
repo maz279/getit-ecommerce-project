@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { AllCustomersContent } from './AllCustomersContent';
 import { CustomerAnalyticsContent } from './CustomerAnalyticsContent';
@@ -9,6 +8,7 @@ import { CustomerBehaviorContent } from './CustomerBehaviorContent';
 import { CustomerOverviewContent } from './CustomerOverviewContent';
 import { CustomerSearchContent } from './CustomerSearchContent';
 import { PurchaseHistoryContent } from './PurchaseHistoryContent';
+import { LoyaltyAnalysisContent } from './LoyaltyAnalysisContent';
 
 interface CustomerManagementRouterProps {
   selectedSubmenu: string;
@@ -49,6 +49,9 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
     case 'purchase-history':
       console.log('✅ Routing to PurchaseHistoryContent');
       return <PurchaseHistoryContent />;
+    case 'loyalty-analysis':
+      console.log('✅ Routing to LoyaltyAnalysisContent');
+      return <LoyaltyAnalysisContent />;
     case 'customer-overview':
     case 'customer-retention':
     case 'customer-acquisition':

@@ -3,6 +3,7 @@ import React from 'react';
 import { AllCustomersContent } from './AllCustomersContent';
 import { CustomerAnalyticsContent } from './CustomerAnalyticsContent';
 import { CustomerSupportContent } from './CustomerSupportContent';
+import { LiveChatContent } from './LiveChatContent';
 import { CustomerSegmentsContent } from './CustomerSegmentsContent';
 import { VIPCustomersContent } from './VIPCustomersContent';
 import { CustomerBehaviorContent } from './CustomerBehaviorContent';
@@ -33,9 +34,11 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
       return <CustomerAnalyticsContent />;
     case 'customer-support':
     case 'support-tickets':
-    case 'live-chat':
       console.log('✅ Routing to CustomerSupportContent');
       return <CustomerSupportContent />;
+    case 'live-chat':
+      console.log('✅ Routing to LiveChatContent');
+      return <LiveChatContent />;
     case 'customer-segments':
     case 'customer-demographics':
       console.log('✅ Routing to CustomerSegmentsContent');

@@ -11,6 +11,7 @@ import { VendorSupportContent } from './VendorSupportContent';
 import { PendingApplicationsContent } from './PendingApplicationsContent';
 import { SuspendedVendorsContent } from './SuspendedVendorsContent';
 import { VendorSearchContent } from './VendorSearchContent';
+import { DocumentReviewContent } from './DocumentReviewContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -72,6 +73,21 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'search-directory':
       console.log('✅ Routing to VendorSearchContent');
       return <VendorSearchContent />;
+    case 'document-review':
+    case 'document-verification':
+    case 'kyc-verification':
+    case 'kyc-review':
+    case 'compliance-check':
+    case 'identity-verification':
+    case 'business-verification':
+    case 'document-approval':
+    case 'verification-queue':
+    case 'rejected-documents':
+    case 'pending-verification':
+    case 'verified-documents':
+    case 'compliance-status':
+      console.log('✅ Routing to DocumentReviewContent');
+      return <DocumentReviewContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

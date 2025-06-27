@@ -63,15 +63,19 @@ export const customerManagementSubmenus = [
   'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Define vendor-management related submenus - COMPREHENSIVE LIST WITH VENDOR SEARCH
+// Define vendor-management related submenus - COMPREHENSIVE LIST WITH DOCUMENT REVIEW
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
   'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
   'vendor-verification', 'verification', 'vendor-performance', 'performance', 'vendor-analytics', 'analytics',
   'vendor-payments', 'payments', 'commission-management', 'vendor-support', 'support',
-  // VENDOR SEARCH SUBMENUS - CRITICAL ADDITION
+  // VENDOR SEARCH SUBMENUS
   'vendor-search', 'search-vendors', 'find-vendors', 'vendor-finder', 'advanced-vendor-search',
-  'vendor-database-search', 'vendor-lookup', 'search-directory'
+  'vendor-database-search', 'vendor-lookup', 'search-directory',
+  // DOCUMENT REVIEW AND KYC VERIFICATION SUBMENUS - CRITICAL ADDITION
+  'document-review', 'document-verification', 'kyc-verification', 'kyc-review', 'compliance-check',
+  'identity-verification', 'business-verification', 'document-approval', 'verification-queue',
+  'rejected-documents', 'pending-verification', 'verified-documents', 'compliance-status'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

@@ -5,7 +5,8 @@ import {
   salesManagementSubmenus, 
   orderManagementSubmenus,
   logisticsManagementSubmenus,
-  productManagementSubmenus 
+  productManagementSubmenus,
+  vendorManagementSubmenus
 } from './routingUtils';
 
 export const getDefaultSubmenu = (menu: string): string => {
@@ -44,7 +45,17 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // PRIORITY 1: Handle stock and inventory submenus FIRST
+  // PRIORITY 1: Handle vendor management submenus FIRST
+  if (vendorManagementSubmenus.includes(menu)) {
+    console.log('✅ PRIORITY: Found in vendor management submenus - routing to vendor management');
+    console.log('🔍 Vendor management submenu:', menu);
+    return {
+      selectedMenu: 'vendor-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 2: Handle stock and inventory submenus
   const stockInventorySubmenus = [
     'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
   ];
@@ -58,7 +69,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
-  // PRIORITY 2: Handle product moderation submenus with both singular and plural forms
+  // PRIORITY 3: Handle product moderation submenus with both singular and plural forms
   const productModerationSubmenus = [
     'pending-approval', 'pending-approvals',
     'content-review', 'content-reviews', 

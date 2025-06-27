@@ -2,15 +2,14 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
-type CommissionAnalytics = Database['public']['Tables']['commission_analytics']['Row'];
+type VendorCommission = Database['public']['Tables']['vendor_commissions']['Row'];
 
 export class CommissionAnalyticsService {
   static async getAnalytics(filters?: {
     vendor_id?: string;
-    period?: string;
     date_from?: string;
     date_to?: string;
-  }): Promise<CommissionAnalytics[]> {
+  }): Promise<any> {
     let query = supabase
       .from('commission_analytics')
       .select('*')
@@ -18,9 +17,6 @@ export class CommissionAnalyticsService {
 
     if (filters?.vendor_id) {
       query = query.eq('vendor_id', filters.vendor_id);
-    }
-    if (filters?.period) {
-      query = query.eq('analytics_period', filters.period);
     }
     if (filters?.date_from) {
       query = query.gte('analytics_date', filters.date_from);
@@ -34,98 +30,40 @@ export class CommissionAnalyticsService {
     return data || [];
   }
 
-  static async getVendorSummary(vendorId: string, period?: string): Promise<{
-    total_commissions: number;
-    total_revenue: number;
-    average_commission: number;
-    commission_count: number;
-  }> {
-    let query = supabase
-      .from('vendor_commissions')
-      .select('commission_amount, gross_amount')
-      .eq('vendor_id', vendorId);
+  static async getVendorSummary(vendorId: string): Promise<any> {
+    const { data, error } = await supabase
+      .from('commission_analytics')
+      .select('*')
+      .eq('vendor_id', vendorId)
+      .order('analytics_date', { ascending: false })
+      .limit(1)
+      .maybeSingle();
 
-    if (period) {
-      const startDate = new Date();
-      switch (period) {
-        case 'week':
-          startDate.setDate(startDate.getDate() - 7);
-          break;
-        case 'month':
-          startDate.setMonth(startDate.getMonth() - 1);
-          break;
-        case 'quarter':
-          startDate.setMonth(startDate.getMonth() - 3);
-          break;
-        case 'year':
-          startDate.setFullYear(startDate.getFullYear() - 1);
-          break;
-      }
-      query = query.gte('transaction_date', startDate.toISOString());
-    }
-
-    const { data, error } = await query;
     if (error) throw error;
-
-    const commissions = data || [];
-    const totalCommissions = commissions.reduce((sum, c) => sum + (c.commission_amount || 0), 0);
-    const totalRevenue = commissions.reduce((sum, c) => sum + (c.gross_amount || 0), 0);
-
-    return {
-      total_commissions: totalCommissions,
-      total_revenue: totalRevenue,
-      average_commission: commissions.length > 0 ? totalCommissions / commissions.length : 0,
-      commission_count: commissions.length
-    };
+    return data;
   }
 
-  static async getDashboardStats(): Promise<{
-    total_commissions: number;
-    pending_payouts: number;
-    active_disputes: number;
-    monthly_growth: number;
-  }> {
-    // Get total commissions
-    const { data: commissions } = await supabase
+  static async getDashboardStats(): Promise<import('../commission/types').CommissionAnalytics> {
+    const { data: commissions, error } = await supabase
       .from('vendor_commissions')
-      .select('commission_amount');
+      .select('commission_amount, status, payment_status');
 
-    // Get pending payouts
-    const { data: payouts } = await supabase
-      .from('commission_payouts')
-      .select('total_commission')
-      .eq('status', 'pending');
+    if (error) throw error;
 
-    // Get active disputes
-    const { data: disputes } = await supabase
-      .from('commission_disputes')
-      .select('id')
-      .in('status', ['open', 'under_review']);
-
-    // Calculate monthly growth
-    const currentMonth = new Date();
-    const lastMonth = new Date(currentMonth.getFullYear(), currentMonth.getMonth() - 1, 1);
-    
-    const { data: currentMonthData } = await supabase
-      .from('vendor_commissions')
-      .select('commission_amount')
-      .gte('transaction_date', currentMonth.toISOString().split('T')[0]);
-
-    const { data: lastMonthData } = await supabase
-      .from('vendor_commissions')
-      .select('commission_amount')
-      .gte('transaction_date', lastMonth.toISOString().split('T')[0])
-      .lt('transaction_date', currentMonth.toISOString().split('T')[0]);
-
-    const currentTotal = (currentMonthData || []).reduce((sum, c) => sum + (c.commission_amount || 0), 0);
-    const lastTotal = (lastMonthData || []).reduce((sum, c) => sum + (c.commission_amount || 0), 0);
-    const monthlyGrowth = lastTotal > 0 ? ((currentTotal - lastTotal) / lastTotal) * 100 : 0;
+    const totalCommissions = commissions?.length || 0;
+    const totalAmount = commissions?.reduce((sum, c) => sum + (c.commission_amount || 0), 0) || 0;
+    const averageCommission = totalCommissions > 0 ? totalAmount / totalCommissions : 0;
+    const pendingCommissions = commissions?.filter(c => c.status === 'pending').length || 0;
+    const approvedCommissions = commissions?.filter(c => c.status === 'approved').length || 0;
+    const paidCommissions = commissions?.filter(c => c.payment_status === 'paid').length || 0;
 
     return {
-      total_commissions: (commissions || []).reduce((sum, c) => sum + (c.commission_amount || 0), 0),
-      pending_payouts: (payouts || []).reduce((sum, p) => sum + (p.total_commission || 0), 0),
-      active_disputes: (disputes || []).length,
-      monthly_growth: monthlyGrowth
+      totalCommissions,
+      totalAmount,
+      averageCommission,
+      pendingCommissions,
+      approvedCommissions,
+      paidCommissions
     };
   }
 }

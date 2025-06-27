@@ -5,15 +5,25 @@ import { CommissionAdjustmentService } from './commission/CommissionAdjustmentSe
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
-// Re-export types for backward compatibility
-export type EnhancedVendorCommission = Database['public']['Tables']['vendor_commissions']['Row'];
-export type VendorCommissionInsert = Database['public']['Tables']['vendor_commissions']['Insert'];
-export type VendorCommissionUpdate = Database['public']['Tables']['vendor_commissions']['Update'];
+// Export types
+export type {
+  EnhancedVendorCommission,
+  VendorCommissionInsert,
+  VendorCommissionUpdate,
+  CommissionAdjustment,
+  CommissionAdjustmentInsert,
+  CommissionRateHistory,
+  CommissionReconciliation,
+  CommissionFilters,
+  PaginationParams,
+  CommissionInsert,
+  PaginatedResponse,
+  CommissionAnalytics
+} from './commission/types';
+
+// Re-export other types for backward compatibility
 export type CommissionDispute = Database['public']['Tables']['commission_disputes']['Row'];
 export type CommissionPayout = Database['public']['Tables']['commission_payouts']['Row'];
-export type CommissionAdjustment = Database['public']['Tables']['commission_adjustments']['Row'];
-export type CommissionRateHistory = Database['public']['Tables']['commission_rate_history']['Row'];
-export type CommissionReconciliation = Database['public']['Tables']['commission_reconciliation']['Row'];
 
 export class EnhancedCommissionTrackingService {
   // Re-export CRUD operations
@@ -35,6 +45,60 @@ export class EnhancedCommissionTrackingService {
   static createAdjustment = CommissionAdjustmentService.createAdjustment;
   static approveAdjustment = CommissionAdjustmentService.approveAdjustment;
   static rejectAdjustment = CommissionAdjustmentService.rejectAdjustment;
+
+  // Enhanced method with pagination support
+  static async getCommissionsWithPagination(
+    filters: import('./commission/types').CommissionFilters = {},
+    pagination: import('./commission/types').PaginationParams = {}
+  ): Promise<import('./commission/types').PaginatedResponse<import('./commission/types').EnhancedVendorCommission>> {
+    const { page = 1, limit = 50 } = pagination;
+    const offset = (page - 1) * limit;
+
+    const commissions = await this.getCommissions({
+      ...filters,
+      limit,
+      offset
+    });
+
+    // Get total count for pagination
+    let countQuery = supabase
+      .from('vendor_commissions')
+      .select('*', { count: 'exact', head: true });
+
+    if (filters.vendor_id) {
+      countQuery = countQuery.eq('vendor_id', filters.vendor_id);
+    }
+    if (filters.status) {
+      countQuery = countQuery.eq('status', filters.status);
+    }
+    if (filters.date_from) {
+      countQuery = countQuery.gte('transaction_date', filters.date_from);
+    }
+    if (filters.date_to) {
+      countQuery = countQuery.lte('transaction_date', filters.date_to);
+    }
+
+    const { count } = await countQuery;
+    const total = count || 0;
+    const total_pages = Math.ceil(total / limit);
+
+    return {
+      data: commissions,
+      total,
+      total_pages,
+      current_page: page
+    };
+  }
+
+  // Add bulk delete method
+  static async bulkDeleteCommissions(ids: string[]): Promise<void> {
+    const { error } = await supabase
+      .from('vendor_commissions')
+      .delete()
+      .in('id', ids);
+
+    if (error) throw error;
+  }
 
   // Dispute operations
   static async getDisputes(filters?: { vendor_id?: string; status?: string }): Promise<CommissionDispute[]> {
@@ -75,7 +139,7 @@ export class EnhancedCommissionTrackingService {
   }
 
   // Rate history operations
-  static async getRateHistory(rateId?: string): Promise<CommissionRateHistory[]> {
+  static async getRateHistory(rateId?: string): Promise<Database['public']['Tables']['commission_rate_history']['Row'][]> {
     let query = supabase
       .from('commission_rate_history')
       .select('*')
@@ -91,7 +155,7 @@ export class EnhancedCommissionTrackingService {
   }
 
   // Reconciliation operations
-  static async getReconciliations(vendorId?: string): Promise<CommissionReconciliation[]> {
+  static async getReconciliations(vendorId?: string): Promise<Database['public']['Tables']['commission_reconciliation']['Row'][]> {
     let query = supabase
       .from('commission_reconciliation')
       .select('*')

@@ -2,9 +2,9 @@
 import { CommissionCacheOperations } from './operations/CommissionCacheOperations';
 import { CommissionSpecificCache } from './operations/CommissionSpecificCache';
 import { CacheInvalidationService } from './invalidation/CacheInvalidationService';
-import { CacheConfig, CachedCommissionData, CacheStats } from './base/CacheConfigTypes';
+import type { CacheConfig, CachedCommissionData, CacheStats } from './base/CacheConfigTypes';
 
-export { CacheConfig, CachedCommissionData };
+export type { CacheConfig, CachedCommissionData };
 
 export class CommissionCacheService {
   // Re-export core operations

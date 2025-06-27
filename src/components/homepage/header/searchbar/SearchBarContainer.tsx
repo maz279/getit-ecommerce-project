@@ -37,7 +37,11 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
   });
   
   const searchState = useSearchState({ searchQuery, setSearchQuery, isAIMode });
-  const searchHandlers = useSearchHandlers({ ...searchState, isAIMode });
+  const searchHandlers = useSearchHandlers({ 
+    ...searchState, 
+    isAIMode,
+    setSearchQuery // Add the missing prop
+  });
 
   const {
     handleVoiceSearch,
@@ -85,9 +89,14 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
     ? searchState.aiSearch.aiSuggestions.map((s: any) => s.text)
     : searchState.aiSearch.suggestions;
 
+  // Create wrapper functions to handle the prop type differences
+  const handleInputChangeWrapper = (e: React.ChangeEvent<HTMLInputElement>) => {
+    searchState.handleInputChange(e.target.value);
+  };
+
   const commonProps = {
     searchQuery,
-    onInputChange: searchState.handleInputChange,
+    onInputChange: handleInputChangeWrapper, // Use wrapper function
     onSearch: searchHandlers.handleSearch,
     onKeyPress: handleKeyPress,
     onClearSearch: handleClearSearch,

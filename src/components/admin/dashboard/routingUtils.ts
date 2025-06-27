@@ -63,7 +63,7 @@ export const customerManagementSubmenus = [
   'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Define vendor-management related submenus - COMPREHENSIVE LIST WITH DOCUMENT REVIEW AND TRADE LICENSE
+// Define vendor-management related submenus - COMPREHENSIVE LIST WITH ALL VERIFICATION SYSTEMS
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
   'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
@@ -76,10 +76,14 @@ export const vendorManagementSubmenus = [
   'document-review', 'document-verification', 'kyc-verification', 'kyc-review', 'compliance-check',
   'identity-verification', 'business-verification', 'document-approval', 'verification-queue',
   'rejected-documents', 'pending-verification', 'verified-documents', 'compliance-status',
-  // TRADE LICENSE VERIFICATION SUBMENUS - NEW ADDITION
+  // TRADE LICENSE VERIFICATION SUBMENUS
   'trade-license-verification', 'trade-license-review', 'license-validation', 'license-approval',
   'license-renewal', 'expired-licenses', 'license-compliance', 'license-analytics',
-  'business-registration', 'regulatory-compliance', 'license-documents', 'certificate-verification'
+  'business-registration', 'regulatory-compliance', 'license-documents', 'certificate-verification',
+  // TIN VERIFICATION SUBMENUS - NEW ADDITION
+  'tin-verification', 'tin-review', 'tax-verification', 'tin-validation', 'tin-approval',
+  'tax-compliance', 'tin-analytics', 'tax-registration', 'tin-documents', 'tax-authority-verification',
+  'expired-tin', 'tin-renewal', 'tax-status-check', 'tin-compliance-monitoring'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

@@ -13,6 +13,7 @@ import { SuspendedVendorsContent } from './SuspendedVendorsContent';
 import { VendorSearchContent } from './VendorSearchContent';
 import { DocumentReviewContent } from './DocumentReviewContent';
 import { TradeLicenseVerificationContent } from './TradeLicenseVerificationContent';
+import { TinVerificationContent } from './TinVerificationContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -103,6 +104,22 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'certificate-verification':
       console.log('✅ Routing to TradeLicenseVerificationContent');
       return <TradeLicenseVerificationContent />;
+    case 'tin-verification':
+    case 'tin-review':
+    case 'tax-verification':
+    case 'tin-validation':
+    case 'tin-approval':
+    case 'tax-compliance':
+    case 'tin-analytics':
+    case 'tax-registration':
+    case 'tin-documents':
+    case 'tax-authority-verification':
+    case 'expired-tin':
+    case 'tin-renewal':
+    case 'tax-status-check':
+    case 'tin-compliance-monitoring':
+      console.log('✅ Routing to TinVerificationContent');
+      return <TinVerificationContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

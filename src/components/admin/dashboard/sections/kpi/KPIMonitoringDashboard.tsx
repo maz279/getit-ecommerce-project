@@ -1,6 +1,7 @@
 
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
+import { TrendingUp, TrendingDown } from 'lucide-react';
 import { KPIHeader } from './KPIHeader';
 import { KPIFilters } from './KPIFilters';
 import { KPIOverviewTab } from './KPIOverviewTab';
@@ -31,6 +32,10 @@ export const KPIMonitoringDashboard: React.FC = () => {
     }
   };
 
+  const getTrendIcon = (trend: number) => {
+    return trend > 0 ? <TrendingUp className="w-4 h-4 text-green-500" /> : <TrendingDown className="w-4 h-4 text-red-500" />;
+  };
+
   return (
     <div className="p-6 space-y-8 bg-gray-50 min-h-screen">
       <KPIHeader onShowGoalForm={() => setShowGoalForm(true)} />
@@ -55,6 +60,7 @@ export const KPIMonitoringDashboard: React.FC = () => {
           <KPIOverviewTab 
             filteredKPIs={filteredKPIs}
             getStatusColor={getStatusColor}
+            getTrendIcon={getTrendIcon}
           />
         </TabsContent>
 

@@ -55,6 +55,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance':
       console.log('✅ Routing to VendorPerformanceContent');  
       return <VendorPerformanceContent />;
+    // All performance metrics and scorecard related submenus route to VendorPerformanceMetricsContent
     case 'performance-metrics':
     case 'vendor-performance-metrics':
     case 'performance-dashboard':
@@ -78,8 +79,8 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance-monitoring':
     case 'performance-improvement':
     case 'performance-alerts':
-      console.log('✅ Routing to VendorPerformanceMetricsContent');
-      return <VendorPerformanceMetricsContent />;
+      console.log('✅ Routing to VendorPerformanceMetricsContent with submenu:', selectedSubmenu);
+      return <VendorPerformanceMetricsContent selectedSubmenu={selectedSubmenu} />;
     case 'vendor-analytics':
     case 'analytics':
       console.log('✅ Routing to VendorAnalyticsContent');

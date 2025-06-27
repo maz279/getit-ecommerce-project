@@ -5,6 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Switch } from '@/components/ui/switch';
 import { Eye, CheckCircle, XCircle, Flag, Search, Filter } from 'lucide-react';
 
 export const RatingModerationTab: React.FC = () => {
@@ -174,19 +175,19 @@ export const RatingModerationTab: React.FC = () => {
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 border rounded">
                   <span>Fake Review Detection</span>
-                  <Badge variant="default">Active</Badge>
+                  <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded">
                   <span>Duplicate Content Check</span>
-                  <Badge variant="default">Active</Badge>
+                  <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded">
                   <span>Sentiment Analysis</span>
-                  <Badge variant="default">Active</Badge>
+                  <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded">
                   <span>Language Pattern Detection</span>
-                  <Badge variant="secondary">Inactive</Badge>
+                  <Switch />
                 </div>
               </div>
             </div>
@@ -194,16 +195,16 @@ export const RatingModerationTab: React.FC = () => {
               <h4 className="font-medium">Auto-moderation Settings</h4>
               <div className="space-y-3">
                 <div className="flex items-center justify-between p-3 border rounded">
-                  <span>Auto-approve verified purchases (Risk < 30%)</span>
-                  <Badge variant="default">Enabled</Badge>
+                  <span>Auto-approve verified purchases (Risk &lt; 30%)</span>
+                  <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded">
-                  <span>Auto-flag high risk reviews (Risk > 70%)</span>
-                  <Badge variant="default">Enabled</Badge>
+                  <span>Auto-flag high risk reviews (Risk &gt; 70%)</span>
+                  <Switch defaultChecked />
                 </div>
                 <div className="flex items-center justify-between p-3 border rounded">
                   <span>Require manual review for disputes</span>
-                  <Badge variant="default">Enabled</Badge>
+                  <Switch defaultChecked />
                 </div>
               </div>
             </div>

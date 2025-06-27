@@ -8,6 +8,7 @@ import { VIPCustomersContent } from './VIPCustomersContent';
 import { CustomerBehaviorContent } from './CustomerBehaviorContent';
 import { CustomerOverviewContent } from './CustomerOverviewContent';
 import { CustomerSearchContent } from './CustomerSearchContent';
+import { PurchaseHistoryContent } from './PurchaseHistoryContent';
 
 interface CustomerManagementRouterProps {
   selectedSubmenu: string;
@@ -42,10 +43,12 @@ export const CustomerManagementRouter: React.FC<CustomerManagementRouterProps> =
       console.log('✅ Routing to VIPCustomersContent');
       return <VIPCustomersContent />;
     case 'customer-behavior':
-    case 'purchase-history':
     case 'customer-engagement':
       console.log('✅ Routing to CustomerBehaviorContent');
       return <CustomerBehaviorContent />;
+    case 'purchase-history':
+      console.log('✅ Routing to PurchaseHistoryContent');
+      return <PurchaseHistoryContent />;
     case 'customer-overview':
     case 'customer-retention':
     case 'customer-acquisition':

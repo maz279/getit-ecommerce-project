@@ -44,10 +44,11 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // Handle product moderation submenus FIRST to avoid conflicts
+  // PRIORITY 1: Handle product moderation submenus FIRST to avoid any conflicts
   const productModerationSubmenus = ['pending-approval', 'content-review', 'quality-control', 'rejected-products', 'product-moderation'];
   if (productModerationSubmenus.includes(menu)) {
-    console.log('✅ Found in product moderation submenus - routing to product management');
+    console.log('✅ PRIORITY: Found in product moderation submenus - routing to product management');
+    console.log('🔍 Product moderation submenu:', menu);
     return {
       selectedMenu: 'product-management',
       selectedSubmenu: menu

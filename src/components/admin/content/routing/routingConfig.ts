@@ -26,14 +26,14 @@ export const orderSubmenus = [
   'payment-analytics', 'payment-disputes', 'payment-methods', 'failed-payments'
 ];
 
-// Logistics submenus
+// Logistics submenus (REMOVED quality-control to avoid conflict with product moderation)
 export const logisticsSubmenus = [
   'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates', 
-  'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 'quality-control', 
+  'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 
   'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
 ];
 
-// Product management submenus (adding product moderation submenus)
+// Product management submenus (INCLUDING all product moderation submenus explicitly)
 export const productSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 
   'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
@@ -42,6 +42,7 @@ export const productSubmenus = [
   'product-export', 'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 
   'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 'category-performance',
   'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
+  // Product moderation submenus - EXPLICITLY LISTED TO ENSURE PROPER ROUTING
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products'
 ];
 

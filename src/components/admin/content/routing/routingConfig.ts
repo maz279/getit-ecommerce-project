@@ -45,7 +45,8 @@ export const productSubmenus = [
   // Product moderation submenus - EXPLICITLY LISTED TO ENSURE PROPER ROUTING
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
   // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
-  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
+  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
+  'low-stock', 'reorder-alerts'
 ];
 
 // Customer management submenus

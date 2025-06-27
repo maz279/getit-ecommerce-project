@@ -38,8 +38,8 @@ export const logisticsManagementSubmenus = [
 // Define product-management related submenus (INCLUDING all product moderation submenus)
 export const productManagementSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
-  'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
-  'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
+  'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
+  'warehouse-management', 'best-sellers', 'product-performance', 
   'trending-products', 'price-optimization', 'product-search', 'featured-products',
   'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
@@ -48,7 +48,8 @@ export const productManagementSubmenus = [
   // Product moderation submenus - EXPLICITLY LISTED
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
   // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
-  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
+  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
+  'low-stock', 'reorder-alerts'
 ];
 
 // Define dashboard-related submenus (removing category-analytics from here)

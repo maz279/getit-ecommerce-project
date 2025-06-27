@@ -12,6 +12,7 @@ import { PendingApplicationsContent } from './PendingApplicationsContent';
 import { SuspendedVendorsContent } from './SuspendedVendorsContent';
 import { VendorSearchContent } from './VendorSearchContent';
 import { DocumentReviewContent } from './DocumentReviewContent';
+import { TradeLicenseVerificationContent } from './TradeLicenseVerificationContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -88,6 +89,20 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'compliance-status':
       console.log('✅ Routing to DocumentReviewContent');
       return <DocumentReviewContent />;
+    case 'trade-license-verification':
+    case 'trade-license-review':
+    case 'license-validation':
+    case 'license-approval':
+    case 'license-renewal':
+    case 'expired-licenses':
+    case 'license-compliance':
+    case 'license-analytics':
+    case 'business-registration':
+    case 'regulatory-compliance':
+    case 'license-documents':
+    case 'certificate-verification':
+      console.log('✅ Routing to TradeLicenseVerificationContent');
+      return <TradeLicenseVerificationContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

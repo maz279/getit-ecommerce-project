@@ -63,7 +63,7 @@ export const customerManagementSubmenus = [
   'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Define vendor-management related submenus - COMPREHENSIVE LIST WITH DOCUMENT REVIEW
+// Define vendor-management related submenus - COMPREHENSIVE LIST WITH DOCUMENT REVIEW AND TRADE LICENSE
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
   'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
@@ -75,7 +75,11 @@ export const vendorManagementSubmenus = [
   // DOCUMENT REVIEW AND KYC VERIFICATION SUBMENUS - CRITICAL ADDITION
   'document-review', 'document-verification', 'kyc-verification', 'kyc-review', 'compliance-check',
   'identity-verification', 'business-verification', 'document-approval', 'verification-queue',
-  'rejected-documents', 'pending-verification', 'verified-documents', 'compliance-status'
+  'rejected-documents', 'pending-verification', 'verified-documents', 'compliance-status',
+  // TRADE LICENSE VERIFICATION SUBMENUS - NEW ADDITION
+  'trade-license-verification', 'trade-license-review', 'license-validation', 'license-approval',
+  'license-renewal', 'expired-licenses', 'license-compliance', 'license-analytics',
+  'business-registration', 'regulatory-compliance', 'license-documents', 'certificate-verification'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

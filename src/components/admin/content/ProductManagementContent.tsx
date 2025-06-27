@@ -11,6 +11,7 @@ import { FeaturedProductsContent } from './forms/productManagement/FeaturedProdu
 import { ProductImportExportContent } from './forms/productManagement/ProductImportExportContent';
 import { CategoryStructureContent } from './forms/productManagement/CategoryStructureContent';
 import { CategoryPerformanceContent } from './forms/productManagement/CategoryPerformanceContent';
+import { CategoryAnalyticsContent } from './forms/productManagement/CategoryAnalyticsContent';
 import { SeasonalCategoriesContent } from './forms/productManagement/SeasonalCategoriesContent';
 
 interface ProductManagementContentProps {
@@ -233,11 +234,12 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
       case 'category-hierarchy':
       case 'category-attributes':
       case 'category-rules':
-      case 'category-analytics':
       case 'category-seo':
         return <CategoryStructureContent selectedSubmenu={selectedSubmenu} />;
       case 'category-performance':
         return <CategoryPerformanceContent />;
+      case 'category-analytics':
+        return <CategoryAnalyticsContent />;
       case 'seasonal-categories':
       case 'seasonal-category-management':
       case 'seasonal-campaigns':

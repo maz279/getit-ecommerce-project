@@ -1,5 +1,4 @@
-
-// Dashboard submenus
+// Dashboard submenus (removing category-analytics from here)
 export const dashboardSubmenus = [
   'overview', 'analytics', 'real-time-metrics', 'realtime-metrics', 'kpi-monitoring', 'kpi_monitoring', 
   'performance-insights', 'performance_insights', 'revenue-analytics', 'user-activity', 'vendor-performance', 
@@ -33,7 +32,7 @@ export const logisticsSubmenus = [
   'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
 ];
 
-// Product management submenus
+// Product management submenus (adding category-analytics here)
 export const productSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 
   'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 

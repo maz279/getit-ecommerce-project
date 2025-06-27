@@ -43,11 +43,11 @@ export const productManagementSubmenus = [
   'trending-products', 'price-optimization', 'product-search', 'featured-products',
   'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
-  'category-rules', 'category-analytics', 'category-seo', 'category-performance',
+  'category-rules', 'category-seo', 'category-performance',
   'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics'
 ];
 
-// Define dashboard-related submenus
+// Define dashboard-related submenus (removing category-analytics from here)
 export const dashboardSubmenus = [
   'overview', 'analytics', 'real-time-metrics', 'realtime-metrics', 'kpi-monitoring', 'kpi_monitoring',
   'performance-insights', 'performance_insights', 'revenue-analytics', 'user-activity', 

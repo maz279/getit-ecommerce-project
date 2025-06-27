@@ -1,4 +1,3 @@
-
 // Define user-management related submenus
 export const userManagementSubmenus = [
   'admin-users', 'admin-list', 'role-management', 'permissions', 
@@ -97,7 +96,10 @@ export const vendorManagementSubmenus = [
   // VENDOR PERFORMANCE METRICS SUBMENUS - CRITICAL ADDITION
   'performance-metrics', 'vendor-performance-metrics', 'performance-dashboard', 'performance-analysis',
   'vendor-kpi', 'vendor-scorecards', 'performance-benchmarks', 'performance-trends', 'performance-reporting',
-  'vendor-ratings', 'vendor-reviews', 'performance-monitoring', 'performance-improvement', 'performance-alerts'
+  'vendor-ratings', 'vendor-reviews', 'performance-monitoring', 'performance-improvement', 'performance-alerts',
+  // VENDOR SCORECARD SUBMENUS - CRITICAL FIX
+  'vendor-scorecard', 'scorecard', 'vendor-rating', 'vendor-evaluation', 'performance-scorecard',
+  'vendor-assessment', 'quality-scorecard', 'supplier-scorecard', 'vendor-grading'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

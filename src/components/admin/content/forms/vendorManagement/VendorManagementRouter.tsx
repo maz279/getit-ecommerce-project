@@ -61,6 +61,15 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance-analysis':
     case 'vendor-kpi':
     case 'vendor-scorecards':
+    case 'vendor-scorecard':
+    case 'scorecard':
+    case 'vendor-rating':
+    case 'vendor-evaluation':
+    case 'performance-scorecard':
+    case 'vendor-assessment':
+    case 'quality-scorecard':
+    case 'supplier-scorecard':
+    case 'vendor-grading':
     case 'performance-benchmarks':
     case 'performance-trends':
     case 'performance-reporting':

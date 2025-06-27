@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { VendorDirectoryContent } from './VendorDirectoryContent';
 import { ActiveVendorsContent } from './ActiveVendorsContent';
@@ -9,6 +8,7 @@ import { VendorAnalyticsContent } from './VendorAnalyticsContent';
 import { VendorPaymentsContent } from './VendorPaymentsContent';
 import { VendorSupportContent } from './VendorSupportContent';
 import { PendingApplicationsContent } from './PendingApplicationsContent';
+import { SuspendedVendorsContent } from './SuspendedVendorsContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -26,6 +26,10 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'active':
       console.log('✅ Routing to ActiveVendorsContent');
       return <ActiveVendorsContent />;
+    case 'suspended-vendors':
+    case 'suspended':
+      console.log('✅ Routing to SuspendedVendorsContent');
+      return <SuspendedVendorsContent />;
     case 'pending-application':
     case 'pending-applications':
     case 'applications':

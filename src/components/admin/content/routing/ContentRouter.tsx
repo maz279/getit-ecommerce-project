@@ -29,13 +29,28 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🌟 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
-  // PRIORITY: Handle product moderation submenus FIRST (before any other routing)
-  const productModerationMenus = ['pending-approval', 'content-review', 'quality-control', 'rejected-products', 'product-moderation'];
+  // PRIORITY: Handle product moderation submenus FIRST (with both singular and plural forms)
+  const productModerationMenus = [
+    'pending-approval', 'pending-approvals',
+    'content-review', 'content-reviews', 
+    'quality-control', 'quality-controls',
+    'rejected-products', 'rejected-product',
+    'product-moderation', 'product-moderations'
+  ];
+  
   if (productModerationMenus.includes(selectedMenu) || productModerationMenus.includes(selectedSubmenu)) {
     console.log('✅ PRODUCT MODERATION DETECTED - routing to ProductManagementContent');
     console.log('🔍 Product moderation selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
-    // Pass the correct submenu value - if selectedMenu is a moderation menu, use it as submenu
-    const moderationSubmenu = productModerationMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    
+    // Normalize submenu to singular form for consistent routing
+    let moderationSubmenu = productModerationMenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
+    if (moderationSubmenu === 'pending-approvals') moderationSubmenu = 'pending-approval';
+    if (moderationSubmenu === 'content-reviews') moderationSubmenu = 'content-review';
+    if (moderationSubmenu === 'quality-controls') moderationSubmenu = 'quality-control';
+    if (moderationSubmenu === 'rejected-product') moderationSubmenu = 'rejected-products';
+    if (moderationSubmenu === 'product-moderations') moderationSubmenu = 'product-moderation';
+    
+    console.log('🔍 Normalized moderation submenu:', moderationSubmenu);
     return <ProductManagementContent selectedSubmenu={moderationSubmenu} />;
   }
 
@@ -61,7 +76,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <OrderManagementContent selectedSubmenu={submenu} />;
   }
 
-  // Handle logistics management (quality-control removed from here)
+  // Handle logistics management
   if (selectedMenu === 'logistics' || selectedMenu.startsWith('shipping-') || 
       selectedMenu.startsWith('warehouse-') || selectedMenu.startsWith('courier-') ||
       logisticsSubmenus.includes(selectedMenu)) {

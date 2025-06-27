@@ -29,6 +29,15 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
   console.log('🔍 ProductManagementRouter - selectedSubmenu:', selectedSubmenu);
   
   switch (selectedSubmenu) {
+    // Import/Export routes - PRIORITY ROUTING
+    case 'import-export':
+    case 'product-import':
+    case 'product-export':
+    case 'bulk-operations':
+    case 'product-import-export':
+      console.log('✅ Routing to ProductImportExportContent');
+      return <ProductImportExportContent />;
+    
     // Stock and inventory related routes - PRIORITY ROUTING
     case 'stock-overview':
     case 'inventory-overview':
@@ -53,14 +62,16 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'inventory-tracking':
     case 'stock-analytics':
       return <StockOverviewContent />;
-    // Best sellers and product analytics routes - ADDED PRIORITY ROUTING
+    
+    // Best sellers and product analytics routes - PRIORITY ROUTING
     case 'best-sellers':
     case 'best-seller':
     case 'top-selling':
     case 'bestsellers':
       console.log('✅ Routing to BestSellersContent');
       return <BestSellersContent />;
-    // Market trends routes - ADDED PRIORITY ROUTING
+    
+    // Market trends routes - PRIORITY ROUTING
     case 'market-trends':
     case 'market-trend':
     case 'trends':
@@ -68,6 +79,8 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'market-analysis':
       console.log('✅ Routing to MarketTrendsContent');
       return <MarketTrendsContent />;
+    
+    // Product catalog and management routes
     case 'product-catalog':
     case 'products':
       return <ProductCatalogOverview />;
@@ -77,11 +90,8 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
       return <ProductSearchContent />;
     case 'featured-products':
       return <FeaturedProductsContent />;
-    case 'import-export':
-    case 'product-import':
-    case 'product-export':
-    case 'bulk-operations':
-      return <ProductImportExportContent />;
+    
+    // Category management routes
     case 'category-structure':
     case 'category-management':
     case 'category-hierarchy':
@@ -98,6 +108,7 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'seasonal-campaigns':
     case 'seasonal-analytics':
       return <SeasonalCategoriesContent />;
+    
     // Product moderation routes - ENHANCED ROUTING
     case 'product-moderation':
     case 'pending-approval':
@@ -112,9 +123,13 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'rejected-products':
       console.log('✅ Routing to RejectedProductsContent');
       return <RejectedProductsContent />;
+    
+    // Inventory management routes
     case 'inventory-management':
     case 'stock-levels':
       return <InventoryManagementOverview />;
+    
+    // Add product route
     case 'add-product':
       return (
         <div className="p-6">
@@ -122,6 +137,8 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
           <p className="text-gray-600">Product creation form would be here...</p>
         </div>
       );
+    
+    // Product analytics route
     case 'product-analytics':
       return (
         <div className="p-6">
@@ -129,6 +146,7 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
           <p className="text-gray-600">Detailed product performance analytics...</p>
         </div>
       );
+    
     default:
       console.log('⚠️ ProductManagementRouter - no matching submenu found for:', selectedSubmenu);
       console.log('⚠️ Falling back to product catalog');

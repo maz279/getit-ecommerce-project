@@ -18,6 +18,7 @@ import { InventoryManagementOverview } from './InventoryManagementOverview';
 import { LowStockAlertsContent } from './LowStockAlertsContent';
 import { InventoryReportsContent } from './InventoryReportsContent';
 import { WarehouseManagementContent } from './WarehouseManagementContent';
+import { BestSellersContent } from './BestSellersContent';
 
 interface ProductManagementRouterProps {
   selectedSubmenu: string;
@@ -51,6 +52,13 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'inventory-tracking':
     case 'stock-analytics':
       return <StockOverviewContent />;
+    // Best sellers and product analytics routes - ADDED PRIORITY ROUTING
+    case 'best-sellers':
+    case 'best-seller':
+    case 'top-selling':
+    case 'bestsellers':
+      console.log('✅ Routing to BestSellersContent');
+      return <BestSellersContent />;
     case 'product-catalog':
     case 'products':
       return <ProductCatalogOverview />;

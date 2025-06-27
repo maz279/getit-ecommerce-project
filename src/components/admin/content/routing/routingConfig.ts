@@ -37,7 +37,7 @@ export const logisticsSubmenus = [
 export const productSubmenus = [
   'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 
   'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
-  'warehouse-management', 'warehouse-operations', 'warehouse-analytics', 'best-sellers', 'product-performance', 
+  'warehouse-management', 'warehouse-operations', 'warehouse-analytics', 'best-sellers', 'best-seller', 'top-selling', 'bestsellers', 'product-performance', 
   'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 
   'product-import', 'product-export', 'bulk-operations', 'category-management', 'category-structure', 
   'category-hierarchy', 'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 

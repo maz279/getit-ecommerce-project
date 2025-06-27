@@ -252,7 +252,7 @@ export const KnowledgeBaseTab: React.FC<KnowledgeBaseTabProps> = ({
                   <TableCell>
                     <Badge variant="outline">{article.category}</Badge>
                   </TableCell>
-                  <TableCell>{article.views.toLocaleStatement()}</TableCell>
+                  <TableCell>{article.views.toLocaleString()}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
                       <div className="flex items-center gap-1">

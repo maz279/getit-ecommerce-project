@@ -1,83 +1,51 @@
 
-import { useState, useEffect, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { useAISearch } from '@/hooks/useAISearch';
-import { getPageSuggestions } from '../utils';
 
 interface UseSearchStateProps {
   searchQuery: string;
   setSearchQuery: (query: string) => void;
-  isAIMode?: boolean;
+  isAIMode: boolean;
 }
 
-export const useSearchState = ({
-  searchQuery,
-  setSearchQuery,
-  isAIMode = true
-}: UseSearchStateProps) => {
+export const useSearchState = ({ searchQuery, setSearchQuery, isAIMode }: UseSearchStateProps) => {
   const [showResults, setShowResults] = useState(false);
   const [showFilters, setShowFilters] = useState(false);
   const [showSuggestions, setShowSuggestions] = useState(false);
-  const [voiceLanguage, setVoiceLanguage] = useState<'bn' | 'en'>('bn');
-  const [pageSuggestions, setPageSuggestions] = useState<string[]>([]);
+  const [voiceLanguage, setVoiceLanguage] = useState<'en' | 'bn'>('en');
+  const [pageSuggestions] = useState([
+    { title: 'Electronics', path: '/categories/electronics' },
+    { title: 'Fashion', path: '/categories/fashion' },
+    { title: 'Home & Garden', path: '/categories/home-garden' },
+    { title: 'Books', path: '/categories/books' }
+  ]);
+
   const searchRef = useRef<HTMLDivElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  
-  const aiSearch = useAISearch();
 
-  // Load personalized recommendations on component mount
-  useEffect(() => {
-    if (isAIMode) {
-      aiSearch.getPersonalizedRecommendations().catch(console.error);
-    }
-  }, [isAIMode, aiSearch]);
+  const aiSearch = useAISearch({
+    enabled: isAIMode,
+    searchQuery,
+    onSearchComplete: () => setShowResults(true)
+  });
 
-  // Enhanced input change handler with AI suggestions
-  const handleInputChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
+  const handleInputChange = (value: string) => {
     setSearchQuery(value);
-    
-    if (value.trim()) {
-      // Get page suggestions (existing functionality)
-      const pageMatches = getPageSuggestions(value);
-      setPageSuggestions(pageMatches);
-      
-      if (isAIMode) {
-        // Get AI-powered smart suggestions
-        try {
-          await aiSearch.getAISuggestions(value);
-          console.log('AI suggestions generated for:', value);
-        } catch (error) {
-          console.error('AI suggestions failed:', error);
-        }
-        
-        // Analyze query in real-time for better UX
-        if (value.length > 3) {
-          try {
-            await aiSearch.analyzeQuery(value);
-            console.log('Real-time query analysis completed');
-          } catch (error) {
-            console.error('Query analysis failed:', error);
-          }
-        }
-      }
-      
+    if (value.length > 0) {
       setShowSuggestions(true);
       setShowResults(false);
     } else {
-      aiSearch.clearResults();
-      setPageSuggestions([]);
       setShowSuggestions(false);
       setShowResults(false);
     }
   };
 
-  // Handle click outside to close results
+  // Click outside to close
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
         setShowResults(false);
         setShowSuggestions(false);
-        setShowFilters(false);
       }
     };
 
@@ -95,7 +63,6 @@ export const useSearchState = ({
     voiceLanguage,
     setVoiceLanguage,
     pageSuggestions,
-    setPageSuggestions,
     searchRef,
     inputRef,
     aiSearch,

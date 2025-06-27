@@ -29,76 +29,43 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
   setShowMobileSearch,
   language
 }) => {
-  const isAIMode = true; // AI mode enabled by default
+  const isAIMode = true;
   
-  // Initialize search indexing
-  const { addToSearchIndex, refreshSearchIndex } = useSearchIndexing({
+  const { addToSearchIndex } = useSearchIndexing({
     autoIndex: true,
-    indexInterval: 5 * 60 * 1000 // 5 minutes
+    indexInterval: 5 * 60 * 1000
   });
   
-  const {
-    showResults,
-    setShowResults,
-    showFilters,
-    setShowFilters,
-    showSuggestions,
-    setShowSuggestions,
-    voiceLanguage,
-    setVoiceLanguage,
-    pageSuggestions,
-    searchRef,
-    inputRef,
-    aiSearch,
-    handleInputChange
-  } = useSearchState({ searchQuery, setSearchQuery, isAIMode });
+  const searchState = useSearchState({ searchQuery, setSearchQuery, isAIMode });
+  const searchHandlers = useSearchHandlers({ ...searchState, isAIMode });
 
-  const {
-    handleSearch,
-    handleSuggestionClick,
-    handlePageNavigation,
-    handleResultClick,
-    handleTrendingClick
-  } = useSearchHandlers({
-    aiSearch,
-    isAIMode,
-    inputRef,
-    setShowSuggestions,
-    setShowResults,
-    setSearchQuery
-  });
-
-  // Custom handlers for voice, image, and QR search
   const {
     handleVoiceSearch,
     handleImageSearch,
     handleQRSearch
   } = useSearchBarHandlers({
-    aiSearch,
+    aiSearch: searchState.aiSearch,
     isAIMode,
-    voiceLanguage,
-    setShowResults,
-    setShowSuggestions
+    voiceLanguage: searchState.voiceLanguage,
+    setShowResults: searchState.setShowResults,
+    setShowSuggestions: searchState.setShowSuggestions
   });
 
-  // Keyboard handlers
   const {
     handleKeyPress,
     handleClearSearch
   } = useSearchKeyboardHandlers({
-    onSearch: handleSearch,
-    setShowResults,
-    setShowSuggestions,
+    onSearch: searchHandlers.handleSearch,
+    setShowResults: searchState.setShowResults,
+    setShowSuggestions: searchState.setShowSuggestions,
     setSearchQuery,
-    aiSearch,
-    inputRef
+    aiSearch: searchState.aiSearch,
+    inputRef: searchState.inputRef
   });
 
-  // Initialize search index on component mount
   useEffect(() => {
     console.log('Initializing search indexing for SearchBarContainer');
     
-    // Auto-index current page content
     const currentPageData = {
       id: `page-${window.location.pathname}`,
       title: document.title || 'Current Page',
@@ -114,11 +81,39 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
   }, [addToSearchIndex]);
 
   const currentContent = SEARCH_CONTENT[language as keyof typeof SEARCH_CONTENT];
+  const enhancedSuggestions = isAIMode && searchState.aiSearch.aiSuggestions.length > 0 
+    ? searchState.aiSearch.aiSuggestions.map((s: any) => s.text)
+    : searchState.aiSearch.suggestions;
 
-  // Enhanced suggestions that include AI suggestions
-  const enhancedSuggestions = isAIMode && aiSearch.aiSuggestions.length > 0 
-    ? aiSearch.aiSuggestions.map(s => s.text)
-    : aiSearch.suggestions;
+  const commonProps = {
+    searchQuery,
+    onInputChange: searchState.handleInputChange,
+    onSearch: searchHandlers.handleSearch,
+    onKeyPress: handleKeyPress,
+    onClearSearch: handleClearSearch,
+    voiceLanguage: searchState.voiceLanguage,
+    onLanguageToggle: () => searchState.setVoiceLanguage(searchState.voiceLanguage === 'bn' ? 'en' : 'bn'),
+    onVoiceSearch: handleVoiceSearch,
+    onImageSearch: handleImageSearch,
+    onQRSearch: handleQRSearch,
+    showFilters: searchState.showFilters,
+    onFiltersToggle: () => searchState.setShowFilters(!searchState.showFilters),
+    onFiltersApply: (filters: any) => {
+      searchState.aiSearch.applyFilters(filters);
+      searchState.setShowFilters(false);
+    },
+    showSuggestions: searchState.showSuggestions,
+    suggestions: enhancedSuggestions,
+    onSuggestionClick: searchHandlers.handleSuggestionClick,
+    showResults: searchState.showResults,
+    searchResults: searchState.aiSearch.searchResults,
+    isLoading: searchState.aiSearch.isLoading,
+    error: searchState.aiSearch.error,
+    onResultClick: searchHandlers.handleResultClick,
+    language,
+    pageSuggestions: searchState.pageSuggestions,
+    onPageNavigate: searchHandlers.handlePageNavigation
+  };
 
   return (
     <>
@@ -129,78 +124,24 @@ export const SearchBarContainer: React.FC<SearchBarContainerProps> = ({
         voiceSearchLabel={currentContent.voiceSearch}
       />
 
-      {/* Desktop Search Bar with AI enhancements */}
       <DesktopSearchBar
-        searchQuery={searchQuery}
-        onInputChange={handleInputChange}
-        onSearch={handleSearch}
-        onKeyPress={handleKeyPress}
-        onClearSearch={handleClearSearch}
-        inputRef={inputRef}
-        searchRef={searchRef}
-        voiceLanguage={voiceLanguage}
-        onLanguageToggle={() => setVoiceLanguage(voiceLanguage === 'bn' ? 'en' : 'bn')}
-        onVoiceSearch={handleVoiceSearch}
-        onImageSearch={handleImageSearch}
-        onQRSearch={handleQRSearch}
-        showFilters={showFilters}
-        onFiltersToggle={() => setShowFilters(!showFilters)}
-        onFiltersApply={(filters) => {
-          aiSearch.applyFilters(filters);
-          setShowFilters(false);
-        }}
-        showSuggestions={showSuggestions}
-        suggestions={enhancedSuggestions}
-        onSuggestionClick={handleSuggestionClick}
-        showResults={showResults}
-        searchResults={aiSearch.searchResults}
-        isLoading={aiSearch.isLoading}
-        error={aiSearch.error}
-        onResultClick={handleResultClick}
+        {...commonProps}
+        inputRef={searchState.inputRef}
+        searchRef={searchState.searchRef}
         trendingSearches={currentContent.trendingSearches}
-        onTrendingClick={handleTrendingClick}
-        language={language}
-        pageSuggestions={pageSuggestions}
-        onPageNavigate={handlePageNavigation}
+        onTrendingClick={searchHandlers.handleTrendingClick}
       />
 
-      {/* Mobile Search Bar with AI enhancements */}
       <MobileSearchBar
+        {...commonProps}
         showMobileSearch={showMobileSearch}
-        searchQuery={searchQuery}
-        onInputChange={handleInputChange}
-        onSearch={handleSearch}
-        onKeyPress={handleKeyPress}
-        onClearSearch={handleClearSearch}
-        searchRef={searchRef}
-        voiceLanguage={voiceLanguage}
-        onLanguageToggle={() => setVoiceLanguage(voiceLanguage === 'bn' ? 'en' : 'bn')}
-        onVoiceSearch={handleVoiceSearch}
-        onImageSearch={handleImageSearch}
-        onQRSearch={handleQRSearch}
-        showFilters={showFilters}
-        onFiltersToggle={() => setShowFilters(!showFilters)}
-        onFiltersApply={(filters) => {
-          aiSearch.applyFilters(filters);
-          setShowFilters(false);
-        }}
-        showSuggestions={showSuggestions}
-        suggestions={enhancedSuggestions}
-        onSuggestionClick={handleSuggestionClick}
-        showResults={showResults}
-        searchResults={aiSearch.searchResults}
-        isLoading={aiSearch.isLoading}
-        error={aiSearch.error}
-        onResultClick={handleResultClick}
-        language={language}
-        pageSuggestions={pageSuggestions}
-        onPageNavigate={handlePageNavigation}
+        searchRef={searchState.searchRef}
       />
 
       <AIModeIndicator isAIMode={isAIMode} />
       
       <ConversationalSearchHelper
-        showSuggestions={showSuggestions}
+        showSuggestions={searchState.showSuggestions}
         searchQuery={searchQuery}
         conversationalSearchText={currentContent.conversationalSearch}
       />

@@ -16,6 +16,7 @@ import { TradeLicenseVerificationContent } from './TradeLicenseVerificationConte
 import { TinVerificationContent } from './TinVerificationContent';
 import { NidVerificationContent } from './NidVerificationContent';
 import { BankAccountVerificationContent } from './BankAccountVerificationContent';
+import { VendorPerformanceMetricsContent } from './VendorPerformanceMetricsContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -54,6 +55,22 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance':
       console.log('✅ Routing to VendorPerformanceContent');  
       return <VendorPerformanceContent />;
+    case 'performance-metrics':
+    case 'vendor-performance-metrics':
+    case 'performance-dashboard':
+    case 'performance-analysis':
+    case 'vendor-kpi':
+    case 'vendor-scorecards':
+    case 'performance-benchmarks':
+    case 'performance-trends':
+    case 'performance-reporting':
+    case 'vendor-ratings':
+    case 'vendor-reviews':
+    case 'performance-monitoring':
+    case 'performance-improvement':
+    case 'performance-alerts':
+      console.log('✅ Routing to VendorPerformanceMetricsContent');
+      return <VendorPerformanceMetricsContent />;
     case 'vendor-analytics':
     case 'analytics':
       console.log('✅ Routing to VendorAnalyticsContent');

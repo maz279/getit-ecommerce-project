@@ -20,7 +20,7 @@ export const orderManagementSubmenus = [
   'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
   'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
   'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests',
-  'order-analytics', 'order-reports', 'performance-reports', 'performance-metrics',
+  'order-analytics', 'order-reports', 'performance-reports',
   'fulfillment-center', 'order-search', 'order-timeline',
   'bulk-actions', 'bulk', 'new-orders', 'order-processing',
   'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',
@@ -89,11 +89,15 @@ export const vendorManagementSubmenus = [
   'identity-compliance', 'nid-analytics', 'national-id-registration', 'nid-documents', 'identity-authority-verification',
   'expired-nid', 'nid-renewal', 'identity-status-check', 'nid-compliance-monitoring', 'biometric-verification',
   'face-matching', 'identity-fraud-detection', 'nid-blacklist-check', 'identity-verification-api',
-  // BANK ACCOUNT VERIFICATION SUBMENUS - NEW ADDITION
+  // BANK ACCOUNT VERIFICATION SUBMENUS
   'bank-account-verification', 'bank-verification', 'banking-verification', 'account-validation', 'bank-approval',
   'banking-compliance', 'bank-analytics', 'financial-verification', 'bank-documents', 'banking-authority-verification',
   'failed-bank-verification', 'bank-renewal', 'banking-status-check', 'bank-compliance-monitoring', 'financial-audit',
-  'payment-method-verification', 'banking-fraud-detection', 'account-ownership-verification', 'banking-api-integration'
+  'payment-method-verification', 'banking-fraud-detection', 'account-ownership-verification', 'banking-api-integration',
+  // VENDOR PERFORMANCE METRICS SUBMENUS - CRITICAL ADDITION
+  'performance-metrics', 'vendor-performance-metrics', 'performance-dashboard', 'performance-analysis',
+  'vendor-kpi', 'vendor-scorecards', 'performance-benchmarks', 'performance-trends', 'performance-reporting',
+  'vendor-ratings', 'vendor-reviews', 'performance-monitoring', 'performance-improvement', 'performance-alerts'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

@@ -1,4 +1,5 @@
 
+
 import React from 'react';
 import { DashboardContent } from './dashboard/DashboardContent';
 import { UserManagementContent } from './content/UserManagementContent';
@@ -104,14 +105,14 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
       return <DashboardContent selectedSubmenu={selectedMenu} />;
     }
 
-    // Handle product management and product-related submenus - UPDATED with import-export handling
+    // Handle product management and product-related submenus - UPDATED with import-export and category management handling
     if (selectedMenu === 'product-management' || selectedMenu === 'products' || selectedMenu.startsWith('product-') || 
-        ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 'product-export', 'bulk-operations'].includes(selectedMenu)) {
+        ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 'product-export', 'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 'category-rules', 'category-analytics', 'category-seo'].includes(selectedMenu)) {
       console.log('✅ PRODUCT MANAGEMENT - routing to ProductManagementContent');
       console.log('   selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
       
       // If selectedMenu is a product submenu, pass it as selectedSubmenu
-      const submenu = ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 'product-export', 'bulk-operations'].includes(selectedMenu) 
+      const submenu = ['product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 'trending-products', 'price-optimization', 'product-search', 'featured-products', 'import-export', 'product-import', 'product-export', 'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 'category-rules', 'category-analytics', 'category-seo'].includes(selectedMenu) 
         ? selectedMenu 
         : selectedSubmenu;
       
@@ -180,3 +181,4 @@ export const ComprehensiveMainContent: React.FC<ComprehensiveMainContentProps> =
     </div>
   );
 };
+

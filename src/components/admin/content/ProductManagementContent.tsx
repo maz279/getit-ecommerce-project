@@ -1,3 +1,4 @@
+
 import React from 'react';
 import { Package, Plus, Upload, TrendingUp, AlertTriangle } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -8,6 +9,7 @@ import { AllProductsContent } from './forms/productManagement/AllProductsContent
 import { ProductSearchContent } from './forms/productManagement/ProductSearchContent';
 import { FeaturedProductsContent } from './forms/productManagement/FeaturedProductsContent';
 import { ProductImportExportContent } from './forms/productManagement/ProductImportExportContent';
+import { CategoryStructureContent } from './forms/productManagement/CategoryStructureContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -224,6 +226,14 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
       case 'product-export':
       case 'bulk-operations':
         return <ProductImportExportContent />;
+      case 'category-structure':
+      case 'category-management':
+      case 'category-hierarchy':
+      case 'category-attributes':
+      case 'category-rules':
+      case 'category-analytics':
+      case 'category-seo':
+        return <CategoryStructureContent selectedSubmenu={selectedSubmenu} />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

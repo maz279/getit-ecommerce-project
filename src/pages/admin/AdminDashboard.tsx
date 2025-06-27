@@ -1,4 +1,5 @@
 
+
 import React, { useState } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
@@ -59,13 +60,15 @@ const AdminDashboard: React.FC = () => {
       'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
     ];
 
-    // Define product-management related submenus - UPDATED with proper import-export handling
+    // Define product-management related submenus - UPDATED with proper import-export and category management handling
     const productManagementSubmenus = [
       'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
       'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 
       'reorder-points', 'warehouse-management', 'best-sellers', 'product-performance', 
       'trending-products', 'price-optimization', 'product-search', 'featured-products',
-      'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export'
+      'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
+      'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
+      'category-rules', 'category-analytics', 'category-seo'
     ];
     
     // Handle special case for product-import-export
@@ -73,6 +76,14 @@ const AdminDashboard: React.FC = () => {
       console.log('✅ Special case: product-import-export detected');
       setSelectedMenu('product-management');
       setSelectedSubmenu('import-export');
+      return;
+    }
+
+    // Handle special case for category-structure
+    if (menu === 'category-structure') {
+      console.log('✅ Special case: category-structure detected');
+      setSelectedMenu('product-management');
+      setSelectedSubmenu('category-structure');
       return;
     }
     
@@ -229,3 +240,4 @@ const AdminDashboard: React.FC = () => {
 };
 
 export default AdminDashboard;
+

@@ -99,7 +99,12 @@ export const vendorManagementSubmenus = [
   'vendor-ratings', 'vendor-reviews', 'performance-monitoring', 'performance-improvement', 'performance-alerts',
   // VENDOR SCORECARD SUBMENUS - CRITICAL FIX
   'vendor-scorecard', 'scorecard', 'vendor-rating', 'vendor-evaluation', 'performance-scorecard',
-  'vendor-assessment', 'quality-scorecard', 'supplier-scorecard', 'vendor-grading'
+  'vendor-assessment', 'quality-scorecard', 'supplier-scorecard', 'vendor-grading',
+  // RATING MANAGEMENT SUBMENUS - NEW ADDITION
+  'rating-management', 'vendor-rating-management', 'rating-system', 'rating-analytics', 'rating-reports',
+  'customer-ratings', 'product-ratings', 'service-ratings', 'rating-moderation', 'rating-disputes',
+  'rating-verification', 'fake-rating-detection', 'rating-trends', 'rating-insights', 'rating-policies',
+  'rating-guidelines', 'rating-compliance', 'rating-audit', 'rating-feedback', 'rating-improvement'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

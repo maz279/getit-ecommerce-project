@@ -17,6 +17,7 @@ import { NidVerificationContent } from './NidVerificationContent';
 import { BankAccountVerificationContent } from './BankAccountVerificationContent';
 import { VendorPerformanceMetricsContent } from './VendorPerformanceMetricsContent';
 import { VendorScorecardContent } from './VendorScorecardContent';
+import { RatingManagementContent } from './RatingManagementContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -194,6 +195,29 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'banking-api-integration':
       console.log('✅ Routing to BankAccountVerificationContent');
       return <BankAccountVerificationContent />;
+    // Rating Management specific submenus route to RatingManagementContent
+    case 'rating-management':
+    case 'vendor-rating-management':
+    case 'rating-system':
+    case 'rating-analytics':
+    case 'rating-reports':
+    case 'customer-ratings':
+    case 'product-ratings':
+    case 'service-ratings':
+    case 'rating-moderation':
+    case 'rating-disputes':
+    case 'rating-verification':
+    case 'fake-rating-detection':
+    case 'rating-trends':
+    case 'rating-insights':
+    case 'rating-policies':
+    case 'rating-guidelines':
+    case 'rating-compliance':
+    case 'rating-audit':
+    case 'rating-feedback':
+    case 'rating-improvement':
+      console.log('✅ Routing to RatingManagementContent with submenu:', selectedSubmenu);
+      return <RatingManagementContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

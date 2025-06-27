@@ -1,12 +1,61 @@
-import { 
-  dashboardSubmenus,
-  userManagementSubmenus, 
-  salesManagementSubmenus, 
-  orderManagementSubmenus,
-  logisticsManagementSubmenus,
-  productManagementSubmenus,
-  vendorManagementSubmenus
-} from './routingUtils';
+
+// Dashboard submenus
+export const dashboardSubmenus = [
+  'overview', 'analytics', 'revenue-analytics', 'user-activity', 'vendor-performance', 
+  'order-insights', 'inventory-alerts', 'platform-performance', 'system-health', 
+  'security-monitoring', 'system-logs', 'quick-actions', 'executive-summary',
+  'real-time-metrics', 'kpi-monitoring', 'performance-insights'
+];
+
+// User management submenus
+export const userManagementSubmenus = [
+  'admin-users', 'role-management', 'permissions-matrix', 'user-analytics', 
+  'activity-logs', 'security-center', 'user-directory', 'access-control'
+];
+
+// Sales management submenus
+export const salesManagementSubmenus = [
+  'sales-overview', 'revenue-analytics', 'monthly-sales', 'sales-reports', 
+  'performance-metrics', 'sales-targets', 'commission-tracking', 'export-data'
+];
+
+// Order management submenus
+export const orderManagementSubmenus = [
+  'order-overview', 'all-orders', 'order-processing', 'order-tracking', 
+  'bulk-actions', 'refund-processing', 'payment-methods', 'order-reports', 
+  'performance-metrics'
+];
+
+// Logistics management submenus
+export const logisticsManagementSubmenus = [
+  'logistics-overview', 'delivery-tracking', 'shipping-zones', 'delivery-performance',
+  'courier-management', 'route-optimization', 'warehouse-management'
+];
+
+// Product management submenus
+export const productManagementSubmenus = [
+  'product-catalog', 'all-products', 'category-structure', 'featured-products', 
+  'product-search', 'import-export', 'inventory-management', 'stock-overview', 
+  'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
+  'pending-approval', 'content-review', 'quality-control', 'rejected-products', 
+  'product-moderation'
+];
+
+// Vendor management submenus - UPDATED TO INCLUDE COMMISSION TRACKING
+export const vendorManagementSubmenus = [
+  'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding', 'vendor-verification', 
+  'vendor-performance', 'vendor-sales', 'vendor-ratings', 'vendor-support', 'vendor-search', 'vendor-scorecard',
+  // Status management
+  'active-vendors', 'pending-applications', 'suspended-vendors',
+  // Verification processes
+  'nid-verification', 'tin-verification', 'trade-license-verification', 'bank-account-verification', 'document-review',
+  // Financial management - COMMISSION TRACKING ADDED HERE
+  'vendor-payments', 'commission-tracking', 'payout-management',
+  // Performance tracking
+  'performance-reports', 'performance-metrics', 'vendor-performance-reports',
+  // Rating and feedback
+  'rating-management'
+];
 
 export const getDefaultSubmenu = (menu: string): string => {
   switch (menu) {
@@ -143,19 +192,3 @@ export const handleCompoundMenus = (menu: string) => {
   // All dashboard submenus should be handled by handleSpecialCases
   return null;
 };
-
-// Vendor management submenus - UPDATED TO INCLUDE COMMISSION TRACKING
-export const vendorManagementSubmenus = [
-  'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding', 'vendor-verification', 
-  'vendor-performance', 'vendor-sales', 'vendor-ratings', 'vendor-support', 'vendor-search', 'vendor-scorecard',
-  // Status management
-  'active-vendors', 'pending-applications', 'suspended-vendors',
-  // Verification processes
-  'nid-verification', 'tin-verification', 'trade-license-verification', 'bank-account-verification', 'document-review',
-  // Financial management - COMMISSION TRACKING ADDED HERE
-  'vendor-payments', 'commission-tracking', 'payout-management',
-  // Performance tracking
-  'performance-reports', 'performance-metrics', 'vendor-performance-reports',
-  // Rating and feedback
-  'rating-management'
-];

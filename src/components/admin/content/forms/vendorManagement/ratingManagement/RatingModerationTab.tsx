@@ -1,60 +1,66 @@
 
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { Switch } from '@/components/ui/switch';
 import { Input } from '@/components/ui/input';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
+import { Switch } from '@/components/ui/switch';
+import { Plus, Search, Filter, Settings, Eye, Edit, Trash2 } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { RatingService, ReviewModerationData, AIDetectionSetting } from '@/services/database/RatingService';
 import { AddReviewModerationForm } from './forms/AddReviewModerationForm';
+import { RatingService, ReviewModerationData, AIDetectionSetting } from '@/services/database/RatingService';
 import { toast } from 'sonner';
-import { Eye, Flag, Search, Filter, Plus, Settings } from 'lucide-react';
 
 export const RatingModerationTab: React.FC = () => {
-  const [reviews, setReviews] = useState<ReviewModerationData[]>([]);
-  const [aiSettings, setAiSettings] = useState<AIDetectionSetting[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [searchQuery, setSearchQuery] = useState('');
+  const [reviewModerations, setReviewModerations] = useState<ReviewModerationData[]>([]);
+  const [aiSettings, setAISettings] = useState<AIDetectionSetting[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('all');
   const [priorityFilter, setPriorityFilter] = useState('all');
+  const [loading, setLoading] = useState(true);
   const [showAddForm, setShowAddForm] = useState(false);
-
-  useEffect(() => {
-    loadData();
-  }, []);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const [reviewsData, settingsData] = await Promise.all([
+      const [moderationData, settingsData] = await Promise.all([
         RatingService.getReviewsForModeration(),
         RatingService.getAIDetectionSettings()
       ]);
       
-      setReviews(reviewsData || []);
-      // Transform the data to match our interface type
-      const transformedSettings = settingsData?.map(setting => ({
-        id: setting.id,
-        setting_name: setting.setting_name,
-        setting_type: setting.setting_type as 'detection_rule' | 'auto_moderation',
-        is_enabled: setting.is_enabled,
-        configuration: setting.configuration as Record<string, any>
-      })) || [];
-      setAiSettings(transformedSettings);
+      // Transform moderation data to match our interface
+      const transformedModerationData: ReviewModerationData[] = moderationData.map((item: any) => ({
+        ...item,
+        moderation_status: item.moderation_status as 'pending' | 'approved' | 'rejected' | 'flagged',
+        priority_level: item.priority_level as 'low' | 'medium' | 'high',
+        flags: Array.isArray(item.flags) ? item.flags : []
+      }));
+      
+      // Transform AI settings data to match our interface
+      const transformedSettingsData: AIDetectionSetting[] = settingsData.map((item: any) => ({
+        ...item,
+        setting_type: item.setting_type as 'detection_rule' | 'auto_moderation',
+        configuration: item.configuration || {}
+      }));
+      
+      setReviewModerations(transformedModerationData);
+      setAISettings(transformedSettingsData);
     } catch (error) {
       console.error('Error loading data:', error);
-      toast.error('Failed to load data');
+      toast.error('Failed to load moderation data');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleStatusUpdate = async (id: string, status: string, notes?: string) => {
+  useEffect(() => {
+    loadData();
+  }, []);
+
+  const handleUpdateStatus = async (id: string, status: string, notes?: string) => {
     try {
-      await RatingService.updateModerationStatus(id, status, notes, 'admin');
+      await RatingService.updateModerationStatus(id, status, notes);
       toast.success('Status updated successfully');
       loadData();
     } catch (error) {
@@ -63,7 +69,7 @@ export const RatingModerationTab: React.FC = () => {
     }
   };
 
-  const handleAISettingToggle = async (settingName: string, isEnabled: boolean) => {
+  const handleToggleAISetting = async (settingName: string, isEnabled: boolean) => {
     try {
       await RatingService.updateAIDetectionSetting(settingName, isEnabled);
       toast.success('AI setting updated successfully');
@@ -79,7 +85,7 @@ export const RatingModerationTab: React.FC = () => {
       case 'approved': return 'bg-green-100 text-green-800';
       case 'rejected': return 'bg-red-100 text-red-800';
       case 'flagged': return 'bg-yellow-100 text-yellow-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-blue-100 text-blue-800';
     }
   };
 
@@ -87,17 +93,14 @@ export const RatingModerationTab: React.FC = () => {
     switch (priority) {
       case 'high': return 'bg-red-100 text-red-800';
       case 'medium': return 'bg-yellow-100 text-yellow-800';
-      case 'low': return 'bg-green-100 text-green-800';
-      default: return 'bg-gray-100 text-gray-800';
+      default: return 'bg-green-100 text-green-800';
     }
   };
 
-  const filteredReviews = reviews.filter(review => {
-    const matchesSearch = !searchQuery || 
-      review.customer_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      review.product_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      review.review_text?.toLowerCase().includes(searchQuery.toLowerCase());
-    
+  const filteredReviews = reviewModerations.filter(review => {
+    const matchesSearch = review.customer_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         review.product_name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                         review.review_text?.toLowerCase().includes(searchTerm.toLowerCase());
     const matchesStatus = statusFilter === 'all' || review.moderation_status === statusFilter;
     const matchesPriority = priorityFilter === 'all' || review.priority_level === priorityFilter;
     
@@ -105,58 +108,37 @@ export const RatingModerationTab: React.FC = () => {
   });
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-blue-600 mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading moderation data...</p>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">Review Moderation</h2>
-          <p className="text-gray-600">Manage and moderate customer reviews</p>
-        </div>
-        <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
-          <DialogTrigger asChild>
-            <Button>
-              <Plus className="h-4 w-4 mr-2" />
-              Add Review
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl">
-            <DialogHeader>
-              <DialogTitle>Add Review for Moderation</DialogTitle>
-            </DialogHeader>
-            <AddReviewModerationForm
-              onSuccess={() => {
-                setShowAddForm(false);
-                loadData();
-              }}
-              onCancel={() => setShowAddForm(false)}
-            />
-          </DialogContent>
-        </Dialog>
-      </div>
-
       {/* AI Detection Settings */}
       <Card>
         <CardHeader>
           <CardTitle className="flex items-center">
-            <Settings className="h-5 w-5 mr-2" />
+            <Settings className="mr-3 h-5 w-5 text-purple-600" />
             AI Detection Settings
           </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {aiSettings.map((setting) => (
-              <div key={setting.id} className="flex items-center justify-between p-4 border rounded-lg">
+              <div key={setting.id} className="flex items-center justify-between p-3 border rounded-lg">
                 <div>
-                  <h4 className="font-medium">{setting.setting_name.replace(/_/g, ' ')}</h4>
+                  <p className="font-medium text-gray-800">{setting.setting_name.replace(/_/g, ' ').toUpperCase()}</p>
                   <p className="text-sm text-gray-500 capitalize">{setting.setting_type.replace(/_/g, ' ')}</p>
                 </div>
                 <Switch
                   checked={setting.is_enabled}
-                  onCheckedChange={(checked) => handleAISettingToggle(setting.setting_name, checked)}
+                  onCheckedChange={(enabled) => handleToggleAISetting(setting.setting_name, enabled)}
                 />
               </div>
             ))}
@@ -164,137 +146,151 @@ export const RatingModerationTab: React.FC = () => {
         </CardContent>
       </Card>
 
-      {/* Filters */}
+      {/* Search and Filters */}
       <Card>
         <CardContent className="p-4">
-          <div className="flex flex-wrap items-center gap-4">
-            <div className="flex items-center space-x-2">
-              <Search className="h-4 w-4 text-gray-500" />
-              <Input
-                placeholder="Search reviews..."
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                className="w-64"
-              />
+          <div className="flex flex-col md:flex-row gap-4">
+            <div className="flex-1">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
+                <Input
+                  placeholder="Search reviews by customer, product, or content..."
+                  value={searchTerm}
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  className="pl-10"
+                />
+              </div>
             </div>
-            <Select value={statusFilter} onValueChange={setStatusFilter}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Status" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Status</SelectItem>
-                <SelectItem value="pending">Pending</SelectItem>
-                <SelectItem value="approved">Approved</SelectItem>
-                <SelectItem value="rejected">Rejected</SelectItem>
-                <SelectItem value="flagged">Flagged</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={priorityFilter} onValueChange={setPriorityFilter}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="Priority" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">All Priority</SelectItem>
-                <SelectItem value="high">High</SelectItem>
-                <SelectItem value="medium">Medium</SelectItem>
-                <SelectItem value="low">Low</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline" onClick={loadData}>
-              <Filter className="h-4 w-4 mr-2" />
-              Refresh
-            </Button>
+            <div className="flex gap-2">
+              <Select value={statusFilter} onValueChange={setStatusFilter}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Status" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Status</SelectItem>
+                  <SelectItem value="pending">Pending</SelectItem>
+                  <SelectItem value="approved">Approved</SelectItem>
+                  <SelectItem value="rejected">Rejected</SelectItem>
+                  <SelectItem value="flagged">Flagged</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Select value={priorityFilter} onValueChange={setPriorityFilter}>
+                <SelectTrigger className="w-40">
+                  <SelectValue placeholder="Priority" />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Priority</SelectItem>
+                  <SelectItem value="low">Low</SelectItem>
+                  <SelectItem value="medium">Medium</SelectItem>
+                  <SelectItem value="high">High</SelectItem>
+                </SelectContent>
+              </Select>
+              
+              <Dialog open={showAddForm} onOpenChange={setShowAddForm}>
+                <DialogTrigger asChild>
+                  <Button>
+                    <Plus className="h-4 w-4 mr-2" />
+                    Add Review
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl">
+                  <DialogHeader>
+                    <DialogTitle>Add Review for Moderation</DialogTitle>
+                  </DialogHeader>
+                  <AddReviewModerationForm
+                    onSuccess={() => {
+                      setShowAddForm(false);
+                      loadData();
+                    }}
+                    onCancel={() => setShowAddForm(false)}
+                  />
+                </DialogContent>
+              </Dialog>
+            </div>
           </div>
         </CardContent>
       </Card>
 
-      {/* Reviews Table */}
+      {/* Reviews List */}
       <Card>
         <CardHeader>
           <CardTitle>Reviews for Moderation ({filteredReviews.length})</CardTitle>
         </CardHeader>
         <CardContent>
-          <Table>
-            <TableHeader>
-              <TableRow>
-                <TableHead>Customer</TableHead>
-                <TableHead>Product</TableHead>
-                <TableHead>Rating</TableHead>
-                <TableHead>Review</TableHead>
-                <TableHead>Risk Score</TableHead>
-                <TableHead>Status</TableHead>
-                <TableHead>Priority</TableHead>
-                <TableHead>Actions</TableHead>
-              </TableRow>
-            </TableHeader>
-            <TableBody>
-              {filteredReviews.length === 0 ? (
-                <TableRow>
-                  <TableCell colSpan={8} className="text-center py-8">
-                    No reviews found
-                  </TableCell>
-                </TableRow>
-              ) : (
-                filteredReviews.map((review) => (
-                  <TableRow key={review.id}>
-                    <TableCell>{review.customer_name || 'Unknown'}</TableCell>
-                    <TableCell>{review.product_name || 'Unknown'}</TableCell>
-                    <TableCell>
-                      <div className="flex items-center">
-                        <span className="text-yellow-500">★</span>
-                        <span className="ml-1">{review.rating}</span>
+          <div className="space-y-4">
+            {filteredReviews.length === 0 ? (
+              <div className="text-center py-8">
+                <p className="text-gray-500">No reviews found matching your criteria</p>
+              </div>
+            ) : (
+              filteredReviews.map((review) => (
+                <div key={review.id} className="p-4 border rounded-lg hover:bg-gray-50 transition-colors">
+                  <div className="flex items-start justify-between">
+                    <div className="flex-1">
+                      <div className="flex items-center gap-2 mb-2">
+                        <h4 className="font-semibold text-gray-800">{review.customer_name}</h4>
+                        <Badge className={getStatusColor(review.moderation_status || 'pending')}>
+                          {review.moderation_status?.toUpperCase()}
+                        </Badge>
+                        <Badge className={getPriorityColor(review.priority_level || 'medium')}>
+                          {review.priority_level?.toUpperCase()}
+                        </Badge>
+                        <div className="flex">
+                          {Array.from({ length: 5 }, (_, i) => (
+                            <span key={i} className={`text-sm ${i < (review.rating || 0) ? 'text-yellow-400' : 'text-gray-300'}`}>
+                              ★
+                            </span>
+                          ))}
+                        </div>
                       </div>
-                    </TableCell>
-                    <TableCell className="max-w-xs truncate">
-                      {review.review_text || 'No review text'}
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={review.risk_score && review.risk_score > 70 ? 'bg-red-100 text-red-800' : 'bg-green-100 text-green-800'}>
-                        {review.risk_score || 0}%
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getStatusColor(review.moderation_status)}>
-                        {review.moderation_status}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={getPriorityColor(review.priority_level)}>
-                        {review.priority_level}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleStatusUpdate(review.id!, 'approved')}
-                          disabled={review.moderation_status === 'approved'}
-                        >
-                          Approve
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleStatusUpdate(review.id!, 'rejected')}
-                          disabled={review.moderation_status === 'rejected'}
-                        >
-                          Reject
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => handleStatusUpdate(review.id!, 'flagged')}
-                        >
-                          <Flag className="h-4 w-4" />
-                        </Button>
+                      <p className="text-sm text-gray-600 mb-1">Product: {review.product_name}</p>
+                      <p className="text-gray-700 mb-2">{review.review_text}</p>
+                      {review.flags && review.flags.length > 0 && (
+                        <div className="flex gap-1 mb-2">
+                          {review.flags.map((flag, index) => (
+                            <Badge key={index} variant="outline" className="text-xs">
+                              {flag}
+                            </Badge>
+                          ))}
+                        </div>
+                      )}
+                      <div className="flex items-center text-xs text-gray-500 gap-4">
+                        <span>Risk Score: {review.risk_score || 0}%</span>
+                        <span>Created: {new Date(review.created_at || '').toLocaleDateString()}</span>
                       </div>
-                    </TableCell>
-                  </TableRow>
-                ))
-              )}
-            </TableBody>
-          </Table>
+                    </div>
+                    <div className="flex items-center gap-2">
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(review.id!, 'approved')}
+                        disabled={review.moderation_status === 'approved'}
+                      >
+                        Approve
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(review.id!, 'rejected')}
+                        disabled={review.moderation_status === 'rejected'}
+                      >
+                        Reject
+                      </Button>
+                      <Button
+                        size="sm"
+                        variant="outline"
+                        onClick={() => handleUpdateStatus(review.id!, 'flagged')}
+                        disabled={review.moderation_status === 'flagged'}
+                      >
+                        Flag
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              ))
+            )}
+          </div>
         </CardContent>
       </Card>
     </div>

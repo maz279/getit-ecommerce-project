@@ -16,6 +16,7 @@ import { RejectedProductsContent } from './RejectedProductsContent';
 import { ProductCatalogOverview } from './ProductCatalogOverview';
 import { InventoryManagementOverview } from './InventoryManagementOverview';
 import { LowStockAlertsContent } from './LowStockAlertsContent';
+import { InventoryReportsContent } from './InventoryReportsContent';
 
 interface ProductManagementRouterProps {
   selectedSubmenu: string;
@@ -35,6 +36,11 @@ export const ProductManagementRouter: React.FC<ProductManagementRouterProps> = (
     case 'reorder-alerts':
       console.log('✅ Routing to LowStockAlertsContent');
       return <LowStockAlertsContent />;
+    case 'inventory-reports':
+    case 'stock-reports':
+    case 'inventory-analytics':
+      console.log('✅ Routing to InventoryReportsContent');
+      return <InventoryReportsContent />;
     case 'stock-management':
     case 'inventory-tracking':
     case 'stock-analytics':

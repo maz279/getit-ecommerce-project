@@ -49,7 +49,7 @@ export const productManagementSubmenus = [
   'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
   // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
   'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
-  'low-stock', 'reorder-alerts'
+  'low-stock', 'reorder-alerts', 'inventory-reports', 'stock-reports', 'inventory-analytics'
 ];
 
 // Define dashboard-related submenus (removing category-analytics from here)

@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { DashboardContent } from '../DashboardContent';
+import { DashboardContent } from '../../dashboard/DashboardContent';
 import { UserManagementContent } from '../UserManagementContent';
 import { SalesManagementContent } from '../SalesManagementContent';
 import { OrderManagementContent } from '../OrderManagementContent';

@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { VendorDirectoryContent } from './VendorDirectoryContent';
 import { ActiveVendorsContent } from './ActiveVendorsContent';
@@ -17,6 +16,7 @@ import { TinVerificationContent } from './TinVerificationContent';
 import { NidVerificationContent } from './NidVerificationContent';
 import { BankAccountVerificationContent } from './BankAccountVerificationContent';
 import { VendorPerformanceMetricsContent } from './VendorPerformanceMetricsContent';
+import { VendorScorecardContent } from './VendorScorecardContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -55,13 +55,21 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance':
       console.log('✅ Routing to VendorPerformanceContent');  
       return <VendorPerformanceContent />;
-    // All performance metrics and scorecard related submenus route to VendorPerformanceMetricsContent
+    // Performance metrics specific submenus route to VendorPerformanceMetricsContent
     case 'performance-metrics':
     case 'vendor-performance-metrics':
     case 'performance-dashboard':
     case 'performance-analysis':
     case 'vendor-kpi':
-    case 'vendor-scorecards':
+    case 'performance-benchmarks':
+    case 'performance-trends':
+    case 'performance-reporting':
+    case 'performance-monitoring':
+    case 'performance-improvement':
+    case 'performance-alerts':
+      console.log('✅ Routing to VendorPerformanceMetricsContent with submenu:', selectedSubmenu);
+      return <VendorPerformanceMetricsContent selectedSubmenu={selectedSubmenu} />;
+    // Vendor scorecard specific submenus route to VendorScorecardContent
     case 'vendor-scorecard':
     case 'scorecard':
     case 'vendor-rating':
@@ -71,16 +79,11 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'quality-scorecard':
     case 'supplier-scorecard':
     case 'vendor-grading':
-    case 'performance-benchmarks':
-    case 'performance-trends':
-    case 'performance-reporting':
+    case 'vendor-scorecards':
     case 'vendor-ratings':
     case 'vendor-reviews':
-    case 'performance-monitoring':
-    case 'performance-improvement':
-    case 'performance-alerts':
-      console.log('✅ Routing to VendorPerformanceMetricsContent with submenu:', selectedSubmenu);
-      return <VendorPerformanceMetricsContent selectedSubmenu={selectedSubmenu} />;
+      console.log('✅ Routing to VendorScorecardContent with submenu:', selectedSubmenu);
+      return <VendorScorecardContent />;
     case 'vendor-analytics':
     case 'analytics':
       console.log('✅ Routing to VendorAnalyticsContent');

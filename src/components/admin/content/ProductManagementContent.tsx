@@ -13,6 +13,11 @@ import { CategoryStructureContent } from './forms/productManagement/CategoryStru
 import { CategoryPerformanceContent } from './forms/productManagement/CategoryPerformanceContent';
 import { CategoryAnalyticsContent } from './forms/productManagement/CategoryAnalyticsContent';
 import { SeasonalCategoriesContent } from './forms/productManagement/SeasonalCategoriesContent';
+// Import new product moderation components
+import { PendingApprovalContent } from './forms/productManagement/PendingApprovalContent';
+import { ContentReviewContent } from './forms/productManagement/ContentReviewContent';
+import { QualityControlContent } from './forms/productManagement/QualityControlContent';
+import { RejectedProductsContent } from './forms/productManagement/RejectedProductsContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -245,6 +250,16 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
       case 'seasonal-campaigns':
       case 'seasonal-analytics':
         return <SeasonalCategoriesContent />;
+      // Product moderation routes
+      case 'product-moderation':
+      case 'pending-approval':
+        return <PendingApprovalContent />;
+      case 'content-review':
+        return <ContentReviewContent />;
+      case 'quality-control':
+        return <QualityControlContent />;
+      case 'rejected-products':
+        return <RejectedProductsContent />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

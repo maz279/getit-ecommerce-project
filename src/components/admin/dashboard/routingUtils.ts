@@ -43,8 +43,10 @@ export const productManagementSubmenus = [
   'trending-products', 'price-optimization', 'product-search', 'featured-products',
   'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
   'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
-  'category-rules', 'category-seo', 'category-performance',
-  'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics'
+  'category-rules', 'category-seo', 'category-performance', 'category-analytics',
+  'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
+  // Product moderation submenus
+  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products'
 ];
 
 // Define dashboard-related submenus (removing category-analytics from here)

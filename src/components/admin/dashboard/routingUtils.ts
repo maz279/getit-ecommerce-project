@@ -1,116 +1,161 @@
-// Define user-management related submenus
-export const userManagementSubmenus = [
-  'admin-users', 'admin-list', 'role-management', 'permissions', 
-  'activity-logs', 'user-analytics', 'registration-trends', 
-  'activity-reports', 'demographics'
-];
+import { 
+  dashboardSubmenus,
+  userManagementSubmenus, 
+  salesManagementSubmenus, 
+  orderManagementSubmenus,
+  logisticsManagementSubmenus,
+  productManagementSubmenus,
+  vendorManagementSubmenus
+} from './routingUtils';
 
-// Define sales-management related submenus
-export const salesManagementSubmenus = [
-  'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 
-  'revenue-analytics', 'revenue-dashboard', 'profit-margins', 'cost-analysis', 'roi-tracking',
-  'sales-reports', 'detailed-reports', 'summary-reports', 'comparative-analysis',
-  'export-data', 'sales-forecast'
-];
+export const getDefaultSubmenu = (menu: string): string => {
+  switch (menu) {
+    case 'dashboard': return 'overview';
+    case 'user-management': return 'admin-users';
+    case 'sales-management': return 'sales-overview';
+    case 'order-management': return 'order-overview';
+    case 'logistics-management': return 'logistics-overview';
+    case 'product-management': return 'product-catalog';
+    case 'customer-management': return 'customer-database';
+    case 'vendor-management': return 'vendor-directory';
+    case 'marketing': return 'campaigns';
+    case 'analytics': return 'business-intelligence';
+    case 'payment-management': return 'payment-processing';
+    case 'communications': return 'notifications';
+    case 'security': return 'security-monitoring';
+    case 'settings': return 'system-settings';
+    default: return 'overview';
+  }
+};
 
-// Define order-management related submenus
-export const orderManagementSubmenus = [
-  'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders',
-  'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders',
-  'order-tracking', 'live-tracking', 'delivery-status', 'shipment-updates',
-  'returns-refunds', 'return-requests', 'refund-processing', 'refund-management', 'exchange-requests',
-  'order-analytics', 'order-reports', 'performance-reports',
-  'fulfillment-center', 'order-search', 'order-timeline',
-  'bulk-actions', 'bulk', 'new-orders', 'order-processing',
-  'payment-status', 'payment-management', 'payment-gateway', 'transaction-monitoring',
-  'payment-analytics', 'payment-disputes', 'payment-methods',
-  'failed-payments'
-];
+export const handleSpecialCases = (menu: string) => {
+  // Handle direct dashboard submenu navigation
+  if (dashboardSubmenus.includes(menu)) {
+    console.log('🎯 Special case: Dashboard submenu detected:', menu);
+    return {
+      selectedMenu: 'dashboard',
+      selectedSubmenu: menu
+    };
+  }
+  
+  return null;
+};
 
-// Define logistics-management related submenus (REMOVED quality-control to avoid conflict)
-export const logisticsManagementSubmenus = [
-  'shipping-management', 'warehouse-operations', 'courier-partners', 'shipping-rates',
-  'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations',
-  'logistics-overview', 'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
-];
+export const handleSubmenuRouting = (menu: string) => {
+  console.log('🔍 Checking submenu routing for:', menu);
+  
+  // PRIORITY 1: Handle vendor management submenus FIRST - CRITICAL FIX
+  if (vendorManagementSubmenus.includes(menu)) {
+    console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
+    console.log('🔍 Vendor management submenu:', menu);
+    return {
+      selectedMenu: 'vendor-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 2: Handle stock and inventory submenus
+  const stockInventorySubmenus = [
+    'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
+  ];
+  
+  if (stockInventorySubmenus.includes(menu)) {
+    console.log('✅ PRIORITY: Found in stock/inventory submenus - routing to product management');
+    console.log('🔍 Stock/Inventory submenu:', menu);
+    return {
+      selectedMenu: 'product-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 3: Handle product moderation submenus with both singular and plural forms
+  const productModerationSubmenus = [
+    'pending-approval', 'pending-approvals',
+    'content-review', 'content-reviews', 
+    'quality-control', 'quality-controls',
+    'rejected-products', 'rejected-product',
+    'product-moderation', 'product-moderations'
+  ];
+  
+  if (productModerationSubmenus.includes(menu)) {
+    console.log('✅ PRIORITY: Found in product moderation submenus - routing to product management');
+    console.log('🔍 Product moderation submenu:', menu);
+    
+    // Normalize to singular form for consistent routing
+    let normalizedSubmenu = menu;
+    if (menu === 'pending-approvals') normalizedSubmenu = 'pending-approval';
+    if (menu === 'content-reviews') normalizedSubmenu = 'content-review';
+    if (menu === 'quality-controls') normalizedSubmenu = 'quality-control';
+    if (menu === 'rejected-product') normalizedSubmenu = 'rejected-products';
+    if (menu === 'product-moderations') normalizedSubmenu = 'product-moderation';
+    
+    return {
+      selectedMenu: 'product-management',
+      selectedSubmenu: normalizedSubmenu
+    };
+  }
+  
+  if (userManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in user management submenus');
+    return {
+      selectedMenu: 'user-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  if (salesManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in sales management submenus');
+    return {
+      selectedMenu: 'sales-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  if (orderManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in order management submenus');
+    return {
+      selectedMenu: 'order-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  if (logisticsManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in logistics management submenus');
+    return {
+      selectedMenu: 'logistics-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  if (productManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in product management submenus');
+    return {
+      selectedMenu: 'product-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  return null;
+};
 
-// Define product-management related submenus (INCLUDING all product moderation submenus)
-export const productManagementSubmenus = [
-  'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 
-  'add-product', 'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
-  'warehouse-management', 'warehouse-operations', 'warehouse-analytics', 'best-sellers', 'best-seller', 'top-selling', 'bestsellers', 'product-performance', 
-  'trending-products', 'price-optimization', 'product-search', 'featured-products',
-  'import-export', 'product-import', 'product-export', 'bulk-operations', 'product-import-export',
-  'category-management', 'category-structure', 'category-hierarchy', 'category-attributes', 
-  'category-rules', 'category-seo', 'category-performance', 'category-analytics',
-  'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
-  // Product moderation submenus - EXPLICITLY LISTED
-  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
-  // Stock and inventory related submenus - ADDED FOR PROPER ROUTING
-  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
-  'low-stock', 'reorder-alerts', 'inventory-reports', 'stock-reports', 'inventory-analytics',
-  // Market trends submenus - ADDED FOR PROPER ROUTING
-  'market-trends', 'market-trend', 'trends', 'trend-analysis', 'market-analysis'
-];
+export const handleCompoundMenus = (menu: string) => {
+  // Remove the problematic compound menu splitting logic
+  // All dashboard submenus should be handled by handleSpecialCases
+  return null;
+};
 
-// Define customer-management related submenus - ENHANCED TO INCLUDE ALL CUSTOMER SUBMENUS
-export const customerManagementSubmenus = [
-  'customer-database', 'customer-analytics', 'customer-support', 'all-customers', 'customer-segments', 
-  'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
-  'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews',
-  'customer-overview', 'customer-insights', 'customer-engagement', 'customer-retention',
-  'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
-];
-
-// Define vendor-management related submenus - COMPREHENSIVE LIST WITH ALL VERIFICATION SYSTEMS
+// Vendor management submenus - UPDATED TO INCLUDE COMMISSION TRACKING
 export const vendorManagementSubmenus = [
-  'vendor-directory', 'vendor-dashboard', 'active-vendors', 'active', 'suspended-vendors', 'suspended',
-  'pending-application', 'pending-applications', 'applications', 'vendor-onboarding', 'onboarding',
-  'vendor-verification', 'verification', 'vendor-performance', 'performance', 'vendor-analytics', 'analytics',
-  'vendor-payments', 'payments', 'commission-management', 'vendor-support', 'support',
-  // VENDOR SEARCH SUBMENUS
-  'vendor-search', 'search-vendors', 'find-vendors', 'vendor-finder', 'advanced-vendor-search',
-  'vendor-database-search', 'vendor-lookup', 'search-directory',
-  // DOCUMENT REVIEW AND KYC VERIFICATION SUBMENUS - CRITICAL ADDITION
-  'document-review', 'document-verification', 'kyc-verification', 'kyc-review', 'compliance-check',
-  'identity-verification', 'business-verification', 'document-approval', 'verification-queue',
-  'rejected-documents', 'pending-verification', 'verified-documents', 'compliance-status',
-  // TRADE LICENSE VERIFICATION SUBMENUS
-  'trade-license-verification', 'trade-license-review', 'license-validation', 'license-approval',
-  'license-renewal', 'expired-licenses', 'license-compliance', 'license-analytics',
-  'business-registration', 'regulatory-compliance', 'license-documents', 'certificate-verification',
-  // TIN VERIFICATION SUBMENUS
-  'tin-verification', 'tin-review', 'tax-verification', 'tin-validation', 'tin-approval',
-  'tax-compliance', 'tin-analytics', 'tax-registration', 'tin-documents', 'tax-authority-verification',
-  'expired-tin', 'tin-renewal', 'tax-status-check', 'tin-compliance-monitoring',
-  // NID VERIFICATION SUBMENUS
-  'nid-verification', 'nid-review', 'national-id-verification', 'nid-validation', 'nid-approval',
-  'identity-compliance', 'nid-analytics', 'national-id-registration', 'nid-documents', 'identity-authority-verification',
-  'expired-nid', 'nid-renewal', 'identity-status-check', 'nid-compliance-monitoring', 'biometric-verification',
-  'face-matching', 'identity-fraud-detection', 'nid-blacklist-check', 'identity-verification-api',
-  // BANK ACCOUNT VERIFICATION SUBMENUS
-  'bank-account-verification', 'bank-verification', 'banking-verification', 'account-validation', 'bank-approval',
-  'banking-compliance', 'bank-analytics', 'financial-verification', 'bank-documents', 'banking-authority-verification',
-  'failed-bank-verification', 'bank-renewal', 'banking-status-check', 'bank-compliance-monitoring', 'financial-audit',
-  'payment-method-verification', 'banking-fraud-detection', 'account-ownership-verification', 'banking-api-integration',
-  // VENDOR PERFORMANCE METRICS SUBMENUS - CRITICAL ADDITION
-  'performance-metrics', 'vendor-performance-metrics', 'performance-dashboard', 'performance-analysis',
-  'vendor-kpi', 'vendor-scorecards', 'performance-benchmarks', 'performance-trends', 'performance-reporting',
-  'vendor-ratings', 'vendor-reviews', 'performance-monitoring', 'performance-improvement', 'performance-alerts',
-  // VENDOR SCORECARD SUBMENUS - CRITICAL FIX
-  'vendor-scorecard', 'scorecard', 'vendor-rating', 'vendor-evaluation', 'performance-scorecard',
-  'vendor-assessment', 'quality-scorecard', 'supplier-scorecard', 'vendor-grading',
-  // RATING MANAGEMENT SUBMENUS - NEW ADDITION
-  'rating-management', 'vendor-rating-management', 'rating-system', 'rating-analytics', 'rating-reports',
-  'customer-ratings', 'product-ratings', 'service-ratings', 'rating-moderation', 'rating-disputes',
-  'rating-verification', 'fake-rating-detection', 'rating-trends', 'rating-insights', 'rating-policies',
-  'rating-guidelines', 'rating-compliance', 'rating-audit', 'rating-feedback', 'rating-improvement'
-];
-
-// Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS
-export const dashboardSubmenus = [
-  'overview', 'analytics', 'real-time-metrics', 'realtime-metrics', 'kpi-monitoring', 'kpi_monitoring',
-  'performance-insights', 'performance_insights', 'revenue-analytics', 'user-activity', 
-  'order-insights', 'inventory-alerts', 'platform-performance', 
-  'system-health', 'security-monitoring', 'system-logs', 'quick-actions', 'executive-summary'
+  'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding', 'vendor-verification', 
+  'vendor-performance', 'vendor-sales', 'vendor-ratings', 'vendor-support', 'vendor-search', 'vendor-scorecard',
+  // Status management
+  'active-vendors', 'pending-applications', 'suspended-vendors',
+  // Verification processes
+  'nid-verification', 'tin-verification', 'trade-license-verification', 'bank-account-verification', 'document-review',
+  // Financial management - COMMISSION TRACKING ADDED HERE
+  'vendor-payments', 'commission-tracking', 'payout-management',
+  // Performance tracking
+  'performance-reports', 'performance-metrics', 'vendor-performance-reports',
+  // Rating and feedback
+  'rating-management'
 ];

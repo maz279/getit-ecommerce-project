@@ -241,6 +241,192 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_analytics: {
+        Row: {
+          analytics_date: string
+          analytics_period: string
+          average_commission_per_order: number | null
+          category_breakdown: Json | null
+          commission_rate_percentage: number | null
+          created_at: string | null
+          growth_percentage: number | null
+          id: string
+          net_commission: number | null
+          previous_period_commission: number | null
+          total_commission_earned: number | null
+          total_gross_sales: number | null
+          total_orders: number | null
+          total_platform_fees: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analytics_date?: string
+          analytics_period: string
+          average_commission_per_order?: number | null
+          category_breakdown?: Json | null
+          commission_rate_percentage?: number | null
+          created_at?: string | null
+          growth_percentage?: number | null
+          id?: string
+          net_commission?: number | null
+          previous_period_commission?: number | null
+          total_commission_earned?: number | null
+          total_gross_sales?: number | null
+          total_orders?: number | null
+          total_platform_fees?: number | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analytics_date?: string
+          analytics_period?: string
+          average_commission_per_order?: number | null
+          category_breakdown?: Json | null
+          commission_rate_percentage?: number | null
+          created_at?: string | null
+          growth_percentage?: number | null
+          id?: string
+          net_commission?: number | null
+          previous_period_commission?: number | null
+          total_commission_earned?: number | null
+          total_gross_sales?: number | null
+          total_orders?: number | null
+          total_platform_fees?: number | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      commission_disputes: {
+        Row: {
+          adjustment_amount: number | null
+          claimed_amount: number | null
+          commission_id: string
+          created_at: string | null
+          dispute_description: string | null
+          dispute_reason: string
+          dispute_type: string
+          disputed_amount: number
+          evidence_files: Json | null
+          id: string
+          priority_level: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          adjustment_amount?: number | null
+          claimed_amount?: number | null
+          commission_id: string
+          created_at?: string | null
+          dispute_description?: string | null
+          dispute_reason: string
+          dispute_type: string
+          disputed_amount: number
+          evidence_files?: Json | null
+          id?: string
+          priority_level?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          adjustment_amount?: number | null
+          claimed_amount?: number | null
+          commission_id?: string
+          created_at?: string | null
+          dispute_description?: string | null
+          dispute_reason?: string
+          dispute_type?: string
+          disputed_amount?: number
+          evidence_files?: Json | null
+          id?: string
+          priority_level?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      commission_payouts: {
+        Row: {
+          bank_account_info: Json | null
+          commission_ids: Json
+          created_at: string | null
+          id: string
+          net_payout_amount: number
+          notes: string | null
+          other_deductions: number | null
+          payment_method: string
+          payment_reference: string | null
+          payout_batch_id: string
+          period_end: string
+          period_start: string
+          platform_fees: number | null
+          processed_by: string | null
+          processed_date: string | null
+          scheduled_date: string | null
+          status: string | null
+          tax_deductions: number | null
+          total_commission: number
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          bank_account_info?: Json | null
+          commission_ids?: Json
+          created_at?: string | null
+          id?: string
+          net_payout_amount: number
+          notes?: string | null
+          other_deductions?: number | null
+          payment_method: string
+          payment_reference?: string | null
+          payout_batch_id: string
+          period_end: string
+          period_start: string
+          platform_fees?: number | null
+          processed_by?: string | null
+          processed_date?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          tax_deductions?: number | null
+          total_commission: number
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          bank_account_info?: Json | null
+          commission_ids?: Json
+          created_at?: string | null
+          id?: string
+          net_payout_amount?: number
+          notes?: string | null
+          other_deductions?: number | null
+          payment_method?: string
+          payment_reference?: string | null
+          payout_batch_id?: string
+          period_end?: string
+          period_start?: string
+          platform_fees?: number | null
+          processed_by?: string | null
+          processed_date?: string | null
+          scheduled_date?: string | null
+          status?: string | null
+          tax_deductions?: number | null
+          total_commission?: number
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       dashboard_metrics: {
         Row: {
           created_at: string
@@ -1021,6 +1207,153 @@ export type Database = {
           percentile_50?: number | null
           percentile_75?: number | null
           percentile_90?: number | null
+        }
+        Relationships: []
+      }
+      vendor_commission_rates: {
+        Row: {
+          base_rate: number
+          category_id: string | null
+          created_at: string | null
+          created_by: string
+          effective_from: string
+          effective_to: string | null
+          id: string
+          is_active: boolean | null
+          maximum_amount: number | null
+          minimum_amount: number | null
+          platform_fee_rate: number | null
+          processing_fee: number | null
+          product_type: string | null
+          rate_type: string
+          tier_rates: Json | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          base_rate: number
+          category_id?: string | null
+          created_at?: string | null
+          created_by: string
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          platform_fee_rate?: number | null
+          processing_fee?: number | null
+          product_type?: string | null
+          rate_type: string
+          tier_rates?: Json | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          base_rate?: number
+          category_id?: string | null
+          created_at?: string | null
+          created_by?: string
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          platform_fee_rate?: number | null
+          processing_fee?: number | null
+          product_type?: string | null
+          rate_type?: string
+          tier_rates?: Json | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_commissions: {
+        Row: {
+          approved_by: string | null
+          calculation_date: string | null
+          category: string | null
+          commission_amount: number
+          commission_rate: number
+          commission_type: string
+          created_at: string | null
+          created_by: string | null
+          currency: string | null
+          exchange_rate: number | null
+          gross_amount: number
+          id: string
+          net_commission: number
+          notes: string | null
+          order_id: string | null
+          payment_date: string | null
+          payment_due_date: string | null
+          payment_method: string | null
+          payment_status: string | null
+          platform_fee: number | null
+          product_id: string | null
+          status: string | null
+          transaction_date: string
+          transaction_id: string
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          approved_by?: string | null
+          calculation_date?: string | null
+          category?: string | null
+          commission_amount: number
+          commission_rate: number
+          commission_type: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          exchange_rate?: number | null
+          gross_amount: number
+          id?: string
+          net_commission: number
+          notes?: string | null
+          order_id?: string | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          product_id?: string | null
+          status?: string | null
+          transaction_date: string
+          transaction_id: string
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          approved_by?: string | null
+          calculation_date?: string | null
+          category?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          commission_type?: string
+          created_at?: string | null
+          created_by?: string | null
+          currency?: string | null
+          exchange_rate?: number | null
+          gross_amount?: number
+          id?: string
+          net_commission?: number
+          notes?: string | null
+          order_id?: string | null
+          payment_date?: string | null
+          payment_due_date?: string | null
+          payment_method?: string | null
+          payment_status?: string | null
+          platform_fee?: number | null
+          product_id?: string | null
+          status?: string | null
+          transaction_date?: string
+          transaction_id?: string
+          updated_at?: string | null
+          vendor_id?: string
         }
         Relationships: []
       }

@@ -16,7 +16,8 @@ export const BenchmarksTab: React.FC = () => {
   const loadBenchmarks = async () => {
     try {
       const data = await VendorPerformanceService.getBenchmarks();
-      setBenchmarks(data || []);
+      // Type assertion to ensure proper typing
+      setBenchmarks((data || []) as VendorBenchmark[]);
     } catch (error) {
       console.error('Error loading benchmarks:', error);
     } finally {

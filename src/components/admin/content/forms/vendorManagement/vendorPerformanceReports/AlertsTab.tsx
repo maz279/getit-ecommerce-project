@@ -18,7 +18,8 @@ export const AlertsTab: React.FC = () => {
   const loadAlerts = async () => {
     try {
       const data = await VendorPerformanceService.getPerformanceAlerts();
-      setAlerts(data || []);
+      // Type assertion to ensure proper typing
+      setAlerts((data || []) as VendorPerformanceAlert[]);
     } catch (error) {
       console.error('Error loading alerts:', error);
     } finally {

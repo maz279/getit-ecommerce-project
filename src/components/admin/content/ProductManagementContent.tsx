@@ -7,6 +7,7 @@ import { Progress } from '@/components/ui/progress';
 import { AllProductsContent } from './forms/productManagement/AllProductsContent';
 import { ProductSearchContent } from './forms/productManagement/ProductSearchContent';
 import { FeaturedProductsContent } from './forms/productManagement/FeaturedProductsContent';
+import { ProductImportExportContent } from './forms/productManagement/ProductImportExportContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -218,6 +219,11 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
         return <ProductSearchContent />;
       case 'featured-products':
         return <FeaturedProductsContent />;
+      case 'import-export':
+      case 'product-import':
+      case 'product-export':
+      case 'bulk-operations':
+        return <ProductImportExportContent />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

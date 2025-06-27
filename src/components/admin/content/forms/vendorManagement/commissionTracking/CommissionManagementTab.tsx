@@ -7,104 +7,66 @@ import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Textarea } from '@/components/ui/textarea';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { EnhancedCommissionTrackingService, EnhancedVendorCommission } from '@/services/database/EnhancedCommissionTrackingService';
-import { CommissionCacheService } from '@/services/cache/CommissionCacheService';
-import { CommissionElasticsearchService } from '@/services/search/CommissionElasticsearchService';
-import { 
-  Plus, Search, Filter, Edit, Trash2, Eye, Download, Upload, 
-  Calculator, DollarSign, Calendar, User, TrendingUp, AlertCircle,
-  CheckCircle, XCircle, Clock, FileText, Settings, BarChart3
-} from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Checkbox } from '@/components/ui/checkbox';
 import { toast } from 'sonner';
-
-interface CommissionFilters {
-  vendor_id?: string;
-  status?: string;
-  payment_status?: string;
-  commission_type?: string;
-  date_from?: string;
-  date_to?: string;
-  amount_min?: number;
-  amount_max?: number;
-}
+import { 
+  Search, 
+  Plus, 
+  Edit, 
+  Trash2, 
+  Filter, 
+  Download, 
+  Upload,
+  RefreshCw,
+  Eye,
+  CheckCircle,
+  XCircle,
+  Clock,
+  DollarSign
+} from 'lucide-react';
+import { 
+  EnhancedCommissionTrackingService, 
+  EnhancedVendorCommission, 
+  CommissionFilters,
+  PaginationParams,
+  CommissionInsert
+} from '@/services/database/EnhancedCommissionTrackingService';
 
 export const CommissionManagementTab: React.FC = () => {
+  // State management
   const [commissions, setCommissions] = useState<EnhancedVendorCommission[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [selectedCommission, setSelectedCommission] = useState<EnhancedVendorCommission | null>(null);
-  const [showCreateDialog, setShowCreateDialog] = useState(false);
-  const [showEditDialog, setShowEditDialog] = useState(false);
-  const [showCalculateDialog, setShowCalculateDialog] = useState(false);
-  const [filters, setFilters] = useState<CommissionFilters>({});
-  const [searchTerm, setSearchTerm] = useState('');
+  const [loading, setLoading] = useState(false);
   const [selectedCommissions, setSelectedCommissions] = useState<string[]>([]);
-  const [bulkAction, setBulkAction] = useState<string>('');
+  const [filters, setFilters] = useState<CommissionFilters>({});
+  const [pagination, setPagination] = useState<PaginationParams>({
+    page: 1,
+    per_page: 50,
+    sort_by: 'created_at',
+    sort_order: 'desc'
+  });
+  const [totalPages, setTotalPages] = useState(0);
+  const [totalRecords, setTotalRecords] = useState(0);
 
-  // Pagination
-  const [currentPage, setCurrentPage] = useState(1);
-  const [itemsPerPage] = useState(25);
-  const [totalItems, setTotalItems] = useState(0);
+  // Modal states
+  const [showCreateModal, setShowCreateModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [showViewModal, setShowViewModal] = useState(false);
+  const [currentCommission, setCurrentCommission] = useState<EnhancedVendorCommission | null>(null);
 
-  useEffect(() => {
-    loadCommissions();
-  }, [filters, currentPage, searchTerm]);
+  // Form states
+  const [searchTerm, setSearchTerm] = useState('');
+  const [formData, setFormData] = useState<Partial<CommissionInsert>>({});
 
+  // Load commissions data
   const loadCommissions = async () => {
+    setLoading(true);
     try {
-      setLoading(true);
-      
-      // Try cache first
-      const cacheKey = { ...filters, page: currentPage, search: searchTerm };
-      let cachedCommissions = await CommissionCacheService.getCachedCommissionList(cacheKey);
-      
-      if (cachedCommissions) {
-        setCommissions(cachedCommissions);
-        setLoading(false);
-        return;
-      }
-
-      // Use Elasticsearch for search, otherwise use database
-      if (searchTerm.trim()) {
-        const searchResult = await CommissionElasticsearchService.searchCommissions(
-          searchTerm,
-          {
-            vendor_ids: filters.vendor_id ? [filters.vendor_id] : undefined,
-            statuses: filters.status ? [filters.status] : undefined,
-            payment_statuses: filters.payment_status ? [filters.payment_status] : undefined,
-            commission_types: filters.commission_type ? [filters.commission_type] : undefined,
-            date_range: filters.date_from || filters.date_to ? {
-              from: filters.date_from,
-              to: filters.date_to
-            } : undefined,
-            amount_range: filters.amount_min || filters.amount_max ? {
-              min: filters.amount_min,
-              max: filters.amount_max
-            } : undefined
-          },
-          {
-            limit: itemsPerPage,
-            offset: (currentPage - 1) * itemsPerPage,
-            include_aggregations: true
-          }
-        );
-        
-        setCommissions(searchResult.results as any);
-        setTotalItems(searchResult.total);
-      } else {
-        const data = await EnhancedCommissionTrackingService.getCommissions({
-          ...filters,
-          limit: itemsPerPage,
-          offset: (currentPage - 1) * itemsPerPage
-        });
-        
-        setCommissions(data);
-        setTotalItems(data.length); // In real app, get total count from API
-      }
-
-      // Cache the results
-      await CommissionCacheService.cacheCommissionList(cacheKey, commissions);
+      const response = await EnhancedCommissionTrackingService.getCommissions(filters, pagination);
+      setCommissions(response.data);
+      setTotalPages(response.total_pages);
+      setTotalRecords(response.total);
     } catch (error) {
       console.error('Error loading commissions:', error);
       toast.error('Failed to load commissions');
@@ -113,567 +75,358 @@ export const CommissionManagementTab: React.FC = () => {
     }
   };
 
-  const handleCreateCommission = async (formData: Partial<EnhancedVendorCommission>) => {
+  // Effects
+  useEffect(() => {
+    loadCommissions();
+  }, [filters, pagination]);
+
+  // Event handlers
+  const handleSearch = () => {
+    setFilters({ ...filters, search: searchTerm });
+    setPagination({ ...pagination, page: 1 });
+  };
+
+  const handleFilterChange = (key: keyof CommissionFilters, value: string) => {
+    setFilters({ ...filters, [key]: value });
+    setPagination({ ...pagination, page: 1 });
+  };
+
+  const handleCreate = async () => {
     try {
-      const newCommission = await EnhancedCommissionTrackingService.createCommission({
-        ...formData,
-        created_by: 'current-user-id', // In real app, get from auth context
-        status: 'pending',
-        payment_status: 'unpaid',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      });
+      if (!formData.vendor_id || !formData.commission_amount || !formData.commission_rate) {
+        toast.error('Please fill in all required fields');
+        return;
+      }
 
-      // Update Elasticsearch index
-      await CommissionElasticsearchService.indexCommission({
-        ...newCommission,
-        search_content: '',
-        tags: []
-      } as any);
-
-      // Invalidate cache
-      await CommissionCacheService.invalidateCommissionCache(newCommission.id);
-      
-      setCommissions(prev => [newCommission, ...prev]);
-      setShowCreateDialog(false);
+      await EnhancedCommissionTrackingService.createCommission(formData as CommissionInsert);
       toast.success('Commission created successfully');
+      setShowCreateModal(false);
+      setFormData({});
+      loadCommissions();
     } catch (error) {
       console.error('Error creating commission:', error);
       toast.error('Failed to create commission');
     }
   };
 
-  const handleUpdateCommission = async (id: string, updates: Partial<EnhancedVendorCommission>) => {
+  const handleEdit = async () => {
     try {
-      const updatedCommission = await EnhancedCommissionTrackingService.updateCommission(id, {
-        ...updates,
-        updated_at: new Date().toISOString()
-      });
+      if (!currentCommission?.id) return;
 
-      // Update Elasticsearch index
-      await CommissionElasticsearchService.updateCommissionIndex(id, updatedCommission as any);
-
-      // Invalidate cache
-      await CommissionCacheService.invalidateCommissionCache(id);
-      
-      setCommissions(prev => prev.map(c => c.id === id ? updatedCommission : c));
-      setShowEditDialog(false);
-      setSelectedCommission(null);
+      await EnhancedCommissionTrackingService.updateCommission(currentCommission.id, formData);
       toast.success('Commission updated successfully');
+      setShowEditModal(false);
+      setCurrentCommission(null);
+      setFormData({});
+      loadCommissions();
     } catch (error) {
       console.error('Error updating commission:', error);
       toast.error('Failed to update commission');
     }
   };
 
-  const handleBulkAction = async () => {
-    if (!bulkAction || selectedCommissions.length === 0) return;
+  const handleDelete = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this commission?')) return;
 
     try {
-      switch (bulkAction) {
-        case 'approve':
-          await EnhancedCommissionTrackingService.bulkApproveCommissions(
-            selectedCommissions,
-            'current-user-id'
-          );
-          toast.success(`${selectedCommissions.length} commissions approved`);
-          break;
-        case 'reject':
-          await EnhancedCommissionTrackingService.bulkUpdateCommissions(
-            selectedCommissions.map(id => ({
-              id,
-              data: { status: 'rejected', updated_at: new Date().toISOString() }
-            }))
-          );
-          toast.success(`${selectedCommissions.length} commissions rejected`);
-          break;
-        case 'export':
-          // Export functionality would be implemented here
-          toast.success('Export started');
-          break;
-      }
-
-      // Invalidate cache and reload
-      await CommissionCacheService.flush('commissions:*');
+      await EnhancedCommissionTrackingService.deleteCommission(id);
+      toast.success('Commission deleted successfully');
       loadCommissions();
-      setSelectedCommissions([]);
-      setBulkAction('');
     } catch (error) {
-      console.error('Bulk action error:', error);
-      toast.error('Bulk action failed');
+      console.error('Error deleting commission:', error);
+      toast.error('Failed to delete commission');
     }
   };
 
-  const calculateCommission = async (vendorId: string, grossAmount: number, category?: string) => {
-    try {
-      const calculation = await EnhancedCommissionTrackingService.calculateCommission(
-        vendorId,
-        grossAmount,
-        category
-      );
-      
-      return calculation;
-    } catch (error) {
-      console.error('Commission calculation error:', error);
-      toast.error('Failed to calculate commission');
-      return null;
+  const handleBulkDelete = async () => {
+    if (selectedCommissions.length === 0) {
+      toast.error('Please select commissions to delete');
+      return;
     }
+
+    if (!confirm(`Are you sure you want to delete ${selectedCommissions.length} commissions?`)) return;
+
+    try {
+      await EnhancedCommissionTrackingService.bulkDeleteCommissions(selectedCommissions);
+      toast.success(`${selectedCommissions.length} commissions deleted successfully`);
+      setSelectedCommissions([]);
+      loadCommissions();
+    } catch (error) {
+      console.error('Error bulk deleting commissions:', error);
+      toast.error('Failed to delete commissions');
+    }
+  };
+
+  const handleSelectAll = (checked: boolean) => {
+    if (checked) {
+      setSelectedCommissions(commissions.map(c => c.id));
+    } else {
+      setSelectedCommissions([]);
+    }
+  };
+
+  const handleSelectCommission = (id: string, checked: boolean) => {
+    if (checked) {
+      setSelectedCommissions([...selectedCommissions, id]);
+    } else {
+      setSelectedCommissions(selectedCommissions.filter(cId => cId !== id));
+    }
+  };
+
+  const openEditModal = (commission: EnhancedVendorCommission) => {
+    setCurrentCommission(commission);
+    setFormData(commission);
+    setShowEditModal(true);
+  };
+
+  const openViewModal = (commission: EnhancedVendorCommission) => {
+    setCurrentCommission(commission);
+    setShowViewModal(true);
   };
 
   const getStatusBadge = (status: string) => {
-    const colors = {
+    const statusColors = {
       pending: 'bg-yellow-100 text-yellow-800',
       approved: 'bg-green-100 text-green-800',
       paid: 'bg-blue-100 text-blue-800',
-      rejected: 'bg-red-100 text-red-800',
-      disputed: 'bg-orange-100 text-orange-800'
+      disputed: 'bg-orange-100 text-orange-800',
+      cancelled: 'bg-gray-100 text-gray-800',
     };
-    
-    const icons = {
-      pending: Clock,
-      approved: CheckCircle,
-      paid: DollarSign,
-      rejected: XCircle,
-      disputed: AlertCircle
-    };
-    
-    const Icon = icons[status as keyof typeof icons] || Clock;
-    
-    return (
-      <Badge className={`${colors[status as keyof typeof colors]} flex items-center gap-1`}>
-        <Icon className="h-3 w-3" />
-        {status.charAt(0).toUpperCase() + status.slice(1)}
-      </Badge>
-    );
+    return <Badge className={statusColors[status as keyof typeof statusColors] || 'bg-gray-100 text-gray-800'}>{status}</Badge>;
   };
 
-  const totalPages = Math.ceil(totalItems / itemsPerPage);
-
-  if (loading) {
+  const getPaymentStatusBadge = (paymentStatus: string) => {
+    const statusIcons = {
+      paid: <CheckCircle className="h-4 w-4 text-green-600" />,
+      unpaid: <Clock className="h-4 w-4 text-yellow-600" />,
+      failed: <XCircle className="h-4 w-4 text-red-600" />,
+    };
     return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+      <div className="flex items-center space-x-1">
+        {statusIcons[paymentStatus as keyof typeof statusIcons]}
+        <span className="capitalize">{paymentStatus}</span>
       </div>
     );
-  }
+  };
 
   return (
     <div className="space-y-6">
-      {/* Header Section */}
-      <div className="flex justify-between items-center">
-        <div>
-          <h2 className="text-2xl font-bold text-gray-900">Commission Management</h2>
-          <p className="text-gray-600">Manage vendor commissions, rates, and payments</p>
-        </div>
-        <div className="flex space-x-2">
-          <Button variant="outline" size="sm">
-            <Download className="h-4 w-4 mr-2" />
-            Export
-          </Button>
-          <Button variant="outline" size="sm">
-            <Upload className="h-4 w-4 mr-2" />
-            Import
-          </Button>
-          <Dialog open={showCreateDialog} onOpenChange={setShowCreateDialog}>
-            <DialogTrigger asChild>
-              <Button size="sm" className="bg-blue-600 hover:bg-blue-700">
-                <Plus className="h-4 w-4 mr-2" />
-                New Commission
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl">
-              <DialogHeader>
-                <DialogTitle>Create New Commission</DialogTitle>
-              </DialogHeader>
-              <CreateCommissionForm onSubmit={handleCreateCommission} onCalculate={calculateCommission} />
-            </DialogContent>
-          </Dialog>
-        </div>
-      </div>
-
-      {/* Search and Filters */}
+      {/* Header and Controls */}
       <Card>
-        <CardContent className="p-4">
-          <div className="flex flex-col lg:flex-row gap-4">
-            <div className="flex-1">
-              <div className="relative">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
-                <Input
-                  placeholder="Search commissions by transaction ID, vendor, or notes..."
-                  value={searchTerm}
-                  onChange={(e) => setSearchTerm(e.target.value)}
-                  className="pl-10"
-                />
-              </div>
-            </div>
-            <div className="flex gap-2">
-              <CommissionFilters filters={filters} onFiltersChange={setFilters} />
+        <CardHeader>
+          <div className="flex justify-between items-center">
+            <CardTitle className="flex items-center space-x-2">
+              <DollarSign className="h-5 w-5" />
+              <span>Commission Management</span>
+            </CardTitle>
+            <div className="flex items-center space-x-2">
+              <Button variant="outline" size="sm" onClick={loadCommissions}>
+                <RefreshCw className="h-4 w-4 mr-2" />
+                Refresh
+              </Button>
               <Button variant="outline" size="sm">
-                <Filter className="h-4 w-4 mr-2" />
-                Advanced Filters
+                <Download className="h-4 w-4 mr-2" />
+                Export
+              </Button>
+              <Button size="sm" onClick={() => setShowCreateModal(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Create Commission
               </Button>
             </div>
           </div>
-        </CardContent>
-      </Card>
-
-      {/* Bulk Actions */}
-      {selectedCommissions.length > 0 && (
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center justify-between">
-              <span className="text-sm text-gray-600">
-                {selectedCommissions.length} commission(s) selected
-              </span>
-              <div className="flex items-center gap-2">
-                <Select value={bulkAction} onValueChange={setBulkAction}>
-                  <SelectTrigger className="w-48">
-                    <SelectValue placeholder="Select action" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="approve">Approve Selected</SelectItem>
-                    <SelectItem value="reject">Reject Selected</SelectItem>
-                    <SelectItem value="export">Export Selected</SelectItem>
-                    <SelectItem value="delete">Delete Selected</SelectItem>
-                  </SelectContent>
-                </Select>
-                <Button 
-                  size="sm" 
-                  onClick={handleBulkAction}
-                  disabled={!bulkAction}
-                >
-                  Execute
-                </Button>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {/* Commissions Table */}
-      <Card>
-        <CardContent className="p-0">
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 border-b">
-                <tr>
-                  <th className="px-4 py-3 text-left">
-                    <input
-                      type="checkbox"
-                      checked={selectedCommissions.length === commissions.length && commissions.length > 0}
-                      onChange={(e) => {
-                        if (e.target.checked) {
-                          setSelectedCommissions(commissions.map(c => c.id));
-                        } else {
-                          setSelectedCommissions([]);
-                        }
-                      }}
-                    />
-                  </th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Transaction</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Vendor</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Amount</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Commission</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Status</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Date</th>
-                  <th className="px-4 py-3 text-left text-sm font-medium text-gray-600">Actions</th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200">
-                {commissions.map((commission) => (
-                  <tr key={commission.id} className="hover:bg-gray-50">
-                    <td className="px-4 py-3">
-                      <input
-                        type="checkbox"
-                        checked={selectedCommissions.includes(commission.id)}
-                        onChange={(e) => {
-                          if (e.target.checked) {
-                            setSelectedCommissions(prev => [...prev, commission.id]);
-                          } else {
-                            setSelectedCommissions(prev => prev.filter(id => id !== commission.id));
-                          }
-                        }}
-                      />
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>
-                        <div className="font-medium text-gray-900">{commission.transaction_id}</div>
-                        <div className="text-sm text-gray-500">{commission.commission_type}</div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-sm text-gray-900">{commission.vendor_id}</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-sm text-gray-900">৳{commission.gross_amount.toLocaleString()}</div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div>
-                        <div className="font-medium text-green-600">৳{commission.commission_amount.toLocaleString()}</div>
-                        <div className="text-xs text-gray-500">Rate: {commission.commission_rate}%</div>
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      {getStatusBadge(commission.status)}
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="text-sm text-gray-900">
-                        {new Date(commission.transaction_date).toLocaleDateString()}
-                      </div>
-                    </td>
-                    <td className="px-4 py-3">
-                      <div className="flex items-center space-x-2">
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedCommission(commission);
-                            // Show commission detail dialog
-                          }}
-                        >
-                          <Eye className="h-4 w-4" />
-                        </Button>
-                        <Button
-                          size="sm"
-                          variant="outline"
-                          onClick={() => {
-                            setSelectedCommission(commission);
-                            setShowEditDialog(true);
-                          }}
-                        >
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Pagination */}
-      <div className="flex items-center justify-between">
-        <div className="text-sm text-gray-600">
-          Showing {((currentPage - 1) * itemsPerPage) + 1} to {Math.min(currentPage * itemsPerPage, totalItems)} of {totalItems} commissions
-        </div>
-        <div className="flex items-center space-x-2">
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
-            disabled={currentPage === 1}
-          >
-            Previous
-          </Button>
-          <span className="px-3 py-1 text-sm bg-gray-100 rounded">
-            {currentPage} of {totalPages}
-          </span>
-          <Button
-            variant="outline"
-            size="sm"
-            onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
-            disabled={currentPage === totalPages}
-          >
-            Next
-          </Button>
-        </div>
-      </div>
-
-      {/* Edit Dialog */}
-      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-        <DialogContent className="max-w-4xl">
-          <DialogHeader>
-            <DialogTitle>Edit Commission</DialogTitle>
-          </DialogHeader>
-          {selectedCommission && (
-            <EditCommissionForm
-              commission={selectedCommission}
-              onSubmit={(updates) => handleUpdateCommission(selectedCommission.id, updates)}
-              onCalculate={calculateCommission}
-            />
-          )}
-        </DialogContent>
-      </Dialog>
-    </div>
-  );
-};
-
-// Commission Filters Component
-const CommissionFilters: React.FC<{
-  filters: CommissionFilters;
-  onFiltersChange: (filters: CommissionFilters) => void;
-}> = ({ filters, onFiltersChange }) => {
-  return (
-    <div className="flex gap-2">
-      <Select
-        value={filters.status || ''}
-        onValueChange={(value) => onFiltersChange({ ...filters, status: value || undefined })}
-      >
-        <SelectTrigger className="w-32">
-          <SelectValue placeholder="Status" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="">All Statuses</SelectItem>
-          <SelectItem value="pending">Pending</SelectItem>
-          <SelectItem value="approved">Approved</SelectItem>
-          <SelectItem value="paid">Paid</SelectItem>
-          <SelectItem value="rejected">Rejected</SelectItem>
-          <SelectItem value="disputed">Disputed</SelectItem>
-        </SelectContent>
-      </Select>
-
-      <Select
-        value={filters.payment_status || ''}
-        onValueChange={(value) => onFiltersChange({ ...filters, payment_status: value || undefined })}
-      >
-        <SelectTrigger className="w-32">
-          <SelectValue placeholder="Payment" />
-        </SelectTrigger>
-        <SelectContent>
-          <SelectItem value="">All Payments</SelectItem>
-          <SelectItem value="unpaid">Unpaid</SelectItem>
-          <SelectItem value="paid">Paid</SelectItem>
-          <SelectItem value="partial">Partial</SelectItem>
-          <SelectItem value="overdue">Overdue</SelectItem>
-        </SelectContent>
-      </Select>
-    </div>
-  );
-};
-
-// Create Commission Form Component
-const CreateCommissionForm: React.FC<{
-  onSubmit: (data: Partial<EnhancedVendorCommission>) => void;
-  onCalculate: (vendorId: string, grossAmount: number, category?: string) => Promise<any>;
-}> = ({ onSubmit, onCalculate }) => {
-  const [formData, setFormData] = useState<Partial<EnhancedVendorCommission>>({
-    commission_type: 'sales',
-    currency: 'BDT',
-    exchange_rate: 1.0000
-  });
-  const [calculatedCommission, setCalculatedCommission] = useState<any>(null);
-
-  const handleCalculate = async () => {
-    if (formData.vendor_id && formData.gross_amount) {
-      const result = await onCalculate(
-        formData.vendor_id,
-        formData.gross_amount,
-        formData.category
-      );
-      setCalculatedCommission(result);
-      if (result) {
-        setFormData(prev => ({
-          ...prev,
-          commission_amount: result.commission_amount,
-          commission_rate: result.commission_rate,
-          platform_fee: result.platform_fee,
-          net_commission: result.net_commission
-        }));
-      }
-    }
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      <Tabs defaultValue="basic" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="basic">Basic Info</TabsTrigger>
-          <TabsTrigger value="calculation">Calculation</TabsTrigger>
-          <TabsTrigger value="advanced">Advanced</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="basic" className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="vendor_id">Vendor ID *</Label>
+        </CardHeader>
+        <CardContent>
+          {/* Search and Filters */}
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
               <Input
-                id="vendor_id"
-                value={formData.vendor_id || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, vendor_id: e.target.value }))}
-                required
+                placeholder="Search transactions..."
+                className="pl-10"
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+                onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
               />
             </div>
+            <Select value={filters.status || ''} onValueChange={(value) => handleFilterChange('status', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Status</SelectItem>
+                <SelectItem value="pending">Pending</SelectItem>
+                <SelectItem value="approved">Approved</SelectItem>
+                <SelectItem value="paid">Paid</SelectItem>
+                <SelectItem value="disputed">Disputed</SelectItem>
+                <SelectItem value="cancelled">Cancelled</SelectItem>
+              </SelectContent>
+            </Select>
+            <Select value={filters.payment_status || ''} onValueChange={(value) => handleFilterChange('payment_status', value)}>
+              <SelectTrigger>
+                <SelectValue placeholder="Payment Status" />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="">All Payment Status</SelectItem>
+                <SelectItem value="paid">Paid</SelectItem>
+                <SelectItem value="unpaid">Unpaid</SelectItem>
+                <SelectItem value="failed">Failed</SelectItem>
+              </SelectContent>
+            </Select>
+            <Button onClick={handleSearch}>
+              <Filter className="h-4 w-4 mr-2" />
+              Apply Filters
+            </Button>
+          </div>
+
+          {/* Bulk Actions */}
+          {selectedCommissions.length > 0 && (
+            <div className="flex items-center space-x-2 mb-4 p-2 bg-blue-50 rounded-md">
+              <span className="text-sm text-blue-700">
+                {selectedCommissions.length} item(s) selected
+              </span>
+              <Button variant="destructive" size="sm" onClick={handleBulkDelete}>
+                <Trash2 className="h-4 w-4 mr-2" />
+                Delete Selected
+              </Button>
+            </div>
+          )}
+
+          {/* Commissions Table */}
+          <div className="overflow-x-auto">
+            <Table>
+              <TableHeader>
+                <TableRow>
+                  <TableHead className="w-12">
+                    <Checkbox
+                      checked={selectedCommissions.length === commissions.length && commissions.length > 0}
+                      onCheckedChange={handleSelectAll}
+                    />
+                  </TableHead>
+                  <TableHead>Transaction ID</TableHead>
+                  <TableHead>Vendor</TableHead>
+                  <TableHead>Amount</TableHead>
+                  <TableHead>Commission</TableHead>
+                  <TableHead>Rate</TableHead>
+                  <TableHead>Status</TableHead>
+                  <TableHead>Payment</TableHead>
+                  <TableHead>Date</TableHead>
+                  <TableHead>Actions</TableHead>
+                </TableRow>
+              </TableHeader>
+              <TableBody>
+                {loading ? (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center py-4">
+                      <div className="flex items-center justify-center">
+                        <RefreshCw className="h-4 w-4 animate-spin mr-2" />
+                        Loading...
+                      </div>
+                    </TableCell>
+                  </TableRow>
+                ) : commissions.length === 0 ? (
+                  <TableRow>
+                    <TableCell colSpan={10} className="text-center py-4 text-gray-500">
+                      No commissions found
+                    </TableCell>
+                  </TableRow>
+                ) : (
+                  commissions.map((commission) => (
+                    <TableRow key={commission.id}>
+                      <TableCell>
+                        <Checkbox
+                          checked={selectedCommissions.includes(commission.id)}
+                          onCheckedChange={(checked) => handleSelectCommission(commission.id, checked as boolean)}
+                        />
+                      </TableCell>
+                      <TableCell className="font-medium">{commission.transaction_id}</TableCell>
+                      <TableCell>{commission.vendor_id}</TableCell>
+                      <TableCell>৳{commission.gross_amount.toLocaleString()}</TableCell>
+                      <TableCell>৳{commission.commission_amount.toLocaleString()}</TableCell>
+                      <TableCell>{commission.commission_rate}%</TableCell>
+                      <TableCell>{getStatusBadge(commission.status)}</TableCell>
+                      <TableCell>{getPaymentStatusBadge(commission.payment_status)}</TableCell>
+                      <TableCell>{new Date(commission.transaction_date).toLocaleDateString()}</TableCell>
+                      <TableCell>
+                        <div className="flex items-center space-x-1">
+                          <Button variant="ghost" size="sm" onClick={() => openViewModal(commission)}>
+                            <Eye className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => openEditModal(commission)}>
+                            <Edit className="h-4 w-4" />
+                          </Button>
+                          <Button variant="ghost" size="sm" onClick={() => handleDelete(commission.id)}>
+                            <Trash2 className="h-4 w-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))
+                )}
+              </TableBody>
+            </Table>
+          </div>
+
+          {/* Pagination */}
+          <div className="flex items-center justify-between mt-4">
+            <div className="text-sm text-gray-500">
+              Showing {((pagination.page - 1) * pagination.per_page) + 1} to {Math.min(pagination.page * pagination.per_page, totalRecords)} of {totalRecords} entries
+            </div>
+            <div className="flex items-center space-x-2">
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.page === 1}
+                onClick={() => setPagination({ ...pagination, page: pagination.page - 1 })}
+              >
+                Previous
+              </Button>
+              <span className="text-sm">Page {pagination.page} of {totalPages}</span>
+              <Button
+                variant="outline"
+                size="sm"
+                disabled={pagination.page === totalPages}
+                onClick={() => setPagination({ ...pagination, page: pagination.page + 1 })}
+              >
+                Next
+              </Button>
+            </div>
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Create Commission Modal */}
+      <Dialog open={showCreateModal} onOpenChange={setShowCreateModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Create New Commission</DialogTitle>
+            <DialogDescription>Add a new commission entry to the system</DialogDescription>
+          </DialogHeader>
+          <div className="grid grid-cols-2 gap-4">
             <div>
-              <Label htmlFor="transaction_id">Transaction ID *</Label>
+              <Label htmlFor="transaction_id">Transaction ID</Label>
               <Input
                 id="transaction_id"
                 value={formData.transaction_id || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, transaction_id: e.target.value }))}
-                required
+                onChange={(e) => setFormData({ ...formData, transaction_id: e.target.value })}
               />
             </div>
             <div>
-              <Label htmlFor="commission_type">Commission Type</Label>
-              <Select
-                value={formData.commission_type || ''}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, commission_type: value }))}
-              >
-                <SelectTrigger>
-                  <SelectValue />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="sales">Sales Commission</SelectItem>
-                  <SelectItem value="referral">Referral Commission</SelectItem>
-                  <SelectItem value="performance">Performance Bonus</SelectItem>
-                  <SelectItem value="adjustment">Manual Adjustment</SelectItem>
-                </SelectContent>
-              </Select>
+              <Label htmlFor="vendor_id">Vendor ID</Label>
+              <Input
+                id="vendor_id"
+                value={formData.vendor_id || ''}
+                onChange={(e) => setFormData({ ...formData, vendor_id: e.target.value })}
+              />
             </div>
             <div>
-              <Label htmlFor="gross_amount">Gross Amount *</Label>
+              <Label htmlFor="gross_amount">Gross Amount</Label>
               <Input
                 id="gross_amount"
                 type="number"
-                step="0.01"
                 value={formData.gross_amount || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, gross_amount: parseFloat(e.target.value) || 0 }))}
-                required
+                onChange={(e) => setFormData({ ...formData, gross_amount: parseFloat(e.target.value) })}
               />
             </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="calculation" className="space-y-4">
-          <div className="flex justify-between items-center">
-            <h3 className="text-lg font-medium">Commission Calculation</h3>
-            <Button type="button" onClick={handleCalculate} disabled={!formData.vendor_id || !formData.gross_amount}>
-              <Calculator className="h-4 w-4 mr-2" />
-              Calculate
-            </Button>
-          </div>
-          
-          {calculatedCommission && (
-            <div className="bg-green-50 p-4 rounded-lg">
-              <h4 className="font-medium text-green-800 mb-2">Calculation Results</h4>
-              <div className="grid grid-cols-2 gap-4 text-sm">
-                <div>
-                  <span className="text-gray-600">Commission Rate:</span>
-                  <span className="ml-2 font-medium">{calculatedCommission.commission_rate}%</span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Commission Amount:</span>
-                  <span className="ml-2 font-medium">৳{calculatedCommission.commission_amount.toLocaleString()}</span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Platform Fee:</span>
-                  <span className="ml-2 font-medium">৳{calculatedCommission.platform_fee.toLocaleString()}</span>
-                </div>
-                <div>
-                  <span className="text-gray-600">Net Commission:</span>
-                  <span className="ml-2 font-medium text-green-600">৳{calculatedCommission.net_commission.toLocaleString()}</span>
-                </div>
-              </div>
-            </div>
-          )}
-
-          <div className="grid grid-cols-2 gap-4">
             <div>
               <Label htmlFor="commission_rate">Commission Rate (%)</Label>
               <Input
@@ -681,7 +434,7 @@ const CreateCommissionForm: React.FC<{
                 type="number"
                 step="0.01"
                 value={formData.commission_rate || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, commission_rate: parseFloat(e.target.value) || 0 }))}
+                onChange={(e) => setFormData({ ...formData, commission_rate: parseFloat(e.target.value) })}
               />
             </div>
             <div>
@@ -689,138 +442,111 @@ const CreateCommissionForm: React.FC<{
               <Input
                 id="commission_amount"
                 type="number"
-                step="0.01"
                 value={formData.commission_amount || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, commission_amount: parseFloat(e.target.value) || 0 }))}
-              />
-            </div>
-          </div>
-        </TabsContent>
-
-        <TabsContent value="advanced" className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
-            <div>
-              <Label htmlFor="category">Category</Label>
-              <Input
-                id="category"
-                value={formData.category || ''}
-                onChange={(e) => setFormData(prev => ({ ...prev, category: e.target.value }))}
+                onChange={(e) => setFormData({ ...formData, commission_amount: parseFloat(e.target.value) })}
               />
             </div>
             <div>
-              <Label htmlFor="payment_method">Payment Method</Label>
+              <Label htmlFor="commission_type">Commission Type</Label>
               <Select
-                value={formData.payment_method || ''}
-                onValueChange={(value) => setFormData(prev => ({ ...prev, payment_method: value }))}
+                value={formData.commission_type || ''}
+                onValueChange={(value) => setFormData({ ...formData, commission_type: value })}
               >
                 <SelectTrigger>
-                  <SelectValue />
+                  <SelectValue placeholder="Select type" />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                  <SelectItem value="mobile_banking">Mobile Banking</SelectItem>
-                  <SelectItem value="digital_wallet">Digital Wallet</SelectItem>
-                  <SelectItem value="check">Check</SelectItem>
+                  <SelectItem value="sale">Sale</SelectItem>
+                  <SelectItem value="referral">Referral</SelectItem>
+                  <SelectItem value="bonus">Bonus</SelectItem>
                 </SelectContent>
               </Select>
             </div>
+            <div className="col-span-2">
+              <Label htmlFor="notes">Notes</Label>
+              <Textarea
+                id="notes"
+                value={formData.notes || ''}
+                onChange={(e) => setFormData({ ...formData, notes: e.target.value })}
+              />
+            </div>
           </div>
-          
-          <div>
-            <Label htmlFor="notes">Notes</Label>
-            <Textarea
-              id="notes"
-              value={formData.notes || ''}
-              onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-              rows={3}
-            />
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={() => setShowCreateModal(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleCreate}>Create Commission</Button>
           </div>
-        </TabsContent>
-      </Tabs>
+        </DialogContent>
+      </Dialog>
 
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline">Cancel</Button>
-        <Button type="submit">Create Commission</Button>
-      </div>
-    </form>
-  );
-};
+      {/* Edit Commission Modal */}
+      <Dialog open={showEditModal} onOpenChange={setShowEditModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Edit Commission</DialogTitle>
+            <DialogDescription>Update commission details</DialogDescription>
+          </DialogHeader>
+          {/* Similar form fields as create modal */}
+          <div className="flex justify-end space-x-2 mt-4">
+            <Button variant="outline" onClick={() => setShowEditModal(false)}>
+              Cancel
+            </Button>
+            <Button onClick={handleEdit}>Update Commission</Button>
+          </div>
+        </DialogContent>
+      </Dialog>
 
-// Edit Commission Form Component
-const EditCommissionForm: React.FC<{
-  commission: EnhancedVendorCommission;
-  onSubmit: (updates: Partial<EnhancedVendorCommission>) => void;
-  onCalculate: (vendorId: string, grossAmount: number, category?: string) => Promise<any>;
-}> = ({ commission, onSubmit, onCalculate }) => {
-  const [formData, setFormData] = useState<Partial<EnhancedVendorCommission>>(commission);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    onSubmit(formData);
-  };
-
-  return (
-    <form onSubmit={handleSubmit} className="space-y-6">
-      {/* Similar structure to CreateCommissionForm but with existing data */}
-      <div className="grid grid-cols-2 gap-4">
-        <div>
-          <Label>Transaction ID</Label>
-          <Input value={formData.transaction_id} disabled />
-        </div>
-        <div>
-          <Label>Vendor ID</Label>
-          <Input value={formData.vendor_id} disabled />
-        </div>
-        <div>
-          <Label htmlFor="status">Status</Label>
-          <Select
-            value={formData.status || ''}
-            onValueChange={(value) => setFormData(prev => ({ ...prev, status: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="pending">Pending</SelectItem>
-              <SelectItem value="approved">Approved</SelectItem>
-              <SelectItem value="rejected">Rejected</SelectItem>
-              <SelectItem value="disputed">Disputed</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-        <div>
-          <Label htmlFor="payment_status">Payment Status</Label>
-          <Select
-            value={formData.payment_status || ''}
-            onValueChange={(value) => setFormData(prev => ({ ...prev, payment_status: value }))}
-          >
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              <SelectItem value="unpaid">Unpaid</SelectItem>
-              <SelectItem value="paid">Paid</SelectItem>
-              <SelectItem value="partial">Partial</SelectItem>
-              <SelectItem value="overdue">Overdue</SelectItem>
-            </SelectContent>
-          </Select>
-        </div>
-      </div>
-
-      <div>
-        <Label htmlFor="notes">Notes</Label>
-        <Textarea
-          id="notes"
-          value={formData.notes || ''}
-          onChange={(e) => setFormData(prev => ({ ...prev, notes: e.target.value }))}
-          rows={3}
-        />
-      </div>
-
-      <div className="flex justify-end space-x-2">
-        <Button type="button" variant="outline">Cancel</Button>
-        <Button type="submit">Update Commission</Button>
-      </div>
-    </form>
+      {/* View Commission Modal */}
+      <Dialog open={showViewModal} onOpenChange={setShowViewModal}>
+        <DialogContent className="max-w-2xl">
+          <DialogHeader>
+            <DialogTitle>Commission Details</DialogTitle>
+            <DialogDescription>View commission information</DialogDescription>
+          </DialogHeader>
+          {currentCommission && (
+            <div className="space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <Label>Transaction ID</Label>
+                  <div className="font-medium">{currentCommission.transaction_id}</div>
+                </div>
+                <div>
+                  <Label>Status</Label>
+                  <div>{getStatusBadge(currentCommission.status)}</div>
+                </div>
+                <div>
+                  <Label>Gross Amount</Label>
+                  <div className="font-medium">৳{currentCommission.gross_amount.toLocaleString()}</div>
+                </div>
+                <div>
+                  <Label>Commission Amount</Label>
+                  <div className="font-medium">৳{currentCommission.commission_amount.toLocaleString()}</div>
+                </div>
+                <div>
+                  <Label>Commission Rate</Label>
+                  <div className="font-medium">{currentCommission.commission_rate}%</div>
+                </div>
+                <div>
+                  <Label>Payment Status</Label>
+                  <div>{getPaymentStatusBadge(currentCommission.payment_status)}</div>
+                </div>
+              </div>
+              {currentCommission.notes && (
+                <div>
+                  <Label>Notes</Label>
+                  <div className="text-sm text-gray-600">{currentCommission.notes}</div>
+                </div>
+              )}
+            </div>
+          )}
+          <div className="flex justify-end mt-4">
+            <Button variant="outline" onClick={() => setShowViewModal(false)}>
+              Close
+            </Button>
+          </div>
+        </DialogContent>
+      </Dialog>
+    </div>
   );
 };

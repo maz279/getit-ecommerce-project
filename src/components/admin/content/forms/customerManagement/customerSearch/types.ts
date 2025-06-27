@@ -30,7 +30,7 @@ export interface CustomerSearchData {
 }
 
 export interface SearchFilter {
-  type: 'tier' | 'status' | 'registrationDate' | 'orderCount' | 'lifetimeValue' | 'location' | 'category' | 'brand';
+  type: 'tier' | 'status' | 'registrationDate' | 'orderCount' | 'lifetimeValue' | 'location' | 'category' | 'brand' | 'communication';
   value: string;
   operator?: 'equals' | 'greater' | 'less' | 'contains' | 'between';
   label: string;

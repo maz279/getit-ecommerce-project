@@ -979,6 +979,300 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_benchmarks: {
+        Row: {
+          benchmark_type: string
+          benchmark_value: number
+          created_at: string | null
+          data_source: string | null
+          id: string
+          industry_category: string
+          last_updated: string | null
+          metric_name: string
+          percentile_25: number | null
+          percentile_50: number | null
+          percentile_75: number | null
+          percentile_90: number | null
+        }
+        Insert: {
+          benchmark_type: string
+          benchmark_value: number
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          industry_category: string
+          last_updated?: string | null
+          metric_name: string
+          percentile_25?: number | null
+          percentile_50?: number | null
+          percentile_75?: number | null
+          percentile_90?: number | null
+        }
+        Update: {
+          benchmark_type?: string
+          benchmark_value?: number
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          industry_category?: string
+          last_updated?: string | null
+          metric_name?: string
+          percentile_25?: number | null
+          percentile_50?: number | null
+          percentile_75?: number | null
+          percentile_90?: number | null
+        }
+        Relationships: []
+      }
+      vendor_performance_alerts: {
+        Row: {
+          alert_message: string
+          alert_type: string
+          created_at: string | null
+          current_value: number | null
+          id: string
+          is_resolved: boolean | null
+          metric_name: string
+          resolved_at: string | null
+          resolved_by: string | null
+          severity_level: string
+          threshold_value: number | null
+          vendor_id: string
+        }
+        Insert: {
+          alert_message: string
+          alert_type: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          is_resolved?: boolean | null
+          metric_name: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity_level: string
+          threshold_value?: number | null
+          vendor_id: string
+        }
+        Update: {
+          alert_message?: string
+          alert_type?: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          is_resolved?: boolean | null
+          metric_name?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity_level?: string
+          threshold_value?: number | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_performance_reports: {
+        Row: {
+          active_products: number | null
+          approved_by: string | null
+          average_delivery_time_days: number | null
+          average_order_value: number | null
+          average_rating: number | null
+          bounce_rate: number | null
+          commission_paid: number | null
+          compliance_score: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          created_by: string
+          customer_satisfaction_score: number | null
+          delivery_success_rate: number | null
+          description_accuracy_rating: number | null
+          id: string
+          inventory_turnover_rate: number | null
+          market_share_percentage: number | null
+          notes: string | null
+          on_time_delivery_rate: number | null
+          out_of_stock_products: number | null
+          overstock_value: number | null
+          packaging_quality_rating: number | null
+          page_views: number | null
+          price_competitiveness_score: number | null
+          product_quality_rating: number | null
+          profit_margin: number | null
+          refunds_issued: number | null
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          resolution_rate: number | null
+          resolved_complaints: number | null
+          response_time_hours: number | null
+          return_rate: number | null
+          review_count: number | null
+          seller_level: string | null
+          status: string | null
+          stockout_frequency: number | null
+          time_on_page_seconds: number | null
+          top_selling_product_id: string | null
+          total_complaints: number | null
+          total_orders: number | null
+          total_products_listed: number | null
+          total_revenue: number | null
+          unique_visitors: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          active_products?: number | null
+          approved_by?: string | null
+          average_delivery_time_days?: number | null
+          average_order_value?: number | null
+          average_rating?: number | null
+          bounce_rate?: number | null
+          commission_paid?: number | null
+          compliance_score?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          created_by: string
+          customer_satisfaction_score?: number | null
+          delivery_success_rate?: number | null
+          description_accuracy_rating?: number | null
+          id?: string
+          inventory_turnover_rate?: number | null
+          market_share_percentage?: number | null
+          notes?: string | null
+          on_time_delivery_rate?: number | null
+          out_of_stock_products?: number | null
+          overstock_value?: number | null
+          packaging_quality_rating?: number | null
+          page_views?: number | null
+          price_competitiveness_score?: number | null
+          product_quality_rating?: number | null
+          profit_margin?: number | null
+          refunds_issued?: number | null
+          report_period_end: string
+          report_period_start: string
+          report_type: string
+          resolution_rate?: number | null
+          resolved_complaints?: number | null
+          response_time_hours?: number | null
+          return_rate?: number | null
+          review_count?: number | null
+          seller_level?: string | null
+          status?: string | null
+          stockout_frequency?: number | null
+          time_on_page_seconds?: number | null
+          top_selling_product_id?: string | null
+          total_complaints?: number | null
+          total_orders?: number | null
+          total_products_listed?: number | null
+          total_revenue?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          active_products?: number | null
+          approved_by?: string | null
+          average_delivery_time_days?: number | null
+          average_order_value?: number | null
+          average_rating?: number | null
+          bounce_rate?: number | null
+          commission_paid?: number | null
+          compliance_score?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          created_by?: string
+          customer_satisfaction_score?: number | null
+          delivery_success_rate?: number | null
+          description_accuracy_rating?: number | null
+          id?: string
+          inventory_turnover_rate?: number | null
+          market_share_percentage?: number | null
+          notes?: string | null
+          on_time_delivery_rate?: number | null
+          out_of_stock_products?: number | null
+          overstock_value?: number | null
+          packaging_quality_rating?: number | null
+          page_views?: number | null
+          price_competitiveness_score?: number | null
+          product_quality_rating?: number | null
+          profit_margin?: number | null
+          refunds_issued?: number | null
+          report_period_end?: string
+          report_period_start?: string
+          report_type?: string
+          resolution_rate?: number | null
+          resolved_complaints?: number | null
+          response_time_hours?: number | null
+          return_rate?: number | null
+          review_count?: number | null
+          seller_level?: string | null
+          status?: string | null
+          stockout_frequency?: number | null
+          time_on_page_seconds?: number | null
+          top_selling_product_id?: string | null
+          total_complaints?: number | null
+          total_orders?: number | null
+          total_products_listed?: number | null
+          total_revenue?: number | null
+          unique_visitors?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_performance_targets: {
+        Row: {
+          conversion_rate_target: number | null
+          created_at: string | null
+          customer_satisfaction_target: number | null
+          id: string
+          on_time_delivery_target: number | null
+          orders_target: number | null
+          quality_rating_target: number | null
+          revenue_target: number | null
+          set_by: string
+          target_month: number | null
+          target_period: string
+          target_quarter: number | null
+          target_year: number
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          conversion_rate_target?: number | null
+          created_at?: string | null
+          customer_satisfaction_target?: number | null
+          id?: string
+          on_time_delivery_target?: number | null
+          orders_target?: number | null
+          quality_rating_target?: number | null
+          revenue_target?: number | null
+          set_by: string
+          target_month?: number | null
+          target_period: string
+          target_quarter?: number | null
+          target_year: number
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          conversion_rate_target?: number | null
+          created_at?: string | null
+          customer_satisfaction_target?: number | null
+          id?: string
+          on_time_delivery_target?: number | null
+          orders_target?: number | null
+          quality_rating_target?: number | null
+          revenue_target?: number | null
+          set_by?: string
+          target_month?: number | null
+          target_period?: string
+          target_quarter?: number | null
+          target_year?: number
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       vendor_ratings: {
         Row: {
           communication_rating: number | null

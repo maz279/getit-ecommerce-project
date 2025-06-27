@@ -17,6 +17,7 @@ import { NidVerificationContent } from './NidVerificationContent';
 import { BankAccountVerificationContent } from './BankAccountVerificationContent';
 import { VendorPerformanceMetricsContent } from './VendorPerformanceMetricsContent';
 import { VendorScorecardContent } from './VendorScorecardContent';
+import { VendorPerformanceReportsContent } from './VendorPerformanceReportsContent';
 import { RatingManagementContent } from './RatingManagementContent';
 
 interface VendorManagementRouterProps {
@@ -56,20 +57,35 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'performance':
       console.log('✅ Routing to VendorPerformanceContent');  
       return <VendorPerformanceContent />;
+    
+    // CRITICAL FIX: Performance Reports routing - this was showing dashboard content
+    case 'performance-reports':
+    case 'vendor-performance-reports':
+    case 'performance-analytics':
+    case 'vendor-reports':
+    case 'sales-reports':
+    case 'performance-dashboard':
+    case 'vendor-analytics-reports':
+    case 'business-intelligence':
+    case 'kpi-reports':
+    case 'monthly-reports':
+    case 'quarterly-reports':
+    case 'annual-reports':
+      console.log('✅ FIXED: Routing to VendorPerformanceReportsContent for performance reports');
+      return <VendorPerformanceReportsContent />;
+    
     // Performance metrics specific submenus route to VendorPerformanceMetricsContent
     case 'performance-metrics':
     case 'vendor-performance-metrics':
-    case 'performance-dashboard':
-    case 'performance-analysis':
     case 'vendor-kpi':
     case 'performance-benchmarks':
     case 'performance-trends':
-    case 'performance-reporting':
     case 'performance-monitoring':
     case 'performance-improvement':
     case 'performance-alerts':
       console.log('✅ Routing to VendorPerformanceMetricsContent with submenu:', selectedSubmenu);
       return <VendorPerformanceMetricsContent selectedSubmenu={selectedSubmenu} />;
+    
     // Vendor scorecard specific submenus route to VendorScorecardContent
     case 'vendor-scorecard':
     case 'scorecard':
@@ -108,6 +124,8 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'search-directory':
       console.log('✅ Routing to VendorSearchContent');
       return <VendorSearchContent />;
+    
+    // ... keep existing code (all other verification and document review cases)
     case 'document-review':
     case 'document-verification':
     case 'kyc-verification':
@@ -200,7 +218,6 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'vendor-rating-management':
     case 'rating-system':
     case 'rating-analytics':
-    case 'rating-reports':
     case 'customer-ratings':
     case 'product-ratings':
     case 'service-ratings':

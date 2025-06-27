@@ -14,6 +14,7 @@ import { VendorSearchContent } from './VendorSearchContent';
 import { DocumentReviewContent } from './DocumentReviewContent';
 import { TradeLicenseVerificationContent } from './TradeLicenseVerificationContent';
 import { TinVerificationContent } from './TinVerificationContent';
+import { NidVerificationContent } from './NidVerificationContent';
 
 interface VendorManagementRouterProps {
   selectedSubmenu: string;
@@ -120,6 +121,27 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
     case 'tin-compliance-monitoring':
       console.log('✅ Routing to TinVerificationContent');
       return <TinVerificationContent />;
+    case 'nid-verification':
+    case 'nid-review':
+    case 'national-id-verification':
+    case 'nid-validation':
+    case 'nid-approval':
+    case 'identity-compliance':
+    case 'nid-analytics':
+    case 'national-id-registration':
+    case 'nid-documents':
+    case 'identity-authority-verification':
+    case 'expired-nid':
+    case 'nid-renewal':
+    case 'identity-status-check':
+    case 'nid-compliance-monitoring':
+    case 'biometric-verification':
+    case 'face-matching':
+    case 'identity-fraud-detection':
+    case 'nid-blacklist-check':
+    case 'identity-verification-api':
+      console.log('✅ Routing to NidVerificationContent');
+      return <NidVerificationContent />;
     default:
       console.log('✅ Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;

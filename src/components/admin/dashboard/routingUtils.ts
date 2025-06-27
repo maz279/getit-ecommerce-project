@@ -80,10 +80,15 @@ export const vendorManagementSubmenus = [
   'trade-license-verification', 'trade-license-review', 'license-validation', 'license-approval',
   'license-renewal', 'expired-licenses', 'license-compliance', 'license-analytics',
   'business-registration', 'regulatory-compliance', 'license-documents', 'certificate-verification',
-  // TIN VERIFICATION SUBMENUS - NEW ADDITION
+  // TIN VERIFICATION SUBMENUS
   'tin-verification', 'tin-review', 'tax-verification', 'tin-validation', 'tin-approval',
   'tax-compliance', 'tin-analytics', 'tax-registration', 'tin-documents', 'tax-authority-verification',
-  'expired-tin', 'tin-renewal', 'tax-status-check', 'tin-compliance-monitoring'
+  'expired-tin', 'tin-renewal', 'tax-status-check', 'tin-compliance-monitoring',
+  // NID VERIFICATION SUBMENUS - NEW ADDITION
+  'nid-verification', 'nid-review', 'national-id-verification', 'nid-validation', 'nid-approval',
+  'identity-compliance', 'nid-analytics', 'national-id-registration', 'nid-documents', 'identity-authority-verification',
+  'expired-nid', 'nid-renewal', 'identity-status-check', 'nid-compliance-monitoring', 'biometric-verification',
+  'face-matching', 'identity-fraud-detection', 'nid-blacklist-check', 'identity-verification-api'
 ];
 
 // Define dashboard-related submenus - CLEANED UP TO AVOID CONFLICTS

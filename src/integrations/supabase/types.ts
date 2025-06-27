@@ -241,6 +241,59 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_adjustments: {
+        Row: {
+          adjustment_amount: number
+          adjustment_reason: string
+          adjustment_type: string
+          approved_at: string | null
+          approved_by: string | null
+          commission_id: string
+          created_at: string | null
+          created_by: string
+          id: string
+          reference_document: string | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          adjustment_amount: number
+          adjustment_reason: string
+          adjustment_type: string
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_id: string
+          created_at?: string | null
+          created_by: string
+          id?: string
+          reference_document?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          adjustment_amount?: number
+          adjustment_reason?: string
+          adjustment_type?: string
+          approved_at?: string | null
+          approved_by?: string | null
+          commission_id?: string
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          reference_document?: string | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_adjustments_commission_id_fkey"
+            columns: ["commission_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_commissions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       commission_analytics: {
         Row: {
           analytics_date: string
@@ -297,18 +350,22 @@ export type Database = {
       }
       commission_disputes: {
         Row: {
+          actual_resolution_date: string | null
           adjustment_amount: number | null
           claimed_amount: number | null
           commission_id: string
           created_at: string | null
+          dispute_category: string | null
           dispute_description: string | null
           dispute_reason: string
           dispute_type: string
           disputed_amount: number
           evidence_files: Json | null
+          expected_resolution_date: string | null
           id: string
           priority_level: string | null
           resolution_notes: string | null
+          resolution_time_hours: number | null
           resolved_at: string | null
           resolved_by: string | null
           status: string | null
@@ -316,18 +373,22 @@ export type Database = {
           vendor_id: string
         }
         Insert: {
+          actual_resolution_date?: string | null
           adjustment_amount?: number | null
           claimed_amount?: number | null
           commission_id: string
           created_at?: string | null
+          dispute_category?: string | null
           dispute_description?: string | null
           dispute_reason: string
           dispute_type: string
           disputed_amount: number
           evidence_files?: Json | null
+          expected_resolution_date?: string | null
           id?: string
           priority_level?: string | null
           resolution_notes?: string | null
+          resolution_time_hours?: number | null
           resolved_at?: string | null
           resolved_by?: string | null
           status?: string | null
@@ -335,18 +396,22 @@ export type Database = {
           vendor_id: string
         }
         Update: {
+          actual_resolution_date?: string | null
           adjustment_amount?: number | null
           claimed_amount?: number | null
           commission_id?: string
           created_at?: string | null
+          dispute_category?: string | null
           dispute_description?: string | null
           dispute_reason?: string
           dispute_type?: string
           disputed_amount?: number
           evidence_files?: Json | null
+          expected_resolution_date?: string | null
           id?: string
           priority_level?: string | null
           resolution_notes?: string | null
+          resolution_time_hours?: number | null
           resolved_at?: string | null
           resolved_by?: string | null
           status?: string | null
@@ -355,18 +420,65 @@ export type Database = {
         }
         Relationships: []
       }
+      commission_notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          notification_data: Json | null
+          notification_type: string
+          read_at: string | null
+          recipient_id: string
+          recipient_type: string
+          sent_at: string | null
+          status: string | null
+          subject: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          notification_data?: Json | null
+          notification_type: string
+          read_at?: string | null
+          recipient_id: string
+          recipient_type: string
+          sent_at?: string | null
+          status?: string | null
+          subject: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          notification_data?: Json | null
+          notification_type?: string
+          read_at?: string | null
+          recipient_id?: string
+          recipient_type?: string
+          sent_at?: string | null
+          status?: string | null
+          subject?: string
+        }
+        Relationships: []
+      }
       commission_payouts: {
         Row: {
           bank_account_info: Json | null
           commission_ids: Json
           created_at: string | null
+          exchange_rate: number | null
           id: string
+          minimum_payout_threshold: number | null
           net_payout_amount: number
           notes: string | null
           other_deductions: number | null
           payment_method: string
           payment_reference: string | null
           payout_batch_id: string
+          payout_currency: string | null
+          payout_fees: number | null
+          payout_frequency: string | null
           period_end: string
           period_start: string
           platform_fees: number | null
@@ -383,13 +495,18 @@ export type Database = {
           bank_account_info?: Json | null
           commission_ids?: Json
           created_at?: string | null
+          exchange_rate?: number | null
           id?: string
+          minimum_payout_threshold?: number | null
           net_payout_amount: number
           notes?: string | null
           other_deductions?: number | null
           payment_method: string
           payment_reference?: string | null
           payout_batch_id: string
+          payout_currency?: string | null
+          payout_fees?: number | null
+          payout_frequency?: string | null
           period_end: string
           period_start: string
           platform_fees?: number | null
@@ -406,13 +523,18 @@ export type Database = {
           bank_account_info?: Json | null
           commission_ids?: Json
           created_at?: string | null
+          exchange_rate?: number | null
           id?: string
+          minimum_payout_threshold?: number | null
           net_payout_amount?: number
           notes?: string | null
           other_deductions?: number | null
           payment_method?: string
           payment_reference?: string | null
           payout_batch_id?: string
+          payout_currency?: string | null
+          payout_fees?: number | null
+          payout_frequency?: string | null
           period_end?: string
           period_start?: string
           platform_fees?: number | null
@@ -424,6 +546,137 @@ export type Database = {
           total_commission?: number
           updated_at?: string | null
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      commission_rate_history: {
+        Row: {
+          change_reason: string | null
+          changed_by: string
+          created_at: string | null
+          effective_date: string
+          id: string
+          new_rate: number
+          old_rate: number
+          rate_id: string
+        }
+        Insert: {
+          change_reason?: string | null
+          changed_by: string
+          created_at?: string | null
+          effective_date: string
+          id?: string
+          new_rate: number
+          old_rate: number
+          rate_id: string
+        }
+        Update: {
+          change_reason?: string | null
+          changed_by?: string
+          created_at?: string | null
+          effective_date?: string
+          id?: string
+          new_rate?: number
+          old_rate?: number
+          rate_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "commission_rate_history_rate_id_fkey"
+            columns: ["rate_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_commission_rates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      commission_reconciliation: {
+        Row: {
+          actual_commission: number
+          calculated_commission: number
+          created_at: string | null
+          id: string
+          notes: string | null
+          period_end: string
+          period_start: string
+          reconciled_at: string | null
+          reconciled_by: string | null
+          reconciliation_period: string
+          reconciliation_status: string | null
+          updated_at: string | null
+          variance: number
+          variance_percentage: number
+          vendor_id: string
+        }
+        Insert: {
+          actual_commission: number
+          calculated_commission: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          period_end: string
+          period_start: string
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          reconciliation_period: string
+          reconciliation_status?: string | null
+          updated_at?: string | null
+          variance: number
+          variance_percentage: number
+          vendor_id: string
+        }
+        Update: {
+          actual_commission?: number
+          calculated_commission?: number
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          period_end?: string
+          period_start?: string
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          reconciliation_period?: string
+          reconciliation_status?: string | null
+          updated_at?: string | null
+          variance?: number
+          variance_percentage?: number
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      commission_tracking_settings: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          id: string
+          is_active: boolean | null
+          setting_key: string
+          setting_type: string
+          setting_value: Json
+          updated_at: string | null
+          updated_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          id?: string
+          is_active?: boolean | null
+          setting_key: string
+          setting_type: string
+          setting_value?: Json
+          updated_at?: string | null
+          updated_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          is_active?: boolean | null
+          setting_key?: string
+          setting_type?: string
+          setting_value?: Json
+          updated_at?: string | null
+          updated_by?: string | null
         }
         Relationships: []
       }
@@ -1275,12 +1528,14 @@ export type Database = {
           approved_by: string | null
           calculation_date: string | null
           category: string | null
+          chargeback_amount: number | null
           commission_amount: number
           commission_rate: number
           commission_type: string
           created_at: string | null
           created_by: string | null
           currency: string | null
+          discount_amount: number | null
           exchange_rate: number | null
           gross_amount: number
           id: string
@@ -1293,7 +1548,10 @@ export type Database = {
           payment_status: string | null
           platform_fee: number | null
           product_id: string | null
+          refund_amount: number | null
+          shipping_commission: number | null
           status: string | null
+          tax_amount: number | null
           transaction_date: string
           transaction_id: string
           updated_at: string | null
@@ -1303,12 +1561,14 @@ export type Database = {
           approved_by?: string | null
           calculation_date?: string | null
           category?: string | null
+          chargeback_amount?: number | null
           commission_amount: number
           commission_rate: number
           commission_type: string
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
+          discount_amount?: number | null
           exchange_rate?: number | null
           gross_amount: number
           id?: string
@@ -1321,7 +1581,10 @@ export type Database = {
           payment_status?: string | null
           platform_fee?: number | null
           product_id?: string | null
+          refund_amount?: number | null
+          shipping_commission?: number | null
           status?: string | null
+          tax_amount?: number | null
           transaction_date: string
           transaction_id: string
           updated_at?: string | null
@@ -1331,12 +1594,14 @@ export type Database = {
           approved_by?: string | null
           calculation_date?: string | null
           category?: string | null
+          chargeback_amount?: number | null
           commission_amount?: number
           commission_rate?: number
           commission_type?: string
           created_at?: string | null
           created_by?: string | null
           currency?: string | null
+          discount_amount?: number | null
           exchange_rate?: number | null
           gross_amount?: number
           id?: string
@@ -1349,7 +1614,10 @@ export type Database = {
           payment_status?: string | null
           platform_fee?: number | null
           product_id?: string | null
+          refund_amount?: number | null
+          shipping_commission?: number | null
           status?: string | null
+          tax_amount?: number | null
           transaction_date?: string
           transaction_id?: string
           updated_at?: string | null
@@ -1726,8 +1994,26 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      calculate_vendor_commission: {
+        Args: {
+          p_vendor_id: string
+          p_gross_amount: number
+          p_product_category?: string
+          p_transaction_date?: string
+        }
+        Returns: {
+          commission_amount: number
+          commission_rate: number
+          platform_fee: number
+          net_commission: number
+        }[]
+      }
       clean_expired_data: {
         Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      update_commission_analytics: {
+        Args: { p_vendor_id?: string; p_analytics_date?: string }
         Returns: undefined
       }
     }

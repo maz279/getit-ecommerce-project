@@ -11,6 +11,7 @@ import { FeaturedProductsContent } from './forms/productManagement/FeaturedProdu
 import { ProductImportExportContent } from './forms/productManagement/ProductImportExportContent';
 import { CategoryStructureContent } from './forms/productManagement/CategoryStructureContent';
 import { CategoryPerformanceContent } from './forms/productManagement/CategoryPerformanceContent';
+import { SeasonalCategoriesContent } from './forms/productManagement/SeasonalCategoriesContent';
 
 interface ProductManagementContentProps {
   selectedSubmenu: string;
@@ -237,6 +238,11 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
         return <CategoryStructureContent selectedSubmenu={selectedSubmenu} />;
       case 'category-performance':
         return <CategoryPerformanceContent />;
+      case 'seasonal-categories':
+      case 'seasonal-category-management':
+      case 'seasonal-campaigns':
+      case 'seasonal-analytics':
+        return <SeasonalCategoriesContent />;
       case 'inventory-management':
       case 'stock-levels':
         return renderInventoryManagement();

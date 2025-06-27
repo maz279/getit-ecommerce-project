@@ -12,7 +12,8 @@ import {
   Star,
   Package,
   TrendingUp,
-  Clock
+  Clock,
+  Store
 } from 'lucide-react';
 import { ActiveVendor } from './types';
 

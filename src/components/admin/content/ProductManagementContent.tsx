@@ -250,15 +250,19 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
       case 'seasonal-campaigns':
       case 'seasonal-analytics':
         return <SeasonalCategoriesContent />;
-      // Product moderation routes
+      // Product moderation routes - ENHANCED ROUTING
       case 'product-moderation':
       case 'pending-approval':
+        console.log('✅ Routing to PendingApprovalContent');
         return <PendingApprovalContent />;
       case 'content-review':
+        console.log('✅ Routing to ContentReviewContent');
         return <ContentReviewContent />;
       case 'quality-control':
+        console.log('✅ Routing to QualityControlContent');
         return <QualityControlContent />;
       case 'rejected-products':
+        console.log('✅ Routing to RejectedProductsContent');
         return <RejectedProductsContent />;
       case 'inventory-management':
       case 'stock-levels':
@@ -278,6 +282,8 @@ export const ProductManagementContent: React.FC<ProductManagementContentProps> =
           </div>
         );
       default:
+        console.log('⚠️ ProductManagementContent - no matching submenu found for:', selectedSubmenu);
+        console.log('⚠️ Falling back to product catalog');
         return renderProductCatalog();
     }
   };

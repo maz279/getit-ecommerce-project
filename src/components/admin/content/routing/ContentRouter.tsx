@@ -67,10 +67,15 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     return <DashboardContent selectedSubmenu={submenu} />;
   }
 
-  // Handle product management
+  // Handle product management - ENHANCED WITH BETTER DETECTION
   if (selectedMenu === 'product-management' || selectedMenu === 'products' || 
-      selectedMenu.startsWith('product-') || productSubmenus.includes(selectedMenu)) {
+      selectedMenu.startsWith('product-') || selectedMenu.startsWith('category-') ||
+      selectedMenu === 'pending-approval' || selectedMenu === 'content-review' ||
+      selectedMenu === 'quality-control' || selectedMenu === 'rejected-products' ||
+      productSubmenus.includes(selectedMenu)) {
     console.log('✅ PRODUCT MANAGEMENT - routing to ProductManagementContent');
+    console.log('🔍 Selected menu for product management:', selectedMenu);
+    console.log('🔍 Selected submenu for product management:', selectedSubmenu);
     const submenu = productSubmenus.includes(selectedMenu) ? selectedMenu : selectedSubmenu;
     return <ProductManagementContent selectedSubmenu={submenu} />;
   }
@@ -135,5 +140,6 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
 
   // Default fallback
   console.log('⚠️ No matching menu found, defaulting to dashboard overview');
+  console.log('⚠️ Received selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   return <DashboardContent selectedSubmenu="overview" />;
 };

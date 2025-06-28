@@ -89,9 +89,20 @@ export const usePayoutRequestForm = ({
         data.tax_deduction
       );
 
+      // Ensure all required fields are properly typed for PayoutRequestInsert
       const requestData: PayoutRequestInsert = {
-        ...data,
+        vendor_id: data.vendor_id,
+        request_amount: data.request_amount,
+        currency: data.currency,
+        payout_period_start: data.payout_period_start,
+        payout_period_end: data.payout_period_end,
+        payment_method: data.payment_method,
         net_payout_amount,
+        processing_fee: data.processing_fee || 0,
+        tax_deduction: data.tax_deduction || 0,
+        priority_level: data.priority_level,
+        notes: data.notes,
+        external_reference: data.external_reference,
         bank_account_details: data.bank_account_details ? JSON.stringify(data.bank_account_details) : null,
         mobile_banking_details: data.mobile_banking_details ? JSON.stringify(data.mobile_banking_details) : null
       };

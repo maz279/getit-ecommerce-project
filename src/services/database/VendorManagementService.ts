@@ -1,28 +1,32 @@
+
 import { supabase } from '@/integrations/supabase/client';
 
 export interface VendorData {
-  id?: string;
-  user_id: string;
+  id: string;
   business_name: string;
-  trade_license?: string;
+  contact_name: string;
+  email: string;
+  phone: string;
+  address: any;
+  business_type: string;
+  registration_number?: string;
+  tax_id?: string;
+  bank_details: any;
   status: 'pending' | 'approved' | 'suspended' | 'rejected';
-  commission_rate?: number;
   rating?: number;
   total_sales?: number;
-  phone?: string;
-  email?: string;
-  address?: any;
-  bank_details?: any;
+  commission_rate?: number;
   documents?: any[];
-  created_at?: string;
-  updated_at?: string;
+  verification_status?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface VendorCommissionData {
   id?: string;
   vendor_id: string;
-  order_id?: string;
-  product_id?: string;
+  order_id: string;
+  product_id: string;
   gross_amount: number;
   commission_rate: number;
   commission_amount: number;
@@ -37,28 +41,25 @@ export interface VendorCommissionData {
   updated_at?: string;
 }
 
-export interface VendorRatingData {
-  id?: string;
+export interface VendorPerformanceReport {
   vendor_id: string;
-  overall_rating?: number;
-  total_reviews?: number;
-  service_quality?: number;
-  delivery_speed?: number;
-  communication?: number;
-  product_quality?: number;
-  rating_breakdown?: any;
-  updated_at?: string;
-  created_at?: string;
+  period_start: string;
+  period_end: string;
+  total_orders: number;
+  total_revenue: number;
+  average_rating: number;
+  return_rate: number;
+  performance_score: number;
 }
 
 export class VendorManagementService {
-  // Vendor Management
+  // Vendor CRUD Operations
   static async getVendors(filters?: {
     status?: string;
     rating_min?: number;
-    date_from?: string;
-    date_to?: string;
+    search?: string;
     limit?: number;
+    offset?: number;
   }): Promise<VendorData[]> {
     let query = supabase
       .from('vendors')
@@ -71,26 +72,33 @@ export class VendorManagementService {
     if (filters?.rating_min) {
       query = query.gte('rating', filters.rating_min);
     }
-    if (filters?.date_from) {
-      query = query.gte('created_at', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('created_at', filters.date_to);
+    if (filters?.search) {
+      query = query.or(`business_name.ilike.%${filters.search}%,contact_name.ilike.%${filters.search}%,email.ilike.%${filters.search}%`);
     }
     if (filters?.limit) {
       query = query.limit(filters.limit);
     }
+    if (filters?.offset) {
+      query = query.range(filters.offset, (filters.offset + (filters.limit || 50)) - 1);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
-    
-    return (data || []).map(item => ({
-      ...item,
-      status: item.status as 'pending' | 'approved' | 'suspended' | 'rejected'
-    })) as VendorData[];
+    return (data || []) as VendorData[];
   }
 
-  static async createVendor(vendor: VendorData): Promise<VendorData> {
+  static async getVendorById(id: string): Promise<VendorData | null> {
+    const { data, error } = await supabase
+      .from('vendors')
+      .select('*')
+      .eq('id', id)
+      .maybeSingle();
+
+    if (error) throw error;
+    return data as VendorData | null;
+  }
+
+  static async createVendor(vendor: Omit<VendorData, 'id' | 'created_at' | 'updated_at'>): Promise<VendorData> {
     const { data, error } = await supabase
       .from('vendors')
       .insert(vendor)
@@ -98,10 +106,7 @@ export class VendorManagementService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      status: data.status as 'pending' | 'approved' | 'suspended' | 'rejected'
-    } as VendorData;
+    return data as VendorData;
   }
 
   static async updateVendor(id: string, updates: Partial<VendorData>): Promise<VendorData> {
@@ -113,10 +118,16 @@ export class VendorManagementService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      status: data.status as 'pending' | 'approved' | 'suspended' | 'rejected'
-    } as VendorData;
+    return data as VendorData;
+  }
+
+  static async deleteVendor(id: string): Promise<void> {
+    const { error } = await supabase
+      .from('vendors')
+      .delete()
+      .eq('id', id);
+
+    if (error) throw error;
   }
 
   // Commission Management
@@ -126,11 +137,12 @@ export class VendorManagementService {
     date_from?: string;
     date_to?: string;
     limit?: number;
+    offset?: number;
   }): Promise<VendorCommissionData[]> {
     let query = supabase
       .from('vendor_commissions')
       .select('*')
-      .order('transaction_date', { ascending: false });
+      .order('created_at', { ascending: false });
 
     if (filters?.vendor_id) {
       query = query.eq('vendor_id', filters.vendor_id);
@@ -147,14 +159,13 @@ export class VendorManagementService {
     if (filters?.limit) {
       query = query.limit(filters.limit);
     }
+    if (filters?.offset) {
+      query = query.range(filters.offset, (filters.offset + (filters.limit || 50)) - 1);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
-    
-    return (data || []).map(item => ({
-      ...item,
-      status: item.status as 'pending' | 'approved' | 'paid' | 'disputed'
-    })) as VendorCommissionData[];
+    return (data || []) as VendorCommissionData[];
   }
 
   static async createCommission(commission: VendorCommissionData): Promise<VendorCommissionData> {
@@ -172,7 +183,10 @@ export class VendorManagementService {
       transaction_date: commission.transaction_date || new Date().toISOString().split('T')[0],
       status: commission.status || 'pending',
       payout_batch_id: commission.payout_batch_id,
-      notes: commission.notes
+      notes: commission.notes,
+      // Add required fields that are missing
+      commission_type: 'percentage', // Default commission type
+      transaction_id: commission.order_id // Use order_id as transaction_id
     };
 
     const { data, error } = await supabase
@@ -182,47 +196,39 @@ export class VendorManagementService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      status: data.status as 'pending' | 'approved' | 'paid' | 'disputed'
-    } as VendorCommissionData;
+    return data as VendorCommissionData;
   }
 
-  // Performance Reports
+  // Performance Analytics
   static async getPerformanceReports(filters?: {
     vendor_id?: string;
-    date_from?: string;
-    date_to?: string;
-    limit?: number;
-  }): Promise<any[]> {
+    period_start?: string;
+    period_end?: string;
+  }): Promise<VendorPerformanceReport[]> {
     let query = supabase
-      .from('commission_analytics')
+      .from('vendor_performance_reports')
       .select('*')
-      .order('analytics_date', { ascending: false });
+      .order('period_start', { ascending: false });
 
     if (filters?.vendor_id) {
       query = query.eq('vendor_id', filters.vendor_id);
     }
-    if (filters?.date_from) {
-      query = query.gte('analytics_date', filters.date_from);
+    if (filters?.period_start) {
+      query = query.gte('period_start', filters.period_start);
     }
-    if (filters?.date_to) {
-      query = query.lte('analytics_date', filters.date_to);
-    }
-    if (filters?.limit) {
-      query = query.limit(filters.limit);
+    if (filters?.period_end) {
+      query = query.lte('period_end', filters.period_end);
     }
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    return (data || []) as VendorPerformanceReport[];
   }
 
-  // Vendor Analytics
   static async getVendorAnalytics(vendorId: string, period: string = '30d'): Promise<any> {
     const endDate = new Date();
     const startDate = new Date();
-    
+
     switch (period) {
       case '7d':
         startDate.setDate(endDate.getDate() - 7);
@@ -233,66 +239,57 @@ export class VendorManagementService {
       case '90d':
         startDate.setDate(endDate.getDate() - 90);
         break;
+      case '1y':
+        startDate.setFullYear(endDate.getFullYear() - 1);
+        break;
     }
 
-    const { data: commissions, error } = await supabase
+    // Get commission data for the period
+    const { data: commissions, error: commissionError } = await supabase
       .from('vendor_commissions')
       .select('*')
       .eq('vendor_id', vendorId)
       .gte('transaction_date', startDate.toISOString().split('T')[0])
       .lte('transaction_date', endDate.toISOString().split('T')[0]);
 
-    if (error) throw error;
+    if (commissionError) throw commissionError;
 
+    // Calculate analytics
     const totalCommissions = commissions?.reduce((sum, c) => sum + (c.commission_amount || 0), 0) || 0;
-    const totalSales = commissions?.reduce((sum, c) => sum + (c.gross_amount || 0), 0) || 0;
-    const totalOrders = commissions?.length || 0;
+    const totalRevenue = commissions?.reduce((sum, c) => sum + (c.gross_amount || 0), 0) || 0;
+    const averageCommission = commissions?.length ? totalCommissions / commissions.length : 0;
 
     return {
-      totalCommissions,
-      totalSales,
-      totalOrders,
-      averageOrderValue: totalOrders > 0 ? totalSales / totalOrders : 0,
       period,
       startDate: startDate.toISOString(),
-      endDate: endDate.toISOString()
+      endDate: endDate.toISOString(),
+      totalCommissions,
+      totalRevenue,
+      averageCommission,
+      transactionCount: commissions?.length || 0,
+      commissionRate: totalRevenue > 0 ? (totalCommissions / totalRevenue) * 100 : 0
     };
   }
 
-  // Vendor Ratings
-  static async getVendorRatings(filters?: {
-    vendor_id?: string;
-    rating_min?: number;
-    limit?: number;
-  }): Promise<VendorRatingData[]> {
-    let query = supabase
-      .from('vendor_ratings')
-      .select('*')
-      .order('updated_at', { ascending: false });
-
-    if (filters?.vendor_id) {
-      query = query.eq('vendor_id', filters.vendor_id);
-    }
-    if (filters?.rating_min) {
-      query = query.gte('overall_rating', filters.rating_min);
-    }
-    if (filters?.limit) {
-      query = query.limit(filters.limit);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return (data || []) as VendorRatingData[];
+  // Vendor Status Management
+  static async approveVendor(vendorId: string, approvedBy: string): Promise<VendorData> {
+    return await this.updateVendor(vendorId, {
+      status: 'approved',
+      updated_at: new Date().toISOString()
+    });
   }
 
-  static async updateVendorRating(vendorId: string, ratingData: Partial<VendorRatingData>): Promise<VendorRatingData> {
-    const { data, error } = await supabase
-      .from('vendor_ratings')
-      .upsert({ vendor_id: vendorId, ...ratingData })
-      .select()
-      .single();
+  static async suspendVendor(vendorId: string, reason: string): Promise<VendorData> {
+    return await this.updateVendor(vendorId, {
+      status: 'suspended',
+      updated_at: new Date().toISOString()
+    });
+  }
 
-    if (error) throw error;
-    return data as VendorRatingData;
+  static async rejectVendor(vendorId: string, reason: string): Promise<VendorData> {
+    return await this.updateVendor(vendorId, {
+      status: 'rejected',
+      updated_at: new Date().toISOString()
+    });
   }
 }

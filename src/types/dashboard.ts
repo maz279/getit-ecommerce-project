@@ -28,6 +28,15 @@ export interface SystemHealthLog {
   metadata?: any;
   recorded_at: string;
   created_at: string;
+  // Additional properties expected by components
+  health_status?: 'healthy' | 'warning' | 'critical' | 'down';
+  service_type?: string;
+  success_rate?: number;
+  cpu_usage?: number;
+  memory_usage?: number;
+  last_check?: string;
+  uptime_seconds?: number;
+  error_count?: number;
 }
 
 export interface SecurityEvent {

@@ -185,10 +185,6 @@ export const useDashboardSearch = (searchTerm: string) => {
     queryKey: ['dashboard-search', searchTerm],
     queryFn: () => DashboardService.searchDashboardData(searchTerm),
     enabled: searchTerm.length > 0,
-    select: (data) => ({
-      data: data || [],
-      searchResults: data || []
-    })
   });
 };
 

@@ -932,6 +932,57 @@ export type Database = {
         }
         Relationships: []
       }
+      order_analytics: {
+        Row: {
+          analytics_date: string
+          average_order_value: number | null
+          cancelled_orders: number | null
+          created_at: string
+          failed_orders: number | null
+          geographic_data: Json | null
+          id: string
+          order_categories: Json | null
+          payment_methods: Json | null
+          pending_orders: number | null
+          successful_orders: number | null
+          total_orders: number | null
+          total_revenue: number | null
+          updated_at: string
+        }
+        Insert: {
+          analytics_date?: string
+          average_order_value?: number | null
+          cancelled_orders?: number | null
+          created_at?: string
+          failed_orders?: number | null
+          geographic_data?: Json | null
+          id?: string
+          order_categories?: Json | null
+          payment_methods?: Json | null
+          pending_orders?: number | null
+          successful_orders?: number | null
+          total_orders?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+        }
+        Update: {
+          analytics_date?: string
+          average_order_value?: number | null
+          cancelled_orders?: number | null
+          created_at?: string
+          failed_orders?: number | null
+          geographic_data?: Json | null
+          id?: string
+          order_categories?: Json | null
+          payment_methods?: Json | null
+          pending_orders?: number | null
+          successful_orders?: number | null
+          total_orders?: number | null
+          total_revenue?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       order_items: {
         Row: {
           created_at: string
@@ -1743,6 +1794,54 @@ export type Database = {
           status_code?: number | null
           success_count?: number | null
           throughput_per_second?: number | null
+        }
+        Relationships: []
+      }
+      platform_metrics: {
+        Row: {
+          active_users: number | null
+          api_calls_count: number | null
+          average_response_time: number | null
+          backup_status: string | null
+          cdn_cache_hit_rate: number | null
+          created_at: string
+          database_performance: Json | null
+          error_rate: number | null
+          id: string
+          metric_date: string
+          security_incidents: number | null
+          server_load_percentage: number | null
+          uptime_percentage: number | null
+        }
+        Insert: {
+          active_users?: number | null
+          api_calls_count?: number | null
+          average_response_time?: number | null
+          backup_status?: string | null
+          cdn_cache_hit_rate?: number | null
+          created_at?: string
+          database_performance?: Json | null
+          error_rate?: number | null
+          id?: string
+          metric_date?: string
+          security_incidents?: number | null
+          server_load_percentage?: number | null
+          uptime_percentage?: number | null
+        }
+        Update: {
+          active_users?: number | null
+          api_calls_count?: number | null
+          average_response_time?: number | null
+          backup_status?: string | null
+          cdn_cache_hit_rate?: number | null
+          created_at?: string
+          database_performance?: Json | null
+          error_rate?: number | null
+          id?: string
+          metric_date?: string
+          security_incidents?: number | null
+          server_load_percentage?: number | null
+          uptime_percentage?: number | null
         }
         Relationships: []
       }

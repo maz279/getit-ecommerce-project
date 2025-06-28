@@ -1,284 +1,124 @@
 
-// Centralized routing utilities for admin dashboard
-
 // Dashboard submenus
 export const dashboardSubmenus = [
-  'overview', 'analytics', 'reports', 'metrics', 'real-time-metrics', 'realtime-metrics',
-  'kpi-monitoring', 'kpi_monitoring', 'performance-insights', 'performance_insights',
-  'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights',
-  'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring',
+  'overview', 'analytics', 'reports', 'real-time-metrics', 'realtime-metrics', 'metrics',
+  'kpi-monitoring', 'kpi_monitoring', 'performance-insights', 'performance_insights', 
+  'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights', 
+  'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring', 
   'system-logs', 'quick-actions', 'executive-summary'
 ];
 
-// User Management submenus
+// User management submenus
 export const userManagementSubmenus = [
-  'admin-users', 'user-roles', 'permissions', 'user-analytics', 'admin-list',
-  'role-management', 'activity-logs', 'activity-reports', 'registration-trends',
-  'demographics', 'user-permissions', 'access-control', 'user-sessions',
-  'security-logs', 'audit-trail'
+  'admin-users', 'user-analytics', 'user-permissions', 'role-management', 'user-activity-logs',
+  'user-reports', 'access-control', 'user-security', 'user-overview', 'active-users',
+  'inactive-users', 'banned-users', 'user-verification', 'user-settings'
 ];
 
-// Sales Management submenus
+// Sales management submenus
 export const salesManagementSubmenus = [
-  'sales-overview', 'revenue-analytics', 'sales-reports', 'export-data',
-  'daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-dashboard',
-  'sales-targets', 'performance-metrics', 'conversion-analytics',
-  'customer-acquisition', 'sales-forecasting', 'territory-management'
+  'sales-overview', 'daily-sales', 'monthly-trends', 'yearly-reports', 'revenue-analytics', 
+  'revenue-dashboard', 'sales-forecast', 'profit-margins', 'cost-analysis', 'roi-tracking', 
+  'sales-reports', 'detailed-reports', 'summary-reports', 'comparative-analysis', 'export-data'
 ];
 
-// Order Management submenus
+// Order management submenus
 export const orderManagementSubmenus = [
-  'order-overview', 'order-processing', 'order-tracking', 'refund-processing',
-  'bulk-actions', 'order-reports', 'payment-methods', 'performance-metrics',
-  'all-orders', 'pending-orders', 'completed-orders', 'cancelled-orders',
-  'order-analytics', 'shipping-management', 'delivery-tracking'
+  'order-overview', 'all-orders', 'pending-orders', 'confirmed-orders', 'processing-orders', 
+  'shipped-orders', 'delivered-orders', 'cancelled-orders', 'returned-orders', 'order-tracking', 
+  'live-tracking', 'delivery-status', 'shipment-updates', 'returns-refunds', 'return-requests', 
+  'refund-processing', 'refund-management', 'exchange-requests', 'order-analytics', 'order-reports', 
+  'performance-reports', 'performance-metrics', 'fulfillment-center', 'order-search', 
+  'order-timeline', 'bulk-actions', 'bulk', 'new-orders', 'order-processing', 'payment-status', 
+  'payment-management', 'payment-gateway', 'transaction-monitoring', 'payment-analytics', 
+  'payment-disputes', 'payment-methods', 'failed-payments'
 ];
 
-// Logistics Management submenus
+// Logistics management submenus
 export const logisticsManagementSubmenus = [
-  'logistics-overview', 'delivery-tracking', 'shipping-zones', 'delivery-performance',
-  'courier-management', 'warehouse-operations', 'inventory-tracking',
-  'supply-chain', 'transportation-analytics', 'route-optimization',
-  'cost-analysis', 'delivery-analytics'
+  'logistics-overview', 'shipping-management', 'warehouse-operations', 'courier-partners', 
+  'shipping-rates', 'delivery-zones', 'shipping-zones', 'shipping-analytics', 'pick-pack-operations', 
+  'delivery-tracking', 'shipping-labels', 'return-logistics', 'delivery-performance'
 ];
 
-// Product Management submenus
+// Product management submenus
 export const productManagementSubmenus = [
-  'product-catalog', 'category-structure', 'inventory-management', 
-  'featured-products', 'product-search', 'import-export', 'all-products',
-  'stock-overview', 'inventory-overview', 'pending-approval', 'content-review',
-  'quality-control', 'rejected-products', 'product-moderation', 'best-sellers',
-  'market-trends', 'low-stock-alerts', 'inventory-reports', 'warehouse-management',
-  'category-performance', 'category-analytics', 'seasonal-categories',
-  'product-analytics', 'add-product', 'bulk-operations'
+  'product-catalog', 'all-products', 'inventory-management', 'product-analytics', 'add-product', 
+  'bulk-upload', 'product-categories', 'stock-levels', 'low-stock-alerts', 'reorder-points', 
+  'warehouse-management', 'warehouse-operations', 'warehouse-analytics', 'best-sellers', 'best-seller', 
+  'top-selling', 'bestsellers', 'product-performance', 'trending-products', 'price-optimization', 
+  'product-search', 'featured-products', 'import-export', 'product-import', 'product-export', 
+  'bulk-operations', 'category-management', 'category-structure', 'category-hierarchy', 
+  'category-attributes', 'category-rules', 'category-analytics', 'category-seo', 'category-performance', 
+  'seasonal-categories', 'seasonal-category-management', 'seasonal-campaigns', 'seasonal-analytics',
+  'product-moderation', 'pending-approval', 'content-review', 'quality-control', 'rejected-products',
+  'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics',
+  'low-stock', 'reorder-alerts', 'inventory-reports', 'stock-reports', 'inventory-analytics',
+  'market-trends', 'market-trend', 'trends', 'trend-analysis', 'market-analysis'
 ];
 
-// Customer Management submenus
+// Customer management submenus
 export const customerManagementSubmenus = [
-  'customer-database', 'customer-analytics', 'customer-support', 'live-chat',
-  'customer-segments', 'vip-customers', 'customer-behavior', 'all-customers',
-  'customer-search', 'purchase-history', 'loyalty-analysis', 'customer-lifetime-value',
-  'feedback-reviews', 'customer-insights', 'customer-retention', 'customer-acquisition',
-  'customer-satisfaction', 'customer-engagement', 'demographics-customer', 'support-tickets'
+  'customer-database', 'customer-analytics', 'customer-support', 'all-customers', 'customer-segments', 
+  'vip-customers', 'customer-search', 'customer-behavior', 'purchase-history', 'loyalty-analysis', 
+  'customer-lifetime-value', 'support-tickets', 'live-chat', 'feedback-reviews',
+  'customer-overview', 'customer-insights', 'customer-engagement', 'customer-retention',
+  'customer-acquisition', 'customer-satisfaction', 'customer-preferences', 'customer-demographics'
 ];
 
-// Vendor Management submenus
+// Vendor management submenus
 export const vendorManagementSubmenus = [
-  'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding',
-  'vendor-verification', 'vendor-performance', 'vendor-support', 'vendor-search',
-  'vendor-scorecard', 'active-vendors', 'pending-applications', 'suspended-vendors',
-  'nid-verification', 'tin-verification', 'trade-license-verification',
-  'bank-account-verification', 'document-review', 'vendor-payments',
-  'commission-tracking', 'payout-processing', 'revenue-sharing',
-  'performance-reports', 'performance-metrics', 'rating-management'
+  'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding', 'vendor-verification', 
+  'vendor-performance', 'vendor-sales', 'commission-tracking', 'payout-management', 'vendor-ratings',
+  'active-vendors', 'pending-applications', 'suspended-vendors', 'vendor-search', 'vendor-support',
+  'vendor-scorecard', 'vendor-performance-metrics', 'vendor-performance-reports', 'vendor-payments',
+  'payout-processing', 'revenue-sharing', 'nid-verification', 'tin-verification', 'trade-license-verification',
+  'bank-account-verification', 'document-review', 'rating-management'
 ];
 
 // Marketing submenus
 export const marketingSubmenus = [
-  'campaigns', 'email-marketing', 'social-media', 'advertising',
-  'promotions', 'discounts', 'loyalty-programs', 'referral-programs',
-  'content-marketing', 'seo-optimization', 'marketing-analytics',
-  'campaign-performance', 'lead-generation', 'conversion-tracking'
+  'campaigns', 'promotions', 'email-marketing', 'active-campaigns', 'create-campaign', 'campaign-analytics', 
+  'a-b-testing', 'discount-codes', 'flash-sales', 'seasonal-offers', 'bundle-deals', 'email-campaigns', 
+  'newsletter-management', 'automated-emails', 'social-media', 'content-marketing', 'influencer-marketing',
+  'affiliate-marketing', 'seo-management', 'ppc-campaigns', 'brand-management', 'customer-acquisition'
 ];
 
 // Analytics submenus
 export const analyticsSubmenus = [
-  'business-intelligence', 'performance-dashboard', 'data-visualization',
-  'custom-reports', 'predictive-analytics', 'user-behavior', 'conversion-analytics',
-  'revenue-insights', 'market-analysis', 'competitive-analysis',
-  'trend-analysis', 'forecasting', 'data-export'
+  'business-intelligence', 'financial-reports', 'operational-reports', 'executive-dashboard', 'key-metrics', 
+  'trend-analysis', 'predictive-analytics', 'profit-loss', 'cash-flow', 'tax-reports', 'audit-reports', 
+  'inventory-reports', 'shipping-reports', 'performance-reports', 'customer-analytics', 'sales-analytics',
+  'marketing-analytics', 'web-analytics', 'conversion-analytics', 'cohort-analysis', 'funnel-analysis'
 ];
 
-// Payment Management submenus
+// Payment management submenus
 export const paymentManagementSubmenus = [
-  'payment-processing', 'transaction-monitoring', 'payment-gateways',
-  'refund-management', 'chargeback-handling', 'payment-analytics',
-  'billing-management', 'subscription-management', 'payment-methods',
-  'fraud-detection', 'compliance-monitoring', 'financial-reporting'
+  'payment-processing', 'financial-management', 'transaction-monitoring', 'payment-gateways', 
+  'failed-payments', 'payment-analytics', 'revenue-tracking', 'expense-management', 'budget-planning', 
+  'financial-forecasting', 'billing-management', 'invoice-management', 'subscription-management',
+  'refund-management', 'chargeback-management', 'fraud-detection', 'compliance-monitoring'
 ];
 
 // Communications submenus
 export const communicationsSubmenus = [
-  'notifications', 'email-templates', 'sms-management', 'push-notifications',
-  'announcement-system', 'customer-communications', 'vendor-communications',
-  'automated-messaging', 'communication-logs', 'template-management',
-  'broadcast-messages', 'communication-analytics'
+  'notifications', 'messaging', 'system-notifications', 'push-notifications', 'email-notifications', 
+  'sms-notifications', 'customer-messages', 'vendor-communications', 'broadcast-messages',
+  'communication-templates', 'automated-messaging', 'chat-support', 'help-desk', 'announcement-center'
 ];
 
 // Security submenus
 export const securitySubmenus = [
-  'security-monitoring', 'access-control', 'audit-logs', 'threat-detection',
-  'vulnerability-assessment', 'security-policies', 'compliance-management',
-  'data-protection', 'incident-response', 'security-analytics',
-  'authentication', 'authorization', 'security-reports'
+  'security-monitoring', 'compliance', 'threat-detection', 'fraud-prevention', 'access-logs', 
+  'security-alerts', 'data-protection', 'privacy-settings', 'audit-trails', 'compliance-reports',
+  'vulnerability-assessment', 'security-policies', 'incident-response', 'user-authentication',
+  'encryption-management', 'backup-management', 'disaster-recovery'
 ];
 
 // Settings submenus
 export const settingsSubmenus = [
-  'system-settings', 'user-preferences', 'platform-configuration',
-  'api-management', 'integration-settings', 'backup-restore',
-  'maintenance-mode', 'performance-optimization', 'database-management',
-  'cache-management', 'log-management', 'environment-variables'
+  'system-settings', 'platform-configuration', 'general-settings', 'user-management', 'role-permissions', 
+  'api-configuration', 'store-settings', 'payment-configuration', 'shipping-configuration', 'tax-settings',
+  'notification-settings', 'email-settings', 'sms-settings', 'integration-settings', 'backup-settings',
+  'maintenance-mode', 'system-logs', 'database-settings', 'cache-settings', 'performance-settings'
 ];
-
-export const getMenuTitle = (menuId: string): string => {
-  const titles: Record<string, string> = {
-    // Dashboard titles
-    'overview': 'Dashboard Overview',
-    'analytics': 'Analytics Dashboard',
-    'reports': 'Reports',
-    'metrics': 'Metrics',
-    'real-time-metrics': 'Real-time Metrics',
-    'realtime-metrics': 'Real-time Metrics',
-    'kpi-monitoring': 'KPI Monitoring',
-    'kpi_monitoring': 'KPI Monitoring',
-    'performance-insights': 'Performance Insights',
-    'performance_insights': 'Performance Insights',
-    'revenue-analytics': 'Revenue Analytics',
-    'user-activity': 'User Activity',
-    'vendor-performance': 'Vendor Performance',
-    'order-insights': 'Order Insights',
-    'inventory-alerts': 'Inventory Alerts',
-    'platform-performance': 'Platform Performance',
-    'system-health': 'System Health',
-    'security-monitoring': 'Security Monitoring',
-    'system-logs': 'System Logs',
-    'quick-actions': 'Quick Actions',
-    'executive-summary': 'Executive Summary',
-    
-    // User Management titles
-    'admin-users': 'Admin Users',
-    'admin-list': 'Admin List',
-    'user-roles': 'User Roles',
-    'role-management': 'Role Management',
-    'permissions': 'Permissions',
-    'user-analytics': 'User Analytics',
-    'activity-logs': 'Activity Logs',
-    'activity-reports': 'Activity Reports',
-    'registration-trends': 'Registration Trends',
-    'demographics': 'Demographics',
-    'demographics-customer': 'Customer Demographics',
-    'user-permissions': 'User Permissions',
-    'access-control': 'Access Control',
-    'user-sessions': 'User Sessions',
-    'security-logs': 'Security Logs',
-    'audit-trail': 'Audit Trail',
-    
-    // Sales Management titles
-    'sales-overview': 'Sales Overview',
-    'sales-reports': 'Sales Reports',
-    'export-data': 'Export Data',
-    'daily-sales': 'Daily Sales',
-    'monthly-trends': 'Monthly Trends',
-    'yearly-reports': 'Yearly Reports',
-    'revenue-dashboard': 'Revenue Dashboard',
-    'sales-targets': 'Sales Targets',
-    'conversion-analytics': 'Conversion Analytics',
-    'customer-acquisition': 'Customer Acquisition',
-    'sales-forecasting': 'Sales Forecasting',
-    'territory-management': 'Territory Management',
-    
-    // Order Management titles
-    'order-overview': 'Order Overview',
-    'order-processing': 'Order Processing',
-    'order-tracking': 'Order Tracking',
-    'refund-processing': 'Refund Processing',
-    'bulk-actions': 'Bulk Actions',
-    'order-reports': 'Order Reports',
-    'payment-methods': 'Payment Methods',
-    'performance-metrics': 'Performance Metrics',
-    'all-orders': 'All Orders',
-    'pending-orders': 'Pending Orders',
-    'completed-orders': 'Completed Orders',
-    'cancelled-orders': 'Cancelled Orders',
-    'order-analytics': 'Order Analytics',
-    'shipping-management': 'Shipping Management',
-    'delivery-tracking': 'Delivery Tracking',
-    
-    // Logistics Management titles
-    'logistics-overview': 'Logistics Overview',
-    'delivery-performance': 'Delivery Performance',
-    'shipping-zones': 'Shipping Zones',
-    'courier-management': 'Courier Management',
-    'warehouse-operations': 'Warehouse Operations',
-    'inventory-tracking': 'Inventory Tracking',
-    'supply-chain': 'Supply Chain',
-    'transportation-analytics': 'Transportation Analytics',
-    'route-optimization': 'Route Optimization',
-    'cost-analysis': 'Cost Analysis',
-    'delivery-analytics': 'Delivery Analytics',
-    
-    // Product Management titles
-    'product-catalog': 'Product Catalog',
-    'category-structure': 'Category Structure',
-    'inventory-management': 'Inventory Management',
-    'featured-products': 'Featured Products',
-    'product-search': 'Product Search',
-    'import-export': 'Import/Export',
-    'all-products': 'All Products',
-    'stock-overview': 'Stock Overview',
-    'inventory-overview': 'Inventory Overview',
-    'pending-approval': 'Pending Approval',
-    'content-review': 'Content Review',
-    'quality-control': 'Quality Control',
-    'rejected-products': 'Rejected Products',
-    'product-moderation': 'Product Moderation',
-    'best-sellers': 'Best Sellers',
-    'market-trends': 'Market Trends',
-    'low-stock-alerts': 'Low Stock Alerts',
-    'inventory-reports': 'Inventory Reports',
-    'warehouse-management': 'Warehouse Management',
-    'category-performance': 'Category Performance',
-    'category-analytics': 'Category Analytics',
-    'seasonal-categories': 'Seasonal Categories',
-    'product-analytics': 'Product Analytics',
-    'add-product': 'Add Product',
-    'bulk-operations': 'Bulk Operations',
-    
-    // Customer Management titles
-    'customer-database': 'Customer Database',
-    'customer-analytics': 'Customer Analytics',
-    'customer-support': 'Customer Support',
-    'live-chat': 'Live Chat',
-    'customer-segments': 'Customer Segments',
-    'vip-customers': 'VIP Customers',
-    'customer-behavior': 'Customer Behavior',
-    'all-customers': 'All Customers',
-    'customer-search': 'Customer Search',
-    'purchase-history': 'Purchase History',
-    'loyalty-analysis': 'Loyalty Analysis',
-    'customer-lifetime-value': 'Customer Lifetime Value',
-    'feedback-reviews': 'Feedback & Reviews',
-    'customer-insights': 'Customer Insights',
-    'customer-retention': 'Customer Retention',
-    'customer-satisfaction': 'Customer Satisfaction',
-    'customer-engagement': 'Customer Engagement',
-    'support-tickets': 'Support Tickets',
-    
-    // Vendor Management titles
-    'vendor-directory': 'Vendor Directory',
-    'vendor-analytics': 'Vendor Analytics',
-    'all-vendors': 'All Vendors',
-    'vendor-onboarding': 'Vendor Onboarding',
-    'vendor-verification': 'Vendor Verification',
-    'vendor-support': 'Vendor Support',
-    'vendor-search': 'Vendor Search',
-    'vendor-scorecard': 'Vendor Scorecard',
-    'active-vendors': 'Active Vendors',
-    'pending-applications': 'Pending Applications',
-    'suspended-vendors': 'Suspended Vendors',
-    'nid-verification': 'NID Verification',
-    'tin-verification': 'TIN Verification',
-    'trade-license-verification': 'Trade License Verification',
-    'bank-account-verification': 'Bank Account Verification',
-    'document-review': 'Document Review',
-    'vendor-payments': 'Vendor Payments',
-    'commission-tracking': 'Commission Tracking',
-    'payout-processing': 'Payout Processing',
-    'revenue-sharing': 'Revenue Sharing',
-    'performance-reports': 'Performance Reports',
-    'rating-management': 'Rating Management'
-  };
-  
-  return titles[menuId] || menuId.replace(/-/g, ' ').replace(/\b\w/g, l => l.toUpperCase());
-};

@@ -1,20 +1,21 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import { Database } from '@/integrations/supabase/types';
 
 export interface DashboardKPIMetric {
   id?: string;
   metric_name: string;
   metric_value: number;
+  metric_unit?: string;
   metric_category: string;
   time_period: string;
   comparison_value?: number;
   percentage_change?: number;
   trend_direction?: 'up' | 'down' | 'stable';
-  metric_unit?: string;
+  recorded_date: string;
   metadata?: any;
   created_by?: string;
-  recorded_date?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface SystemHealthLog {
@@ -28,9 +29,11 @@ export interface SystemHealthLog {
   disk_usage?: number;
   uptime_seconds?: number;
   error_count?: number;
+  last_check: string;
   error_details?: any;
   alerts_triggered?: any[];
   metadata?: any;
+  created_at?: string;
 }
 
 export interface SecurityEvent {
@@ -44,20 +47,28 @@ export interface SecurityEvent {
   event_details: any;
   is_blocked?: boolean;
   resolution_status?: 'open' | 'investigating' | 'resolved' | 'false_positive';
+  resolved_by?: string;
+  resolved_at?: string;
+  created_at?: string;
 }
 
 export interface ExecutiveReport {
   id?: string;
   report_title: string;
   report_type: string;
+  executive_summary: string;
   report_period_start: string;
   report_period_end: string;
-  executive_summary: string;
   key_metrics: any;
-  recommendations?: any[];
   charts_data?: any;
-  status?: 'draft' | 'published' | 'archived';
+  recommendations?: any[];
+  status?: 'draft' | 'reviewed' | 'approved' | 'published';
   created_by: string;
+  reviewed_by?: string;
+  approved_by?: string;
+  published_at?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 export interface QuickAction {
@@ -69,6 +80,8 @@ export interface QuickAction {
   parameters?: any;
   result_data?: any;
   executed_by: string;
+  started_at?: string;
+  completed_at?: string;
   execution_time_ms?: number;
   error_message?: string;
   created_at?: string;
@@ -76,14 +89,20 @@ export interface QuickAction {
 
 export class DashboardService {
   // KPI Metrics Management
-  static async getKPIMetrics(filters?: any): Promise<DashboardKPIMetric[]> {
+  static async getKPIMetrics(filters?: {
+    metric_category?: string;
+    time_period?: string;
+    date_from?: string;
+    date_to?: string;
+    limit?: number;
+  }): Promise<DashboardKPIMetric[]> {
     let query = supabase
       .from('dashboard_kpi_metrics')
       .select('*')
       .order('recorded_date', { ascending: false });
 
-    if (filters?.category) {
-      query = query.eq('metric_category', filters.category);
+    if (filters?.metric_category) {
+      query = query.eq('metric_category', filters.metric_category);
     }
     if (filters?.time_period) {
       query = query.eq('time_period', filters.time_period);
@@ -94,10 +113,17 @@ export class DashboardService {
     if (filters?.date_to) {
       query = query.lte('recorded_date', filters.date_to);
     }
+    if (filters?.limit) {
+      query = query.limit(filters.limit);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    return (data || []).map(item => ({
+      ...item,
+      trend_direction: item.trend_direction as 'up' | 'down' | 'stable'
+    })) as DashboardKPIMetric[];
   }
 
   static async createKPIMetric(metric: DashboardKPIMetric): Promise<DashboardKPIMetric> {
@@ -108,7 +134,10 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      trend_direction: data.trend_direction as 'up' | 'down' | 'stable'
+    } as DashboardKPIMetric;
   }
 
   static async updateKPIMetric(id: string, updates: Partial<DashboardKPIMetric>): Promise<DashboardKPIMetric> {
@@ -120,7 +149,10 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      trend_direction: data.trend_direction as 'up' | 'down' | 'stable'
+    } as DashboardKPIMetric;
   }
 
   static async deleteKPIMetric(id: string): Promise<void> {
@@ -145,7 +177,12 @@ export class DashboardService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    return (data || []).map(item => ({
+      ...item,
+      service_type: item.service_type as 'database' | 'api' | 'cache' | 'search' | 'payment' | 'notification',
+      health_status: item.health_status as 'healthy' | 'warning' | 'critical' | 'down'
+    })) as SystemHealthLog[];
   }
 
   static async createSystemHealthLog(log: SystemHealthLog): Promise<SystemHealthLog> {
@@ -156,11 +193,21 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      service_type: data.service_type as 'database' | 'api' | 'cache' | 'search' | 'payment' | 'notification',
+      health_status: data.health_status as 'healthy' | 'warning' | 'critical' | 'down'
+    } as SystemHealthLog;
   }
 
   // Security Events
-  static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
+  static async getSecurityEvents(filters?: {
+    event_type?: string;
+    severity_level?: string;
+    date_from?: string;
+    date_to?: string;
+    limit?: number;
+  }): Promise<SecurityEvent[]> {
     let query = supabase
       .from('security_events')
       .select('*')
@@ -172,28 +219,54 @@ export class DashboardService {
     if (filters?.severity_level) {
       query = query.eq('severity_level', filters.severity_level);
     }
-    if (filters?.resolution_status) {
-      query = query.eq('resolution_status', filters.resolution_status);
+    if (filters?.date_from) {
+      query = query.gte('created_at', filters.date_from);
+    }
+    if (filters?.date_to) {
+      query = query.lte('created_at', filters.date_to);
+    }
+    if (filters?.limit) {
+      query = query.limit(filters.limit);
     }
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    return (data || []).map(item => ({
+      ...item,
+      event_type: item.event_type as 'login_attempt' | 'failed_login' | 'suspicious_activity' | 'data_breach_attempt' | 'unauthorized_access' | 'password_reset',
+      severity_level: item.severity_level as 'low' | 'medium' | 'high' | 'critical',
+      resolution_status: item.resolution_status as 'open' | 'investigating' | 'resolved' | 'false_positive'
+    })) as SecurityEvent[];
   }
 
   static async createSecurityEvent(event: SecurityEvent): Promise<SecurityEvent> {
     const { data, error } = await supabase
       .from('security_events')
-      .insert(event)
+      .insert({
+        ...event,
+        ip_address: event.ip_address || null
+      })
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      event_type: data.event_type as 'login_attempt' | 'failed_login' | 'suspicious_activity' | 'data_breach_attempt' | 'unauthorized_access' | 'password_reset',
+      severity_level: data.severity_level as 'low' | 'medium' | 'high' | 'critical',
+      resolution_status: data.resolution_status as 'open' | 'investigating' | 'resolved' | 'false_positive'
+    } as SecurityEvent;
   }
 
   // Executive Reports
-  static async getExecutiveReports(filters?: any): Promise<ExecutiveReport[]> {
+  static async getExecutiveReports(filters?: {
+    report_type?: string;
+    status?: string;
+    date_from?: string;
+    date_to?: string;
+    limit?: number;
+  }): Promise<ExecutiveReport[]> {
     let query = supabase
       .from('executive_reports')
       .select('*')
@@ -205,10 +278,24 @@ export class DashboardService {
     if (filters?.status) {
       query = query.eq('status', filters.status);
     }
+    if (filters?.date_from) {
+      query = query.gte('created_at', filters.date_from);
+    }
+    if (filters?.date_to) {
+      query = query.lte('created_at', filters.date_to);
+    }
+    if (filters?.limit) {
+      query = query.limit(filters.limit);
+    }
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    return (data || []).map(item => ({
+      ...item,
+      recommendations: Array.isArray(item.recommendations) ? item.recommendations : [],
+      status: item.status as 'draft' | 'reviewed' | 'approved' | 'published'
+    })) as ExecutiveReport[];
   }
 
   static async createExecutiveReport(report: ExecutiveReport): Promise<ExecutiveReport> {
@@ -219,7 +306,11 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      recommendations: Array.isArray(data.recommendations) ? data.recommendations : [],
+      status: data.status as 'draft' | 'reviewed' | 'approved' | 'published'
+    } as ExecutiveReport;
   }
 
   // Quick Actions
@@ -235,22 +326,25 @@ export class DashboardService {
 
     const { data, error } = await query;
     if (error) throw error;
-    return data || [];
+    
+    return (data || []).map(item => ({
+      ...item,
+      execution_status: item.execution_status as 'pending' | 'running' | 'completed' | 'failed'
+    })) as QuickAction[];
   }
 
   static async createQuickAction(action: QuickAction): Promise<QuickAction> {
     const { data, error } = await supabase
       .from('quick_actions_log')
-      .insert({
-        ...action,
-        execution_status: action.execution_status || 'pending',
-        progress_percentage: action.progress_percentage || 0
-      })
+      .insert(action)
       .select()
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      execution_status: data.execution_status as 'pending' | 'running' | 'completed' | 'failed'
+    } as QuickAction;
   }
 
   static async updateQuickAction(id: string, updates: Partial<QuickAction>): Promise<QuickAction> {
@@ -262,209 +356,33 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return data;
+    return {
+      ...data,
+      execution_status: data.execution_status as 'pending' | 'running' | 'completed' | 'failed'
+    } as QuickAction;
   }
 
   // Real-time Analytics
-  static async getRealTimeAnalytics(filters?: any): Promise<any[]> {
-    let query = supabase
+  static async getRealTimeAnalytics(filters?: any): Promise<any> {
+    const { data, error } = await supabase
       .from('realtime_analytics')
       .select('*')
       .order('timestamp_recorded', { ascending: false })
-      .limit(100);
+      .limit(filters?.limit || 100);
 
-    if (filters?.metric_type) {
-      query = query.eq('metric_type', filters.metric_type);
-    }
-    if (filters?.user_id) {
-      query = query.eq('user_id', filters.user_id);
-    }
-
-    const { data, error } = await query;
     if (error) throw error;
     return data || [];
   }
 
   // Performance Metrics
-  static async getPerformanceMetrics(filters?: any): Promise<any[]> {
-    let query = supabase
+  static async getPerformanceMetrics(filters?: any): Promise<any> {
+    const { data, error } = await supabase
       .from('performance_metrics')
       .select('*')
-      .order('recorded_at', { ascending: false });
+      .order('recorded_at', { ascending: false })
+      .limit(filters?.limit || 100);
 
-    if (filters?.metric_category) {
-      query = query.eq('metric_category', filters.metric_category);
-    }
-    if (filters?.date_from) {
-      query = query.gte('recorded_at', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('recorded_at', filters.date_to);
-    }
-
-    const { data, error } = await query;
     if (error) throw error;
     return data || [];
-  }
-
-  // Vendor Management
-  static async getVendors(filters?: any): Promise<any[]> {
-    let query = supabase
-      .from('vendors')
-      .select(`
-        *,
-        vendor_ratings (
-          overall_rating,
-          total_reviews,
-          service_quality,
-          delivery_speed,
-          communication,
-          product_quality
-        )
-      `)
-      .order('created_at', { ascending: false });
-
-    if (filters?.status) {
-      query = query.eq('status', filters.status);
-    }
-    if (filters?.search) {
-      query = query.ilike('business_name', `%${filters.search}%`);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  static async getVendorPerformance(vendorId?: string): Promise<any[]> {
-    let query = supabase
-      .from('vendor_performance_reports')
-      .select('*')
-      .order('report_period_end', { ascending: false });
-
-    if (vendorId) {
-      query = query.eq('vendor_id', vendorId);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  // Order Analytics  
-  static async getOrderAnalytics(filters?: any): Promise<any[]> {
-    let query = supabase
-      .from('order_analytics')
-      .select('*')
-      .order('analytics_date', { ascending: false });
-
-    if (filters?.date_from) {
-      query = query.gte('analytics_date', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('analytics_date', filters.date_to);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  // Platform Metrics
-  static async getPlatformMetrics(filters?: any): Promise<any[]> {
-    let query = supabase
-      .from('platform_metrics')
-      .select('*')
-      .order('metric_date', { ascending: false });
-
-    if (filters?.date_from) {
-      query = query.gte('metric_date', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('metric_date', filters.date_to);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  // Commission Management
-  static async getCommissions(filters?: any): Promise<any[]> {
-    let query = supabase
-      .from('vendor_commissions')
-      .select(`
-        *,
-        vendors (
-          business_name,
-          email
-        ),
-        orders (
-          order_number,
-          total_amount
-        )
-      `)
-      .order('created_at', { ascending: false });
-
-    if (filters?.vendor_id) {
-      query = query.eq('vendor_id', filters.vendor_id);
-    }
-    if (filters?.status) {
-      query = query.eq('status', filters.status);
-    }
-    if (filters?.date_from) {
-      query = query.gte('transaction_date', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('transaction_date', filters.date_to);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  // Review Moderation
-  static async getReviewModeration(filters?: any): Promise<any[]> {
-    let query = supabase
-      .from('review_moderation')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (filters?.moderation_status) {
-      query = query.eq('moderation_status', filters.moderation_status);
-    }
-    if (filters?.priority_level) {
-      query = query.eq('priority_level', filters.priority_level);
-    }
-    if (filters?.vendor_id) {
-      query = query.eq('vendor_id', filters.vendor_id);
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-    return data || [];
-  }
-
-  static async updateReviewModerationStatus(
-    id: string, 
-    status: string, 
-    moderatorId: string, 
-    notes?: string
-  ): Promise<any> {
-    const { data, error } = await supabase
-      .from('review_moderation')
-      .update({
-        moderation_status: status,
-        moderator_id: moderatorId,
-        moderation_notes: notes,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', id)
-      .select()
-      .single();
-
-    if (error) throw error;
-    return data;
   }
 }

@@ -1,5 +1,39 @@
 
 // Centralized routing utilities for admin dashboard
+
+// Dashboard submenus
+export const dashboardSubmenus = [
+  'overview', 'analytics', 'reports', 'metrics'
+];
+
+// User Management submenus
+export const userManagementSubmenus = [
+  'admin-users', 'user-roles', 'permissions', 'user-analytics'
+];
+
+// Sales Management submenus
+export const salesManagementSubmenus = [
+  'sales-overview', 'revenue-analytics', 'sales-reports', 'export-data'
+];
+
+// Order Management submenus
+export const orderManagementSubmenus = [
+  'order-overview', 'order-processing', 'order-tracking', 'refund-processing',
+  'bulk-actions', 'order-reports', 'payment-methods', 'performance-metrics'
+];
+
+// Logistics Management submenus
+export const logisticsManagementSubmenus = [
+  'logistics-overview', 'delivery-tracking', 'shipping-zones', 'delivery-performance'
+];
+
+// Product Management submenus
+export const productManagementSubmenus = [
+  'product-catalog', 'category-structure', 'inventory-management', 
+  'featured-products', 'product-search', 'import-export', 'all-products'
+];
+
+// Vendor Management submenus
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding',
   'vendor-verification', 'vendor-performance', 'vendor-support', 'vendor-search',

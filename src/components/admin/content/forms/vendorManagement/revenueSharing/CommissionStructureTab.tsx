@@ -2,340 +2,210 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Badge } from '@/components/ui/badge';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { Settings, Percent, TrendingUp, Plus, Edit, Save } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Calculator, Settings, TrendingUp } from 'lucide-react';
 import { RevenueSharingService } from '@/services/database/revenue/RevenueSharingService';
-import { useToast } from '@/components/ui/use-toast';
-
-interface CommissionStructure {
-  id: string;
-  model_name: string;
-  model_type: string;
-  base_rate: number;
-  tier_structure: any[];
-  category_rates: any;
-  is_active: boolean;
-}
+import { CommissionStructure } from '@/types/revenue';
 
 export const CommissionStructureTab: React.FC = () => {
   const [structures, setStructures] = useState<CommissionStructure[]>([]);
-  const [selectedStructure, setSelectedStructure] = useState('tiered');
   const [loading, setLoading] = useState(true);
-  const [tierConfig, setTierConfig] = useState([
-    { min: 0, max: 50000, rate: 5.0 },
-    { min: 50000, max: 200000, rate: 4.0 },
-    { min: 200000, max: null, rate: 3.0 }
-  ]);
-  const [categoryConfig, setCategoryConfig] = useState({
-    electronics: 3.5,
-    fashion: 6.0,
-    home: 4.5,
-    books: 8.0
-  });
-  const [performanceConfig, setPerformanceConfig] = useState({
-    high: 3.0,
-    medium: 4.0,
-    low: 5.0,
-    poor: 6.0
-  });
-
-  const { toast } = useToast();
+  const [selectedCategory, setSelectedCategory] = useState('all');
 
   useEffect(() => {
-    loadStructures();
+    loadCommissionStructures();
   }, []);
 
-  const loadStructures = async () => {
+  const loadCommissionStructures = async () => {
     try {
       setLoading(true);
       const data = await RevenueSharingService.getRevenueModels();
-      setStructures(data);
+      // Type cast with proper JSON parsing
+      const typedStructures: CommissionStructure[] = data.map(structure => ({
+        ...structure,
+        tier_structure: Array.isArray(structure.tier_structure) 
+          ? structure.tier_structure 
+          : typeof structure.tier_structure === 'string' 
+            ? JSON.parse(structure.tier_structure) 
+            : [],
+        category_rates: typeof structure.category_rates === 'object' && structure.category_rates !== null
+          ? structure.category_rates as Record<string, any>
+          : {}
+      }));
+      setStructures(typedStructures);
     } catch (error) {
-      console.error('Failed to load commission structures:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to load commission structures',
-        variant: 'destructive'
-      });
+      console.error('Error loading commission structures:', error);
     } finally {
       setLoading(false);
     }
   };
 
-  const handleSaveStructure = async (type: string) => {
-    try {
-      let structureData: any = {
-        model_name: `${type.charAt(0).toUpperCase() + type.slice(1)} Commission Structure`,
-        model_type: type,
-        base_rate: 5.0,
-        tier_structure: [],
-        category_rates: {},
-        created_by: '00000000-0000-0000-0000-000000000000'
-      };
+  const categories = [
+    { id: 'electronics', name: 'Electronics', rate: 8.5 },
+    { id: 'fashion', name: 'Fashion & Apparel', rate: 12.0 },
+    { id: 'home', name: 'Home & Garden', rate: 10.0 },
+    { id: 'books', name: 'Books & Media', rate: 15.0 },
+    { id: 'sports', name: 'Sports & Outdoors', rate: 9.5 }
+  ];
 
-      switch (type) {
-        case 'tiered':
-          structureData.tier_structure = tierConfig;
-          break;
-        case 'category':
-          structureData.category_rates = categoryConfig;
-          break;
-        case 'performance':
-          structureData.category_rates = performanceConfig;
-          break;
-      }
-
-      await RevenueSharingService.createRevenueModel(structureData);
-      
-      toast({
-        title: 'Success',
-        description: 'Commission structure saved successfully'
-      });
-
-      loadStructures();
-    } catch (error) {
-      console.error('Failed to save commission structure:', error);
-      toast({
-        title: 'Error',
-        description: 'Failed to save commission structure',
-        variant: 'destructive'
-      });
-    }
-  };
-
-  const updateTierConfig = (index: number, field: string, value: any) => {
-    const newConfig = [...tierConfig];
-    newConfig[index] = { ...newConfig[index], [field]: value };
-    setTierConfig(newConfig);
-  };
-
-  const updateCategoryConfig = (category: string, rate: number) => {
-    setCategoryConfig({ ...categoryConfig, [category]: rate });
-  };
-
-  const updatePerformanceConfig = (level: string, rate: number) => {
-    setPerformanceConfig({ ...performanceConfig, [level]: rate });
-  };
+  const vendorTiers = [
+    { tier: 'bronze', name: 'Bronze', minSales: 0, maxSales: 50000, rate: 10.0 },
+    { tier: 'silver', name: 'Silver', minSales: 50001, maxSales: 200000, rate: 12.0 },
+    { tier: 'gold', name: 'Gold', minSales: 200001, maxSales: 500000, rate: 15.0 },
+    { tier: 'platinum', name: 'Platinum', minSales: 500001, maxSales: null, rate: 18.0 }
+  ];
 
   if (loading) {
-    return (
-      <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-blue-600"></div>
-      </div>
-    );
+    return <div className="flex justify-center p-8">Loading commission structures...</div>;
   }
 
   return (
     <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h3 className="text-lg font-semibold">Commission Structure Management</h3>
-          <p className="text-gray-600">Configure and manage commission rates and structures</p>
+          <h3 className="text-lg font-semibold">Commission Structure</h3>
+          <p className="text-gray-600">Configure commission rates by category and vendor tier</p>
         </div>
+        <Button>
+          <Settings className="h-4 w-4 mr-2" />
+          Global Settings
+        </Button>
       </div>
 
-      <Tabs value={selectedStructure} onValueChange={setSelectedStructure} className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="tiered">Tiered Structure</TabsTrigger>
-          <TabsTrigger value="category">Category-Based</TabsTrigger>
-          <TabsTrigger value="performance">Performance-Based</TabsTrigger>
-        </TabsList>
-
-        <TabsContent value="tiered" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <TrendingUp className="h-5 w-5 mr-2" />
-                  Volume-Based Tiers
-                </CardTitle>
-                <Button onClick={() => handleSaveStructure('tiered')}>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Structure
-                </Button>
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <Calculator className="h-5 w-5 mr-2" />
+              Category-based Rates
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {categories.map((category) => (
+              <div key={category.id} className="flex items-center justify-between p-3 border rounded-lg">
+                <div>
+                  <h4 className="font-medium">{category.name}</h4>
+                  <p className="text-sm text-gray-500">Category: {category.id}</p>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Input
+                    type="number"
+                    value={category.rate}
+                    className="w-20 h-8"
+                    step="0.1"
+                  />
+                  <span className="text-sm">%</span>
+                </div>
               </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              {tierConfig.map((tier, index) => (
-                <div key={index} className="grid grid-cols-1 md:grid-cols-4 gap-4 p-4 border rounded-lg">
-                  <div className="space-y-2">
-                    <Label>Tier {index + 1} Min (৳)</Label>
-                    <Input
-                      type="number"
-                      value={tier.min}
-                      onChange={(e) => updateTierConfig(index, 'min', Number(e.target.value))}
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Max (৳)</Label>
-                    <Input
-                      type="number"
-                      value={tier.max || ''}
-                      onChange={(e) => updateTierConfig(index, 'max', e.target.value ? Number(e.target.value) : null)}
-                      placeholder="No limit"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label>Commission Rate (%)</Label>
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={tier.rate}
-                      onChange={(e) => updateTierConfig(index, 'rate', Number(e.target.value))}
-                    />
-                  </div>
-                  <div className="flex items-end">
-                    <Badge variant="outline" className="h-fit">
-                      {tier.rate}% rate
+            ))}
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader>
+            <CardTitle className="flex items-center">
+              <TrendingUp className="h-5 w-5 mr-2" />
+              Vendor Tier Rates
+            </CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-4">
+            {vendorTiers.map((tier) => (
+              <div key={tier.tier} className="p-4 border rounded-lg">
+                <div className="flex items-center justify-between mb-2">
+                  <h4 className="font-medium flex items-center">
+                    <Badge variant="outline" className="mr-2">
+                      {tier.name}
                     </Badge>
+                  </h4>
+                  <div className="flex items-center space-x-2">
+                    <Input
+                      type="number"
+                      value={tier.rate}
+                      className="w-20 h-8"
+                      step="0.1"
+                    />
+                    <span className="text-sm">%</span>
                   </div>
                 </div>
-              ))}
-            </CardContent>
-          </Card>
-        </TabsContent>
+                <p className="text-sm text-gray-500">
+                  Sales Range: ৳{tier.minSales.toLocaleString()} - {tier.maxSales ? `৳${tier.maxSales.toLocaleString()}` : 'Unlimited'}
+                </p>
+              </div>
+            ))}
+          </CardContent>
+        </Card>
+      </div>
 
-        <TabsContent value="category" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Settings className="h-5 w-5 mr-2" />
-                  Category-Based Rates
-                </CardTitle>
-                <Button onClick={() => handleSaveStructure('category')}>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Structure
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {Object.entries(categoryConfig).map(([category, rate]) => (
-                  <div key={category} className="space-y-2">
-                    <Label className="capitalize">{category}</Label>
-                    <div className="flex items-center space-x-2">
-                      <Input
-                        type="number"
-                        step="0.1"
-                        value={rate}
-                        onChange={(e) => updateCategoryConfig(category, Number(e.target.value))}
-                      />
-                      <span className="text-sm text-gray-500">%</span>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="performance" className="space-y-4">
-          <Card>
-            <CardHeader>
-              <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Percent className="h-5 w-5 mr-2" />
-                  Performance-Based Structure
-                </CardTitle>
-                <Button onClick={() => handleSaveStructure('performance')}>
-                  <Save className="h-4 w-4 mr-2" />
-                  Save Structure
-                </Button>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Rating ≥ 4.5 (High Performance)</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={performanceConfig.high}
-                      onChange={(e) => updatePerformanceConfig('high', Number(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-500">%</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Rating 4.0 - 4.4 (Medium Performance)</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={performanceConfig.medium}
-                      onChange={(e) => updatePerformanceConfig('medium', Number(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-500">%</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Rating 3.5 - 3.9 (Low Performance)</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={performanceConfig.low}
-                      onChange={(e) => updatePerformanceConfig('low', Number(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-500">%</span>
-                  </div>
-                </div>
-                <div className="space-y-2">
-                  <Label>Rating &lt; 3.5 (Poor Performance)</Label>
-                  <div className="flex items-center space-x-2">
-                    <Input
-                      type="number"
-                      step="0.1"
-                      value={performanceConfig.poor}
-                      onChange={(e) => updatePerformanceConfig('poor', Number(e.target.value))}
-                    />
-                    <span className="text-sm text-gray-500">%</span>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
-
-      {/* Active Structures Overview */}
       <Card>
         <CardHeader>
-          <CardTitle>Active Commission Structures</CardTitle>
+          <CardTitle>Commission Calculator</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {structures
-              .filter(s => s.is_active)
-              .map((structure) => (
-                <Card key={structure.id} className="hover:shadow-md transition-shadow">
-                  <CardHeader>
-                    <div className="flex items-center justify-between">
-                      <CardTitle className="text-sm">{structure.model_name}</CardTitle>
-                      <Badge variant="default">Active</Badge>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-gray-600 mb-2">Type: {structure.model_type}</p>
-                    <p className="text-lg font-semibold text-blue-600">{structure.base_rate}%</p>
-                  </CardContent>
-                </Card>
-              ))}
-          </div>
-          
-          {structures.filter(s => s.is_active).length === 0 && (
-            <div className="text-center py-8">
-              <Settings className="h-12 w-12 text-gray-400 mx-auto mb-4" />
-              <h3 className="text-lg font-medium text-gray-900 mb-2">No Active Structures</h3>
-              <p className="text-gray-500">Create and save commission structures to get started.</p>
+          <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
+            <div className="space-y-2">
+              <Label>Transaction Amount (৳)</Label>
+              <Input type="number" placeholder="10000" />
             </div>
-          )}
+            <div className="space-y-2">
+              <Label>Category</Label>
+              <Select value={selectedCategory} onValueChange={setSelectedCategory}>
+                <SelectTrigger>
+                  <SelectValue />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">All Categories</SelectItem>
+                  {categories.map((cat) => (
+                    <SelectItem key={cat.id} value={cat.id}>
+                      {cat.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="space-y-2">
+              <Label>Vendor Tier</Label>
+              <Select>
+                <SelectTrigger>
+                  <SelectValue placeholder="Select tier" />
+                </SelectTrigger>
+                <SelectContent>
+                  {vendorTiers.map((tier) => (
+                    <SelectItem key={tier.tier} value={tier.tier}>
+                      {tier.name}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            <div className="flex items-end">
+              <Button className="w-full">Calculate</Button>
+            </div>
+          </div>
+
+          <div className="mt-6 p-4 bg-gray-50 rounded-lg">
+            <h4 className="font-medium mb-3">Commission Breakdown:</h4>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div>
+                <p className="text-sm text-gray-600">Base Commission</p>
+                <p className="font-semibold">৳1,200</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Tier Bonus</p>
+                <p className="font-semibold">৳300</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Category Adjustment</p>
+                <p className="font-semibold">৳150</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Total Commission</p>
+                <p className="font-semibold text-green-600">৳1,650</p>
+              </div>
+            </div>
+          </div>
         </CardContent>
       </Card>
     </div>

@@ -8,7 +8,14 @@ import {
   orderManagementSubmenus,
   logisticsManagementSubmenus,
   productManagementSubmenus,
-  vendorManagementSubmenus
+  customerManagementSubmenus,
+  vendorManagementSubmenus,
+  marketingSubmenus,
+  analyticsSubmenus,
+  paymentManagementSubmenus,
+  communicationsSubmenus,
+  securitySubmenus,
+  settingsSubmenus
 } from './routingUtils';
 
 export const useAdminRouteHandler = () => {
@@ -24,91 +31,112 @@ export const useAdminRouteHandler = () => {
     // PRIORITY 1: Check dashboard submenus first
     if (dashboardSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in dashboard submenus - routing to dashboard');
-      console.log('🔍 Dashboard submenu:', menuId);
       setSelectedMenu('dashboard');
       setSelectedSubmenu(menuId);
-      console.log('✅ Dashboard submenu routing handled:', {
-        selectedMenu: 'dashboard',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
     // PRIORITY 2: Check user management submenus
     if (userManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in user management submenus - routing to user management');
-      console.log('🔍 User management submenu:', menuId);
       setSelectedMenu('user-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ User management submenu routing handled:', {
-        selectedMenu: 'user-management',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
     // PRIORITY 3: Check sales management submenus
     if (salesManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in sales management submenus - routing to sales management');
-      console.log('🔍 Sales management submenu:', menuId);
       setSelectedMenu('sales-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ Sales management submenu routing handled:', {
-        selectedMenu: 'sales-management',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
     // PRIORITY 4: Check order management submenus
     if (orderManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in order management submenus - routing to order management');
-      console.log('🔍 Order management submenu:', menuId);
       setSelectedMenu('order-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ Order management submenu routing handled:', {
-        selectedMenu: 'order-management',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
     // PRIORITY 5: Check logistics management submenus
     if (logisticsManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in logistics management submenus - routing to logistics management');
-      console.log('🔍 Logistics management submenu:', menuId);
       setSelectedMenu('logistics-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ Logistics management submenu routing handled:', {
-        selectedMenu: 'logistics-management',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
     // PRIORITY 6: Check product management submenus
     if (productManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in product management submenus - routing to product management');
-      console.log('🔍 Product management submenu:', menuId);
       setSelectedMenu('product-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ Product management submenu routing handled:', {
-        selectedMenu: 'product-management',
-        selectedSubmenu: menuId
-      });
       return;
     }
     
-    // PRIORITY 7: Check vendor management submenus
+    // PRIORITY 7: Check customer management submenus
+    if (customerManagementSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in customer management submenus - routing to customer management');
+      setSelectedMenu('customer-management');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 8: Check vendor management submenus
     if (vendorManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
-      console.log('🔍 Vendor management submenu:', menuId);
       setSelectedMenu('vendor-management');
       setSelectedSubmenu(menuId);
-      console.log('✅ Vendor management submenu routing handled:', {
-        selectedMenu: 'vendor-management',
-        selectedSubmenu: menuId
-      });
+      return;
+    }
+    
+    // PRIORITY 9: Check marketing submenus
+    if (marketingSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in marketing submenus - routing to marketing');
+      setSelectedMenu('marketing');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 10: Check analytics submenus
+    if (analyticsSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in analytics submenus - routing to analytics');
+      setSelectedMenu('analytics');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 11: Check payment management submenus
+    if (paymentManagementSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in payment management submenus - routing to payment management');
+      setSelectedMenu('payment-management');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 12: Check communications submenus
+    if (communicationsSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in communications submenus - routing to communications');
+      setSelectedMenu('communications');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 13: Check security submenus
+    if (securitySubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in security submenus - routing to security');
+      setSelectedMenu('security');
+      setSelectedSubmenu(menuId);
+      return;
+    }
+    
+    // PRIORITY 14: Check settings submenus
+    if (settingsSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in settings submenus - routing to settings');
+      setSelectedMenu('settings');
+      setSelectedSubmenu(menuId);
       return;
     }
     

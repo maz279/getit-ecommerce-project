@@ -6,7 +6,14 @@ import {
   orderManagementSubmenus,
   logisticsManagementSubmenus,
   productManagementSubmenus,
-  vendorManagementSubmenus
+  customerManagementSubmenus,
+  vendorManagementSubmenus,
+  marketingSubmenus,
+  analyticsSubmenus,
+  paymentManagementSubmenus,
+  communicationsSubmenus,
+  securitySubmenus,
+  settingsSubmenus
 } from './routingUtils';
 
 export const getDefaultSubmenu = (menu: string): string => {
@@ -45,57 +52,16 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // PRIORITY 1: Handle vendor management submenus FIRST - CRITICAL FIX
-  if (vendorManagementSubmenus.includes(menu)) {
-    console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
-    console.log('🔍 Vendor management submenu:', menu);
+  // PRIORITY 1: Handle dashboard submenus FIRST
+  if (dashboardSubmenus.includes(menu)) {
+    console.log('✅ CRITICAL: Found in dashboard submenus - routing to dashboard');
     return {
-      selectedMenu: 'vendor-management',
+      selectedMenu: 'dashboard',
       selectedSubmenu: menu
     };
   }
   
-  // PRIORITY 2: Handle stock and inventory submenus
-  const stockInventorySubmenus = [
-    'stock-overview', 'stock-management', 'inventory-overview', 'inventory-tracking', 'stock-analytics'
-  ];
-  
-  if (stockInventorySubmenus.includes(menu)) {
-    console.log('✅ PRIORITY: Found in stock/inventory submenus - routing to product management');
-    console.log('🔍 Stock/Inventory submenu:', menu);
-    return {
-      selectedMenu: 'product-management',
-      selectedSubmenu: menu
-    };
-  }
-  
-  // PRIORITY 3: Handle product moderation submenus with both singular and plural forms
-  const productModerationSubmenus = [
-    'pending-approval', 'pending-approvals',
-    'content-review', 'content-reviews', 
-    'quality-control', 'quality-controls',
-    'rejected-products', 'rejected-product',
-    'product-moderation', 'product-moderations'
-  ];
-  
-  if (productModerationSubmenus.includes(menu)) {
-    console.log('✅ PRIORITY: Found in product moderation submenus - routing to product management');
-    console.log('🔍 Product moderation submenu:', menu);
-    
-    // Normalize to singular form for consistent routing
-    let normalizedSubmenu = menu;
-    if (menu === 'pending-approvals') normalizedSubmenu = 'pending-approval';
-    if (menu === 'content-reviews') normalizedSubmenu = 'content-review';
-    if (menu === 'quality-controls') normalizedSubmenu = 'quality-control';
-    if (menu === 'rejected-product') normalizedSubmenu = 'rejected-products';
-    if (menu === 'product-moderations') normalizedSubmenu = 'product-moderation';
-    
-    return {
-      selectedMenu: 'product-management',
-      selectedSubmenu: normalizedSubmenu
-    };
-  }
-  
+  // PRIORITY 2: Handle user management submenus
   if (userManagementSubmenus.includes(menu)) {
     console.log('✅ Found in user management submenus');
     return {
@@ -104,6 +70,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
+  // PRIORITY 3: Handle sales management submenus
   if (salesManagementSubmenus.includes(menu)) {
     console.log('✅ Found in sales management submenus');
     return {
@@ -112,6 +79,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
+  // PRIORITY 4: Handle order management submenus
   if (orderManagementSubmenus.includes(menu)) {
     console.log('✅ Found in order management submenus');
     return {
@@ -120,6 +88,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
+  // PRIORITY 5: Handle logistics management submenus
   if (logisticsManagementSubmenus.includes(menu)) {
     console.log('✅ Found in logistics management submenus');
     return {
@@ -128,10 +97,83 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
+  // PRIORITY 6: Handle product management submenus
   if (productManagementSubmenus.includes(menu)) {
     console.log('✅ Found in product management submenus');
     return {
       selectedMenu: 'product-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 7: Handle customer management submenus
+  if (customerManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in customer management submenus');
+    return {
+      selectedMenu: 'customer-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 8: Handle vendor management submenus
+  if (vendorManagementSubmenus.includes(menu)) {
+    console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
+    return {
+      selectedMenu: 'vendor-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 9: Handle marketing submenus
+  if (marketingSubmenus.includes(menu)) {
+    console.log('✅ Found in marketing submenus');
+    return {
+      selectedMenu: 'marketing',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 10: Handle analytics submenus
+  if (analyticsSubmenus.includes(menu)) {
+    console.log('✅ Found in analytics submenus');
+    return {
+      selectedMenu: 'analytics',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 11: Handle payment management submenus
+  if (paymentManagementSubmenus.includes(menu)) {
+    console.log('✅ Found in payment management submenus');
+    return {
+      selectedMenu: 'payment-management',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 12: Handle communications submenus
+  if (communicationsSubmenus.includes(menu)) {
+    console.log('✅ Found in communications submenus');
+    return {
+      selectedMenu: 'communications',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 13: Handle security submenus
+  if (securitySubmenus.includes(menu)) {
+    console.log('✅ Found in security submenus');
+    return {
+      selectedMenu: 'security',
+      selectedSubmenu: menu
+    };
+  }
+  
+  // PRIORITY 14: Handle settings submenus
+  if (settingsSubmenus.includes(menu)) {
+    console.log('✅ Found in settings submenus');
+    return {
+      selectedMenu: 'settings',
       selectedSubmenu: menu
     };
   }

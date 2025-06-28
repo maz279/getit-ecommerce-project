@@ -20,36 +20,70 @@ export const UserManagementContent: React.FC<UserManagementContentProps> = ({ se
   const getContent = () => {
     console.log('🎯 UserManagementContent getContent switch - selectedSubmenu:', selectedSubmenu);
     
-    switch (selectedSubmenu) {
+    // Normalize the submenu value
+    const normalizedSubmenu = selectedSubmenu?.toString().trim().toLowerCase();
+    console.log('🔍 Normalized submenu:', normalizedSubmenu);
+    
+    switch (normalizedSubmenu) {
       case 'admin-users':
+      case 'admin-list':
         console.log('✅ Rendering AdminListManagement for admin-users');
         return <AdminListManagement />;
-      case 'admin-list':
-        console.log('✅ Rendering AdminListManagement for admin-list');
-        return <AdminListManagement />;
-      case 'role-management':
-        console.log('✅ Rendering RoleManagementForm for role-management');
-        return <RoleManagementForm />;
-      case 'permissions':
-        console.log('✅ Rendering PermissionsManagementForm for permissions');
-        return <PermissionsManagementForm />;
-      case 'activity-logs':
-        console.log('✅ Rendering ActivityLogsForm for activity-logs');
-        return <ActivityLogsForm />;
-      case 'activity-reports':
-        console.log('✅ Rendering ActivityReportsForm for activity-reports');
-        return <ActivityReportsForm />;
-      case 'registration-trends':
-        console.log('✅ Rendering RegistrationTrendsForm for registration-trends');
-        return <RegistrationTrendsForm />;
+      
       case 'user-analytics':
         console.log('✅ Rendering UserManagementForm for user-analytics');
         return <UserManagementForm />;
+      
+      case 'user-permissions':
+      case 'permissions':
+        console.log('✅ Rendering PermissionsManagementForm for permissions');
+        return <PermissionsManagementForm />;
+      
+      case 'role-management':
+        console.log('✅ Rendering RoleManagementForm for role-management');
+        return <RoleManagementForm />;
+      
+      case 'user-activity-logs':
+      case 'activity-logs':
+        console.log('✅ Rendering ActivityLogsForm for activity-logs');
+        return <ActivityLogsForm />;
+      
+      case 'user-reports':
+      case 'activity-reports':
+        console.log('✅ Rendering ActivityReportsForm for activity-reports');
+        return <ActivityReportsForm />;
+      
+      case 'access-control':
+      case 'user-security':
+        console.log('✅ Rendering PermissionsManagementForm for access-control');
+        return <PermissionsManagementForm />;
+      
+      case 'user-overview':
+        console.log('✅ Rendering UserManagementForm for user-overview');
+        return <UserManagementForm />;
+      
+      case 'active-users':
+      case 'inactive-users':
+      case 'banned-users':
+        console.log('✅ Rendering AdminListManagement for user status');
+        return <AdminListManagement />;
+      
+      case 'user-verification':
+      case 'user-settings':
+        console.log('✅ Rendering UserManagementForm for user settings');
+        return <UserManagementForm />;
+      
+      case 'registration-trends':
+        console.log('✅ Rendering RegistrationTrendsForm for registration-trends');
+        return <RegistrationTrendsForm />;
+      
       case 'demographics':
+      case 'user-demographics':
         console.log('✅ Rendering DemographicsForm for demographics');
         return <DemographicsForm />;
+      
       default:
-        console.log('⚠️ No matching submenu, defaulting to AdminListManagement for admin users');
+        console.log('⚠️ No matching submenu, defaulting to AdminListManagement');
         console.log('   selectedSubmenu was:', selectedSubmenu);
         return <AdminListManagement />;
     }

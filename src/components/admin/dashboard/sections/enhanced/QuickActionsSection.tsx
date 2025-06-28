@@ -1,12 +1,8 @@
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { useCreateQuickAction, useQuickActions } from '@/hooks/useDashboardData';
 import { 
   Plus, 
   CheckCircle, 
@@ -15,209 +11,198 @@ import {
   Settings, 
   AlertTriangle,
   Play,
+  Pause,
   Clock,
-  CheckCircle2
+  TrendingUp
 } from 'lucide-react';
+import { DashboardService } from '@/services/database/DashboardService';
+import type { QuickAction, QuickActionLog } from '@/types/dashboard';
 
-export const EnhancedQuickActionsSection: React.FC = () => {
-  const [actionName, setActionName] = useState('');
-  const [actionType, setActionType] = useState('bulk_update');
-  const [parameters, setParameters] = useState('');
+export const QuickActionsSection: React.FC = () => {
+  const [quickActions, setQuickActions] = useState<QuickAction[]>([]);
+  const [actionLogs, setActionLogs] = useState<QuickActionLog[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const { data: quickActions, isLoading } = useQuickActions(10);
-  const createActionMutation = useCreateQuickAction();
-
-  const handleCreateAction = () => {
-    const newAction = {
-      id: `qa-${Date.now()}`,
-      action_name: actionName,
-      action_type: actionType as any,
-      parameters: parameters ? JSON.parse(parameters) : {},
-      executed_by: 'admin@getit.com',
-      execution_status: 'pending' as any,
-      progress_percentage: 0,
-      created_at: new Date().toISOString(),
-      started_at: new Date().toISOString(),
-      completed_at: '',
-      execution_time_ms: 0,
-      result_data: {},
-      error_message: ''
+  useEffect(() => {
+    const loadData = async () => {
+      try {
+        const [actions, logs] = await Promise.all([
+          DashboardService.getQuickActions(),
+          DashboardService.getQuickActionLogs(10)
+        ]);
+        setQuickActions(actions);
+        setActionLogs(logs);
+      } catch (error) {
+        console.error('Error loading quick actions data:', error);
+      } finally {
+        setLoading(false);
+      }
     };
 
-    createActionMutation.mutate(newAction);
-    setActionName('');
-    setParameters('');
+    loadData();
+  }, []);
+
+  const handleActionClick = async (action: QuickAction) => {
+    const logEntry: Omit<QuickActionLog, 'id' | 'created_at'> = {
+      action_type: action.action_type,
+      action_name: action.action_name,
+      execution_status: 'running',
+      executed_by: 'current-user', // This should come from auth context
+      progress_percentage: 0,
+      started_at: new Date().toISOString()
+    };
+
+    await DashboardService.logQuickAction(logEntry);
+    
+    // Simulate action execution
+    setTimeout(async () => {
+      const completedLog: Omit<QuickActionLog, 'id' | 'created_at'> = {
+        ...logEntry,
+        execution_status: 'completed',
+        progress_percentage: 100,
+        completed_at: new Date().toISOString(),
+        execution_time_ms: Math.random() * 5000 + 1000,
+        result_data: { success: true }
+      };
+      
+      await DashboardService.logQuickAction(completedLog);
+      
+      // Refresh logs
+      const updatedLogs = await DashboardService.getQuickActionLogs(10);
+      setActionLogs(updatedLogs);
+    }, 2000);
   };
 
-  const quickActionTemplates = [
-    { icon: Plus, label: 'Add Product', type: 'bulk_update', color: 'bg-blue-500' },
-    { icon: CheckCircle, label: 'Approve Vendor', type: 'user_management', color: 'bg-green-500' },
-    { icon: DollarSign, label: 'Process Payout', type: 'order_processing', color: 'bg-purple-500' },
-    { icon: FileText, label: 'Generate Report', type: 'data_export', color: 'bg-orange-500' },
-    { icon: Settings, label: 'System Maintenance', type: 'system_maintenance', color: 'bg-gray-500' },
-    { icon: AlertTriangle, label: 'Emergency Alert', type: 'bulk_update', color: 'bg-red-500' }
-  ];
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'completed': return 'bg-green-100 text-green-800';
+      case 'running': return 'bg-blue-100 text-blue-800';
+      case 'failed': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
+  };
+
+  const getActionIcon = (iconName?: string) => {
+    switch (iconName) {
+      case 'Plus': return <Plus size={20} />;
+      case 'CheckCircle': return <CheckCircle size={20} />;
+      case 'DollarSign': return <DollarSign size={20} />;
+      case 'FileText': return <FileText size={20} />;
+      case 'Settings': return <Settings size={20} />;
+      case 'AlertTriangle': return <AlertTriangle size={20} />;
+      default: return <Play size={20} />;
+    }
+  };
+
+  if (loading) {
+    return <div className="animate-pulse">Loading quick actions...</div>;
+  }
 
   return (
     <div className="space-y-6">
-      <Tabs defaultValue="overview" className="w-full">
-        <TabsList className="grid w-full grid-cols-3">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="create">Create Action</TabsTrigger>
-          <TabsTrigger value="history">History</TabsTrigger>
-        </TabsList>
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Active Actions</CardTitle>
+            <Play className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {actionLogs.filter(log => log.execution_status === 'running').length}
+            </div>
+            <p className="text-xs text-muted-foreground">Currently running</p>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="overview" className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Active Actions</CardTitle>
-                <Play className="h-4 w-4 text-blue-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">12</div>
-                <p className="text-xs text-muted-foreground">Currently running</p>
-              </CardContent>
-            </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Completed Today</CardTitle>
+            <CheckCircle className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {actionLogs.filter(log => 
+                log.execution_status === 'completed' && 
+                new Date(log.created_at).toDateString() === new Date().toDateString()
+              ).length}
+            </div>
+            <p className="text-xs text-muted-foreground">Success rate: 97%</p>
+          </CardContent>
+        </Card>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Completed Today</CardTitle>
-                <CheckCircle2 className="h-4 w-4 text-green-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">89</div>
-                <p className="text-xs text-muted-foreground">Success rate: 97%</p>
-              </CardContent>
-            </Card>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Failed Actions</CardTitle>
+            <Pause className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">
+              {actionLogs.filter(log => log.execution_status === 'failed').length}
+            </div>
+            <p className="text-xs text-muted-foreground">Need attention</p>
+          </CardContent>
+        </Card>
+      </div>
 
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                <CardTitle className="text-sm font-medium">Failed Actions</CardTitle>
-                <AlertTriangle className="h-4 w-4 text-red-600" />
-              </CardHeader>
-              <CardContent>
-                <div className="text-2xl font-bold">3</div>
-                <p className="text-xs text-muted-foreground">Need attention</p>
-              </CardContent>
-            </Card>
-          </div>
-
-          <Card>
-            <CardHeader>
-              <CardTitle>Quick Action Templates</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
-                {quickActionTemplates.map((template, index) => {
-                  const IconComponent = template.icon;
-                  return (
-                    <Button
-                      key={index}
-                      className={`${template.color} hover:opacity-90 text-white h-20 flex-col space-y-2`}
-                      variant="default"
-                      onClick={() => {
-                        setActionName(template.label);
-                        setActionType(template.type);
-                      }}
-                    >
-                      <IconComponent size={20} />
-                      <span className="text-xs text-center">{template.label}</span>
-                    </Button>
-                  );
-                })}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="create" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Create New Quick Action</CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <Label htmlFor="actionName">Action Name</Label>
-                <Input
-                  id="actionName"
-                  value={actionName}
-                  onChange={(e) => setActionName(e.target.value)}
-                  placeholder="Enter action name"
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="actionType">Action Type</Label>
-                <select
-                  id="actionType"
-                  value={actionType}
-                  onChange={(e) => setActionType(e.target.value)}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                >
-                  <option value="bulk_update">Bulk Update</option>
-                  <option value="data_export">Data Export</option>
-                  <option value="system_maintenance">System Maintenance</option>
-                  <option value="user_management">User Management</option>
-                  <option value="order_processing">Order Processing</option>
-                  <option value="inventory_sync">Inventory Sync</option>
-                </select>
-              </div>
-
-              <div>
-                <Label htmlFor="parameters">Parameters (JSON)</Label>
-                <Input
-                  id="parameters"
-                  value={parameters}
-                  onChange={(e) => setParameters(e.target.value)}
-                  placeholder='{"key": "value"}'
-                />
-              </div>
-
-              <Button 
-                onClick={handleCreateAction}
-                disabled={!actionName || createActionMutation.isPending}
-                className="w-full"
+      {/* Quick Actions Grid */}
+      <Card>
+        <CardHeader>
+          <CardTitle>Quick Actions</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+            {quickActions.map((action) => (
+              <Button
+                key={action.id}
+                className={`${action.color_class || 'bg-blue-500 hover:bg-blue-600'} text-white h-20 flex-col space-y-2`}
+                variant="default"
+                onClick={() => handleActionClick(action)}
               >
-                {createActionMutation.isPending ? 'Creating...' : 'Create Action'}
+                {getActionIcon(action.icon_name)}
+                <span className="text-xs text-center">{action.action_name}</span>
               </Button>
-            </CardContent>
-          </Card>
-        </TabsContent>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
 
-        <TabsContent value="history" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Action History</CardTitle>
-            </CardHeader>
-            <CardContent>
-              {isLoading ? (
-                <p>Loading actions...</p>
-              ) : (
-                <div className="space-y-4">
-                  {quickActions?.map((action) => (
-                    <div key={action.id} className="flex items-center justify-between p-4 border rounded-lg">
-                      <div>
-                        <h4 className="font-semibold">{action.action_name}</h4>
-                        <p className="text-sm text-gray-600">{action.action_type}</p>
-                        <p className="text-xs text-gray-500">{new Date(action.created_at).toLocaleString()}</p>
-                      </div>
-                      <div className="flex items-center space-x-2">
-                        <Badge variant={action.execution_status === 'completed' ? 'default' : 'secondary'}>
-                          {action.execution_status}
-                        </Badge>
-                        {action.execution_status === 'running' && (
-                          <Clock className="h-4 w-4 text-blue-500" />
-                        )}
-                      </div>
-                    </div>
-                  ))}
+      {/* Action History */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center gap-2">
+            <Clock className="h-5 w-5" />
+            Recent Action History
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3">
+            {actionLogs.slice(0, 5).map((log) => (
+              <div key={log.id} className="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
+                <div className="flex items-center space-x-3">
+                  <div className="h-8 w-8 bg-blue-100 rounded-full flex items-center justify-center">
+                    {getActionIcon()}
+                  </div>
+                  <div>
+                    <p className="font-medium text-sm">{log.action_name}</p>
+                    <p className="text-xs text-gray-500">
+                      {log.execution_time_ms ? `${Math.round(log.execution_time_ms / 1000)}s` : 'Running...'}
+                    </p>
+                  </div>
                 </div>
-              )}
-            </CardContent>
-          </Card>
-        </TabsContent>
-      </Tabs>
+                <div className="text-right">
+                  <Badge className={getStatusColor(log.execution_status)}>
+                    {log.execution_status.toUpperCase()}
+                  </Badge>
+                  <p className="text-xs text-gray-500 mt-1">
+                    {new Date(log.created_at).toLocaleTimeString()}
+                  </p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </CardContent>
+      </Card>
     </div>
   );
 };

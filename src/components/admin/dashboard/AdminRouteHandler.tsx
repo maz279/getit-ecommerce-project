@@ -36,7 +36,7 @@ export const useAdminRouteHandler = () => {
       return;
     }
     
-    // PRIORITY 2: Check user management submenus
+    // PRIORITY 2: Check user management submenus - FIX HERE
     if (userManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in user management submenus - routing to user management');
       setSelectedMenu('user-management');

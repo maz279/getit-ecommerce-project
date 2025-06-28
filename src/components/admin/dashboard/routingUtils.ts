@@ -8,11 +8,13 @@ export const dashboardSubmenus = [
   'system-logs', 'quick-actions', 'executive-summary'
 ];
 
-// User management submenus
+// User management submenus - FIXED AND COMPREHENSIVE
 export const userManagementSubmenus = [
-  'admin-users', 'user-analytics', 'user-permissions', 'role-management', 'user-activity-logs',
-  'user-reports', 'access-control', 'user-security', 'user-overview', 'active-users',
-  'inactive-users', 'banned-users', 'user-verification', 'user-settings'
+  'admin-users', 'admin-list', 'user-analytics', 'user-permissions', 'permissions',
+  'role-management', 'user-activity-logs', 'activity-logs', 'user-reports', 
+  'activity-reports', 'access-control', 'user-security', 'user-overview', 
+  'active-users', 'inactive-users', 'banned-users', 'user-verification', 
+  'user-settings', 'registration-trends', 'demographics', 'user-demographics'
 ];
 
 // Sales management submenus

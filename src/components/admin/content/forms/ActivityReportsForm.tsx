@@ -1,57 +1,72 @@
 
-import React, { useState } from 'react';
-import { FileText, Download, Filter, RefreshCw } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { ActivityReportsStats } from './activityReports/ActivityReportsStats';
-import { ActivityReportsFilters } from './activityReports/ActivityReportsFilters';
-import { ActivityReportsTabs } from './activityReports/ActivityReportsTabs';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { BarChart3, FileText, TrendingUp, Download } from 'lucide-react';
 
 export const ActivityReportsForm: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('last30days');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
-
-  const handleGenerateReport = () => {
-    setIsGeneratingReport(true);
-    setTimeout(() => setIsGeneratingReport(false), 2000);
-  };
-
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <FileText className="w-8 h-8 text-blue-600" />
-            Activity Reports
-          </h1>
-          <p className="text-gray-600 mt-1">Comprehensive analytics and reporting for user activities</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={handleGenerateReport} disabled={isGeneratingReport}>
-            {isGeneratingReport ? (
-              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Download className="w-4 h-4 mr-2" />
-            )}
-            Generate Report
-          </Button>
-          <Button>
-            <Filter className="w-4 h-4 mr-2" />
-            Advanced Filters
-          </Button>
+          <h1 className="text-2xl font-bold">Activity Reports</h1>
+          <p className="text-gray-600">Generate and analyze activity reports</p>
         </div>
       </div>
 
-      <ActivityReportsStats />
-      
-      <ActivityReportsFilters 
-        selectedPeriod={selectedPeriod}
-        setSelectedPeriod={setSelectedPeriod}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Reports Generated</CardTitle>
+            <FileText className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">127</div>
+            <p className="text-xs text-muted-foreground">This month</p>
+          </CardContent>
+        </Card>
 
-      <ActivityReportsTabs />
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Data Points</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">45.2k</div>
+            <p className="text-xs text-muted-foreground">Analyzed</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Trend Analysis</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+12%</div>
+            <p className="text-xs text-muted-foreground">Growth rate</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Downloads</CardTitle>
+            <Download className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">89</div>
+            <p className="text-xs text-muted-foreground">Report downloads</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Activity Reports Dashboard</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-600">Activity reports generation and analysis tools would be displayed here...</p>
+        </CardContent>
+      </Card>
     </div>
   );
 };

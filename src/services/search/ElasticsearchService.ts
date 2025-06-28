@@ -15,7 +15,8 @@ export interface SearchResult {
 }
 
 export class ElasticsearchService {
-  private static baseUrl = process.env.ELASTICSEARCH_URL || 'http://localhost:9200';
+  // Use a fallback URL instead of process.env which is not available in browser
+  private static baseUrl = 'http://localhost:9200';
   
   static async search(index: string, query: SearchQuery): Promise<SearchResult> {
     try {

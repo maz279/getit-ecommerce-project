@@ -1,9 +1,10 @@
 
 import { supabase } from '@/integrations/supabase/client';
+import { Json } from '@/integrations/supabase/types';
 
-// Types for dashboard entities
+// Type definitions with strict literal types
 export interface DashboardKPIMetric {
-  id?: string;
+  id: string;
   metric_name: string;
   metric_category: 'revenue' | 'users' | 'orders' | 'performance' | 'security' | 'inventory';
   metric_value: number;
@@ -12,140 +13,199 @@ export interface DashboardKPIMetric {
   percentage_change?: number;
   trend_direction?: 'up' | 'down' | 'stable';
   time_period: 'hourly' | 'daily' | 'weekly' | 'monthly' | 'yearly';
-  recorded_date?: string;
-  metadata?: any;
-  created_by?: string;
-  created_at?: string;
-  updated_at?: string;
+  recorded_date: string;
+  metadata?: Json;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface SystemHealthLog {
-  id?: string;
+  id: string;
   service_name: string;
   service_type: 'database' | 'api' | 'cache' | 'search' | 'payment' | 'notification';
   health_status: 'healthy' | 'warning' | 'critical' | 'down';
   response_time_ms?: number;
-  error_count?: number;
+  error_count: number;
   success_rate?: number;
   cpu_usage?: number;
   memory_usage?: number;
   disk_usage?: number;
   uptime_seconds?: number;
-  last_check?: string;
-  error_details?: any;
-  alerts_triggered?: any[];
-  created_at?: string;
+  last_check: string;
+  error_details?: Json;
+  alerts_triggered?: Json;
+  created_at: string;
 }
 
 export interface SecurityEvent {
-  id?: string;
+  id: string;
   event_type: 'login_attempt' | 'failed_login' | 'suspicious_activity' | 'data_breach_attempt' | 'unauthorized_access' | 'password_reset';
   severity_level: 'low' | 'medium' | 'high' | 'critical';
   user_id?: string;
   ip_address: string;
   user_agent?: string;
-  location_data?: any;
-  event_details: any;
-  is_blocked?: boolean;
-  resolution_status?: 'open' | 'investigating' | 'resolved' | 'false_positive';
+  location_data?: Json;
+  event_details: Json;
+  is_blocked: boolean;
+  resolution_status: 'open' | 'investigating' | 'resolved' | 'false_positive';
   resolved_by?: string;
   resolved_at?: string;
-  created_at?: string;
+  created_at: string;
 }
 
 export interface ExecutiveReport {
-  id?: string;
+  id: string;
   report_title: string;
   report_type: 'daily' | 'weekly' | 'monthly' | 'quarterly' | 'annual' | 'custom';
   report_period_start: string;
   report_period_end: string;
-  key_metrics: any;
+  key_metrics: Json;
   executive_summary: string;
-  recommendations?: any[];
-  charts_data?: any;
-  status?: 'draft' | 'review' | 'approved' | 'published';
-  created_by: string; // Required field
+  recommendations?: Json;
+  charts_data?: Json;
+  status: 'draft' | 'review' | 'approved' | 'published';
+  created_by: string;
   reviewed_by?: string;
   approved_by?: string;
   published_at?: string;
-  created_at?: string;
-  updated_at?: string;
+  created_at: string;
+  updated_at: string;
 }
 
 export interface QuickAction {
-  id?: string;
+  id: string;
   action_type: 'bulk_update' | 'data_export' | 'system_maintenance' | 'user_management' | 'order_processing' | 'inventory_sync';
   action_name: string;
-  parameters?: any;
-  execution_status?: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
-  progress_percentage?: number;
-  result_data?: any;
+  parameters?: Json;
+  execution_status: 'pending' | 'running' | 'completed' | 'failed' | 'cancelled';
+  progress_percentage: number;
+  result_data?: Json;
   error_message?: string;
   execution_time_ms?: number;
-  executed_by: string; // Required field
+  executed_by: string;
   started_at?: string;
   completed_at?: string;
-  created_at?: string;
+  created_at: string;
 }
 
 export interface RealTimeAnalytics {
-  id?: string;
+  id: string;
   metric_type: 'page_views' | 'active_users' | 'transactions' | 'api_calls' | 'errors' | 'conversions';
   metric_value: number;
-  dimensions?: any;
-  timestamp_recorded?: string;
+  dimensions?: Json;
+  timestamp_recorded: string;
   session_id?: string;
   user_id?: string;
   page_url?: string;
   referrer?: string;
-  device_info?: any;
-  geographic_data?: any;
-  created_at?: string;
+  device_info?: Json;
+  geographic_data?: Json;
+  created_at: string;
 }
 
 export interface PerformanceMetrics {
-  id?: string;
+  id: string;
   metric_category: 'api_performance' | 'database_performance' | 'frontend_performance' | 'search_performance' | 'cache_performance';
   endpoint_path?: string;
   method_type?: 'GET' | 'POST' | 'PUT' | 'DELETE' | 'PATCH';
   response_time_ms: number;
   status_code?: number;
-  error_count?: number;
-  success_count?: number;
+  error_count: number;
+  success_count: number;
   throughput_per_second?: number;
   memory_usage_mb?: number;
   cpu_usage_percent?: number;
   cache_hit_rate?: number;
-  recorded_at?: string;
-  metadata?: any;
-  created_at?: string;
+  recorded_at: string;
+  metadata?: Json;
+  created_at: string;
+}
+
+// Helper function to safely cast enum values
+function validateEnumValue<T extends string>(value: string, validValues: readonly T[]): T {
+  return validValues.includes(value as T) ? (value as T) : validValues[0];
+}
+
+// Helper function to transform database row to typed interface
+function transformKPIMetric(row: any): DashboardKPIMetric {
+  return {
+    ...row,
+    metric_category: validateEnumValue(row.metric_category, ['revenue', 'users', 'orders', 'performance', 'security', 'inventory'] as const),
+    trend_direction: validateEnumValue(row.trend_direction || 'stable', ['up', 'down', 'stable'] as const),
+    time_period: validateEnumValue(row.time_period, ['hourly', 'daily', 'weekly', 'monthly', 'yearly'] as const)
+  };
+}
+
+function transformSystemHealthLog(row: any): SystemHealthLog {
+  return {
+    ...row,
+    service_type: validateEnumValue(row.service_type, ['database', 'api', 'cache', 'search', 'payment', 'notification'] as const),
+    health_status: validateEnumValue(row.health_status, ['healthy', 'warning', 'critical', 'down'] as const)
+  };
+}
+
+function transformSecurityEvent(row: any): SecurityEvent {
+  return {
+    ...row,
+    event_type: validateEnumValue(row.event_type, ['login_attempt', 'failed_login', 'suspicious_activity', 'data_breach_attempt', 'unauthorized_access', 'password_reset'] as const),
+    severity_level: validateEnumValue(row.severity_level, ['low', 'medium', 'high', 'critical'] as const),
+    resolution_status: validateEnumValue(row.resolution_status, ['open', 'investigating', 'resolved', 'false_positive'] as const)
+  };
+}
+
+function transformExecutiveReport(row: any): ExecutiveReport {
+  return {
+    ...row,
+    report_type: validateEnumValue(row.report_type, ['daily', 'weekly', 'monthly', 'quarterly', 'annual', 'custom'] as const),
+    status: validateEnumValue(row.status, ['draft', 'review', 'approved', 'published'] as const)
+  };
+}
+
+function transformQuickAction(row: any): QuickAction {
+  return {
+    ...row,
+    action_type: validateEnumValue(row.action_type, ['bulk_update', 'data_export', 'system_maintenance', 'user_management', 'order_processing', 'inventory_sync'] as const),
+    execution_status: validateEnumValue(row.execution_status, ['pending', 'running', 'completed', 'failed', 'cancelled'] as const)
+  };
+}
+
+function transformRealTimeAnalytics(row: any): RealTimeAnalytics {
+  return {
+    ...row,
+    metric_type: validateEnumValue(row.metric_type, ['page_views', 'active_users', 'transactions', 'api_calls', 'errors', 'conversions'] as const)
+  };
+}
+
+function transformPerformanceMetrics(row: any): PerformanceMetrics {
+  return {
+    ...row,
+    metric_category: validateEnumValue(row.metric_category, ['api_performance', 'database_performance', 'frontend_performance', 'search_performance', 'cache_performance'] as const),
+    method_type: row.method_type ? validateEnumValue(row.method_type, ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'] as const) : undefined
+  };
 }
 
 export class DashboardService {
-  // KPI Metrics
+  // KPI Metrics operations
   static async getKPIMetrics(filters?: any): Promise<DashboardKPIMetric[]> {
     let query = supabase.from('dashboard_kpi_metrics').select('*');
     
     if (filters?.category) {
       query = query.eq('metric_category', filters.category);
     }
-    if (filters?.time_period) {
-      query = query.eq('time_period', filters.time_period);
-    }
-    if (filters?.date_from) {
-      query = query.gte('recorded_date', filters.date_from);
-    }
-    if (filters?.date_to) {
-      query = query.lte('recorded_date', filters.date_to);
-    }
     
+    if (filters?.timeRange) {
+      const { from, to } = filters.timeRange;
+      query = query.gte('recorded_date', from).lte('recorded_date', to);
+    }
+
     const { data, error } = await query.order('recorded_date', { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformKPIMetric);
   }
 
-  static async createKPIMetric(metric: DashboardKPIMetric): Promise<DashboardKPIMetric> {
+  static async createKPIMetric(metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>): Promise<DashboardKPIMetric> {
     const { data, error } = await supabase
       .from('dashboard_kpi_metrics')
       .insert(metric)
@@ -153,7 +213,7 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformKPIMetric(data);
   }
 
   static async updateKPIMetric(id: string, updates: Partial<DashboardKPIMetric>): Promise<DashboardKPIMetric> {
@@ -165,7 +225,7 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformKPIMetric(data);
   }
 
   static async deleteKPIMetric(id: string): Promise<void> {
@@ -177,21 +237,19 @@ export class DashboardService {
     if (error) throw error;
   }
 
-  // System Health Logs
-  static async getSystemHealthLogs(limit?: number): Promise<SystemHealthLog[]> {
-    let query = supabase.from('system_health_logs').select('*');
-    
-    if (limit) {
-      query = query.limit(limit);
-    }
-    
-    const { data, error } = await query.order('last_check', { ascending: false });
+  // System Health operations
+  static async getSystemHealthLogs(limit = 50): Promise<SystemHealthLog[]> {
+    const { data, error } = await supabase
+      .from('system_health_logs')
+      .select('*')
+      .order('last_check', { ascending: false })
+      .limit(limit);
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformSystemHealthLog);
   }
 
-  static async createSystemHealthLog(log: SystemHealthLog): Promise<SystemHealthLog> {
+  static async createSystemHealthLog(log: Omit<SystemHealthLog, 'id' | 'created_at'>): Promise<SystemHealthLog> {
     const { data, error } = await supabase
       .from('system_health_logs')
       .insert(log)
@@ -199,30 +257,28 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformSystemHealthLog(data);
   }
 
-  // Security Events
+  // Security Events operations
   static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
     let query = supabase.from('security_events').select('*');
     
-    if (filters?.event_type) {
-      query = query.eq('event_type', filters.event_type);
-    }
-    if (filters?.severity_level) {
-      query = query.eq('severity_level', filters.severity_level);
-    }
-    if (filters?.resolution_status) {
-      query = query.eq('resolution_status', filters.resolution_status);
+    if (filters?.severity) {
+      query = query.eq('severity_level', filters.severity);
     }
     
+    if (filters?.eventType) {
+      query = query.eq('event_type', filters.eventType);
+    }
+
     const { data, error } = await query.order('created_at', { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformSecurityEvent);
   }
 
-  static async createSecurityEvent(event: SecurityEvent): Promise<SecurityEvent> {
+  static async createSecurityEvent(event: Omit<SecurityEvent, 'id' | 'created_at'>): Promise<SecurityEvent> {
     const { data, error } = await supabase
       .from('security_events')
       .insert(event)
@@ -230,27 +286,28 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformSecurityEvent(data);
   }
 
-  // Executive Reports
+  // Executive Reports operations
   static async getExecutiveReports(filters?: any): Promise<ExecutiveReport[]> {
     let query = supabase.from('executive_reports').select('*');
     
-    if (filters?.report_type) {
-      query = query.eq('report_type', filters.report_type);
+    if (filters?.reportType) {
+      query = query.eq('report_type', filters.reportType);
     }
+    
     if (filters?.status) {
       query = query.eq('status', filters.status);
     }
-    
+
     const { data, error } = await query.order('created_at', { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformExecutiveReport);
   }
 
-  static async createExecutiveReport(report: ExecutiveReport): Promise<ExecutiveReport> {
+  static async createExecutiveReport(report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>): Promise<ExecutiveReport> {
     const { data, error } = await supabase
       .from('executive_reports')
       .insert(report)
@@ -258,24 +315,22 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformExecutiveReport(data);
   }
 
-  // Quick Actions
-  static async getQuickActions(limit?: number): Promise<QuickAction[]> {
-    let query = supabase.from('quick_actions_log').select('*');
-    
-    if (limit) {
-      query = query.limit(limit);
-    }
-    
-    const { data, error } = await query.order('created_at', { ascending: false });
+  // Quick Actions operations
+  static async getQuickActions(limit = 20): Promise<QuickAction[]> {
+    const { data, error } = await supabase
+      .from('quick_actions_log')
+      .select('*')
+      .order('created_at', { ascending: false })
+      .limit(limit);
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformQuickAction);
   }
 
-  static async createQuickAction(action: QuickAction): Promise<QuickAction> {
+  static async createQuickAction(action: Omit<QuickAction, 'id' | 'created_at'>): Promise<QuickAction> {
     const { data, error } = await supabase
       .from('quick_actions_log')
       .insert(action)
@@ -283,7 +338,7 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformQuickAction(data);
   }
 
   static async updateQuickAction(id: string, updates: Partial<QuickAction>): Promise<QuickAction> {
@@ -295,40 +350,44 @@ export class DashboardService {
       .single();
     
     if (error) throw error;
-    return data;
+    return transformQuickAction(data);
   }
 
-  // Real-time Analytics
+  // Real-time Analytics operations
   static async getRealTimeAnalytics(filters?: any): Promise<RealTimeAnalytics[]> {
     let query = supabase.from('realtime_analytics').select('*');
     
-    if (filters?.metric_type) {
-      query = query.eq('metric_type', filters.metric_type);
-    }
-    if (filters?.user_id) {
-      query = query.eq('user_id', filters.user_id);
+    if (filters?.metricType) {
+      query = query.eq('metric_type', filters.metricType);
     }
     
+    if (filters?.timeRange) {
+      const { from, to } = filters.timeRange;
+      query = query.gte('timestamp_recorded', from).lte('timestamp_recorded', to);
+    }
+
     const { data, error } = await query.order('timestamp_recorded', { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformRealTimeAnalytics);
   }
 
-  // Performance Metrics
+  // Performance Metrics operations
   static async getPerformanceMetrics(filters?: any): Promise<PerformanceMetrics[]> {
     let query = supabase.from('performance_metrics').select('*');
     
-    if (filters?.metric_category) {
-      query = query.eq('metric_category', filters.metric_category);
-    }
-    if (filters?.endpoint_path) {
-      query = query.eq('endpoint_path', filters.endpoint_path);
+    if (filters?.category) {
+      query = query.eq('metric_category', filters.category);
     }
     
+    if (filters?.timeRange) {
+      const { from, to } = filters.timeRange;
+      query = query.gte('recorded_at', from).lte('recorded_at', to);
+    }
+
     const { data, error } = await query.order('recorded_at', { ascending: false });
     
     if (error) throw error;
-    return data || [];
+    return (data || []).map(transformPerformanceMetrics);
   }
 }

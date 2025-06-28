@@ -2,9 +2,12 @@
 import { supabase } from '@/integrations/supabase/client';
 import { Database } from '@/integrations/supabase/types';
 
-type VendorRow = Database['public']['Tables']['vendors']['Row'];
-type VendorCommissionRow = Database['public']['Tables']['vendor_commissions']['Row'];
+// Types from database
+type Vendor = Database['public']['Tables']['vendors']['Row'];
+type VendorCommission = Database['public']['Tables']['vendor_commissions']['Row'];
+type VendorPerformanceReport = Database['public']['Tables']['vendor_performance_reports']['Row'];
 
+// Interface definitions for the service
 export interface VendorData {
   id: string;
   business_name: string;
@@ -14,18 +17,18 @@ export interface VendorData {
   address: string;
   city: string;
   status: 'pending' | 'approved' | 'suspended' | 'rejected';
-  commission_rate: number;
   rating: number;
   total_sales: number;
-  trade_license: string;
+  commission_rate: number;
   documents: any[];
   created_at: string;
   updated_at: string;
-  user_id: string;
 }
 
 export interface VendorPerformanceReport {
+  id: string;
   vendor_id: string;
+  report_date: string;
   period_start: string;
   period_end: string;
   performance_score: number;
@@ -33,81 +36,88 @@ export interface VendorPerformanceReport {
   successful_orders: number;
   cancelled_orders: number;
   average_rating: number;
-  response_time_hours: number;
+  average_response_time_hours: number;
   revenue_generated: number;
   commission_paid: number;
   customer_complaints: number;
 }
 
-export interface CommissionData {
-  id: string;
-  vendor_id: string;
-  order_id: string;
-  commission_amount: number;
-  commission_rate: number;
-  gross_amount: number;
-  net_commission: number;
-  transaction_date: string;
-  status: string;
-  commission_type: string;
-  transaction_id: string;
-  payout_batch_id?: string;
-}
-
 export class VendorManagementService {
-  static async getVendors(filters?: any): Promise<VendorData[]> {
+  // Get all vendors with pagination and filters
+  static async getVendors(filters?: {
+    status?: string;
+    search?: string;
+    page?: number;
+    limit?: number;
+  }): Promise<{ data: VendorData[]; total: number }> {
     try {
       let query = supabase
         .from('vendors')
         .select(`
           *,
-          profiles:user_id (
+          profiles!vendors_user_id_fkey (
             full_name,
             phone
           )
-        `);
+        `, { count: 'exact' });
 
-      if (filters?.status) {
+      // Apply filters
+      if (filters?.status && filters.status !== 'all') {
         query = query.eq('status', filters.status);
       }
+
       if (filters?.search) {
-        query = query.ilike('business_name', `%${filters.search}%`);
+        query = query.or(`business_name.ilike.%${filters.search}%,trade_license.ilike.%${filters.search}%`);
       }
 
-      const { data, error } = await query;
+      // Apply pagination
+      const page = filters?.page || 1;
+      const limit = filters?.limit || 10;
+      const from = (page - 1) * limit;
+      const to = from + limit - 1;
+
+      query = query.range(from, to);
+
+      const { data: rawData, error, count } = await query;
+
       if (error) throw error;
 
-      return (data || []).map((vendor: any) => ({
+      // Map database results to VendorData interface
+      const data: VendorData[] = (rawData || []).map(vendor => ({
         id: vendor.id,
-        business_name: vendor.business_name,
+        business_name: vendor.business_name || '',
         contact_name: vendor.profiles?.full_name || 'N/A',
-        email: 'contact@vendor.com', // Fallback email
+        email: 'N/A', // Email would need to be stored in vendors table or profiles
         phone: vendor.profiles?.phone || 'N/A',
-        address: 'Address not provided',
-        city: 'City not provided',
+        address: 'N/A', // Address would need to be added to database schema
+        city: 'N/A', // City would need to be added to database schema
         status: vendor.status as 'pending' | 'approved' | 'suspended' | 'rejected',
-        commission_rate: vendor.commission_rate,
-        rating: vendor.rating,
-        total_sales: vendor.total_sales,
-        trade_license: vendor.trade_license || '',
-        documents: [],
+        rating: vendor.rating || 0,
+        total_sales: vendor.total_sales || 0,
+        commission_rate: vendor.commission_rate || 0,
+        documents: [], // Documents would need to be fetched separately
         created_at: vendor.created_at,
-        updated_at: vendor.updated_at,
-        user_id: vendor.user_id
+        updated_at: vendor.updated_at
       }));
+
+      return {
+        data,
+        total: count || 0
+      };
     } catch (error) {
       console.error('Error fetching vendors:', error);
       throw error;
     }
   }
 
+  // Get single vendor by ID
   static async getVendorById(id: string): Promise<VendorData | null> {
     try {
-      const { data, error } = await supabase
+      const { data: rawData, error } = await supabase
         .from('vendors')
         .select(`
           *,
-          profiles:user_id (
+          profiles!vendors_user_id_fkey (
             full_name,
             phone
           )
@@ -116,215 +126,264 @@ export class VendorManagementService {
         .maybeSingle();
 
       if (error) throw error;
-      if (!data) return null;
+      if (!rawData) return null;
 
-      return {
-        id: data.id,
-        business_name: data.business_name,
-        contact_name: data.profiles?.full_name || 'N/A',
-        email: 'contact@vendor.com', // Fallback email
-        phone: data.profiles?.phone || 'N/A',
-        address: 'Address not provided',
-        city: 'City not provided',
-        status: data.status as 'pending' | 'approved' | 'suspended' | 'rejected',
-        commission_rate: data.commission_rate,
-        rating: data.rating,
-        total_sales: data.total_sales,
-        trade_license: data.trade_license || '',
-        documents: [],
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        user_id: data.user_id
+      // Map database result to VendorData interface
+      const vendorData: VendorData = {
+        id: rawData.id,
+        business_name: rawData.business_name || '',
+        contact_name: rawData.profiles?.full_name || 'N/A',
+        email: 'N/A', // Email would need to be stored in vendors table or profiles
+        phone: rawData.profiles?.phone || 'N/A',
+        address: 'N/A', // Address would need to be added to database schema
+        city: 'N/A', // City would need to be added to database schema
+        status: rawData.status as 'pending' | 'approved' | 'suspended' | 'rejected',
+        rating: rawData.rating || 0,
+        total_sales: rawData.total_sales || 0,
+        commission_rate: rawData.commission_rate || 0,
+        documents: [], // Documents would need to be fetched separately
+        created_at: rawData.created_at,
+        updated_at: rawData.updated_at
       };
+
+      return vendorData;
     } catch (error) {
-      console.error('Error fetching vendor by ID:', error);
+      console.error('Error fetching vendor:', error);
       throw error;
     }
   }
 
-  static async updateVendorStatus(id: string, status: 'pending' | 'approved' | 'suspended' | 'rejected'): Promise<VendorData> {
+  // Update vendor status
+  static async updateVendorStatus(id: string, status: 'pending' | 'approved' | 'suspended' | 'rejected'): Promise<void> {
     try {
-      const { data, error } = await supabase
+      const { error } = await supabase
         .from('vendors')
-        .update({ status })
-        .eq('id', id)
-        .select(`
-          *,
-          profiles:user_id (
-            full_name,
-            phone
-          )
-        `)
-        .single();
+        .update({ status, updated_at: new Date().toISOString() })
+        .eq('id', id);
 
       if (error) throw error;
-
-      return {
-        id: data.id,
-        business_name: data.business_name,
-        contact_name: data.profiles?.full_name || 'N/A',
-        email: 'contact@vendor.com', // Fallback email
-        phone: data.profiles?.phone || 'N/A',
-        address: 'Address not provided',
-        city: 'City not provided',
-        status: data.status as 'pending' | 'approved' | 'suspended' | 'rejected',
-        commission_rate: data.commission_rate,
-        rating: data.rating,
-        total_sales: data.total_sales,
-        trade_license: data.trade_license || '',
-        documents: [],
-        created_at: data.created_at,
-        updated_at: data.updated_at,
-        user_id: data.user_id
-      };
     } catch (error) {
       console.error('Error updating vendor status:', error);
       throw error;
     }
   }
 
-  static async getPerformanceReports(filters?: any): Promise<VendorPerformanceReport[]> {
+  // Get vendors by status
+  static async getVendorsByStatus(status: string): Promise<VendorData[]> {
     try {
-      let query = supabase
-        .from('vendor_performance_reports')
-        .select('*');
+      const { data: rawData, error } = await supabase
+        .from('vendors')
+        .select(`
+          *,
+          profiles!vendors_user_id_fkey (
+            full_name,
+            phone
+          )
+        `)
+        .eq('status', status);
 
-      if (filters?.vendor_id) {
-        query = query.eq('vendor_id', filters.vendor_id);
-      }
-      if (filters?.period_start) {
-        query = query.gte('report_date', filters.period_start);
-      }
-      if (filters?.period_end) {
-        query = query.lte('report_date', filters.period_end);
-      }
-
-      const { data, error } = await query;
-      if (error) {
-        console.error('Performance reports query error:', error);
-        return [];
-      }
-
-      return (data || []).map((report: any) => ({
-        vendor_id: report.vendor_id || '',
-        period_start: report.report_date || new Date().toISOString(),
-        period_end: report.report_date || new Date().toISOString(),
-        performance_score: report.performance_score || 0,
-        total_orders: report.total_orders || 0,
-        successful_orders: report.successful_orders || 0,
-        cancelled_orders: report.cancelled_orders || 0,
-        average_rating: report.average_rating || 0,
-        response_time_hours: report.response_time_hours || 0,
-        revenue_generated: report.total_revenue || 0,
-        commission_paid: report.commission_paid || 0,
-        customer_complaints: report.customer_complaints || 0
-      }));
-    } catch (error) {
-      console.error('Error fetching performance reports:', error);
-      return [];
-    }
-  }
-
-  static async getCommissions(filters?: any): Promise<CommissionData[]> {
-    try {
-      let query = supabase
-        .from('vendor_commissions')
-        .select('*');
-
-      if (filters?.vendor_id) {
-        query = query.eq('vendor_id', filters.vendor_id);
-      }
-      if (filters?.status) {
-        query = query.eq('status', filters.status);
-      }
-      if (filters?.date_from) {
-        query = query.gte('transaction_date', filters.date_from);
-      }
-      if (filters?.date_to) {
-        query = query.lte('transaction_date', filters.date_to);
-      }
-
-      const { data, error } = await query;
       if (error) throw error;
 
-      return (data || []).map((commission: any) => ({
-        id: commission.id,
-        vendor_id: commission.vendor_id,
-        order_id: commission.order_id || '',
-        commission_amount: commission.commission_amount,
-        commission_rate: commission.commission_rate,
-        gross_amount: commission.gross_amount,
-        net_commission: commission.net_commission,
-        transaction_date: commission.transaction_date,
-        status: commission.status,
-        commission_type: commission.commission_type || 'sales',
-        transaction_id: commission.transaction_id || commission.id,
-        payout_batch_id: commission.payout_batch_id || undefined
+      // Map database results to VendorData interface
+      const data: VendorData[] = (rawData || []).map(vendor => ({
+        id: vendor.id,
+        business_name: vendor.business_name || '',
+        contact_name: vendor.profiles?.full_name || 'N/A',
+        email: 'N/A', // Email would need to be stored in vendors table or profiles
+        phone: vendor.profiles?.phone || 'N/A',
+        address: 'N/A', // Address would need to be added to database schema
+        city: 'N/A', // City would need to be added to database schema
+        status: vendor.status as 'pending' | 'approved' | 'suspended' | 'rejected',
+        rating: vendor.rating || 0,
+        total_sales: vendor.total_sales || 0,
+        commission_rate: vendor.commission_rate || 0,
+        documents: [], // Documents would need to be fetched separately
+        created_at: vendor.created_at,
+        updated_at: vendor.updated_at
       }));
+
+      return data;
     } catch (error) {
-      console.error('Error fetching commissions:', error);
+      console.error('Error fetching vendors by status:', error);
       throw error;
     }
   }
 
-  static async createCommission(commissionData: Omit<CommissionData, 'id'>): Promise<CommissionData> {
+  // Get vendor analytics
+  static async getVendorAnalytics(): Promise<any> {
+    try {
+      const { data, error } = await supabase
+        .from('vendors')
+        .select('status')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      // Calculate analytics
+      const total = data?.length || 0;
+      const active = data?.filter(v => v.status === 'approved').length || 0;
+      const pending = data?.filter(v => v.status === 'pending').length || 0;
+      const suspended = data?.filter(v => v.status === 'suspended').length || 0;
+
+      return {
+        total,
+        active,
+        pending,
+        suspended,
+        growth_rate: 0 // Would need historical data to calculate
+      };
+    } catch (error) {
+      console.error('Error fetching vendor analytics:', error);
+      throw error;
+    }
+  }
+
+  // Get vendor performance reports
+  static async getVendorPerformanceReports(vendorId?: string): Promise<VendorPerformanceReport[]> {
+    try {
+      let query = supabase
+        .from('vendor_performance_reports')
+        .select('*')
+        .order('report_date', { ascending: false });
+
+      if (vendorId) {
+        query = query.eq('vendor_id', vendorId);
+      }
+
+      const { data: rawData, error } = await query;
+
+      if (error) {
+        console.error('Error fetching performance reports:', error);
+        throw error;
+      }
+
+      // Map database results to VendorPerformanceReport interface with fallbacks
+      const data: VendorPerformanceReport[] = (rawData || []).map(report => ({
+        id: report.id,
+        vendor_id: report.vendor_id,
+        report_date: report.report_date,
+        period_start: report.period_start,
+        period_end: report.period_end,
+        performance_score: report.performance_score || 0,
+        total_orders: report.total_orders || 0,
+        successful_orders: report.successful_orders_count || 0,
+        cancelled_orders: report.cancelled_orders_count || 0,
+        average_rating: report.average_rating || 0,
+        average_response_time_hours: report.response_time_hours || 0,
+        revenue_generated: report.total_revenue || 0,
+        commission_paid: report.commission_paid || 0,
+        customer_complaints: report.customer_complaint_count || 0
+      }));
+
+      return data;
+    } catch (error) {
+      console.error('Error fetching vendor performance reports:', error);
+      return [];
+    }
+  }
+
+  // Get vendor commissions
+  static async getVendorCommissions(vendorId: string, filters?: {
+    startDate?: string;
+    endDate?: string;
+    status?: string;
+  }): Promise<VendorCommission[]> {
+    try {
+      let query = supabase
+        .from('vendor_commissions')
+        .select('*')
+        .eq('vendor_id', vendorId)
+        .order('transaction_date', { ascending: false });
+
+      if (filters?.startDate) {
+        query = query.gte('transaction_date', filters.startDate);
+      }
+
+      if (filters?.endDate) {
+        query = query.lte('transaction_date', filters.endDate);
+      }
+
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return data || [];
+    } catch (error) {
+      console.error('Error fetching vendor commissions:', error);
+      throw error;
+    }
+  }
+
+  // Create commission for vendor
+  static async createCommission(commissionData: {
+    vendor_id: string;
+    order_id: string;
+    gross_amount: number;
+    commission_amount: number;
+    commission_rate: number;
+    transaction_date: string;
+    status?: string;
+  }): Promise<VendorCommission> {
     try {
       const { data, error } = await supabase
         .from('vendor_commissions')
         .insert({
           vendor_id: commissionData.vendor_id,
           order_id: commissionData.order_id,
+          gross_amount: commissionData.gross_amount,
           commission_amount: commissionData.commission_amount,
           commission_rate: commissionData.commission_rate,
-          gross_amount: commissionData.gross_amount,
-          net_commission: commissionData.net_commission,
           transaction_date: commissionData.transaction_date,
-          status: commissionData.status,
-          commission_type: commissionData.commission_type,
-          transaction_id: commissionData.transaction_id,
-          payout_batch_id: commissionData.payout_batch_id
+          status: commissionData.status || 'pending',
+          net_commission: commissionData.commission_amount,
+          platform_fee: 0,
+          tax_amount: 0,
+          commission_type: 'sales',
+          category: 'general',
+          payment_status: 'pending'
         })
         .select()
         .single();
 
       if (error) throw error;
 
-      return {
-        id: data.id,
-        vendor_id: data.vendor_id,
-        order_id: data.order_id || '',
-        commission_amount: data.commission_amount,
-        commission_rate: data.commission_rate,
-        gross_amount: data.gross_amount,
-        net_commission: data.net_commission,
-        transaction_date: data.transaction_date,
-        status: data.status,
-        commission_type: data.commission_type || 'sales',
-        transaction_id: data.transaction_id || data.id,
-        payout_batch_id: data.payout_batch_id || undefined
-      };
+      return data;
     } catch (error) {
       console.error('Error creating commission:', error);
       throw error;
     }
   }
 
-  static async getVendorAnalytics(vendorId: string, period: string = '30d'): Promise<any> {
+  // Update vendor rating
+  static async updateVendorRating(vendorId: string, rating: number): Promise<void> {
     try {
-      const { data, error } = await supabase
-        .from('vendor_commissions')
-        .select('*')
-        .eq('vendor_id', vendorId);
+      const { error } = await supabase
+        .from('vendors')
+        .update({ rating, updated_at: new Date().toISOString() })
+        .eq('id', vendorId);
 
       if (error) throw error;
-
-      return {
-        totalCommissions: data?.length || 0,
-        totalAmount: data?.reduce((sum, item) => sum + (item.commission_amount || 0), 0) || 0,
-        averageCommission: data?.length ? (data.reduce((sum, item) => sum + (item.commission_amount || 0), 0) / data.length) : 0
-      };
     } catch (error) {
-      console.error('Error fetching vendor analytics:', error);
+      console.error('Error updating vendor rating:', error);
+      throw error;
+    }
+  }
+
+  // Delete vendor
+  static async deleteVendor(id: string): Promise<void> {
+    try {
+      const { error } = await supabase
+        .from('vendors')
+        .delete()
+        .eq('id', id);
+
+      if (error) throw error;
+    } catch (error) {
+      console.error('Error deleting vendor:', error);
       throw error;
     }
   }

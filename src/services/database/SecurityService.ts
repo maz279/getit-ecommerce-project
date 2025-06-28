@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface SecurityEventData {
@@ -30,12 +29,21 @@ export interface SecurityAlert {
 export class SecurityService {
   // Security Events Management
   static async createSecurityEvent(eventData: SecurityEventData): Promise<any> {
+    const insertData = {
+      event_type: eventData.event_type,
+      severity_level: eventData.severity_level,
+      user_id: eventData.user_id || null,
+      ip_address: eventData.ip_address || null,
+      user_agent: eventData.user_agent || null,
+      location_data: eventData.location_data || {},
+      event_details: eventData.event_details,
+      is_blocked: eventData.is_blocked || false,
+      resolution_status: eventData.resolution_status || 'open'
+    };
+
     const { data, error } = await supabase
       .from('security_events')
-      .insert({
-        ...eventData,
-        created_at: new Date().toISOString()
-      })
+      .insert(insertData)
       .select()
       .single();
 

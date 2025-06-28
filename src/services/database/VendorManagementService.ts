@@ -1,4 +1,3 @@
-
 import { supabase } from '@/integrations/supabase/client';
 
 export interface VendorData {
@@ -67,7 +66,7 @@ export class VendorManagementService {
       .order('created_at', { ascending: false });
 
     if (filters?.status) {
-      query = query.eq('status', filters.status);
+      query = query.eq('status', filters.status as 'pending' | 'approved' | 'suspended' | 'rejected');
     }
     if (filters?.rating_min) {
       query = query.gte('rating', filters.rating_min);
@@ -159,9 +158,26 @@ export class VendorManagementService {
   }
 
   static async createCommission(commission: VendorCommissionData): Promise<VendorCommissionData> {
+    // Map the commission data to match the database schema
+    const insertData = {
+      vendor_id: commission.vendor_id,
+      order_id: commission.order_id,
+      product_id: commission.product_id,
+      gross_amount: commission.gross_amount,
+      commission_rate: commission.commission_rate,
+      commission_amount: commission.commission_amount,
+      platform_fee: commission.platform_fee || 0,
+      net_commission: commission.net_commission,
+      currency: commission.currency || 'BDT',
+      transaction_date: commission.transaction_date || new Date().toISOString().split('T')[0],
+      status: commission.status || 'pending',
+      payout_batch_id: commission.payout_batch_id,
+      notes: commission.notes
+    };
+
     const { data, error } = await supabase
       .from('vendor_commissions')
-      .insert(commission)
+      .insert(insertData)
       .select()
       .single();
 

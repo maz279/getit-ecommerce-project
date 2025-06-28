@@ -11,6 +11,9 @@ export const useKPIMetrics = (filters?: any) => {
   });
 };
 
+// Alias for compatibility
+export const useDashboardKPIMetrics = useKPIMetrics;
+
 export const useCreateKPIMetric = () => {
   const queryClient = useQueryClient();
   
@@ -162,7 +165,7 @@ export const useLogQuickAction = () => {
 export const useRealTimeAnalytics = () => {
   return useQuery({
     queryKey: ['realtime-analytics'],
-    queryFn: DashboardService.getRealTimeAnalytics,
+    queryFn: () => DashboardService.getRealTimeAnalytics(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
@@ -171,8 +174,17 @@ export const useRealTimeAnalytics = () => {
 export const usePerformanceMetrics = () => {
   return useQuery({
     queryKey: ['performance-metrics'],
-    queryFn: DashboardService.getPerformanceMetrics,
+    queryFn: () => DashboardService.getPerformanceMetrics(),
     refetchInterval: 60000, // Refetch every minute
+  });
+};
+
+// Dashboard search hook
+export const useDashboardSearch = (searchTerm: string) => {
+  return useQuery({
+    queryKey: ['dashboard-search', searchTerm],
+    queryFn: () => DashboardService.searchDashboardData(searchTerm),
+    enabled: searchTerm.length > 0,
   });
 };
 

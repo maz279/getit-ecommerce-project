@@ -1,307 +1,340 @@
 
 import { supabase } from '@/integrations/supabase/client';
 
-export interface SecurityAnalytics {
-  totalEvents: number;
-  criticalEvents: number;
-  resolvedEvents: number;
-  avgResolutionTime: number;
-  topThreats: Array<{
-    type: string;
-    count: number;
-    severity: string;
-  }>;
-  trendsData: Array<{
-    date: string;
-    events: number;
-    severity: string;
-  }>;
+export interface SecurityEvent {
+  id?: string;
+  event_type: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  source_ip?: string;
+  user_id?: string;
+  event_description: string;
+  metadata?: any;
+  resolved: boolean;
+  resolved_by?: string;
+  resolved_at?: string;
+  created_at?: string;
+}
+
+export interface SystemHealthLog {
+  id?: string;
+  service_name: string;
+  status: 'healthy' | 'warning' | 'critical' | 'down';
+  response_time_ms?: number;
+  cpu_usage_percent?: number;
+  memory_usage_percent?: number;
+  disk_usage_percent?: number;
+  error_message?: string;
+  metadata?: any;
+  recorded_at?: string;
+  created_at?: string;
 }
 
 export class SecurityService {
-  static async getSecurityEvents(filters?: any): Promise<any[]> {
+  static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
     try {
-      let query = supabase.from('security_events').select('*');
-      
-      if (filters?.severity) {
-        query = query.in('severity', filters.severity);
-      }
-      
-      if (filters?.resolved !== undefined) {
-        query = query.eq('resolved', filters.resolved);
-      }
-      
-      if (filters?.dateRange) {
-        query = query
-          .gte('created_at', filters.dateRange.start)
-          .lte('created_at', filters.dateRange.end);
-      }
-      
-      const { data, error } = await query.order('created_at', { ascending: false });
-      
+      const { data, error } = await supabase
+        .from('security_events')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
       if (error) {
         console.warn('Security events table not accessible, returning mock data');
         return this.getMockSecurityEvents();
       }
-      
-      return data || [];
+
+      return (data || []).map(item => ({
+        id: item.id,
+        event_type: item.event_type,
+        severity: item.severity_level || 'low',
+        source_ip: item.source_ip || item.ip_address,
+        user_id: item.user_id,
+        event_description: item.event_description || 'Security event detected',
+        metadata: item.metadata || item.event_details || {},
+        resolved: item.resolved ?? (item.resolution_status === 'resolved'),
+        resolved_by: item.resolved_by,
+        resolved_at: item.resolved_at,
+        created_at: item.created_at
+      }));
     } catch (error) {
       console.error('Error fetching security events:', error);
       return this.getMockSecurityEvents();
     }
   }
 
-  static async createSecurityEvent(event: any): Promise<any> {
+  static async createSecurityEvent(event: SecurityEvent): Promise<SecurityEvent> {
     try {
       const { data, error } = await supabase
         .from('security_events')
         .insert([{
-          ...event,
+          event_type: event.event_type,
+          severity_level: event.severity,
+          source_ip: event.source_ip,
+          user_id: event.user_id,
+          event_description: event.event_description,
+          metadata: event.metadata,
+          resolved: event.resolved,
+          resolved_by: event.resolved_by,
+          resolved_at: event.resolved_at,
           created_at: new Date().toISOString()
         }])
         .select()
         .single();
-      
+
       if (error) throw error;
-      return data;
+
+      return {
+        id: data.id,
+        event_type: data.event_type,
+        severity: data.severity_level,
+        source_ip: data.source_ip,
+        user_id: data.user_id,
+        event_description: data.event_description,
+        metadata: data.metadata,
+        resolved: data.resolved,
+        resolved_by: data.resolved_by,
+        resolved_at: data.resolved_at,
+        created_at: data.created_at
+      };
     } catch (error) {
       console.error('Error creating security event:', error);
       throw error;
     }
   }
 
-  static async updateSecurityEvent(id: string, updates: any): Promise<any> {
+  static async getSystemHealthLogs(filters?: any): Promise<SystemHealthLog[]> {
     try {
       const { data, error } = await supabase
-        .from('security_events')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
-      
-      if (error) throw error;
-      return data;
-    } catch (error) {
-      console.error('Error updating security event:', error);
-      throw error;
-    }
-  }
+        .from('system_health_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(filters?.limit || 50);
 
-  static async getSecurityAnalytics(period: string = '30d'): Promise<SecurityAnalytics> {
-    try {
-      const events = await this.getSecurityEvents({
-        dateRange: this.getDateRange(period)
-      });
-
-      return this.processSecurityAnalytics(events);
-    } catch (error) {
-      console.error('Error fetching security analytics:', error);
-      return this.getMockSecurityAnalytics();
-    }
-  }
-
-  static async getSystemHealthLogs(filters?: any): Promise<any[]> {
-    try {
-      let query = supabase.from('system_health_logs').select('*');
-      
-      if (filters?.limit) {
-        query = query.limit(filters.limit);
-      }
-      
-      if (filters?.service) {
-        query = query.eq('service_name', filters.service);
-      }
-      
-      const { data, error } = await query.order('recorded_at', { ascending: false });
-      
       if (error) {
         console.warn('System health logs table not accessible, returning mock data');
         return this.getMockSystemHealthLogs();
       }
-      
-      return data || [];
+
+      return (data || []).map(item => ({
+        id: item.id,
+        service_name: item.service_name,
+        status: item.health_status || 'healthy',
+        response_time_ms: item.response_time_ms,
+        cpu_usage_percent: item.cpu_usage,
+        memory_usage_percent: item.memory_usage,
+        disk_usage_percent: item.disk_usage,
+        error_message: item.error_message,
+        metadata: item.metadata || {},
+        recorded_at: item.last_check || item.created_at,
+        created_at: item.created_at
+      }));
     } catch (error) {
       console.error('Error fetching system health logs:', error);
       return this.getMockSystemHealthLogs();
     }
   }
 
-  private static getDateRange(period: string): { start: string; end: string } {
-    const end = new Date();
-    const start = new Date();
-    
-    switch (period) {
-      case '7d':
-        start.setDate(start.getDate() - 7);
-        break;
-      case '30d':
-        start.setDate(start.getDate() - 30);
-        break;
-      case '90d':
-        start.setDate(start.getDate() - 90);
-        break;
-      default:
-        start.setDate(start.getDate() - 30);
+  static async getSecurityAnalytics(period: string = '30d'): Promise<any> {
+    try {
+      const events = await this.getSecurityEvents();
+      
+      // Filter events based on period
+      const now = new Date();
+      const periodStart = new Date();
+      
+      switch (period) {
+        case '7d':
+          periodStart.setDate(now.getDate() - 7);
+          break;
+        case '30d':
+          periodStart.setDate(now.getDate() - 30);
+          break;
+        case '90d':
+          periodStart.setDate(now.getDate() - 90);
+          break;
+        default:
+          periodStart.setDate(now.getDate() - 30);
+      }
+
+      const filteredEvents = events.filter(event => 
+        new Date(event.created_at || '') >= periodStart
+      );
+
+      // Calculate analytics
+      const totalEvents = filteredEvents.length;
+      const resolvedEvents = filteredEvents.filter(e => e.resolved).length;
+      const unresolvedEvents = totalEvents - resolvedEvents;
+      
+      // Count by severity with proper type handling
+      const severityCounts = filteredEvents.reduce((acc, event) => {
+        const severity = String(event.severity || 'low');
+        acc[severity] = (acc[severity] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      // Count by type with proper type handling
+      const typeCounts = filteredEvents.reduce((acc, event) => {
+        const type = String(event.event_type || 'unknown');
+        acc[type] = (acc[type] || 0) + 1;
+        return acc;
+      }, {} as Record<string, number>);
+
+      // Create trend data
+      const trendData = this.generateTrendData(filteredEvents, period);
+
+      return {
+        totalEvents,
+        resolvedEvents,
+        unresolvedEvents,
+        resolutionRate: totalEvents > 0 ? Number(((resolvedEvents / totalEvents) * 100).toFixed(1)) : 0,
+        severityBreakdown: severityCounts,
+        typeBreakdown: typeCounts,
+        trendData,
+        topSources: this.getTopSources(filteredEvents),
+        avgResolutionTime: this.calculateAvgResolutionTime(filteredEvents)
+      };
+    } catch (error) {
+      console.error('Error fetching security analytics:', error);
+      return this.getMockSecurityAnalytics();
     }
-    
-    return {
-      start: start.toISOString(),
-      end: end.toISOString()
-    };
   }
 
-  private static processSecurityAnalytics(events: any[]): SecurityAnalytics {
-    const totalEvents = events.length;
-    const criticalEvents = events.filter(e => e.severity === 'critical').length;
-    const resolvedEvents = events.filter(e => e.resolved).length;
+  private static generateTrendData(events: SecurityEvent[], period: string): Array<{ date: string; count: number }> {
+    const days = period === '7d' ? 7 : period === '30d' ? 30 : 90;
+    const trendData = [];
     
-    // Calculate average resolution time
-    const resolvedWithTime = events.filter(e => e.resolved && e.resolved_at);
-    const avgResolutionTime = resolvedWithTime.length > 0
-      ? resolvedWithTime.reduce((acc, e) => {
-          const created = new Date(e.created_at);
-          const resolved = new Date(e.resolved_at);
-          return acc + (resolved.getTime() - created.getTime());
-        }, 0) / resolvedWithTime.length / (1000 * 60 * 60) // Convert to hours
-      : 0;
-
-    // Top threats
-    const threatCounts = events.reduce((acc, e) => {
-      acc[e.event_type] = (acc[e.event_type] || 0) + 1;
-      return acc;
-    }, {} as Record<string, number>);
-
-    const topThreats = Object.entries(threatCounts)
-      .map(([type, count]) => ({
-        type,
-        count,
-        severity: events.find(e => e.event_type === type)?.severity || 'medium'
-      }))
-      .sort((a, b) => b.count - a.count)
-      .slice(0, 5);
-
-    // Trends data (simplified)
-    const trendsData = this.generateTrendsData(events);
-
-    return {
-      totalEvents,
-      criticalEvents,
-      resolvedEvents,
-      avgResolutionTime,
-      topThreats,
-      trendsData
-    };
-  }
-
-  private static generateTrendsData(events: any[]): Array<{ date: string; events: number; severity: string }> {
-    const last7Days = [];
-    for (let i = 6; i >= 0; i--) {
+    for (let i = days - 1; i >= 0; i--) {
       const date = new Date();
       date.setDate(date.getDate() - i);
       const dateStr = date.toISOString().split('T')[0];
       
-      const dayEvents = events.filter(e => 
-        e.created_at.startsWith(dateStr)
-      );
+      const dayEvents = events.filter(event => 
+        event.created_at && event.created_at.startsWith(dateStr)
+      ).length;
       
-      last7Days.push({
+      trendData.push({
         date: dateStr,
-        events: dayEvents.length,
-        severity: dayEvents.length > 10 ? 'high' : dayEvents.length > 5 ? 'medium' : 'low'
+        count: dayEvents
       });
     }
     
-    return last7Days;
+    return trendData;
   }
 
-  private static getMockSecurityEvents(): any[] {
+  private static getTopSources(events: SecurityEvent[]): Array<{ ip: string; count: number }> {
+    const sourceCounts = events.reduce((acc, event) => {
+      if (event.source_ip) {
+        acc[event.source_ip] = (acc[event.source_ip] || 0) + 1;
+      }
+      return acc;
+    }, {} as Record<string, number>);
+
+    return Object.entries(sourceCounts)
+      .map(([ip, count]) => ({ ip, count: Number(count) }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 10);
+  }
+
+  private static calculateAvgResolutionTime(events: SecurityEvent[]): number {
+    const resolvedEvents = events.filter(e => e.resolved && e.resolved_at && e.created_at);
+    
+    if (resolvedEvents.length === 0) return 0;
+    
+    const totalTime = resolvedEvents.reduce((sum, event) => {
+      const created = new Date(event.created_at!).getTime();
+      const resolved = new Date(event.resolved_at!).getTime();
+      return sum + (resolved - created);
+    }, 0);
+    
+    return Math.round(totalTime / resolvedEvents.length / (1000 * 60 * 60)); // Convert to hours
+  }
+
+  private static getMockSecurityEvents(): SecurityEvent[] {
     return [
       {
         id: '1',
         event_type: 'Failed Login Attempt',
         severity: 'medium',
         source_ip: '192.168.1.100',
-        event_description: 'Multiple failed login attempts from IP 192.168.1.100',
+        user_id: 'user-123',
+        event_description: 'Multiple failed login attempts detected',
+        metadata: { attempt_count: 5 },
         resolved: false,
-        created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString() // 30 minutes ago
+        created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString()
       },
       {
         id: '2',
-        event_type: 'Suspicious File Access',
+        event_type: 'Suspicious Activity',
         severity: 'high',
-        source_ip: '10.0.0.50',
-        event_description: 'Unauthorized access attempt to sensitive files',
+        source_ip: '10.0.0.45',
+        user_id: 'user-456',
+        event_description: 'Unusual access pattern detected',
+        metadata: { risk_score: 85 },
         resolved: true,
+        resolved_by: 'admin-1',
         resolved_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
-        created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString() // 1 hour ago
-      },
-      {
-        id: '3',
-        event_type: 'DDoS Attack',
-        severity: 'critical',
-        source_ip: '203.0.113.0',
-        event_description: 'High volume of requests detected from multiple IPs',
-        resolved: true,
-        resolved_at: new Date(Date.now() - 1000 * 60 * 45).toISOString(),
-        created_at: new Date(Date.now() - 1000 * 60 * 120).toISOString() // 2 hours ago
+        created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString()
       }
     ];
   }
 
-  private static getMockSystemHealthLogs(): any[] {
+  private static getMockSystemHealthLogs(): SystemHealthLog[] {
     return [
       {
         id: '1',
         service_name: 'API Gateway',
         status: 'healthy',
         response_time_ms: 245,
-        cpu_usage_percent: 65.5,
-        memory_usage_percent: 78.2,
-        recorded_at: new Date().toISOString()
+        cpu_usage_percent: 67.8,
+        memory_usage_percent: 82.3,
+        disk_usage_percent: 45.2,
+        recorded_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
       },
       {
         id: '2',
         service_name: 'Database',
         status: 'warning',
-        response_time_ms: 890,
-        cpu_usage_percent: 89.1,
-        memory_usage_percent: 85.7,
-        recorded_at: new Date(Date.now() - 300000).toISOString()
-      },
-      {
-        id: '3',
-        service_name: 'File Storage',
-        status: 'healthy',
         response_time_ms: 156,
-        cpu_usage_percent: 42.3,
-        memory_usage_percent: 55.1,
-        recorded_at: new Date(Date.now() - 600000).toISOString()
+        cpu_usage_percent: 85.1,
+        memory_usage_percent: 91.7,
+        disk_usage_percent: 78.9,
+        error_message: 'High memory usage detected',
+        metadata: { alert_threshold: 90 },
+        recorded_at: new Date().toISOString(),
+        created_at: new Date().toISOString()
       }
     ];
   }
 
-  private static getMockSecurityAnalytics(): SecurityAnalytics {
+  private static getMockSecurityAnalytics(): any {
     return {
-      totalEvents: 45,
-      criticalEvents: 3,
-      resolvedEvents: 38,
-      avgResolutionTime: 2.5,
-      topThreats: [
-        { type: 'Failed Login Attempt', count: 15, severity: 'medium' },
-        { type: 'Suspicious File Access', count: 8, severity: 'high' },
-        { type: 'DDoS Attack', count: 3, severity: 'critical' },
-        { type: 'Malware Detection', count: 12, severity: 'high' },
-        { type: 'Unauthorized API Access', count: 7, severity: 'medium' }
+      totalEvents: 156,
+      resolvedEvents: 142,
+      unresolvedEvents: 14,
+      resolutionRate: 91.0,
+      severityBreakdown: {
+        low: 89,
+        medium: 45,
+        high: 18,
+        critical: 4
+      },
+      typeBreakdown: {
+        'Failed Login': 67,
+        'Suspicious Activity': 34,
+        'Malware Detection': 23,
+        'Data Breach Attempt': 12
+      },
+      trendData: [
+        { date: '2024-01-01', count: 12 },
+        { date: '2024-01-02', count: 8 },
+        { date: '2024-01-03', count: 15 }
       ],
-      trendsData: [
-        { date: '2024-01-01', events: 5, severity: 'low' },
-        { date: '2024-01-02', events: 8, severity: 'medium' },
-        { date: '2024-01-03', events: 12, severity: 'high' },
-        { date: '2024-01-04', events: 3, severity: 'low' },
-        { date: '2024-01-05', events: 7, severity: 'medium' },
-        { date: '2024-01-06', events: 6, severity: 'medium' },
-        { date: '2024-01-07', events: 4, severity: 'low' }
-      ]
+      topSources: [
+        { ip: '192.168.1.100', count: 23 },
+        { ip: '10.0.0.45', count: 18 }
+      ],
+      avgResolutionTime: 4.2
     };
   }
 }

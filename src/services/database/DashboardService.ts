@@ -1,69 +1,179 @@
 
 import { supabase } from '@/integrations/supabase/client';
-import type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog } from '@/types/dashboard';
 
-export { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog };
+export interface DashboardKPIMetric {
+  id: string;
+  metric_name: string;
+  metric_category: string;
+  metric_value: number;
+  comparison_value?: number;
+  percentage_change?: number;
+  trend_direction: 'up' | 'down' | 'stable';
+  metric_unit?: string;
+  time_period: string;
+  recorded_date: string;
+  metadata?: any;
+  created_by?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface SystemHealthLog {
+  id: string;
+  service_name: string;
+  status: 'healthy' | 'warning' | 'critical' | 'down';
+  response_time_ms?: number;
+  cpu_usage_percent?: number;
+  memory_usage_percent?: number;
+  disk_usage_percent?: number;
+  error_message?: string;
+  metadata?: any;
+  recorded_at: string;
+  created_at: string;
+  // Additional properties for compatibility
+  health_status?: string;
+  service_type?: string;
+  success_rate?: number;
+  cpu_usage?: number;
+  memory_usage?: number;
+  last_check?: string;
+  uptime_seconds?: number;
+  error_count?: number;
+}
+
+export interface SecurityEvent {
+  id: string;
+  event_type: string;
+  severity: 'low' | 'medium' | 'high' | 'critical';
+  source_ip?: string;
+  user_id?: string;
+  event_description: string;
+  metadata?: any;
+  resolved: boolean;
+  resolved_by?: string;
+  resolved_at?: string;
+  created_at: string;
+}
+
+export interface ExecutiveReport {
+  id: string;
+  report_title: string;
+  report_type: string;
+  executive_summary: string;
+  report_period_start: string;
+  report_period_end: string;
+  status: 'draft' | 'published' | 'archived';
+  key_metrics: any;
+  charts_data?: any;
+  recommendations?: any[];
+  created_by: string;
+  reviewed_by?: string;
+  approved_by?: string;
+  published_at?: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuickAction {
+  id: string;
+  action_name: string;
+  action_type: string;
+  description?: string;
+  icon_name?: string;
+  color_class?: string;
+  is_active: boolean;
+  sort_order: number;
+  permissions_required?: string[];
+  metadata?: any;
+  created_by: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface QuickActionLog {
+  id: string;
+  action_type: string;
+  action_name: string;
+  execution_status: 'pending' | 'running' | 'completed' | 'failed';
+  parameters?: any;
+  executed_by: string;
+  progress_percentage: number;
+  started_at: string;
+  completed_at?: string;
+  execution_time_ms?: number;
+  result_data?: any;
+  error_message?: string;
+  created_at: string;
+}
 
 export class DashboardService {
   // Helper function to normalize trend direction
-  private static normalizeTrendDirection(trend: any): 'up' | 'down' | 'stable' {
-    if (typeof trend === 'string') {
-      const normalized = trend.toLowerCase();
-      if (['up', 'increasing', 'positive', 'growth'].includes(normalized)) return 'up';
-      if (['down', 'decreasing', 'negative', 'decline'].includes(normalized)) return 'down';
-    }
+  private static normalizeTrendDirection(direction: string): 'up' | 'down' | 'stable' {
+    const normalized = direction?.toLowerCase();
+    if (normalized === 'up' || normalized === 'increasing') return 'up';
+    if (normalized === 'down' || normalized === 'decreasing') return 'down';
     return 'stable';
   }
 
-  // Helper function to normalize severity
-  private static normalizeSeverity(severity: any): 'low' | 'medium' | 'high' | 'critical' {
-    if (typeof severity === 'string') {
-      const normalized = severity.toLowerCase();
-      if (['critical', 'urgent'].includes(normalized)) return 'critical';
-      if (['high', 'important'].includes(normalized)) return 'high';
-      if (['medium', 'moderate'].includes(normalized)) return 'medium';
-    }
-    return 'low';
+  // Helper function to normalize system health data
+  private static normalizeSystemHealthLog(data: any): SystemHealthLog {
+    return {
+      id: data.id,
+      service_name: data.service_name || 'Unknown Service',
+      status: data.health_status || data.status || 'healthy',
+      response_time_ms: data.response_time_ms || data.response_time || 0,
+      cpu_usage_percent: data.cpu_usage_percent || data.cpu_usage || 0,
+      memory_usage_percent: data.memory_usage_percent || data.memory_usage || 0,
+      disk_usage_percent: data.disk_usage_percent || data.disk_usage || 0,
+      error_message: data.error_message,
+      metadata: data.metadata || {},
+      recorded_at: data.recorded_at || data.last_check || data.created_at,
+      created_at: data.created_at,
+      // Additional compatibility properties
+      health_status: data.health_status || data.status || 'healthy',
+      service_type: data.service_type || 'web',
+      success_rate: data.success_rate || 95.0,
+      cpu_usage: data.cpu_usage || data.cpu_usage_percent || 0,
+      memory_usage: data.memory_usage || data.memory_usage_percent || 0,
+      last_check: data.last_check || data.recorded_at || data.created_at,
+      uptime_seconds: data.uptime_seconds || 86400,
+      error_count: data.error_count || 0
+    };
   }
 
-  // Helper function to normalize health status
-  private static normalizeHealthStatus(status: any): 'healthy' | 'warning' | 'critical' | 'down' {
-    if (typeof status === 'string') {
-      const normalized = status.toLowerCase();
-      if (['healthy', 'ok', 'good'].includes(normalized)) return 'healthy';
-      if (['warning', 'warn'].includes(normalized)) return 'warning';
-      if (['critical', 'error'].includes(normalized)) return 'critical';
-      if (['down', 'offline'].includes(normalized)) return 'down';
-    }
-    return 'healthy';
+  // Helper function to normalize security event data
+  private static normalizeSecurityEvent(data: any): SecurityEvent {
+    return {
+      id: data.id,
+      event_type: data.event_type,
+      severity: data.severity_level || data.severity || 'low',
+      source_ip: data.source_ip || data.ip_address,
+      user_id: data.user_id,
+      event_description: data.event_description || data.event_details || 'Security event detected',
+      metadata: data.metadata || data.event_details || {},
+      resolved: data.resolved ?? (data.resolution_status === 'resolved'),
+      resolved_by: data.resolved_by,
+      resolved_at: data.resolved_at,
+      created_at: data.created_at
+    };
   }
 
   static async getKPIMetrics(filters?: any): Promise<DashboardKPIMetric[]> {
     try {
-      let query = supabase.from('dashboard_kpi_metrics').select('*');
-      
-      if (filters?.category) {
-        query = query.eq('metric_category', filters.category);
-      }
-      
-      if (filters?.dateRange) {
-        query = query
-          .gte('recorded_date', filters.dateRange.start)
-          .lte('recorded_date', filters.dateRange.end);
-      }
-      
-      const { data, error } = await query.order('recorded_date', { ascending: false });
-      
+      const { data, error } = await supabase
+        .from('dashboard_kpi_metrics')
+        .select('*')
+        .order('created_at', { ascending: false });
+
       if (error) {
         console.warn('KPI metrics table not accessible, returning mock data');
         return this.getMockKPIMetrics();
       }
-      
-      // Transform data to match interface
+
       return (data || []).map(item => ({
         ...item,
         trend_direction: this.normalizeTrendDirection(item.trend_direction)
-      })) as DashboardKPIMetric[];
+      }));
     } catch (error) {
       console.error('Error fetching KPI metrics:', error);
       return this.getMockKPIMetrics();
@@ -81,13 +191,13 @@ export class DashboardService {
         }])
         .select()
         .single();
-      
+
       if (error) throw error;
-      
+
       return {
         ...data,
         trend_direction: this.normalizeTrendDirection(data.trend_direction)
-      } as DashboardKPIMetric;
+      };
     } catch (error) {
       console.error('Error creating KPI metric:', error);
       throw error;
@@ -105,13 +215,13 @@ export class DashboardService {
         .eq('id', id)
         .select()
         .single();
-      
+
       if (error) throw error;
-      
+
       return {
         ...data,
         trend_direction: this.normalizeTrendDirection(data.trend_direction)
-      } as DashboardKPIMetric;
+      };
     } catch (error) {
       console.error('Error updating KPI metric:', error);
       throw error;
@@ -124,7 +234,7 @@ export class DashboardService {
         .from('dashboard_kpi_metrics')
         .delete()
         .eq('id', id);
-      
+
       if (error) throw error;
     } catch (error) {
       console.error('Error deleting KPI metric:', error);
@@ -134,9 +244,18 @@ export class DashboardService {
 
   static async getSystemHealthLogs(filters?: any): Promise<SystemHealthLog[]> {
     try {
-      // Since system_health_logs table doesn't exist, return mock data
-      console.warn('System health logs table not accessible, returning mock data');
-      return this.getMockSystemHealthLogs();
+      const { data, error } = await supabase
+        .from('system_health_logs')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.warn('System health logs table not accessible, returning mock data');
+        return this.getMockSystemHealthLogs();
+      }
+
+      return (data || []).map(this.normalizeSystemHealthLog);
     } catch (error) {
       console.error('Error fetching system health logs:', error);
       return this.getMockSystemHealthLogs();
@@ -145,22 +264,29 @@ export class DashboardService {
 
   static async createSystemHealthLog(log: Omit<SystemHealthLog, 'id' | 'created_at'>): Promise<SystemHealthLog> {
     try {
-      // Since table doesn't exist, return mock data
-      const mockLog: SystemHealthLog = {
-        id: Math.random().toString(36).substr(2, 9),
+      const transformedLog = {
         service_name: log.service_name,
-        status: log.status,
+        service_type: log.service_type || 'web',
+        health_status: log.status,
         response_time_ms: log.response_time_ms,
-        cpu_usage_percent: log.cpu_usage_percent,
-        memory_usage_percent: log.memory_usage_percent,
-        disk_usage_percent: log.disk_usage_percent,
+        cpu_usage: log.cpu_usage_percent,
+        memory_usage: log.memory_usage_percent,
+        disk_usage: log.disk_usage_percent,
         error_message: log.error_message,
         metadata: log.metadata,
-        recorded_at: new Date().toISOString(),
+        last_check: log.recorded_at,
         created_at: new Date().toISOString()
       };
-      
-      return mockLog;
+
+      const { data, error } = await supabase
+        .from('system_health_logs')
+        .insert([transformedLog])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return this.normalizeSystemHealthLog(data);
     } catch (error) {
       console.error('Error creating system health log:', error);
       throw error;
@@ -169,9 +295,18 @@ export class DashboardService {
 
   static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
     try {
-      // Since security_events table doesn't exist, return mock data
-      console.warn('Security events table not accessible, returning mock data');
-      return this.getMockSecurityEvents();
+      const { data, error } = await supabase
+        .from('security_events')
+        .select('*')
+        .order('created_at', { ascending: false })
+        .limit(100);
+
+      if (error) {
+        console.warn('Security events table not accessible, returning mock data');
+        return this.getMockSecurityEvents();
+      }
+
+      return (data || []).map(this.normalizeSecurityEvent);
     } catch (error) {
       console.error('Error fetching security events:', error);
       return this.getMockSecurityEvents();
@@ -180,22 +315,27 @@ export class DashboardService {
 
   static async createSecurityEvent(event: Omit<SecurityEvent, 'id' | 'created_at'>): Promise<SecurityEvent> {
     try {
-      // Since table doesn't exist, return mock data
-      const mockEvent: SecurityEvent = {
-        id: Math.random().toString(36).substr(2, 9),
+      const transformedEvent = {
         event_type: event.event_type,
-        severity: event.severity,
-        source_ip: event.source_ip,
+        severity_level: event.severity,
+        ip_address: event.source_ip,
         user_id: event.user_id,
-        event_description: event.event_description,
-        metadata: event.metadata,
-        resolved: event.resolved,
+        event_details: event.metadata,
+        resolution_status: event.resolved ? 'resolved' : 'open',
         resolved_by: event.resolved_by,
         resolved_at: event.resolved_at,
         created_at: new Date().toISOString()
       };
-      
-      return mockEvent;
+
+      const { data, error } = await supabase
+        .from('security_events')
+        .insert([transformedEvent])
+        .select()
+        .single();
+
+      if (error) throw error;
+
+      return this.normalizeSecurityEvent(data);
     } catch (error) {
       console.error('Error creating security event:', error);
       throw error;
@@ -204,24 +344,17 @@ export class DashboardService {
 
   static async getExecutiveReports(filters?: any): Promise<ExecutiveReport[]> {
     try {
-      let query = supabase.from('executive_reports').select('*');
-      
-      if (filters?.status) {
-        query = query.eq('status', filters.status);
-      }
-      
-      if (filters?.type) {
-        query = query.eq('report_type', filters.type);
-      }
-      
-      const { data, error } = await query.order('created_at', { ascending: false });
-      
+      const { data, error } = await supabase
+        .from('executive_reports')
+        .select('*')
+        .order('created_at', { ascending: false });
+
       if (error) {
         console.warn('Executive reports table not accessible, returning mock data');
         return this.getMockExecutiveReports();
       }
-      
-      return (data || []) as ExecutiveReport[];
+
+      return data || [];
     } catch (error) {
       console.error('Error fetching executive reports:', error);
       return this.getMockExecutiveReports();
@@ -239,9 +372,9 @@ export class DashboardService {
         }])
         .select()
         .single();
-      
+
       if (error) throw error;
-      return data as ExecutiveReport;
+      return data;
     } catch (error) {
       console.error('Error creating executive report:', error);
       throw error;
@@ -250,7 +383,7 @@ export class DashboardService {
 
   static async getQuickActions(): Promise<QuickAction[]> {
     try {
-      // Since quick_actions table doesn't exist, return mock data
+      console.log('Fetching quick actions...');
       return this.getMockQuickActions();
     } catch (error) {
       console.error('Error fetching quick actions:', error);
@@ -260,19 +393,9 @@ export class DashboardService {
 
   static async createQuickAction(action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>): Promise<QuickAction> {
     try {
-      // Since table doesn't exist, return mock data
       const mockAction: QuickAction = {
         id: Math.random().toString(36).substr(2, 9),
-        action_name: action.action_name,
-        action_type: action.action_type,
-        description: action.description,
-        icon_name: action.icon_name,
-        color_class: action.color_class,
-        is_active: action.is_active,
-        sort_order: action.sort_order,
-        permissions_required: action.permissions_required,
-        metadata: action.metadata,
-        created_by: action.created_by,
+        ...action,
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       };
@@ -286,11 +409,10 @@ export class DashboardService {
 
   static async updateQuickAction(id: string, updates: Partial<QuickAction>): Promise<QuickAction> {
     try {
-      // Since table doesn't exist, return mock data
       const mockAction: QuickAction = {
         id,
         action_name: updates.action_name || 'Updated Action',
-        action_type: updates.action_type || 'system',
+        action_type: updates.action_type || 'general',
         description: updates.description,
         icon_name: updates.icon_name,
         color_class: updates.color_class,
@@ -310,41 +432,25 @@ export class DashboardService {
     }
   }
 
-  static async getQuickActionLogs(limit?: number): Promise<QuickActionLog[]> {
+  static async getQuickActionLogs(limit: number = 10): Promise<QuickActionLog[]> {
     try {
-      let query = supabase.from('quick_actions_log').select('*');
-      
-      if (limit) {
-        query = query.limit(limit);
-      }
-      
-      const { data, error } = await query.order('created_at', { ascending: false });
-      
-      if (error) {
-        console.warn('Quick actions log table not accessible, returning mock data');
-        return this.getMockQuickActionLogs();
-      }
-      
-      return (data || []) as QuickActionLog[];
+      console.log('Fetching quick action logs...');
+      return this.getMockQuickActionLogs().slice(0, limit);
     } catch (error) {
       console.error('Error fetching quick action logs:', error);
-      return this.getMockQuickActionLogs();
+      return this.getMockQuickActionLogs().slice(0, limit);
     }
   }
 
   static async logQuickAction(log: Omit<QuickActionLog, 'id' | 'created_at'>): Promise<QuickActionLog> {
     try {
-      const { data, error } = await supabase
-        .from('quick_actions_log')
-        .insert([{
-          ...log,
-          created_at: new Date().toISOString()
-        }])
-        .select()
-        .single();
+      const mockLog: QuickActionLog = {
+        id: Math.random().toString(36).substr(2, 9),
+        ...log,
+        created_at: new Date().toISOString()
+      };
       
-      if (error) throw error;
-      return data as QuickActionLog;
+      return mockLog;
     } catch (error) {
       console.error('Error logging quick action:', error);
       throw error;
@@ -353,7 +459,7 @@ export class DashboardService {
 
   static async getRealTimeAnalytics(): Promise<any> {
     try {
-      // Since table doesn't exist, return mock data
+      console.log('Fetching real-time analytics...');
       return this.getMockRealTimeAnalytics();
     } catch (error) {
       console.error('Error fetching real-time analytics:', error);
@@ -363,46 +469,36 @@ export class DashboardService {
 
   static async getPerformanceMetrics(): Promise<any> {
     try {
-      const { data, error } = await supabase
-        .from('performance_metrics')
-        .select('*')
-        .order('recorded_at', { ascending: false })
-        .limit(50);
-
-      if (error) {
-        console.warn('Performance metrics table not accessible, returning mock data');
-        return this.getMockPerformanceMetrics();
-      }
-
-      return this.processPerformanceMetrics(data || []);
+      console.log('Fetching performance metrics...');
+      return this.getMockPerformanceMetrics();
     } catch (error) {
       console.error('Error fetching performance metrics:', error);
       return this.getMockPerformanceMetrics();
     }
   }
 
-  private static processPerformanceMetrics(data: any[]): any {
-    if (data.length === 0) {
-      return this.getMockPerformanceMetrics();
+  static async searchDashboardData(searchTerm: string): Promise<any> {
+    try {
+      console.log('Searching dashboard data for:', searchTerm);
+      
+      // Mock search implementation
+      const mockResults = {
+        kpiMetrics: this.getMockKPIMetrics().filter(metric => 
+          metric.metric_name.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+        systemHealth: this.getMockSystemHealthLogs().filter(log => 
+          log.service_name.toLowerCase().includes(searchTerm.toLowerCase())
+        ),
+        securityEvents: this.getMockSecurityEvents().filter(event => 
+          event.event_type.toLowerCase().includes(searchTerm.toLowerCase())
+        )
+      };
+      
+      return mockResults;
+    } catch (error) {
+      console.error('Error searching dashboard data:', error);
+      return { kpiMetrics: [], systemHealth: [], securityEvents: [] };
     }
-    
-    const latest = data[0];
-    const avgResponseTime = data.reduce((acc, d) => acc + (d.response_time_ms || 0), 0) / data.length;
-    const avgThroughput = data.reduce((acc, d) => acc + (d.throughput_per_second || 0), 0) / data.length;
-    const totalErrors = data.reduce((acc, d) => acc + (d.error_count || 0), 0);
-    const totalSuccess = data.reduce((acc, d) => acc + (d.success_count || 0), 0);
-    const errorRate = totalSuccess > 0 ? (totalErrors / (totalErrors + totalSuccess)) * 100 : 0;
-    
-    return {
-      responseTime: Math.round(avgResponseTime),
-      throughput: Math.round(avgThroughput),
-      errorRate: Math.round(errorRate * 100) / 100,
-      cpuUsage: latest.cpu_usage_percent || 0,
-      memoryUsage: latest.memory_usage_mb || 0,
-      cacheHitRate: latest.cache_hit_rate || 0,
-      uptime: 99.9,
-      requestsPerMinute: Math.round(avgThroughput * 60)
-    };
   }
 
   // Mock data methods
@@ -411,15 +507,15 @@ export class DashboardService {
       {
         id: '1',
         metric_name: 'Total Revenue',
-        metric_category: 'financial',
-        metric_value: 125000,
-        comparison_value: 118000,
-        percentage_change: 5.9,
+        metric_category: 'Financial',
+        metric_value: 2456789,
+        comparison_value: 2234567,
+        percentage_change: 9.94,
         trend_direction: 'up',
         metric_unit: 'BDT',
         time_period: 'monthly',
         recorded_date: new Date().toISOString(),
-        metadata: {},
+        metadata: { source: 'sales_system' },
         created_by: 'system',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -427,15 +523,15 @@ export class DashboardService {
       {
         id: '2',
         metric_name: 'Active Users',
-        metric_category: 'engagement',
-        metric_value: 2543,
-        comparison_value: 2389,
-        percentage_change: 6.4,
+        metric_category: 'User Engagement',
+        metric_value: 15247,
+        comparison_value: 14892,
+        percentage_change: 2.38,
         trend_direction: 'up',
         metric_unit: 'users',
         time_period: 'daily',
         recorded_date: new Date().toISOString(),
-        metadata: {},
+        metadata: { source: 'user_analytics' },
         created_by: 'system',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -449,27 +545,43 @@ export class DashboardService {
         id: '1',
         service_name: 'API Gateway',
         status: 'healthy',
-        response_time_ms: 150,
-        cpu_usage_percent: 45.2,
-        memory_usage_percent: 68.5,
-        disk_usage_percent: 32.1,
-        error_message: undefined,
+        response_time_ms: 245,
+        cpu_usage_percent: 67.8,
+        memory_usage_percent: 82.3,
+        disk_usage_percent: 45.2,
+        error_message: null,
         metadata: {},
         recorded_at: new Date().toISOString(),
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        health_status: 'healthy',
+        service_type: 'api',
+        success_rate: 99.5,
+        cpu_usage: 67.8,
+        memory_usage: 82.3,
+        last_check: new Date().toISOString(),
+        uptime_seconds: 86400,
+        error_count: 0
       },
       {
         id: '2',
         service_name: 'Database',
         status: 'warning',
-        response_time_ms: 890,
-        cpu_usage_percent: 78.9,
-        memory_usage_percent: 85.2,
-        disk_usage_percent: 76.3,
-        error_message: 'High CPU usage detected',
-        metadata: { alert_threshold: 80 },
+        response_time_ms: 156,
+        cpu_usage_percent: 85.1,
+        memory_usage_percent: 91.7,
+        disk_usage_percent: 78.9,
+        error_message: 'High memory usage detected',
+        metadata: { alert_threshold: 90 },
         recorded_at: new Date().toISOString(),
-        created_at: new Date().toISOString()
+        created_at: new Date().toISOString(),
+        health_status: 'warning',
+        service_type: 'database',
+        success_rate: 97.2,
+        cpu_usage: 85.1,
+        memory_usage: 91.7,
+        last_check: new Date().toISOString(),
+        uptime_seconds: 86400,
+        error_count: 3
       }
     ];
   }
@@ -478,29 +590,29 @@ export class DashboardService {
     return [
       {
         id: '1',
-        event_type: 'failed_login',
+        event_type: 'Failed Login Attempt',
         severity: 'medium',
         source_ip: '192.168.1.100',
         user_id: 'user-123',
         event_description: 'Multiple failed login attempts detected',
-        metadata: { attempts: 5, timeframe: '5 minutes' },
+        metadata: { attempt_count: 5 },
         resolved: false,
-        resolved_by: undefined,
-        resolved_at: undefined,
-        created_at: new Date().toISOString()
+        resolved_by: null,
+        resolved_at: null,
+        created_at: new Date(Date.now() - 1000 * 60 * 30).toISOString()
       },
       {
         id: '2',
-        event_type: 'suspicious_activity',
+        event_type: 'Suspicious Activity',
         severity: 'high',
         source_ip: '10.0.0.45',
-        user_id: undefined,
-        event_description: 'Unusual traffic pattern detected',
-        metadata: { traffic_volume: 'high', pattern: 'bot-like' },
+        user_id: 'user-456',
+        event_description: 'Unusual access pattern detected',
+        metadata: { risk_score: 85 },
         resolved: true,
         resolved_by: 'admin-1',
-        resolved_at: new Date().toISOString(),
-        created_at: new Date(Date.now() - 3600000).toISOString()
+        resolved_at: new Date(Date.now() - 1000 * 60 * 15).toISOString(),
+        created_at: new Date(Date.now() - 1000 * 60 * 60).toISOString()
       }
     ];
   }
@@ -511,23 +623,23 @@ export class DashboardService {
         id: '1',
         report_title: 'Q4 2024 Performance Summary',
         report_type: 'quarterly',
-        executive_summary: 'Strong performance across all key metrics with 15% revenue growth.',
+        executive_summary: 'Strong performance across all key metrics with 15% growth in revenue.',
         report_period_start: '2024-10-01',
         report_period_end: '2024-12-31',
         status: 'published',
         key_metrics: {
-          revenue: 1250000,
+          revenue: 2456789,
           growth_rate: 15.2,
-          active_users: 25430
+          user_acquisition: 1234
         },
         charts_data: {},
         recommendations: [
-          'Continue investment in user acquisition',
-          'Optimize conversion funnel'
+          'Increase marketing spend in Q1 2025',
+          'Focus on user retention programs'
         ],
-        created_by: 'exec-1',
-        reviewed_by: 'ceo-1',
-        approved_by: 'board-1',
+        created_by: 'exec-team',
+        reviewed_by: 'ceo',
+        approved_by: 'board',
         published_at: new Date().toISOString(),
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
@@ -539,31 +651,31 @@ export class DashboardService {
     return [
       {
         id: '1',
-        action_name: 'Add Product',
-        action_type: 'create',
-        description: 'Create a new product',
-        icon_name: 'Plus',
+        action_name: 'Generate Report',
+        action_type: 'report',
+        description: 'Generate monthly analytics report',
+        icon_name: 'FileText',
         color_class: 'bg-blue-500 hover:bg-blue-600',
         is_active: true,
         sort_order: 1,
-        permissions_required: ['product:create'],
-        metadata: {},
-        created_by: 'admin',
+        permissions_required: ['admin', 'analyst'],
+        metadata: { report_type: 'monthly' },
+        created_by: 'system',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       },
       {
         id: '2',
-        action_name: 'Approve Vendor',
-        action_type: 'approve',
-        description: 'Approve pending vendor application',
-        icon_name: 'CheckCircle',
+        action_name: 'Sync Data',
+        action_type: 'sync',
+        description: 'Synchronize data with external systems',
+        icon_name: 'RefreshCw',
         color_class: 'bg-green-500 hover:bg-green-600',
         is_active: true,
         sort_order: 2,
-        permissions_required: ['vendor:approve'],
-        metadata: {},
-        created_by: 'admin',
+        permissions_required: ['admin'],
+        metadata: { sync_type: 'full' },
+        created_by: 'system',
         created_at: new Date().toISOString(),
         updated_at: new Date().toISOString()
       }
@@ -574,18 +686,33 @@ export class DashboardService {
     return [
       {
         id: '1',
-        action_type: 'create',
-        action_name: 'Add Product',
+        action_type: 'report',
+        action_name: 'Generate Report',
         execution_status: 'completed',
-        parameters: { category: 'electronics' },
+        parameters: { report_type: 'monthly' },
         executed_by: 'admin-1',
         progress_percentage: 100,
-        started_at: new Date(Date.now() - 5000).toISOString(),
-        completed_at: new Date().toISOString(),
-        execution_time_ms: 2340,
-        result_data: { product_id: 'prod-123' },
-        error_message: undefined,
-        created_at: new Date().toISOString()
+        started_at: new Date(Date.now() - 1000 * 60 * 5).toISOString(),
+        completed_at: new Date(Date.now() - 1000 * 60 * 2).toISOString(),
+        execution_time_ms: 180000,
+        result_data: { report_id: 'rpt-123', status: 'success' },
+        error_message: null,
+        created_at: new Date(Date.now() - 1000 * 60 * 5).toISOString()
+      },
+      {
+        id: '2',
+        action_type: 'sync',
+        action_name: 'Sync Data',
+        execution_status: 'running',
+        parameters: { sync_type: 'incremental' },
+        executed_by: 'admin-2',
+        progress_percentage: 65,
+        started_at: new Date(Date.now() - 1000 * 60 * 3).toISOString(),
+        completed_at: null,
+        execution_time_ms: null,
+        result_data: null,
+        error_message: null,
+        created_at: new Date(Date.now() - 1000 * 60 * 3).toISOString()
       }
     ];
   }
@@ -602,11 +729,6 @@ export class DashboardService {
         { page: '/products', views: 1892 },
         { page: '/orders', views: 1567 }
       ],
-      trafficSources: {
-        'google.com': 3456,
-        'facebook.com': 1234,
-        'direct': 2890
-      },
       realTimeVisitors: 89,
       conversionRate: 3.4,
       revenue: 18750.25

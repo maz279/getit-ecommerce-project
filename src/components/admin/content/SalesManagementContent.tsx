@@ -6,10 +6,15 @@ import { YearlySalesForm } from './forms/YearlySalesForm';
 import { SalesForecastForm } from './forms/SalesForecastForm';
 import { ProfitMarginsForm } from './forms/ProfitMarginsForm';
 import { SalesReportsForm } from './forms/SalesReportsForm';
-import { SalesOverviewRenderer } from './SalesManagement/SalesOverviewRenderer';
-import { RevenueAnalyticsRenderer } from './SalesManagement/RevenueAnalyticsRenderer';
-import { RevenueDashboardContent } from './forms/salesManagement/RevenueDashboardContent';
+import { SalesOverviewContent } from './forms/salesManagement/SalesOverviewContent';
 import { RevenueAnalyticsContent } from './forms/salesManagement/RevenueAnalyticsContent';
+import { SalesForecastContent } from './forms/salesManagement/SalesForecastContent';
+import { RevenueDashboardContent } from './forms/salesManagement/RevenueDashboardContent';
+import { ProfitMarginContent } from './forms/salesManagement/ProfitMarginContent';
+import { CostAnalysisContent } from './forms/salesManagement/CostAnalysisContent';
+import { ROITrackingContent } from './forms/salesManagement/ROITrackingContent';
+import { DetailedReportsContent } from './forms/salesManagement/DetailedReportsContent';
+import { ComparativeAnalysisContent } from './forms/salesManagement/ComparativeAnalysisContent';
 import { ExportDataContent } from './forms/salesManagement/ExportDataContent';
 
 interface SalesManagementContentProps {
@@ -24,7 +29,8 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
       case 'sales-overview':
       case 'sales':
       case 'overview':
-        return <SalesOverviewRenderer />;
+        console.log('✅ Rendering SalesOverviewContent');
+        return <SalesOverviewContent />;
       
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
@@ -39,37 +45,47 @@ export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ 
         return <YearlySalesForm />;
       
       case 'revenue-analytics':
+        console.log('✅ Rendering RevenueAnalyticsContent');
         return <RevenueAnalyticsContent />;
       
       case 'revenue-dashboard':
+        console.log('✅ Rendering RevenueDashboardContent');
         return <RevenueDashboardContent />;
       
       case 'sales-forecast':
-        return <SalesForecastForm />;
+      case 'forecast':
+        console.log('✅ Rendering SalesForecastContent');
+        return <SalesForecastContent />;
       
       case 'profit-margins':
-        return <ProfitMarginsForm />;
+        console.log('✅ Rendering ProfitMarginContent');
+        return <ProfitMarginContent />;
       
       case 'cost-analysis':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Cost Analysis</h1><p>Cost analysis dashboard coming soon...</p></div>;
+        console.log('✅ Rendering CostAnalysisContent');
+        return <CostAnalysisContent />;
       
       case 'roi-tracking':
-        return <div className="p-6"><h1 className="text-2xl font-bold">ROI Tracking</h1><p>ROI tracking analytics coming soon...</p></div>;
+        console.log('✅ Rendering ROITrackingContent');
+        return <ROITrackingContent />;
       
       case 'sales-reports':
       case 'detailed-reports':
       case 'summary-reports':
-        return <SalesReportsForm />;
+        console.log('✅ Rendering DetailedReportsContent');
+        return <DetailedReportsContent />;
       
       case 'comparative-analysis':
-        return <div className="p-6"><h1 className="text-2xl font-bold">Comparative Analysis</h1><p>Comparative sales analysis coming soon...</p></div>;
+        console.log('✅ Rendering ComparativeAnalysisContent');
+        return <ComparativeAnalysisContent />;
       
       case 'export-data':
+        console.log('✅ Rendering ExportDataContent');
         return <ExportDataContent />;
       
       default:
         console.log('⚠️ SalesManagementContent - defaulting to sales overview for:', selectedSubmenu);
-        return <SalesOverviewRenderer />;
+        return <SalesOverviewContent />;
     }
   };
 

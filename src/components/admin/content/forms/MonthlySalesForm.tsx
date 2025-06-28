@@ -1,94 +1,72 @@
 
-import React, { useState } from 'react';
-import { Calendar, Download, RefreshCw, Settings } from 'lucide-react';
-import { Button } from '@/components/ui/button';
-import { MonthlyFilters } from './monthlySales/MonthlyFilters';
-import { MonthlyMetrics } from './monthlySales/MonthlyMetrics';
-import { MonthlyTrendsTab } from './monthlySales/MonthlyTrendsTab';
-import { MonthlyGoalsTab } from './monthlySales/MonthlyGoalsTab';
-import { 
-  monthlyTrendsData, 
-  categoryTrendsData, 
-  customerSegmentData, 
-  monthlyGoalsData, 
-  predictiveData 
-} from './monthlySales/monthlyData';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { Calendar, TrendingUp, BarChart3, DollarSign } from 'lucide-react';
 
 export const MonthlySalesForm: React.FC = () => {
-  const [selectedYear, setSelectedYear] = useState('2024');
-  const [selectedQuarter, setSelectedQuarter] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-  const [viewMode, setViewMode] = useState('trends');
-  const [isGeneratingReport, setIsGeneratingReport] = useState(false);
-
-  const handleGenerateReport = () => {
-    setIsGeneratingReport(true);
-    setTimeout(() => setIsGeneratingReport(false), 2000);
-  };
-
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      {/* Header */}
+    <div className="space-y-6">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
-            <Calendar className="w-8 h-8 text-blue-600" />
-            Monthly Sales Trends
-          </h1>
-          <p className="text-gray-600 mt-1">Comprehensive monthly performance analysis and forecasting</p>
-        </div>
-        <div className="flex gap-3">
-          <Button variant="outline" onClick={handleGenerateReport} disabled={isGeneratingReport}>
-            {isGeneratingReport ? (
-              <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-            ) : (
-              <Download className="w-4 h-4 mr-2" />
-            )}
-            Export Report
-          </Button>
-          <Button>
-            <Settings className="w-4 h-4 mr-2" />
-            Configure Goals
-          </Button>
+          <h1 className="text-2xl font-bold">Monthly Sales Trends</h1>
+          <p className="text-gray-600">Analyze monthly sales performance and trends</p>
         </div>
       </div>
 
-      {/* Filters */}
-      <MonthlyFilters
-        selectedYear={selectedYear}
-        setSelectedYear={setSelectedYear}
-        selectedQuarter={selectedQuarter}
-        setSelectedQuarter={setSelectedQuarter}
-        selectedCategory={selectedCategory}
-        setSelectedCategory={setSelectedCategory}
-        viewMode={viewMode}
-        setViewMode={setViewMode}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">This Month</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">৳1.2M</div>
+            <p className="text-xs text-muted-foreground">+15% from last month</p>
+          </CardContent>
+        </Card>
 
-      {/* Key Metrics */}
-      <MonthlyMetrics />
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Monthly Growth</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+18.2%</div>
+            <p className="text-xs text-muted-foreground">vs previous month</p>
+          </CardContent>
+        </Card>
 
-      {/* Dynamic Content Based on View Mode */}
-      {viewMode === 'trends' && (
-        <MonthlyTrendsTab
-          monthlyTrendsData={monthlyTrendsData}
-          categoryTrendsData={categoryTrendsData}
-          customerSegmentData={customerSegmentData}
-        />
-      )}
-      {viewMode === 'goals' && (
-        <MonthlyGoalsTab
-          monthlyGoalsData={monthlyGoalsData}
-          predictiveData={predictiveData}
-        />
-      )}
-      {viewMode === 'comparison' && (
-        <MonthlyTrendsTab
-          monthlyTrendsData={monthlyTrendsData}
-          categoryTrendsData={categoryTrendsData}
-          customerSegmentData={customerSegmentData}
-        />
-      )}
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Best Month</CardTitle>
+            <Calendar className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">December</div>
+            <p className="text-xs text-muted-foreground">৳1.8M revenue</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Avg Monthly</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">৳950K</div>
+            <p className="text-xs text-muted-foreground">Year to date</p>
+          </CardContent>
+        </Card>
+      </div>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Monthly Sales Analysis</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-600">Monthly sales trends and performance analysis would be displayed here...</p>
+        </CardContent>
+      </Card>
     </div>
   );
 };

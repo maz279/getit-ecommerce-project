@@ -1,65 +1,72 @@
 
-import React, { useState } from 'react';
-import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { DashboardHeader } from './revenueDashboard/DashboardHeader';
-import { RevenueFilters } from './revenueDashboard/RevenueFilters';
-import { MetricsCards } from './revenueDashboard/MetricsCards';
-import { OverviewTab } from './revenueDashboard/OverviewTab';
-import { CategoriesTab } from './revenueDashboard/CategoriesTab';
-import { RegionalTab } from './revenueDashboard/RegionalTab';
-import { PaymentMethodsTab } from './revenueDashboard/PaymentMethodsTab';
-import { TargetsTab } from './revenueDashboard/TargetsTab';
+import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import { DollarSign, TrendingUp, BarChart3, PieChart } from 'lucide-react';
 
 export const RevenueDashboardContent: React.FC = () => {
-  const [selectedPeriod, setSelectedPeriod] = useState('30d');
-  const [selectedRegion, setSelectedRegion] = useState('all');
-  const [selectedCategory, setSelectedCategory] = useState('all');
-
   return (
     <div className="space-y-6">
-      <DashboardHeader />
+      <div className="flex items-center justify-between">
+        <div>
+          <h1 className="text-2xl font-bold">Revenue Dashboard</h1>
+          <p className="text-gray-600">Real-time revenue tracking and analytics</p>
+        </div>
+      </div>
 
-      <RevenueFilters
-        selectedPeriod={selectedPeriod}
-        selectedRegion={selectedRegion}
-        selectedCategory={selectedCategory}
-        onPeriodChange={setSelectedPeriod}
-        onRegionChange={setSelectedRegion}
-        onCategoryChange={setSelectedCategory}
-      />
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-6">
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Today's Revenue</CardTitle>
+            <DollarSign className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">৳87,430</div>
+            <p className="text-xs text-muted-foreground">+18% from yesterday</p>
+          </CardContent>
+        </Card>
 
-      <MetricsCards />
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Weekly Growth</CardTitle>
+            <TrendingUp className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">+24.8%</div>
+            <p className="text-xs text-muted-foreground">vs last week</p>
+          </CardContent>
+        </Card>
 
-      <Tabs defaultValue="overview" className="space-y-6">
-        <TabsList className="grid grid-cols-6 w-full">
-          <TabsTrigger value="overview">Overview</TabsTrigger>
-          <TabsTrigger value="trends">Revenue Trends</TabsTrigger>
-          <TabsTrigger value="categories">Categories</TabsTrigger>
-          <TabsTrigger value="regions">Regional</TabsTrigger>
-          <TabsTrigger value="payments">Payment Methods</TabsTrigger>
-          <TabsTrigger value="targets">Targets & Goals</TabsTrigger>
-        </TabsList>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Revenue Streams</CardTitle>
+            <PieChart className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">7</div>
+            <p className="text-xs text-muted-foreground">Active streams</p>
+          </CardContent>
+        </Card>
 
-        <TabsContent value="overview" className="space-y-6">
-          <OverviewTab />
-        </TabsContent>
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Top Category</CardTitle>
+            <BarChart3 className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">Electronics</div>
+            <p className="text-xs text-muted-foreground">35% of revenue</p>
+          </CardContent>
+        </Card>
+      </div>
 
-        <TabsContent value="categories" className="space-y-6">
-          <CategoriesTab />
-        </TabsContent>
-
-        <TabsContent value="regions" className="space-y-6">
-          <RegionalTab />
-        </TabsContent>
-
-        <TabsContent value="payments" className="space-y-6">
-          <PaymentMethodsTab />
-        </TabsContent>
-
-        <TabsContent value="targets" className="space-y-6">
-          <TargetsTab />
-        </TabsContent>
-      </Tabs>
+      <Card>
+        <CardHeader>
+          <CardTitle>Revenue Dashboard Analytics</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-gray-600">Comprehensive revenue dashboard with real-time analytics would be displayed here...</p>
+        </CardContent>
+      </Card>
     </div>
   );
 };

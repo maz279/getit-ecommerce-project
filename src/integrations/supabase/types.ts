@@ -707,6 +707,63 @@ export type Database = {
         }
         Relationships: []
       }
+      incentive_programs: {
+        Row: {
+          budget_allocation: number | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          eligibility_criteria: Json
+          end_date: string | null
+          id: string
+          is_active: boolean | null
+          participation_count: number | null
+          program_name: string
+          program_type: string
+          reward_structure: Json
+          start_date: string
+          target_metrics: Json | null
+          total_rewards_paid: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          budget_allocation?: number | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          eligibility_criteria?: Json
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          participation_count?: number | null
+          program_name: string
+          program_type: string
+          reward_structure?: Json
+          start_date: string
+          target_metrics?: Json | null
+          total_rewards_paid?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          budget_allocation?: number | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          eligibility_criteria?: Json
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          participation_count?: number | null
+          program_name?: string
+          program_type?: string
+          reward_structure?: Json
+          start_date?: string
+          target_metrics?: Json | null
+          total_rewards_paid?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ml_recommendations: {
         Row: {
           confidence_score: number | null
@@ -834,6 +891,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      payment_terms_config: {
+        Row: {
+          compliance_requirements: Json | null
+          created_at: string | null
+          created_by: string
+          currency: string
+          id: string
+          is_active: boolean | null
+          late_payment_penalty_rate: number | null
+          minimum_payout_amount: number
+          payment_methods: Json
+          payout_frequency: string
+          processing_days: number
+          processing_fee_rate: number | null
+          term_name: string
+          terms_conditions: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          compliance_requirements?: Json | null
+          created_at?: string | null
+          created_by: string
+          currency?: string
+          id?: string
+          is_active?: boolean | null
+          late_payment_penalty_rate?: number | null
+          minimum_payout_amount?: number
+          payment_methods?: Json
+          payout_frequency: string
+          processing_days?: number
+          processing_fee_rate?: number | null
+          term_name: string
+          terms_conditions?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          compliance_requirements?: Json | null
+          created_at?: string | null
+          created_by?: string
+          currency?: string
+          id?: string
+          is_active?: boolean | null
+          late_payment_penalty_rate?: number | null
+          minimum_payout_amount?: number
+          payment_methods?: Json
+          payout_frequency?: string
+          processing_days?: number
+          processing_fee_rate?: number | null
+          term_name?: string
+          terms_conditions?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       payout_approval_workflow: {
         Row: {
@@ -1775,6 +1886,297 @@ export type Database = {
           policy_name?: string
           policy_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      revenue_analytics_summary: {
+        Row: {
+          analytics_date: string
+          analytics_period: string
+          average_order_value: number | null
+          category_id: string | null
+          commission_rate_avg: number | null
+          created_at: string | null
+          growth_rate: number | null
+          id: string
+          market_share: number | null
+          net_revenue: number | null
+          platform_fees: number | null
+          processing_fees: number | null
+          total_commission: number | null
+          total_revenue: number | null
+          transaction_count: number | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analytics_date: string
+          analytics_period: string
+          average_order_value?: number | null
+          category_id?: string | null
+          commission_rate_avg?: number | null
+          created_at?: string | null
+          growth_rate?: number | null
+          id?: string
+          market_share?: number | null
+          net_revenue?: number | null
+          platform_fees?: number | null
+          processing_fees?: number | null
+          total_commission?: number | null
+          total_revenue?: number | null
+          transaction_count?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analytics_date?: string
+          analytics_period?: string
+          average_order_value?: number | null
+          category_id?: string | null
+          commission_rate_avg?: number | null
+          created_at?: string | null
+          growth_rate?: number | null
+          id?: string
+          market_share?: number | null
+          net_revenue?: number | null
+          platform_fees?: number | null
+          processing_fees?: number | null
+          total_commission?: number | null
+          total_revenue?: number | null
+          transaction_count?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      revenue_disputes: {
+        Row: {
+          assigned_to: string | null
+          claimed_amount: number | null
+          commission_id: string | null
+          created_at: string | null
+          dispute_amount: number
+          dispute_description: string | null
+          dispute_number: string
+          dispute_reason: string
+          dispute_type: string
+          escalation_level: number | null
+          evidence_documents: Json | null
+          expected_resolution_date: string | null
+          id: string
+          priority_level: string | null
+          resolution_amount: number | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          status: string
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          claimed_amount?: number | null
+          commission_id?: string | null
+          created_at?: string | null
+          dispute_amount: number
+          dispute_description?: string | null
+          dispute_number: string
+          dispute_reason: string
+          dispute_type: string
+          escalation_level?: number | null
+          evidence_documents?: Json | null
+          expected_resolution_date?: string | null
+          id?: string
+          priority_level?: string | null
+          resolution_amount?: number | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          assigned_to?: string | null
+          claimed_amount?: number | null
+          commission_id?: string | null
+          created_at?: string | null
+          dispute_amount?: number
+          dispute_description?: string | null
+          dispute_number?: string
+          dispute_reason?: string
+          dispute_type?: string
+          escalation_level?: number | null
+          evidence_documents?: Json | null
+          expected_resolution_date?: string | null
+          id?: string
+          priority_level?: string | null
+          resolution_amount?: number | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          status?: string
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      revenue_forecasts: {
+        Row: {
+          actual_commission: number | null
+          actual_revenue: number | null
+          category_id: string | null
+          confidence_score: number | null
+          created_at: string | null
+          forecast_date: string
+          forecast_factors: Json | null
+          forecast_period: string
+          id: string
+          model_version: string | null
+          predicted_commission: number
+          predicted_revenue: number
+          updated_at: string | null
+          variance_percentage: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          actual_commission?: number | null
+          actual_revenue?: number | null
+          category_id?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          forecast_date: string
+          forecast_factors?: Json | null
+          forecast_period: string
+          id?: string
+          model_version?: string | null
+          predicted_commission: number
+          predicted_revenue: number
+          updated_at?: string | null
+          variance_percentage?: number | null
+          vendor_id?: string | null
+        }
+        Update: {
+          actual_commission?: number | null
+          actual_revenue?: number | null
+          category_id?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          forecast_date?: string
+          forecast_factors?: Json | null
+          forecast_period?: string
+          id?: string
+          model_version?: string | null
+          predicted_commission?: number
+          predicted_revenue?: number
+          updated_at?: string | null
+          variance_percentage?: number | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      revenue_models: {
+        Row: {
+          base_rate: number
+          category_rates: Json | null
+          created_at: string | null
+          created_by: string
+          description: string | null
+          effective_from: string
+          effective_to: string | null
+          id: string
+          is_active: boolean | null
+          maximum_threshold: number | null
+          minimum_threshold: number | null
+          model_name: string
+          model_type: string
+          tier_structure: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          base_rate?: number
+          category_rates?: Json | null
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_threshold?: number | null
+          minimum_threshold?: number | null
+          model_name: string
+          model_type: string
+          tier_structure?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          base_rate?: number
+          category_rates?: Json | null
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_threshold?: number | null
+          minimum_threshold?: number | null
+          model_name?: string
+          model_type?: string
+          tier_structure?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      revenue_split_config: {
+        Row: {
+          category_overrides: Json | null
+          config_name: string
+          created_at: string | null
+          created_by: string
+          effective_date: string
+          id: string
+          insurance_fee_percentage: number
+          is_active: boolean | null
+          platform_fee_percentage: number
+          processing_fee_percentage: number
+          tax_reserve_percentage: number
+          updated_at: string | null
+          vendor_share_percentage: number
+          vendor_tier_adjustments: Json | null
+        }
+        Insert: {
+          category_overrides?: Json | null
+          config_name: string
+          created_at?: string | null
+          created_by: string
+          effective_date?: string
+          id?: string
+          insurance_fee_percentage?: number
+          is_active?: boolean | null
+          platform_fee_percentage?: number
+          processing_fee_percentage?: number
+          tax_reserve_percentage?: number
+          updated_at?: string | null
+          vendor_share_percentage?: number
+          vendor_tier_adjustments?: Json | null
+        }
+        Update: {
+          category_overrides?: Json | null
+          config_name?: string
+          created_at?: string | null
+          created_by?: string
+          effective_date?: string
+          id?: string
+          insurance_fee_percentage?: number
+          is_active?: boolean | null
+          platform_fee_percentage?: number
+          processing_fee_percentage?: number
+          tax_reserve_percentage?: number
+          updated_at?: string | null
+          vendor_share_percentage?: number
+          vendor_tier_adjustments?: Json | null
         }
         Relationships: []
       }

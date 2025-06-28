@@ -162,25 +162,25 @@ export const useLogQuickAction = () => {
   });
 };
 
-// Real-time Analytics hooks - Fixed to accept no parameters
-export const useRealTimeAnalytics = () => {
+// Real-time Analytics hooks - Fixed to accept optional filters parameter
+export const useRealTimeAnalytics = (filters?: any) => {
   return useQuery({
-    queryKey: ['realtime-analytics'],
+    queryKey: ['realtime-analytics', filters],
     queryFn: () => DashboardService.getRealTimeAnalytics(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
 
-// Performance Metrics hooks - Fixed to accept no parameters  
-export const usePerformanceMetrics = () => {
+// Performance Metrics hooks - Fixed to accept optional refreshInterval parameter  
+export const usePerformanceMetrics = (refreshInterval?: number) => {
   return useQuery({
-    queryKey: ['performance-metrics'],
+    queryKey: ['performance-metrics', refreshInterval],
     queryFn: () => DashboardService.getPerformanceMetrics(),
-    refetchInterval: 60000, // Refetch every minute
+    refetchInterval: refreshInterval || 60000, // Refetch every minute by default
   });
 };
 
-// Dashboard search hook - Fixed to return proper structure
+// Dashboard search hook - Fixed to return proper structure with both data and searchResults
 export const useDashboardSearch = (searchTerm: string, filters?: any) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm, filters],
@@ -192,6 +192,10 @@ export const useDashboardSearch = (searchTerm: string, filters?: any) => {
       };
     },
     enabled: searchTerm.length > 0,
+    select: (data) => ({
+      ...data,
+      searchResults: data.searchResults || data.data || []
+    })
   });
 };
 

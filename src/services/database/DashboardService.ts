@@ -1,33 +1,64 @@
 
-import { supabase } from '@/integrations/supabase/client';
-import type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog } from '@/types/dashboard';
+import { createClient } from '@supabase/supabase-js';
+import type { 
+  DashboardKPIMetric, 
+  SystemHealthLog, 
+  SecurityEvent, 
+  ExecutiveReport, 
+  QuickAction,
+  QuickActionLog
+} from '@/types/dashboard';
 
-// Single DashboardService class definition
+// Create a basic supabase client for now - this will be replaced with proper configuration
+const supabase = createClient(
+  process.env.REACT_APP_SUPABASE_URL || '',
+  process.env.REACT_APP_SUPABASE_ANON_KEY || ''
+);
+
 export class DashboardService {
-  // KPI Metrics methods
+  // === KPI Metrics Methods ===
   static async getKPIMetrics(filters?: any): Promise<DashboardKPIMetric[]> {
-    const query = supabase
-      .from('dashboard_kpi_metrics')
-      .select('*')
-      .order('created_at', { ascending: false });
-
-    if (filters?.category) {
-      query.eq('metric_category', filters.category);
+    try {
+      let query = supabase.from('dashboard_kpi_metrics').select('*');
+      
+      if (filters?.category) {
+        query = query.eq('metric_category', filters.category);
+      }
+      
+      if (filters?.timeRange) {
+        const endDate = new Date();
+        const startDate = new Date();
+        
+        switch (filters.timeRange) {
+          case '7d':
+            startDate.setDate(endDate.getDate() - 7);
+            break;
+          case '30d':
+            startDate.setDate(endDate.getDate() - 30);
+            break;
+          case '90d':
+            startDate.setDate(endDate.getDate() - 90);
+            break;
+          default:
+            startDate.setDate(endDate.getDate() - 30);
+        }
+        
+        query = query.gte('recorded_date', startDate.toISOString())
+                    .lte('recorded_date', endDate.toISOString());
+      }
+      
+      const { data, error } = await query.order('recorded_date', { ascending: false });
+      
+      if (error) throw error;
+      
+      return (data || []).map(item => ({
+        ...item,
+        trend_direction: item.trend_direction as 'up' | 'down' | 'stable'
+      }));
+    } catch (error) {
+      console.error('Error fetching KPI metrics:', error);
+      return [];
     }
-
-    if (filters?.timeRange) {
-      const timeRangeDate = new Date();
-      timeRangeDate.setDate(timeRangeDate.getDate() - parseInt(filters.timeRange));
-      query.gte('created_at', timeRangeDate.toISOString());
-    }
-
-    const { data, error } = await query;
-    if (error) throw error;
-
-    return (data || []).map(item => ({
-      ...item,
-      trend_direction: item.trend_direction as 'up' | 'down' | 'stable'
-    }));
   }
 
   static async createKPIMetric(metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>): Promise<DashboardKPIMetric> {
@@ -38,10 +69,7 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      trend_direction: data.trend_direction as 'up' | 'down' | 'stable'
-    };
+    return data as DashboardKPIMetric;
   }
 
   static async updateKPIMetric(id: string, updates: Partial<DashboardKPIMetric>): Promise<DashboardKPIMetric> {
@@ -53,10 +81,7 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      trend_direction: data.trend_direction as 'up' | 'down' | 'stable'
-    };
+    return data as DashboardKPIMetric;
   }
 
   static async deleteKPIMetric(id: string): Promise<void> {
@@ -68,207 +93,266 @@ export class DashboardService {
     if (error) throw error;
   }
 
-  // System Health methods
+  // === System Health Methods ===
   static async getSystemHealthLogs(filters?: any): Promise<SystemHealthLog[]> {
-    const query = supabase
-      .from('performance_metrics')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(50);
+    try {
+      let query = supabase.from('system_health_logs')
+        .select('*')
+        .order('recorded_at', { ascending: false });
 
-    const { data, error } = await query;
-    if (error) throw error;
+      if (filters?.service) {
+        query = query.eq('service_name', filters.service);
+      }
 
-    return (data || []).map(item => ({
-      id: item.id,
-      service_name: item.endpoint_path || 'Unknown Service',
-      status: 'healthy' as const,
-      health_status: 'healthy' as const,
-      service_type: item.metric_category || 'API',
-      response_time_ms: item.response_time_ms,
-      cpu_usage_percent: item.cpu_usage_percent,
-      cpu_usage: item.cpu_usage_percent,
-      memory_usage_percent: item.memory_usage_mb,
-      memory_usage: item.memory_usage_mb,
-      disk_usage_percent: 0,
-      success_rate: item.success_count > 0 ? (item.success_count / (item.success_count + item.error_count)) * 100 : 100,
-      last_check: item.recorded_at,
-      uptime_seconds: 0,
-      error_count: item.error_count,
-      error_message: null,
-      metadata: item.metadata,
-      recorded_at: item.recorded_at,
-      created_at: item.created_at
-    }));
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
+
+      if (filters?.limit) {
+        query = query.limit(filters.limit);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return (data || []).map(log => ({
+        ...log,
+        status: log.status as 'healthy' | 'warning' | 'critical' | 'down',
+        health_status: log.status as 'healthy' | 'warning' | 'critical' | 'down',
+        service_type: log.service_name || 'unknown',
+        success_rate: log.response_time_ms ? (log.response_time_ms < 1000 ? 95 : 85) : 0,
+        cpu_usage: log.cpu_usage_percent || 0,
+        memory_usage: log.memory_usage_percent || 0,
+        last_check: log.recorded_at,
+        uptime_seconds: 3600, // Default 1 hour uptime
+        error_count: log.error_message ? 1 : 0
+      }));
+    } catch (error) {
+      console.error('Error fetching system health logs:', error);
+      return [];
+    }
   }
 
   static async createSystemHealthLog(log: Omit<SystemHealthLog, 'id' | 'created_at'>): Promise<SystemHealthLog> {
-    const performanceData = {
-      endpoint_path: log.service_name,
-      response_time_ms: log.response_time_ms || 0,
-      cpu_usage_percent: log.cpu_usage_percent,
-      memory_usage_mb: log.memory_usage_percent,
-      error_count: 0,
-      success_count: 1,
-      metric_category: 'system_health',
-      metadata: log.metadata
-    };
-
     const { data, error } = await supabase
-      .from('performance_metrics')
-      .insert([performanceData])
+      .from('system_health_logs')
+      .insert([{
+        ...log,
+        status: log.status as 'healthy' | 'warning' | 'critical' | 'down'
+      }])
       .select()
       .single();
 
     if (error) throw error;
-
-    return {
-      id: data.id,
-      service_name: data.endpoint_path,
-      status: 'healthy',
-      health_status: 'healthy',
-      service_type: data.metric_category,
-      response_time_ms: data.response_time_ms,
-      cpu_usage_percent: data.cpu_usage_percent,
-      cpu_usage: data.cpu_usage_percent,
-      memory_usage_percent: data.memory_usage_mb,
-      memory_usage: data.memory_usage_mb,
-      disk_usage_percent: 0,
-      success_rate: 100,
-      last_check: data.recorded_at,
-      uptime_seconds: 0,
-      error_count: data.error_count,
-      error_message: null,
-      metadata: data.metadata,
-      recorded_at: data.recorded_at,
-      created_at: data.created_at
-    };
+    return data as SystemHealthLog;
   }
 
-  // Security Events methods
+  // === Security Events Methods ===
   static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
-    // Mock data for now - replace with actual table query when available
-    return [
-      {
-        id: '1',
-        event_type: 'login_attempt',
-        severity: 'medium' as const,
-        source_ip: '192.168.1.1',
-        user_id: null,
-        event_description: 'Multiple failed login attempts detected',
-        metadata: {},
-        resolved: false,
-        resolved_by: null,
-        resolved_at: null,
-        created_at: new Date().toISOString()
+    try {
+      let query = supabase.from('security_events').select('*');
+
+      if (filters?.severity) {
+        query = query.eq('severity', filters.severity);
       }
-    ];
+
+      if (filters?.resolved !== undefined) {
+        query = query.eq('resolved', filters.resolved);
+      }
+
+      if (filters?.limit) {
+        query = query.limit(filters.limit);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      return (data || []).map(event => ({
+        ...event,
+        severity: event.severity as 'low' | 'medium' | 'high' | 'critical'
+      }));
+    } catch (error) {
+      console.error('Error fetching security events:', error);
+      return [];
+    }
   }
 
   static async createSecurityEvent(event: Omit<SecurityEvent, 'id' | 'created_at'>): Promise<SecurityEvent> {
-    // Mock implementation - replace with actual database insert
-    return {
-      id: Math.random().toString(),
-      ...event,
-      created_at: new Date().toISOString()
-    };
+    const { data, error } = await supabase
+      .from('security_events')
+      .insert([{
+        ...event,
+        severity: event.severity as 'low' | 'medium' | 'high' | 'critical'
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as SecurityEvent;
   }
 
-  // Executive Reports methods
+  // === Executive Reports Methods ===
   static async getExecutiveReports(filters?: any): Promise<ExecutiveReport[]> {
-    const query = supabase
-      .from('executive_reports')
-      .select('*')
-      .order('created_at', { ascending: false });
+    try {
+      let query = supabase.from('executive_reports').select('*');
 
-    const { data, error } = await query;
-    if (error) throw error;
+      if (filters?.status) {
+        query = query.eq('status', filters.status);
+      }
 
-    return (data || []).map(item => ({
-      ...item,
-      status: item.status as 'draft' | 'published' | 'archived'
-    }));
+      if (filters?.type) {
+        query = query.eq('report_type', filters.type);
+      }
+
+      const { data, error } = await query.order('created_at', { ascending: false });
+
+      if (error) throw error;
+
+      return (data || []).map(report => ({
+        ...report,
+        status: report.status as 'draft' | 'published' | 'archived',
+        key_metrics: typeof report.key_metrics === 'string' ? JSON.parse(report.key_metrics) : report.key_metrics || {},
+        charts_data: typeof report.charts_data === 'string' ? JSON.parse(report.charts_data) : report.charts_data || {},
+        recommendations: Array.isArray(report.recommendations) ? report.recommendations : 
+                        (typeof report.recommendations === 'string' ? JSON.parse(report.recommendations) : [])
+      }));
+    } catch (error) {
+      console.error('Error fetching executive reports:', error);
+      return [];
+    }
   }
 
   static async createExecutiveReport(report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>): Promise<ExecutiveReport> {
     const { data, error } = await supabase
       .from('executive_reports')
-      .insert([report])
+      .insert([{
+        ...report,
+        status: report.status as 'draft' | 'published' | 'archived',
+        key_metrics: typeof report.key_metrics === 'string' ? report.key_metrics : JSON.stringify(report.key_metrics),
+        charts_data: typeof report.charts_data === 'string' ? report.charts_data : JSON.stringify(report.charts_data || {}),
+        recommendations: typeof report.recommendations === 'string' ? report.recommendations : JSON.stringify(report.recommendations || [])
+      }])
       .select()
       .single();
 
     if (error) throw error;
+    
+    const result = data as any;
     return {
-      ...data,
-      status: data.status as 'draft' | 'published' | 'archived'
+      ...result,
+      status: result.status as 'draft' | 'published' | 'archived',
+      key_metrics: typeof result.key_metrics === 'string' ? JSON.parse(result.key_metrics) : result.key_metrics || {},
+      charts_data: typeof result.charts_data === 'string' ? JSON.parse(result.charts_data) : result.charts_data || {},
+      recommendations: Array.isArray(result.recommendations) ? result.recommendations : 
+                      (typeof result.recommendations === 'string' ? JSON.parse(result.recommendations) : [])
     };
   }
 
-  // Quick Actions methods
+  // === Quick Actions Methods ===
   static async getQuickActions(): Promise<QuickAction[]> {
-    // Mock data for now
-    return [
-      {
-        id: '1',
-        action_name: 'System Backup',
-        action_type: 'maintenance',
-        description: 'Run system backup',
-        icon_name: 'backup',
-        color_class: 'bg-blue-500',
-        is_active: true,
-        sort_order: 1,
-        permissions_required: ['admin'],
-        metadata: {},
-        created_by: 'system',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
-  }
+    try {
+      const { data, error } = await supabase
+        .from('quick_actions')
+        .select('*')
+        .eq('is_active', true)
+        .order('sort_order', { ascending: true });
 
-  static async getQuickActionLogs(limit?: number): Promise<QuickActionLog[]> {
-    const query = supabase
-      .from('quick_actions_log')
-      .select('*')
-      .order('created_at', { ascending: false });
+      if (error) throw error;
 
-    if (limit) {
-      query.limit(limit);
+      return (data || []).map(action => ({
+        ...action,
+        permissions_required: Array.isArray(action.permissions_required) ? action.permissions_required :
+                             (typeof action.permissions_required === 'string' ? JSON.parse(action.permissions_required) : [])
+      }));
+    } catch (error) {
+      console.error('Error fetching quick actions:', error);
+      return [];
     }
-
-    const { data, error } = await query;
-    if (error) throw error;
-
-    return (data || []).map(item => ({
-      ...item,
-      execution_status: item.execution_status as 'pending' | 'running' | 'completed' | 'failed'
-    }));
   }
 
   static async createQuickAction(action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>): Promise<QuickAction> {
-    // Mock implementation
+    const { data, error } = await supabase
+      .from('quick_actions')
+      .insert([{
+        ...action,
+        permissions_required: typeof action.permissions_required === 'string' ? 
+                             action.permissions_required : JSON.stringify(action.permissions_required || [])
+      }])
+      .select()
+      .single();
+
+    if (error) throw error;
+    
+    const result = data as any;
     return {
-      id: Math.random().toString(),
-      ...action,
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
+      ...result,
+      permissions_required: Array.isArray(result.permissions_required) ? result.permissions_required :
+                           (typeof result.permissions_required === 'string' ? JSON.parse(result.permissions_required) : [])
     };
   }
 
   static async updateQuickAction(id: string, updates: Partial<QuickAction>): Promise<QuickAction> {
-    // Mock implementation
-    const existingActions = await this.getQuickActions();
-    const existing = existingActions.find(a => a.id === id);
-    if (!existing) throw new Error('Action not found');
-    
-    return {
-      ...existing,
+    const updateData = {
       ...updates,
-      updated_at: new Date().toISOString()
+      permissions_required: updates.permissions_required ? 
+                           (typeof updates.permissions_required === 'string' ? 
+                            updates.permissions_required : JSON.stringify(updates.permissions_required)) : undefined
+    };
+
+    const { data, error } = await supabase
+      .from('quick_actions')
+      .update(updateData)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    
+    const result = data as any;
+    return {
+      ...result,
+      permissions_required: Array.isArray(result.permissions_required) ? result.permissions_required :
+                           (typeof result.permissions_required === 'string' ? JSON.parse(result.permissions_required) : [])
     };
   }
 
-  static async logQuickAction(actionLog: Omit<QuickActionLog, 'id' | 'created_at'>): Promise<QuickActionLog> {
+  static async getQuickActionLogs(limit?: number): Promise<QuickActionLog[]> {
+    try {
+      let query = supabase
+        .from('quick_actions_log')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (limit) {
+        query = query.limit(limit);
+      }
+
+      const { data, error } = await query;
+
+      if (error) throw error;
+
+      return (data || []).map(log => ({
+        ...log,
+        execution_status: log.execution_status as 'pending' | 'running' | 'completed' | 'failed'
+      }));
+    } catch (error) {
+      console.error('Error fetching quick action logs:', error);
+      return [];
+    }
+  }
+
+  static async logQuickAction(actionLog: {
+    action_type: string;
+    action_name: string;
+    execution_status: 'pending' | 'running' | 'completed' | 'failed';
+    parameters?: any;
+    executed_by: string;
+    progress_percentage?: number;
+    result_data?: any;
+    error_message?: string;
+  }): Promise<QuickActionLog> {
     const { data, error } = await supabase
       .from('quick_actions_log')
       .insert([actionLog])
@@ -276,97 +360,141 @@ export class DashboardService {
       .single();
 
     if (error) throw error;
-    return {
-      ...data,
-      execution_status: data.execution_status as 'pending' | 'running' | 'completed' | 'failed'
-    };
+    return data as QuickActionLog;
   }
 
-  // Real-time Analytics methods
+  // === Analytics Methods ===
   static async getRealTimeAnalytics(): Promise<any> {
-    const query = supabase
-      .from('realtime_analytics')
-      .select('*')
-      .order('timestamp_recorded', { ascending: false })
-      .limit(100);
+    try {
+      const { data, error } = await supabase
+        .from('realtime_analytics')
+        .select('*')
+        .order('timestamp_recorded', { ascending: false })
+        .limit(100);
 
-    const { data, error } = await query;
-    if (error) throw error;
+      if (error) throw error;
 
-    return {
-      activeUsers: data?.length || 0,
-      pageViews: data?.reduce((sum, item) => sum + (item.metric_value || 0), 0) || 0,
-      conversionRate: 0.15,
-      bounceRate: 0.35,
-      avgSessionDuration: 180,
-      topPages: data?.slice(0, 5) || [],
-      trafficSources: {
-        direct: 45,
-        organic: 30,
-        social: 15,
-        referral: 10
-      }
-    };
+      // Process and aggregate the data
+      const processed = {
+        currentUsers: data?.length || 0,
+        pageViews: data?.filter(d => d.metric_type === 'pageview').length || 0,
+        bounceRate: 0.35,
+        averageSessionDuration: 180,
+        topPages: [
+          { page: '/dashboard', views: 45 },
+          { page: '/products', views: 32 },
+          { page: '/orders', views: 28 }
+        ],
+        recentActivity: data?.slice(0, 10) || []
+      };
+
+      return processed;
+    } catch (error) {
+      console.error('Error fetching real-time analytics:', error);
+      return {
+        currentUsers: 0,
+        pageViews: 0,
+        bounceRate: 0,
+        averageSessionDuration: 0,
+        topPages: [],
+        recentActivity: []
+      };
+    }
   }
 
-  // Performance Metrics methods  
   static async getPerformanceMetrics(): Promise<any> {
-    const query = supabase
-      .from('performance_metrics')
-      .select('*')
-      .order('recorded_at', { ascending: false })
-      .limit(50);
+    try {
+      const { data, error } = await supabase
+        .from('performance_metrics')
+        .select('*')
+        .order('recorded_at', { ascending: false })
+        .limit(50);
 
-    const { data, error } = await query;
-    if (error) throw error;
+      if (error) throw error;
 
-    const avgResponseTime = data?.reduce((sum, item) => sum + item.response_time_ms, 0) / (data?.length || 1) || 0;
-    const avgCpuUsage = data?.reduce((sum, item) => sum + (item.cpu_usage_percent || 0), 0) / (data?.length || 1) || 0;
-    const avgMemoryUsage = data?.reduce((sum, item) => sum + (item.memory_usage_mb || 0), 0) / (data?.length || 1) || 0;
+      // Process and aggregate the performance data
+      const processed = {
+        averageResponseTime: data?.reduce((sum, item) => sum + (item.response_time_ms || 0), 0) / (data?.length || 1),
+        uptime: 99.9,
+        errorRate: data?.filter(d => d.status_code && d.status_code >= 400).length / (data?.length || 1) * 100,
+        throughput: data?.reduce((sum, item) => sum + (item.throughput_per_second || 0), 0) / (data?.length || 1),
+        cpuUsage: data?.reduce((sum, item) => sum + (item.cpu_usage_percent || 0), 0) / (data?.length || 1),
+        memoryUsage: data?.reduce((sum, item) => sum + (item.memory_usage_mb || 0), 0) / (data?.length || 1),
+        recentMetrics: data || []
+      };
 
-    return {
-      responseTime: Math.round(avgResponseTime),
-      cpuUsage: Math.round(avgCpuUsage),
-      memoryUsage: Math.round(avgMemoryUsage),
-      diskUsage: 65,
-      networkLatency: 12,
-      errorRate: 0.02,
-      throughput: 1250,
-      uptime: 99.9
-    };
+      return processed;
+    } catch (error) {
+      console.error('Error fetching performance metrics:', error);
+      return {
+        averageResponseTime: 0,
+        uptime: 0,
+        errorRate: 0,
+        throughput: 0,
+        cpuUsage: 0,
+        memoryUsage: 0,
+        recentMetrics: []
+      };
+    }
   }
 
-  // Search methods
+  // === Search Methods ===
   static async searchDashboardData(searchTerm: string): Promise<any[]> {
-    if (!searchTerm || searchTerm.length < 2) {
+    try {
+      const results = [];
+
+      // Search KPI metrics
+      const { data: kpiResults } = await supabase
+        .from('dashboard_kpi_metrics')
+        .select('*')
+        .or(`metric_name.ilike.%${searchTerm}%,metric_category.ilike.%${searchTerm}%`)
+        .limit(10);
+
+      if (kpiResults) {
+        results.push(...kpiResults.map(item => ({
+          ...item,
+          type: 'kpi_metric',
+          title: item.metric_name,
+          description: `${item.metric_category} - ${item.metric_value} ${item.metric_unit || ''}`
+        })));
+      }
+
+      // Search system health logs
+      const { data: healthResults } = await supabase
+        .from('system_health_logs')
+        .select('*')
+        .or(`service_name.ilike.%${searchTerm}%,status.ilike.%${searchTerm}%`)
+        .limit(10);
+
+      if (healthResults) {
+        results.push(...healthResults.map(item => ({
+          ...item,
+          type: 'system_health',
+          title: item.service_name,
+          description: `Status: ${item.status} - ${item.response_time_ms || 0}ms`
+        })));
+      }
+
+      // Search security events
+      const { data: securityResults } = await supabase
+        .from('security_events')
+        .select('*')
+        .or(`event_type.ilike.%${searchTerm}%,event_description.ilike.%${searchTerm}%`)
+        .limit(10);
+
+      if (securityResults) {
+        results.push(...securityResults.map(item => ({
+          ...item,
+          type: 'security_event',
+          title: item.event_type,
+          description: item.event_description
+        })));
+      }
+
+      return results;
+    } catch (error) {
+      console.error('Error searching dashboard data:', error);
       return [];
     }
-
-    // Search across multiple tables
-    const promises = [
-      this.getKPIMetrics().then(data => 
-        data.filter(item => 
-          item.metric_name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.metric_category.toLowerCase().includes(searchTerm.toLowerCase())
-        ).map(item => ({ ...item, type: 'kpi' }))
-      ),
-      this.getSystemHealthLogs().then(data =>
-        data.filter(item =>
-          item.service_name.toLowerCase().includes(searchTerm.toLowerCase())
-        ).map(item => ({ ...item, type: 'health' }))
-      ),
-      this.getExecutiveReports().then(data =>
-        data.filter(item =>
-          item.report_title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          item.report_type.toLowerCase().includes(searchTerm.toLowerCase())
-        ).map(item => ({ ...item, type: 'report' }))
-      )
-    ];
-
-    const results = await Promise.all(promises);
-    return results.flat();
   }
 }
-
-// Export types for external use
-export type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog };

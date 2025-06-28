@@ -1,7 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
-import { vendorManagementSubmenus } from './routingUtils';
+import { vendorManagementSubmenus, dashboardSubmenus } from './routingUtils';
 
 export const useAdminRouteHandler = () => {
   const [selectedMenu, setSelectedMenu] = useState('dashboard');
@@ -13,7 +13,20 @@ export const useAdminRouteHandler = () => {
     console.log('🎯 AdminRouteHandler handleMenuChange called with:', menuId);
     console.log('🔍 Checking submenu routing for:', menuId);
     
-    // Check if this is a vendor management submenu using the centralized list
+    // PRIORITY 1: Check dashboard submenus first
+    if (dashboardSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in dashboard submenus - routing to dashboard');
+      console.log('🔍 Dashboard submenu:', menuId);
+      setSelectedMenu('dashboard');
+      setSelectedSubmenu(menuId);
+      console.log('✅ Dashboard submenu routing handled:', {
+        selectedMenu: 'dashboard',
+        selectedSubmenu: menuId
+      });
+      return;
+    }
+    
+    // PRIORITY 2: Check if this is a vendor management submenu
     if (vendorManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
       console.log('🔍 Vendor management submenu:', menuId);

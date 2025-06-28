@@ -120,7 +120,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       
       default:
         console.log('⚠️ DashboardContent - no matching submenu found for:', normalizedSubmenu);
-        console.log('⚠️ Available submenus should include: overview, analytics, reports, metrics');
+        console.log('⚠️ Available submenus should include: overview, analytics, reports, metrics, etc.');
         console.log('⚠️ Falling back to OverviewDashboard');
         return <OverviewDashboard />;
     }

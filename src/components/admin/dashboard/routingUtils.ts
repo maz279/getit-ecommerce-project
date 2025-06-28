@@ -3,7 +3,11 @@
 
 // Dashboard submenus
 export const dashboardSubmenus = [
-  'overview', 'analytics', 'reports', 'metrics'
+  'overview', 'analytics', 'reports', 'metrics', 'real-time-metrics', 'realtime-metrics',
+  'kpi-monitoring', 'kpi_monitoring', 'performance-insights', 'performance_insights',
+  'revenue-analytics', 'user-activity', 'vendor-performance', 'order-insights',
+  'inventory-alerts', 'platform-performance', 'system-health', 'security-monitoring',
+  'system-logs', 'quick-actions', 'executive-summary'
 ];
 
 // User Management submenus

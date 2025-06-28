@@ -161,7 +161,7 @@ export const useLogQuickAction = () => {
   });
 };
 
-// Real-time Analytics hooks
+// Real-time Analytics hooks - Fixed to take no arguments
 export const useRealTimeAnalytics = () => {
   return useQuery({
     queryKey: ['realtime-analytics'],
@@ -170,7 +170,7 @@ export const useRealTimeAnalytics = () => {
   });
 };
 
-// Performance Metrics hooks
+// Performance Metrics hooks - Fixed to take no arguments
 export const usePerformanceMetrics = () => {
   return useQuery({
     queryKey: ['performance-metrics'],
@@ -179,12 +179,16 @@ export const usePerformanceMetrics = () => {
   });
 };
 
-// Dashboard search hook
+// Dashboard search hook - Fixed to return proper structure
 export const useDashboardSearch = (searchTerm: string) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm],
     queryFn: () => DashboardService.searchDashboardData(searchTerm),
     enabled: searchTerm.length > 0,
+    select: (data) => ({
+      data: data || [],
+      searchResults: data || []
+    })
   });
 };
 

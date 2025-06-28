@@ -12,6 +12,7 @@ import { VendorPaymentsContent } from './VendorPaymentsContent';
 import { VendorPerformanceReportsContent } from './VendorPerformanceReportsContent';
 import { VendorPerformanceMetricsContent } from './VendorPerformanceMetricsContent';
 import { CommissionTrackingContent } from './CommissionTrackingContent';
+import { PayoutProcessingContent } from './PayoutProcessingContent';
 import { ActiveVendorsContent } from './ActiveVendorsContent';
 import { PendingApplicationsContent } from './PendingApplicationsContent';
 import { SuspendedVendorsContent } from './SuspendedVendorsContent';
@@ -93,8 +94,11 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       console.log('✅ Routing to VendorPaymentsContent');
       return <VendorPaymentsContent />;
     case 'commission-tracking':
-      console.log('✅ Routing to CommissionTrackingContent - FIXED ROUTING');
+      console.log('✅ Routing to CommissionTrackingContent');
       return <CommissionTrackingContent />;
+    case 'payout-processing':
+      console.log('✅ Routing to PayoutProcessingContent - FIXED ROUTING');
+      return <PayoutProcessingContent />;
     
     // Performance tracking
     case 'performance-reports':

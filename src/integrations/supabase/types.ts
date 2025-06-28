@@ -835,6 +835,260 @@ export type Database = {
           },
         ]
       }
+      payout_fees_config: {
+        Row: {
+          created_at: string
+          created_by: string
+          currency: string
+          effective_from: string
+          effective_to: string | null
+          fee_amount: number
+          fee_type: string
+          id: string
+          is_active: boolean | null
+          maximum_fee: number | null
+          minimum_fee: number | null
+          payment_method: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          created_by: string
+          currency?: string
+          effective_from?: string
+          effective_to?: string | null
+          fee_amount: number
+          fee_type: string
+          id?: string
+          is_active?: boolean | null
+          maximum_fee?: number | null
+          minimum_fee?: number | null
+          payment_method: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          created_by?: string
+          currency?: string
+          effective_from?: string
+          effective_to?: string | null
+          fee_amount?: number
+          fee_type?: string
+          id?: string
+          is_active?: boolean | null
+          maximum_fee?: number | null
+          minimum_fee?: number | null
+          payment_method?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_fees_config_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_history: {
+        Row: {
+          action: string
+          created_at: string
+          id: string
+          new_status: string | null
+          notes: string | null
+          payout_request_id: string | null
+          performed_by: string | null
+          previous_status: string | null
+          vendor_id: string
+        }
+        Insert: {
+          action: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          notes?: string | null
+          payout_request_id?: string | null
+          performed_by?: string | null
+          previous_status?: string | null
+          vendor_id: string
+        }
+        Update: {
+          action?: string
+          created_at?: string
+          id?: string
+          new_status?: string | null
+          notes?: string | null
+          payout_request_id?: string | null
+          performed_by?: string | null
+          previous_status?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_history_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_history_performed_by_fkey"
+            columns: ["performed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_history_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_requests: {
+        Row: {
+          bank_account_details: Json | null
+          created_at: string
+          currency: string
+          id: string
+          mobile_banking_details: Json | null
+          net_payout_amount: number
+          notes: string | null
+          payment_method: string
+          payment_reference: string | null
+          payout_period_end: string
+          payout_period_start: string
+          processed_at: string | null
+          processed_by: string | null
+          processing_fee: number | null
+          rejection_reason: string | null
+          request_amount: number
+          request_date: string
+          status: string
+          tax_deduction: number | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          bank_account_details?: Json | null
+          created_at?: string
+          currency?: string
+          id?: string
+          mobile_banking_details?: Json | null
+          net_payout_amount: number
+          notes?: string | null
+          payment_method: string
+          payment_reference?: string | null
+          payout_period_end: string
+          payout_period_start: string
+          processed_at?: string | null
+          processed_by?: string | null
+          processing_fee?: number | null
+          rejection_reason?: string | null
+          request_amount: number
+          request_date?: string
+          status?: string
+          tax_deduction?: number | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          bank_account_details?: Json | null
+          created_at?: string
+          currency?: string
+          id?: string
+          mobile_banking_details?: Json | null
+          net_payout_amount?: number
+          notes?: string | null
+          payment_method?: string
+          payment_reference?: string | null
+          payout_period_end?: string
+          payout_period_start?: string
+          processed_at?: string | null
+          processed_by?: string | null
+          processing_fee?: number | null
+          rejection_reason?: string | null
+          request_amount?: number
+          request_date?: string
+          status?: string
+          tax_deduction?: number | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_requests_processed_by_fkey"
+            columns: ["processed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_schedules: {
+        Row: {
+          auto_payout_enabled: boolean | null
+          bank_account_info: Json | null
+          created_at: string
+          id: string
+          is_active: boolean | null
+          minimum_payout_amount: number | null
+          mobile_banking_info: Json | null
+          payout_day: number | null
+          preferred_payment_method: string
+          schedule_type: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          auto_payout_enabled?: boolean | null
+          bank_account_info?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          minimum_payout_amount?: number | null
+          mobile_banking_info?: Json | null
+          payout_day?: number | null
+          preferred_payment_method: string
+          schedule_type: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          auto_payout_enabled?: boolean | null
+          bank_account_info?: Json | null
+          created_at?: string
+          id?: string
+          is_active?: boolean | null
+          minimum_payout_amount?: number | null
+          mobile_banking_info?: Json | null
+          payout_day?: number | null
+          preferred_payment_method?: string
+          schedule_type?: string
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_schedules_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_reviews: {
         Row: {
           created_at: string | null

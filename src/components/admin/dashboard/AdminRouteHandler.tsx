@@ -1,65 +1,59 @@
 
-import { useState, useCallback } from 'react';
-import { getDefaultSubmenu, handleSpecialCases, handleSubmenuRouting, handleCompoundMenus } from './menuHandlers';
+import { useState, useEffect } from 'react';
+import { useLocation, useNavigate } from 'react-router-dom';
 
-interface UseAdminRouteHandlerReturn {
-  selectedMenu: string;
-  selectedSubmenu: string;
-  handleMenuChange: (menu: string) => void;
-  handleSubmenuChange: (submenu: string) => void;
-}
-
-export const useAdminRouteHandler = (): UseAdminRouteHandlerReturn => {
+export const useAdminRouteHandler = () => {
   const [selectedMenu, setSelectedMenu] = useState('dashboard');
   const [selectedSubmenu, setSelectedSubmenu] = useState('overview');
+  const location = useLocation();
+  const navigate = useNavigate();
 
-  const setDefaultSubmenu = useCallback((menu: string) => {
-    const defaultSubmenu = getDefaultSubmenu(menu);
-    setSelectedSubmenu(defaultSubmenu);
-  }, []);
+  // Define vendor management submenus
+  const vendorManagementSubmenus = [
+    'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding',
+    'vendor-verification', 'vendor-performance', 'vendor-support', 'vendor-search',
+    'vendor-scorecard', 'active-vendors', 'pending-applications', 'suspended-vendors',
+    'nid-verification', 'tin-verification', 'trade-license-verification',
+    'bank-account-verification', 'document-review', 'vendor-payments',
+    'commission-tracking', 'payout-processing', 'performance-reports',
+    'performance-metrics', 'rating-management'
+  ];
 
-  const handleMenuChange = useCallback((menu: string) => {
-    console.log('🎯 AdminRouteHandler handleMenuChange called with:', menu);
+  const handleMenuChange = (menuId: string) => {
+    console.log('🎯 AdminRouteHandler handleMenuChange called with:', menuId);
+    console.log('🔍 Checking submenu routing for:', menuId);
     
-    // Handle special cases first (including dashboard submenus)
-    const specialCase = handleSpecialCases(menu);
-    if (specialCase) {
-      console.log('✅ Special case handled:', specialCase);
-      setSelectedMenu(specialCase.selectedMenu);
-      setSelectedSubmenu(specialCase.selectedSubmenu);
+    // Check if this is a vendor management submenu
+    if (vendorManagementSubmenus.includes(menuId)) {
+      console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
+      console.log('🔍 Vendor management submenu:', menuId);
+      setSelectedMenu('vendor-management');
+      setSelectedSubmenu(menuId);
+      console.log('✅ Submenu routing handled:', {
+        selectedMenu: 'vendor-management',
+        selectedSubmenu: menuId
+      });
       return;
     }
     
-    // Check if this is a submenu from various management sections
-    const submenuRouting = handleSubmenuRouting(menu);
-    if (submenuRouting) {
-      console.log('✅ Submenu routing handled:', submenuRouting);
-      setSelectedMenu(submenuRouting.selectedMenu);
-      setSelectedSubmenu(submenuRouting.selectedSubmenu);
-      return;
-    }
-    
-    // Handle compound menu items (now mostly empty)
-    const compoundMenu = handleCompoundMenus(menu);
-    if (compoundMenu) {
-      console.log('✅ Compound menu handled:', compoundMenu);
-      setSelectedMenu(compoundMenu.selectedMenu);
-      setSelectedSubmenu(compoundMenu.selectedSubmenu);
-      return;
-    }
+    // Handle other main menu items
+    console.log('📝 Setting simple menu:', menuId);
+    setSelectedMenu(menuId);
+    setSelectedSubmenu('overview');
+  };
 
-    // Handle simple menu changes
-    console.log('📝 Setting simple menu:', menu);
-    setSelectedMenu(menu);
-    
-    // Set default submenu based on menu selection
-    setDefaultSubmenu(menu);
-  }, [setDefaultSubmenu]);
+  const handleSubmenuChange = (submenuId: string) => {
+    console.log('🔍 AdminRouteHandler handleSubmenuChange called with:', submenuId);
+    setSelectedSubmenu(submenuId);
+  };
 
-  const handleSubmenuChange = useCallback((submenu: string) => {
-    console.log('🎯 AdminRouteHandler handleSubmenuChange called with:', submenu);
-    setSelectedSubmenu(submenu);
-  }, []);
+  // Update URL when menu changes
+  useEffect(() => {
+    const currentPath = location.pathname;
+    if (currentPath !== '/admin/dashboard') {
+      navigate('/admin/dashboard', { replace: true });
+    }
+  }, [selectedMenu, selectedSubmenu, location.pathname, navigate]);
 
   return {
     selectedMenu,

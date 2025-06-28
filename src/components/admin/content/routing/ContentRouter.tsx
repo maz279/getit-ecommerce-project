@@ -25,24 +25,31 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
   
   switch (selectedMenu) {
     case 'dashboard':
+      console.log('✅ ContentRouter routing to DashboardContent');
       return <DashboardContent selectedSubmenu={selectedSubmenu} />;
     
     case 'user-management':
+      console.log('✅ ContentRouter routing to UserManagementContent');
       return <UserManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'sales-management':
+      console.log('✅ ContentRouter routing to SalesManagementContent');
       return <SalesManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'order-management':
+      console.log('✅ ContentRouter routing to OrderManagementContent');
       return <OrderManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'logistics-management':
+      console.log('✅ ContentRouter routing to LogisticsContent');
       return <LogisticsContent selectedSubmenu={selectedSubmenu} />;
     
     case 'product-management':
+      console.log('✅ ContentRouter routing to ProductManagementContent');
       return <ProductManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'customer-management':
+      console.log('✅ ContentRouter routing to CustomerManagementContent');
       return <CustomerManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'vendor-management':
@@ -50,25 +57,31 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       return <VendorManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'marketing':
+      console.log('✅ ContentRouter routing to MarketingContent');
       return <MarketingContent selectedSubmenu={selectedSubmenu} />;
     
     case 'analytics':
+      console.log('✅ ContentRouter routing to AnalyticsContent');
       return <AnalyticsContent selectedSubmenu={selectedSubmenu} />;
     
     case 'payment-management':
+      console.log('✅ ContentRouter routing to PaymentManagementContent');
       return <PaymentManagementContent selectedSubmenu={selectedSubmenu} />;
     
     case 'communications':
+      console.log('✅ ContentRouter routing to CommunicationsContent');
       return <CommunicationsContent selectedSubmenu={selectedSubmenu} />;
     
     case 'security':
+      console.log('✅ ContentRouter routing to SecurityContent');
       return <SecurityContent selectedSubmenu={selectedSubmenu} />;
     
     case 'settings':
+      console.log('✅ ContentRouter routing to SettingsContent');
       return <SettingsContent selectedSubmenu={selectedSubmenu} />;
     
     default:
-      console.log('⚠️ ContentRouter - Unknown menu, defaulting to dashboard');
+      console.log('⚠️ ContentRouter - Unknown menu:', selectedMenu, '- defaulting to dashboard');
       return <DashboardContent selectedSubmenu="overview" />;
   }
 };

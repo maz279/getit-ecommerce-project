@@ -162,31 +162,34 @@ export const useLogQuickAction = () => {
   });
 };
 
-// Real-time Analytics hooks - Updated to accept optional period parameter
-export const useRealTimeAnalytics = (period?: string) => {
+// Real-time Analytics hooks - Fixed to accept no parameters
+export const useRealTimeAnalytics = () => {
   return useQuery({
-    queryKey: ['realtime-analytics', period],
+    queryKey: ['realtime-analytics'],
     queryFn: () => DashboardService.getRealTimeAnalytics(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
 
-// Performance Metrics hooks - Updated to accept optional parameter
-export const usePerformanceMetrics = (refreshInterval?: number) => {
+// Performance Metrics hooks - Fixed to accept no parameters  
+export const usePerformanceMetrics = () => {
   return useQuery({
     queryKey: ['performance-metrics'],
     queryFn: () => DashboardService.getPerformanceMetrics(),
-    refetchInterval: refreshInterval || 60000, // Refetch every minute
+    refetchInterval: 60000, // Refetch every minute
   });
 };
 
-// Dashboard search hook - Updated to match component expectations
+// Dashboard search hook - Fixed to return proper structure
 export const useDashboardSearch = (searchTerm: string, filters?: any) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm, filters],
     queryFn: async () => {
       const results = await DashboardService.searchDashboardData(searchTerm);
-      return results || [];
+      return {
+        data: results || [],
+        searchResults: results || []
+      };
     },
     enabled: searchTerm.length > 0,
   });

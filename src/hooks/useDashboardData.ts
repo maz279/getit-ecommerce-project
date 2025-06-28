@@ -1,39 +1,13 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DashboardService } from '@/services/database/DashboardService';
-import type { 
-  DashboardKPIMetric, 
-  SystemHealthLog, 
-  SecurityEvent, 
-  ExecutiveReport, 
-  QuickAction 
-} from '@/types/dashboard';
-import { RedisService } from '@/services/cache/RedisService';
-import { ElasticsearchService } from '@/services/search/ElasticsearchService';
+import { DashboardService, DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction } from '@/services/database/DashboardService';
 
-export const useDashboardKPIMetrics = (filters?: any) => {
+// KPI Metrics hooks
+export const useKPIMetrics = (filters?: any) => {
   return useQuery({
-    queryKey: ['dashboard-kpi-metrics', filters],
-    queryFn: async () => {
-      const cacheKey = `kpi-metrics-${JSON.stringify(filters)}`;
-      
-      // Try to get from cache first
-      const cached = await RedisService.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
-
-      // Fetch from database
-      const data = await DashboardService.getKPIMetrics(filters);
-      
-      // Cache the result
-      await RedisService.set(cacheKey, data, 300); // 5 minutes
-      
-      return data;
-    },
-    staleTime: 5 * 60 * 1000, // 5 minutes
-    refetchInterval: 10 * 60 * 1000, // 10 minutes
+    queryKey: ['kpi-metrics', filters],
+    queryFn: () => DashboardService.getKPIMetrics(filters),
   });
 };
 
@@ -41,11 +15,10 @@ export const useCreateKPIMetric = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>) => 
+    mutationFn: (metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>) =>
       DashboardService.createKPIMetric(metric),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dashboard-kpi-metrics'] });
-      RedisService.flushPattern('kpi-metrics');
+      queryClient.invalidateQueries({ queryKey: ['kpi-metrics'] });
     },
   });
 };
@@ -54,11 +27,10 @@ export const useUpdateKPIMetric = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<DashboardKPIMetric> }) => 
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<DashboardKPIMetric> }) =>
       DashboardService.updateKPIMetric(id, updates),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dashboard-kpi-metrics'] });
-      RedisService.flushPattern('kpi-metrics');
+      queryClient.invalidateQueries({ queryKey: ['kpi-metrics'] });
     },
   });
 };
@@ -69,30 +41,17 @@ export const useDeleteKPIMetric = () => {
   return useMutation({
     mutationFn: (id: string) => DashboardService.deleteKPIMetric(id),
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['dashboard-kpi-metrics'] });
-      RedisService.flushPattern('kpi-metrics');
+      queryClient.invalidateQueries({ queryKey: ['kpi-metrics'] });
     },
   });
 };
 
-export const useSystemHealthLogs = (limit?: number) => {
+// System Health hooks  
+export const useSystemHealthLogs = (filters?: any) => {
   return useQuery({
-    queryKey: ['system-health-logs', limit],
-    queryFn: async () => {
-      const cacheKey = `health-logs-${limit}`;
-      
-      const cached = await RedisService.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
-
-      const data = await DashboardService.getSystemHealthLogs(limit);
-      await RedisService.set(cacheKey, data, 60); // 1 minute cache
-      
-      return data;
-    },
-    staleTime: 30 * 1000, // 30 seconds
-    refetchInterval: 60 * 1000, // 1 minute
+    queryKey: ['system-health-logs', filters],
+    queryFn: () => DashboardService.getSystemHealthLogs(filters),
+    refetchInterval: 30000, // Refetch every 30 seconds for real-time updates
   });
 };
 
@@ -100,33 +59,20 @@ export const useCreateSystemHealthLog = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (log: Omit<SystemHealthLog, 'id' | 'created_at'>) => 
+    mutationFn: (log: Omit<SystemHealthLog, 'id' | 'created_at'>) =>
       DashboardService.createSystemHealthLog(log),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['system-health-logs'] });
-      RedisService.flushPattern('health-logs');
     },
   });
 };
 
+// Security Events hooks
 export const useSecurityEvents = (filters?: any) => {
   return useQuery({
     queryKey: ['security-events', filters],
-    queryFn: async () => {
-      const cacheKey = `security-events-${JSON.stringify(filters)}`;
-      
-      const cached = await RedisService.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
-
-      const data = await DashboardService.getSecurityEvents(filters);
-      await RedisService.set(cacheKey, data, 120); // 2 minutes cache
-      
-      return data;
-    },
-    staleTime: 60 * 1000, // 1 minute
-    refetchInterval: 2 * 60 * 1000, // 2 minutes
+    queryFn: () => DashboardService.getSecurityEvents(filters),
+    refetchInterval: 60000, // Refetch every minute
   });
 };
 
@@ -134,32 +80,19 @@ export const useCreateSecurityEvent = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (event: Omit<SecurityEvent, 'id' | 'created_at'>) => 
+    mutationFn: (event: Omit<SecurityEvent, 'id' | 'created_at'>) =>
       DashboardService.createSecurityEvent(event),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['security-events'] });
-      RedisService.flushPattern('security-events');
     },
   });
 };
 
+// Executive Reports hooks
 export const useExecutiveReports = (filters?: any) => {
   return useQuery({
     queryKey: ['executive-reports', filters],
-    queryFn: async () => {
-      const cacheKey = `executive-reports-${JSON.stringify(filters)}`;
-      
-      const cached = await RedisService.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
-
-      const data = await DashboardService.getExecutiveReports(filters);
-      await RedisService.set(cacheKey, data, 600); // 10 minutes cache
-      
-      return data;
-    },
-    staleTime: 10 * 60 * 1000, // 10 minutes
+    queryFn: () => DashboardService.getExecutiveReports(filters),
   });
 };
 
@@ -167,33 +100,26 @@ export const useCreateExecutiveReport = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>) => 
+    mutationFn: (report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>) =>
       DashboardService.createExecutiveReport(report),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['executive-reports'] });
-      RedisService.flushPattern('executive-reports');
     },
   });
 };
 
-export const useQuickActions = (limit?: number) => {
+// Quick Actions hooks
+export const useQuickActions = () => {
   return useQuery({
-    queryKey: ['quick-actions', limit],
-    queryFn: async () => {
-      const cacheKey = `quick-actions-${limit}`;
-      
-      const cached = await RedisService.get(cacheKey);
-      if (cached) {
-        return cached;
-      }
+    queryKey: ['quick-actions'],
+    queryFn: () => DashboardService.getQuickActions(),
+  });
+};
 
-      const data = await DashboardService.getQuickActions(limit);
-      await RedisService.set(cacheKey, data, 180); // 3 minutes cache
-      
-      return data;
-    },
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 3 * 60 * 1000, // 3 minutes
+export const useQuickActionLogs = (limit?: number) => {
+  return useQuery({
+    queryKey: ['quick-action-logs', limit],
+    queryFn: () => DashboardService.getQuickActionLogs(limit),
   });
 };
 
@@ -201,11 +127,10 @@ export const useCreateQuickAction = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>) => 
+    mutationFn: (action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>) =>
       DashboardService.createQuickAction(action),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quick-actions'] });
-      RedisService.flushPattern('quick-actions');
     },
   });
 };
@@ -214,63 +139,96 @@ export const useUpdateQuickAction = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: ({ id, updates }: { id: string; updates: Partial<QuickAction> }) => 
+    mutationFn: ({ id, updates }: { id: string; updates: Partial<QuickAction> }) =>
       DashboardService.updateQuickAction(id, updates),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quick-actions'] });
-      RedisService.flushPattern('quick-actions');
     },
   });
 };
 
-export const useRealTimeAnalytics = (filters?: any) => {
-  return useQuery({
-    queryKey: ['realtime-analytics', filters],
-    queryFn: () => DashboardService.getRealTimeAnalytics(filters),
-    staleTime: 30 * 1000, // 30 seconds
-    refetchInterval: 60 * 1000, // 1 minute
+export const useLogQuickAction = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: DashboardService.logQuickAction,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ['quick-action-logs'] });
+    },
   });
 };
 
-export const usePerformanceMetrics = (filters?: any) => {
+// Real-time Analytics hooks
+export const useRealTimeAnalytics = () => {
   return useQuery({
-    queryKey: ['performance-metrics', filters],
-    queryFn: () => DashboardService.getPerformanceMetrics(filters),
-    staleTime: 2 * 60 * 1000, // 2 minutes
-    refetchInterval: 5 * 60 * 1000, // 5 minutes
+    queryKey: ['realtime-analytics'],
+    queryFn: DashboardService.getRealTimeAnalytics,
+    refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
 
-export const useDashboardSearch = (query: string, filters?: any) => {
-  const [isSearching, setIsSearching] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
+// Performance Metrics hooks
+export const usePerformanceMetrics = () => {
+  return useQuery({
+    queryKey: ['performance-metrics'],
+    queryFn: DashboardService.getPerformanceMetrics,
+    refetchInterval: 60000, // Refetch every minute
+  });
+};
 
-  useEffect(() => {
-    const performSearch = async () => {
-      if (!query.trim()) {
-        setSearchResults([]);
-        return;
-      }
+// Combined dashboard data hook
+export const useDashboardData = () => {
+  const kpiMetrics = useKPIMetrics();
+  const systemHealth = useSystemHealthLogs();
+  const securityEvents = useSecurityEvents();
+  const executiveReports = useExecutiveReports();
+  const quickActions = useQuickActions();
+  const quickActionLogs = useQuickActionLogs(10);
+  const realtimeAnalytics = useRealTimeAnalytics();
+  const performanceMetrics = usePerformanceMetrics();
 
-      setIsSearching(true);
-      try {
-        const results = await ElasticsearchService.search('dashboard_data', {
-          query,
-          filters,
-          size: 20
-        });
-        setSearchResults(results.hits);
-      } catch (error) {
-        console.error('Search error:', error);
-        setSearchResults([]);
-      } finally {
-        setIsSearching(false);
-      }
-    };
+  const isLoading = 
+    kpiMetrics.isLoading || 
+    systemHealth.isLoading || 
+    securityEvents.isLoading || 
+    executiveReports.isLoading || 
+    quickActions.isLoading ||
+    quickActionLogs.isLoading ||
+    realtimeAnalytics.isLoading ||
+    performanceMetrics.isLoading;
 
-    const debounceTimer = setTimeout(performSearch, 300);
-    return () => clearTimeout(debounceTimer);
-  }, [query, filters]);
+  const error = 
+    kpiMetrics.error || 
+    systemHealth.error || 
+    securityEvents.error || 
+    executiveReports.error || 
+    quickActions.error ||
+    quickActionLogs.error ||
+    realtimeAnalytics.error ||
+    performanceMetrics.error;
 
-  return { searchResults, isSearching };
+  return {
+    data: {
+      kpiMetrics: kpiMetrics.data || [],
+      systemHealth: systemHealth.data || [],
+      securityEvents: securityEvents.data || [],
+      executiveReports: executiveReports.data || [],
+      quickActions: quickActions.data || [],
+      quickActionLogs: quickActionLogs.data || [],
+      realtimeAnalytics: realtimeAnalytics.data || {},
+      performanceMetrics: performanceMetrics.data || {}
+    },
+    isLoading,
+    error,
+    refetch: () => {
+      kpiMetrics.refetch();
+      systemHealth.refetch();
+      securityEvents.refetch();
+      executiveReports.refetch();
+      quickActions.refetch();
+      quickActionLogs.refetch();
+      realtimeAnalytics.refetch();
+      performanceMetrics.refetch();
+    }
+  };
 };

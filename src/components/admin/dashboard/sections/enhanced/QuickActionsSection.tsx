@@ -4,356 +4,185 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Textarea } from '@/components/ui/textarea';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
-import { Progress } from '@/components/ui/progress';
-import { Zap, Users, Package, FileText, Settings, Mail, Download, Upload, RefreshCw } from 'lucide-react';
 import { useCreateQuickAction, useQuickActions } from '@/hooks/useDashboardData';
+import { 
+  Plus, 
+  CheckCircle, 
+  DollarSign, 
+  FileText, 
+  Settings, 
+  AlertTriangle,
+  Play,
+  Clock,
+  CheckCircle2
+} from 'lucide-react';
 
-export const QuickActionsSection: React.FC = () => {
-  const [selectedAction, setSelectedAction] = useState('');
-  const [actionParameters, setActionParameters] = useState({});
-  const { data: actions, isLoading } = useQuickActions(10);
-  const createAction = useCreateQuickAction();
+export const EnhancedQuickActionsSection: React.FC = () => {
+  const [actionName, setActionName] = useState('');
+  const [actionType, setActionType] = useState('bulk_update');
+  const [parameters, setParameters] = useState('');
 
-  const quickActionCategories = [
-    {
-      title: 'User Management',
-      icon: Users,
-      actions: [
-        { id: 'bulk-user-update', name: 'Bulk Update Users', description: 'Update multiple user profiles' },
-        { id: 'user-notification', name: 'Send User Notifications', description: 'Send notifications to users' },
-        { id: 'user-export', name: 'Export User Data', description: 'Export user information' },
-      ]
-    },
-    {
-      title: 'Product Management',
-      icon: Package,
-      actions: [
-        { id: 'inventory-sync', name: 'Sync Inventory', description: 'Synchronize product inventory' },
-        { id: 'bulk-price-update', name: 'Bulk Price Update', description: 'Update product prices' },
-        { id: 'product-import', name: 'Import Products', description: 'Import product catalog' },
-      ]
-    },
-    {
-      title: 'System Maintenance',
-      icon: Settings,
-      actions: [
-        { id: 'cache-clear', name: 'Clear Cache', description: 'Clear system cache' },
-        { id: 'backup-database', name: 'Backup Database', description: 'Create database backup' },
-        { id: 'system-cleanup', name: 'System Cleanup', description: 'Clean temporary files' },
-      ]
-    },
-    {
-      title: 'Data Export',
-      icon: Download,
-      actions: [
-        { id: 'sales-report', name: 'Generate Sales Report', description: 'Export sales analytics' },
-        { id: 'vendor-report', name: 'Vendor Performance Report', description: 'Export vendor metrics' },
-        { id: 'customer-report', name: 'Customer Analytics', description: 'Export customer data' },
-      ]
-    },
-  ];
+  const { data: quickActions, isLoading } = useQuickActions(10);
+  const createActionMutation = useCreateQuickAction();
 
-  const recentActions = [
-    { name: 'Cache Clear', status: 'completed', progress: 100, time: '2 min ago', duration: '15s' },
-    { name: 'User Export', status: 'in_progress', progress: 67, time: '5 min ago', duration: 'Running...' },
-    { name: 'Inventory Sync', status: 'completed', progress: 100, time: '10 min ago', duration: '2m 34s' },
-    { name: 'Price Update', status: 'failed', progress: 45, time: '15 min ago', duration: 'Failed' },
-  ];
+  const handleCreateAction = () => {
+    const newAction = {
+      id: `qa-${Date.now()}`,
+      action_name: actionName,
+      action_type: actionType as any,
+      parameters: parameters ? JSON.parse(parameters) : {},
+      executed_by: 'admin@getit.com',
+      execution_status: 'pending' as any,
+      progress_percentage: 0,
+      created_at: new Date().toISOString(),
+      started_at: new Date().toISOString(),
+      completed_at: '',
+      execution_time_ms: 0,
+      result_data: {},
+      error_message: ''
+    };
 
-  const handleActionSubmit = async (actionType: string, parameters: any) => {
-    try {
-      await createAction.mutateAsync({
-        action_name: actionType,
-        action_type: actionType as any,
-        parameters: parameters,
-        executed_by: 'current-user-id', // This would come from auth context
-      });
-    } catch (error) {
-      console.error('Failed to execute action:', error);
-    }
+    createActionMutation.mutate(newAction);
+    setActionName('');
+    setParameters('');
   };
 
-  const getStatusColor = (status: string) => {
-    switch (status) {
-      case 'completed': return 'text-green-600 bg-green-50';
-      case 'in_progress': return 'text-blue-600 bg-blue-50';
-      case 'failed': return 'text-red-600 bg-red-50';
-      case 'pending': return 'text-yellow-600 bg-yellow-50';
-      default: return 'text-gray-600 bg-gray-50';
-    }
-  };
+  const quickActionTemplates = [
+    { icon: Plus, label: 'Add Product', type: 'bulk_update', color: 'bg-blue-500' },
+    { icon: CheckCircle, label: 'Approve Vendor', type: 'user_management', color: 'bg-green-500' },
+    { icon: DollarSign, label: 'Process Payout', type: 'order_processing', color: 'bg-purple-500' },
+    { icon: FileText, label: 'Generate Report', type: 'data_export', color: 'bg-orange-500' },
+    { icon: Settings, label: 'System Maintenance', type: 'system_maintenance', color: 'bg-gray-500' },
+    { icon: AlertTriangle, label: 'Emergency Alert', type: 'bulk_update', color: 'bg-red-500' }
+  ];
 
   return (
-    <div className="p-6 space-y-6 bg-gray-50 min-h-screen">
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-gray-900">Quick Actions</h1>
-          <p className="text-gray-600 mt-1">Execute common administrative tasks efficiently</p>
-        </div>
-        <div className="flex space-x-3">
-          <Button variant="outline">
-            <RefreshCw className="w-4 h-4 mr-2" />
-            Refresh Status
-          </Button>
-          <Button>
-            <Zap className="w-4 h-4 mr-2" />
-            Schedule Action
-          </Button>
-        </div>
-      </div>
-
-      <Tabs defaultValue="actions" className="space-y-6">
-        <TabsList className="grid w-full grid-cols-4">
-          <TabsTrigger value="actions">Quick Actions</TabsTrigger>
-          <TabsTrigger value="forms">Action Forms</TabsTrigger>
-          <TabsTrigger value="history">Action History</TabsTrigger>
-          <TabsTrigger value="templates">Templates</TabsTrigger>
+    <div className="space-y-6">
+      <Tabs defaultValue="overview" className="w-full">
+        <TabsList className="grid w-full grid-cols-3">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="create">Create Action</TabsTrigger>
+          <TabsTrigger value="history">History</TabsTrigger>
         </TabsList>
 
-        <TabsContent value="actions" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            {quickActionCategories.map((category, index) => (
-              <Card key={index}>
-                <CardHeader>
-                  <CardTitle className="flex items-center">
-                    <category.icon className="w-5 h-5 mr-2" />
-                    {category.title}
-                  </CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-3">
-                    {category.actions.map((action, actionIndex) => (
-                      <div key={actionIndex} className="flex items-center justify-between p-3 border rounded-lg">
-                        <div>
-                          <h4 className="font-medium">{action.name}</h4>
-                          <p className="text-sm text-gray-600">{action.description}</p>
-                        </div>
-                        <Button 
-                          size="sm" 
-                          onClick={() => handleActionSubmit(action.id, {})}
-                        >
-                          Execute
-                        </Button>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+        <TabsContent value="overview" className="space-y-6">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Active Actions</CardTitle>
+                <Play className="h-4 w-4 text-blue-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">12</div>
+                <p className="text-xs text-muted-foreground">Currently running</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Completed Today</CardTitle>
+                <CheckCircle2 className="h-4 w-4 text-green-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">89</div>
+                <p className="text-xs text-muted-foreground">Success rate: 97%</p>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                <CardTitle className="text-sm font-medium">Failed Actions</CardTitle>
+                <AlertTriangle className="h-4 w-4 text-red-600" />
+              </CardHeader>
+              <CardContent>
+                <div className="text-2xl font-bold">3</div>
+                <p className="text-xs text-muted-foreground">Need attention</p>
+              </CardContent>
+            </Card>
           </div>
 
           <Card>
             <CardHeader>
-              <CardTitle>Recent Actions</CardTitle>
+              <CardTitle>Quick Action Templates</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {recentActions.map((action, index) => (
-                  <div key={index} className="flex items-center justify-between p-3 border rounded-lg">
-                    <div className="flex-1">
-                      <div className="flex items-center justify-between mb-2">
-                        <span className="font-medium">{action.name}</span>
-                        <Badge className={getStatusColor(action.status)}>
-                          {action.status.replace('_', ' ')}
-                        </Badge>
-                      </div>
-                      <div className="flex items-center space-x-4">
-                        <Progress value={action.progress} className="flex-1" />
-                        <span className="text-xs text-gray-500">{action.progress}%</span>
-                      </div>
-                    </div>
-                    <div className="text-right ml-4">
-                      <p className="text-xs text-gray-500">{action.time}</p>
-                      <p className="text-xs text-gray-600">{action.duration}</p>
-                    </div>
-                  </div>
-                ))}
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4">
+                {quickActionTemplates.map((template, index) => {
+                  const IconComponent = template.icon;
+                  return (
+                    <Button
+                      key={index}
+                      className={`${template.color} hover:opacity-90 text-white h-20 flex-col space-y-2`}
+                      variant="default"
+                      onClick={() => {
+                        setActionName(template.label);
+                        setActionType(template.type);
+                      }}
+                    >
+                      <IconComponent size={20} />
+                      <span className="text-xs text-center">{template.label}</span>
+                    </Button>
+                  );
+                })}
               </div>
             </CardContent>
           </Card>
         </TabsContent>
 
-        <TabsContent value="forms" className="space-y-6">
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Bulk User Notification</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="notification-type">Notification Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="email">Email</SelectItem>
-                      <SelectItem value="sms">SMS</SelectItem>
-                      <SelectItem value="push">Push Notification</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="user-segment">User Segment</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select segment" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Users</SelectItem>
-                      <SelectItem value="active">Active Users</SelectItem>
-                      <SelectItem value="inactive">Inactive Users</SelectItem>
-                      <SelectItem value="premium">Premium Users</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="message">Message</Label>
-                  <Textarea id="message" placeholder="Enter notification message..." />
-                </div>
-                <Button onClick={() => handleActionSubmit('user-notification', {})}>
-                  Send Notifications
-                </Button>
-              </CardContent>
-            </Card>
+        <TabsContent value="create" className="space-y-6">
+          <Card>
+            <CardHeader>
+              <CardTitle>Create New Quick Action</CardTitle>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <div>
+                <Label htmlFor="actionName">Action Name</Label>
+                <Input
+                  id="actionName"
+                  value={actionName}
+                  onChange={(e) => setActionName(e.target.value)}
+                  placeholder="Enter action name"
+                />
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Bulk Price Update</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="category">Product Category</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select category" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="all">All Categories</SelectItem>
-                      <SelectItem value="electronics">Electronics</SelectItem>
-                      <SelectItem value="fashion">Fashion</SelectItem>
-                      <SelectItem value="books">Books</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="update-type">Update Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="percentage">Percentage</SelectItem>
-                      <SelectItem value="fixed">Fixed Amount</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="value">Value</Label>
-                  <Input id="value" type="number" placeholder="Enter value..." />
-                </div>
-                <Button onClick={() => handleActionSubmit('bulk-price-update', {})}>
-                  Update Prices
-                </Button>
-              </CardContent>
-            </Card>
+              <div>
+                <Label htmlFor="actionType">Action Type</Label>
+                <select
+                  id="actionType"
+                  value={actionType}
+                  onChange={(e) => setActionType(e.target.value)}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                >
+                  <option value="bulk_update">Bulk Update</option>
+                  <option value="data_export">Data Export</option>
+                  <option value="system_maintenance">System Maintenance</option>
+                  <option value="user_management">User Management</option>
+                  <option value="order_processing">Order Processing</option>
+                  <option value="inventory_sync">Inventory Sync</option>
+                </select>
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>System Maintenance</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="maintenance-type">Maintenance Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="cache-clear">Clear Cache</SelectItem>
-                      <SelectItem value="database-optimize">Optimize Database</SelectItem>
-                      <SelectItem value="log-cleanup">Clean Logs</SelectItem>
-                      <SelectItem value="backup">Create Backup</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="schedule">Schedule</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select schedule" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="now">Execute Now</SelectItem>
-                      <SelectItem value="low-traffic">During Low Traffic</SelectItem>
-                      <SelectItem value="scheduled">Schedule for Later</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={() => handleActionSubmit('system-maintenance', {})}>
-                  Execute Maintenance
-                </Button>
-              </CardContent>
-            </Card>
+              <div>
+                <Label htmlFor="parameters">Parameters (JSON)</Label>
+                <Input
+                  id="parameters"
+                  value={parameters}
+                  onChange={(e) => setParameters(e.target.value)}
+                  placeholder='{"key": "value"}'
+                />
+              </div>
 
-            <Card>
-              <CardHeader>
-                <CardTitle>Data Export</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div>
-                  <Label htmlFor="export-type">Export Type</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select type" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="users">User Data</SelectItem>
-                      <SelectItem value="orders">Order Data</SelectItem>
-                      <SelectItem value="products">Product Data</SelectItem>
-                      <SelectItem value="analytics">Analytics Data</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="date-range">Date Range</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select range" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="last-week">Last Week</SelectItem>
-                      <SelectItem value="last-month">Last Month</SelectItem>
-                      <SelectItem value="last-quarter">Last Quarter</SelectItem>
-                      <SelectItem value="custom">Custom Range</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <div>
-                  <Label htmlFor="format">Export Format</Label>
-                  <Select>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select format" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="csv">CSV</SelectItem>
-                      <SelectItem value="excel">Excel</SelectItem>
-                      <SelectItem value="json">JSON</SelectItem>
-                      <SelectItem value="pdf">PDF</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-                <Button onClick={() => handleActionSubmit('data-export', {})}>
-                  <Download className="w-4 h-4 mr-2" />
-                  Export Data
-                </Button>
-              </CardContent>
-            </Card>
-          </div>
+              <Button 
+                onClick={handleCreateAction}
+                disabled={!actionName || createActionMutation.isPending}
+                className="w-full"
+              >
+                {createActionMutation.isPending ? 'Creating...' : 'Create Action'}
+              </Button>
+            </CardContent>
+          </Card>
         </TabsContent>
 
         <TabsContent value="history" className="space-y-6">
@@ -362,38 +191,29 @@ export const QuickActionsSection: React.FC = () => {
               <CardTitle>Action History</CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="space-y-3">
-                {actions?.map((action, index) => (
-                  <div key={index} className="flex items-center justify-between p-4 border rounded-lg">
-                    <div>
-                      <h3 className="font-medium">{action.action_name}</h3>
-                      <p className="text-sm text-gray-600">Type: {action.action_type}</p>
-                      <p className="text-xs text-gray-500">{action.created_at}</p>
+              {isLoading ? (
+                <p>Loading actions...</p>
+              ) : (
+                <div className="space-y-4">
+                  {quickActions?.map((action) => (
+                    <div key={action.id} className="flex items-center justify-between p-4 border rounded-lg">
+                      <div>
+                        <h4 className="font-semibold">{action.action_name}</h4>
+                        <p className="text-sm text-gray-600">{action.action_type}</p>
+                        <p className="text-xs text-gray-500">{new Date(action.created_at).toLocaleString()}</p>
+                      </div>
+                      <div className="flex items-center space-x-2">
+                        <Badge variant={action.execution_status === 'completed' ? 'default' : 'secondary'}>
+                          {action.execution_status}
+                        </Badge>
+                        {action.execution_status === 'running' && (
+                          <Clock className="h-4 w-4 text-blue-500" />
+                        )}
+                      </div>
                     </div>
-                    <div className="text-right">
-                      <Badge className={getStatusColor(action.execution_status || 'pending')}>
-                        {action.execution_status || 'pending'}
-                      </Badge>
-                      {action.execution_time_ms && (
-                        <p className="text-xs text-gray-500 mt-1">
-                          Duration: {action.execution_time_ms}ms
-                        </p>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </CardContent>
-          </Card>
-        </TabsContent>
-
-        <TabsContent value="templates" className="space-y-6">
-          <Card>
-            <CardHeader>
-              <CardTitle>Action Templates</CardTitle>
-            </CardHeader>
-            <CardContent>
-              <p className="text-gray-600">Action templates and saved configurations would be displayed here...</p>
+                  ))}
+                </div>
+              )}
             </CardContent>
           </Card>
         </TabsContent>

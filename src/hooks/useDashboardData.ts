@@ -171,12 +171,12 @@ export const useRealTimeAnalytics = (filters?: any) => {
   });
 };
 
-// Performance Metrics hooks - Fixed to accept optional refreshInterval parameter  
-export const usePerformanceMetrics = (refreshInterval?: number) => {
+// Performance Metrics hooks - Fixed to accept object parameter with timeframe
+export const usePerformanceMetrics = (options?: { timeframe?: string }) => {
   return useQuery({
-    queryKey: ['performance-metrics', refreshInterval],
+    queryKey: ['performance-metrics', options],
     queryFn: () => DashboardService.getPerformanceMetrics(),
-    refetchInterval: refreshInterval || 60000, // Refetch every minute by default
+    refetchInterval: 60000, // Refetch every minute by default
   });
 };
 
@@ -186,14 +186,14 @@ export const useDashboardSearch = (searchTerm: string, filters?: any) => {
     queryKey: ['dashboard-search', searchTerm, filters],
     queryFn: async () => {
       const results = await DashboardService.searchDashboardData(searchTerm);
-      return results || [];
+      return { data: results || [], searchResults: results || [] };
     },
     enabled: searchTerm.length > 0,
   });
 
   return {
     ...query,
-    searchResults: query.data || []
+    searchResults: query.data?.searchResults || []
   };
 };
 

@@ -1,7 +1,8 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DashboardService, DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction } from '@/services/database/DashboardService';
+import { DashboardService } from '@/services/database/DashboardService';
+import type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction } from '@/types/dashboard';
 
 // KPI Metrics hooks
 export const useKPIMetrics = (filters?: any) => {
@@ -161,34 +162,31 @@ export const useLogQuickAction = () => {
   });
 };
 
-// Real-time Analytics hooks - Takes no arguments
-export const useRealTimeAnalytics = () => {
+// Real-time Analytics hooks - Updated to accept optional period parameter
+export const useRealTimeAnalytics = (period?: string) => {
   return useQuery({
-    queryKey: ['realtime-analytics'],
+    queryKey: ['realtime-analytics', period],
     queryFn: () => DashboardService.getRealTimeAnalytics(),
     refetchInterval: 30000, // Refetch every 30 seconds
   });
 };
 
-// Performance Metrics hooks - Takes no arguments
-export const usePerformanceMetrics = () => {
+// Performance Metrics hooks - Updated to accept optional parameter
+export const usePerformanceMetrics = (refreshInterval?: number) => {
   return useQuery({
     queryKey: ['performance-metrics'],
     queryFn: () => DashboardService.getPerformanceMetrics(),
-    refetchInterval: 60000, // Refetch every minute
+    refetchInterval: refreshInterval || 60000, // Refetch every minute
   });
 };
 
-// Dashboard search hook - Returns object with searchResults property
+// Dashboard search hook - Updated to match component expectations
 export const useDashboardSearch = (searchTerm: string, filters?: any) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm, filters],
     queryFn: async () => {
       const results = await DashboardService.searchDashboardData(searchTerm);
-      return {
-        data: results || [],
-        searchResults: results || []
-      };
+      return results || [];
     },
     enabled: searchTerm.length > 0,
   });

@@ -1,581 +1,355 @@
-import { supabase } from '@/integrations/supabase/client';
 
-export interface DashboardKPIMetric {
-  id: string;
-  metric_name: string;
-  metric_category: string;
-  metric_value: number;
-  comparison_value?: number;
-  percentage_change?: number;
-  trend_direction: 'up' | 'down' | 'stable';
-  metric_unit?: string;
-  time_period: string;
-  recorded_date: string;
-  metadata?: any;
-  created_by?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface SystemHealthLog {
-  id: string;
-  service_name: string;
-  status: 'healthy' | 'warning' | 'critical' | 'down';
-  response_time_ms?: number;
-  cpu_usage_percent?: number;
-  memory_usage_percent?: number;
-  disk_usage_percent?: number;
-  error_message?: string;
-  metadata?: any;
-  recorded_at: string;
-  created_at: string;
-  // Additional properties expected by components
-  health_status?: 'healthy' | 'warning' | 'critical' | 'down';
-  service_type?: string;
-  success_rate?: number;
-  cpu_usage?: number;
-  memory_usage?: number;
-  last_check?: string;
-  uptime_seconds?: number;
-  error_count?: number;
-}
-
-export interface SecurityEvent {
-  id: string;
-  event_type: string;
-  severity: 'low' | 'medium' | 'high' | 'critical';
-  source_ip?: string;
-  user_id?: string;
-  event_description: string;
-  metadata?: any;
-  resolved: boolean;
-  resolved_by?: string;
-  resolved_at?: string;
-  created_at: string;
-}
-
-export interface ExecutiveReport {
-  id: string;
-  report_title: string;
-  report_type: string;
-  executive_summary: string;
-  report_period_start: string;
-  report_period_end: string;
-  status: 'draft' | 'published' | 'archived';
-  key_metrics: any;
-  charts_data?: any;
-  recommendations?: any[];
-  created_by: string;
-  reviewed_by?: string;
-  approved_by?: string;
-  published_at?: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface QuickAction {
-  id: string;
-  action_name: string;
-  action_type: string;
-  description?: string;
-  icon_name?: string;
-  color_class?: string;
-  is_active: boolean;
-  sort_order: number;
-  permissions_required?: string[];
-  metadata?: any;
-  created_by: string;
-  created_at: string;
-  updated_at: string;
-}
-
-export interface QuickActionLog {
-  id: string;
-  action_type: string;
-  action_name: string;
-  execution_status: 'pending' | 'running' | 'completed' | 'failed';
-  parameters?: any;
-  executed_by: string;
-  progress_percentage: number;
-  started_at: string;
-  completed_at?: string;
-  execution_time_ms?: number;
-  result_data?: any;
-  error_message?: string;
-  created_at: string;
-}
+import { supabase } from '@/lib/supabase';
+import type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog } from '@/types/dashboard';
 
 export class DashboardService {
   // KPI Metrics
   static async getKPIMetrics(filters?: any): Promise<DashboardKPIMetric[]> {
-    try {
-      const { data, error } = await supabase
-        .from('dashboard_kpi_metrics')
-        .select('*')
-        .order('recorded_date', { ascending: false });
+    let query = supabase
+      .from('dashboard_kpi_metrics')
+      .select('*')
+      .order('recorded_date', { ascending: false });
 
-      if (error) throw error;
-      
-      return (data || []).map(item => ({
-        ...item,
-        trend_direction: ['up', 'down', 'stable'].includes(item.trend_direction) 
-          ? item.trend_direction as 'up' | 'down' | 'stable'
-          : 'stable'
-      }));
-    } catch (error) {
-      console.error('Error fetching KPI metrics:', error);
-      return this.getMockKPIMetrics();
+    if (filters?.category) {
+      query = query.eq('metric_category', filters.category);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return data.map(item => ({
+      ...item,
+      trend_direction: (item.trend_direction as 'up' | 'down' | 'stable') || 'stable'
+    })) as DashboardKPIMetric[];
   }
 
   static async createKPIMetric(metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>): Promise<DashboardKPIMetric> {
-    try {
-      const { data, error } = await supabase
-        .from('dashboard_kpi_metrics')
-        .insert([metric])
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from('dashboard_kpi_metrics')
+      .insert(metric)
+      .select()
+      .single();
 
-      if (error) throw error;
-      
-      return {
-        ...data,
-        trend_direction: ['up', 'down', 'stable'].includes(data.trend_direction) 
-          ? data.trend_direction as 'up' | 'down' | 'stable'
-          : 'stable'
-      };
-    } catch (error) {
-      console.error('Error creating KPI metric:', error);
-      throw error;
-    }
+    if (error) throw error;
+    return {
+      ...data,
+      trend_direction: (data.trend_direction as 'up' | 'down' | 'stable') || 'stable'
+    } as DashboardKPIMetric;
   }
 
   static async updateKPIMetric(id: string, updates: Partial<DashboardKPIMetric>): Promise<DashboardKPIMetric> {
-    try {
-      const { data, error } = await supabase
-        .from('dashboard_kpi_metrics')
-        .update(updates)
-        .eq('id', id)
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from('dashboard_kpi_metrics')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
 
-      if (error) throw error;
-      
-      return {
-        ...data,
-        trend_direction: ['up', 'down', 'stable'].includes(data.trend_direction) 
-          ? data.trend_direction as 'up' | 'down' | 'stable'
-          : 'stable'
-      };
-    } catch (error) {
-      console.error('Error updating KPI metric:', error);
-      throw error;
-    }
+    if (error) throw error;
+    return {
+      ...data,
+      trend_direction: (data.trend_direction as 'up' | 'down' | 'stable') || 'stable'
+    } as DashboardKPIMetric;
   }
 
   static async deleteKPIMetric(id: string): Promise<void> {
-    try {
-      const { error } = await supabase
-        .from('dashboard_kpi_metrics')
-        .delete()
-        .eq('id', id);
+    const { error } = await supabase
+      .from('dashboard_kpi_metrics')
+      .delete()
+      .eq('id', id);
 
-      if (error) throw error;
-    } catch (error) {
-      console.error('Error deleting KPI metric:', error);
-      throw error;
-    }
+    if (error) throw error;
   }
 
-  // System Health
+  // System Health Logs
   static async getSystemHealthLogs(filters?: any): Promise<SystemHealthLog[]> {
-    try {
-      console.warn('System health logs table not accessible, returning mock data');
-      return this.getMockSystemHealthLogs();
-    } catch (error) {
-      console.error('Error fetching system health logs:', error);
-      return this.getMockSystemHealthLogs();
+    let query = supabase
+      .from('system_health_logs')
+      .select('*')
+      .order('recorded_at', { ascending: false });
+
+    if (filters?.service) {
+      query = query.eq('service_name', filters.service);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return data.map(item => ({
+      ...item,
+      status: (item.status as 'healthy' | 'warning' | 'critical' | 'down') || 'healthy',
+      health_status: (item.status as 'healthy' | 'warning' | 'critical' | 'down') || 'healthy',
+      service_type: item.service_name?.split('-')[0] || 'service',
+      success_rate: Math.random() * 100, // Mock data
+      cpu_usage: item.cpu_usage_percent || 0,
+      memory_usage: item.memory_usage_percent || 0,
+      last_check: item.recorded_at,
+      uptime_seconds: Math.floor(Math.random() * 86400), // Mock data
+      error_count: Math.floor(Math.random() * 10) // Mock data
+    })) as SystemHealthLog[];
   }
 
   static async createSystemHealthLog(log: Omit<SystemHealthLog, 'id' | 'created_at'>): Promise<SystemHealthLog> {
-    try {
-      const mockLog: SystemHealthLog = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...log,
-        created_at: new Date().toISOString()
-      };
-      
-      return mockLog;
-    } catch (error) {
-      console.error('Error creating system health log:', error);
-      throw error;
-    }
+    const { data, error } = await supabase
+      .from('system_health_logs')
+      .insert({
+        service_name: log.service_name,
+        status: log.status,
+        response_time_ms: log.response_time_ms,
+        cpu_usage_percent: log.cpu_usage_percent,
+        memory_usage_percent: log.memory_usage_percent,
+        disk_usage_percent: log.disk_usage_percent,
+        error_message: log.error_message,
+        metadata: log.metadata,
+        recorded_at: log.recorded_at || new Date().toISOString()
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return {
+      ...data,
+      status: (data.status as 'healthy' | 'warning' | 'critical' | 'down') || 'healthy',
+      health_status: (data.status as 'healthy' | 'warning' | 'critical' | 'down') || 'healthy',
+      service_type: data.service_name?.split('-')[0] || 'service',
+      success_rate: Math.random() * 100,
+      cpu_usage: data.cpu_usage_percent || 0,
+      memory_usage: data.memory_usage_percent || 0,
+      last_check: data.recorded_at,
+      uptime_seconds: Math.floor(Math.random() * 86400),
+      error_count: Math.floor(Math.random() * 10)
+    } as SystemHealthLog;
   }
 
   // Security Events
   static async getSecurityEvents(filters?: any): Promise<SecurityEvent[]> {
-    try {
-      console.warn('Security events table not accessible, returning mock data');
-      return this.getMockSecurityEvents();
-    } catch (error) {
-      console.error('Error fetching security events:', error);
-      return this.getMockSecurityEvents();
+    let query = supabase
+      .from('security_events')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (filters?.severity) {
+      query = query.eq('severity', filters.severity);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return data.map(item => ({
+      ...item,
+      severity: (item.severity as 'low' | 'medium' | 'high' | 'critical') || 'low'
+    })) as SecurityEvent[];
   }
 
   static async createSecurityEvent(event: Omit<SecurityEvent, 'id' | 'created_at'>): Promise<SecurityEvent> {
-    try {
-      const mockEvent: SecurityEvent = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...event,
-        created_at: new Date().toISOString()
-      };
-      
-      return mockEvent;
-    } catch (error) {
-      console.error('Error creating security event:', error);
-      throw error;
-    }
+    const { data, error } = await supabase
+      .from('security_events')
+      .insert({
+        event_type: event.event_type,
+        severity: event.severity,
+        source_ip: event.source_ip,
+        user_id: event.user_id,
+        event_description: event.event_description,
+        metadata: event.metadata,
+        resolved: event.resolved || false,
+        resolved_by: event.resolved_by,
+        resolved_at: event.resolved_at
+      })
+      .select()
+      .single();
+
+    if (error) throw error;
+    return {
+      ...data,
+      severity: (data.severity as 'low' | 'medium' | 'high' | 'critical') || 'low'
+    } as SecurityEvent;
   }
 
   // Executive Reports
   static async getExecutiveReports(filters?: any): Promise<ExecutiveReport[]> {
-    try {
-      const { data, error } = await supabase
-        .from('executive_reports')
-        .select('*')
-        .order('created_at', { ascending: false });
+    let query = supabase
+      .from('executive_reports')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      
-      return (data || []).map(item => ({
-        ...item,
-        status: ['draft', 'published', 'archived'].includes(item.status) 
-          ? item.status as 'draft' | 'published' | 'archived'
-          : 'draft',
-        recommendations: Array.isArray(item.recommendations) ? item.recommendations : []
-      }));
-    } catch (error) {
-      console.error('Error fetching executive reports:', error);
-      return this.getMockExecutiveReports();
+    if (filters?.status) {
+      query = query.eq('status', filters.status);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return data.map(item => ({
+      ...item,
+      status: (item.status as 'draft' | 'published' | 'archived') || 'draft',
+      recommendations: Array.isArray(item.recommendations) ? item.recommendations : []
+    })) as ExecutiveReport[];
   }
 
   static async createExecutiveReport(report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>): Promise<ExecutiveReport> {
-    try {
-      const { data, error } = await supabase
-        .from('executive_reports')
-        .insert([report])
-        .select()
-        .single();
+    const { data, error } = await supabase
+      .from('executive_reports')
+      .insert({
+        report_title: report.report_title,
+        report_type: report.report_type,
+        executive_summary: report.executive_summary,
+        report_period_start: report.report_period_start,
+        report_period_end: report.report_period_end,
+        status: report.status || 'draft',
+        key_metrics: report.key_metrics,
+        charts_data: report.charts_data,
+        recommendations: report.recommendations || [],
+        created_by: report.created_by,
+        reviewed_by: report.reviewed_by,
+        approved_by: report.approved_by,
+        published_at: report.published_at
+      })
+      .select()
+      .single();
 
-      if (error) throw error;
-      
-      return {
-        ...data,
-        status: ['draft', 'published', 'archived'].includes(data.status) 
-          ? data.status as 'draft' | 'published' | 'archived'
-          : 'draft',
-        recommendations: Array.isArray(data.recommendations) ? data.recommendations : []
-      };
-    } catch (error) {
-      console.error('Error creating executive report:', error);
-      throw error;
-    }
+    if (error) throw error;
+    return {
+      ...data,
+      status: (data.status as 'draft' | 'published' | 'archived') || 'draft',
+      recommendations: Array.isArray(data.recommendations) ? data.recommendations : []
+    } as ExecutiveReport;
   }
 
   // Quick Actions
   static async getQuickActions(): Promise<QuickAction[]> {
-    try {
-      console.warn('Quick actions table not accessible, returning mock data');
-      return this.getMockQuickActions();
-    } catch (error) {
-      console.error('Error fetching quick actions:', error);
-      return this.getMockQuickActions();
-    }
+    const { data, error } = await supabase
+      .from('quick_actions')
+      .select('*')
+      .eq('is_active', true)
+      .order('sort_order');
+
+    if (error) throw error;
+    return data as QuickAction[];
   }
 
   static async getQuickActionLogs(limit?: number): Promise<QuickActionLog[]> {
-    try {
-      const { data, error } = await supabase
-        .from('quick_actions_log')
-        .select('*')
-        .order('created_at', { ascending: false })
-        .limit(limit || 50);
+    let query = supabase
+      .from('quick_actions_log')
+      .select('*')
+      .order('created_at', { ascending: false });
 
-      if (error) throw error;
-      
-      return (data || []).map(item => ({
-        ...item,
-        execution_status: ['pending', 'running', 'completed', 'failed'].includes(item.execution_status) 
-          ? item.execution_status as 'pending' | 'running' | 'completed' | 'failed'
-          : 'pending'
-      }));
-    } catch (error) {
-      console.error('Error fetching quick action logs:', error);
-      return this.getMockQuickActionLogs();
+    if (limit) {
+      query = query.limit(limit);
     }
+
+    const { data, error } = await query;
+    if (error) throw error;
+    
+    return data.map(item => ({
+      ...item,
+      execution_status: (item.execution_status as 'pending' | 'running' | 'completed' | 'failed') || 'pending'
+    })) as QuickActionLog[];
   }
 
   static async createQuickAction(action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>): Promise<QuickAction> {
-    try {
-      const mockAction: QuickAction = {
-        id: Math.random().toString(36).substr(2, 9),
-        ...action,
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      
-      return mockAction;
-    } catch (error) {
-      console.error('Error creating quick action:', error);
-      throw error;
-    }
+    const { data, error } = await supabase
+      .from('quick_actions')
+      .insert(action)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as QuickAction;
   }
 
   static async updateQuickAction(id: string, updates: Partial<QuickAction>): Promise<QuickAction> {
-    try {
-      const mockAction: QuickAction = {
-        id,
-        action_name: updates.action_name || 'Updated Action',
-        action_type: updates.action_type || 'update',
-        description: updates.description || 'Updated description',
-        icon_name: updates.icon_name || 'settings',
-        color_class: updates.color_class || 'blue',
-        is_active: updates.is_active !== undefined ? updates.is_active : true,
-        sort_order: updates.sort_order || 1,
-        permissions_required: updates.permissions_required || [],
-        metadata: updates.metadata || {},
-        created_by: updates.created_by || 'system',
-        created_at: updates.created_at || new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      };
-      
-      return mockAction;
-    } catch (error) {
-      console.error('Error updating quick action:', error);
-      throw error;
-    }
+    const { data, error } = await supabase
+      .from('quick_actions')
+      .update(updates)
+      .eq('id', id)
+      .select()
+      .single();
+
+    if (error) throw error;
+    return data as QuickAction;
   }
 
-  static async logQuickAction(actionData: { action_type: string; action_name: string; executed_by: string; parameters?: any }): Promise<QuickActionLog> {
-    try {
-      const { data, error } = await supabase
-        .from('quick_actions_log')
-        .insert([{
-          ...actionData,
-          execution_status: 'completed',
-          progress_percentage: 100,
-          started_at: new Date().toISOString(),
-          completed_at: new Date().toISOString(),
-          execution_time_ms: 1000
-        }])
-        .select()
-        .single();
+  static async logQuickAction(actionLog: {
+    action_type: string;
+    action_name: string;
+    executed_by: string;
+    parameters?: any;
+  }): Promise<QuickActionLog> {
+    const { data, error } = await supabase
+      .from('quick_actions_log')
+      .insert({
+        action_type: actionLog.action_type,
+        action_name: actionLog.action_name,
+        execution_status: 'pending',
+        parameters: actionLog.parameters || {},
+        executed_by: actionLog.executed_by,
+        progress_percentage: 0,
+        started_at: new Date().toISOString()
+      })
+      .select()
+      .single();
 
-      if (error) throw error;
-      
-      return {
-        ...data,
-        execution_status: ['pending', 'running', 'completed', 'failed'].includes(data.execution_status) 
-          ? data.execution_status as 'pending' | 'running' | 'completed' | 'failed'
-          : 'pending'
-      };
-    } catch (error) {
-      console.error('Error logging quick action:', error);
-      throw error;
-    }
+    if (error) throw error;
+    return {
+      ...data,
+      execution_status: (data.execution_status as 'pending' | 'running' | 'completed' | 'failed') || 'pending'
+    } as QuickActionLog;
   }
 
-  // Analytics
+  // Real-time Analytics
   static async getRealTimeAnalytics(): Promise<any> {
-    try {
-      console.warn('Real-time analytics table not accessible, returning mock data');
-      return this.getMockRealTimeAnalytics();
-    } catch (error) {
-      console.error('Error fetching real-time analytics:', error);
-      return this.getMockRealTimeAnalytics();
-    }
+    // Mock implementation - in real scenario this would fetch from realtime_analytics table
+    return {
+      activeUsers: Math.floor(Math.random() * 1000) + 500,
+      pageViews: Math.floor(Math.random() * 5000) + 2000,
+      conversionRate: (Math.random() * 5 + 2).toFixed(2),
+      bounceRate: (Math.random() * 30 + 25).toFixed(2),
+      avgSessionDuration: Math.floor(Math.random() * 300) + 120,
+      topPages: [
+        { page: '/products', views: Math.floor(Math.random() * 500) + 200 },
+        { page: '/categories', views: Math.floor(Math.random() * 400) + 150 },
+        { page: '/deals', views: Math.floor(Math.random() * 300) + 100 }
+      ],
+      recentEvents: [
+        { type: 'purchase', user: 'User123', amount: 150.50, timestamp: new Date().toISOString() },
+        { type: 'signup', user: 'User456', amount: 0, timestamp: new Date().toISOString() },
+        { type: 'purchase', user: 'User789', amount: 75.25, timestamp: new Date().toISOString() }
+      ]
+    };
   }
 
+  // Performance Metrics
   static async getPerformanceMetrics(): Promise<any> {
-    try {
-      console.warn('Performance metrics table not accessible, returning mock data');
-      return this.getMockPerformanceMetrics();
-    } catch (error) {
-      console.error('Error fetching performance metrics:', error);
-      return this.getMockPerformanceMetrics();
-    }
+    // Mock implementation - in real scenario this would fetch from performance_metrics table
+    return {
+      responseTime: Math.floor(Math.random() * 200) + 50,
+      uptime: 99.9,
+      errorRate: (Math.random() * 2).toFixed(3),
+      throughput: Math.floor(Math.random() * 1000) + 500,
+      cpuUsage: Math.floor(Math.random() * 30) + 20,
+      memoryUsage: Math.floor(Math.random() * 40) + 30,
+      diskUsage: Math.floor(Math.random() * 20) + 10,
+      cacheHitRate: (Math.random() * 20 + 80).toFixed(1),
+      databaseConnections: Math.floor(Math.random() * 50) + 25,
+      queueDepth: Math.floor(Math.random() * 100) + 10
+    };
   }
 
+  // Dashboard Search
   static async searchDashboardData(searchTerm: string): Promise<any[]> {
-    try {
-      // Mock search functionality
-      const allData = [
-        ...this.getMockKPIMetrics(),
-        ...this.getMockSystemHealthLogs(),
-        ...this.getMockSecurityEvents(),
-        ...this.getMockExecutiveReports(),
-        ...this.getMockQuickActions()
-      ];
-      
-      return allData.filter(item => 
-        JSON.stringify(item).toLowerCase().includes(searchTerm.toLowerCase())
-      );
-    } catch (error) {
-      console.error('Error searching dashboard data:', error);
-      return [];
-    }
-  }
-
-  // Mock data methods
-  private static getMockKPIMetrics(): DashboardKPIMetric[] {
-    return [
-      {
-        id: '1',
-        metric_name: 'Total Revenue',
-        metric_category: 'Financial',
-        metric_value: 125000,
-        comparison_value: 115000,
-        percentage_change: 8.7,
-        trend_direction: 'up',
-        metric_unit: 'BDT',
-        time_period: 'monthly',
-        recorded_date: new Date().toISOString(),
-        metadata: { source: 'sales_system' },
-        created_by: 'system',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
+    // Mock implementation - in real scenario this would search across multiple tables
+    const mockResults = [
+      { type: 'metric', name: 'Revenue Growth', value: '15.2%', category: 'financial' },
+      { type: 'alert', name: 'Low Stock Alert', description: 'Product ABC running low', severity: 'medium' },
+      { type: 'report', name: 'Monthly Sales Report', date: '2024-01-15', status: 'published' }
     ];
-  }
 
-  private static getMockSystemHealthLogs(): SystemHealthLog[] {
-    return [
-      {
-        id: '1',
-        service_name: 'API Gateway',
-        status: 'healthy',
-        health_status: 'healthy',
-        service_type: 'API',
-        response_time_ms: 245,
-        cpu_usage_percent: 45,
-        cpu_usage: 45,
-        memory_usage_percent: 67,
-        memory_usage: 67,
-        disk_usage_percent: 23,
-        success_rate: 99.5,
-        uptime_seconds: 86400,
-        error_count: 2,
-        last_check: new Date().toISOString(),
-        recorded_at: new Date().toISOString(),
-        created_at: new Date().toISOString()
-      }
-    ];
-  }
-
-  private static getMockSecurityEvents(): SecurityEvent[] {
-    return [
-      {
-        id: '1',
-        event_type: 'login_attempt',
-        severity: 'medium',
-        source_ip: '192.168.1.100',
-        user_id: 'user-123',
-        event_description: 'Multiple failed login attempts detected',
-        metadata: { attempts: 5 },
-        resolved: false,
-        created_at: new Date().toISOString()
-      }
-    ];
-  }
-
-  private static getMockExecutiveReports(): ExecutiveReport[] {
-    return [
-      {
-        id: '1',
-        report_title: 'Q4 Performance Summary',
-        report_type: 'quarterly',
-        executive_summary: 'Strong performance across all metrics',
-        report_period_start: '2024-01-01',
-        report_period_end: '2024-03-31',
-        status: 'published',
-        key_metrics: { revenue: 125000, growth: 8.7 },
-        charts_data: {},
-        recommendations: ['Increase marketing spend', 'Expand team'],
-        created_by: 'admin',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
-  }
-
-  private static getMockQuickActions(): QuickAction[] {
-    return [
-      {
-        id: '1',
-        action_name: 'Generate Report',
-        action_type: 'report',
-        description: 'Generate monthly performance report',
-        icon_name: 'FileText',
-        color_class: 'blue',
-        is_active: true,
-        sort_order: 1,
-        permissions_required: ['admin'],
-        metadata: {},
-        created_by: 'system',
-        created_at: new Date().toISOString(),
-        updated_at: new Date().toISOString()
-      }
-    ];
-  }
-
-  private static getMockQuickActionLogs(): QuickActionLog[] {
-    return [
-      {
-        id: '1',
-        action_type: 'report',
-        action_name: 'Generate Report',
-        execution_status: 'completed',
-        parameters: {},
-        executed_by: 'admin',
-        progress_percentage: 100,
-        started_at: new Date().toISOString(),
-        completed_at: new Date().toISOString(),
-        execution_time_ms: 1500,
-        result_data: {},
-        created_at: new Date().toISOString()
-      }
-    ];
-  }
-
-  private static getMockRealTimeAnalytics(): any {
-    return {
-      activeUsers: 1245,
-      pageViews: 5678,
-      conversionRate: 3.4,
-      bounceRate: 45.2,
-      avgSessionDuration: 420
-    };
-  }
-
-  private static getMockPerformanceMetrics(): any {
-    return {
-      responseTime: 245,
-      throughput: 1200,
-      errorRate: 0.5,
-      cpuUsage: 45,
-      memoryUsage: 67,
-      diskUsage: 23
-    };
+    return mockResults.filter(item => 
+      item.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      (item.description && item.description.toLowerCase().includes(searchTerm.toLowerCase()))
+    );
   }
 }
 
-// Fix type exports for isolatedModules
-export type { DashboardKPIMetric };
-export type { SystemHealthLog };
-export type { SecurityEvent };
-export type { ExecutiveReport };
-export type { QuickAction };
-export type { QuickActionLog };
+// Clean exports without conflicts
+export { DashboardService };

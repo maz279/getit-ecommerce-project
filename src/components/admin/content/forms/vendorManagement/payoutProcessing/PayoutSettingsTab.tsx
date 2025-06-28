@@ -4,299 +4,392 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Switch } from '@/components/ui/switch';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { Separator } from '@/components/ui/separator';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
-import { Plus, Edit, Trash2, Save } from 'lucide-react';
+import { Settings, DollarSign, Clock, Shield, Bell } from 'lucide-react';
+import { useToast } from '@/hooks/use-toast';
 
 export const PayoutSettingsTab: React.FC = () => {
-  const [showFeeForm, setShowFeeForm] = useState(false);
-  const [globalSettings, setGlobalSettings] = useState({
-    defaultMinimumPayout: '1000',
-    defaultProcessingTime: '2',
-    autoApprovalEnabled: false,
-    autoApprovalThreshold: '50000',
-    requireDocumentVerification: true,
-    enableScheduledPayouts: true,
-    defaultCurrency: 'BDT'
+  const [settings, setSettings] = useState({
+    // Processing Settings
+    autoProcessingEnabled: true,
+    batchProcessingEnabled: true,
+    maxBatchSize: 100,
+    processingInterval: 'daily',
+    
+    // Fee Settings
+    defaultProcessingFee: 2.5,
+    feeType: 'percentage',
+    minimumFee: 10,
+    maximumFee: 500,
+    
+    // Approval Settings
+    autoApprovalEnabled: true,
+    autoApprovalLimit: 10000,
+    requireDualApproval: false,
+    dualApprovalLimit: 50000,
+    
+    // Security Settings
+    fraudDetectionEnabled: true,
+    velocityChecking: true,
+    maxDailyLimit: 100000,
+    maxMonthlyLimit: 1000000,
+    
+    // Notification Settings
+    emailNotifications: true,
+    smsNotifications: false,
+    adminAlerts: true,
+    vendorNotifications: true
   });
 
-  // Mock fee configuration data
-  const feeConfigs = [
-    {
-      id: '1',
-      paymentMethod: 'bank_transfer',
-      feeType: 'fixed',
-      feeAmount: 25,
-      minimumFee: 10,
-      maximumFee: 100,
-      isActive: true
-    },
-    {
-      id: '2',
-      paymentMethod: 'mobile_banking',
-      feeType: 'percentage',
-      feeAmount: 1.5,
-      minimumFee: 5,
-      maximumFee: 50,
-      isActive: true
-    },
-    {
-      id: '3',
-      paymentMethod: 'digital_wallet',
-      feeType: 'percentage',
-      feeAmount: 2.0,
-      minimumFee: 10,
-      maximumFee: 75,
-      isActive: true
-    }
-  ];
+  const { toast } = useToast();
 
-  const handleGlobalSettingChange = (key: string, value: any) => {
-    setGlobalSettings(prev => ({ ...prev, [key]: value }));
+  const handleSettingChange = (key: string, value: any) => {
+    setSettings(prev => ({
+      ...prev,
+      [key]: value
+    }));
   };
 
-  const handleSaveSettings = () => {
-    console.log('Saving global settings:', globalSettings);
-    // In real app, this would call the API
-  };
-
-  const getFeeDisplay = (config: any) => {
-    if (config.feeType === 'fixed') {
-      return `৳${config.feeAmount}`;
-    } else {
-      return `${config.feeAmount}%`;
+  const handleSave = async () => {
+    try {
+      // Here you would save settings to your backend
+      console.log('Saving settings:', settings);
+      
+      toast({
+        title: 'Success',
+        description: 'Payout settings saved successfully',
+      });
+    } catch (error) {
+      toast({
+        title: 'Error',
+        description: 'Failed to save settings',
+        variant: 'destructive',
+      });
     }
   };
 
   return (
     <div className="space-y-6">
-      {/* Global Settings */}
+      {/* Processing Settings */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Global Payout Settings</CardTitle>
-            <Button onClick={handleSaveSettings}>
-              <Save className="h-4 w-4 mr-2" />
-              Save Settings
-            </Button>
-          </div>
+          <CardTitle className="flex items-center">
+            <Settings className="h-5 w-5 mr-2" />
+            Processing Settings
+          </CardTitle>
         </CardHeader>
         <CardContent className="space-y-6">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="space-y-4">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Auto Processing</Label>
+              <p className="text-sm text-gray-500">
+                Automatically process approved payout requests
+              </p>
+            </div>
+            <Switch
+              checked={settings.autoProcessingEnabled}
+              onCheckedChange={(value) => handleSettingChange('autoProcessingEnabled', value)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Batch Processing</Label>
+              <p className="text-sm text-gray-500">
+                Process multiple requests in batches for efficiency
+              </p>
+            </div>
+            <Switch
+              checked={settings.batchProcessingEnabled}
+              onCheckedChange={(value) => handleSettingChange('batchProcessingEnabled', value)}
+            />
+          </div>
+
+          {settings.batchProcessingEnabled && (
+            <div className="grid grid-cols-2 gap-4 pl-4 border-l-2 border-gray-200">
               <div>
-                <Label htmlFor="defaultMinimumPayout">Default Minimum Payout Amount</Label>
+                <Label htmlFor="maxBatchSize">Max Batch Size</Label>
                 <Input
-                  id="defaultMinimumPayout"
+                  id="maxBatchSize"
                   type="number"
-                  value={globalSettings.defaultMinimumPayout}
-                  onChange={(e) => handleGlobalSettingChange('defaultMinimumPayout', e.target.value)}
+                  value={settings.maxBatchSize}
+                  onChange={(e) => handleSettingChange('maxBatchSize', parseInt(e.target.value))}
                 />
               </div>
-
               <div>
-                <Label htmlFor="defaultProcessingTime">Default Processing Time (Days)</Label>
-                <Input
-                  id="defaultProcessingTime"
-                  type="number"
-                  value={globalSettings.defaultProcessingTime}
-                  onChange={(e) => handleGlobalSettingChange('defaultProcessingTime', e.target.value)}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="autoApprovalThreshold">Auto Approval Threshold</Label>
-                <Input
-                  id="autoApprovalThreshold"
-                  type="number"
-                  value={globalSettings.autoApprovalThreshold}
-                  onChange={(e) => handleGlobalSettingChange('autoApprovalThreshold', e.target.value)}
-                />
-              </div>
-
-              <div>
-                <Label htmlFor="defaultCurrency">Default Currency</Label>
-                <Select value={globalSettings.defaultCurrency} onValueChange={(value) => handleGlobalSettingChange('defaultCurrency', value)}>
+                <Label htmlFor="processingInterval">Processing Interval</Label>
+                <Select
+                  value={settings.processingInterval}
+                  onValueChange={(value) => handleSettingChange('processingInterval', value)}
+                >
                   <SelectTrigger>
                     <SelectValue />
                   </SelectTrigger>
                   <SelectContent>
-                    <SelectItem value="BDT">BDT - Bangladeshi Taka</SelectItem>
-                    <SelectItem value="USD">USD - US Dollar</SelectItem>
-                    <SelectItem value="EUR">EUR - Euro</SelectItem>
+                    <SelectItem value="hourly">Hourly</SelectItem>
+                    <SelectItem value="daily">Daily</SelectItem>
+                    <SelectItem value="weekly">Weekly</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
             </div>
+          )}
+        </CardContent>
+      </Card>
 
-            <div className="space-y-4">
-              <div className="flex items-center justify-between">
-                <Label htmlFor="autoApprovalEnabled">Enable Auto Approval</Label>
-                <Switch
-                  id="autoApprovalEnabled"
-                  checked={globalSettings.autoApprovalEnabled}
-                  onCheckedChange={(checked) => handleGlobalSettingChange('autoApprovalEnabled', checked)}
+      {/* Fee Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <DollarSign className="h-5 w-5 mr-2" />
+            Fee Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="defaultProcessingFee">Default Processing Fee</Label>
+              <div className="flex">
+                <Input
+                  id="defaultProcessingFee"
+                  type="number"
+                  step="0.01"
+                  value={settings.defaultProcessingFee}
+                  onChange={(e) => handleSettingChange('defaultProcessingFee', parseFloat(e.target.value))}
+                />
+                <Select
+                  value={settings.feeType}
+                  onValueChange={(value) => handleSettingChange('feeType', value)}
+                >
+                  <SelectTrigger className="w-32 ml-2">
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">%</SelectItem>
+                    <SelectItem value="fixed">৳</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+            <div>
+              <Label>Fee Range</Label>
+              <div className="flex items-center space-x-2">
+                <Input
+                  type="number"
+                  placeholder="Min"
+                  value={settings.minimumFee}
+                  onChange={(e) => handleSettingChange('minimumFee', parseFloat(e.target.value))}
+                />
+                <span>-</span>
+                <Input
+                  type="number"
+                  placeholder="Max"
+                  value={settings.maximumFee}
+                  onChange={(e) => handleSettingChange('maximumFee', parseFloat(e.target.value))}
                 />
               </div>
+            </div>
+          </div>
 
-              <div className="flex items-center justify-between">
-                <Label htmlFor="requireDocumentVerification">Require Document Verification</Label>
-                <Switch
-                  id="requireDocumentVerification"
-                  checked={globalSettings.requireDocumentVerification}
-                  onCheckedChange={(checked) => handleGlobalSettingChange('requireDocumentVerification', checked)}
-                />
-              </div>
+          <div className="p-4 bg-blue-50 border border-blue-200 rounded-lg">
+            <p className="text-sm text-blue-700">
+              <strong>Current Fee Structure:</strong> {settings.defaultProcessingFee}
+              {settings.feeType === 'percentage' ? '%' : ' ৳'} 
+              {settings.feeType === 'percentage' && 
+                ` (Min: ৳${settings.minimumFee}, Max: ৳${settings.maximumFee})`
+              }
+            </p>
+          </div>
+        </CardContent>
+      </Card>
 
-              <div className="flex items-center justify-between">
-                <Label htmlFor="enableScheduledPayouts">Enable Scheduled Payouts</Label>
-                <Switch
-                  id="enableScheduledPayouts"
-                  checked={globalSettings.enableScheduledPayouts}
-                  onCheckedChange={(checked) => handleGlobalSettingChange('enableScheduledPayouts', checked)}
-                />
-              </div>
+      {/* Approval Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Clock className="h-5 w-5 mr-2" />
+            Approval Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Auto Approval</Label>
+              <p className="text-sm text-gray-500">
+                Automatically approve requests below a certain limit
+              </p>
+            </div>
+            <Switch
+              checked={settings.autoApprovalEnabled}
+              onCheckedChange={(value) => handleSettingChange('autoApprovalEnabled', value)}
+            />
+          </div>
+
+          {settings.autoApprovalEnabled && (
+            <div className="pl-4 border-l-2 border-gray-200">
+              <Label htmlFor="autoApprovalLimit">Auto Approval Limit (৳)</Label>
+              <Input
+                id="autoApprovalLimit"
+                type="number"
+                value={settings.autoApprovalLimit}
+                onChange={(e) => handleSettingChange('autoApprovalLimit', parseFloat(e.target.value))}
+              />
+            </div>
+          )}
+
+          <Separator />
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Dual Approval Required</Label>
+              <p className="text-sm text-gray-500">
+                Require two approvers for high-value transactions
+              </p>
+            </div>
+            <Switch
+              checked={settings.requireDualApproval}
+              onCheckedChange={(value) => handleSettingChange('requireDualApproval', value)}
+            />
+          </div>
+
+          {settings.requireDualApproval && (
+            <div className="pl-4 border-l-2 border-gray-200">
+              <Label htmlFor="dualApprovalLimit">Dual Approval Limit (৳)</Label>
+              <Input
+                id="dualApprovalLimit"
+                type="number"
+                value={settings.dualApprovalLimit}
+                onChange={(e) => handleSettingChange('dualApprovalLimit', parseFloat(e.target.value))}
+              />
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      {/* Security Settings */}
+      <Card>
+        <CardHeader>
+          <CardTitle className="flex items-center">
+            <Shield className="h-5 w-5 mr-2" />
+            Security Settings
+          </CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Fraud Detection</Label>
+              <p className="text-sm text-gray-500">
+                Enable automated fraud detection and prevention
+              </p>
+            </div>
+            <Switch
+              checked={settings.fraudDetectionEnabled}
+              onCheckedChange={(value) => handleSettingChange('fraudDetectionEnabled', value)}
+            />
+          </div>
+
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <Label className="text-base font-medium">Velocity Checking</Label>
+              <p className="text-sm text-gray-500">
+                Monitor transaction frequency and patterns
+              </p>
+            </div>
+            <Switch
+              checked={settings.velocityChecking}
+              onCheckedChange={(value) => handleSettingChange('velocityChecking', value)}
+            />
+          </div>
+
+          <div className="grid grid-cols-2 gap-4">
+            <div>
+              <Label htmlFor="maxDailyLimit">Max Daily Limit (৳)</Label>
+              <Input
+                id="maxDailyLimit"
+                type="number"
+                value={settings.maxDailyLimit}
+                onChange={(e) => handleSettingChange('maxDailyLimit', parseFloat(e.target.value))}
+              />
+            </div>
+            <div>
+              <Label htmlFor="maxMonthlyLimit">Max Monthly Limit (৳)</Label>
+              <Input
+                id="maxMonthlyLimit"
+                type="number"
+                value={settings.maxMonthlyLimit}
+                onChange={(e) => handleSettingChange('maxMonthlyLimit', parseFloat(e.target.value))}
+              />
             </div>
           </div>
         </CardContent>
       </Card>
 
-      <Separator />
-
-      {/* Fee Configuration */}
+      {/* Notification Settings */}
       <Card>
         <CardHeader>
-          <div className="flex items-center justify-between">
-            <CardTitle>Payout Fee Configuration</CardTitle>
-            <Dialog open={showFeeForm} onOpenChange={setShowFeeForm}>
-              <DialogTrigger asChild>
-                <Button>
-                  <Plus className="h-4 w-4 mr-2" />
-                  Add Fee Configuration
-                </Button>
-              </DialogTrigger>
-              <DialogContent className="max-w-md">
-                <DialogHeader>
-                  <DialogTitle>Add Fee Configuration</DialogTitle>
-                </DialogHeader>
-                <div className="space-y-4">
-                  <div>
-                    <Label htmlFor="paymentMethod">Payment Method</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select payment method" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="bank_transfer">Bank Transfer</SelectItem>
-                        <SelectItem value="mobile_banking">Mobile Banking</SelectItem>
-                        <SelectItem value="check">Check</SelectItem>
-                        <SelectItem value="digital_wallet">Digital Wallet</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="feeType">Fee Type</Label>
-                    <Select>
-                      <SelectTrigger>
-                        <SelectValue placeholder="Select fee type" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="fixed">Fixed Amount</SelectItem>
-                        <SelectItem value="percentage">Percentage</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-
-                  <div>
-                    <Label htmlFor="feeAmount">Fee Amount</Label>
-                    <Input id="feeAmount" type="number" placeholder="0.00" />
-                  </div>
-
-                  <div className="grid grid-cols-2 gap-4">
-                    <div>
-                      <Label htmlFor="minimumFee">Minimum Fee</Label>
-                      <Input id="minimumFee" type="number" placeholder="0.00" />
-                    </div>
-                    <div>
-                      <Label htmlFor="maximumFee">Maximum Fee</Label>
-                      <Input id="maximumFee" type="number" placeholder="0.00" />
-                    </div>
-                  </div>
-
-                  <div className="flex items-center justify-end space-x-4">
-                    <Button type="button" variant="outline" onClick={() => setShowFeeForm(false)}>
-                      Cancel
-                    </Button>
-                    <Button type="submit" onClick={() => setShowFeeForm(false)}>
-                      Add Configuration
-                    </Button>
-                  </div>
-                </div>
-              </DialogContent>
-            </Dialog>
-          </div>
+          <CardTitle className="flex items-center">
+            <Bell className="h-5 w-5 mr-2" />
+            Notification Settings
+          </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="border rounded-lg">
-            <Table>
-              <TableHeader>
-                <TableRow>
-                  <TableHead>Payment Method</TableHead>
-                  <TableHead>Fee Type</TableHead>
-                  <TableHead>Fee Amount</TableHead>
-                  <TableHead>Min/Max Fee</TableHead>
-                  <TableHead>Status</TableHead>
-                  <TableHead>Actions</TableHead>
-                </TableRow>
-              </TableHeader>
-              <TableBody>
-                {feeConfigs.map((config) => (
-                  <TableRow key={config.id}>
-                    <TableCell>
-                      <div className="capitalize">
-                        {config.paymentMethod.replace('_', ' ')}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge variant="outline" className="capitalize">
-                        {config.feeType}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="font-medium">{getFeeDisplay(config)}</div>
-                    </TableCell>
-                    <TableCell>
-                      <div className="text-sm">
-                        ৳{config.minimumFee} - ৳{config.maximumFee}
-                      </div>
-                    </TableCell>
-                    <TableCell>
-                      <Badge className={config.isActive ? 'bg-green-100 text-green-800' : 'bg-gray-100 text-gray-800'}>
-                        {config.isActive ? 'Active' : 'Inactive'}
-                      </Badge>
-                    </TableCell>
-                    <TableCell>
-                      <div className="flex items-center space-x-2">
-                        <Button variant="outline" size="sm">
-                          <Edit className="h-4 w-4" />
-                        </Button>
-                        <Button variant="outline" size="sm" className="text-red-600">
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </div>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
+        <CardContent className="space-y-6">
+          <div className="grid grid-cols-2 gap-6">
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-base font-medium">Email Notifications</Label>
+                <p className="text-sm text-gray-500">Send email alerts</p>
+              </div>
+              <Switch
+                checked={settings.emailNotifications}
+                onCheckedChange={(value) => handleSettingChange('emailNotifications', value)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-base font-medium">SMS Notifications</Label>
+                <p className="text-sm text-gray-500">Send SMS alerts</p>
+              </div>
+              <Switch
+                checked={settings.smsNotifications}
+                onCheckedChange={(value) => handleSettingChange('smsNotifications', value)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-base font-medium">Admin Alerts</Label>
+                <p className="text-sm text-gray-500">Notify administrators</p>
+              </div>
+              <Switch
+                checked={settings.adminAlerts}
+                onCheckedChange={(value) => handleSettingChange('adminAlerts', value)}
+              />
+            </div>
+
+            <div className="flex items-center justify-between">
+              <div className="space-y-1">
+                <Label className="text-base font-medium">Vendor Notifications</Label>
+                <p className="text-sm text-gray-500">Notify vendors</p>
+              </div>
+              <Switch
+                checked={settings.vendorNotifications}
+                onCheckedChange={(value) => handleSettingChange('vendorNotifications', value)}
+              />
+            </div>
           </div>
         </CardContent>
       </Card>
+
+      {/* Save Button */}
+      <div className="flex justify-end pt-4 border-t">
+        <Button onClick={handleSave} size="lg">
+          Save Settings
+        </Button>
+      </div>
     </div>
   );
 };

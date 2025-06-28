@@ -835,6 +835,144 @@ export type Database = {
           },
         ]
       }
+      payout_approval_workflow: {
+        Row: {
+          approval_level: number
+          approval_status: string
+          approved_by: string[] | null
+          assigned_to: string[] | null
+          created_at: string
+          current_approvers: number
+          deadline: string | null
+          escalated_to: string | null
+          escalation_reason: string | null
+          id: string
+          payout_request_id: string
+          rejected_by: string | null
+          rejection_reason: string | null
+          required_approvers: number
+          updated_at: string
+        }
+        Insert: {
+          approval_level?: number
+          approval_status?: string
+          approved_by?: string[] | null
+          assigned_to?: string[] | null
+          created_at?: string
+          current_approvers?: number
+          deadline?: string | null
+          escalated_to?: string | null
+          escalation_reason?: string | null
+          id?: string
+          payout_request_id: string
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          required_approvers?: number
+          updated_at?: string
+        }
+        Update: {
+          approval_level?: number
+          approval_status?: string
+          approved_by?: string[] | null
+          assigned_to?: string[] | null
+          created_at?: string
+          current_approvers?: number
+          deadline?: string | null
+          escalated_to?: string | null
+          escalation_reason?: string | null
+          id?: string
+          payout_request_id?: string
+          rejected_by?: string | null
+          rejection_reason?: string | null
+          required_approvers?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_approval_workflow_escalated_to_fkey"
+            columns: ["escalated_to"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_approval_workflow_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_approval_workflow_rejected_by_fkey"
+            columns: ["rejected_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_batch_processing: {
+        Row: {
+          batch_number: string
+          completed_at: string | null
+          created_at: string
+          error_log: Json | null
+          failed_amount: number
+          id: string
+          metadata: Json | null
+          processed_amount: number
+          processing_date: string
+          processor_id: string | null
+          started_at: string | null
+          status: string
+          total_amount: number
+          total_requests: number
+          updated_at: string
+        }
+        Insert: {
+          batch_number: string
+          completed_at?: string | null
+          created_at?: string
+          error_log?: Json | null
+          failed_amount?: number
+          id?: string
+          metadata?: Json | null
+          processed_amount?: number
+          processing_date?: string
+          processor_id?: string | null
+          started_at?: string | null
+          status?: string
+          total_amount?: number
+          total_requests?: number
+          updated_at?: string
+        }
+        Update: {
+          batch_number?: string
+          completed_at?: string | null
+          created_at?: string
+          error_log?: Json | null
+          failed_amount?: number
+          id?: string
+          metadata?: Json | null
+          processed_amount?: number
+          processing_date?: string
+          processor_id?: string | null
+          started_at?: string | null
+          status?: string
+          total_amount?: number
+          total_requests?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_batch_processing_processor_id_fkey"
+            columns: ["processor_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payout_fees_config: {
         Row: {
           created_at: string
@@ -949,11 +1087,192 @@ export type Database = {
           },
         ]
       }
+      payout_notification_queue: {
+        Row: {
+          attempts: number | null
+          content: string
+          created_at: string
+          delivery_method: string[] | null
+          delivery_status: string
+          error_message: string | null
+          id: string
+          max_attempts: number | null
+          metadata: Json | null
+          notification_type: string
+          payout_request_id: string | null
+          recipient_id: string
+          scheduled_at: string | null
+          sent_at: string | null
+          subject: string
+          template_id: string | null
+        }
+        Insert: {
+          attempts?: number | null
+          content: string
+          created_at?: string
+          delivery_method?: string[] | null
+          delivery_status?: string
+          error_message?: string | null
+          id?: string
+          max_attempts?: number | null
+          metadata?: Json | null
+          notification_type: string
+          payout_request_id?: string | null
+          recipient_id: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          subject: string
+          template_id?: string | null
+        }
+        Update: {
+          attempts?: number | null
+          content?: string
+          created_at?: string
+          delivery_method?: string[] | null
+          delivery_status?: string
+          error_message?: string | null
+          id?: string
+          max_attempts?: number | null
+          metadata?: Json | null
+          notification_type?: string
+          payout_request_id?: string | null
+          recipient_id?: string
+          scheduled_at?: string | null
+          sent_at?: string | null
+          subject?: string
+          template_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_notification_queue_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_notification_queue_recipient_id_fkey"
+            columns: ["recipient_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_processing_logs: {
+        Row: {
+          batch_id: string | null
+          created_at: string
+          id: string
+          log_data: Json | null
+          log_level: string
+          log_message: string
+          logged_by: string | null
+          payout_request_id: string | null
+        }
+        Insert: {
+          batch_id?: string | null
+          created_at?: string
+          id?: string
+          log_data?: Json | null
+          log_level: string
+          log_message: string
+          logged_by?: string | null
+          payout_request_id?: string | null
+        }
+        Update: {
+          batch_id?: string | null
+          created_at?: string
+          id?: string
+          log_data?: Json | null
+          log_level?: string
+          log_message?: string
+          logged_by?: string | null
+          payout_request_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_processing_logs_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "payout_batch_processing"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_processing_logs_logged_by_fkey"
+            columns: ["logged_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_processing_logs_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      payout_request_items: {
+        Row: {
+          commission_id: string | null
+          commission_period_end: string | null
+          commission_period_start: string | null
+          created_at: string
+          id: string
+          item_amount: number
+          item_description: string | null
+          payout_request_id: string
+        }
+        Insert: {
+          commission_id?: string | null
+          commission_period_end?: string | null
+          commission_period_start?: string | null
+          created_at?: string
+          id?: string
+          item_amount: number
+          item_description?: string | null
+          payout_request_id: string
+        }
+        Update: {
+          commission_id?: string | null
+          commission_period_end?: string | null
+          commission_period_start?: string | null
+          created_at?: string
+          id?: string
+          item_amount?: number
+          item_description?: string | null
+          payout_request_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payout_request_items_commission_id_fkey"
+            columns: ["commission_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_commissions"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_request_items_payout_request_id_fkey"
+            columns: ["payout_request_id"]
+            isOneToOne: false
+            referencedRelation: "payout_requests"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       payout_requests: {
         Row: {
+          approval_workflow_id: string | null
+          auto_processed: boolean | null
           bank_account_details: Json | null
+          batch_id: string | null
+          compliance_checked: boolean | null
           created_at: string
           currency: string
+          external_reference: string | null
+          fraud_check_status: string | null
           id: string
           mobile_banking_details: Json | null
           net_payout_amount: number
@@ -962,21 +1281,30 @@ export type Database = {
           payment_reference: string | null
           payout_period_end: string
           payout_period_start: string
+          priority_level: string | null
           processed_at: string | null
           processed_by: string | null
           processing_fee: number | null
+          reconciliation_status: string | null
           rejection_reason: string | null
           request_amount: number
           request_date: string
+          requires_manual_review: boolean | null
           status: string
           tax_deduction: number | null
           updated_at: string
           vendor_id: string
         }
         Insert: {
+          approval_workflow_id?: string | null
+          auto_processed?: boolean | null
           bank_account_details?: Json | null
+          batch_id?: string | null
+          compliance_checked?: boolean | null
           created_at?: string
           currency?: string
+          external_reference?: string | null
+          fraud_check_status?: string | null
           id?: string
           mobile_banking_details?: Json | null
           net_payout_amount: number
@@ -985,21 +1313,30 @@ export type Database = {
           payment_reference?: string | null
           payout_period_end: string
           payout_period_start: string
+          priority_level?: string | null
           processed_at?: string | null
           processed_by?: string | null
           processing_fee?: number | null
+          reconciliation_status?: string | null
           rejection_reason?: string | null
           request_amount: number
           request_date?: string
+          requires_manual_review?: boolean | null
           status?: string
           tax_deduction?: number | null
           updated_at?: string
           vendor_id: string
         }
         Update: {
+          approval_workflow_id?: string | null
+          auto_processed?: boolean | null
           bank_account_details?: Json | null
+          batch_id?: string | null
+          compliance_checked?: boolean | null
           created_at?: string
           currency?: string
+          external_reference?: string | null
+          fraud_check_status?: string | null
           id?: string
           mobile_banking_details?: Json | null
           net_payout_amount?: number
@@ -1008,18 +1345,35 @@ export type Database = {
           payment_reference?: string | null
           payout_period_end?: string
           payout_period_start?: string
+          priority_level?: string | null
           processed_at?: string | null
           processed_by?: string | null
           processing_fee?: number | null
+          reconciliation_status?: string | null
           rejection_reason?: string | null
           request_amount?: number
           request_date?: string
+          requires_manual_review?: boolean | null
           status?: string
           tax_deduction?: number | null
           updated_at?: string
           vendor_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "payout_requests_approval_workflow_id_fkey"
+            columns: ["approval_workflow_id"]
+            isOneToOne: false
+            referencedRelation: "payout_approval_workflow"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payout_requests_batch_id_fkey"
+            columns: ["batch_id"]
+            isOneToOne: false
+            referencedRelation: "payout_batch_processing"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "payout_requests_processed_by_fkey"
             columns: ["processed_by"]
@@ -2248,6 +2602,10 @@ export type Database = {
       [_ in never]: never
     }
     Functions: {
+      auto_approve_payout_request: {
+        Args: { p_request_id: string }
+        Returns: boolean
+      }
       calculate_vendor_commission: {
         Args: {
           p_vendor_id: string
@@ -2265,6 +2623,10 @@ export type Database = {
       clean_expired_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
+      }
+      process_payout_batch: {
+        Args: { p_batch_id: string; p_processor_id: string }
+        Returns: Json
       }
       update_commission_analytics: {
         Args: { p_vendor_id?: string; p_analytics_date?: string }

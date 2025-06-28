@@ -9,14 +9,14 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from '@/components/ui/dialog';
 import { Switch } from '@/components/ui/switch';
 import { Search, Plus, Edit, Calendar, Clock } from 'lucide-react';
-import { PayoutScheduleForm } from './PayoutScheduleForm';
+import { PayoutScheduleForm } from './forms/PayoutScheduleForm';
 
 export const PayoutSchedulesTab: React.FC = () => {
   const [searchQuery, setSearchQuery] = useState('');
   const [scheduleFilter, setScheduleFilter] = useState('all');
   const [showForm, setShowForm] = useState(false);
 
-  // Mock data
+  // Mock data - replace with actual service call
   const payoutSchedules = [
     {
       id: '1',
@@ -72,7 +72,7 @@ export const PayoutSchedulesTab: React.FC = () => {
                   New Schedule
                 </Button>
               </DialogTrigger>
-              <DialogContent className="max-w-2xl">
+              <DialogContent className="max-w-3xl">
                 <DialogHeader>
                   <DialogTitle>Create Payout Schedule</DialogTitle>
                 </DialogHeader>

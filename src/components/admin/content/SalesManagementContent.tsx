@@ -22,63 +22,76 @@ interface SalesManagementContentProps {
 }
 
 export const SalesManagementContent: React.FC<SalesManagementContentProps> = ({ selectedSubmenu }) => {
+  console.log('🔍 SalesManagementContent - selectedSubmenu:', selectedSubmenu);
+  
   const getContent = () => {
-    console.log('🔍 SalesManagementContent - selectedSubmenu:', selectedSubmenu);
-    
     switch (selectedSubmenu) {
+      // Sales Overview
       case 'sales-overview':
       case 'sales':
       case 'overview':
         console.log('✅ Rendering SalesOverviewContent');
         return <SalesOverviewContent />;
       
+      // Daily Sales
       case 'daily-sales':
         console.log('✅ Rendering DailySalesForm');
         return <DailySalesForm />;
       
+      // Monthly Sales
       case 'monthly-trends':
         console.log('✅ Rendering MonthlySalesForm');
         return <MonthlySalesForm />;
       
+      // Yearly Sales
       case 'yearly-reports':
         console.log('✅ Rendering YearlySalesForm');
         return <YearlySalesForm />;
       
+      // Revenue Analytics
       case 'revenue-analytics':
         console.log('✅ Rendering RevenueAnalyticsContent');
         return <RevenueAnalyticsContent />;
       
+      // Revenue Dashboard
       case 'revenue-dashboard':
         console.log('✅ Rendering RevenueDashboardContent');
         return <RevenueDashboardContent />;
       
+      // Sales Forecast
       case 'sales-forecast':
       case 'forecast':
         console.log('✅ Rendering SalesForecastContent');
         return <SalesForecastContent />;
       
+      // Profit Margins
       case 'profit-margins':
         console.log('✅ Rendering ProfitMarginContent');
         return <ProfitMarginContent />;
       
+      // Cost Analysis
       case 'cost-analysis':
         console.log('✅ Rendering CostAnalysisContent');
         return <CostAnalysisContent />;
       
+      // ROI Tracking
       case 'roi-tracking':
         console.log('✅ Rendering ROITrackingContent');
         return <ROITrackingContent />;
       
+      // Sales Reports
       case 'sales-reports':
       case 'detailed-reports':
       case 'summary-reports':
         console.log('✅ Rendering DetailedReportsContent');
         return <DetailedReportsContent />;
       
+      // Comparative Analysis
       case 'comparative-analysis':
         console.log('✅ Rendering ComparativeAnalysisContent');
         return <ComparativeAnalysisContent />;
       
+      // Export Data
       case 'export-data':
         console.log('✅ Rendering ExportDataContent');
         return <ExportDataContent />;

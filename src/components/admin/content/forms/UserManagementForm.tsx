@@ -1,7 +1,7 @@
 
 import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Users, UserPlus, UserCheck, UserX } from 'lucide-react';
+import { Users, UserCheck, UserX, Shield } from 'lucide-react';
 
 export const UserManagementForm: React.FC = () => {
   return (
@@ -20,19 +20,8 @@ export const UserManagementForm: React.FC = () => {
             <Users className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">12,543</div>
-            <p className="text-xs text-muted-foreground">+180 from last month</p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">New Users</CardTitle>
-            <UserPlus className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">1,205</div>
-            <p className="text-xs text-muted-foreground">+19% from last month</p>
+            <div className="text-2xl font-bold">12,847</div>
+            <p className="text-xs text-muted-foreground">+15% from last month</p>
           </CardContent>
         </Card>
 
@@ -42,8 +31,8 @@ export const UserManagementForm: React.FC = () => {
             <UserCheck className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">8,432</div>
-            <p className="text-xs text-muted-foreground">+5% from last month</p>
+            <div className="text-2xl font-bold">9,234</div>
+            <p className="text-xs text-muted-foreground">+8% increase</p>
           </CardContent>
         </Card>
 
@@ -53,8 +42,19 @@ export const UserManagementForm: React.FC = () => {
             <UserX className="h-4 w-4 text-muted-foreground" />
           </CardHeader>
           <CardContent>
-            <div className="text-2xl font-bold">4,111</div>
-            <p className="text-xs text-muted-foreground">-2% from last month</p>
+            <div className="text-2xl font-bold">3,613</div>
+            <p className="text-xs text-muted-foreground">-2% decrease</p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">Admin Users</CardTitle>
+            <Shield className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">24</div>
+            <p className="text-xs text-muted-foreground">Active administrators</p>
           </CardContent>
         </Card>
       </div>
@@ -64,7 +64,7 @@ export const UserManagementForm: React.FC = () => {
           <CardTitle>User Analytics Dashboard</CardTitle>
         </CardHeader>
         <CardContent>
-          <p className="text-gray-600">Detailed user analytics and reporting tools would be displayed here...</p>
+          <p className="text-gray-600">Detailed user analytics and behavioral insights would be displayed here...</p>
         </CardContent>
       </Card>
     </div>

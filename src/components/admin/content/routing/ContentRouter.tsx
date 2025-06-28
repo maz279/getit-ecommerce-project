@@ -23,65 +23,71 @@ interface ContentRouterProps {
 export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, selectedSubmenu }) => {
   console.log('🔍 ContentRouter - selectedMenu:', selectedMenu, 'selectedSubmenu:', selectedSubmenu);
   
-  switch (selectedMenu) {
+  // Normalize menu values to handle any inconsistencies
+  const normalizedMenu = selectedMenu?.toString().trim().toLowerCase();
+  const normalizedSubmenu = selectedSubmenu?.toString().trim().toLowerCase();
+  
+  console.log('🔍 Normalized values - menu:', normalizedMenu, 'submenu:', normalizedSubmenu);
+  
+  switch (normalizedMenu) {
     case 'dashboard':
       console.log('✅ ContentRouter routing to DashboardContent');
-      return <DashboardContent selectedSubmenu={selectedSubmenu} />;
+      return <DashboardContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'user-management':
       console.log('✅ ContentRouter routing to UserManagementContent');
-      return <UserManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <UserManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'sales-management':
       console.log('✅ ContentRouter routing to SalesManagementContent');
-      return <SalesManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <SalesManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'order-management':
       console.log('✅ ContentRouter routing to OrderManagementContent');
-      return <OrderManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <OrderManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'logistics-management':
       console.log('✅ ContentRouter routing to LogisticsContent');
-      return <LogisticsContent selectedSubmenu={selectedSubmenu} />;
+      return <LogisticsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'product-management':
       console.log('✅ ContentRouter routing to ProductManagementContent');
-      return <ProductManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <ProductManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'customer-management':
       console.log('✅ ContentRouter routing to CustomerManagementContent');
-      return <CustomerManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <CustomerManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'vendor-management':
-      console.log('✅ ContentRouter routing to VendorManagementContent with submenu:', selectedSubmenu);
-      return <VendorManagementContent selectedSubmenu={selectedSubmenu} />;
+      console.log('✅ ContentRouter routing to VendorManagementContent');
+      return <VendorManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'marketing':
       console.log('✅ ContentRouter routing to MarketingContent');
-      return <MarketingContent selectedSubmenu={selectedSubmenu} />;
+      return <MarketingContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'analytics':
       console.log('✅ ContentRouter routing to AnalyticsContent');
-      return <AnalyticsContent selectedSubmenu={selectedSubmenu} />;
+      return <AnalyticsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'payment-management':
       console.log('✅ ContentRouter routing to PaymentManagementContent');
-      return <PaymentManagementContent selectedSubmenu={selectedSubmenu} />;
+      return <PaymentManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'communications':
       console.log('✅ ContentRouter routing to CommunicationsContent');
-      return <CommunicationsContent selectedSubmenu={selectedSubmenu} />;
+      return <CommunicationsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'security':
       console.log('✅ ContentRouter routing to SecurityContent');
-      return <SecurityContent selectedSubmenu={selectedSubmenu} />;
+      return <SecurityContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'settings':
       console.log('✅ ContentRouter routing to SettingsContent');
-      return <SettingsContent selectedSubmenu={selectedSubmenu} />;
+      return <SettingsContent selectedSubmenu={normalizedSubmenu} />;
     
     default:
-      console.log('⚠️ ContentRouter - Unknown menu:', selectedMenu, '- defaulting to dashboard');
+      console.log('⚠️ ContentRouter - Unknown menu:', normalizedMenu, '- defaulting to dashboard');
       return <DashboardContent selectedSubmenu="overview" />;
   }
 };

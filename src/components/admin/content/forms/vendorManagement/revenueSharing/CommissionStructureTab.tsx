@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Button } from '@/components/ui/button';
@@ -23,9 +22,11 @@ export const CommissionStructureTab: React.FC = () => {
     try {
       setLoading(true);
       const data = await RevenueSharingService.getRevenueModels();
-      // Type cast with proper JSON parsing
+      
+      // Properly cast the database response to our interface
       const typedStructures: CommissionStructure[] = data.map(structure => ({
         ...structure,
+        model_type: structure.model_type as 'percentage' | 'tiered' | 'flat_fee' | 'hybrid',
         tier_structure: Array.isArray(structure.tier_structure) 
           ? structure.tier_structure 
           : typeof structure.tier_structure === 'string' 
@@ -35,6 +36,7 @@ export const CommissionStructureTab: React.FC = () => {
           ? structure.category_rates as Record<string, any>
           : {}
       }));
+      
       setStructures(typedStructures);
     } catch (error) {
       console.error('Error loading commission structures:', error);

@@ -5,26 +5,17 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Badge } from '@/components/ui/badge';
 import { Textarea } from '@/components/ui/textarea';
-import { Plus, Edit, Trash2, Target, TrendingUp } from 'lucide-react';
+import { Badge } from '@/components/ui/badge';
+import { Plus, Edit, Trash2, Settings } from 'lucide-react';
 import { RevenueSharingService } from '@/services/database/revenue/RevenueSharingService';
 import { RevenueModel } from '@/types/revenue';
 
 export const RevenueModelsTab: React.FC = () => {
   const [models, setModels] = useState<RevenueModel[]>([]);
   const [loading, setLoading] = useState(true);
-  const [showForm, setShowForm] = useState(false);
-  const [editingModel, setEditingModel] = useState<RevenueModel | null>(null);
-
-  const [formData, setFormData] = useState({
-    model_name: '',
-    model_type: 'percentage' as const,
-    description: '',
-    base_rate: 0,
-    minimum_threshold: 0,
-    maximum_threshold: 0
-  });
+  const [selectedModelType, setSelectedModelType] = useState<'percentage' | 'tiered' | 'flat_fee' | 'hybrid'>('percentage');
+  const [isCreating, setIsCreating] = useState(false);
 
   useEffect(() => {
     loadRevenueModels();
@@ -34,9 +25,11 @@ export const RevenueModelsTab: React.FC = () => {
     try {
       setLoading(true);
       const data = await RevenueSharingService.getRevenueModels();
-      // Type cast with proper JSON parsing
+      
+      // Properly cast the database response to our interface
       const typedModels: RevenueModel[] = data.map(model => ({
         ...model,
+        model_type: model.model_type as 'percentage' | 'tiered' | 'flat_fee' | 'hybrid',
         tier_structure: Array.isArray(model.tier_structure) 
           ? model.tier_structure 
           : typeof model.tier_structure === 'string' 
@@ -46,69 +39,12 @@ export const RevenueModelsTab: React.FC = () => {
           ? model.category_rates as Record<string, any>
           : {}
       }));
+      
       setModels(typedModels);
     } catch (error) {
       console.error('Error loading revenue models:', error);
     } finally {
       setLoading(false);
-    }
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    try {
-      if (editingModel) {
-        await RevenueSharingService.updateRevenueModel(editingModel.id, {
-          ...formData,
-          tier_structure: [],
-          category_rates: {}
-        });
-      } else {
-        await RevenueSharingService.createRevenueModel({
-          ...formData,
-          tier_structure: [],
-          category_rates: {},
-          created_by: 'current-user-id' // TODO: Get from auth context
-        });
-      }
-      
-      setShowForm(false);
-      setEditingModel(null);
-      setFormData({
-        model_name: '',
-        model_type: 'percentage',
-        description: '',
-        base_rate: 0,
-        minimum_threshold: 0,
-        maximum_threshold: 0
-      });
-      loadRevenueModels();
-    } catch (error) {
-      console.error('Error saving revenue model:', error);
-    }
-  };
-
-  const handleEdit = (model: RevenueModel) => {
-    setEditingModel(model);
-    setFormData({
-      model_name: model.model_name,
-      model_type: model.model_type,
-      description: model.description || '',
-      base_rate: model.base_rate,
-      minimum_threshold: model.minimum_threshold || 0,
-      maximum_threshold: model.maximum_threshold || 0
-    });
-    setShowForm(true);
-  };
-
-  const handleDelete = async (id: string) => {
-    if (confirm('Are you sure you want to delete this revenue model?')) {
-      try {
-        await RevenueSharingService.deleteRevenueModel(id);
-        loadRevenueModels();
-      } catch (error) {
-        console.error('Error deleting revenue model:', error);
-      }
     }
   };
 
@@ -121,152 +57,119 @@ export const RevenueModelsTab: React.FC = () => {
       <div className="flex items-center justify-between">
         <div>
           <h3 className="text-lg font-semibold">Revenue Models</h3>
-          <p className="text-gray-600">Configure and manage revenue sharing models</p>
+          <p className="text-gray-600">Configure commission models and revenue sharing structures</p>
         </div>
-        <Button onClick={() => setShowForm(true)}>
+        <Button onClick={() => setIsCreating(true)}>
           <Plus className="h-4 w-4 mr-2" />
-          New Model
+          Create Model
         </Button>
       </div>
 
-      {showForm && (
+      {/* Revenue Model Creation Form */}
+      {isCreating && (
         <Card>
           <CardHeader>
-            <CardTitle>
-              {editingModel ? 'Edit Revenue Model' : 'Create New Revenue Model'}
-            </CardTitle>
+            <CardTitle>Create New Revenue Model</CardTitle>
           </CardHeader>
-          <CardContent>
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label>Model Name</Label>
-                  <Input
-                    value={formData.model_name}
-                    onChange={(e) => setFormData(prev => ({ ...prev, model_name: e.target.value }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Model Type</Label>
-                  <Select
-                    value={formData.model_type}
-                    onValueChange={(value: any) => setFormData(prev => ({ ...prev, model_type: value }))}
-                  >
-                    <SelectTrigger>
-                      <SelectValue />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="percentage">Percentage</SelectItem>
-                      <SelectItem value="tiered">Tiered</SelectItem>
-                      <SelectItem value="flat_fee">Flat Fee</SelectItem>
-                      <SelectItem value="hybrid">Hybrid</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
+          <CardContent className="space-y-4">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label>Description</Label>
-                <Textarea
-                  value={formData.description}
-                  onChange={(e) => setFormData(prev => ({ ...prev, description: e.target.value }))}
-                  rows={3}
-                />
+                <Label>Model Name</Label>
+                <Input placeholder="e.g., Electronics Commission Model" />
               </div>
+              <div className="space-y-2">
+                <Label>Model Type</Label>
+                <Select value={selectedModelType} onValueChange={(value: 'percentage' | 'tiered' | 'flat_fee' | 'hybrid') => setSelectedModelType(value)}>
+                  <SelectTrigger>
+                    <SelectValue />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="percentage">Percentage Based</SelectItem>
+                    <SelectItem value="tiered">Tiered Structure</SelectItem>
+                    <SelectItem value="flat_fee">Flat Fee</SelectItem>
+                    <SelectItem value="hybrid">Hybrid Model</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                <div className="space-y-2">
-                  <Label>Base Rate (%)</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.base_rate}
-                    onChange={(e) => setFormData(prev => ({ ...prev, base_rate: parseFloat(e.target.value) }))}
-                    required
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Minimum Threshold</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.minimum_threshold}
-                    onChange={(e) => setFormData(prev => ({ ...prev, minimum_threshold: parseFloat(e.target.value) }))}
-                  />
-                </div>
-                <div className="space-y-2">
-                  <Label>Maximum Threshold</Label>
-                  <Input
-                    type="number"
-                    step="0.01"
-                    value={formData.maximum_threshold}
-                    onChange={(e) => setFormData(prev => ({ ...prev, maximum_threshold: parseFloat(e.target.value) }))}
-                  />
-                </div>
-              </div>
+            <div className="space-y-2">
+              <Label>Description</Label>
+              <Textarea placeholder="Describe the revenue model and its purpose..." />
+            </div>
 
-              <div className="flex justify-end space-x-2">
-                <Button
-                  type="button"
-                  variant="outline"
-                  onClick={() => {
-                    setShowForm(false);
-                    setEditingModel(null);
-                  }}
-                >
-                  Cancel
-                </Button>
-                <Button type="submit">
-                  {editingModel ? 'Update' : 'Create'} Model
-                </Button>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="space-y-2">
+                <Label>Base Rate (%)</Label>
+                <Input type="number" placeholder="10.00" step="0.01" />
               </div>
-            </form>
+              <div className="space-y-2">
+                <Label>Minimum Threshold (৳)</Label>
+                <Input type="number" placeholder="100" />
+              </div>
+              <div className="space-y-2">
+                <Label>Maximum Threshold (৳)</Label>
+                <Input type="number" placeholder="50000" />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end space-x-2">
+              <Button variant="outline" onClick={() => setIsCreating(false)}>
+                Cancel
+              </Button>
+              <Button>
+                Create Model
+              </Button>
+            </div>
           </CardContent>
         </Card>
       )}
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      {/* Revenue Models List */}
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {models.map((model) => (
-          <Card key={model.id} className="hover:shadow-md transition-shadow">
+          <Card key={model.id}>
             <CardHeader>
               <div className="flex items-center justify-between">
-                <CardTitle className="flex items-center">
-                  <Target className="h-5 w-5 mr-2" />
-                  {model.model_name}
-                </CardTitle>
-                <Badge variant={model.is_active ? 'default' : 'secondary'}>
-                  {model.is_active ? 'Active' : 'Inactive'}
-                </Badge>
+                <CardTitle className="text-lg">{model.model_name}</CardTitle>
+                <div className="flex items-center space-x-2">
+                  <Badge variant={model.is_active ? "default" : "secondary"}>
+                    {model.is_active ? 'Active' : 'Inactive'}
+                  </Badge>
+                  <Badge variant="outline">
+                    {model.model_type.replace('_', ' ').toUpperCase()}
+                  </Badge>
+                </div>
               </div>
             </CardHeader>
-            <CardContent>
-              <div className="space-y-3">
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Type:</span>
-                  <span className="font-medium capitalize">{model.model_type.replace('_', ' ')}</span>
+            <CardContent className="space-y-4">
+              <p className="text-sm text-gray-600">
+                {model.description || 'No description provided'}
+              </p>
+              
+              <div className="grid grid-cols-2 gap-4 text-sm">
+                <div>
+                  <span className="font-medium">Base Rate:</span>
+                  <p>{model.base_rate}%</p>
                 </div>
-                <div className="flex justify-between">
-                  <span className="text-sm text-gray-600">Base Rate:</span>
-                  <span className="font-medium">{model.base_rate}%</span>
+                <div>
+                  <span className="font-medium">Min Threshold:</span>
+                  <p>৳{model.minimum_threshold?.toLocaleString() || 'N/A'}</p>
                 </div>
-                {model.description && (
-                  <p className="text-sm text-gray-600 mt-2">{model.description}</p>
-                )}
-                <div className="flex justify-end space-x-2 pt-4">
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEdit(model)}
-                  >
-                    <Edit className="h-4 w-4" />
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t">
+                <div className="text-xs text-gray-500">
+                  Effective from: {new Date(model.effective_from).toLocaleDateString()}
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="outline" size="sm">
+                    <Edit className="h-3 w-3 mr-1" />
+                    Edit
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleDelete(model.id)}
-                  >
-                    <Trash2 className="h-4 w-4" />
+                  <Button variant="outline" size="sm">
+                    <Settings className="h-3 w-3 mr-1" />
+                    Configure
                   </Button>
                 </div>
               </div>
@@ -274,6 +177,21 @@ export const RevenueModelsTab: React.FC = () => {
           </Card>
         ))}
       </div>
+
+      {models.length === 0 && (
+        <Card>
+          <CardContent className="flex flex-col items-center justify-center py-12">
+            <Settings className="h-12 w-12 text-gray-400 mb-4" />
+            <p className="text-gray-600 text-center mb-4">
+              No revenue models configured yet.
+            </p>
+            <Button onClick={() => setIsCreating(true)}>
+              <Plus className="h-4 w-4 mr-2" />
+              Create Your First Model
+            </Button>
+          </CardContent>
+        </Card>
+      )}
     </div>
   );
 };

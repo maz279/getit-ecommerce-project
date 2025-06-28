@@ -180,21 +180,18 @@ export const usePerformanceMetrics = (refreshInterval?: number) => {
   });
 };
 
-// Dashboard search hook - Fixed to return proper structure with both data and searchResults
+// Dashboard search hook - Fixed to return proper structure with searchResults accessible directly
 export const useDashboardSearch = (searchTerm: string, filters?: any) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm, filters],
     queryFn: async () => {
       const results = await DashboardService.searchDashboardData(searchTerm);
-      return {
-        data: results || [],
-        searchResults: results || []
-      };
+      return results || [];
     },
     enabled: searchTerm.length > 0,
     select: (data) => ({
-      ...data,
-      searchResults: data.searchResults || data.data || []
+      data: data || [],
+      searchResults: data || []
     })
   });
 };

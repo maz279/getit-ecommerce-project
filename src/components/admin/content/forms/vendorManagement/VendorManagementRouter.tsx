@@ -90,7 +90,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       console.log('✅ Routing to DocumentReviewContent');
       return <DocumentReviewContent />;
     
-    // Financial management
+    // Financial management - REVENUE SHARING ROUTING FIXED
     case 'vendor-payments':
       console.log('✅ Routing to VendorPaymentsContent');
       return <VendorPaymentsContent />;
@@ -101,7 +101,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       console.log('✅ Routing to PayoutProcessingContent');
       return <PayoutProcessingContent />;
     case 'revenue-sharing':
-      console.log('✅ Routing to RevenueSharingContent - NEW ROUTE');
+      console.log('✅ FIXED: Routing to RevenueSharingContent');
       return <RevenueSharingContent />;
     
     // Performance tracking

@@ -1,6 +1,7 @@
 
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
+import { vendorManagementSubmenus } from './routingUtils';
 
 export const useAdminRouteHandler = () => {
   const [selectedMenu, setSelectedMenu] = useState('dashboard');
@@ -8,22 +9,11 @@ export const useAdminRouteHandler = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // Define vendor management submenus
-  const vendorManagementSubmenus = [
-    'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding',
-    'vendor-verification', 'vendor-performance', 'vendor-support', 'vendor-search',
-    'vendor-scorecard', 'active-vendors', 'pending-applications', 'suspended-vendors',
-    'nid-verification', 'tin-verification', 'trade-license-verification',
-    'bank-account-verification', 'document-review', 'vendor-payments',
-    'commission-tracking', 'payout-processing', 'performance-reports',
-    'performance-metrics', 'rating-management'
-  ];
-
   const handleMenuChange = (menuId: string) => {
     console.log('🎯 AdminRouteHandler handleMenuChange called with:', menuId);
     console.log('🔍 Checking submenu routing for:', menuId);
     
-    // Check if this is a vendor management submenu
+    // Check if this is a vendor management submenu using the centralized list
     if (vendorManagementSubmenus.includes(menuId)) {
       console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
       console.log('🔍 Vendor management submenu:', menuId);

@@ -179,11 +179,14 @@ export const usePerformanceMetrics = () => {
   });
 };
 
-// Dashboard search hook - Fixed to return proper structure
+// Dashboard search hook - Fixed to return array structure
 export const useDashboardSearch = (searchTerm: string) => {
   return useQuery({
     queryKey: ['dashboard-search', searchTerm],
-    queryFn: () => DashboardService.searchDashboardData(searchTerm),
+    queryFn: async () => {
+      const results = await DashboardService.searchDashboardData(searchTerm);
+      return results || [];
+    },
     enabled: searchTerm.length > 0,
   });
 };

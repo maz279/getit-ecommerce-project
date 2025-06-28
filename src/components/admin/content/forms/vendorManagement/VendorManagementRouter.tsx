@@ -97,7 +97,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       console.log('✅ Routing to CommissionTrackingContent');
       return <CommissionTrackingContent />;
     case 'payout-processing':
-      console.log('✅ Routing to PayoutProcessingContent - FIXED ROUTING');
+      console.log('✅ Routing to PayoutProcessingContent - CORRECT ROUTING');
       return <PayoutProcessingContent />;
     
     // Performance tracking
@@ -114,7 +114,7 @@ export const VendorManagementRouter: React.FC<VendorManagementRouterProps> = ({ 
       return <RatingManagementContent />;
     
     default:
-      console.log('✅ Routing to VendorDirectoryContent (default)');
+      console.log('⚠️ No matching route for:', selectedSubmenu, '- Routing to VendorDirectoryContent (default)');
       return <VendorDirectoryContent />;
   }
 };

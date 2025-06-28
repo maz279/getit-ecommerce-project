@@ -11,6 +11,8 @@ import { PayoutProcessingHeader } from './payoutProcessing/PayoutProcessingHeade
 export const PayoutProcessingContent: React.FC = () => {
   const [activeTab, setActiveTab] = useState('requests');
 
+  console.log('🎯 PayoutProcessingContent - Component rendered with activeTab:', activeTab);
+
   return (
     <div className="space-y-6">
       <PayoutProcessingHeader />

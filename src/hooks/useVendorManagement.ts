@@ -10,8 +10,8 @@ export const useVendors = (filters?: any) => {
   const fetchVendors = async () => {
     try {
       setLoading(true);
-      const data = await VendorManagementService.getVendors(filters);
-      setVendors(data);
+      const response = await VendorManagementService.getVendors(filters);
+      setVendors(response.data);
       setError(null);
     } catch (err) {
       console.error('Error fetching vendors:', err);
@@ -41,7 +41,7 @@ export const useVendorPerformance = (vendorId?: string, filters?: any) => {
   const fetchPerformance = async () => {
     try {
       setLoading(true);
-      const data = await VendorManagementService.getPerformanceReports({
+      const data = await VendorManagementService.getVendorPerformanceReports({
         vendor_id: vendorId,
         ...filters
       });
@@ -75,7 +75,7 @@ export const useVendorAnalytics = (vendorId: string, period: string = '30d') => 
   const fetchAnalytics = async () => {
     try {
       setLoading(true);
-      const data = await VendorManagementService.getVendorAnalytics(vendorId, period);
+      const data = await VendorManagementService.getVendorAnalytics(vendorId);
       setAnalytics(data);
       setError(null);
     } catch (err) {

@@ -680,6 +680,65 @@ export type Database = {
         }
         Relationships: []
       }
+      dashboard_kpi_metrics: {
+        Row: {
+          comparison_value: number | null
+          created_at: string
+          created_by: string | null
+          id: string
+          metadata: Json | null
+          metric_category: string
+          metric_name: string
+          metric_unit: string | null
+          metric_value: number
+          percentage_change: number | null
+          recorded_date: string
+          time_period: string
+          trend_direction: string | null
+          updated_at: string
+        }
+        Insert: {
+          comparison_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_category: string
+          metric_name: string
+          metric_unit?: string | null
+          metric_value: number
+          percentage_change?: number | null
+          recorded_date?: string
+          time_period: string
+          trend_direction?: string | null
+          updated_at?: string
+        }
+        Update: {
+          comparison_value?: number | null
+          created_at?: string
+          created_by?: string | null
+          id?: string
+          metadata?: Json | null
+          metric_category?: string
+          metric_name?: string
+          metric_unit?: string | null
+          metric_value?: number
+          percentage_change?: number | null
+          recorded_date?: string
+          time_period?: string
+          trend_direction?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dashboard_kpi_metrics_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       dashboard_metrics: {
         Row: {
           created_at: string
@@ -706,6 +765,85 @@ export type Database = {
           metric_value?: number | null
         }
         Relationships: []
+      }
+      executive_reports: {
+        Row: {
+          approved_by: string | null
+          charts_data: Json | null
+          created_at: string
+          created_by: string
+          executive_summary: string
+          id: string
+          key_metrics: Json
+          published_at: string | null
+          recommendations: Json | null
+          report_period_end: string
+          report_period_start: string
+          report_title: string
+          report_type: string
+          reviewed_by: string | null
+          status: string | null
+          updated_at: string
+        }
+        Insert: {
+          approved_by?: string | null
+          charts_data?: Json | null
+          created_at?: string
+          created_by: string
+          executive_summary: string
+          id?: string
+          key_metrics?: Json
+          published_at?: string | null
+          recommendations?: Json | null
+          report_period_end: string
+          report_period_start: string
+          report_title: string
+          report_type: string
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Update: {
+          approved_by?: string | null
+          charts_data?: Json | null
+          created_at?: string
+          created_by?: string
+          executive_summary?: string
+          id?: string
+          key_metrics?: Json
+          published_at?: string | null
+          recommendations?: Json | null
+          report_period_end?: string
+          report_period_start?: string
+          report_title?: string
+          report_type?: string
+          reviewed_by?: string | null
+          status?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "executive_reports_approved_by_fkey"
+            columns: ["approved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "executive_reports_created_by_fkey"
+            columns: ["created_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "executive_reports_reviewed_by_fkey"
+            columns: ["reviewed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       incentive_programs: {
         Row: {
@@ -1554,6 +1692,60 @@ export type Database = {
           },
         ]
       }
+      performance_metrics: {
+        Row: {
+          cache_hit_rate: number | null
+          cpu_usage_percent: number | null
+          created_at: string
+          endpoint_path: string | null
+          error_count: number | null
+          id: string
+          memory_usage_mb: number | null
+          metadata: Json | null
+          method_type: string | null
+          metric_category: string
+          recorded_at: string
+          response_time_ms: number
+          status_code: number | null
+          success_count: number | null
+          throughput_per_second: number | null
+        }
+        Insert: {
+          cache_hit_rate?: number | null
+          cpu_usage_percent?: number | null
+          created_at?: string
+          endpoint_path?: string | null
+          error_count?: number | null
+          id?: string
+          memory_usage_mb?: number | null
+          metadata?: Json | null
+          method_type?: string | null
+          metric_category: string
+          recorded_at?: string
+          response_time_ms: number
+          status_code?: number | null
+          success_count?: number | null
+          throughput_per_second?: number | null
+        }
+        Update: {
+          cache_hit_rate?: number | null
+          cpu_usage_percent?: number | null
+          created_at?: string
+          endpoint_path?: string | null
+          error_count?: number | null
+          id?: string
+          memory_usage_mb?: number | null
+          metadata?: Json | null
+          method_type?: string | null
+          metric_category?: string
+          recorded_at?: string
+          response_time_ms?: number
+          status_code?: number | null
+          success_count?: number | null
+          throughput_per_second?: number | null
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           created_at: string | null
@@ -1797,6 +1989,62 @@ export type Database = {
           },
         ]
       }
+      quick_actions_log: {
+        Row: {
+          action_name: string
+          action_type: string
+          completed_at: string | null
+          created_at: string
+          error_message: string | null
+          executed_by: string
+          execution_status: string | null
+          execution_time_ms: number | null
+          id: string
+          parameters: Json | null
+          progress_percentage: number | null
+          result_data: Json | null
+          started_at: string | null
+        }
+        Insert: {
+          action_name: string
+          action_type: string
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          executed_by: string
+          execution_status?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          parameters?: Json | null
+          progress_percentage?: number | null
+          result_data?: Json | null
+          started_at?: string | null
+        }
+        Update: {
+          action_name?: string
+          action_type?: string
+          completed_at?: string | null
+          created_at?: string
+          error_message?: string | null
+          executed_by?: string
+          execution_status?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          parameters?: Json | null
+          progress_percentage?: number | null
+          result_data?: Json | null
+          started_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quick_actions_log_executed_by_fkey"
+            columns: ["executed_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       rating_disputes: {
         Row: {
           created_at: string | null
@@ -1886,6 +2134,51 @@ export type Database = {
           policy_name?: string
           policy_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      realtime_analytics: {
+        Row: {
+          created_at: string
+          device_info: Json | null
+          dimensions: Json | null
+          geographic_data: Json | null
+          id: string
+          metric_type: string
+          metric_value: number
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          timestamp_recorded: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_info?: Json | null
+          dimensions?: Json | null
+          geographic_data?: Json | null
+          id?: string
+          metric_type: string
+          metric_value: number
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp_recorded?: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_info?: Json | null
+          dimensions?: Json | null
+          geographic_data?: Json | null
+          id?: string
+          metric_type?: string
+          metric_value?: number
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          timestamp_recorded?: string
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2312,6 +2605,123 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      security_events: {
+        Row: {
+          created_at: string
+          event_details: Json
+          event_type: string
+          id: string
+          ip_address: unknown
+          is_blocked: boolean | null
+          location_data: Json | null
+          resolution_status: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity_level: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          event_details?: Json
+          event_type: string
+          id?: string
+          ip_address: unknown
+          is_blocked?: boolean | null
+          location_data?: Json | null
+          resolution_status?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity_level?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          event_details?: Json
+          event_type?: string
+          id?: string
+          ip_address?: unknown
+          is_blocked?: boolean | null
+          location_data?: Json | null
+          resolution_status?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity_level?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "security_events_resolved_by_fkey"
+            columns: ["resolved_by"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "security_events_user_id_fkey"
+            columns: ["user_id"]
+            isOneToOne: false
+            referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      system_health_logs: {
+        Row: {
+          alerts_triggered: Json | null
+          cpu_usage: number | null
+          created_at: string
+          disk_usage: number | null
+          error_count: number | null
+          error_details: Json | null
+          health_status: string
+          id: string
+          last_check: string
+          memory_usage: number | null
+          response_time_ms: number | null
+          service_name: string
+          service_type: string
+          success_rate: number | null
+          uptime_seconds: number | null
+        }
+        Insert: {
+          alerts_triggered?: Json | null
+          cpu_usage?: number | null
+          created_at?: string
+          disk_usage?: number | null
+          error_count?: number | null
+          error_details?: Json | null
+          health_status?: string
+          id?: string
+          last_check?: string
+          memory_usage?: number | null
+          response_time_ms?: number | null
+          service_name: string
+          service_type: string
+          success_rate?: number | null
+          uptime_seconds?: number | null
+        }
+        Update: {
+          alerts_triggered?: Json | null
+          cpu_usage?: number | null
+          created_at?: string
+          disk_usage?: number | null
+          error_count?: number | null
+          error_details?: Json | null
+          health_status?: string
+          id?: string
+          last_check?: string
+          memory_usage?: number | null
+          response_time_ms?: number | null
+          service_name?: string
+          service_type?: string
+          success_rate?: number | null
+          uptime_seconds?: number | null
+        }
+        Relationships: []
       }
       user_behaviors: {
         Row: {

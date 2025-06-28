@@ -13,7 +13,7 @@ import {
   QuickActionsSection,
   ExecutiveSummarySection
 } from './sections';
-import { OverviewDashboard } from './sections/OverviewDashboard';
+import { EnhancedOverviewDashboard } from './sections/enhanced/EnhancedOverviewDashboard';
 import { AnalyticsDashboard } from './sections/AnalyticsDashboard';
 import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
 import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
@@ -44,8 +44,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
     
     switch (normalizedSubmenu) {
       case 'overview':
-        console.log('✅ Rendering OverviewDashboard');
-        return <OverviewDashboard />;
+        console.log('✅ Rendering EnhancedOverviewDashboard');
+        return <EnhancedOverviewDashboard />;
       
       case 'analytics':
         console.log('✅ Rendering AnalyticsDashboard');
@@ -121,8 +121,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       default:
         console.log('⚠️ DashboardContent - no matching submenu found for:', normalizedSubmenu);
         console.log('⚠️ Available submenus should include: overview, analytics, reports, metrics, etc.');
-        console.log('⚠️ Falling back to OverviewDashboard');
-        return <OverviewDashboard />;
+        console.log('⚠️ Falling back to EnhancedOverviewDashboard');
+        return <EnhancedOverviewDashboard />;
     }
   };
 

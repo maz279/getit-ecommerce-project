@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
 import { DashboardService } from '@/services/database/DashboardService';
@@ -182,18 +181,19 @@ export const usePerformanceMetrics = (refreshInterval?: number) => {
 
 // Dashboard search hook - Fixed to return proper structure with searchResults accessible directly
 export const useDashboardSearch = (searchTerm: string, filters?: any) => {
-  return useQuery({
+  const query = useQuery({
     queryKey: ['dashboard-search', searchTerm, filters],
     queryFn: async () => {
       const results = await DashboardService.searchDashboardData(searchTerm);
       return results || [];
     },
     enabled: searchTerm.length > 0,
-    select: (data) => ({
-      data: data || [],
-      searchResults: data || []
-    })
   });
+
+  return {
+    ...query,
+    searchResults: query.data || []
+  };
 };
 
 // Combined dashboard data hook

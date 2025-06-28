@@ -1,5 +1,6 @@
 
-import { supabase } from '@/lib/supabase';
+// Dashboard Service for handling all dashboard-related database operations
+import { supabase } from '@/integrations/supabase/client';
 import type { DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction, QuickActionLog } from '@/types/dashboard';
 
 // Export the types for use in other components

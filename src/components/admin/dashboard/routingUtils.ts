@@ -41,7 +41,7 @@ export const productManagementSubmenus = [
   'product-moderation'
 ];
 
-// Vendor management submenus - UPDATED TO INCLUDE COMMISSION TRACKING
+// Vendor management submenus - UPDATED TO INCLUDE REVENUE SHARING
 export const vendorManagementSubmenus = [
   'vendor-directory', 'vendor-analytics', 'all-vendors', 'vendor-onboarding', 'vendor-verification', 
   'vendor-performance', 'vendor-sales', 'vendor-ratings', 'vendor-support', 'vendor-search', 'vendor-scorecard',
@@ -49,8 +49,8 @@ export const vendorManagementSubmenus = [
   'active-vendors', 'pending-applications', 'suspended-vendors',
   // Verification processes
   'nid-verification', 'tin-verification', 'trade-license-verification', 'bank-account-verification', 'document-review',
-  // Financial management - COMMISSION TRACKING ADDED HERE
-  'vendor-payments', 'commission-tracking', 'payout-management',
+  // Financial management - REVENUE SHARING ADDED HERE
+  'vendor-payments', 'commission-tracking', 'payout-processing', 'revenue-sharing',
   // Performance tracking
   'performance-reports', 'performance-metrics', 'vendor-performance-reports',
   // Rating and feedback
@@ -93,7 +93,7 @@ export const handleSpecialCases = (menu: string) => {
 export const handleSubmenuRouting = (menu: string) => {
   console.log('🔍 Checking submenu routing for:', menu);
   
-  // PRIORITY 1: Handle vendor management submenus FIRST - CRITICAL FIX
+  // PRIORITY 1: Handle vendor management submenus FIRST - INCLUDING REVENUE SHARING
   if (vendorManagementSubmenus.includes(menu)) {
     console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
     console.log('🔍 Vendor management submenu:', menu);

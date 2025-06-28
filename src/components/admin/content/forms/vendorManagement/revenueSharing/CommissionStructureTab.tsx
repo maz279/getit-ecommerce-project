@@ -146,7 +146,7 @@ export const CommissionStructureTab: React.FC = () => {
             <CardContent className="space-y-4">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 <div className="space-y-2">
-                  <Label>Rating >= 4.5</Label>
+                  <Label>Rating ≥ 4.5</Label>
                   <div className="flex items-center space-x-2">
                     <Input placeholder="3.0" />
                     <span className="text-sm text-gray-500">%</span>
@@ -167,7 +167,7 @@ export const CommissionStructureTab: React.FC = () => {
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <Label>Rating < 3.5</Label>
+                  <Label>Rating &lt; 3.5</Label>
                   <div className="flex items-center space-x-2">
                     <Input placeholder="6.0" />
                     <span className="text-sm text-gray-500">%</span>

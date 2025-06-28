@@ -40,7 +40,7 @@ export const WarehouseManagementContent: React.FC = () => {
           <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
             <CardTitle className="text-sm font-medium">Staff</CardTitle>
             <Users className="h-4 w-4 text-muted-foreground" />
-          </CardHead>
+          </CardHeader>
           <CardContent>
             <div className="text-2xl font-bold">245</div>
             <p className="text-xs text-muted-foreground">Warehouse workers</p>

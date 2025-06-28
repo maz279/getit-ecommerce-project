@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { Zap, Server, Database, Globe, Cpu, HardDrive } from 'lucide-react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
@@ -282,3 +281,5 @@ export const PlatformPerformanceSection: React.FC = () => (
     </Card>
   </div>
 );
+
+export { PlatformPerformanceSection } from './enhanced/PlatformPerformanceSection';

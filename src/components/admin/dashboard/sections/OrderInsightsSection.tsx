@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { 
   ShoppingCart, 
@@ -297,3 +296,5 @@ export const OrderInsightsSection: React.FC = () => {
     </div>
   );
 };
+
+export { OrderInsightsSection } from './enhanced/OrderInsightsSection';

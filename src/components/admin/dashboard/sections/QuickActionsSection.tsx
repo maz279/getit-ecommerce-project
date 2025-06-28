@@ -1,4 +1,3 @@
-
 import React from 'react';
 import { 
   Zap, Plus, Users, Package, ShoppingCart, DollarSign, 
@@ -271,3 +270,5 @@ export const QuickActionsSection: React.FC = () => (
     </Card>
   </div>
 );
+
+export { QuickActionsSection } from './enhanced/QuickActionsSection';

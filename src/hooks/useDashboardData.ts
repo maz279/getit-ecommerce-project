@@ -1,7 +1,14 @@
 
 import { useState, useEffect } from 'react';
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query';
-import { DashboardService, DashboardKPIMetric, SystemHealthLog, SecurityEvent, ExecutiveReport, QuickAction } from '@/services/database/DashboardService';
+import { DashboardService } from '@/services/database/DashboardService';
+import type { 
+  DashboardKPIMetric, 
+  SystemHealthLog, 
+  SecurityEvent, 
+  ExecutiveReport, 
+  QuickAction 
+} from '@/types/dashboard';
 import { RedisService } from '@/services/cache/RedisService';
 import { ElasticsearchService } from '@/services/search/ElasticsearchService';
 
@@ -34,7 +41,8 @@ export const useCreateKPIMetric = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (metric: DashboardKPIMetric) => DashboardService.createKPIMetric(metric),
+    mutationFn: (metric: Omit<DashboardKPIMetric, 'id' | 'created_at' | 'updated_at'>) => 
+      DashboardService.createKPIMetric(metric),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['dashboard-kpi-metrics'] });
       RedisService.flushPattern('kpi-metrics');
@@ -92,7 +100,8 @@ export const useCreateSystemHealthLog = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (log: SystemHealthLog) => DashboardService.createSystemHealthLog(log),
+    mutationFn: (log: Omit<SystemHealthLog, 'id' | 'created_at'>) => 
+      DashboardService.createSystemHealthLog(log),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['system-health-logs'] });
       RedisService.flushPattern('health-logs');
@@ -125,7 +134,8 @@ export const useCreateSecurityEvent = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (event: SecurityEvent) => DashboardService.createSecurityEvent(event),
+    mutationFn: (event: Omit<SecurityEvent, 'id' | 'created_at'>) => 
+      DashboardService.createSecurityEvent(event),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['security-events'] });
       RedisService.flushPattern('security-events');
@@ -157,7 +167,8 @@ export const useCreateExecutiveReport = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (report: ExecutiveReport) => DashboardService.createExecutiveReport(report),
+    mutationFn: (report: Omit<ExecutiveReport, 'id' | 'created_at' | 'updated_at'>) => 
+      DashboardService.createExecutiveReport(report),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['executive-reports'] });
       RedisService.flushPattern('executive-reports');
@@ -190,7 +201,8 @@ export const useCreateQuickAction = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
-    mutationFn: (action: QuickAction) => DashboardService.createQuickAction(action),
+    mutationFn: (action: Omit<QuickAction, 'id' | 'created_at' | 'updated_at'>) => 
+      DashboardService.createQuickAction(action),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['quick-actions'] });
       RedisService.flushPattern('quick-actions');

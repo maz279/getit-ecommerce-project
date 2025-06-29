@@ -1,17 +1,19 @@
-export { RevenueAnalytics } from './RevenueAnalytics';
-export { UserActivity } from './UserActivity';
-export { InventoryAlertsSection } from './InventoryAlertsSection';
-export { SecurityMonitoringSection } from './SecurityMonitoringSection';
-export { SystemLogsSection } from './SystemLogsSection';
-export { RealtimeMetricsSection } from './RealtimeMetricsSection';
-export { VendorPerformanceSection } from './VendorPerformanceSection';
-export { OrderInsightsSection } from './OrderInsightsSection';
-export { PlatformPerformanceSection } from './PlatformPerformanceSection';
-export { SystemHealthSection } from './SystemHealthSection';
-export { QuickActionsSection } from './QuickActionsSection';
-export { ExecutiveSummarySection } from './ExecutiveSummarySection';
 
-// Add new dashboard components
-export { AnalyticsDashboard } from './AnalyticsDashboard';
-export { KPIMonitoringDashboard } from './KPIMonitoringDashboard';
-export { PerformanceInsightsDashboard } from './PerformanceInsightsDashboard';
+// Legacy sections
+export { default as RevenueAnalytics } from './RevenueAnalytics';
+export { default as UserActivity } from './UserActivity';
+export { default as InventoryAlertsSection } from './InventoryAlertsSection';
+export { default as SecurityMonitoringSection } from './SecurityMonitoringSection';
+export { default as SystemLogsSection } from './SystemLogsSection';
+export { default as VendorPerformanceSection } from './VendorPerformanceSection';
+export { default as OrderInsightsSection } from './OrderInsightsSection';
+export { default as PlatformPerformanceSection } from './PlatformPerformanceSection';
+export { default as SystemHealthSection } from './SystemHealthSection';
+export { default as QuickActionsSection } from './QuickActionsSection';
+export { default as ExecutiveSummarySection } from './ExecutiveSummarySection';
+
+// Enhanced sections
+export { EnhancedOverviewDashboard } from './enhanced/EnhancedOverviewDashboard';
+export { KPIMetricsSection } from './enhanced/KPIMetricsSection';
+export { SystemHealthSection as EnhancedSystemHealthSection } from './enhanced/SystemHealthSection';
+export { QuickActionsSection as EnhancedQuickActionsSection } from './enhanced/QuickActionsSection';

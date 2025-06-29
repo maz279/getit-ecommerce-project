@@ -10,7 +10,7 @@ interface KPIMetricsSectionProps {
   searchTerm?: string;
 }
 
-const KPIMetricsSection: React.FC<KPIMetricsSectionProps> = ({ searchTerm }) => {
+export const KPIMetricsSection: React.FC<KPIMetricsSectionProps> = ({ searchTerm }) => {
   const { data: metrics, isLoading, error } = useKPIMetrics();
 
   if (isLoading) {
@@ -129,4 +129,5 @@ const KPIMetricsSection: React.FC<KPIMetricsSectionProps> = ({ searchTerm }) => 
   );
 };
 
+// Make it the default export as well for better compatibility
 export default KPIMetricsSection;

@@ -1,90 +1,69 @@
 
 import React from 'react';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { 
   TrendingUp, 
   Users, 
-  Package, 
   ShoppingCart, 
   DollarSign,
-  ArrowUp,
-  ArrowDown
+  Activity,
+  AlertTriangle
 } from 'lucide-react';
-import { Card, CardContent } from '@/components/ui/card';
 
 export const QuickStatsCards: React.FC = () => {
+  // Mock data - in a real app this would come from your data hooks
   const stats = [
     {
       title: 'Total Revenue',
-      value: '৳24.5M',
-      change: '+12%',
-      trend: 'up',
+      value: '$45,231.89',
+      change: '+20.1%',
+      changeType: 'positive' as const,
       icon: DollarSign,
-      gradient: 'from-blue-50 to-blue-100',
-      border: 'border-blue-200',
-      textColor: 'text-blue-600',
-      valueColor: 'text-blue-900'
-    },
-    {
-      title: 'Total Orders',
-      value: '18,976',
-      change: '+8%',
-      trend: 'up',
-      icon: ShoppingCart,
-      gradient: 'from-green-50 to-green-100',
-      border: 'border-green-200',
-      textColor: 'text-green-600',
-      valueColor: 'text-green-900'
     },
     {
       title: 'Active Users',
-      value: '42,345',
-      change: '+15%',
-      trend: 'up',
+      value: '2,350',
+      change: '+180.1%',
+      changeType: 'positive' as const,
       icon: Users,
-      gradient: 'from-purple-50 to-purple-100',
-      border: 'border-purple-200',
-      textColor: 'text-purple-600',
-      valueColor: 'text-purple-900'
     },
     {
-      title: 'Total Products',
-      value: '156,789',
-      change: '+5%',
-      trend: 'up',
-      icon: Package,
-      gradient: 'from-orange-50 to-orange-100',
-      border: 'border-orange-200',
-      textColor: 'text-orange-600',
-      valueColor: 'text-orange-900'
-    }
+      title: 'Orders',
+      value: '12,234',
+      change: '+19%',
+      changeType: 'positive' as const,
+      icon: ShoppingCart,
+    },
+    {
+      title: 'System Health',
+      value: '98.5%',
+      change: '+2.1%',
+      changeType: 'positive' as const,
+      icon: Activity,
+    },
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-      {stats.map((stat, index) => {
-        const IconComponent = stat.icon;
-        const TrendIcon = stat.trend === 'up' ? ArrowUp : ArrowDown;
-        
-        return (
-          <Card key={index} className={`bg-gradient-to-r ${stat.gradient} ${stat.border} hover:shadow-lg transition-shadow duration-300`}>
-            <CardContent className="p-6">
-              <div className="flex items-center justify-between">
-                <div className="flex-1">
-                  <p className={`${stat.textColor} text-sm font-medium mb-2`}>{stat.title}</p>
-                  <p className={`text-3xl font-bold ${stat.valueColor} mb-2`}>{stat.value}</p>
-                  <div className={`text-sm ${stat.textColor} flex items-center`}>
-                    <TrendIcon className="w-4 h-4 mr-1" />
-                    <span>{stat.change} from last month</span>
-                  </div>
-                </div>
-                <div className="ml-4">
-                  <IconComponent className={`w-12 h-12 ${stat.textColor.replace('text-', 'text-').replace('-600', '-500')}`} />
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        );
-      })}
+    <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+      {stats.map((stat, index) => (
+        <Card key={index}>
+          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+            <CardTitle className="text-sm font-medium">{stat.title}</CardTitle>
+            <stat.icon className="h-4 w-4 text-muted-foreground" />
+          </CardHeader>
+          <CardContent>
+            <div className="text-2xl font-bold">{stat.value}</div>
+            <p className={`text-xs flex items-center gap-1 ${
+              stat.changeType === 'positive' ? 'text-green-600' : 'text-red-600'
+            }`}>
+              <TrendingUp className="h-3 w-3" />
+              {stat.change} from last month
+            </p>
+          </CardContent>
+        </Card>
+      ))}
     </div>
   );
 };
+
+export default QuickStatsCards;

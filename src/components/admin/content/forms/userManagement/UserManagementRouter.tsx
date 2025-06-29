@@ -15,6 +15,9 @@ import { UserVerificationContent } from './UserVerificationContent';
 import { UserSettingsContent } from './UserSettingsContent';
 import { RegistrationTrendsContent } from './RegistrationTrendsContent';
 import { DemographicsContent } from './DemographicsContent';
+import { UserBehaviorAnalytics } from './analytics/UserBehaviorAnalytics';
+import { CustomerSegmentationAnalytics } from './analytics/CustomerSegmentationAnalytics';
+import { LifetimeValueAnalytics } from './analytics/LifetimeValueAnalytics';
 
 interface UserManagementRouterProps {
   selectedSubmenu: string;
@@ -29,6 +32,13 @@ export const UserManagementRouter: React.FC<UserManagementRouterProps> = ({ sele
       return <AdminListManagement />;
     case 'user-analytics':
       return <UserAnalyticsContent />;
+    // Handle individual analytics components
+    case 'user-behavior':
+      return <UserBehaviorAnalytics />;
+    case 'customer-segmentation':
+      return <CustomerSegmentationAnalytics />;
+    case 'lifetime-value':
+      return <LifetimeValueAnalytics />;
     case 'user-permissions':
     case 'permissions':
       return <PermissionsManagementContent />;

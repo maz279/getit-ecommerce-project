@@ -1,4 +1,3 @@
-
 // Dashboard submenus
 export const dashboardSubmenus = [
   'overview',
@@ -103,12 +102,21 @@ export const orderManagementSubmenus = [
   'live-tracking'
 ];
 
-// Logistics management submenus
+// Logistics management submenus - FIXED: Added courier-partners
 export const logisticsManagementSubmenus = [
   'logistics-overview',
   'delivery-tracking',
   'delivery-performance',
-  'shipping-zones'
+  'shipping-zones',
+  'courier-management',
+  'courier-partners',  // ADDED: This was missing
+  'warehouse-operations',
+  'inventory-tracking',
+  'supply-chain',
+  'transportation-analytics',
+  'route-optimization',
+  'cost-analysis',
+  'delivery-analytics'
 ];
 
 // Product management submenus

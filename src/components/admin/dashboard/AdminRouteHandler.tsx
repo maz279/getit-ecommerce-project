@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -71,11 +70,19 @@ export const useAdminRouteHandler = () => {
       return;
     }
     
-    // PRIORITY 5: Check logistics management submenus
+    // PRIORITY 5: Check logistics management submenus - FIXED: Now includes courier-partners
     if (logisticsManagementSubmenus.includes(normalizedMenuId)) {
       console.log('✅ CRITICAL: Found in logistics management submenus - routing to logistics management');
       setSelectedMenu('logistics-management');
       setSelectedSubmenu(normalizedMenuId);
+      return;
+    }
+    
+    // SPECIAL CASE: Handle courier-partners explicitly
+    if (normalizedMenuId === 'courier-partners') {
+      console.log('✅ CRITICAL: Courier-partners detected - routing to logistics management');
+      setSelectedMenu('logistics-management');
+      setSelectedSubmenu('courier-partners');
       return;
     }
     

@@ -1,4 +1,3 @@
-
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -39,9 +38,17 @@ export const useAdminRouteHandler = () => {
       return;
     }
     
-    // PRIORITY 2: Check user management submenus
+    // PRIORITY 2: Check user management submenus (including analytics)
     if (userManagementSubmenus.includes(normalizedMenuId)) {
       console.log('✅ CRITICAL: Found in user management submenus - routing to user management');
+      setSelectedMenu('user-management');
+      setSelectedSubmenu(normalizedMenuId);
+      return;
+    }
+    
+    // Handle analytics submenus specifically - they should go to user-management
+    if (['user-behavior', 'customer-segmentation', 'lifetime-value'].includes(normalizedMenuId)) {
+      console.log('✅ CRITICAL: Analytics submenu detected - routing to user management');
       setSelectedMenu('user-management');
       setSelectedSubmenu(normalizedMenuId);
       return;

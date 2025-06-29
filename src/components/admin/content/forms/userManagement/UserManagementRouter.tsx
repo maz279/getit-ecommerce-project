@@ -32,12 +32,15 @@ export const UserManagementRouter: React.FC<UserManagementRouterProps> = ({ sele
       return <AdminListManagement />;
     case 'user-analytics':
       return <UserAnalyticsContent />;
-    // Handle individual analytics components
+    // Handle individual analytics components directly
     case 'user-behavior':
+      console.log('✅ Rendering UserBehaviorAnalytics directly');
       return <UserBehaviorAnalytics />;
     case 'customer-segmentation':
+      console.log('✅ Rendering CustomerSegmentationAnalytics directly');
       return <CustomerSegmentationAnalytics />;
     case 'lifetime-value':
+      console.log('✅ Rendering LifetimeValueAnalytics directly');
       return <LifetimeValueAnalytics />;
     case 'user-permissions':
     case 'permissions':
@@ -71,6 +74,7 @@ export const UserManagementRouter: React.FC<UserManagementRouterProps> = ({ sele
     case 'user-demographics':
       return <DemographicsContent />;
     default:
+      console.log('⚠️ UserManagementRouter - defaulting to UserOverviewContent for:', selectedSubmenu);
       return <UserOverviewContent />;
   }
 };

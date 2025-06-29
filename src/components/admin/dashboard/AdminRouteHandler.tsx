@@ -1,3 +1,4 @@
+
 import { useState, useEffect } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { 
@@ -62,7 +63,7 @@ export const useAdminRouteHandler = () => {
       return;
     }
     
-    // PRIORITY 4: Check order management submenus
+    // PRIORITY 4: Check order management submenus - THIS IS THE CRITICAL FIX
     if (orderManagementSubmenus.includes(normalizedMenuId)) {
       console.log('✅ CRITICAL: Found in order management submenus - routing to order management');
       setSelectedMenu('order-management');

@@ -70,7 +70,7 @@ export const salesManagementSubmenus = [
   'sales-reports'
 ];
 
-// Order management submenus
+// Order management submenus - CRITICAL FIX: Added missing submenus
 export const orderManagementSubmenus = [
   'order-overview',
   'all-orders',
@@ -80,7 +80,27 @@ export const orderManagementSubmenus = [
   'refund-processing',
   'bulk-actions',
   'performance-metrics',
-  'payment-methods'
+  'payment-methods',
+  // CRITICAL: Adding the missing order status submenus
+  'new-orders',
+  'processing-orders',
+  'shipped-orders',
+  'delivered-orders',
+  'cancelled-orders',
+  'pending-orders',
+  'completed-orders',
+  'failed-orders',
+  'returned-orders',
+  // Additional order management submenus
+  'order-search',
+  'order-timeline',
+  'order-analytics',
+  'payment-status',
+  'failed-payments',
+  'order-history',
+  'order-details',
+  'order-management',
+  'live-tracking'
 ];
 
 // Logistics management submenus

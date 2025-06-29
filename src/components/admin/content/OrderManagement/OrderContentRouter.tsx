@@ -23,8 +23,11 @@ interface OrderContentRouterProps {
 }
 
 export const OrderContentRouter: React.FC<OrderContentRouterProps> = ({ selectedSubmenu }) => {
+  console.log('🔍 OrderContentRouter - selectedSubmenu:', selectedSubmenu);
+  
   switch (selectedSubmenu) {
     case 'all-orders':
+      console.log('✅ Routing to AllOrdersContent');
       return <AllOrdersContent />;
     case 'order-search':
     case 'search':
@@ -35,24 +38,38 @@ export const OrderContentRouter: React.FC<OrderContentRouterProps> = ({ selected
     case 'bulk-actions':
     case 'bulk':
       return <BulkActionsContent />;
+    // Order status specific routes
     case 'new-orders':
+      console.log('✅ Routing to NewOrdersContent');
       return <NewOrdersContent />;
     case 'processing-orders':
+      console.log('✅ Routing to ProcessingOrdersContent');
       return <ProcessingOrdersContent />;
     case 'shipped-orders':
+      console.log('✅ Routing to ShippedOrdersContent');
       return <ShippedOrdersContent />;
     case 'delivered-orders':
+      console.log('✅ Routing to DeliveredOrdersContent');
       return <DeliveredOrdersContent />;
+    case 'cancelled-orders':
+    case 'pending-orders':
+    case 'completed-orders':
+    case 'failed-orders':
+    case 'returned-orders':
+      return <OrderSubmenuContent submenu={selectedSubmenu} />;
+    // Payment related routes
     case 'payment-status':
     case 'payment-management':
     case 'payment-gateway':
     case 'transaction-monitoring':
     case 'payment-analytics':
     case 'payment-disputes':
+      console.log('✅ Routing to PaymentStatusContent');
       return <PaymentStatusContent />;
     case 'payment-methods':
       return <PaymentMethodsContent />;
     case 'failed-payments':
+      console.log('✅ Routing to FailedPaymentsContent');
       return <FailedPaymentsContent />;
     case 'refund-processing':
     case 'refund-management':
@@ -69,6 +86,7 @@ export const OrderContentRouter: React.FC<OrderContentRouterProps> = ({ selected
     case 'order-overview':
     case 'order-processing':
     case 'orders':
+      console.log('✅ Routing to OrderProcessingContent (default order management)');
       return <OrderProcessingContent />;
     case 'order-tracking':
     case 'live-tracking':
@@ -76,6 +94,7 @@ export const OrderContentRouter: React.FC<OrderContentRouterProps> = ({ selected
     case 'returns-refunds':
       return <OrderSubmenuContent submenu={selectedSubmenu} />;
     default:
+      console.log('⚠️ OrderContentRouter - defaulting to OrderProcessingContent for:', selectedSubmenu);
       return <OrderProcessingContent />;
   }
 };

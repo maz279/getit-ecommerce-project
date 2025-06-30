@@ -11,7 +11,6 @@ import {
   marketingSubmenus,
   analyticsSubmenus,
   paymentManagementSubmenus,
-  communicationsSubmenus,
   securitySubmenus,
   settingsSubmenus
 } from './routingUtils';
@@ -19,34 +18,20 @@ import {
 export const getDefaultSubmenu = (menu: string): string => {
   switch (menu) {
     case 'dashboard': return 'overview';
-    case 'user-management': return 'admin-users';
+    case 'user-management': return 'admin-list';
     case 'sales-management': return 'sales-overview';
     case 'order-management': return 'order-overview';
-    case 'logistics-management': return 'logistics-overview';
+    case 'logistics-management': return 'courier-partners-logistics';
     case 'product-management': return 'product-catalog';
     case 'customer-management': return 'customer-database';
     case 'vendor-management': return 'vendor-directory';
-    case 'marketing': return 'campaigns';
+    case 'marketing': return 'marketing-campaigns';
     case 'analytics': return 'business-intelligence';
-    case 'payment-management': return 'payment-processing';
-    case 'communications': return 'notifications';
+    case 'payment-management': return 'revenue-dashboard-payment';
     case 'security': return 'security-monitoring';
     case 'settings': return 'system-settings';
     default: return 'overview';
   }
-};
-
-export const handleSpecialCases = (menu: string) => {
-  // Handle direct dashboard submenu navigation
-  if (dashboardSubmenus.includes(menu)) {
-    console.log('🎯 Special case: Dashboard submenu detected:', menu);
-    return {
-      selectedMenu: 'dashboard',
-      selectedSubmenu: menu
-    };
-  }
-  
-  return null;
 };
 
 export const handleSubmenuRouting = (menu: string) => {
@@ -54,7 +39,7 @@ export const handleSubmenuRouting = (menu: string) => {
   
   // PRIORITY 1: Handle dashboard submenus FIRST
   if (dashboardSubmenus.includes(menu)) {
-    console.log('✅ CRITICAL: Found in dashboard submenus - routing to dashboard');
+    console.log('✅ Found in dashboard submenus - routing to dashboard');
     return {
       selectedMenu: 'dashboard',
       selectedSubmenu: menu
@@ -117,7 +102,7 @@ export const handleSubmenuRouting = (menu: string) => {
   
   // PRIORITY 8: Handle vendor management submenus
   if (vendorManagementSubmenus.includes(menu)) {
-    console.log('✅ CRITICAL: Found in vendor management submenus - routing to vendor management');
+    console.log('✅ Found in vendor management submenus');
     return {
       selectedMenu: 'vendor-management',
       selectedSubmenu: menu
@@ -151,16 +136,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
-  // PRIORITY 12: Handle communications submenus
-  if (communicationsSubmenus.includes(menu)) {
-    console.log('✅ Found in communications submenus');
-    return {
-      selectedMenu: 'communications',
-      selectedSubmenu: menu
-    };
-  }
-  
-  // PRIORITY 13: Handle security submenus
+  // PRIORITY 12: Handle security submenus
   if (securitySubmenus.includes(menu)) {
     console.log('✅ Found in security submenus');
     return {
@@ -169,7 +145,7 @@ export const handleSubmenuRouting = (menu: string) => {
     };
   }
   
-  // PRIORITY 14: Handle settings submenus
+  // PRIORITY 13: Handle settings submenus
   if (settingsSubmenus.includes(menu)) {
     console.log('✅ Found in settings submenus');
     return {
@@ -181,8 +157,20 @@ export const handleSubmenuRouting = (menu: string) => {
   return null;
 };
 
+export const handleSpecialCases = (menu: string) => {
+  // Handle direct dashboard submenu navigation
+  if (dashboardSubmenus.includes(menu)) {
+    console.log('🎯 Special case: Dashboard submenu detected:', menu);
+    return {
+      selectedMenu: 'dashboard',
+      selectedSubmenu: menu
+    };
+  }
+  
+  return null;
+};
+
 export const handleCompoundMenus = (menu: string) => {
-  // Remove the problematic compound menu splitting logic
-  // All dashboard submenus should be handled by handleSpecialCases
+  // This function is kept for compatibility but simplified
   return null;
 };

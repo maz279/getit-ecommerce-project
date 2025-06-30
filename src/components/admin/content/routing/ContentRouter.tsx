@@ -47,6 +47,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       return <OrderManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'logistics-management':
+    case 'shipping-logistics': // Handle legacy naming
       console.log('✅ ContentRouter routing to LogisticsContent');
       return <LogisticsContent selectedSubmenu={normalizedSubmenu} />;
     
@@ -63,14 +64,17 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       return <VendorManagementContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'marketing':
+    case 'marketing-promotions': // Handle expanded naming
       console.log('✅ ContentRouter routing to MarketingContent');
       return <MarketingContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'analytics':
+    case 'analytics-reports': // Handle expanded naming
       console.log('✅ ContentRouter routing to AnalyticsContent');
       return <AnalyticsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'payment-management':
+    case 'financial-management': // Handle alternative naming
       console.log('✅ ContentRouter routing to PaymentManagementContent');
       return <PaymentManagementContent selectedSubmenu={normalizedSubmenu} />;
     
@@ -79,10 +83,12 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       return <CommunicationsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'security':
+    case 'security-compliance': // Handle expanded naming
       console.log('✅ ContentRouter routing to SecurityContent');
       return <SecurityContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'settings':
+    case 'settings-configuration': // Handle expanded naming
       console.log('✅ ContentRouter routing to SettingsContent');
       return <SettingsContent selectedSubmenu={normalizedSubmenu} />;
     

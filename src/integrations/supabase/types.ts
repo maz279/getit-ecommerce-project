@@ -93,6 +93,47 @@ export type Database = {
           },
         ]
       }
+      balance_sheet_data: {
+        Row: {
+          borrower_id: string
+          borrower_name: string
+          created_at: string
+          current_year_data: Json
+          id: string
+          updated_at: string
+          year2_data: Json
+          year3_data: Json
+        }
+        Insert: {
+          borrower_id: string
+          borrower_name: string
+          created_at?: string
+          current_year_data?: Json
+          id?: string
+          updated_at?: string
+          year2_data?: Json
+          year3_data?: Json
+        }
+        Update: {
+          borrower_id?: string
+          borrower_name?: string
+          created_at?: string
+          current_year_data?: Json
+          id?: string
+          updated_at?: string
+          year2_data?: Json
+          year3_data?: Json
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fk_balance_sheet_borrower"
+            columns: ["borrower_id"]
+            isOneToOne: true
+            referencedRelation: "borrowers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       borrowers: {
         Row: {
           created_at: string

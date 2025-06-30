@@ -14,6 +14,50 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
   
   const getContent = () => {
     switch (selectedSubmenu) {
+      // Courier Partners section
+      case 'courier-partners-logistics':
+      case 'pathao-management':
+      case 'paperfly-integration':
+      case 'sundarban-coordination':
+      case 'redx-monitoring':
+      case 'ecourier-tracking':
+        return <CourierPartnersContent />;
+      
+      // Delivery Management section  
+      case 'delivery-management':
+      case 'delivery-zones':
+      case 'delivery-scheduling':
+      case 'route-optimization':
+      case 'delivery-performance-logistics':
+        return <DeliveryPerformanceContent />;
+      
+      // Shipping Analytics section
+      case 'shipping-analytics':
+      case 'delivery-reports':
+      case 'performance-metrics-logistics':
+      case 'cost-analysis-logistics':
+      case 'customer-satisfaction-logistics':
+        return (
+          <div className="p-6">
+            <h1 className="text-2xl font-bold mb-6">Shipping Analytics</h1>
+            <p className="text-gray-600">Comprehensive shipping and delivery analytics dashboard...</p>
+          </div>
+        );
+      
+      // Returns & Exchanges section
+      case 'returns-exchanges':
+      case 'return-requests':
+      case 'exchange-processing':
+      case 'refund-management':
+      case 'return-analytics':
+        return (
+          <div className="p-6">
+            <h1 className="text-2xl font-bold mb-6">Returns & Exchanges</h1>
+            <p className="text-gray-600">Manage returns, exchanges and refund processing...</p>
+          </div>
+        );
+      
+      // Legacy support for old routing
       case 'logistics-overview':
       case 'overview':
         return (
@@ -31,61 +75,13 @@ export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubm
       case 'courier-management':
       case 'courier-partners':
         return <CourierPartnersContent />;
-      case 'warehouse-operations':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Warehouse Operations</h1>
-            <p className="text-gray-600">Monitor and manage warehouse activities...</p>
-          </div>
-        );
-      case 'inventory-tracking':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Inventory Tracking</h1>
-            <p className="text-gray-600">Real-time inventory tracking across locations...</p>
-          </div>
-        );
-      case 'supply-chain':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Supply Chain Management</h1>
-            <p className="text-gray-600">End-to-end supply chain visibility...</p>
-          </div>
-        );
-      case 'transportation-analytics':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Transportation Analytics</h1>
-            <p className="text-gray-600">Analyze transportation costs and efficiency...</p>
-          </div>
-        );
-      case 'route-optimization':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Route Optimization</h1>
-            <p className="text-gray-600">Optimize delivery routes for efficiency...</p>
-          </div>
-        );
-      case 'cost-analysis':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Cost Analysis</h1>
-            <p className="text-gray-600">Analyze logistics costs and identify savings...</p>
-          </div>
-        );
-      case 'delivery-analytics':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Delivery Analytics</h1>
-            <p className="text-gray-600">Comprehensive delivery performance analytics...</p>
-          </div>
-        );
+      
       default:
         console.log('⚠️ LogisticsContent - no matching submenu found for:', selectedSubmenu);
         return (
           <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Logistics Overview</h1>
-            <p className="text-gray-600">Comprehensive logistics management dashboard...</p>
+            <h1 className="text-2xl font-bold mb-6">Courier Partners</h1>
+            <p className="text-gray-600">Manage courier partnerships and delivery services...</p>
           </div>
         );
     }

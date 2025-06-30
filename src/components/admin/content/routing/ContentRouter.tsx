@@ -35,7 +35,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
   
   switch (normalizedMenu) {
     case 'dashboard':
-      console.log('➡️ ContentRouter routing to DashboardContent');
+      console.log('➡️ ContentRouter routing to DashboardContent with submenu:', normalizedSubmenu);
       return <DashboardContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'user-management':
@@ -71,7 +71,7 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       return <MarketingContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'analytics':
-      console.log('➡️ ContentRouter routing to AnalyticsContent');
+      console.log('➡️ ContentRouter routing to AnalyticsContent (Main Analytics Menu)');
       return <AnalyticsContent selectedSubmenu={normalizedSubmenu} />;
     
     case 'payment-management':

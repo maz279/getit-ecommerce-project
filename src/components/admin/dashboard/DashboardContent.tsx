@@ -49,7 +49,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       
       case 'analytics':
       case 'analytics-dashboard':
-        console.log('✅ Rendering AnalyticsDashboard');
+        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics)');
         return <AnalyticsDashboard />;
       
       case 'reports':

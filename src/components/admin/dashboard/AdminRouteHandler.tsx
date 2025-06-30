@@ -19,8 +19,7 @@ import {
 import { 
   getDefaultSubmenu, 
   handleSubmenuRouting, 
-  handleSpecialCases, 
-  handleCompoundMenus 
+  handleSpecialCases
 } from './menuHandlers';
 
 export const useAdminRouteHandler = () => {
@@ -31,49 +30,60 @@ export const useAdminRouteHandler = () => {
   useEffect(() => {
     // Extract path without leading slash
     const path = location.pathname.slice(1);
+    console.log('🔍 AdminRouteHandler - processing path:', path);
     
-    // Check for direct matches in main menus
-    if (
-      path === 'dashboard' ||
-      path === 'user-management' ||
-      path === 'sales-management' ||
-      path === 'order-management' ||
-      path === 'logistics-management' ||
-      path === 'product-management' ||
-      path === 'customer-management' ||
-      path === 'vendor-management' ||
-      path === 'marketing' ||
-      path === 'analytics' ||
-      path === 'payment-management' ||
-      path === 'security' ||
-      path === 'settings'
-    ) {
-      console.log('🎯 Direct menu match found:', path);
+    // Handle root dashboard path
+    if (path === '' || path === 'admin/dashboard' || path === 'dashboard') {
+      console.log('🎯 Root dashboard path detected');
+      setSelectedMenu('dashboard');
+      setSelectedSubmenu('overview');
+      return;
+    }
+    
+    // Check for direct main menu matches
+    const mainMenus = [
+      'dashboard',
+      'user-management',
+      'sales-management', 
+      'order-management',
+      'logistics-management',
+      'product-management',
+      'customer-management',
+      'vendor-management',
+      'marketing',
+      'analytics',
+      'payment-management',
+      'security',
+      'settings'
+    ];
+    
+    if (mainMenus.includes(path)) {
+      console.log('🎯 Direct main menu match found:', path);
       setSelectedMenu(path);
       setSelectedSubmenu(getDefaultSubmenu(path));
       return;
     }
 
-    // Check for special cases (direct submenu navigation)
+    // Check for submenu routing
+    const submenuResult = handleSubmenuRouting(path);
+    if (submenuResult) {
+      console.log('✅ Submenu routing found:', submenuResult);
+      setSelectedMenu(submenuResult.selectedMenu);
+      setSelectedSubmenu(submenuResult.selectedSubmenu);
+      return;
+    }
+
+    // Check for special cases
     const specialCaseResult = handleSpecialCases(path);
     if (specialCaseResult) {
-      console.log('🎯 Special case routing triggered for:', path);
+      console.log('✅ Special case routing found:', specialCaseResult);
       setSelectedMenu(specialCaseResult.selectedMenu);
       setSelectedSubmenu(specialCaseResult.selectedSubmenu);
       return;
     }
-    
-    // Check for standard submenu routing
-    const submenuRoutingResult = handleSubmenuRouting(path);
-    if (submenuRoutingResult) {
-      console.log('✅ Standard submenu routing triggered for:', path);
-      setSelectedMenu(submenuRoutingResult.selectedMenu);
-      setSelectedSubmenu(submenuRoutingResult.selectedSubmenu);
-      return;
-    }
 
-    // Fallback: Default to dashboard overview
-    console.log('⚠️ No matching route found - defaulting to dashboard overview');
+    // Fallback to dashboard
+    console.log('⚠️ No matching route found for:', path, '- defaulting to dashboard');
     setSelectedMenu('dashboard');
     setSelectedSubmenu('overview');
   }, [location.pathname]);

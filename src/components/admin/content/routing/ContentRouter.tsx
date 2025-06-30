@@ -92,8 +92,60 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
       console.log('✅ ContentRouter routing to SettingsContent');
       return <SettingsContent selectedSubmenu={normalizedSubmenu} />;
     
+    // Handle dashboard submenus that might be passed as main menu
+    case 'overview':
+    case 'analytics-dashboard':
+    case 'real-time-metrics':
+    case 'realtime-metrics':
+    case 'kpi-monitoring':
+    case 'performance-insights':
+      console.log('✅ ContentRouter routing dashboard submenu to DashboardContent');
+      return <DashboardContent selectedSubmenu={normalizedMenu} />;
+    
+    // Handle order management submenus that might be passed as main menu
+    case 'order-search':
+    case 'order-timeline':
+    case 'bulk-actions':
+    case 'new-orders':
+    case 'processing-orders':
+    case 'shipped-orders':
+    case 'delivered-orders':
+      console.log('✅ ContentRouter routing order submenu to OrderManagementContent');
+      return <OrderManagementContent selectedSubmenu={normalizedMenu} />;
+    
     default:
-      console.log('⚠️ ContentRouter - Unknown menu:', normalizedMenu, '- defaulting to dashboard');
+      console.log('⚠️ ContentRouter - Unknown menu:', normalizedMenu, '- routing to appropriate content based on submenu');
+      
+      // Try to determine the correct content based on submenu patterns
+      if (normalizedSubmenu.includes('order') || normalizedSubmenu.includes('payment') || normalizedSubmenu.includes('shipping')) {
+        return <OrderManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('user') || normalizedSubmenu.includes('admin') || normalizedSubmenu.includes('role')) {
+        return <UserManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('sales') || normalizedSubmenu.includes('revenue')) {
+        return <SalesManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('product') || normalizedSubmenu.includes('inventory') || normalizedSubmenu.includes('category')) {
+        return <ProductManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('customer') || normalizedSubmenu.includes('support')) {
+        return <CustomerManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('vendor') || normalizedSubmenu.includes('commission')) {
+        return <VendorManagementContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('marketing') || normalizedSubmenu.includes('campaign')) {
+        return <MarketingContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('analytics') || normalizedSubmenu.includes('report')) {
+        return <AnalyticsContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      if (normalizedSubmenu.includes('logistics') || normalizedSubmenu.includes('courier') || normalizedSubmenu.includes('delivery')) {
+        return <LogisticsContent selectedSubmenu={normalizedSubmenu} />;
+      }
+      
+      // Final fallback to dashboard
       return <DashboardContent selectedSubmenu="overview" />;
   }
 };

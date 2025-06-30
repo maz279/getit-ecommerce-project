@@ -2,7 +2,7 @@
 // Dashboard submenus
 export const dashboardSubmenus = [
   'overview',
-  'analytics-dashboard',
+  'dashboard-analytics', // Changed from 'analytics-dashboard' to 'dashboard-analytics'
   'real-time-metrics',
   'realtime-metrics',
   'kpi-monitoring',

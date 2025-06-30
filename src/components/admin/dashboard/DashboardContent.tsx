@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import { 
   RevenueAnalytics, 
@@ -47,9 +46,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
         console.log('✅ Rendering EnhancedOverviewDashboard');
         return <EnhancedOverviewDashboard />;
       
-      case 'analytics':
-      case 'analytics-dashboard':
-        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics)');
+      case 'dashboard-analytics':
+        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics - Fixed Routing)');
         return <AnalyticsDashboard />;
       
       case 'reports':
@@ -121,7 +119,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       
       default:
         console.log('⚠️ DashboardContent - no matching submenu found for:', normalizedSubmenu);
-        console.log('⚠️ Available submenus should include: overview, analytics, reports, metrics, etc.');
+        console.log('⚠️ Available submenus should include: overview, dashboard-analytics, reports, metrics, etc.');
         console.log('⚠️ Falling back to EnhancedOverviewDashboard');
         return <EnhancedOverviewDashboard />;
     }

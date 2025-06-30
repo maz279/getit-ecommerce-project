@@ -7,7 +7,7 @@ interface VendorManagementContentProps {
 }
 
 export const VendorManagementContent: React.FC<VendorManagementContentProps> = ({ selectedSubmenu }) => {
-  console.log('🔍 VendorManagementContent - selectedSubmenu received:', selectedSubmenu);
+  console.log('🔍 VendorManagementContent - selectedSubmenu:', selectedSubmenu);
   
   return (
     <div className="p-6">

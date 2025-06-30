@@ -10,7 +10,7 @@ export const CustomerManagementContent: React.FC<CustomerManagementContentProps>
   console.log('🔍 CustomerManagementContent - selectedSubmenu:', selectedSubmenu);
   
   return (
-    <div className="bg-gray-50 min-h-screen">
+    <div className="p-6">
       <CustomerManagementRouter selectedSubmenu={selectedSubmenu} />
     </div>
   );

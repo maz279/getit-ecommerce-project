@@ -7,6 +7,8 @@ interface ProductManagementContentProps {
 }
 
 export const ProductManagementContent: React.FC<ProductManagementContentProps> = ({ selectedSubmenu }) => {
+  console.log('🔍 ProductManagementContent - selectedSubmenu:', selectedSubmenu);
+  
   return (
     <div className="p-6">
       <ProductManagementRouter selectedSubmenu={selectedSubmenu} />

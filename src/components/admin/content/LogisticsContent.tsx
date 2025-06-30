@@ -1,9 +1,10 @@
 
 import React from 'react';
+import { CourierPartnersContent } from './forms/logistics/CourierPartnersContent';
+import { DeliveryPerformanceContent } from './forms/logistics/DeliveryPerformanceContent';
 import { DeliveryTrackingContent } from './forms/logistics/DeliveryTrackingContent';
 import { ShippingZonesContent } from './forms/logistics/ShippingZonesContent';
-import { DeliveryPerformanceContent } from './forms/logistics/DeliveryPerformanceContent';
-import { CourierPartnersContent } from './forms/logistics/CourierPartnersContent';
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 
 interface LogisticsContentProps {
   selectedSubmenu: string;
@@ -12,84 +13,223 @@ interface LogisticsContentProps {
 export const LogisticsContent: React.FC<LogisticsContentProps> = ({ selectedSubmenu }) => {
   console.log('🔍 LogisticsContent - selectedSubmenu:', selectedSubmenu);
   
-  const getContent = () => {
-    switch (selectedSubmenu) {
-      // Courier Partners section
+  const renderContent = () => {
+    const normalizedSubmenu = selectedSubmenu?.toString().trim().toLowerCase();
+    
+    switch (normalizedSubmenu) {
       case 'courier-partners-logistics':
-      case 'pathao-management':
-      case 'paperfly-integration':
-      case 'sundarban-coordination':
-      case 'redx-monitoring':
-      case 'ecourier-tracking':
         return <CourierPartnersContent />;
-      
-      // Delivery Management section  
+      case 'pathao-management':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Pathao Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Pathao courier partner management will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
+      case 'paperfly-integration':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Paperfly Integration</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Paperfly courier integration will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
+      case 'sundarban-coordination':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Sundarban Coordination</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Sundarban courier coordination will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
+      case 'redx-monitoring':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>RedX Monitoring</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>RedX courier monitoring will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
+      case 'ecourier-tracking':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>eCourier Tracking</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>eCourier tracking system will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'delivery-management':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Delivery Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Delivery management interface will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'delivery-zones':
+        return <ShippingZonesContent />;
       case 'delivery-scheduling':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Delivery Scheduling</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Delivery scheduling system will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'route-optimization':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Route Optimization</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Route optimization tools will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'delivery-performance-logistics':
         return <DeliveryPerformanceContent />;
-      
-      // Shipping Analytics section
       case 'shipping-analytics':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Shipping Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Shipping analytics and insights will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'delivery-reports':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Delivery Reports</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Delivery performance reports will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'performance-metrics-logistics':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Performance Metrics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Logistics performance metrics will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'cost-analysis-logistics':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Cost Analysis</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Logistics cost analysis will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'customer-satisfaction-logistics':
         return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Shipping Analytics</h1>
-            <p className="text-gray-600">Comprehensive shipping and delivery analytics dashboard...</p>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Customer Satisfaction</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Customer satisfaction metrics will be displayed here.</p>
+            </CardContent>
+          </Card>
         );
-      
-      // Returns & Exchanges section
       case 'returns-exchanges':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Returns & Exchanges</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Returns and exchanges management will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'return-requests':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Return Requests</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Return requests management will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'exchange-processing':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Exchange Processing</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Exchange processing system will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'refund-management':
+        return (
+          <Card>
+            <CardHeader>
+              <CardTitle>Refund Management</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Refund management system will be displayed here.</p>
+            </CardContent>
+          </Card>
+        );
       case 'return-analytics':
         return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Returns & Exchanges</h1>
-            <p className="text-gray-600">Manage returns, exchanges and refund processing...</p>
-          </div>
+          <Card>
+            <CardHeader>
+              <CardTitle>Return Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p>Return analytics and insights will be displayed here.</p>
+            </CardContent>
+          </Card>
         );
-      
-      // Legacy support for old routing
-      case 'logistics-overview':
-      case 'overview':
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Logistics Overview</h1>
-            <p className="text-gray-600">Comprehensive logistics management dashboard...</p>
-          </div>
-        );
-      case 'delivery-tracking':
-        return <DeliveryTrackingContent />;
-      case 'shipping-zones':
-        return <ShippingZonesContent />;
-      case 'delivery-performance':
-        return <DeliveryPerformanceContent />;
-      case 'courier-management':
-      case 'courier-partners':
-        return <CourierPartnersContent />;
-      
       default:
-        console.log('⚠️ LogisticsContent - no matching submenu found for:', selectedSubmenu);
-        return (
-          <div className="p-6">
-            <h1 className="text-2xl font-bold mb-6">Courier Partners</h1>
-            <p className="text-gray-600">Manage courier partnerships and delivery services...</p>
-          </div>
-        );
+        console.log('⚠️ LogisticsContent - unknown submenu, defaulting to courier partners');
+        return <CourierPartnersContent />;
     }
   };
 
   return (
-    <div className="bg-gray-50 min-h-screen">
-      {getContent()}
+    <div className="p-6">
+      {renderContent()}
     </div>
   );
 };

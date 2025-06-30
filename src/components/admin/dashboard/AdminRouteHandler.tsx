@@ -1,4 +1,5 @@
-import { useState } from 'react';
+
+import { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { 
   dashboardSubmenus,
@@ -27,7 +28,7 @@ export const useAdminRouteHandler = () => {
   const [selectedMenu, setSelectedMenu] = useState<string>('dashboard');
   const [selectedSubmenu, setSelectedSubmenu] = useState<string>('overview');
 
-  useState(() => {
+  useEffect(() => {
     // Extract path without leading slash
     const path = location.pathname.slice(1);
     

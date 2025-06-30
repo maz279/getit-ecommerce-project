@@ -1,3 +1,4 @@
+
 // types/customer-management.types.ts
 
 /**
@@ -276,22 +277,3 @@ export interface CustomerAPIResponse<T> {
     requestId: string;
   };
 }
-
-// Export all types for use throughout the application
-export type {
-  BangladeshCustomerData,
-  CustomerSegment,
-  CustomerAnalytics,
-  SupportTicket,
-  LiveChatSession,
-  ChatMessage,
-  CustomerFeedback,
-  VIPCustomer,
-  PurchasePattern,
-  CLVMetrics,
-  CustomerBehavior,
-  RouteAnalytics,
-  RouterError,
-  RouterConfig,
-  CustomerAPIResponse
-};

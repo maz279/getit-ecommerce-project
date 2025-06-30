@@ -36,16 +36,16 @@ export const AdminLayoutWrapper: React.FC<AdminLayoutWrapperProps> = ({
 
         {/* Content Area with top margin for fixed header */}
         <div className="flex pt-[125px]">
-          {/* Collapsible Sidebar */}
+          {/* Collapsible Sidebar - 1 inch less width (from w-80 to w-56 when expanded, w-12 when collapsed) */}
           <ComprehensiveAdminSidebar
-            activeTab={selectedMenu}
+            activeTab={selectedMenu === 'dashboard' ? selectedSubmenu : selectedMenu}
             setActiveTab={onMenuChange}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />
 
-          {/* Main Content - Dynamic margin based on sidebar state */}
-          <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-80'}`}>
+          {/* Main Content - Dynamic margin based on sidebar state (adjusted for new width) */}
+          <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-12' : 'ml-56'}`}>
             {/* Main Content */}
             <div className="min-h-screen">
               <ComprehensiveMainContent 

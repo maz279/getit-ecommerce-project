@@ -20,10 +20,32 @@ import {
   ChevronUp,
   Shield,
   Truck,
-  CreditCard,
   MessageSquare,
-  Megaphone
+  CreditCard,
+  Target,
+  PieChart,
+  Activity,
+  Database,
+  Lock,
+  Zap,
+  Globe,
+  Headphones,
+  Map,
+  FileCheck,
+  AlertTriangle,
+  CheckCircle,
+  Clock,
+  Eye,
+  Search,
+  Filter,
+  Archive,
+  Star,
+  Award,
+  Briefcase
 } from 'lucide-react';
+import { ScrollArea } from '@/components/ui/scroll-area';
+import { Button } from '@/components/ui/button';
+import { Collapsible, CollapsibleContent, CollapsibleTrigger } from '@/components/ui/collapsible';
 
 interface ComprehensiveAdminSidebarProps {
   activeTab: string;
@@ -38,300 +60,241 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   collapsed,
   setCollapsed
 }) => {
-  const [expandedMenus, setExpandedMenus] = useState<{ [key: string]: boolean }>({});
+  // Track which sections are expanded
+  const [expandedSections, setExpandedSections] = useState<Set<string>>(new Set(['dashboard']));
 
-  const toggleMenu = (menuId: string) => {
-    if (collapsed) return;
-    setExpandedMenus(prev => ({
-      ...prev,
-      [menuId]: !prev[menuId]
-    }));
+  const toggleSection = (sectionId: string) => {
+    const newExpanded = new Set(expandedSections);
+    if (newExpanded.has(sectionId)) {
+      newExpanded.delete(sectionId);
+    } else {
+      newExpanded.add(sectionId);
+    }
+    setExpandedSections(newExpanded);
   };
 
-  const handleMenuClick = (menuId: string, hasSubmenu: boolean = false) => {
-    if (hasSubmenu && !collapsed) {
-      toggleMenu(menuId);
-    }
+  const handleMenuClick = (menuId: string) => {
+    console.log('🎯 ComprehensiveAdminSidebar - Menu clicked:', menuId);
     setActiveTab(menuId);
   };
 
-  const menuItems = [
+  // Define comprehensive menu structure with proper hierarchy
+  const menuStructure = [
     {
-      id: 'overview',
+      id: 'dashboard',
       label: 'Dashboard',
       icon: LayoutDashboard,
       color: 'text-blue-500',
-      submenu: [
-        { id: 'overview', label: 'Overview' },
-        { id: 'dashboard-analytics', label: 'Analytics Dashboard' },
-        { id: 'real-time-metrics', label: 'Real-time Metrics' },
-        { id: 'kpi-monitoring', label: 'KPI Monitoring' },
-        { id: 'performance-insights', label: 'Performance Insights' }
+      submenus: [
+        { id: 'overview', label: 'Overview', icon: Eye },
+        { id: 'dashboard-analytics', label: 'Analytics Dashboard', icon: BarChart3 },
+        { id: 'real-time-metrics', label: 'Real-time Metrics', icon: Activity },
+        { id: 'kpi-monitoring', label: 'KPI Monitoring', icon: Target },
+        { id: 'performance-insights', label: 'Performance Insights', icon: TrendingUp }
       ]
     },
     {
-      id: 'users',
+      id: 'user-management',
       label: 'User Management',
       icon: Users,
       color: 'text-cyan-500',
-      submenu: [
-        { id: 'user-overview', label: 'User Overview' },
-        { id: 'active-users', label: 'Active Users' },
-        { id: 'inactive-users', label: 'Inactive Users' },
-        { id: 'banned-users', label: 'Banned Users' },
-        { id: 'user-verification', label: 'User Verification' },
-        { id: 'demographics', label: 'Demographics' },
-        { id: 'registration-trends', label: 'Registration Trends' },
-        { id: 'user-analytics', label: 'User Analytics' },
-        { id: 'role-management', label: 'Role Management' },
-        { id: 'permissions-management', label: 'Permissions Management' },
-        { id: 'access-control', label: 'Access Control' },
-        { id: 'activity-logs', label: 'Activity Logs' },
-        { id: 'activity-reports', label: 'Activity Reports' },
-        { id: 'user-settings', label: 'User Settings' },
-        { id: 'admin-list-management', label: 'Admin List Management' }
+      submenus: [
+        { id: 'user-overview', label: 'User Overview', icon: Eye },
+        { id: 'admin-list', label: 'Admin Users', icon: Shield },
+        { id: 'active-users', label: 'Active Users', icon: CheckCircle },
+        { id: 'inactive-users', label: 'Inactive Users', icon: Clock },
+        { id: 'banned-users', label: 'Banned Users', icon: AlertTriangle },
+        { id: 'user-verification', label: 'User Verification', icon: FileCheck },
+        { id: 'role-management', label: 'Role Management', icon: Award },
+        { id: 'permissions', label: 'Permissions', icon: Lock },
+        { id: 'activity-logs', label: 'Activity Logs', icon: FileText },
+        { id: 'user-analytics', label: 'User Analytics', icon: BarChart3 },
+        { id: 'registration-trends', label: 'Registration Trends', icon: TrendingUp },
+        { id: 'demographics', label: 'Demographics', icon: PieChart },
+        { id: 'user-settings', label: 'User Settings', icon: Settings }
       ]
     },
     {
-      id: 'sales',
-      label: 'Sales Management',
-      icon: TrendingUp,
-      color: 'text-green-500',
-      submenu: [
-        { id: 'sales-overview', label: 'Sales Overview' },
-        { id: 'daily-sales', label: 'Daily Sales' },
-        { id: 'monthly-trends', label: 'Monthly Trends' },
-        { id: 'yearly-reports', label: 'Yearly Reports' },
-        { id: 'sales-forecast', label: 'Sales Forecast' },
-        { id: 'revenue-analytics', label: 'Revenue Analytics' },
-        { id: 'revenue-dashboard', label: 'Revenue Dashboard' },
-        { id: 'profit-margins', label: 'Profit Margins' },
-        { id: 'cost-analysis', label: 'Cost Analysis' },
-        { id: 'roi-tracking', label: 'ROI Tracking' },
-        { id: 'sales-reports', label: 'Sales Reports' },
-        { id: 'detailed-reports', label: 'Detailed Reports' },
-        { id: 'comparative-analysis', label: 'Comparative Analysis' },
-        { id: 'export-data', label: 'Export Data' }
-      ]
-    },
-    {
-      id: 'orders',
-      label: 'Order Management',
-      icon: ShoppingCart,
-      color: 'text-orange-500',
-      submenu: [
-        { id: 'order-overview', label: 'Order Overview' },
-        { id: 'all-orders', label: 'All Orders' },
-        { id: 'new-orders', label: 'New Orders' },
-        { id: 'processing-orders', label: 'Processing Orders' },
-        { id: 'shipped-orders', label: 'Shipped Orders' },
-        { id: 'delivered-orders', label: 'Delivered Orders' },
-        { id: 'order-tracking', label: 'Order Tracking' },
-        { id: 'order-processing', label: 'Order Processing' },
-        { id: 'bulk-actions', label: 'Bulk Actions' },
-        { id: 'order-reports', label: 'Order Reports' },
-        { id: 'performance-metrics', label: 'Performance Metrics' },
-        { id: 'payment-status', label: 'Payment Status' },
-        { id: 'payment-methods', label: 'Payment Methods' },
-        { id: 'failed-payments', label: 'Failed Payments' },
-        { id: 'refund-processing', label: 'Refund Processing' }
-      ]
-    },
-    {
-      id: 'products',
-      label: 'Product Management',
-      icon: Package,
-      color: 'text-purple-500',
-      submenu: [
-        { id: 'product-catalog-overview', label: 'Product Catalog Overview' },
-        { id: 'all-products', label: 'All Products' },
-        { id: 'featured-products', label: 'Featured Products' },
-        { id: 'best-sellers', label: 'Best Sellers' },
-        { id: 'product-search', label: 'Product Search' },
-        { id: 'category-structure', label: 'Category Structure' },
-        { id: 'category-analytics', label: 'Category Analytics' },
-        { id: 'pending-approval', label: 'Pending Approval' },
-        { id: 'rejected-products', label: 'Rejected Products' },
-        { id: 'content-review', label: 'Content Review' },
-        { id: 'quality-control', label: 'Quality Control' },
-        { id: 'inventory-management-overview', label: 'Inventory Management Overview' },
-        { id: 'stock-overview', label: 'Stock Overview' },
-        { id: 'low-stock-alerts', label: 'Low Stock Alerts' },
-        { id: 'warehouse-management', label: 'Warehouse Management' },
-        { id: 'inventory-reports', label: 'Inventory Reports' },
-        { id: 'product-import-export', label: 'Product Import/Export' },
-        { id: 'market-trends', label: 'Market Trends' }
-      ]
-    },
-    {
-      id: 'customers',
+      id: 'customer-management',
       label: 'Customer Management',
       icon: UserCheck,
-      color: 'text-indigo-500',
-      submenu: [
-        { id: 'customer-overview', label: 'Customer Overview' },
-        { id: 'all-customers', label: 'All Customers' },
-        { id: 'vip-customers', label: 'VIP Customers' },
-        { id: 'customer-segments', label: 'Customer Segments' },
-        { id: 'customer-search', label: 'Customer Search' },
-        { id: 'customer-analytics', label: 'Customer Analytics' },
-        { id: 'customer-behavior', label: 'Customer Behavior' },
-        { id: 'purchase-history', label: 'Purchase History' },
-        { id: 'clv', label: 'Customer Lifetime Value' },
-        { id: 'loyalty-analysis', label: 'Loyalty Analysis' },
-        { id: 'customer-support', label: 'Customer Support' },
-        { id: 'live-chat', label: 'Live Chat' },
-        { id: 'feedback-reviews', label: 'Feedback & Reviews' }
+      color: 'text-green-500',
+      submenus: [
+        { id: 'customer-overview', label: 'Customer Overview', icon: Eye },
+        { id: 'customer-database', label: 'Customer Database', icon: Database },
+        { id: 'customer-analytics', label: 'Customer Analytics', icon: BarChart3 },
+        { id: 'customer-search', label: 'Customer Search', icon: Search },
+        { id: 'customer-segments', label: 'Customer Segments', icon: Filter },
+        { id: 'vip-customers', label: 'VIP Customers', icon: Star },
+        { id: 'purchase-history', label: 'Purchase History', icon: Archive },
+        { id: 'customer-behavior', label: 'Customer Behavior', icon: Activity },
+        { id: 'clv-analysis', label: 'CLV Analysis', icon: TrendingUp },
+        { id: 'loyalty-analysis', label: 'Loyalty Analysis', icon: Award },
+        { id: 'customer-support', label: 'Customer Support', icon: Headphones },
+        { id: 'live-chat', label: 'Live Chat', icon: MessageSquare },
+        { id: 'feedback-reviews', label: 'Feedback & Reviews', icon: Star }
       ]
     },
     {
-      id: 'vendors',
+      id: 'vendor-management',
       label: 'Vendor Management',
       icon: Store,
+      color: 'text-purple-500',
+      submenus: [
+        { id: 'vendor-directory', label: 'Vendor Directory', icon: Database },
+        { id: 'active-vendors', label: 'Active Vendors', icon: CheckCircle },
+        { id: 'pending-applications', label: 'Pending Applications', icon: Clock },
+        { id: 'suspended-vendors', label: 'Suspended Vendors', icon: AlertTriangle },
+        { id: 'vendor-search', label: 'Vendor Search', icon: Search },
+        { id: 'vendor-analytics', label: 'Vendor Analytics', icon: BarChart3 },
+        { id: 'nid-verification', label: 'NID Verification', icon: FileCheck },
+        { id: 'tin-verification', label: 'TIN Verification', icon: FileText },
+        { id: 'trade-license-verification', label: 'Trade License', icon: Briefcase },
+        { id: 'bank-account-verification', label: 'Bank Account', icon: CreditCard },
+        { id: 'document-review', label: 'Document Review', icon: FileCheck },
+        { id: 'vendor-performance', label: 'Performance', icon: TrendingUp },
+        { id: 'performance-metrics', label: 'Performance Metrics', icon: Target },
+        { id: 'performance-reports', label: 'Performance Reports', icon: FileText },
+        { id: 'vendor-scorecard', label: 'Vendor Scorecard', icon: Award },
+        { id: 'rating-management', label: 'Rating Management', icon: Star },
+        { id: 'vendor-payments', label: 'Vendor Payments', icon: CreditCard },
+        { id: 'commission-tracking', label: 'Commission Tracking', icon: DollarSign },
+        { id: 'payout-processing', label: 'Payout Processing', icon: Zap },
+        { id: 'revenue-sharing', label: 'Revenue Sharing', icon: PieChart },
+        { id: 'vendor-support', label: 'Vendor Support', icon: Headphones }
+      ]
+    },
+    {
+      id: 'product-management',
+      label: 'Product Management',
+      icon: Package,
+      color: 'text-orange-500',
+      submenus: [
+        { id: 'product-catalog', label: 'Product Catalog', icon: Database },
+        { id: 'all-products', label: 'All Products', icon: Package },
+        { id: 'product-search', label: 'Product Search', icon: Search },
+        { id: 'featured-products', label: 'Featured Products', icon: Star },
+        { id: 'category-management', label: 'Category Management', icon: Filter },
+        { id: 'category-structure', label: 'Category Structure', icon: Map },
+        { id: 'pending-approval', label: 'Pending Approval', icon: Clock },
+        { id: 'content-review', label: 'Content Review', icon: FileCheck },
+        { id: 'quality-control', label: 'Quality Control', icon: Shield },
+        { id: 'rejected-products', label: 'Rejected Products', icon: AlertTriangle },
+        { id: 'inventory-management', label: 'Inventory Management', icon: Archive },
+        { id: 'stock-overview', label: 'Stock Overview', icon: Eye },
+        { id: 'low-stock-alerts', label: 'Low Stock Alerts', icon: AlertTriangle },
+        { id: 'product-analytics', label: 'Product Analytics', icon: BarChart3 },
+        { id: 'best-sellers', label: 'Best Sellers', icon: TrendingUp },
+        { id: 'market-trends', label: 'Market Trends', icon: Activity }
+      ]
+    },
+    {
+      id: 'order-management',
+      label: 'Order Management',
+      icon: ShoppingCart,
+      color: 'text-red-500',
+      submenus: [
+        { id: 'order-overview', label: 'Order Overview', icon: Eye },
+        { id: 'all-orders', label: 'All Orders', icon: ShoppingCart },
+        { id: 'new-orders', label: 'New Orders', icon: Zap },
+        { id: 'processing-orders', label: 'Processing Orders', icon: Clock },
+        { id: 'shipped-orders', label: 'Shipped Orders', icon: Truck },
+        { id: 'delivered-orders', label: 'Delivered Orders', icon: CheckCircle },
+        { id: 'order-tracking', label: 'Order Tracking', icon: Map },
+        { id: 'bulk-actions', label: 'Bulk Actions', icon: Archive },
+        { id: 'payment-status', label: 'Payment Status', icon: CreditCard },
+        { id: 'payment-methods', label: 'Payment Methods', icon: DollarSign },
+        { id: 'refund-processing', label: 'Refund Processing', icon: AlertTriangle },
+        { id: 'order-reports', label: 'Order Reports', icon: FileText },
+        { id: 'performance-metrics-orders', label: 'Performance Metrics', icon: Target }
+      ]
+    },
+    {
+      id: 'sales-management',
+      label: 'Sales Management',
+      icon: TrendingUp,
       color: 'text-emerald-500',
-      submenu: [
-        { id: 'vendor-overview', label: 'Vendor Overview' },
-        { id: 'active-vendors', label: 'Active Vendors' },
-        { id: 'pending-applications', label: 'Pending Applications' },
-        { id: 'suspended-vendors', label: 'Suspended Vendors' },
-        { id: 'vendor-directory', label: 'Vendor Directory' },
-        { id: 'vendor-search', label: 'Vendor Search' },
-        { id: 'vendor-analytics', label: 'Vendor Analytics' },
-        { id: 'vendor-performance', label: 'Vendor Performance' },
-        { id: 'vendor-performance-metrics', label: 'Vendor Performance Metrics' },
-        { id: 'vendor-performance-reports', label: 'Vendor Performance Reports' },
-        { id: 'vendor-scorecard', label: 'Vendor Scorecard' },
-        { id: 'rating-management', label: 'Rating Management' },
-        { id: 'vendor-onboarding', label: 'Vendor Onboarding' },
-        { id: 'vendor-verification', label: 'Vendor Verification' },
-        { id: 'nid-verification', label: 'NID Verification' },
-        { id: 'tin-verification', label: 'TIN Verification' },
-        { id: 'trade-license-verification', label: 'Trade License Verification' },
-        { id: 'bank-account-verification', label: 'Bank Account Verification' },
-        { id: 'document-review', label: 'Document Review' },
-        { id: 'vendor-payments', label: 'Vendor Payments' },
-        { id: 'payout-processing', label: 'Payout Processing' },
-        { id: 'commission-tracking', label: 'Commission Tracking' },
-        { id: 'revenue-sharing', label: 'Revenue Sharing' },
-        { id: 'vendor-support', label: 'Vendor Support' }
+      submenus: [
+        { id: 'sales-overview', label: 'Sales Overview', icon: Eye },
+        { id: 'revenue-dashboard', label: 'Revenue Dashboard', icon: DollarSign },
+        { id: 'revenue-analytics', label: 'Revenue Analytics', icon: BarChart3 },
+        { id: 'profit-margins', label: 'Profit Margins', icon: TrendingUp },
+        { id: 'cost-analysis', label: 'Cost Analysis', icon: PieChart },
+        { id: 'roi-tracking', label: 'ROI Tracking', icon: Target },
+        { id: 'sales-reports', label: 'Sales Reports', icon: FileText },
+        { id: 'detailed-reports', label: 'Detailed Reports', icon: FileCheck },
+        { id: 'comparative-analysis', label: 'Comparative Analysis', icon: BarChart3 },
+        { id: 'export-data', label: 'Export Data', icon: Archive }
+      ]
+    },
+    {
+      id: 'logistics-management',
+      label: 'Logistics',
+      icon: Truck,
+      color: 'text-indigo-500',
+      submenus: [
+        { id: 'courier-partners', label: 'Courier Partners', icon: Truck },
+        { id: 'delivery-management', label: 'Delivery Management', icon: Map },
+        { id: 'delivery-tracking', label: 'Delivery Tracking', icon: Eye },
+        { id: 'shipping-zones', label: 'Shipping Zones', icon: Globe },
+        { id: 'delivery-performance', label: 'Delivery Performance', icon: TrendingUp },
+        { id: 'returns-exchanges', label: 'Returns & Exchanges', icon: AlertTriangle }
+      ]
+    },
+    {
+      id: 'payment-management',
+      label: 'Payment Management',
+      icon: DollarSign,
+      color: 'text-yellow-500',
+      submenus: [
+        { id: 'revenue-dashboard-payment', label: 'Revenue Dashboard', icon: DollarSign },
+        { id: 'payment-gateways', label: 'Payment Gateways', icon: CreditCard },
+        { id: 'vendor-payouts', label: 'Vendor Payouts', icon: Zap },
+        { id: 'transaction-monitoring', label: 'Transaction Monitoring', icon: Eye },
+        { id: 'financial-reports', label: 'Financial Reports', icon: FileText }
       ]
     },
     {
       id: 'marketing',
       label: 'Marketing',
-      icon: Megaphone,
+      icon: Target,
       color: 'text-pink-500',
-      submenu: [
-        { id: 'marketing-overview', label: 'Marketing Overview' },
-        { id: 'campaigns', label: 'Campaigns' },
-        { id: 'promotions', label: 'Promotions' },
-        { id: 'discount-management', label: 'Discount Management' },
-        { id: 'coupon-management', label: 'Coupon Management' },
-        { id: 'email-marketing', label: 'Email Marketing' },
-        { id: 'sms-marketing', label: 'SMS Marketing' },
-        { id: 'push-notifications', label: 'Push Notifications' },
-        { id: 'social-media', label: 'Social Media' },
-        { id: 'content-management', label: 'Content Management' },
-        { id: 'seo-optimization', label: 'SEO Optimization' },
-        { id: 'affiliate-program', label: 'Affiliate Program' },
-        { id: 'referral-program', label: 'Referral Program' },
-        { id: 'loyalty-program', label: 'Loyalty Program' },
-        { id: 'marketing-analytics', label: 'Marketing Analytics' }
+      submenus: [
+        { id: 'marketing-campaigns', label: 'Campaigns', icon: Target },
+        { id: 'promotions-discounts', label: 'Promotions & Discounts', icon: Star },
+        { id: 'email-marketing', label: 'Email Marketing', icon: MessageSquare }
       ]
     },
     {
       id: 'analytics',
       label: 'Analytics',
       icon: BarChart3,
-      color: 'text-yellow-500',
-      submenu: [
-        { id: 'analytics-overview', label: 'Analytics Overview' },
-        { id: 'traffic-analytics', label: 'Traffic Analytics' },
-        { id: 'conversion-analytics', label: 'Conversion Analytics' },
-        { id: 'behavior-analytics', label: 'Behavior Analytics' },
-        { id: 'funnel-analysis', label: 'Funnel Analysis' },
-        { id: 'cohort-analysis', label: 'Cohort Analysis' },
-        { id: 'a-b-testing', label: 'A/B Testing' },
-        { id: 'heatmaps', label: 'Heatmaps' },
-        { id: 'user-journey', label: 'User Journey' },
-        { id: 'predictive-analytics', label: 'Predictive Analytics' },
-        { id: 'custom-reports', label: 'Custom Reports' },
-        { id: 'data-visualization', label: 'Data Visualization' },
-        { id: 'export-analytics', label: 'Export Analytics' }
-      ]
-    },
-    {
-      id: 'financials',
-      label: 'Payment Management',
-      icon: CreditCard,
-      color: 'text-teal-500',
-      submenu: [
-        { id: 'payment-overview', label: 'Payment Overview' },
-        { id: 'payment-processing', label: 'Payment Processing' },
-        { id: 'payment-gateways', label: 'Payment Gateways' },
-        { id: 'payment-methods', label: 'Payment Methods' },
-        { id: 'transaction-history', label: 'Transaction History' },
-        { id: 'failed-transactions', label: 'Failed Transactions' },
-        { id: 'refunds-chargebacks', label: 'Refunds & Chargebacks' },
-        { id: 'payment-disputes', label: 'Payment Disputes' },
-        { id: 'payment-analytics', label: 'Payment Analytics' },
-        { id: 'fraud-detection', label: 'Fraud Detection' },
-        { id: 'compliance-reporting', label: 'Compliance Reporting' },
-        { id: 'tax-management', label: 'Tax Management' },
-        { id: 'financial-reports', label: 'Financial Reports' }
-      ]
-    },
-    {
-      id: 'logistics',
-      label: 'Logistics',
-      icon: Truck,
-      color: 'text-amber-500',
-      submenu: [
-        { id: 'logistics-overview', label: 'Logistics Overview' },
-        { id: 'delivery-tracking', label: 'Delivery Tracking' },
-        { id: 'delivery-performance', label: 'Delivery Performance' },
-        { id: 'courier-partners', label: 'Courier Partners' },
-        { id: 'shipping-zones', label: 'Shipping Zones' },
-        { id: 'shipping-rates', label: 'Shipping Rates' },
-        { id: 'warehouse-management', label: 'Warehouse Management' },
-        { id: 'inventory-tracking', label: 'Inventory Tracking' },
-        { id: 'route-optimization', label: 'Route Optimization' },
-        { id: 'delivery-analytics', label: 'Delivery Analytics' }
+      color: 'text-blue-600',
+      submenus: [
+        { id: 'business-intelligence', label: 'Business Intelligence', icon: BarChart3 },
+        { id: 'financial-reports-analytics', label: 'Financial Reports', icon: FileText },
+        { id: 'operational-reports', label: 'Operational Reports', icon: Activity }
       ]
     },
     {
       id: 'communications',
       label: 'Communications',
       icon: MessageSquare,
-      color: 'text-rose-500',
-      submenu: [
-        { id: 'communications-overview', label: 'Communications Overview' },
-        { id: 'notifications', label: 'Notifications' },
-        { id: 'email-templates', label: 'Email Templates' },
-        { id: 'sms-templates', label: 'SMS Templates' },
-        { id: 'push-notifications', label: 'Push Notifications' },
-        { id: 'broadcast-messages', label: 'Broadcast Messages' },
-        { id: 'automated-messages', label: 'Automated Messages' },
-        { id: 'message-analytics', label: 'Message Analytics' }
+      color: 'text-teal-500',
+      submenus: [
+        { id: 'notifications', label: 'Notifications', icon: Bell },
+        { id: 'messaging', label: 'Messaging', icon: MessageSquare },
+        { id: 'announcements', label: 'Announcements', icon: Globe }
       ]
     },
     {
       id: 'security',
-      label: 'Security & Compliance',
+      label: 'Security',
       icon: Shield,
-      color: 'text-red-500',
-      submenu: [
-        { id: 'security-overview', label: 'Security Overview' },
-        { id: 'security-monitoring', label: 'Security Monitoring' },
-        { id: 'threat-detection', label: 'Threat Detection' },
-        { id: 'fraud-prevention', label: 'Fraud Prevention' },
-        { id: 'access-logs', label: 'Access Logs' },
-        { id: 'security-alerts', label: 'Security Alerts' },
-        { id: 'compliance', label: 'Compliance' },
-        { id: 'data-protection', label: 'Data Protection' },
-        { id: 'privacy-settings', label: 'Privacy Settings' },
-        { id: 'audit-trails', label: 'Audit Trails' },
-        { id: 'compliance-reports', label: 'Compliance Reports' }
+      color: 'text-red-600',
+      submenus: [
+        { id: 'security-monitoring', label: 'Security Monitoring', icon: Shield },
+        { id: 'compliance', label: 'Compliance', icon: FileCheck }
       ]
     },
     {
@@ -339,25 +302,35 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       label: 'Settings',
       icon: Settings,
       color: 'text-gray-500',
-      submenu: [
-        { id: 'system-settings', label: 'System Settings' },
-        { id: 'general-settings', label: 'General Settings' },
-        { id: 'user-management-settings', label: 'User Management Settings' },
-        { id: 'role-permissions-settings', label: 'Role & Permissions Settings' },
-        { id: 'api-configuration', label: 'API Configuration' },
-        { id: 'platform-configuration', label: 'Platform Configuration' },
-        { id: 'store-settings', label: 'Store Settings' },
-        { id: 'payment-configuration', label: 'Payment Configuration' },
-        { id: 'shipping-configuration', label: 'Shipping Configuration' },
-        { id: 'tax-settings', label: 'Tax Settings' }
+      submenus: [
+        { id: 'system-settings', label: 'System Settings', icon: Settings },
+        { id: 'platform-configuration', label: 'Platform Configuration', icon: Globe }
       ]
     }
   ];
 
   return (
     <div className={`fixed left-0 top-[125px] bottom-0 bg-gradient-to-b from-gray-50 via-white to-gray-50 text-gray-800 transition-all duration-300 z-30 shadow-lg border-r border-gray-200 ${
-      collapsed ? 'w-16' : 'w-80'
-    }`}>
+      collapsed ? 'w-12' : 'w-56'
+    }`} style={{ height: 'calc(100vh - 125px + 144px)' }}>
+      {/* Custom scrollbar styles */}
+      <style>{`
+        .custom-scrollbar::-webkit-scrollbar {
+          width: 4px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-track {
+          background: #f1f5f9;
+          border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb {
+          background: #cbd5e1;
+          border-radius: 2px;
+        }
+        .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+          background: #94a3b8;
+        }
+      `}</style>
+
       {/* Header */}
       <div className="flex items-center justify-between p-3 border-b border-gray-200 bg-white/80 backdrop-blur-sm">
         {!collapsed && (
@@ -378,87 +351,83 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
       </div>
 
       {/* Scrollable Navigation */}
-      <div className="flex-1 h-[calc(100vh-180px)] overflow-hidden">
-        <div 
-          className="h-full overflow-y-auto pr-2"
-          style={{
-            scrollbarWidth: 'thin',
-            scrollbarColor: '#cbd5e1 #f1f5f9'
-          }}
-        >
-          <style jsx>{`
-            div::-webkit-scrollbar {
-              width: 8px;
-            }
-            div::-webkit-scrollbar-track {
-              background: #f1f5f9;
-              border-radius: 4px;
-            }
-            div::-webkit-scrollbar-thumb {
-              background: #cbd5e1;
-              border-radius: 4px;
-            }
-            div::-webkit-scrollbar-thumb:hover {
-              background: #94a3b8;
-            }
-          `}</style>
-          
+      <div className="flex-1 h-[calc(100vh-200px)] overflow-hidden">
+        <ScrollArea className="h-full custom-scrollbar">
           <nav className="p-2">
-            {menuItems.map((item) => {
-              const Icon = item.icon;
-              const isActive = activeTab === item.id;
-              const isExpanded = expandedMenus[item.id];
-              const hasSubmenu = item.submenu && item.submenu.length > 0;
+            {menuStructure.map((section) => {
+              const SectionIcon = section.icon;
+              const isExpanded = expandedSections.has(section.id);
+              const hasActiveSubmenu = section.submenus?.some(sub => sub.id === activeTab);
               
               return (
-                <div key={item.id} className="mb-1">
-                  <button
-                    onClick={() => handleMenuClick(item.id, hasSubmenu)}
-                    className={`w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-white/80 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
-                      isActive ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
-                    }`}
+                <div key={section.id} className="mb-1">
+                  <Collapsible
+                    open={isExpanded}
+                    onOpenChange={() => toggleSection(section.id)}
                   >
-                    <div className="flex items-center">
-                      <Icon 
-                        size={16} 
-                        className={`flex-shrink-0 transition-colors ${
-                          isActive ? 'text-blue-600' : item.color
-                        } group-hover:${item.color}`} 
-                      />
-                      {!collapsed && (
-                        <span className="ml-2.5 font-medium">{item.label}</span>
-                      )}
-                    </div>
-                    {!collapsed && hasSubmenu && (
-                      <div className="flex-shrink-0 ml-2">
-                        {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-                      </div>
+                    <CollapsibleTrigger asChild>
+                      <Button
+                        variant="ghost"
+                        className={`w-full flex items-center justify-between px-3 py-2.5 text-left hover:bg-white/80 hover:shadow-sm transition-all duration-200 rounded-lg text-xs group ${
+                          hasActiveSubmenu || activeTab === section.id ? 'bg-white shadow-md border-l-4 border-blue-500 text-blue-700' : 'text-gray-600'
+                        }`}
+                        onClick={() => {
+                          if (!section.submenus || section.submenus.length === 0) {
+                            handleMenuClick(section.id);
+                          }
+                        }}
+                      >
+                        <div className="flex items-center">
+                          <SectionIcon 
+                            size={16} 
+                            className={`flex-shrink-0 transition-colors ${
+                              hasActiveSubmenu || activeTab === section.id ? 'text-blue-600' : section.color
+                            } group-hover:${section.color}`} 
+                          />
+                          {!collapsed && (
+                            <span className="ml-2.5 font-medium">{section.label}</span>
+                          )}
+                        </div>
+                        {!collapsed && section.submenus && section.submenus.length > 0 && (
+                          <div className="flex-shrink-0">
+                            {isExpanded ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
+                          </div>
+                        )}
+                      </Button>
+                    </CollapsibleTrigger>
+                    
+                    {!collapsed && section.submenus && section.submenus.length > 0 && (
+                      <CollapsibleContent className="space-y-1 mt-1">
+                        {section.submenus.map((submenu) => {
+                          const SubmenuIcon = submenu.icon;
+                          const isActive = activeTab === submenu.id;
+                          
+                          return (
+                            <button
+                              key={submenu.id}
+                              onClick={() => handleMenuClick(submenu.id)}
+                              className={`w-full flex items-center px-6 py-2 text-left hover:bg-white/60 hover:shadow-sm transition-all duration-200 rounded-lg text-xs ml-2 ${
+                                isActive ? 'bg-blue-50 text-blue-700 font-medium border-l-2 border-blue-400' : 'text-gray-600'
+                              }`}
+                            >
+                              <SubmenuIcon 
+                                size={14} 
+                                className={`flex-shrink-0 mr-2 ${
+                                  isActive ? 'text-blue-600' : 'text-gray-400'
+                                }`} 
+                              />
+                              <span className="text-xs">{submenu.label}</span>
+                            </button>
+                          );
+                        })}
+                      </CollapsibleContent>
                     )}
-                  </button>
-
-                  {/* Submenu */}
-                  {!collapsed && hasSubmenu && isExpanded && (
-                    <div className="ml-6 mt-1 space-y-1">
-                      {item.submenu.map((subItem) => (
-                        <button
-                          key={subItem.id}
-                          onClick={() => setActiveTab(subItem.id)}
-                          className={`w-full text-left px-3 py-2 text-xs rounded-md transition-colors ${
-                            activeTab === subItem.id
-                              ? 'bg-blue-50 text-blue-700 font-medium'
-                              : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50'
-                          }`}
-                        >
-                          {subItem.label}
-                        </button>
-                      ))}
-                    </div>
-                  )}
+                  </Collapsible>
                 </div>
               );
             })}
           </nav>
-        </div>
+        </ScrollArea>
       </div>
 
       {/* Footer */}

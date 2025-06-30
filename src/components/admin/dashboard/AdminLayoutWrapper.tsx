@@ -38,8 +38,9 @@ export const AdminLayoutWrapper: React.FC<AdminLayoutWrapperProps> = ({
         <div className="flex pt-[125px]">
           {/* Collapsible Sidebar */}
           <ComprehensiveAdminSidebar
-            activeTab={selectedMenu}
-            setActiveTab={onMenuChange}
+            selectedMenu={selectedMenu}
+            selectedSubmenu={selectedSubmenu}
+            onMenuChange={onMenuChange}
             collapsed={sidebarCollapsed}
             setCollapsed={setSidebarCollapsed}
           />

@@ -1,3 +1,4 @@
+
 import React, { useState, useEffect } from 'react';
 import { 
   RevenueAnalytics, 
@@ -47,7 +48,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
         return <EnhancedOverviewDashboard />;
       
       case 'dashboard-analytics':
-        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics - Fixed Routing)');
+        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics - FIXED ROUTING)');
         return <AnalyticsDashboard />;
       
       case 'reports':
@@ -57,17 +58,17 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       case 'metrics':
       case 'real-time-metrics':
       case 'realtime-metrics':
-        console.log('✅ Rendering RealtimeMetricsSection');
+        console.log('✅ Rendering RealtimeMetricsSection for real-time metrics');
         return <RealtimeMetricsSection />;
       
       case 'kpi-monitoring':
       case 'kpi_monitoring':
-        console.log('✅ Rendering KPIMonitoringDashboard');
+        console.log('✅ Rendering KPIMonitoringDashboard for KPI monitoring');
         return <KPIMonitoringDashboard />;
       
       case 'performance-insights':
       case 'performance_insights':
-        console.log('✅ Rendering PerformanceInsightsDashboard');
+        console.log('✅ Rendering PerformanceInsightsDashboard for performance insights');
         return <PerformanceInsightsDashboard />;
       
       case 'revenue-analytics':
@@ -119,7 +120,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
       
       default:
         console.log('⚠️ DashboardContent - no matching submenu found for:', normalizedSubmenu);
-        console.log('⚠️ Available submenus should include: overview, dashboard-analytics, reports, metrics, etc.');
+        console.log('⚠️ Available submenus should include: overview, dashboard-analytics, real-time-metrics, kpi-monitoring, etc.');
         console.log('⚠️ Falling back to EnhancedOverviewDashboard');
         return <EnhancedOverviewDashboard />;
     }

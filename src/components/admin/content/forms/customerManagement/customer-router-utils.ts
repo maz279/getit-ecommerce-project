@@ -1,4 +1,3 @@
-
 /**
  * GetIt Bangladesh Multi-Vendor Ecommerce Platform
  * Customer Management Router Utilities
@@ -200,7 +199,19 @@ export const trackRouteAnalytics = (routeData: Partial<RouteAnalytics>): void =>
 
   // Send to analytics service
   if (window.analytics) {
-    window.analytics.track('route_access', analytics);
+    // Convert RouteAnalytics to Record<string, unknown> for analytics tracking
+    const analyticsData: Record<string, unknown> = {
+      route: analytics.route,
+      component: analytics.component,
+      loadTime: analytics.loadTime,
+      errorRate: analytics.errorRate,
+      usageCount: analytics.usageCount,
+      lastAccessed: analytics.lastAccessed.toISOString(),
+      userAgent: analytics.userAgent,
+      location: analytics.location
+    };
+    
+    window.analytics.track('route_access', analyticsData);
   }
 
   console.log('Route Analytics:', analytics);

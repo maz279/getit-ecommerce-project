@@ -2,7 +2,7 @@
 import React, { ReactNode } from 'react';
 import { TooltipProvider } from '@/components/ui/tooltip';
 import { AdminDashboardHeader } from '@/components/admin/AdminDashboardHeader';
-import { ComprehensiveAdminSidebar } from '@/components/admin/ComprehensiveAdminSidebar';
+import { AdminSidebar } from '@/components/admin/AdminSidebar';
 import { ComprehensiveMainContent } from '@/components/admin/ComprehensiveMainContent';
 import { AdminDashboardFooter } from '@/components/admin/AdminDashboardFooter';
 
@@ -37,7 +37,7 @@ export const AdminLayoutWrapper: React.FC<AdminLayoutWrapperProps> = ({
         {/* Content Area with top margin for fixed header */}
         <div className="flex pt-[125px]">
           {/* Collapsible Sidebar */}
-          <ComprehensiveAdminSidebar
+          <AdminSidebar
             activeTab={selectedMenu}
             setActiveTab={onMenuChange}
             collapsed={sidebarCollapsed}
@@ -45,7 +45,7 @@ export const AdminLayoutWrapper: React.FC<AdminLayoutWrapperProps> = ({
           />
 
           {/* Main Content - Dynamic margin based on sidebar state */}
-          <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-80'}`}>
+          <main className={`flex-1 transition-all duration-300 ${sidebarCollapsed ? 'ml-16' : 'ml-64'}`}>
             {/* Main Content */}
             <div className="min-h-screen">
               <ComprehensiveMainContent 

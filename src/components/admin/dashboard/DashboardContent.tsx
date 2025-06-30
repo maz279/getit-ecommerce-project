@@ -48,6 +48,7 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
         return <EnhancedOverviewDashboard />;
       
       case 'analytics':
+      case 'analytics-dashboard':
         console.log('✅ Rendering AnalyticsDashboard');
         return <AnalyticsDashboard />;
       

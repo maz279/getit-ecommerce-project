@@ -12,7 +12,7 @@ interface PaymentGateway {
   name: string;
   provider: string;
   is_active: boolean;
-  supported_currencies: string[];
+  supported_currencies: any; // Changed from string[] to any to handle Json type
   transaction_fee_percentage: number;
   transaction_fee_fixed: number;
 }
@@ -169,7 +169,10 @@ export default function PaymentGatewayManager() {
                     </Badge>
                   </TableCell>
                   <TableCell>
-                    {gateway.supported_currencies.join(', ')}
+                    {Array.isArray(gateway.supported_currencies) 
+                      ? gateway.supported_currencies.join(', ')
+                      : JSON.stringify(gateway.supported_currencies)
+                    }
                   </TableCell>
                   <TableCell>
                     {gateway.transaction_fee_percentage}% + ৳{gateway.transaction_fee_fixed}

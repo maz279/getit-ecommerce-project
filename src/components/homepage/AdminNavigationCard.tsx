@@ -2,7 +2,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { LayoutDashboard, TrendingUp, Users, Package, Settings, ShoppingCart } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Users, Package, Settings, ShoppingCart, Truck, Warehouse, CreditCard } from 'lucide-react';
 import { useAuth } from '@/context/AuthContext';
 
 export const AdminNavigationCard: React.FC = () => {
@@ -43,6 +43,27 @@ export const AdminNavigationCard: React.FC = () => {
       color: 'text-orange-600 bg-orange-50'
     },
     {
+      title: 'Fulfillment Center',
+      description: 'Logistics and shipping management',
+      icon: Truck,
+      link: '/fulfillment-dashboard',
+      color: 'text-blue-600 bg-blue-50'
+    },
+    {
+      title: 'Inventory Control',
+      description: 'Stock levels and forecasting',
+      icon: Warehouse,
+      link: '/inventory-dashboard',
+      color: 'text-green-600 bg-green-50'
+    },
+    {
+      title: 'Payment Gateways',
+      description: 'Payment processing and transactions',
+      icon: CreditCard,
+      link: '/payment-gateway-manager',
+      color: 'text-purple-600 bg-purple-50'
+    },
+    {
       title: 'Financial Reports',
       description: 'Revenue and analytics',
       icon: TrendingUp,
@@ -70,7 +91,7 @@ export const AdminNavigationCard: React.FC = () => {
         </p>
       </CardHeader>
       <CardContent>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-4 mb-6">
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4 mb-6">
           {adminFeatures.map((feature, index) => {
             const Icon = feature.icon;
             return (

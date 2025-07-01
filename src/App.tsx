@@ -39,6 +39,12 @@ const MyAccount = lazy(() => import("./pages/account/MyAccount"));
 const Orders = lazy(() => import("./pages/account/Orders"));
 const Settings = lazy(() => import("./pages/account/Settings"));
 const PaymentMethods = lazy(() => import("./pages/account/PaymentMethods"));
+const PaymentDemo = lazy(() => import("./pages/PaymentDemo"));
+
+// Logistics and Management Components
+const FulfillmentDashboard = lazy(() => import("./components/logistics/FulfillmentDashboard"));
+const InventoryDashboard = lazy(() => import("./components/inventory/InventoryDashboard"));
+const PaymentGatewayManager = lazy(() => import("./components/payment/PaymentGatewayManager"));
 
 // Customer Dashboard
 const CustomerDashboard = lazy(() => import("./pages/customer/Dashboard"));
@@ -59,7 +65,6 @@ const VendorCenter = lazy(() => import("./pages/VendorCenter"));
 const VendorRegister = lazy(() => import("./pages/VendorRegister"));
 const VendorDashboard = lazy(() => import("./pages/vendor/Dashboard"));
 const LiveChat = lazy(() => import("./pages/LiveChat"));
-const PaymentDemo = lazy(() => import("./pages/PaymentDemo"));
 
 // Company pages
 const AboutUs = lazy(() => import("./pages/AboutUs"));
@@ -128,11 +133,11 @@ const App = () => (
                 
                 {/* Vendor */}
                 <Route path="/seller-center" element={<VendorCenter />} />
-                <Route path="/live-chat" element={<LiveChat />} />
-          <Route path="/payment-demo" element={<PaymentDemo />} />
-          <Route path="/fulfillment-dashboard" element={<FulfillmentDashboard />} />
-          <Route path="/inventory-dashboard" element={<InventoryDashboard />} />
-          <Route path="/payment-gateway-manager" element={<PaymentGatewayManager />} />
+                 <Route path="/live-chat" element={<LiveChat />} />
+                 <Route path="/payment-demo" element={<PaymentDemo />} />
+                 <Route path="/fulfillment-dashboard" element={<FulfillmentDashboard />} />
+                 <Route path="/inventory-dashboard" element={<InventoryDashboard />} />
+                 <Route path="/payment-gateway-manager" element={<PaymentGatewayManager />} />
                 <Route path="/vendor/register" element={<VendorRegister />} />
                 <Route path="/vendor/dashboard" element={<VendorDashboard />} />
                 

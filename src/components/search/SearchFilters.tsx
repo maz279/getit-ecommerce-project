@@ -63,7 +63,7 @@ export const SearchFilters: React.FC<SearchFiltersProps> = ({
 
   const clearAllFilters = () => {
     onFiltersChange({
-      priceRange: [0, 100000],
+      priceRange: [0, 100000] as [number, number],
       categories: [],
       brands: [],
       rating: 0,

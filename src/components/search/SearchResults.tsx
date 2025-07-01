@@ -38,7 +38,7 @@ export const SearchResults: React.FC<SearchResultsProps> = ({
   const [sortBy, setSortBy] = useState<SortOption>('relevance');
   const [showFilters, setShowFilters] = useState(false);
   const [filters, setFilters] = useState({
-    priceRange: [0, 100000],
+    priceRange: [0, 100000] as [number, number],
     categories: [] as string[],
     brands: [] as string[],
     rating: 0,

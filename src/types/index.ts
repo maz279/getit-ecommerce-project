@@ -31,11 +31,16 @@ export interface Product {
   description_bn?: string;
   sku: string;
   price: number;
+  originalPrice?: number;
   stock_quantity: number;
   images: string[];
   category_id: string;
   vendor_id: string;
   is_active: boolean;
+  featured?: boolean;
+  is_new?: boolean;
+  averageRating?: number;
+  reviewCount?: number;
   created_at: string;
   updated_at: string;
 }
@@ -44,6 +49,7 @@ export interface Vendor {
   id: string;
   user_id: string;
   business_name: string;
+  logo?: string;
   trade_license?: string;
   status: 'pending' | 'approved' | 'suspended';
   commission_rate: number;

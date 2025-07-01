@@ -5774,6 +5774,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_expired_rate_limits: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       is_admin_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean

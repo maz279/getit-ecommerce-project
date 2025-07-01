@@ -1,35 +1,14 @@
-
 import React, { useState } from 'react';
-import { useAdminRouteHandler } from '@/components/admin/dashboard/AdminRouteHandler';
 import { AdminLayoutWrapper } from '@/components/admin/dashboard/AdminLayoutWrapper';
+import { DashboardContent } from '@/components/admin/dashboard/DashboardContent';
 
 const AdminDashboard: React.FC = () => {
+  const [selectedMenu, setSelectedMenu] = useState('dashboard');
+  const [selectedSubmenu, setSelectedSubmenu] = useState('overview');
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  
-  const {
-    selectedMenu,
-    selectedSubmenu,
-    handleMenuChange,
-    handleSubmenuChange
-  } = useAdminRouteHandler();
-
-  // Mock user profile data
-  const userProfile = {
-    name: 'Admin User',
-    email: 'admin@getit.com',
-    role: 'System Administrator',
-    avatar: null
-  };
 
   return (
-    <AdminLayoutWrapper
-      selectedMenu={selectedMenu}
-      selectedSubmenu={selectedSubmenu}
-      sidebarCollapsed={sidebarCollapsed}
-      setSidebarCollapsed={setSidebarCollapsed}
-      onMenuChange={handleMenuChange}
-      userProfile={userProfile}
-    />
+    <DashboardContent selectedSubmenu={selectedSubmenu} />
   );
 };
 

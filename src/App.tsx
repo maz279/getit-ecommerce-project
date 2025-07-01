@@ -39,6 +39,12 @@ const Orders = lazy(() => import("./pages/account/Orders"));
 const Settings = lazy(() => import("./pages/account/Settings"));
 const PaymentMethods = lazy(() => import("./pages/account/PaymentMethods"));
 
+// Customer Dashboard
+const CustomerDashboard = lazy(() => import("./pages/customer/Dashboard"));
+
+// User Dashboard  
+const UserDashboard = lazy(() => import("./pages/user/UserDashboard"));
+
 // Order pages
 const OrderTracking = lazy(() => import("./pages/order/OrderTracking"));
 const TrackOrder = lazy(() => import("./pages/order/TrackOrder"));
@@ -114,6 +120,10 @@ const App = () => (
                 {/* Company */}
                 <Route path="/about" element={<AboutUs />} />
                 
+                {/* Customer & User Dashboard Routes */}
+                <Route path="/customer/dashboard" element={<CustomerDashboard />} />
+                <Route path="/user/dashboard" element={<UserDashboard />} />
+
                 {/* Admin */}
                 <Route path="/admin/dashboard" element={<AdminDashboard />} />
                 

@@ -9,6 +9,98 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
+      ab_experiment_participants: {
+        Row: {
+          assigned_at: string | null
+          conversion_events: Json | null
+          experiment_id: string | null
+          id: string
+          session_id: string | null
+          user_id: string | null
+          variant_id: string
+        }
+        Insert: {
+          assigned_at?: string | null
+          conversion_events?: Json | null
+          experiment_id?: string | null
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+          variant_id: string
+        }
+        Update: {
+          assigned_at?: string | null
+          conversion_events?: Json | null
+          experiment_id?: string | null
+          id?: string
+          session_id?: string | null
+          user_id?: string | null
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_experiment_participants_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ab_experiments: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          description: string | null
+          end_date: string | null
+          experiment_name: string
+          experiment_type: string
+          id: string
+          start_date: string | null
+          statistical_significance: number | null
+          status: string | null
+          success_metrics: Json | null
+          target_audience: Json | null
+          traffic_allocation: Json | null
+          updated_at: string | null
+          variants: Json
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          end_date?: string | null
+          experiment_name: string
+          experiment_type: string
+          id?: string
+          start_date?: string | null
+          statistical_significance?: number | null
+          status?: string | null
+          success_metrics?: Json | null
+          target_audience?: Json | null
+          traffic_allocation?: Json | null
+          updated_at?: string | null
+          variants?: Json
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          end_date?: string | null
+          experiment_name?: string
+          experiment_type?: string
+          id?: string
+          start_date?: string | null
+          statistical_significance?: number | null
+          status?: string | null
+          success_metrics?: Json | null
+          target_audience?: Json | null
+          traffic_allocation?: Json | null
+          updated_at?: string | null
+          variants?: Json
+        }
+        Relationships: []
+      }
       ai_detection_settings: {
         Row: {
           configuration: Json | null
@@ -39,6 +131,57 @@ export type Database = {
           setting_type?: string
           updated_at?: string | null
           updated_by?: string | null
+        }
+        Relationships: []
+      }
+      analytics_events: {
+        Row: {
+          created_at: string | null
+          custom_properties: Json | null
+          event_action: string
+          event_category: string
+          event_label: string | null
+          event_name: string
+          event_value: number | null
+          id: string
+          ip_address: unknown | null
+          page_url: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          custom_properties?: Json | null
+          event_action: string
+          event_category: string
+          event_label?: string | null
+          event_name: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          custom_properties?: Json | null
+          event_action?: string
+          event_category?: string
+          event_label?: string | null
+          event_name?: string
+          event_value?: number | null
+          id?: string
+          ip_address?: unknown | null
+          page_url?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -1013,6 +1156,87 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      fraud_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          id: string
+          investigation_notes: string | null
+          order_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          risk_factors: Json | null
+          risk_score: number
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          id?: string
+          investigation_notes?: string | null
+          order_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          risk_factors?: Json | null
+          risk_score: number
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          id?: string
+          investigation_notes?: string | null
+          order_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          risk_factors?: Json | null
+          risk_score?: number
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      fraud_detection_rules: {
+        Row: {
+          action_threshold: number | null
+          created_at: string | null
+          created_by: string
+          id: string
+          is_active: boolean | null
+          risk_score_weight: number | null
+          rule_conditions: Json
+          rule_name: string
+          rule_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          action_threshold?: number | null
+          created_at?: string | null
+          created_by: string
+          id?: string
+          is_active?: boolean | null
+          risk_score_weight?: number | null
+          rule_conditions?: Json
+          rule_name: string
+          rule_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          action_threshold?: number | null
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          is_active?: boolean | null
+          risk_score_weight?: number | null
+          rule_conditions?: Json
+          rule_name?: string
+          rule_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       fulfillment_centers: {
         Row: {
@@ -3406,6 +3630,45 @@ export type Database = {
         }
         Relationships: []
       }
+      recommendation_models: {
+        Row: {
+          accuracy_metrics: Json | null
+          created_at: string | null
+          created_by: string
+          id: string
+          is_active: boolean | null
+          model_name: string
+          model_parameters: Json
+          model_type: string
+          training_data_config: Json
+          updated_at: string | null
+        }
+        Insert: {
+          accuracy_metrics?: Json | null
+          created_at?: string | null
+          created_by: string
+          id?: string
+          is_active?: boolean | null
+          model_name: string
+          model_parameters?: Json
+          model_type: string
+          training_data_config?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          accuracy_metrics?: Json | null
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          is_active?: boolean | null
+          model_name?: string
+          model_parameters?: Json
+          model_type?: string
+          training_data_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       revenue_analytics_summary: {
         Row: {
           analytics_date: string
@@ -3759,6 +4022,45 @@ export type Database = {
           },
         ]
       }
+      search_analytics: {
+        Row: {
+          click_through_rate: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          results_count: number | null
+          search_filters: Json | null
+          search_query: string
+          search_type: string | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          click_through_rate?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          results_count?: number | null
+          search_filters?: Json | null
+          search_query: string
+          search_type?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          click_through_rate?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          results_count?: number | null
+          search_filters?: Json | null
+          search_query?: string
+          search_type?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       search_index: {
         Row: {
           created_at: string | null
@@ -3949,6 +4251,92 @@ export type Database = {
           },
         ]
       }
+      suppliers: {
+        Row: {
+          certifications: Json | null
+          contact_info: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          lead_time_days: number | null
+          minimum_order_quantity: number | null
+          payment_terms: string | null
+          performance_rating: number | null
+          supplier_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          certifications?: Json | null
+          contact_info?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          lead_time_days?: number | null
+          minimum_order_quantity?: number | null
+          payment_terms?: string | null
+          performance_rating?: number | null
+          supplier_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          certifications?: Json | null
+          contact_info?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          lead_time_days?: number | null
+          minimum_order_quantity?: number | null
+          payment_terms?: string | null
+          performance_rating?: number | null
+          supplier_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      supply_chain_analytics: {
+        Row: {
+          analytics_date: string | null
+          cost_efficiency: number | null
+          created_at: string | null
+          demand_forecast: Json | null
+          id: string
+          inventory_levels: Json | null
+          on_time_delivery_rate: number | null
+          quality_score: number | null
+          supplier_id: string | null
+        }
+        Insert: {
+          analytics_date?: string | null
+          cost_efficiency?: number | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          inventory_levels?: Json | null
+          on_time_delivery_rate?: number | null
+          quality_score?: number | null
+          supplier_id?: string | null
+        }
+        Update: {
+          analytics_date?: string | null
+          cost_efficiency?: number | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          inventory_levels?: Json | null
+          on_time_delivery_rate?: number | null
+          quality_score?: number | null
+          supplier_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "supply_chain_analytics_supplier_id_fkey"
+            columns: ["supplier_id"]
+            isOneToOne: false
+            referencedRelation: "suppliers"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       system_health_logs: {
         Row: {
           alerts_triggered: Json | null
@@ -4058,6 +4446,84 @@ export type Database = {
           },
         ]
       }
+      user_interactions: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          id: string
+          interaction_data: Json | null
+          interaction_type: string
+          ip_address: unknown | null
+          product_id: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          interaction_type: string
+          ip_address?: unknown | null
+          product_id?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id: string
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          interaction_type?: string
+          ip_address?: unknown | null
+          product_id?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
+      user_preferences: {
+        Row: {
+          browsing_patterns: Json | null
+          created_at: string | null
+          id: string
+          last_updated: string | null
+          personalization_score: number | null
+          preferred_brands: Json | null
+          preferred_categories: Json | null
+          price_range: Json | null
+          purchase_history_analysis: Json | null
+          user_id: string
+        }
+        Insert: {
+          browsing_patterns?: Json | null
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          personalization_score?: number | null
+          preferred_brands?: Json | null
+          preferred_categories?: Json | null
+          price_range?: Json | null
+          purchase_history_analysis?: Json | null
+          user_id: string
+        }
+        Update: {
+          browsing_patterns?: Json | null
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          personalization_score?: number | null
+          preferred_brands?: Json | null
+          preferred_categories?: Json | null
+          price_range?: Json | null
+          purchase_history_analysis?: Json | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       user_presence: {
         Row: {
           id: string
@@ -4089,6 +4555,50 @@ export type Database = {
             columns: ["room_id"]
             isOneToOne: false
             referencedRelation: "chat_rooms"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      user_recommendations: {
+        Row: {
+          confidence_score: number
+          expires_at: string | null
+          generated_at: string | null
+          id: string
+          interaction_data: Json | null
+          model_id: string | null
+          product_id: string
+          recommendation_type: string
+          user_id: string
+        }
+        Insert: {
+          confidence_score?: number
+          expires_at?: string | null
+          generated_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          model_id?: string | null
+          product_id: string
+          recommendation_type: string
+          user_id: string
+        }
+        Update: {
+          confidence_score?: number
+          expires_at?: string | null
+          generated_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          model_id?: string | null
+          product_id?: string
+          recommendation_type?: string
+          user_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_recommendations_model_id_fkey"
+            columns: ["model_id"]
+            isOneToOne: false
+            referencedRelation: "recommendation_models"
             referencedColumns: ["id"]
           },
         ]
@@ -4150,6 +4660,63 @@ export type Database = {
           is_verified?: boolean | null
           phone?: string | null
           updated_at?: string
+        }
+        Relationships: []
+      }
+      vendor_analytics: {
+        Row: {
+          analytics_date: string
+          average_order_value: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          customer_satisfaction_score: number | null
+          geographic_data: Json | null
+          id: string
+          inventory_turnover: number | null
+          profit_margin: number | null
+          return_rate: number | null
+          top_selling_products: Json | null
+          total_orders: number | null
+          total_sales: number | null
+          total_views: number | null
+          traffic_sources: Json | null
+          vendor_id: string
+        }
+        Insert: {
+          analytics_date?: string
+          average_order_value?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          customer_satisfaction_score?: number | null
+          geographic_data?: Json | null
+          id?: string
+          inventory_turnover?: number | null
+          profit_margin?: number | null
+          return_rate?: number | null
+          top_selling_products?: Json | null
+          total_orders?: number | null
+          total_sales?: number | null
+          total_views?: number | null
+          traffic_sources?: Json | null
+          vendor_id: string
+        }
+        Update: {
+          analytics_date?: string
+          average_order_value?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          customer_satisfaction_score?: number | null
+          geographic_data?: Json | null
+          id?: string
+          inventory_turnover?: number | null
+          profit_margin?: number | null
+          return_rate?: number | null
+          top_selling_products?: Json | null
+          total_orders?: number | null
+          total_sales?: number | null
+          total_views?: number | null
+          traffic_sources?: Json | null
+          vendor_id?: string
         }
         Relationships: []
       }
@@ -4401,6 +4968,45 @@ export type Database = {
           resolved_by?: string | null
           severity_level?: string
           threshold_value?: number | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_performance_metrics: {
+        Row: {
+          benchmark_value: number | null
+          comparison_period: string | null
+          created_at: string | null
+          id: string
+          metric_name: string
+          metric_unit: string | null
+          metric_value: number
+          percentage_change: number | null
+          recorded_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          benchmark_value?: number | null
+          comparison_period?: string | null
+          created_at?: string | null
+          id?: string
+          metric_name: string
+          metric_unit?: string | null
+          metric_value: number
+          percentage_change?: number | null
+          recorded_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          benchmark_value?: number | null
+          comparison_period?: string | null
+          created_at?: string | null
+          id?: string
+          metric_name?: string
+          metric_unit?: string | null
+          metric_value?: number
+          percentage_change?: number | null
+          recorded_at?: string | null
           vendor_id?: string
         }
         Relationships: []
@@ -4697,6 +5303,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      voice_search_logs: {
+        Row: {
+          audio_duration_seconds: number | null
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          processing_time_ms: number | null
+          results_count: number | null
+          search_query: string | null
+          transcription: string | null
+          user_id: string | null
+        }
+        Insert: {
+          audio_duration_seconds?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          processing_time_ms?: number | null
+          results_count?: number | null
+          search_query?: string | null
+          transcription?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          audio_duration_seconds?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          processing_time_ms?: number | null
+          results_count?: number | null
+          search_query?: string | null
+          transcription?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       wishlist_items: {
         Row: {

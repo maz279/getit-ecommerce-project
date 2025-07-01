@@ -76,6 +76,13 @@ export const AdminNavigationCard: React.FC = () => {
       icon: Settings,
       link: '/admin/dashboard?tab=settings',
       color: 'text-gray-600 bg-gray-50'
+    },
+    {
+      title: 'Advanced Features',
+      description: 'AI, Analytics & Testing Tools',
+      icon: TrendingUp,
+      link: '/phase3-features',
+      color: 'text-purple-600 bg-purple-50'
     }
   ];
 

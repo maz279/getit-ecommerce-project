@@ -129,7 +129,10 @@ const App = () => (
                 {/* Vendor */}
                 <Route path="/seller-center" element={<VendorCenter />} />
                 <Route path="/live-chat" element={<LiveChat />} />
-                <Route path="/payment-demo" element={<PaymentDemo />} />
+          <Route path="/payment-demo" element={<PaymentDemo />} />
+          <Route path="/fulfillment-dashboard" element={<FulfillmentDashboard />} />
+          <Route path="/inventory-dashboard" element={<InventoryDashboard />} />
+          <Route path="/payment-gateway-manager" element={<PaymentGatewayManager />} />
                 <Route path="/vendor/register" element={<VendorRegister />} />
                 <Route path="/vendor/dashboard" element={<VendorDashboard />} />
                 

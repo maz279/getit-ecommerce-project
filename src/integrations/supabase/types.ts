@@ -878,6 +878,63 @@ export type Database = {
         }
         Relationships: []
       }
+      demand_forecasts: {
+        Row: {
+          algorithm_version: string | null
+          confidence_score: number | null
+          created_at: string
+          factors_considered: Json | null
+          forecast_date: string
+          forecast_period: string
+          historical_data: Json | null
+          id: string
+          predicted_demand: number
+          product_id: string
+          vendor_id: string
+        }
+        Insert: {
+          algorithm_version?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          factors_considered?: Json | null
+          forecast_date: string
+          forecast_period: string
+          historical_data?: Json | null
+          id?: string
+          predicted_demand: number
+          product_id: string
+          vendor_id: string
+        }
+        Update: {
+          algorithm_version?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          factors_considered?: Json | null
+          forecast_date?: string
+          forecast_period?: string
+          historical_data?: Json | null
+          id?: string
+          predicted_demand?: number
+          product_id?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demand_forecasts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demand_forecasts_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       executive_reports: {
         Row: {
           approved_by: string | null
@@ -957,6 +1014,101 @@ export type Database = {
           },
         ]
       }
+      fulfillment_centers: {
+        Row: {
+          address: Json
+          capabilities: Json | null
+          capacity: number
+          contact_info: Json | null
+          created_at: string
+          current_utilization: number
+          id: string
+          name: string
+          operational_hours: Json | null
+          status: string
+          updated_at: string
+        }
+        Insert: {
+          address: Json
+          capabilities?: Json | null
+          capacity?: number
+          contact_info?: Json | null
+          created_at?: string
+          current_utilization?: number
+          id?: string
+          name: string
+          operational_hours?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Update: {
+          address?: Json
+          capabilities?: Json | null
+          capacity?: number
+          contact_info?: Json | null
+          created_at?: string
+          current_utilization?: number
+          id?: string
+          name?: string
+          operational_hours?: Json | null
+          status?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      fulfillment_workflow_steps: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          duration_minutes: number | null
+          id: string
+          instructions: string | null
+          order_fulfillment_id: string
+          result_data: Json | null
+          started_at: string | null
+          status: string
+          step_name: string
+          step_order: number
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          instructions?: string | null
+          order_fulfillment_id: string
+          result_data?: Json | null
+          started_at?: string | null
+          status?: string
+          step_name: string
+          step_order: number
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          duration_minutes?: number | null
+          id?: string
+          instructions?: string | null
+          order_fulfillment_id?: string
+          result_data?: Json | null
+          started_at?: string | null
+          status?: string
+          step_name?: string
+          step_order?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "fulfillment_workflow_steps_order_fulfillment_id_fkey"
+            columns: ["order_fulfillment_id"]
+            isOneToOne: false
+            referencedRelation: "order_fulfillment"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       incentive_programs: {
         Row: {
           budget_allocation: number | null
@@ -1013,6 +1165,147 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      inventory: {
+        Row: {
+          available_stock: number | null
+          batch_number: string | null
+          cost_per_unit: number
+          created_at: string
+          current_stock: number
+          expiry_date: string | null
+          forecast_demand: Json | null
+          fulfillment_center_id: string | null
+          id: string
+          last_restocked_at: string | null
+          maximum_stock_level: number
+          minimum_stock_level: number
+          product_id: string
+          reorder_point: number
+          reorder_quantity: number
+          reserved_stock: number
+          sku: string
+          storage_location: string | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          available_stock?: number | null
+          batch_number?: string | null
+          cost_per_unit?: number
+          created_at?: string
+          current_stock?: number
+          expiry_date?: string | null
+          forecast_demand?: Json | null
+          fulfillment_center_id?: string | null
+          id?: string
+          last_restocked_at?: string | null
+          maximum_stock_level?: number
+          minimum_stock_level?: number
+          product_id: string
+          reorder_point?: number
+          reorder_quantity?: number
+          reserved_stock?: number
+          sku: string
+          storage_location?: string | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          available_stock?: number | null
+          batch_number?: string | null
+          cost_per_unit?: number
+          created_at?: string
+          current_stock?: number
+          expiry_date?: string | null
+          forecast_demand?: Json | null
+          fulfillment_center_id?: string | null
+          id?: string
+          last_restocked_at?: string | null
+          maximum_stock_level?: number
+          minimum_stock_level?: number
+          product_id?: string
+          reorder_point?: number
+          reorder_quantity?: number
+          reserved_stock?: number
+          sku?: string
+          storage_location?: string | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_fulfillment_center_id_fkey"
+            columns: ["fulfillment_center_id"]
+            isOneToOne: false
+            referencedRelation: "fulfillment_centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      inventory_movements: {
+        Row: {
+          cost_per_unit: number | null
+          created_at: string
+          id: string
+          inventory_id: string
+          movement_type: string
+          performed_by: string | null
+          quantity: number
+          reason: string | null
+          reference_id: string | null
+          reference_type: string | null
+          total_cost: number | null
+        }
+        Insert: {
+          cost_per_unit?: number | null
+          created_at?: string
+          id?: string
+          inventory_id: string
+          movement_type: string
+          performed_by?: string | null
+          quantity: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          total_cost?: number | null
+        }
+        Update: {
+          cost_per_unit?: number | null
+          created_at?: string
+          id?: string
+          inventory_id?: string
+          movement_type?: string
+          performed_by?: string | null
+          quantity?: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          total_cost?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_movements_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ml_recommendations: {
         Row: {
@@ -1130,6 +1423,93 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      order_fulfillment: {
+        Row: {
+          allocated_at: string | null
+          assigned_packer: string | null
+          assigned_picker: string | null
+          created_at: string
+          delivered_at: string | null
+          fulfillment_center_id: string
+          id: string
+          notes: Json | null
+          order_id: string
+          packed_at: string | null
+          packing_started_at: string | null
+          picked_at: string | null
+          picking_started_at: string | null
+          priority_level: string
+          shipped_at: string | null
+          shipping_carrier: string | null
+          shipping_cost: number | null
+          shipping_method: string | null
+          status: string
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          allocated_at?: string | null
+          assigned_packer?: string | null
+          assigned_picker?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          fulfillment_center_id: string
+          id?: string
+          notes?: Json | null
+          order_id: string
+          packed_at?: string | null
+          packing_started_at?: string | null
+          picked_at?: string | null
+          picking_started_at?: string | null
+          priority_level?: string
+          shipped_at?: string | null
+          shipping_carrier?: string | null
+          shipping_cost?: number | null
+          shipping_method?: string | null
+          status?: string
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          allocated_at?: string | null
+          assigned_packer?: string | null
+          assigned_picker?: string | null
+          created_at?: string
+          delivered_at?: string | null
+          fulfillment_center_id?: string
+          id?: string
+          notes?: Json | null
+          order_id?: string
+          packed_at?: string | null
+          packing_started_at?: string | null
+          picked_at?: string | null
+          picking_started_at?: string | null
+          priority_level?: string
+          shipped_at?: string | null
+          shipping_carrier?: string | null
+          shipping_cost?: number | null
+          shipping_method?: string | null
+          status?: string
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_fulfillment_fulfillment_center_id_fkey"
+            columns: ["fulfillment_center_id"]
+            isOneToOne: false
+            referencedRelation: "fulfillment_centers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_fulfillment_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_items: {
         Row: {
@@ -1276,6 +1656,54 @@ export type Database = {
           },
         ]
       }
+      payment_gateways: {
+        Row: {
+          configuration: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          maximum_amount: number | null
+          minimum_amount: number | null
+          name: string
+          processing_time_hours: number | null
+          provider: string
+          supported_currencies: Json | null
+          transaction_fee_fixed: number | null
+          transaction_fee_percentage: number | null
+          updated_at: string
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          name: string
+          processing_time_hours?: number | null
+          provider: string
+          supported_currencies?: Json | null
+          transaction_fee_fixed?: number | null
+          transaction_fee_percentage?: number | null
+          updated_at?: string
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          name?: string
+          processing_time_hours?: number | null
+          provider?: string
+          supported_currencies?: Json | null
+          transaction_fee_fixed?: number | null
+          transaction_fee_percentage?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       payment_methods: {
         Row: {
           configuration: Json | null
@@ -1365,6 +1793,93 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      payment_transactions: {
+        Row: {
+          amount: number
+          billing_address: Json | null
+          created_at: string
+          currency: string
+          customer_details: Json | null
+          failed_at: string | null
+          failure_reason: string | null
+          fee_amount: number | null
+          gateway_response: Json | null
+          gateway_transaction_id: string | null
+          id: string
+          initiated_at: string
+          net_amount: number | null
+          order_id: string
+          payment_gateway_id: string
+          payment_method: string
+          processed_at: string | null
+          refunded_amount: number | null
+          status: string
+          transaction_id: string
+          updated_at: string
+        }
+        Insert: {
+          amount: number
+          billing_address?: Json | null
+          created_at?: string
+          currency?: string
+          customer_details?: Json | null
+          failed_at?: string | null
+          failure_reason?: string | null
+          fee_amount?: number | null
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          initiated_at?: string
+          net_amount?: number | null
+          order_id: string
+          payment_gateway_id: string
+          payment_method: string
+          processed_at?: string | null
+          refunded_amount?: number | null
+          status?: string
+          transaction_id: string
+          updated_at?: string
+        }
+        Update: {
+          amount?: number
+          billing_address?: Json | null
+          created_at?: string
+          currency?: string
+          customer_details?: Json | null
+          failed_at?: string | null
+          failure_reason?: string | null
+          fee_amount?: number | null
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          initiated_at?: string
+          net_amount?: number | null
+          order_id?: string
+          payment_gateway_id?: string
+          payment_method?: string
+          processed_at?: string | null
+          refunded_amount?: number | null
+          status?: string
+          transaction_id?: string
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payment_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "payment_transactions_payment_gateway_id_fkey"
+            columns: ["payment_gateway_id"]
+            isOneToOne: false
+            referencedRelation: "payment_gateways"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payments: {
         Row: {
@@ -2083,6 +2598,126 @@ export type Database = {
           throughput_per_second?: number | null
         }
         Relationships: []
+      }
+      pick_list_items: {
+        Row: {
+          created_at: string
+          id: string
+          inventory_id: string
+          notes: string | null
+          order_fulfillment_id: string
+          pick_list_id: string
+          pick_sequence: number | null
+          picked_at: string | null
+          quantity_picked: number
+          quantity_requested: number
+          status: string
+          storage_location: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          inventory_id: string
+          notes?: string | null
+          order_fulfillment_id: string
+          pick_list_id: string
+          pick_sequence?: number | null
+          picked_at?: string | null
+          quantity_picked?: number
+          quantity_requested: number
+          status?: string
+          storage_location?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          inventory_id?: string
+          notes?: string | null
+          order_fulfillment_id?: string
+          pick_list_id?: string
+          pick_sequence?: number | null
+          picked_at?: string | null
+          quantity_picked?: number
+          quantity_requested?: number
+          status?: string
+          storage_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pick_list_items_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pick_list_items_order_fulfillment_id_fkey"
+            columns: ["order_fulfillment_id"]
+            isOneToOne: false
+            referencedRelation: "order_fulfillment"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "pick_list_items_pick_list_id_fkey"
+            columns: ["pick_list_id"]
+            isOneToOne: false
+            referencedRelation: "pick_lists"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      pick_lists: {
+        Row: {
+          completed_at: string | null
+          created_at: string
+          estimated_completion_time: string | null
+          fulfillment_center_id: string
+          id: string
+          picked_items: number
+          picker_id: string | null
+          priority_level: string
+          started_at: string | null
+          status: string
+          total_items: number
+          updated_at: string
+        }
+        Insert: {
+          completed_at?: string | null
+          created_at?: string
+          estimated_completion_time?: string | null
+          fulfillment_center_id: string
+          id?: string
+          picked_items?: number
+          picker_id?: string | null
+          priority_level?: string
+          started_at?: string | null
+          status?: string
+          total_items?: number
+          updated_at?: string
+        }
+        Update: {
+          completed_at?: string | null
+          created_at?: string
+          estimated_completion_time?: string | null
+          fulfillment_center_id?: string
+          id?: string
+          picked_items?: number
+          picker_id?: string | null
+          priority_level?: string
+          started_at?: string | null
+          status?: string
+          total_items?: number
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "pick_lists_fulfillment_center_id_fkey"
+            columns: ["fulfillment_center_id"]
+            isOneToOne: false
+            referencedRelation: "fulfillment_centers"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       platform_metrics: {
         Row: {
@@ -3134,6 +3769,62 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      stock_alerts: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          alert_type: string
+          created_at: string
+          current_value: number | null
+          id: string
+          inventory_id: string
+          is_acknowledged: boolean
+          message: string
+          metadata: Json | null
+          resolved_at: string | null
+          severity: string
+          threshold_value: number | null
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type: string
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          inventory_id: string
+          is_acknowledged?: boolean
+          message: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          threshold_value?: number | null
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          alert_type?: string
+          created_at?: string
+          current_value?: number | null
+          id?: string
+          inventory_id?: string
+          is_acknowledged?: boolean
+          message?: string
+          metadata?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          threshold_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "stock_alerts_inventory_id_fkey"
+            columns: ["inventory_id"]
+            isOneToOne: false
+            referencedRelation: "inventory"
             referencedColumns: ["id"]
           },
         ]

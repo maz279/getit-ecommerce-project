@@ -1,424 +1,353 @@
-import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2.45.0";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-interface PaymentRequest {
-  order_id: string;
-  amount: number;
-  payment_method: 'bkash' | 'nagad' | 'rocket' | 'bank_transfer' | 'cod';
-  customer_phone?: string;
-  customer_details: {
-    name: string;
-    email: string;
-    address: object;
-  };
 }
 
-interface PaymentVerification {
-  payment_id: string;
-  transaction_id: string;
-  payment_method: string;
+interface PaymentRequest {
+  order_id: string
+  amount: number
+  currency: string
+  payment_method: string
+  vendor_id?: string
+  customer_data?: any
+}
+
+interface FraudCheckResult {
+  risk_score: number
+  risk_level: 'low' | 'medium' | 'high' | 'critical'
+  flags: string[]
+  approved: boolean
 }
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders })
   }
 
   try {
-    const supabase = createClient(
+    const supabaseClient = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    );
+    )
 
-    const url = new URL(req.url);
-    const endpoint = url.pathname.split('/').pop();
-    const method = req.method;
-
-    console.log(`Payment API - ${method} ${endpoint}`);
-
-    // POST /payment-processing/initiate - Initiate payment
-    if (method === 'POST' && endpoint === 'initiate') {
-      const paymentData: PaymentRequest = await req.json();
-
-      if (!paymentData.order_id || !paymentData.amount || !paymentData.payment_method) {
-        return new Response(JSON.stringify({ error: 'Missing required fields' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Verify order exists and is pending
-      const { data: order, error: orderError } = await supabase
-        .from('orders')
-        .select('*')
-        .eq('id', paymentData.order_id)
-        .eq('payment_status', 'pending')
-        .single();
-
-      if (orderError || !order) {
-        return new Response(JSON.stringify({ error: 'Order not found or already processed' }), {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Verify amount matches order total
-      if (order.total_amount !== paymentData.amount) {
-        return new Response(JSON.stringify({ error: 'Amount mismatch' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Create payment record
-      const paymentRecord = {
-        id: crypto.randomUUID(),
-        order_id: paymentData.order_id,
-        amount: paymentData.amount,
-        payment_method: paymentData.payment_method,
-        status: paymentData.payment_method === 'cod' ? 'pending_delivery' : 'pending',
-        customer_phone: paymentData.customer_phone,
-        customer_details: paymentData.customer_details,
-        created_at: new Date().toISOString(),
-        transaction_reference: `PAY_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-      };
-
-      const { data: payment, error: paymentError } = await supabase
-        .from('payments')
-        .insert(paymentRecord)
-        .select()
-        .single();
-
-      if (paymentError) {
-        console.error('Payment creation error:', paymentError);
-        return new Response(JSON.stringify({ error: 'Failed to create payment record' }), {
-          status: 500,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Handle different payment methods
-      let paymentResponse;
-      
-      switch (paymentData.payment_method) {
-        case 'bkash':
-          paymentResponse = await processBkashPayment(payment, paymentData);
-          break;
-        case 'nagad':
-          paymentResponse = await processNagadPayment(payment, paymentData);
-          break;
-        case 'rocket':
-          paymentResponse = await processRocketPayment(payment, paymentData);
-          break;
-        case 'bank_transfer':
-          paymentResponse = await processBankTransfer(payment);
-          break;
-        case 'cod':
-          paymentResponse = await processCOD(payment);
-          break;
-        default:
-          return new Response(JSON.stringify({ error: 'Unsupported payment method' }), {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-      }
-
-      console.log('Payment initiated successfully:', payment.id);
-      return new Response(JSON.stringify(paymentResponse), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
+    const authHeader = req.headers.get('Authorization')
+    if (!authHeader) {
+      return new Response(JSON.stringify({ error: 'Unauthorized' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
     }
 
-    // POST /payment-processing/verify - Verify payment
-    if (method === 'POST' && endpoint === 'verify') {
-      const verificationData: PaymentVerification = await req.json();
+    const { data: { user } } = await supabaseClient.auth.getUser(
+      authHeader.replace('Bearer ', '')
+    )
 
-      if (!verificationData.payment_id || !verificationData.transaction_id) {
-        return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+    if (!user) {
+      return new Response(JSON.stringify({ error: 'Invalid user' }), {
+        status: 401,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+    }
+
+    const url = new URL(req.url)
+    const action = url.pathname.split('/').pop()
+
+    switch (action) {
+      case 'process-payment':
+        return await processPayment(req, supabaseClient, user.id)
+      case 'fraud-check':
+        return await performFraudCheck(req, supabaseClient)
+      case 'calculate-commission':
+        return await calculateCommission(req, supabaseClient)
+      case 'process-settlement':
+        return await processSettlement(req, supabaseClient)
+      default:
+        return new Response(JSON.stringify({ error: 'Invalid action' }), {
           status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Get payment record
-      const { data: payment, error: paymentError } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('id', verificationData.payment_id)
-        .single();
-
-      if (paymentError || !payment) {
-        return new Response(JSON.stringify({ error: 'Payment not found' }), {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      // Verify with payment gateway based on method
-      let verificationResult;
-      
-      switch (payment.payment_method) {
-        case 'bkash':
-          verificationResult = await verifyBkashPayment(verificationData);
-          break;
-        case 'nagad':
-          verificationResult = await verifyNagadPayment(verificationData);
-          break;
-        case 'rocket':
-          verificationResult = await verifyRocketPayment(verificationData);
-          break;
-        default:
-          return new Response(JSON.stringify({ error: 'Payment method does not support verification' }), {
-            status: 400,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-      }
-
-      if (verificationResult.success) {
-        // Update payment status
-        const { error: updateError } = await supabase
-          .from('payments')
-          .update({
-            status: 'completed',
-            transaction_id: verificationData.transaction_id,
-            verified_at: new Date().toISOString(),
-            gateway_response: verificationResult.data,
-          })
-          .eq('id', verificationData.payment_id);
-
-        if (updateError) {
-          console.error('Payment update error:', updateError);
-          return new Response(JSON.stringify({ error: 'Failed to update payment' }), {
-            status: 500,
-            headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-          });
-        }
-
-        // Update order status
-        await supabase
-          .from('orders')
-          .update({ payment_status: 'completed' })
-          .eq('id', payment.order_id);
-
-        console.log('Payment verified successfully:', verificationData.payment_id);
-        return new Response(JSON.stringify({ success: true, payment_status: 'completed' }), {
-          status: 200,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      } else {
-        // Update payment as failed
-        await supabase
-          .from('payments')
-          .update({
-            status: 'failed',
-            gateway_response: verificationResult.error,
-          })
-          .eq('id', verificationData.payment_id);
-
-        return new Response(JSON.stringify({ success: false, error: verificationResult.error }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+        })
     }
-
-    // GET /payment-processing/status/{payment_id} - Get payment status
-    if (method === 'GET' && url.pathname.includes('/status/')) {
-      const paymentId = url.pathname.split('/').pop();
-
-      const { data: payment, error } = await supabase
-        .from('payments')
-        .select('*')
-        .eq('id', paymentId)
-        .single();
-
-      if (error || !payment) {
-        return new Response(JSON.stringify({ error: 'Payment not found' }), {
-          status: 404,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-        });
-      }
-
-      return new Response(JSON.stringify(payment), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    // GET /payment-processing/methods - Get available payment methods
-    if (method === 'GET' && endpoint === 'methods') {
-      const paymentMethods = [
-        {
-          id: 'bkash',
-          name: 'bKash',
-          type: 'mobile_banking',
-          logo: '/payment-logos/bkash.png',
-          enabled: true,
-        },
-        {
-          id: 'nagad',
-          name: 'Nagad',
-          type: 'mobile_banking',
-          logo: '/payment-logos/nagad.png',
-          enabled: true,
-        },
-        {
-          id: 'rocket',
-          name: 'Rocket',
-          type: 'mobile_banking',
-          logo: '/payment-logos/rocket.png',
-          enabled: true,
-        },
-        {
-          id: 'bank_transfer',
-          name: 'Bank Transfer',
-          type: 'bank',
-          logo: '/payment-logos/bank.png',
-          enabled: true,
-        },
-        {
-          id: 'cod',
-          name: 'Cash on Delivery',
-          type: 'cash',
-          logo: '/payment-logos/cod.png',
-          enabled: true,
-        },
-      ];
-
-      return new Response(JSON.stringify(paymentMethods), {
-        status: 200,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-      });
-    }
-
-    return new Response(JSON.stringify({ error: 'Endpoint not found' }), {
-      status: 404,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
-
   } catch (error) {
-    console.error('Payment processing error:', error);
-    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+    console.error('Payment processing error:', error)
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
-    });
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
   }
-});
+})
 
-// Payment method handlers
-async function processBkashPayment(payment: any, paymentData: PaymentRequest) {
-  // In production, integrate with bKash API
-  console.log('Processing bKash payment:', payment.id);
+async function processPayment(req: Request, supabaseClient: any, userId: string) {
+  const paymentData: PaymentRequest = await req.json()
   
-  return {
+  // Perform fraud check first
+  const fraudCheck = await performFraudAnalysis(paymentData, supabaseClient, userId)
+  
+  if (!fraudCheck.approved) {
+    // Create fraud alert
+    await supabaseClient.from('fraud_alerts').insert({
+      user_id: userId,
+      order_id: paymentData.order_id,
+      alert_type: 'payment_fraud',
+      risk_score: fraudCheck.risk_score,
+      risk_factors: fraudCheck.flags,
+      status: 'pending'
+    })
+
+    return new Response(JSON.stringify({
+      success: false,
+      error: 'Payment blocked due to fraud risk',
+      fraud_check: fraudCheck
+    }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
+
+  // Process payment based on method
+  let paymentResult
+  switch (paymentData.payment_method.toLowerCase()) {
+    case 'bkash':
+      paymentResult = await processBkashPayment(paymentData)
+      break
+    case 'nagad':
+      paymentResult = await processNagadPayment(paymentData)
+      break
+    case 'rocket':
+      paymentResult = await processRocketPayment(paymentData)
+      break
+    case 'stripe':
+      paymentResult = await processStripePayment(paymentData)
+      break
+    default:
+      return new Response(JSON.stringify({ error: 'Unsupported payment method' }), {
+        status: 400,
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      })
+  }
+
+  // Record payment transaction
+  const { data: transaction } = await supabaseClient.from('payment_transactions').insert({
+    order_id: paymentData.order_id,
+    user_id: userId,
+    amount: paymentData.amount,
+    currency: paymentData.currency,
+    payment_method: paymentData.payment_method,
+    status: paymentResult.status,
+    gateway_response: paymentResult.gateway_response,
+    fraud_score: fraudCheck.risk_score
+  }).select().single()
+
+  // Calculate and record commission if vendor payment
+  if (paymentData.vendor_id && paymentResult.status === 'completed') {
+    await calculateAndRecordCommission(paymentData, supabaseClient)
+  }
+
+  return new Response(JSON.stringify({
     success: true,
-    payment_id: payment.id,
-    payment_url: `bkash://payment?amount=${payment.amount}&reference=${payment.transaction_reference}`,
-    instructions: 'Complete the payment using bKash app with the provided reference number',
-    transaction_reference: payment.transaction_reference,
-  };
+    transaction_id: transaction.id,
+    payment_result: paymentResult,
+    fraud_check: fraudCheck
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  })
 }
 
-async function processNagadPayment(payment: any, paymentData: PaymentRequest) {
-  // In production, integrate with Nagad API
-  console.log('Processing Nagad payment:', payment.id);
-  
+async function performFraudAnalysis(paymentData: PaymentRequest, supabaseClient: any, userId: string): Promise<FraudCheckResult> {
+  let riskScore = 0
+  const flags: string[] = []
+
+  // Check user payment history
+  const { data: recentPayments } = await supabaseClient
+    .from('payment_transactions')
+    .select('*')
+    .eq('user_id', userId)
+    .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
+
+  if (recentPayments && recentPayments.length > 5) {
+    riskScore += 30
+    flags.push('high_frequency_payments')
+  }
+
+  // Check amount anomaly
+  const { data: avgAmount } = await supabaseClient
+    .rpc('get_user_avg_payment_amount', { user_id: userId })
+
+  if (avgAmount && paymentData.amount > avgAmount * 3) {
+    riskScore += 25
+    flags.push('unusual_amount')
+  }
+
+  // Check for round amounts (potential fraud)
+  if (paymentData.amount % 1000 === 0 && paymentData.amount > 10000) {
+    riskScore += 15
+    flags.push('round_amount')
+  }
+
+  // Determine risk level
+  let riskLevel: 'low' | 'medium' | 'high' | 'critical'
+  if (riskScore >= 70) riskLevel = 'critical'
+  else if (riskScore >= 50) riskLevel = 'high'
+  else if (riskScore >= 30) riskLevel = 'medium'
+  else riskLevel = 'low'
+
   return {
-    success: true,
-    payment_id: payment.id,
-    payment_url: `nagad://payment?amount=${payment.amount}&reference=${payment.transaction_reference}`,
-    instructions: 'Complete the payment using Nagad app with the provided reference number',
-    transaction_reference: payment.transaction_reference,
-  };
+    risk_score: riskScore,
+    risk_level: riskLevel,
+    flags,
+    approved: riskScore < 50
+  }
 }
 
-async function processRocketPayment(payment: any, paymentData: PaymentRequest) {
-  // In production, integrate with Rocket API
-  console.log('Processing Rocket payment:', payment.id);
-  
+async function processBkashPayment(paymentData: PaymentRequest) {
+  // Mock bKash payment processing
+  // In production, integrate with actual bKash API
   return {
-    success: true,
-    payment_id: payment.id,
-    payment_url: `rocket://payment?amount=${payment.amount}&reference=${payment.transaction_reference}`,
-    instructions: 'Complete the payment using Rocket app with the provided reference number',
-    transaction_reference: payment.transaction_reference,
-  };
+    status: 'completed',
+    gateway_response: {
+      transaction_id: `bkash_${Date.now()}`,
+      gateway: 'bkash',
+      amount: paymentData.amount,
+      currency: paymentData.currency
+    }
+  }
 }
 
-async function processBankTransfer(payment: any) {
-  console.log('Processing bank transfer:', payment.id);
-  
+async function processNagadPayment(paymentData: PaymentRequest) {
+  // Mock Nagad payment processing
   return {
-    success: true,
-    payment_id: payment.id,
-    instructions: 'Transfer the amount to our bank account and provide the transaction reference',
-    bank_details: {
-      account_name: 'E-Commerce Platform Ltd',
-      account_number: '1234567890',
-      bank_name: 'Bangladesh Bank',
-      routing_number: '123456789',
-    },
-    transaction_reference: payment.transaction_reference,
-  };
+    status: 'completed',
+    gateway_response: {
+      transaction_id: `nagad_${Date.now()}`,
+      gateway: 'nagad',
+      amount: paymentData.amount,
+      currency: paymentData.currency
+    }
+  }
 }
 
-async function processCOD(payment: any) {
-  console.log('Processing cash on delivery:', payment.id);
-  
+async function processRocketPayment(paymentData: PaymentRequest) {
+  // Mock Rocket payment processing
   return {
-    success: true,
-    payment_id: payment.id,
-    instructions: 'Payment will be collected upon delivery',
-    delivery_note: 'Please keep the exact amount ready for the delivery person',
-  };
+    status: 'completed',
+    gateway_response: {
+      transaction_id: `rocket_${Date.now()}`,
+      gateway: 'rocket',
+      amount: paymentData.amount,
+      currency: paymentData.currency
+    }
+  }
 }
 
-// Payment verification functions
-async function verifyBkashPayment(verificationData: PaymentVerification) {
-  // In production, verify with bKash API
-  console.log('Verifying bKash payment:', verificationData.payment_id);
-  
-  // Simulate API call
+async function processStripePayment(paymentData: PaymentRequest) {
+  // Mock Stripe payment processing
   return {
-    success: true,
-    data: {
-      verified: true,
-      amount: 1000,
-      transaction_id: verificationData.transaction_id,
-    },
-  };
+    status: 'completed',
+    gateway_response: {
+      transaction_id: `stripe_${Date.now()}`,
+      gateway: 'stripe',
+      amount: paymentData.amount,
+      currency: paymentData.currency
+    }
+  }
 }
 
-async function verifyNagadPayment(verificationData: PaymentVerification) {
-  // In production, verify with Nagad API
-  console.log('Verifying Nagad payment:', verificationData.payment_id);
-  
-  return {
-    success: true,
-    data: {
-      verified: true,
-      amount: 1000,
-      transaction_id: verificationData.transaction_id,
-    },
-  };
+async function calculateAndRecordCommission(paymentData: PaymentRequest, supabaseClient: any) {
+  const commissionRate = 0.05 // 5% default commission
+  const commissionAmount = paymentData.amount * commissionRate
+  const platformFee = commissionAmount * 0.1 // 10% platform fee
+  const netCommission = commissionAmount - platformFee
+
+  await supabaseClient.from('vendor_commissions').insert({
+    vendor_id: paymentData.vendor_id,
+    order_id: paymentData.order_id,
+    gross_amount: paymentData.amount,
+    commission_amount: commissionAmount,
+    platform_fee: platformFee,
+    net_commission: netCommission,
+    commission_rate: commissionRate,
+    status: 'pending'
+  })
 }
 
-async function verifyRocketPayment(verificationData: PaymentVerification) {
-  // In production, verify with Rocket API
-  console.log('Verifying Rocket payment:', verificationData.payment_id);
+async function performFraudCheck(req: Request, supabaseClient: any) {
+  const { payment_data } = await req.json()
+  const fraudResult = await performFraudAnalysis(payment_data, supabaseClient, payment_data.user_id)
   
-  return {
-    success: true,
-    data: {
-      verified: true,
-      amount: 1000,
-      transaction_id: verificationData.transaction_id,
-    },
-  };
+  return new Response(JSON.stringify(fraudResult), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  })
+}
+
+async function calculateCommission(req: Request, supabaseClient: any) {
+  const { vendor_id, amount, product_category } = await req.json()
+  
+  // Get commission rate for vendor
+  const { data: commissionRate } = await supabaseClient
+    .from('vendor_commission_rates')
+    .select('*')
+    .eq('vendor_id', vendor_id)
+    .eq('is_active', true)
+    .single()
+
+  const rate = commissionRate?.base_rate || 5.0
+  const commissionAmount = (amount * rate) / 100
+  const platformFee = commissionAmount * 0.1
+  const netCommission = commissionAmount - platformFee
+
+  return new Response(JSON.stringify({
+    commission_amount: commissionAmount,
+    platform_fee: platformFee,
+    net_commission: netCommission,
+    rate: rate
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  })
+}
+
+async function processSettlement(req: Request, supabaseClient: any) {
+  const { vendor_id, period_start, period_end } = await req.json()
+  
+  // Get pending commissions for vendor
+  const { data: commissions } = await supabaseClient
+    .from('vendor_commissions')
+    .select('*')
+    .eq('vendor_id', vendor_id)
+    .eq('status', 'pending')
+    .gte('created_at', period_start)
+    .lte('created_at', period_end)
+
+  if (!commissions || commissions.length === 0) {
+    return new Response(JSON.stringify({ message: 'No pending commissions found' }), {
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    })
+  }
+
+  const totalAmount = commissions.reduce((sum, comm) => sum + comm.net_commission, 0)
+  
+  // Create payout request
+  const { data: payout } = await supabaseClient.from('commission_payouts').insert({
+    vendor_id,
+    total_commission: totalAmount,
+    commission_ids: commissions.map(c => c.id),
+    period_start,
+    period_end,
+    status: 'pending',
+    payout_batch_id: `batch_${Date.now()}`
+  }).select().single()
+
+  // Update commissions status
+  await supabaseClient
+    .from('vendor_commissions')
+    .update({ status: 'processed' })
+    .in('id', commissions.map(c => c.id))
+
+  return new Response(JSON.stringify({
+    payout_id: payout.id,
+    total_amount: totalAmount,
+    commission_count: commissions.length
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  })
 }

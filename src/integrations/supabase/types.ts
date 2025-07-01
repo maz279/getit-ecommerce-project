@@ -1122,6 +1122,42 @@ export type Database = {
           },
         ]
       }
+      payment_methods: {
+        Row: {
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          is_enabled: boolean | null
+          logo_url: string | null
+          method_id: string
+          name: string
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          logo_url?: string | null
+          method_id: string
+          name: string
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          is_enabled?: boolean | null
+          logo_url?: string | null
+          method_id?: string
+          name?: string
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       payment_terms_config: {
         Row: {
           compliance_requirements: Json | null
@@ -1175,6 +1211,62 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      payments: {
+        Row: {
+          amount: number
+          created_at: string | null
+          customer_details: Json | null
+          customer_phone: string | null
+          gateway_response: Json | null
+          id: string
+          order_id: string | null
+          payment_method: string
+          status: string
+          transaction_id: string | null
+          transaction_reference: string
+          updated_at: string | null
+          verified_at: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          customer_details?: Json | null
+          customer_phone?: string | null
+          gateway_response?: Json | null
+          id?: string
+          order_id?: string | null
+          payment_method: string
+          status?: string
+          transaction_id?: string | null
+          transaction_reference: string
+          updated_at?: string | null
+          verified_at?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          customer_details?: Json | null
+          customer_phone?: string | null
+          gateway_response?: Json | null
+          id?: string
+          order_id?: string | null
+          payment_method?: string
+          status?: string
+          transaction_id?: string | null
+          transaction_reference?: string
+          updated_at?: string | null
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "payments_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       payout_approval_workflow: {
         Row: {

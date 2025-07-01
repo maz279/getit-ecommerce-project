@@ -149,3 +149,36 @@ export const authApi = {
     return response
   }
 }
+
+// Payment Processing API
+export const paymentApi = {
+  getPaymentMethods: async () => {
+    const response = await supabase.functions.invoke('payment-processing/methods', {
+      method: 'GET'
+    })
+    return response
+  },
+
+  initiatePayment: async (paymentData: any) => {
+    const response = await supabase.functions.invoke('payment-processing/initiate', {
+      method: 'POST',
+      body: JSON.stringify(paymentData)
+    })
+    return response
+  },
+
+  verifyPayment: async (verificationData: any) => {
+    const response = await supabase.functions.invoke('payment-processing/verify', {
+      method: 'POST',
+      body: JSON.stringify(verificationData)
+    })
+    return response
+  },
+
+  getPaymentStatus: async (paymentId: string) => {
+    const response = await supabase.functions.invoke(`payment-processing/status/${paymentId}`, {
+      method: 'GET'
+    })
+    return response
+  }
+}

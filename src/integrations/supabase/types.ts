@@ -185,6 +185,51 @@ export type Database = {
         }
         Relationships: []
       }
+      api_gateway_logs: {
+        Row: {
+          created_at: string
+          data: Json
+          id: string
+          type: string
+        }
+        Insert: {
+          created_at?: string
+          data?: Json
+          id?: string
+          type: string
+        }
+        Update: {
+          created_at?: string
+          data?: Json
+          id?: string
+          type?: string
+        }
+        Relationships: []
+      }
+      api_rate_limits: {
+        Row: {
+          count: number
+          created_at: string
+          expires_at: string
+          id: string
+          key: string
+        }
+        Insert: {
+          count?: number
+          created_at?: string
+          expires_at: string
+          id?: string
+          key: string
+        }
+        Update: {
+          count?: number
+          created_at?: string
+          expires_at?: string
+          id?: string
+          key?: string
+        }
+        Relationships: []
+      }
       assessment_documents: {
         Row: {
           assessment_id: string | null
@@ -235,6 +280,36 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      audit_logs: {
+        Row: {
+          action: string
+          changes: Json | null
+          created_at: string
+          id: string
+          metadata: Json | null
+          resource_type: string
+          user_id: string | null
+        }
+        Insert: {
+          action: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          resource_type: string
+          user_id?: string | null
+        }
+        Update: {
+          action?: string
+          changes?: Json | null
+          created_at?: string
+          id?: string
+          metadata?: Json | null
+          resource_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
       }
       balance_sheet_data: {
         Row: {
@@ -313,6 +388,57 @@ export type Database = {
           score?: number | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      cache_entries: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          key: string
+          type: string
+          value: Json
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          key: string
+          type: string
+          value: Json
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          key?: string
+          type?: string
+          value?: Json
+        }
+        Relationships: []
+      }
+      cache_statistics: {
+        Row: {
+          cache_type: string
+          count: number
+          created_at: string
+          id: string
+          operation: string
+        }
+        Insert: {
+          cache_type: string
+          count?: number
+          created_at?: string
+          id?: string
+          operation: string
+        }
+        Update: {
+          cache_type?: string
+          count?: number
+          created_at?: string
+          id?: string
+          operation?: string
         }
         Relationships: []
       }
@@ -1078,6 +1204,36 @@ export type Database = {
           },
         ]
       }
+      error_tracking: {
+        Row: {
+          created_at: string
+          error_message: string
+          id: string
+          metadata: Json | null
+          service_name: string
+          stack_trace: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          error_message: string
+          id?: string
+          metadata?: Json | null
+          service_name: string
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          error_message?: string
+          id?: string
+          metadata?: Json | null
+          service_name?: string
+          stack_trace?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       executive_reports: {
         Row: {
           approved_by: string | null
@@ -1156,6 +1312,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      file_uploads: {
+        Row: {
+          bucket_name: string
+          created_at: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id: string
+          metadata: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          bucket_name: string
+          created_at?: string
+          file_name: string
+          file_path: string
+          file_size: number
+          file_type: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          bucket_name?: string
+          created_at?: string
+          file_name?: string
+          file_path?: string
+          file_size?: number
+          file_type?: string
+          id?: string
+          metadata?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       fraud_alerts: {
         Row: {
@@ -1332,6 +1524,30 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      health_checks: {
+        Row: {
+          checks_data: Json | null
+          created_at: string
+          id: string
+          response_time: number
+          status: string
+        }
+        Insert: {
+          checks_data?: Json | null
+          created_at?: string
+          id?: string
+          response_time: number
+          status: string
+        }
+        Update: {
+          checks_data?: Json | null
+          created_at?: string
+          id?: string
+          response_time?: number
+          status?: string
+        }
+        Relationships: []
       }
       incentive_programs: {
         Row: {
@@ -2820,6 +3036,33 @@ export type Database = {
           status_code?: number | null
           success_count?: number | null
           throughput_per_second?: number | null
+        }
+        Relationships: []
+      }
+      performance_tracking: {
+        Row: {
+          created_at: string
+          duration_ms: number
+          id: string
+          metadata: Json | null
+          operation_name: string
+          service_name: string
+        }
+        Insert: {
+          created_at?: string
+          duration_ms: number
+          id?: string
+          metadata?: Json | null
+          operation_name: string
+          service_name: string
+        }
+        Update: {
+          created_at?: string
+          duration_ms?: number
+          id?: string
+          metadata?: Json | null
+          operation_name?: string
+          service_name?: string
         }
         Relationships: []
       }
@@ -4337,6 +4580,42 @@ export type Database = {
           },
         ]
       }
+      system_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string
+          id: string
+          message: string
+          metadata: Json | null
+          service_name: string | null
+          severity: string
+          status: string
+          title: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          service_name?: string | null
+          severity: string
+          status?: string
+          title: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          service_name?: string | null
+          severity?: string
+          status?: string
+          title?: string
+        }
+        Relationships: []
+      }
       system_health_logs: {
         Row: {
           alerts_triggered: Json | null
@@ -4388,6 +4667,75 @@ export type Database = {
           service_type?: string
           success_rate?: number | null
           uptime_seconds?: number | null
+        }
+        Relationships: []
+      }
+      system_logs: {
+        Row: {
+          created_at: string
+          id: string
+          log_level: string
+          message: string
+          metadata: Json | null
+          service_name: string
+          session_id: string | null
+          timestamp: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          log_level: string
+          message: string
+          metadata?: Json | null
+          service_name: string
+          session_id?: string | null
+          timestamp: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          log_level?: string
+          message?: string
+          metadata?: Json | null
+          service_name?: string
+          session_id?: string | null
+          timestamp?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      system_metrics: {
+        Row: {
+          created_at: string
+          id: string
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          service_name: string | null
+          tags: Json | null
+          timestamp: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          metric_name: string
+          metric_type?: string
+          metric_value: number
+          service_name?: string | null
+          tags?: Json | null
+          timestamp: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          service_name?: string | null
+          tags?: Json | null
+          timestamp?: string
         }
         Relationships: []
       }

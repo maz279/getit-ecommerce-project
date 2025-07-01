@@ -14,7 +14,7 @@ import {
   ExecutiveSummarySection
 } from './sections';
 import { EnhancedOverviewDashboard } from './sections/enhanced/EnhancedOverviewDashboard';
-import { DashboardAnalytics } from './sections/DashboardAnalytics';
+import { Analyticsdashboard } from './sections/Analyticsdashboard';
 import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
 import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
 import { RealtimeMetricsSection } from './sections/RealtimeMetricsSection';

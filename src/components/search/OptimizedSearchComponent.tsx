@@ -102,6 +102,7 @@ export const OptimizedSearchComponent: React.FC = () => {
 
       return response;
     },
+    initialPageParam: 0, // Required property for useInfiniteQuery
     getNextPageParam: (lastPage: any) => {
       const pagination = lastPage?.data?.data?.pagination;
       return pagination?.hasMore ? pagination.offset + pagination.limit : undefined;

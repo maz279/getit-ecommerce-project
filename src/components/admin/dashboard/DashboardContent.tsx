@@ -14,7 +14,7 @@ import {
   ExecutiveSummarySection
 } from './sections';
 import { EnhancedOverviewDashboard } from './sections/enhanced/EnhancedOverviewDashboard';
-import { AnalyticsDashboard } from './sections/AnalyticsDashboard';
+import { DashboardAnalytics } from './sections/DashboardAnalytics';
 import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
 import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
 import { RealtimeMetricsSection } from './sections/RealtimeMetricsSection';
@@ -48,8 +48,8 @@ export const DashboardContent: React.FC<DashboardContentProps> = ({ selectedSubm
         return <EnhancedOverviewDashboard />;
       
       case 'dashboard-analytics':
-        console.log('✅ Rendering AnalyticsDashboard (Dashboard Analytics - DASHBOARD SPECIFIC)');
-        return <AnalyticsDashboard />;
+        console.log('✅ Rendering DashboardAnalytics (Dashboard-specific Analytics)');
+        return <DashboardAnalytics />;
       
       case 'reports':
         console.log('✅ Rendering ExecutiveSummarySection for reports');

@@ -27,7 +27,7 @@ interface WishlistItem {
   };
 }
 
-export const EnhancedWishlist: React.FC = () => {
+const EnhancedWishlist: React.FC = () => {
   const { toast } = useToast();
   const [wishlistItems, setWishlistItems] = useState<WishlistItem[]>([]);
   const [loading, setLoading] = useState(true);
@@ -484,3 +484,5 @@ export const EnhancedWishlist: React.FC = () => {
     </div>
   );
 };
+
+export default EnhancedWishlist;

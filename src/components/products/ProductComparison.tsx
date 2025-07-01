@@ -23,7 +23,7 @@ interface Product {
   };
 }
 
-export const ProductComparison: React.FC = () => {
+const ProductComparison: React.FC = () => {
   const { toast } = useToast();
   const [searchParams] = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
@@ -44,7 +44,6 @@ export const ProductComparison: React.FC = () => {
         .from('products')
         .select(`
           *,
-          vendors!inner(name, rating),
           product_reviews(rating),
           inventory!inner(current_stock)
         `)
@@ -59,8 +58,15 @@ export const ProductComparison: React.FC = () => {
           : 0;
 
         return {
-          ...product,
-          vendor: product.vendors,
+          id: product.id,
+          name: product.name,
+          description: product.description,
+          price: product.price,
+          images: Array.isArray(product.images) 
+            ? product.images.map(img => typeof img === 'string' ? img : String(img))
+            : [typeof product.images === 'string' ? product.images : String(product.images || '')],
+          specifications: {},
+          vendor: { name: 'Unknown Vendor', rating: 0 },
           avgRating: parseFloat(avgRating.toFixed(1)),
           reviewCount: reviews.length,
           inStock: product.inventory?.[0]?.current_stock > 0
@@ -380,3 +386,5 @@ export const ProductComparison: React.FC = () => {
     </div>
   );
 };
+
+export default ProductComparison;

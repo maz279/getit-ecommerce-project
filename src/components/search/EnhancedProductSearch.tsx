@@ -37,7 +37,7 @@ interface SearchFilters {
   inStock: boolean;
 }
 
-export const EnhancedProductSearch: React.FC = () => {
+const EnhancedProductSearch: React.FC = () => {
   const { toast } = useToast();
   const [products, setProducts] = useState<Product[]>([]);
   const [filters, setFilters] = useState<ProductFilter[]>([]);
@@ -421,3 +421,5 @@ export const EnhancedProductSearch: React.FC = () => {
     </div>
   );
 };
+
+export default EnhancedProductSearch;

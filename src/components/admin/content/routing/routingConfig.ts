@@ -96,7 +96,7 @@ export const dashboardRoutes: RouteItem[] = [
   },
   {
     key: 'analytics',
-    path: '/admin/dashboard/analytics',
+    path: '/admin/dashboard/analyticsdashboard',
     label: 'Analytics',
     labelBn: 'বিশ্লেষণ',
     icon: 'chart-line',

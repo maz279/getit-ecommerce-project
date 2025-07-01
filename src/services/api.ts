@@ -6,13 +6,16 @@ const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYm
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey)
 
-// Products API
+// Enhanced Products API
 export const productsApi = {
   getAll: async (filters = {}) => {
     const params = new URLSearchParams(filters).toString()
     const response = await supabase.functions.invoke('products-api', {
       method: 'GET',
-      body: null
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      }
     })
     return response
   },
@@ -20,7 +23,9 @@ export const productsApi = {
   getById: async (id: string) => {
     const response = await supabase.functions.invoke('products-api', {
       method: 'GET',
-      body: null
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
     })
     return response
   },
@@ -28,6 +33,10 @@ export const productsApi = {
   create: async (product: any) => {
     const response = await supabase.functions.invoke('products-api', {
       method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(product)
     })
     return response
@@ -36,6 +45,10 @@ export const productsApi = {
   update: async (id: string, updates: any) => {
     const response = await supabase.functions.invoke('products-api', {
       method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      },
       body: JSON.stringify(updates)
     })
     return response
@@ -44,7 +57,92 @@ export const productsApi = {
   delete: async (id: string) => {
     const response = await supabase.functions.invoke('products-api', {
       method: 'DELETE',
-      body: null
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
+    })
+    return response
+  }
+}
+
+// Vendor Management API
+export const vendorApi = {
+  getAll: async (filters = {}) => {
+    const params = new URLSearchParams(filters).toString()
+    const response = await supabase.functions.invoke('vendor-management-api', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
+    })
+    return response
+  },
+
+  getById: async (id: string) => {
+    const response = await supabase.functions.invoke('vendor-management-api', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
+    })
+    return response
+  },
+
+  create: async (vendor: any) => {
+    const response = await supabase.functions.invoke('vendor-management-api', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(vendor)
+    })
+    return response
+  },
+
+  update: async (id: string, updates: any) => {
+    const response = await supabase.functions.invoke('vendor-management-api', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updates)
+    })
+    return response
+  }
+}
+
+// User Management API
+export const userApi = {
+  getAll: async (filters = {}) => {
+    const response = await supabase.functions.invoke('user-management-api', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
+    })
+    return response
+  },
+
+  getById: async (id: string) => {
+    const response = await supabase.functions.invoke('user-management-api', {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+      }
+    })
+    return response
+  },
+
+  update: async (id: string, updates: any) => {
+    const response = await supabase.functions.invoke('user-management-api', {
+      method: 'PUT',
+      headers: {
+        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updates)
     })
     return response
   }

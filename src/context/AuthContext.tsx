@@ -14,6 +14,10 @@ interface AuthContextType {
   signUp: (email: string, password: string, userData: any) => Promise<any>;
   signOut: () => Promise<void>;
   updateProfile: (data: Partial<AppUser>) => Promise<void>;
+  hasRole: (roles: string | string[]) => boolean;
+  isAdmin: boolean;
+  isVendor: boolean;
+  isCustomer: boolean;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -194,6 +198,22 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     await fetchUserProfile(user.id);
   };
 
+  // Role checking function
+  const hasRole = (roles: string | string[]): boolean => {
+    if (!userProfile) return false;
+    
+    if (typeof roles === 'string') {
+      return userProfile.role === roles;
+    }
+    
+    return roles.includes(userProfile.role);
+  };
+
+  // Convenience role checks
+  const isAdmin = hasRole(['admin', 'super_admin']);
+  const isVendor = hasRole('vendor');
+  const isCustomer = hasRole(['customer', 'user']);
+
   const value = {
     user,
     userProfile,
@@ -205,6 +225,10 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     signUp,
     signOut,
     updateProfile,
+    hasRole,
+    isAdmin,
+    isVendor,
+    isCustomer,
   };
 
   return (

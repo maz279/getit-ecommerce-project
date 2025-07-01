@@ -12,15 +12,23 @@ interface Product {
   name_bn?: string;
   description?: string;
   description_bn?: string;
-  sku: string;
+  sku?: string;
   price: number;
+  compare_price?: number;
+  cost_price?: number;
+  weight?: number;
+  dimensions?: any;
   stock_quantity: number;
+  low_stock_threshold?: number;
   images: string[];
-  category_id: string;
+  category_id?: string;
   vendor_id: string;
-  is_active?: boolean;
-  featured?: boolean;
-  is_new?: boolean;
+  status?: 'draft' | 'active' | 'inactive' | 'out_of_stock';
+  tags?: string[];
+  is_featured?: boolean;
+  is_digital?: boolean;
+  meta_title?: string;
+  meta_description?: string;
 }
 
 interface ProductFilters {

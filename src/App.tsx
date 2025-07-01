@@ -45,6 +45,9 @@ const PaymentDemo = lazy(() => import("./pages/PaymentDemo"));
 const FulfillmentDashboard = lazy(() => import("./components/logistics/FulfillmentDashboard"));
 const InventoryDashboard = lazy(() => import("./components/inventory/InventoryDashboard"));
 const PaymentGatewayManager = lazy(() => import("./components/payment/PaymentGatewayManager"));
+const EnhancedProductSearch = lazy(() => import("./components/search/EnhancedProductSearch"));
+const ProductComparison = lazy(() => import("./components/products/ProductComparison"));
+const EnhancedWishlist = lazy(() => import("./components/wishlist/EnhancedWishlist"));
 
 // Customer Dashboard
 const CustomerDashboard = lazy(() => import("./pages/customer/Dashboard"));
@@ -138,6 +141,9 @@ const App = () => (
                  <Route path="/fulfillment-dashboard" element={<FulfillmentDashboard />} />
                  <Route path="/inventory-dashboard" element={<InventoryDashboard />} />
                  <Route path="/payment-gateway-manager" element={<PaymentGatewayManager />} />
+                 <Route path="/enhanced-search" element={<EnhancedProductSearch />} />
+                 <Route path="/compare" element={<ProductComparison />} />
+                 <Route path="/enhanced-wishlist" element={<EnhancedWishlist />} />
                 <Route path="/vendor/register" element={<VendorRegister />} />
                 <Route path="/vendor/dashboard" element={<VendorDashboard />} />
                 

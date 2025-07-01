@@ -2767,6 +2767,66 @@ export type Database = {
         }
         Relationships: []
       }
+      product_comparisons: {
+        Row: {
+          comparison_name: string | null
+          created_at: string | null
+          id: string
+          product_ids: Json
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          comparison_name?: string | null
+          created_at?: string | null
+          id?: string
+          product_ids?: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          comparison_name?: string | null
+          created_at?: string | null
+          id?: string
+          product_ids?: Json
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      product_filters: {
+        Row: {
+          category_id: string | null
+          created_at: string | null
+          filter_name: string
+          filter_options: Json
+          filter_type: string
+          id: string
+          is_active: boolean | null
+          sort_order: number | null
+        }
+        Insert: {
+          category_id?: string | null
+          created_at?: string | null
+          filter_name: string
+          filter_options?: Json
+          filter_type: string
+          id?: string
+          is_active?: boolean | null
+          sort_order?: number | null
+        }
+        Update: {
+          category_id?: string | null
+          created_at?: string | null
+          filter_name?: string
+          filter_options?: Json
+          filter_type?: string
+          id?: string
+          is_active?: boolean | null
+          sort_order?: number | null
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           created_at: string | null
@@ -3149,6 +3209,42 @@ export type Database = {
           },
         ]
       }
+      quick_checkout_preferences: {
+        Row: {
+          auto_apply_coupons: boolean | null
+          created_at: string | null
+          default_billing_address: Json | null
+          default_payment_method: string | null
+          default_shipping_address: Json | null
+          id: string
+          skip_review_step: boolean | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          auto_apply_coupons?: boolean | null
+          created_at?: string | null
+          default_billing_address?: Json | null
+          default_payment_method?: string | null
+          default_shipping_address?: Json | null
+          id?: string
+          skip_review_step?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          auto_apply_coupons?: boolean | null
+          created_at?: string | null
+          default_billing_address?: Json | null
+          default_payment_method?: string | null
+          default_shipping_address?: Json | null
+          id?: string
+          skip_review_step?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       rating_disputes: {
         Row: {
           created_at: string | null
@@ -3283,6 +3379,30 @@ export type Database = {
           session_id?: string | null
           timestamp_recorded?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      recently_viewed: {
+        Row: {
+          id: string
+          product_id: string | null
+          user_id: string | null
+          view_duration_seconds: number | null
+          viewed_at: string | null
+        }
+        Insert: {
+          id?: string
+          product_id?: string | null
+          user_id?: string | null
+          view_duration_seconds?: number | null
+          viewed_at?: string | null
+        }
+        Update: {
+          id?: string
+          product_id?: string | null
+          user_id?: string | null
+          view_duration_seconds?: number | null
+          viewed_at?: string | null
         }
         Relationships: []
       }
@@ -4606,6 +4726,33 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      wishlists: {
+        Row: {
+          added_at: string | null
+          id: string
+          notes: string | null
+          priority: number | null
+          product_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          added_at?: string | null
+          id?: string
+          notes?: string | null
+          priority?: number | null
+          product_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          added_at?: string | null
+          id?: string
+          notes?: string | null
+          priority?: number | null
+          product_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
     }
     Views: {

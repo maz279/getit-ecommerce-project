@@ -48,6 +48,7 @@ const UserDashboard = lazy(() => import("./pages/user/UserDashboard"));
 // Order pages
 const OrderTracking = lazy(() => import("./pages/order/OrderTracking"));
 const TrackOrder = lazy(() => import("./pages/order/TrackOrder"));
+const Checkout = lazy(() => import("./pages/Checkout"));
 
 // Support pages
 const HelpCenter = lazy(() => import("./pages/support/HelpCenter"));
@@ -108,6 +109,7 @@ const App = () => (
                 {/* Orders */}
                 <Route path="/order-tracking" element={<OrderTracking />} />
                 <Route path="/track-order" element={<TrackOrder />} />
+                <Route path="/checkout/:orderId" element={<Checkout />} />
                 
                 {/* Support */}
                 <Route path="/help" element={<HelpCenter />} />

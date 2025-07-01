@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
@@ -7,7 +6,7 @@ import { RegisterCard } from '@/components/auth/RegisterCard';
 import { RegisterPageFooter } from '@/components/auth/RegisterPageFooter';
 import { RegisterWelcomeSection } from '@/components/auth/RegisterWelcomeSection';
 import { RegistrationBenefits } from '@/components/auth/RegistrationBenefits';
-import { useRegistrationHandlers } from '@/hooks/useRegistrationHandlers';
+import { useEnhancedRegistrationHandlers } from '@/hooks/useEnhancedRegistrationHandlers';
 
 const Register: React.FC = () => {
   const [formData, setFormData] = useState({
@@ -25,11 +24,12 @@ const Register: React.FC = () => {
     loading,
     error,
     showOTPVerification,
+    validationErrors,
     handleEmailSubmit,
     handleSocialRegister,
     handlePhoneRegister,
     handleVerifyOTP,
-  } = useRegistrationHandlers();
+  } = useEnhancedRegistrationHandlers();
 
   const onSubmit = (e: React.FormEvent) => handleEmailSubmit(e, formData);
 
@@ -56,6 +56,7 @@ const Register: React.FC = () => {
                 setShowConfirmPassword={setShowConfirmPassword}
                 loading={loading}
                 error={error}
+                validationErrors={validationErrors}
                 onSubmit={onSubmit}
                 onSocialRegister={handleSocialRegister}
                 onPhoneRegister={handlePhoneRegister}

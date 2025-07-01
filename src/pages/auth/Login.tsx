@@ -1,4 +1,3 @@
-
 import React, { useState } from 'react';
 import { Header } from '@/components/homepage/Header';
 import { Footer } from '@/components/homepage/Footer';
@@ -7,7 +6,7 @@ import { SecurityFeatures } from '@/components/auth/SecurityFeatures';
 import { LoginPageHeader } from '@/components/auth/LoginPageHeader';
 import { LoginCard } from '@/components/auth/LoginCard';
 import { LoginPageFooter } from '@/components/auth/LoginPageFooter';
-import { useLoginHandlers } from '@/hooks/useLoginHandlers';
+import { useEnhancedLoginHandlers } from '@/hooks/useEnhancedLoginHandlers';
 
 const Login: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -30,7 +29,7 @@ const Login: React.FC = () => {
     handleVerifyOTP,
     handleResendOTP,
     handleSocialLogin,
-  } = useLoginHandlers();
+  } = useEnhancedLoginHandlers();
 
   const onSubmit = (e: React.FormEvent) => handleSubmit(e, loginMethod, email, phone, password);
   const onSendOTP = () => handleSendOTP(phone);

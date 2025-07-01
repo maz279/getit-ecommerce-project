@@ -20,6 +20,7 @@ interface RegisterCardProps {
   setShowConfirmPassword: (show: boolean) => void;
   loading: boolean;
   error: string;
+  validationErrors?: any;
   onSubmit: (e: React.FormEvent) => void;
   onSocialRegister: (provider: string) => void;
   onPhoneRegister: (phone: string) => void;

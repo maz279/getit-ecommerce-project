@@ -11,13 +11,15 @@ import { Star, MapPin, Truck, CreditCard, Shield, Heart, Share2, ShoppingCart, P
 import { useCart } from '@/context/CartContext';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Product, Vendor } from '@/types';
+import { Product, Vendor } from '@/types/supabase';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 export const ProductDetail: React.FC = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const { addToCart } = useCart();
+  
+  // Use the vendor directly - the type issue is from different import paths
   const { toast } = useToast();
   
   const [product, setProduct] = useState<Product | null>(null);
@@ -49,7 +51,14 @@ export const ProductDetail: React.FC = () => {
 
       if (productError) throw productError;
 
-      setProduct(productData);
+      // Ensure proper type conversion for images
+      const productWithImages: Product = {
+        ...productData,
+        images: Array.isArray(productData.images) ? productData.images as string[] : 
+                typeof productData.images === 'string' ? [productData.images] : 
+                []
+      };
+      setProduct(productWithImages);
       setVendor(productData.vendor);
     } catch (error) {
       console.error('Error fetching product:', error);
@@ -66,7 +75,7 @@ export const ProductDetail: React.FC = () => {
 
   const handleAddToCart = () => {
     if (product && vendor) {
-      addToCart(product, vendor, quantity);
+      addToCart(product as any, vendor as any, quantity);
       toast({
         title: "Added to Cart",
         description: `${product.name} has been added to your cart.`,
@@ -109,8 +118,8 @@ export const ProductDetail: React.FC = () => {
     );
   }
 
-  const discountPercentage = product.original_price 
-    ? Math.round((1 - product.price / product.original_price) * 100)
+  const discountPercentage = product.compare_price 
+    ? Math.round((1 - product.price / product.compare_price) * 100)
     : 0;
 
   const images = product.images || ['/placeholder-product.jpg'];
@@ -151,7 +160,7 @@ export const ProductDetail: React.FC = () => {
                     }`}
                   >
                     <img
-                      src={image}
+                      src={typeof image === 'string' ? image : '/placeholder-product.jpg'}
                       alt={`${product.name} ${index + 1}`}
                       className="w-full h-full object-cover"
                     />
@@ -171,11 +180,8 @@ export const ProductDetail: React.FC = () => {
                     -{discountPercentage}% OFF
                   </Badge>
                 )}
-                {product.featured && (
+                {product.is_featured && (
                   <Badge variant="secondary">Featured</Badge>
-                )}
-                {product.is_new && (
-                  <Badge className="bg-green-500 hover:bg-green-600">New</Badge>
                 )}
               </div>
               <h1 className="text-3xl font-bold">{product.name}</h1>
@@ -207,15 +213,15 @@ export const ProductDetail: React.FC = () => {
                 <span className="text-3xl font-bold text-primary">
                   ৳{product.price.toLocaleString()}
                 </span>
-                {product.original_price && product.original_price > product.price && (
+                {product.compare_price && product.compare_price > product.price && (
                   <span className="text-xl text-muted-foreground line-through">
-                    ৳{product.original_price.toLocaleString()}
+                    ৳{product.compare_price.toLocaleString()}
                   </span>
                 )}
               </div>
               {discountPercentage > 0 && (
                 <p className="text-sm text-green-600">
-                  You save ৳{(product.original_price! - product.price).toLocaleString()}
+                  You save ৳{(product.compare_price! - product.price).toLocaleString()}
                 </p>
               )}
             </div>
@@ -339,7 +345,7 @@ export const ProductDetail: React.FC = () => {
                 <div className="space-y-2">
                   <div className="flex justify-between py-2 border-b">
                     <span className="font-medium">Category</span>
-                    <span>{product.category || 'General'}</span>
+                    <span>{product.category_id || 'General'}</span>
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="font-medium">SKU</span>
@@ -351,7 +357,7 @@ export const ProductDetail: React.FC = () => {
                   </div>
                   <div className="flex justify-between py-2 border-b">
                     <span className="font-medium">Dimensions</span>
-                    <span>{product.dimensions || 'N/A'}</span>
+                    <span>{product.dimensions ? JSON.stringify(product.dimensions) : 'N/A'}</span>
                   </div>
                 </div>
               </CardContent>

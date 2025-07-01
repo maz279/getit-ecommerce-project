@@ -13,7 +13,7 @@ import { Badge } from '@/components/ui/badge';
 import { X, Upload, Plus } from 'lucide-react';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Product } from '@/types';
+import { Product } from '@/types/supabase';
 
 const productSchema = z.object({
   name: z.string().min(3, 'Product name must be at least 3 characters'),
@@ -27,7 +27,6 @@ const productSchema = z.object({
   dimensions: z.string().optional(),
   tags: z.array(z.string()).optional(),
   featured: z.boolean().default(false),
-  is_new: z.boolean().default(false),
 });
 
 type ProductFormData = z.infer<typeof productSchema>;
@@ -54,15 +53,15 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       name: product?.name || '',
       description: product?.description || '',
       price: product?.price || 0,
-      compare_price: product?.compare_price || undefined,
+      compare_price: product?.compare_price || 0,
       sku: product?.sku || '',
       category_id: product?.category_id || '',
       stock_quantity: product?.stock_quantity || 0,
-      weight: product?.weight || undefined,
+      weight: product?.weight || 0,
       dimensions: product?.dimensions ? JSON.stringify(product.dimensions) : '',
       tags: Array.isArray(product?.tags) ? product.tags : [],
       featured: product?.is_featured || false,
-      is_new: false, // Not in database schema
+      // is_new: false, // Removed as not in current schema
     },
   });
 
@@ -420,21 +419,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
                 )}
               />
 
-              <FormField
-                control={form.control}
-                name="is_new"
-                render={({ field }) => (
-                  <FormItem className="flex flex-row items-start space-x-3 space-y-0">
-                    <FormControl>
-                      <Checkbox
-                        checked={field.value}
-                        onCheckedChange={field.onChange}
-                      />
-                    </FormControl>
-                    <FormLabel>New Product</FormLabel>
-                  </FormItem>
-                )}
-              />
+              {/* Removed is_new field as it's not in current schema */}
             </div>
 
             {/* Actions */}

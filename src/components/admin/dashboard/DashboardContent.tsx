@@ -15,7 +15,7 @@ import {
   DashboardAnalytics
 } from './sections';
 import { EnhancedOverviewDashboard } from './sections/enhanced/EnhancedOverviewDashboard';
-import {analytiscdhaboard} from './sections/AnalyticsDashboard';
+import {Analytiscdashboard} from './sections/AnalyticsDashboard';
 import { KPIMonitoringDashboard } from './sections/KPIMonitoringDashboard';
 import { PerformanceInsightsDashboard } from './sections/PerformanceInsightsDashboard';
 import { RealtimeMetricsSection } from './sections/RealtimeMetricsSection';

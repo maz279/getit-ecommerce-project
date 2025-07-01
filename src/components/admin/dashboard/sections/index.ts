@@ -11,3 +11,4 @@ export { SystemHealthSection } from './SystemHealthSection';
 export { QuickActionsSection } from './QuickActionsSection';
 export { ExecutiveSummarySection } from './ExecutiveSummarySection';
 export { AnalyticsDashboard } from './AnalyticsDashboard';
+export { DashboardAnalytics } from './DashboardAnalytics';

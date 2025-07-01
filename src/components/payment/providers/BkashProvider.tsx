@@ -1,0 +1,1 @@
+export { BkashPayment } from '@/components/payment/BkashPayment';

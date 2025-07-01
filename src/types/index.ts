@@ -90,3 +90,71 @@ export interface WishlistItem {
   product: Product;
   added_at: string;
 }
+
+// Payment Types
+export interface PaymentMethod {
+  id: string;
+  type: 'bkash' | 'nagad' | 'rocket' | 'cod' | 'bank_transfer' | 'card';
+  name: string;
+  namebn: string;
+  icon: string;
+  isActive: boolean;
+  processingFee: number;
+  currency: string;
+}
+
+export interface PaymentTransaction {
+  id: string;
+  orderId: string;
+  amount: number;
+  currency: string;
+  method: PaymentMethod['type'];
+  status: 'pending' | 'processing' | 'completed' | 'failed' | 'cancelled';
+  transactionId?: string;
+  reference?: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+// Shipping Types
+export interface ShippingProvider {
+  id: string;
+  name: string;
+  namebn: string;
+  type: 'pathao' | 'paperfly' | 'sundarban' | 'redx' | 'ecourier';
+  logo: string;
+  isActive: boolean;
+  supportsCOD: boolean;
+  maxWeight: number;
+  serviceAreas: string[];
+}
+
+export interface ShippingOption {
+  id: string;
+  providerId: string;
+  name: string;
+  description: string;
+  price: number;
+  estimatedDays: number;
+  type: 'regular' | 'express' | 'same-day';
+}
+
+export interface ShippingAddress {
+  id?: string;
+  name: string;
+  phone: string;
+  division: string;
+  district: string;
+  upazila: string;
+  address: string;
+  postalCode?: string;
+  isDefault?: boolean;
+}
+
+// API Response Types
+export interface ApiResponse<T = any> {
+  data?: T;
+  error?: string;
+  message?: string;
+  success: boolean;
+}

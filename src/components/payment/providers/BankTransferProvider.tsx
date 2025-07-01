@@ -1,0 +1,1 @@
+export { BankTransferPayment } from './RocketProvider';

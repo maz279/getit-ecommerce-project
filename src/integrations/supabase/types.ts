@@ -5771,6 +5771,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      is_admin_user: {
+        Args: Record<PropertyKey, never>
+        Returns: boolean
+      }
       process_payout_batch: {
         Args: { p_batch_id: string; p_processor_id: string }
         Returns: Json

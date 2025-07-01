@@ -95,18 +95,18 @@ export const dashboardRoutes: RouteItem[] = [
     }
   },
   {
-    key: 'analytics',
-    path: '/admin/dashboard/analyticsdashboard',
-    label: 'Analytics',
-    labelBn: 'বিশ্লেষণ',
+    key: 'dashboard-analytics',
+    path: '/admin/dashboard/dashboard-analytics',
+    label: 'Analytics Dashboard',
+    labelBn: 'বিশ্লেষণ ড্যাশবোর্ড',
     icon: 'chart-line',
-    description: 'Real-time platform analytics',
+    description: 'Dashboard-specific analytics and insights',
     roles: [UserRole.SUPER_ADMIN, UserRole.ADMIN, UserRole.ANALYST],
     permissions: [Permission.READ],
     order: 2,
     metadata: {
       category: ROUTE_CATEGORIES.DASHBOARD,
-      tags: ['analytics', 'charts', 'insights']
+      tags: ['dashboard-analytics', 'charts', 'insights']
     }
   },
   {

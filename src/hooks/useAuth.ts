@@ -9,6 +9,7 @@ interface UseAuthReturn {
   signIn: (email: string, password: string) => Promise<{ error: any }>;
   signUp: (email: string, password: string, userData?: any) => Promise<{ error: any }>;
   signOut: () => Promise<{ error: any }>;
+  logout: () => Promise<{ error: any }>;
   updateProfile: (data: Partial<User>) => Promise<{ error: any }>;
 }
 
@@ -103,6 +104,7 @@ export const useAuth = (): UseAuthReturn => {
     signIn,
     signUp,
     signOut,
+    logout: signOut, // Alias for convenience
     updateProfile
   };
 };

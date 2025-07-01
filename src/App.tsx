@@ -64,6 +64,10 @@ const AboutUs = lazy(() => import("./pages/AboutUs"));
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 
+// Search and Notifications pages
+const SearchPage = lazy(() => import("./pages/SearchPage").then(module => ({ default: module.SearchPage })));
+const NotificationsPage = lazy(() => import("./pages/SearchPage").then(module => ({ default: module.NotificationsPage })));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -105,6 +109,10 @@ const App = () => (
                 <Route path="/orders" element={<Orders />} />
                 <Route path="/settings" element={<Settings />} />
                 <Route path="/payment-methods" element={<PaymentMethods />} />
+                
+                {/* Search and Notifications */}
+                <Route path="/search" element={<SearchPage />} />
+                <Route path="/notifications" element={<NotificationsPage />} />
                 
                 {/* Orders */}
                 <Route path="/order-tracking" element={<OrderTracking />} />

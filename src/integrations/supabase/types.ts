@@ -973,6 +973,42 @@ export type Database = {
         }
         Relationships: []
       }
+      notifications: {
+        Row: {
+          created_at: string | null
+          id: string
+          message: string
+          metadata: Json | null
+          read: boolean | null
+          read_at: string | null
+          title: string
+          type: string | null
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          message: string
+          metadata?: Json | null
+          read?: boolean | null
+          read_at?: string | null
+          title: string
+          type?: string | null
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          message?: string
+          metadata?: Json | null
+          read?: boolean | null
+          read_at?: string | null
+          title?: string
+          type?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       order_analytics: {
         Row: {
           analytics_date: string
@@ -3571,6 +3607,7 @@ export type Database = {
           commission_rate: number | null
           created_at: string
           id: string
+          is_active: boolean | null
           rating: number | null
           status: Database["public"]["Enums"]["vendor_status"] | null
           total_sales: number | null
@@ -3583,6 +3620,7 @@ export type Database = {
           commission_rate?: number | null
           created_at?: string
           id?: string
+          is_active?: boolean | null
           rating?: number | null
           status?: Database["public"]["Enums"]["vendor_status"] | null
           total_sales?: number | null
@@ -3595,6 +3633,7 @@ export type Database = {
           commission_rate?: number | null
           created_at?: string
           id?: string
+          is_active?: boolean | null
           rating?: number | null
           status?: Database["public"]["Enums"]["vendor_status"] | null
           total_sales?: number | null

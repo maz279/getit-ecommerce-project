@@ -182,3 +182,80 @@ export const paymentApi = {
     return response
   }
 }
+
+// Search API
+export const searchApi = {
+  search: async (params: {
+    q?: string;
+    category?: string;
+    minPrice?: number;
+    maxPrice?: number;
+    limit?: number;
+    offset?: number;
+  }) => {
+    const searchParams = new URLSearchParams();
+    if (params.q) searchParams.append('q', params.q);
+    if (params.category) searchParams.append('category', params.category);
+    if (params.minPrice) searchParams.append('minPrice', params.minPrice.toString());
+    if (params.maxPrice) searchParams.append('maxPrice', params.maxPrice.toString());
+    if (params.limit) searchParams.append('limit', params.limit.toString());
+    if (params.offset) searchParams.append('offset', params.offset.toString());
+
+    const response = await supabase.functions.invoke(`search-api?${searchParams.toString()}`, {
+      method: 'GET'
+    })
+    return response
+  },
+
+  logSearch: async (searchData: any) => {
+    const response = await supabase.functions.invoke('search-api', {
+      method: 'POST',
+      body: JSON.stringify(searchData)
+    })
+    return response
+  }
+}
+
+// Notifications API
+export const notificationsApi = {
+  getNotifications: async (params?: { limit?: number; offset?: number; unread?: boolean }) => {
+    const searchParams = new URLSearchParams();
+    if (params?.limit) searchParams.append('limit', params.limit.toString());
+    if (params?.offset) searchParams.append('offset', params.offset.toString());
+    if (params?.unread) searchParams.append('unread', 'true');
+
+    const response = await supabase.functions.invoke(`notifications-api?${searchParams.toString()}`, {
+      method: 'GET'
+    })
+    return response
+  },
+
+  markAsRead: async (notificationId: string) => {
+    const response = await supabase.functions.invoke(`notifications-api/${notificationId}/read`, {
+      method: 'PUT'
+    })
+    return response
+  },
+
+  markAllAsRead: async () => {
+    const response = await supabase.functions.invoke('notifications-api/read-all', {
+      method: 'PUT'
+    })
+    return response
+  },
+
+  deleteNotification: async (notificationId: string) => {
+    const response = await supabase.functions.invoke(`notifications-api/${notificationId}`, {
+      method: 'DELETE'
+    })
+    return response
+  },
+
+  createNotification: async (notificationData: any) => {
+    const response = await supabase.functions.invoke('notifications-api', {
+      method: 'POST',
+      body: JSON.stringify(notificationData)
+    })
+    return response
+  }
+}

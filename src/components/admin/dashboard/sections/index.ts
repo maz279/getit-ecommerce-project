@@ -10,4 +10,4 @@ export { PlatformPerformanceSection } from './PlatformPerformanceSection';
 export { SystemHealthSection } from './SystemHealthSection';
 export { QuickActionsSection } from './QuickActionsSection';
 export { ExecutiveSummarySection } from './ExecutiveSummarySection';
-export { DashboardAnalytics } from './DashboardAnalytics';
+export { AnalyticsDashboard } from './AnalyticsDashboard';

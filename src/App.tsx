@@ -11,6 +11,7 @@ import Index from "./pages/Index";
 
 // Common pages
 const NotFound = lazy(() => import("./pages/common/NotFound"));
+const ProductDetail = lazy(() => import("./pages/ProductDetail"));
 
 // Authentication pages
 const Login = lazy(() => import("./pages/auth/Login"));
@@ -90,6 +91,7 @@ const App = () => (
                 {/* Shop */}
                 <Route path="/categories" element={<Categories />} />
                 <Route path="/categories/fashion/womens-fashion" element={<WomensClothing />} />
+                <Route path="/product/:id" element={<ProductDetail />} />
                 <Route path="/best-sellers" element={<BestSellers />} />
                 <Route path="/new-arrivals" element={<NewArrivals />} />
                 <Route path="/wishlist" element={<Wishlist />} />

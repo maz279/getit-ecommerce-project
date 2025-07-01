@@ -145,10 +145,16 @@ const ABTestingFramework: React.FC = () => {
           description: exp.description || '',
           status: exp.status as 'draft' | 'running' | 'paused' | 'completed',
           type: exp.experiment_type,
-          variants: Array.isArray(exp.variants) ? exp.variants : [],
+          variants: Array.isArray(exp.variants) ? exp.variants.map((v: any) => ({
+            id: v.id || '',
+            name: v.name || '',
+            allocation: v.allocation || 0,
+            conversions: v.conversions || 0,
+            participants: v.participants || 0
+          })) : [],
           metrics: {
-            primary: Array.isArray(exp.success_metrics) ? exp.success_metrics[0] || 'conversion_rate' : 'conversion_rate',
-            secondary: Array.isArray(exp.success_metrics) ? exp.success_metrics.slice(1) : []
+            primary: Array.isArray(exp.success_metrics) ? String(exp.success_metrics[0] || 'conversion_rate') : 'conversion_rate',
+            secondary: Array.isArray(exp.success_metrics) ? exp.success_metrics.slice(1).map(String) : []
           },
           startDate: exp.start_date,
           endDate: exp.end_date,

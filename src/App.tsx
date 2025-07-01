@@ -58,6 +58,8 @@ const HelpCenter = lazy(() => import("./pages/support/HelpCenter"));
 const VendorCenter = lazy(() => import("./pages/VendorCenter"));
 const VendorRegister = lazy(() => import("./pages/VendorRegister"));
 const VendorDashboard = lazy(() => import("./pages/vendor/Dashboard"));
+const LiveChat = lazy(() => import("./pages/LiveChat"));
+const PaymentDemo = lazy(() => import("./pages/PaymentDemo"));
 
 // Company pages
 const AboutUs = lazy(() => import("./pages/AboutUs"));
@@ -126,6 +128,8 @@ const App = () => (
                 
                 {/* Vendor */}
                 <Route path="/seller-center" element={<VendorCenter />} />
+                <Route path="/live-chat" element={<LiveChat />} />
+                <Route path="/payment-demo" element={<PaymentDemo />} />
                 <Route path="/vendor/register" element={<VendorRegister />} />
                 <Route path="/vendor/dashboard" element={<VendorDashboard />} />
                 

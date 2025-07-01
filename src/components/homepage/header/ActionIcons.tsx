@@ -1,11 +1,13 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Search, ShoppingCart, Heart } from 'lucide-react';
+import { Search, ShoppingCart, Heart, MessageCircle } from 'lucide-react';
+import { Button } from '@/components/ui/button';
 import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { LanguageSelector } from './LanguageSelector';
+import { NotificationCenter } from '@/components/realtime/NotificationCenter';
 
 interface ActionIconsProps {
   language: string;
@@ -44,6 +46,16 @@ export const ActionIcons: React.FC<ActionIconsProps> = ({ language }) => {
       >
         <Search className="w-5 h-5" />
       </button>
+
+      {/* Live Chat */}
+      <Link to="/live-chat">
+        <Button variant="ghost" size="icon" className="relative">
+          <MessageCircle className="h-5 w-5" />
+        </Button>
+      </Link>
+
+      {/* Notifications */}
+      <NotificationCenter />
 
       {/* Wishlist */}
       <Link

@@ -59,10 +59,10 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       category_id: product?.category_id || '',
       stock_quantity: product?.stock_quantity || 0,
       weight: product?.weight || undefined,
-      dimensions: typeof product?.dimensions === 'string' ? product.dimensions : '',
+      dimensions: product?.dimensions ? JSON.stringify(product.dimensions) : '',
       tags: Array.isArray(product?.tags) ? product.tags : [],
-      featured: product?.featured || false,
-      is_new: product?.is_new || false,
+      featured: product?.is_featured || false,
+      is_new: false, // Not in database schema
     },
   });
 
@@ -102,10 +102,19 @@ export const ProductForm: React.FC<ProductFormProps> = ({
       setIsSubmitting(true);
 
       const productData = {
-        ...data,
-        images,
+        name: data.name,
+        description: data.description,
+        price: data.price,
+        compare_price: data.compare_price,
+        sku: data.sku,
+        category_id: data.category_id,
+        stock_quantity: data.stock_quantity,
+        weight: data.weight,
+        dimensions: data.dimensions ? JSON.parse(data.dimensions) : null,
+        tags: data.tags,
+        is_featured: data.featured,
+        images: images,
         vendor_id: 'current-vendor-id', // In real app, get from auth context
-        searchable_content: `${data.name} ${data.description} ${data.tags?.join(' ') || ''}`.toLowerCase(),
       };
 
       let result;
@@ -229,16 +238,16 @@ export const ProductForm: React.FC<ProductFormProps> = ({
 
               <FormField
                 control={form.control}
-                name="original_price"
+                name="compare_price"
                 render={({ field }) => (
                   <FormItem>
-                    <FormLabel>Original Price (৳)</FormLabel>
+                    <FormLabel>Compare Price (৳)</FormLabel>
                     <FormControl>
                       <Input
                         type="number"
                         step="0.01"
                         placeholder="0.00"
-                        {...field}
+                        value={field.value || ''}
                         onChange={(e) => field.onChange(parseFloat(e.target.value) || undefined)}
                       />
                     </FormControl>
@@ -271,7 +280,7 @@ export const ProductForm: React.FC<ProductFormProps> = ({
             <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
               <FormField
                 control={form.control}
-                name="category"
+                name="category_id"
                 render={({ field }) => (
                   <FormItem>
                     <FormLabel>Category *</FormLabel>

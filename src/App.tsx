@@ -67,6 +67,7 @@ const HelpCenter = lazy(() => import("./pages/support/HelpCenter"));
 const VendorCenter = lazy(() => import("./pages/VendorCenter"));
 const VendorRegister = lazy(() => import("./pages/VendorRegister"));
 const VendorDashboard = lazy(() => import("./pages/vendor/Dashboard"));
+const VendorDashboardNew = lazy(() => import("./pages/vendor/VendorDashboard"));
 const LiveChat = lazy(() => import("./pages/LiveChat"));
 
 // Company pages
@@ -146,6 +147,7 @@ const App = () => (
                  <Route path="/enhanced-wishlist" element={<EnhancedWishlist />} />
                 <Route path="/vendor/register" element={<VendorRegister />} />
                 <Route path="/vendor/dashboard" element={<VendorDashboard />} />
+                <Route path="/vendor/dashboard-new" element={<VendorDashboardNew />} />
                 
                 {/* Company */}
                 <Route path="/about" element={<AboutUs />} />

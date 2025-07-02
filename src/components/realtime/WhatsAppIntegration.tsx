@@ -80,7 +80,7 @@ export const WhatsAppIntegration: React.FC = () => {
           setIntegration({
             ...data,
             integration_config: data.integration_config || {},
-            message_templates: data.message_templates || []
+            message_templates: Array.isArray(data.message_templates) ? data.message_templates : []
           });
         }
       }

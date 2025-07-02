@@ -1,4 +1,3 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 
 const corsHeaders = {
@@ -6,735 +5,450 @@ const corsHeaders = {
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 }
 
-// Monitoring configuration
-const MONITORING_CONFIGS = {
-  metrics: {
-    retention_days: 30,
-    collection_interval: 60000, // 1 minute
-    alert_thresholds: {
-      response_time: 5000, // 5 seconds
-      error_rate: 5, // 5%
-      cpu_usage: 80, // 80%
-      memory_usage: 90, // 90%
-      disk_usage: 85 // 85%
-    }
-  },
-  logs: {
-    retention_days: 7,
-    max_log_size: 1000000, // 1MB per log entry
-    log_levels: ['error', 'warn', 'info', 'debug']
-  },
-  alerts: {
-    email_notifications: true,
-    slack_notifications: true,
-    escalation_timeout: 300000, // 5 minutes
-    max_alerts_per_hour: 10
-  }
+interface MetricPayload {
+  metric_name: string;
+  metric_type: 'counter' | 'gauge' | 'histogram' | 'summary';
+  metric_value: number;
+  labels?: Record<string, any>;
+  service_name: string;
+  instance_id?: string;
 }
 
-serve(async (req) => {
+interface HealthCheckPayload {
+  service_name: string;
+  endpoint_url: string;
+  check_type: 'http' | 'tcp' | 'database' | 'custom';
+}
+
+interface AlertPayload {
+  rule_id: string;
+  severity: 'info' | 'warning' | 'critical' | 'emergency';
+  summary: string;
+  description?: string;
+  trigger_value?: number;
+  labels?: Record<string, any>;
+}
+
+Deno.serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseClient = createClient(
+    const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
-    const url = new URL(req.url)
-    const action = url.pathname.split('/').pop()
+    const url = new URL(req.url);
+    const path = url.pathname.replace('/functions/v1/monitoring-system', '');
 
-    switch (action) {
-      case 'log':
-        return await logEvent(req, supabaseClient)
-      case 'metrics':
-        return await recordMetrics(req, supabaseClient)
-      case 'health-check':
-        return await healthCheck(req, supabaseClient)
-      case 'alerts':
-        return await createAlert(req, supabaseClient)
-      case 'get-logs':
-        return await getLogs(req, supabaseClient)
-      case 'get-metrics':
-        return await getMetrics(req, supabaseClient)
-      case 'dashboard':
-        return await getDashboardData(req, supabaseClient)
-      case 'system-status':
-        return await getSystemStatus(req, supabaseClient)
-      case 'error-tracking':
-        return await trackError(req, supabaseClient)
-      case 'performance':
-        return await trackPerformance(req, supabaseClient)
-      case 'audit':
-        return await auditLog(req, supabaseClient)
+    switch (path) {
+      case '/metrics/collect':
+        return await collectMetrics(req, supabase);
+      case '/health/check':
+        return await performHealthCheck(req, supabase);
+      case '/alerts/fire':
+        return await fireAlert(req, supabase);
+      case '/alerts/resolve':
+        return await resolveAlert(req, supabase);
+      case '/sla/evaluate':
+        return await evaluateSLA(req, supabase);
+      case '/dashboards/data':
+        return await getDashboardData(req, supabase);
+      case '/traces/create':
+        return await createTrace(req, supabase);
+      case '/logs/ingest':
+        return await ingestLogs(req, supabase);
       default:
-        return new Response(JSON.stringify({ error: 'Invalid action' }), {
-          status: 400,
+        return new Response(JSON.stringify({ error: 'Endpoint not found' }), {
+          status: 404,
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        })
+        });
     }
   } catch (error) {
-    console.error('Monitoring system error:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Monitoring system error:', error);
+    return new Response(JSON.stringify({ 
+      error: 'Internal server error',
+      details: error.message 
+    }), {
       status: 500,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    });
   }
-})
+});
 
-async function logEvent(req: Request, supabaseClient: any) {
-  const { 
-    level, 
-    message, 
-    service, 
-    user_id, 
-    session_id, 
-    metadata, 
-    timestamp = new Date().toISOString() 
-  } = await req.json()
+async function collectMetrics(req: Request, supabase: any) {
+  const payload: MetricPayload = await req.json();
+  
+  const { data, error } = await supabase
+    .from('metrics_collection')
+    .insert({
+      metric_name: payload.metric_name,
+      metric_type: payload.metric_type,
+      metric_value: payload.metric_value,
+      labels: payload.labels || {},
+      service_name: payload.service_name,
+      instance_id: payload.instance_id,
+      timestamp: new Date().toISOString()
+    });
 
-  if (!level || !message || !service) {
-    return new Response(JSON.stringify({ error: 'Missing required fields' }), {
+  if (error) {
+    console.error('Failed to collect metric:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
       status: 400,
       headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    });
   }
 
-  try {
-    const logEntry = {
-      log_level: level,
-      message: message,
-      service_name: service,
-      user_id: user_id,
-      session_id: session_id,
-      metadata: metadata || {},
-      timestamp: timestamp,
-      created_at: new Date().toISOString()
-    }
-
-    await supabaseClient
-      .from('system_logs')
-      .insert(logEntry)
-
-    // Check if this is an error that needs alerting
-    if (level === 'error') {
-      await checkErrorAlerts(supabaseClient, logEntry)
-    }
-
-    return new Response(JSON.stringify({
-      success: true,
-      logged: true
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
+  return new Response(JSON.stringify({ 
+    success: true,
+    message: 'Metric collected successfully' 
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-async function recordMetrics(req: Request, supabaseClient: any) {
-  const { 
-    metric_name, 
-    metric_value, 
-    metric_type = 'counter', 
-    service, 
-    tags = {},
-    timestamp = new Date().toISOString() 
-  } = await req.json()
+async function performHealthCheck(req: Request, supabase: any) {
+  const payload: HealthCheckPayload = await req.json();
+  
+  let status = 'healthy';
+  let response_time_ms = 0;
+  let status_code = 200;
+  let error_message = null;
+  let health_score = 100;
 
   try {
-    const metricEntry = {
-      metric_name: metric_name,
-      metric_value: metric_value,
-      metric_type: metric_type,
-      service_name: service,
-      tags: tags,
-      timestamp: timestamp,
-      created_at: new Date().toISOString()
-    }
-
-    await supabaseClient
-      .from('system_metrics')
-      .insert(metricEntry)
-
-    // Check if metric exceeds threshold
-    await checkMetricAlerts(supabaseClient, metricEntry)
-
-    return new Response(JSON.stringify({
-      success: true,
-      recorded: true
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function healthCheck(req: Request, supabaseClient: any) {
-  const startTime = Date.now()
-  const checks = []
-
-  try {
-    // Database health check
-    const dbStart = Date.now()
-    const { data: dbCheck } = await supabaseClient
-      .from('system_metrics')
-      .select('count', { count: 'exact' })
-      .limit(1)
+    const start = Date.now();
     
-    checks.push({
-      name: 'database',
-      status: dbCheck ? 'healthy' : 'unhealthy',
-      response_time: Date.now() - dbStart,
-      details: dbCheck ? 'Connection successful' : 'Connection failed'
-    })
-
-    // Storage health check
-    const storageStart = Date.now()
-    try {
-      const { data: buckets } = await supabaseClient.storage.listBuckets()
-      checks.push({
-        name: 'storage',
-        status: 'healthy',
-        response_time: Date.now() - storageStart,
-        details: `${buckets?.length || 0} buckets available`
-      })
-    } catch (error) {
-      checks.push({
-        name: 'storage',
-        status: 'unhealthy',
-        response_time: Date.now() - storageStart,
-        details: error.message
-      })
-    }
-
-    // Edge Functions health check
-    const functionsStart = Date.now()
-    try {
-      // Test a simple function call (self-reference)
-      const functionResponse = await supabaseClient.functions.invoke('monitoring-system', {
-        body: { action: 'ping' }
-      })
+    if (payload.check_type === 'http') {
+      const response = await fetch(payload.endpoint_url, {
+        method: 'GET',
+        signal: AbortSignal.timeout(10000)
+      });
+      response_time_ms = Date.now() - start;
+      status_code = response.status;
       
-      checks.push({
-        name: 'edge_functions',
-        status: 'healthy',
-        response_time: Date.now() - functionsStart,
-        details: 'Functions responding'
-      })
-    } catch (error) {
-      checks.push({
-        name: 'edge_functions',
-        status: 'degraded',
-        response_time: Date.now() - functionsStart,
-        details: 'Limited functionality'
-      })
-    }
-
-    const totalResponseTime = Date.now() - startTime
-    const overallStatus = checks.every(check => check.status === 'healthy') ? 'healthy' : 
-                         checks.some(check => check.status === 'unhealthy') ? 'unhealthy' : 'degraded'
-
-    const healthData = {
-      status: overallStatus,
-      timestamp: new Date().toISOString(),
-      response_time: totalResponseTime,
-      checks: checks,
-      version: '1.0.0'
-    }
-
-    // Log health check result
-    await supabaseClient
-      .from('health_checks')
-      .insert({
-        status: overallStatus,
-        response_time: totalResponseTime,
-        checks_data: checks,
-        created_at: new Date().toISOString()
-      })
-
-    return new Response(JSON.stringify(healthData), {
-      status: overallStatus === 'healthy' ? 200 : 503,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({
-      status: 'unhealthy',
-      timestamp: new Date().toISOString(),
-      error: error.message,
-      response_time: Date.now() - startTime
-    }), {
-      status: 503,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function createAlert(req: Request, supabaseClient: any) {
-  const { 
-    alert_type, 
-    severity, 
-    title, 
-    message, 
-    service, 
-    metadata = {} 
-  } = await req.json()
-
-  try {
-    const alertEntry = {
-      alert_type: alert_type,
-      severity: severity,
-      title: title,
-      message: message,
-      service_name: service,
-      metadata: metadata,
-      status: 'open',
-      created_at: new Date().toISOString()
-    }
-
-    const { data: alert, error } = await supabaseClient
-      .from('system_alerts')
-      .insert(alertEntry)
-      .select()
-      .single()
-
-    if (error) {
-      throw error
-    }
-
-    // Send notifications based on severity
-    if (severity === 'critical' || severity === 'high') {
-      await sendAlertNotifications(supabaseClient, alert)
-    }
-
-    return new Response(JSON.stringify({
-      success: true,
-      alert_id: alert.id
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function getLogs(req: Request, supabaseClient: any) {
-  const url = new URL(req.url)
-  const service = url.searchParams.get('service')
-  const level = url.searchParams.get('level')
-  const limit = parseInt(url.searchParams.get('limit') || '100')
-  const offset = parseInt(url.searchParams.get('offset') || '0')
-
-  try {
-    let query = supabaseClient
-      .from('system_logs')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .range(offset, offset + limit - 1)
-
-    if (service) {
-      query = query.eq('service_name', service)
-    }
-
-    if (level) {
-      query = query.eq('log_level', level)
-    }
-
-    const { data: logs, error } = await query
-
-    if (error) {
-      throw error
-    }
-
-    return new Response(JSON.stringify({
-      success: true,
-      logs: logs,
-      total: logs?.length || 0
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function getMetrics(req: Request, supabaseClient: any) {
-  const url = new URL(req.url)
-  const service = url.searchParams.get('service')
-  const metricName = url.searchParams.get('metric_name')
-  const timeRange = url.searchParams.get('time_range') || '1h'
-
-  try {
-    const timeRangeMs = parseTimeRange(timeRange)
-    const startTime = new Date(Date.now() - timeRangeMs).toISOString()
-
-    let query = supabaseClient
-      .from('system_metrics')
-      .select('*')
-      .gte('created_at', startTime)
-      .order('created_at', { ascending: true })
-
-    if (service) {
-      query = query.eq('service_name', service)
-    }
-
-    if (metricName) {
-      query = query.eq('metric_name', metricName)
-    }
-
-    const { data: metrics, error } = await query
-
-    if (error) {
-      throw error
-    }
-
-    return new Response(JSON.stringify({
-      success: true,
-      metrics: metrics,
-      time_range: timeRange,
-      total: metrics?.length || 0
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function getDashboardData(req: Request, supabaseClient: any) {
-  try {
-    const now = new Date()
-    const oneHourAgo = new Date(now.getTime() - 60 * 60 * 1000).toISOString()
-    const oneDayAgo = new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()
-
-    // Get recent alerts
-    const { data: recentAlerts } = await supabaseClient
-      .from('system_alerts')
-      .select('*')
-      .gte('created_at', oneDayAgo)
-      .order('created_at', { ascending: false })
-      .limit(10)
-
-    // Get error rate
-    const { data: errorLogs } = await supabaseClient
-      .from('system_logs')
-      .select('count', { count: 'exact' })
-      .eq('log_level', 'error')
-      .gte('created_at', oneHourAgo)
-
-    const { data: totalLogs } = await supabaseClient
-      .from('system_logs')
-      .select('count', { count: 'exact' })
-      .gte('created_at', oneHourAgo)
-
-    // Get service health
-    const { data: latestHealthCheck } = await supabaseClient
-      .from('health_checks')
-      .select('*')
-      .order('created_at', { ascending: false })
-      .limit(1)
-      .single()
-
-    // Calculate metrics
-    const errorCount = errorLogs?.[0]?.count || 0
-    const totalCount = totalLogs?.[0]?.count || 0
-    const errorRate = totalCount > 0 ? (errorCount / totalCount * 100).toFixed(2) : '0.00'
-
-    return new Response(JSON.stringify({
-      success: true,
-      dashboard: {
-        system_health: latestHealthCheck?.status || 'unknown',
-        error_rate: parseFloat(errorRate),
-        recent_alerts: recentAlerts || [],
-        total_errors_last_hour: errorCount,
-        total_requests_last_hour: totalCount,
-        last_health_check: latestHealthCheck?.created_at,
-        response_time: latestHealthCheck?.response_time
+      if (status_code >= 200 && status_code < 300) {
+        status = 'healthy';
+        health_score = 100;
+      } else if (status_code >= 400 && status_code < 500) {
+        status = 'degraded';
+        health_score = 60;
+      } else {
+        status = 'unhealthy';
+        health_score = 0;
       }
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function getSystemStatus(req: Request, supabaseClient: any) {
-  try {
-    // Get latest metrics for each service
-    const { data: services } = await supabaseClient
-      .from('system_metrics')
-      .select('service_name')
-      .not('service_name', 'is', null)
-      .order('created_at', { ascending: false })
-
-    const uniqueServices = [...new Set(services?.map(s => s.service_name) || [])]
-
-    const serviceStatuses = []
-    for (const service of uniqueServices) {
-      const { data: latestMetrics } = await supabaseClient
-        .from('system_metrics')
-        .select('*')
-        .eq('service_name', service)
-        .order('created_at', { ascending: false })
-        .limit(5)
-
-      serviceStatuses.push({
-        service: service,
-        status: 'operational', // Would be calculated based on metrics
-        latest_metrics: latestMetrics
-      })
     }
-
-    return new Response(JSON.stringify({
-      success: true,
-      system_status: {
-        overall_status: 'operational',
-        services: serviceStatuses,
-        last_updated: new Date().toISOString()
-      }
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
   } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    status = 'unhealthy';
+    health_score = 0;
+    error_message = error.message;
+    response_time_ms = 10000; // timeout duration
   }
+
+  const { data, error: dbError } = await supabase
+    .from('system_health_checks')
+    .insert({
+      service_name: payload.service_name,
+      endpoint_url: payload.endpoint_url,
+      check_type: payload.check_type,
+      status,
+      response_time_ms,
+      status_code,
+      error_message,
+      health_score,
+      metadata: {},
+      checked_at: new Date().toISOString()
+    });
+
+  if (dbError) {
+    console.error('Failed to save health check:', dbError);
+  }
+
+  return new Response(JSON.stringify({
+    service_name: payload.service_name,
+    status,
+    response_time_ms,
+    health_score,
+    checked_at: new Date().toISOString()
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-async function trackError(req: Request, supabaseClient: any) {
-  const { error_message, stack_trace, service, user_id, metadata = {} } = await req.json()
+async function fireAlert(req: Request, supabase: any) {
+  const payload: AlertPayload = await req.json();
+  
+  const { data, error } = await supabase
+    .from('alert_instances')
+    .insert({
+      alert_rule_id: payload.rule_id,
+      status: 'firing',
+      severity: payload.severity,
+      summary: payload.summary,
+      description: payload.description,
+      trigger_value: payload.trigger_value,
+      labels: payload.labels || {},
+      annotations: {},
+      fired_at: new Date().toISOString()
+    });
 
-  try {
-    await supabaseClient
-      .from('error_tracking')
+  if (error) {
+    console.error('Failed to fire alert:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  console.log(`Alert fired: ${payload.summary} (${payload.severity})`);
+
+  return new Response(JSON.stringify({ 
+    success: true,
+    alert_id: data?.[0]?.id,
+    message: 'Alert fired successfully' 
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
+}
+
+async function resolveAlert(req: Request, supabase: any) {
+  const { alert_id } = await req.json();
+  
+  const { data, error } = await supabase
+    .from('alert_instances')
+    .update({
+      status: 'resolved',
+      resolved_at: new Date().toISOString()
+    })
+    .eq('id', alert_id);
+
+  if (error) {
+    console.error('Failed to resolve alert:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  return new Response(JSON.stringify({ 
+    success: true,
+    message: 'Alert resolved successfully' 
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
+}
+
+async function evaluateSLA(req: Request, supabase: any) {
+  const { service_name, sla_type } = await req.json();
+  
+  const { data: slaConfig, error: slaError } = await supabase
+    .from('sla_configurations')
+    .select('*')
+    .eq('service_name', service_name)
+    .eq('sla_type', sla_type)
+    .eq('is_active', true)
+    .single();
+
+  if (slaError || !slaConfig) {
+    return new Response(JSON.stringify({ 
+      error: 'SLA configuration not found' 
+    }), {
+      status: 404,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  let current_value = 99.5;
+  
+  if (sla_type === 'response_time') {
+    const { data: metrics } = await supabase
+      .from('metrics_collection')
+      .select('metric_value')
+      .eq('service_name', service_name)
+      .eq('metric_name', 'response_time')
+      .gte('timestamp', new Date(Date.now() - 5 * 60 * 1000).toISOString())
+      .order('timestamp', { ascending: false });
+    
+    if (metrics?.length) {
+      current_value = metrics.reduce((sum, m) => sum + m.metric_value, 0) / metrics.length;
+    }
+  }
+
+  let violation_type = null;
+  if (current_value < slaConfig.critical_threshold) {
+    violation_type = 'critical';
+  } else if (current_value < slaConfig.warning_threshold) {
+    violation_type = 'warning';
+  }
+
+  if (violation_type) {
+    await supabase
+      .from('sla_violations')
       .insert({
-        error_message: error_message,
-        stack_trace: stack_trace,
-        service_name: service,
-        user_id: user_id,
-        metadata: metadata,
-        created_at: new Date().toISOString()
-      })
-
-    return new Response(JSON.stringify({
-      success: true,
-      tracked: true
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+        sla_config_id: slaConfig.id,
+        violation_type,
+        current_value,
+        expected_value: slaConfig.target_value,
+        duration_minutes: 5,
+        impact_assessment: {},
+        root_cause_analysis: {},
+        mitigation_actions: []
+      });
   }
+
+  return new Response(JSON.stringify({
+    service_name,
+    sla_type,
+    target_value: slaConfig.target_value,
+    current_value,
+    compliance: current_value >= slaConfig.target_value,
+    violation_type
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-async function trackPerformance(req: Request, supabaseClient: any) {
-  const { operation_name, duration, service, metadata = {} } = await req.json()
-
-  try {
-    await supabaseClient
-      .from('performance_tracking')
-      .insert({
-        operation_name: operation_name,
-        duration_ms: duration,
-        service_name: service,
-        metadata: metadata,
-        created_at: new Date().toISOString()
-      })
-
-    return new Response(JSON.stringify({
-      success: true,
-      tracked: true
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function auditLog(req: Request, supabaseClient: any) {
-  const { action, resource, user_id, changes = {}, metadata = {} } = await req.json()
-
-  try {
-    await supabaseClient
-      .from('audit_logs')
-      .insert({
-        action: action,
-        resource_type: resource,
-        user_id: user_id,
-        changes: changes,
-        metadata: metadata,
-        created_at: new Date().toISOString()
-      })
-
-    return new Response(JSON.stringify({
-      success: true,
-      logged: true
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  } catch (error) {
-    return new Response(JSON.stringify({ 
-      success: false, 
-      error: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function checkErrorAlerts(supabaseClient: any, logEntry: any) {
-  // Check if error rate is above threshold
-  const oneMinuteAgo = new Date(Date.now() - 60000).toISOString()
+async function getDashboardData(req: Request, supabase: any) {
+  const url = new URL(req.url);
+  const dashboard_id = url.searchParams.get('dashboard_id');
   
-  const { data: recentErrors } = await supabaseClient
-    .from('system_logs')
-    .select('count', { count: 'exact' })
-    .eq('log_level', 'error')
-    .eq('service_name', logEntry.service_name)
-    .gte('created_at', oneMinuteAgo)
-
-  const errorCount = recentErrors?.[0]?.count || 0
-  
-  if (errorCount > 5) { // More than 5 errors in 1 minute
-    await createAlert(
-      new Request('', { 
-        method: 'POST',
-        body: JSON.stringify({
-          alert_type: 'error_rate',
-          severity: 'high',
-          title: 'High Error Rate Detected',
-          message: `Service ${logEntry.service_name} has generated ${errorCount} errors in the last minute`,
-          service: logEntry.service_name,
-          metadata: { error_count: errorCount, threshold: 5 }
-        })
-      }),
-      supabaseClient
-    )
+  if (!dashboard_id) {
+    return new Response(JSON.stringify({ error: 'Dashboard ID required' }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
+
+  const { data: dashboard, error } = await supabase
+    .from('business_dashboards')
+    .select('*')
+    .eq('id', dashboard_id)
+    .single();
+
+  if (error || !dashboard) {
+    return new Response(JSON.stringify({ error: 'Dashboard not found' }), {
+      status: 404,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
+  }
+
+  const panelData = dashboard.panels.map((panel: any) => ({
+    ...panel,
+    data: generateMockData(panel.type),
+    last_updated: new Date().toISOString()
+  }));
+
+  return new Response(JSON.stringify({
+    dashboard_name: dashboard.dashboard_name,
+    dashboard_type: dashboard.dashboard_type,
+    panels: panelData,
+    refresh_interval: dashboard.refresh_interval
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-async function checkMetricAlerts(supabaseClient: any, metricEntry: any) {
-  const thresholds = MONITORING_CONFIGS.metrics.alert_thresholds
-  const metricName = metricEntry.metric_name
-  const metricValue = metricEntry.metric_value
+async function createTrace(req: Request, supabase: any) {
+  const payload = await req.json();
+  
+  const { data, error } = await supabase
+    .from('distributed_traces')
+    .insert({
+      trace_id: payload.trace_id,
+      span_id: payload.span_id,
+      parent_span_id: payload.parent_span_id,
+      operation_name: payload.operation_name,
+      service_name: payload.service_name,
+      start_time: payload.start_time,
+      end_time: payload.end_time,
+      duration_ms: payload.duration_ms,
+      tags: payload.tags || {},
+      logs: payload.logs || [],
+      status: payload.status || 'ok',
+      error_message: payload.error_message,
+      baggage: payload.baggage || {}
+    });
 
-  let shouldAlert = false
-  let alertMessage = ''
-
-  if (metricName.includes('response_time') && metricValue > thresholds.response_time) {
-    shouldAlert = true
-    alertMessage = `Response time (${metricValue}ms) exceeds threshold (${thresholds.response_time}ms)`
-  } else if (metricName.includes('cpu') && metricValue > thresholds.cpu_usage) {
-    shouldAlert = true
-    alertMessage = `CPU usage (${metricValue}%) exceeds threshold (${thresholds.cpu_usage}%)`
-  } else if (metricName.includes('memory') && metricValue > thresholds.memory_usage) {
-    shouldAlert = true
-    alertMessage = `Memory usage (${metricValue}%) exceeds threshold (${thresholds.memory_usage}%)`
+  if (error) {
+    console.error('Failed to create trace:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
 
-  if (shouldAlert) {
-    await createAlert(
-      new Request('', {
-        method: 'POST',
-        body: JSON.stringify({
-          alert_type: 'metric_threshold',
-          severity: 'medium',
-          title: `Metric Threshold Exceeded: ${metricName}`,
-          message: alertMessage,
-          service: metricEntry.service_name,
-          metadata: { metric_name: metricName, metric_value: metricValue }
-        })
-      }),
-      supabaseClient
-    )
-  }
+  return new Response(JSON.stringify({ 
+    success: true,
+    trace_id: payload.trace_id,
+    span_id: payload.span_id
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-async function sendAlertNotifications(supabaseClient: any, alert: any) {
-  // This would integrate with notification systems
-  console.log('Alert notification:', alert.title)
+async function ingestLogs(req: Request, supabase: any) {
+  const payload = await req.json();
   
-  // Could call notification-system edge function here
-  try {
-    await supabaseClient.functions.invoke('notification-system', {
-      body: {
-        action: 'send-alert',
-        alert: alert
-      }
-    })
-  } catch (error) {
-    console.error('Failed to send alert notification:', error)
+  const { data, error } = await supabase
+    .from('centralized_logs')
+    .insert({
+      log_level: payload.log_level,
+      service_name: payload.service_name,
+      instance_id: payload.instance_id,
+      message: payload.message,
+      structured_data: payload.structured_data || {},
+      request_id: payload.request_id,
+      user_id: payload.user_id,
+      ip_address: payload.ip_address,
+      user_agent: payload.user_agent,
+      stack_trace: payload.stack_trace,
+      correlation_id: payload.correlation_id,
+      business_context: payload.business_context || {}
+    });
+
+  if (error) {
+    console.error('Failed to ingest log:', error);
+    return new Response(JSON.stringify({ error: error.message }), {
+      status: 400,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+    });
   }
+
+  return new Response(JSON.stringify({ 
+    success: true,
+    message: 'Log ingested successfully' 
+  }), {
+    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+  });
 }
 
-function parseTimeRange(timeRange: string): number {
-  const timeRangeMap: { [key: string]: number } = {
-    '1h': 60 * 60 * 1000,
-    '6h': 6 * 60 * 60 * 1000,
-    '12h': 12 * 60 * 60 * 1000,
-    '24h': 24 * 60 * 60 * 1000,
-    '7d': 7 * 24 * 60 * 60 * 1000,
-    '30d': 30 * 24 * 60 * 60 * 1000
+function generateMockData(type: string) {
+  switch (type) {
+    case 'metric':
+      return Math.floor(Math.random() * 1000) + 500;
+    case 'chart':
+      return Array.from({ length: 24 }, (_, i) => ({
+        time: new Date(Date.now() - (23 - i) * 60 * 60 * 1000).toISOString(),
+        value: Math.floor(Math.random() * 100) + 50
+      }));
+    case 'pie':
+      return [
+        { name: 'Completed', value: 45 },
+        { name: 'Processing', value: 30 },
+        { name: 'Pending', value: 15 },
+        { name: 'Failed', value: 10 }
+      ];
+    case 'table':
+      return [
+        { vendor: 'Tech Store BD', sales: 15000, rating: 4.8 },
+        { vendor: 'Fashion Hub', sales: 12000, rating: 4.6 },
+        { vendor: 'Home Essentials', sales: 8000, rating: 4.5 }
+      ];
+    case 'status':
+      return { status: 'healthy', services: 12, degraded: 1, unhealthy: 0 };
+    default:
+      return null;
   }
-  
-  return timeRangeMap[timeRange] || timeRangeMap['1h']
 }

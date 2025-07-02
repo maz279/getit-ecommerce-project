@@ -9,10 +9,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface BiometricRegistration {
   id: string;
-  auth_type: string;
+  credential_id: string;
   device_name: string;
+  device_type: string;
   last_used_at: string;
+  registered_at: string;
   is_active: boolean;
+  user_id: string;
+  public_key: string;
+  authenticator_data: any;
 }
 
 export const BiometricAuth: React.FC = () => {
@@ -82,7 +87,7 @@ export const BiometricAuth: React.FC = () => {
           .from('biometric_auth_registrations')
           .insert({
             user_id: user.id,
-            auth_type: authType,
+            device_type: authType,
             credential_id: credential.id,
             public_key: 'demo-key',
             device_name: navigator.userAgent.split(' ')[0],
@@ -142,9 +147,9 @@ export const BiometricAuth: React.FC = () => {
                 registrations.map((registration) => (
                   <div key={registration.id} className="flex items-center justify-between p-3 border rounded-lg">
                     <div className="flex items-center gap-3">
-                      {getAuthIcon(registration.auth_type)}
+                      {getAuthIcon(registration.device_type)}
                       <div>
-                        <p className="font-medium capitalize">{registration.auth_type}</p>
+                        <p className="font-medium capitalize">{registration.device_type || 'Biometric'}</p>
                         <p className="text-sm text-muted-foreground">
                           {registration.device_name}
                         </p>

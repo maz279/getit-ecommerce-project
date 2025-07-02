@@ -8,9 +8,15 @@ import { supabase } from '@/integrations/supabase/client';
 
 interface FraudAlert {
   id: string;
+  user_id: string;
+  order_id: string;
+  alert_type: string;
   risk_score: number;
-  action: string;
-  indicators: string[];
+  risk_factors: any;
+  status: string;
+  investigation_notes: string;
+  resolved_at: string;
+  resolved_by: string;
   created_at: string;
 }
 
@@ -79,15 +85,15 @@ export const FraudDetection: React.FC = () => {
                     Risk Score: {alert.risk_score}%
                   </span>
                 </div>
-                <Badge variant={alert.action === 'block' ? 'destructive' : 'secondary'}>
-                  {alert.action}
+                <Badge variant={alert.status === 'critical' ? 'destructive' : 'secondary'}>
+                  {alert.alert_type}
                 </Badge>
               </div>
               
               <div className="flex flex-wrap gap-1">
-                {alert.indicators.map((indicator, index) => (
+                {alert.risk_factors && typeof alert.risk_factors === 'object' && Object.keys(alert.risk_factors).map((key, index) => (
                   <Badge key={index} variant="outline" className="text-xs">
-                    {indicator}
+                    {key}: {String(alert.risk_factors[key])}
                   </Badge>
                 ))}
               </div>

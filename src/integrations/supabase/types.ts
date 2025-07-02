@@ -706,6 +706,113 @@ export type Database = {
         }
         Relationships: []
       }
+      alert_instances: {
+        Row: {
+          alert_rule_id: string
+          annotations: Json | null
+          description: string | null
+          escalated_at: string | null
+          escalation_level: number | null
+          fired_at: string
+          id: string
+          labels: Json | null
+          notification_history: Json | null
+          resolved_at: string | null
+          severity: string
+          status: string
+          summary: string
+          trigger_value: number | null
+        }
+        Insert: {
+          alert_rule_id: string
+          annotations?: Json | null
+          description?: string | null
+          escalated_at?: string | null
+          escalation_level?: number | null
+          fired_at?: string
+          id?: string
+          labels?: Json | null
+          notification_history?: Json | null
+          resolved_at?: string | null
+          severity: string
+          status?: string
+          summary: string
+          trigger_value?: number | null
+        }
+        Update: {
+          alert_rule_id?: string
+          annotations?: Json | null
+          description?: string | null
+          escalated_at?: string | null
+          escalation_level?: number | null
+          fired_at?: string
+          id?: string
+          labels?: Json | null
+          notification_history?: Json | null
+          resolved_at?: string | null
+          severity?: string
+          status?: string
+          summary?: string
+          trigger_value?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "alert_instances_alert_rule_id_fkey"
+            columns: ["alert_rule_id"]
+            isOneToOne: false
+            referencedRelation: "alert_rules"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      alert_rules: {
+        Row: {
+          conditions: Json
+          created_at: string
+          created_by: string | null
+          escalation_rules: Json
+          id: string
+          is_active: boolean | null
+          notification_channels: Json
+          rule_name: string
+          rule_type: string
+          runbook_url: string | null
+          severity: string
+          suppression_rules: Json | null
+          updated_at: string
+        }
+        Insert: {
+          conditions: Json
+          created_at?: string
+          created_by?: string | null
+          escalation_rules?: Json
+          id?: string
+          is_active?: boolean | null
+          notification_channels?: Json
+          rule_name: string
+          rule_type: string
+          runbook_url?: string | null
+          severity: string
+          suppression_rules?: Json | null
+          updated_at?: string
+        }
+        Update: {
+          conditions?: Json
+          created_at?: string
+          created_by?: string | null
+          escalation_rules?: Json
+          id?: string
+          is_active?: boolean | null
+          notification_channels?: Json
+          rule_name?: string
+          rule_type?: string
+          runbook_url?: string | null
+          severity?: string
+          suppression_rules?: Json | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       analytics_cache: {
         Row: {
           analytics_type: string
@@ -1056,6 +1163,176 @@ export type Database = {
           metadata?: Json | null
           resource_type?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      availability_tracking: {
+        Row: {
+          average_response_time_ms: number | null
+          created_at: string
+          error_rate_percentage: number | null
+          failed_requests: number
+          id: string
+          measurement_period: unknown
+          p95_response_time_ms: number | null
+          p99_response_time_ms: number | null
+          period_end: string
+          period_start: string
+          service_name: string
+          sla_compliance: boolean | null
+          successful_requests: number
+          total_requests: number
+          uptime_percentage: number | null
+        }
+        Insert: {
+          average_response_time_ms?: number | null
+          created_at?: string
+          error_rate_percentage?: number | null
+          failed_requests?: number
+          id?: string
+          measurement_period: unknown
+          p95_response_time_ms?: number | null
+          p99_response_time_ms?: number | null
+          period_end: string
+          period_start: string
+          service_name: string
+          sla_compliance?: boolean | null
+          successful_requests?: number
+          total_requests?: number
+          uptime_percentage?: number | null
+        }
+        Update: {
+          average_response_time_ms?: number | null
+          created_at?: string
+          error_rate_percentage?: number | null
+          failed_requests?: number
+          id?: string
+          measurement_period?: unknown
+          p95_response_time_ms?: number | null
+          p99_response_time_ms?: number | null
+          period_end?: string
+          period_start?: string
+          service_name?: string
+          sla_compliance?: boolean | null
+          successful_requests?: number
+          total_requests?: number
+          uptime_percentage?: number | null
+        }
+        Relationships: []
+      }
+      backup_executions: {
+        Row: {
+          backup_name: string
+          backup_size_bytes: number | null
+          backup_type: string
+          compressed_size_bytes: number | null
+          end_time: string | null
+          error_message: string | null
+          id: string
+          metadata: Json | null
+          next_scheduled_backup: string | null
+          policy_id: string
+          recovery_point_objective: string | null
+          start_time: string
+          status: string
+          storage_path: string | null
+          verification_status: string | null
+        }
+        Insert: {
+          backup_name: string
+          backup_size_bytes?: number | null
+          backup_type: string
+          compressed_size_bytes?: number | null
+          end_time?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          next_scheduled_backup?: string | null
+          policy_id: string
+          recovery_point_objective?: string | null
+          start_time?: string
+          status?: string
+          storage_path?: string | null
+          verification_status?: string | null
+        }
+        Update: {
+          backup_name?: string
+          backup_size_bytes?: number | null
+          backup_type?: string
+          compressed_size_bytes?: number | null
+          end_time?: string | null
+          error_message?: string | null
+          id?: string
+          metadata?: Json | null
+          next_scheduled_backup?: string | null
+          policy_id?: string
+          recovery_point_objective?: string | null
+          start_time?: string
+          status?: string
+          storage_path?: string | null
+          verification_status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "backup_executions_policy_id_fkey"
+            columns: ["policy_id"]
+            isOneToOne: false
+            referencedRelation: "backup_policies"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      backup_policies: {
+        Row: {
+          backup_type: string
+          backup_window: string | null
+          compression_enabled: boolean | null
+          created_at: string
+          cross_region_copy: boolean | null
+          encryption_enabled: boolean | null
+          frequency: unknown
+          id: string
+          is_active: boolean | null
+          policy_name: string
+          retention_period: unknown
+          storage_location: string
+          target_regions: Json | null
+          updated_at: string
+          verification_enabled: boolean | null
+        }
+        Insert: {
+          backup_type: string
+          backup_window?: string | null
+          compression_enabled?: boolean | null
+          created_at?: string
+          cross_region_copy?: boolean | null
+          encryption_enabled?: boolean | null
+          frequency: unknown
+          id?: string
+          is_active?: boolean | null
+          policy_name: string
+          retention_period: unknown
+          storage_location: string
+          target_regions?: Json | null
+          updated_at?: string
+          verification_enabled?: boolean | null
+        }
+        Update: {
+          backup_type?: string
+          backup_window?: string | null
+          compression_enabled?: boolean | null
+          created_at?: string
+          cross_region_copy?: boolean | null
+          encryption_enabled?: boolean | null
+          frequency?: unknown
+          id?: string
+          is_active?: boolean | null
+          policy_name?: string
+          retention_period?: unknown
+          storage_location?: string
+          target_regions?: Json | null
+          updated_at?: string
+          verification_enabled?: boolean | null
         }
         Relationships: []
       }
@@ -1950,6 +2227,48 @@ export type Database = {
           },
         ]
       }
+      business_dashboards: {
+        Row: {
+          access_permissions: Json
+          created_at: string
+          created_by: string | null
+          dashboard_name: string
+          dashboard_type: string
+          data_sources: Json
+          id: string
+          is_active: boolean | null
+          panels: Json
+          refresh_interval: number | null
+          updated_at: string
+        }
+        Insert: {
+          access_permissions?: Json
+          created_at?: string
+          created_by?: string | null
+          dashboard_name: string
+          dashboard_type: string
+          data_sources?: Json
+          id?: string
+          is_active?: boolean | null
+          panels?: Json
+          refresh_interval?: number | null
+          updated_at?: string
+        }
+        Update: {
+          access_permissions?: Json
+          created_at?: string
+          created_by?: string | null
+          dashboard_name?: string
+          dashboard_type?: string
+          data_sources?: Json
+          id?: string
+          is_active?: boolean | null
+          panels?: Json
+          refresh_interval?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       business_intelligence_dashboards: {
         Row: {
           access_permissions: Json | null
@@ -2349,6 +2668,57 @@ export type Database = {
           is_active?: boolean | null
           resource_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      centralized_logs: {
+        Row: {
+          business_context: Json | null
+          correlation_id: string | null
+          created_at: string
+          id: string
+          instance_id: string | null
+          ip_address: unknown | null
+          log_level: string
+          message: string
+          request_id: string | null
+          service_name: string
+          stack_trace: string | null
+          structured_data: Json | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          business_context?: Json | null
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          instance_id?: string | null
+          ip_address?: unknown | null
+          log_level: string
+          message: string
+          request_id?: string | null
+          service_name: string
+          stack_trace?: string | null
+          structured_data?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          business_context?: Json | null
+          correlation_id?: string | null
+          created_at?: string
+          id?: string
+          instance_id?: string | null
+          ip_address?: unknown | null
+          log_level?: string
+          message?: string
+          request_id?: string | null
+          service_name?: string
+          stack_trace?: string | null
+          structured_data?: Json | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -4058,6 +4428,57 @@ export type Database = {
         }
         Relationships: []
       }
+      database_replicas: {
+        Row: {
+          auto_failover_enabled: boolean | null
+          configuration: Json
+          created_at: string
+          failover_priority: number | null
+          health_status: string | null
+          id: string
+          last_sync_at: string | null
+          primary_endpoint: string
+          region: string
+          replica_endpoint: string
+          replica_name: string
+          replica_type: string
+          replication_lag_ms: number | null
+          updated_at: string
+        }
+        Insert: {
+          auto_failover_enabled?: boolean | null
+          configuration?: Json
+          created_at?: string
+          failover_priority?: number | null
+          health_status?: string | null
+          id?: string
+          last_sync_at?: string | null
+          primary_endpoint: string
+          region: string
+          replica_endpoint: string
+          replica_name: string
+          replica_type: string
+          replication_lag_ms?: number | null
+          updated_at?: string
+        }
+        Update: {
+          auto_failover_enabled?: boolean | null
+          configuration?: Json
+          created_at?: string
+          failover_priority?: number | null
+          health_status?: string | null
+          id?: string
+          last_sync_at?: string | null
+          primary_endpoint?: string
+          region?: string
+          replica_endpoint?: string
+          replica_name?: string
+          replica_type?: string
+          replication_lag_ms?: number | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
       db_connection_pool_stats: {
         Row: {
           active_connections: number
@@ -4283,6 +4704,57 @@ export type Database = {
           pin_hash?: string | null
           updated_at?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      distributed_traces: {
+        Row: {
+          baggage: Json | null
+          duration_ms: number | null
+          end_time: string | null
+          error_message: string | null
+          id: string
+          logs: Json | null
+          operation_name: string
+          parent_span_id: string | null
+          service_name: string
+          span_id: string
+          start_time: string
+          status: string | null
+          tags: Json | null
+          trace_id: string
+        }
+        Insert: {
+          baggage?: Json | null
+          duration_ms?: number | null
+          end_time?: string | null
+          error_message?: string | null
+          id?: string
+          logs?: Json | null
+          operation_name: string
+          parent_span_id?: string | null
+          service_name: string
+          span_id: string
+          start_time: string
+          status?: string | null
+          tags?: Json | null
+          trace_id: string
+        }
+        Update: {
+          baggage?: Json | null
+          duration_ms?: number | null
+          end_time?: string | null
+          error_message?: string | null
+          id?: string
+          logs?: Json | null
+          operation_name?: string
+          parent_span_id?: string | null
+          service_name?: string
+          span_id?: string
+          start_time?: string
+          status?: string | null
+          tags?: Json | null
+          trace_id?: string
         }
         Relationships: []
       }
@@ -4864,6 +5336,125 @@ export type Database = {
             columns: ["reviewed_by"]
             isOneToOne: false
             referencedRelation: "profiles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      failover_configurations: {
+        Row: {
+          created_at: string
+          failover_mode: string
+          failover_triggers: Json
+          health_check_config: Json
+          id: string
+          is_active: boolean | null
+          notification_contacts: Json | null
+          primary_region: string
+          recovery_point_objective: number
+          recovery_time_objective: number
+          rollback_procedure: Json | null
+          secondary_regions: Json
+          service_name: string
+          traffic_switching_method: string
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          failover_mode: string
+          failover_triggers?: Json
+          health_check_config: Json
+          id?: string
+          is_active?: boolean | null
+          notification_contacts?: Json | null
+          primary_region: string
+          recovery_point_objective: number
+          recovery_time_objective: number
+          rollback_procedure?: Json | null
+          secondary_regions?: Json
+          service_name: string
+          traffic_switching_method: string
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          failover_mode?: string
+          failover_triggers?: Json
+          health_check_config?: Json
+          id?: string
+          is_active?: boolean | null
+          notification_contacts?: Json | null
+          primary_region?: string
+          recovery_point_objective?: number
+          recovery_time_objective?: number
+          rollback_procedure?: Json | null
+          secondary_regions?: Json
+          service_name?: string
+          traffic_switching_method?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      failover_events: {
+        Row: {
+          affected_services: Json | null
+          config_id: string
+          downtime_seconds: number | null
+          end_time: string | null
+          event_type: string
+          id: string
+          impact_assessment: Json | null
+          initiated_by: string | null
+          initiated_by_user: string | null
+          lessons_learned: string | null
+          post_mortem_url: string | null
+          source_region: string
+          start_time: string
+          status: string
+          target_region: string
+          trigger_reason: string
+        }
+        Insert: {
+          affected_services?: Json | null
+          config_id: string
+          downtime_seconds?: number | null
+          end_time?: string | null
+          event_type: string
+          id?: string
+          impact_assessment?: Json | null
+          initiated_by?: string | null
+          initiated_by_user?: string | null
+          lessons_learned?: string | null
+          post_mortem_url?: string | null
+          source_region: string
+          start_time?: string
+          status?: string
+          target_region: string
+          trigger_reason: string
+        }
+        Update: {
+          affected_services?: Json | null
+          config_id?: string
+          downtime_seconds?: number | null
+          end_time?: string | null
+          event_type?: string
+          id?: string
+          impact_assessment?: Json | null
+          initiated_by?: string | null
+          initiated_by_user?: string | null
+          lessons_learned?: string | null
+          post_mortem_url?: string | null
+          source_region?: string
+          start_time?: string
+          status?: string
+          target_region?: string
+          trigger_reason?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "failover_events_config_id_fkey"
+            columns: ["config_id"]
+            isOneToOne: false
+            referencedRelation: "failover_configurations"
             referencedColumns: ["id"]
           },
         ]
@@ -5916,6 +6507,138 @@ export type Database = {
           target_metrics?: Json | null
           total_rewards_paid?: number | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      incident_records: {
+        Row: {
+          action_items: Json | null
+          affected_services: Json | null
+          assigned_team: Json | null
+          category: string
+          closed_at: string | null
+          communication_log: Json | null
+          created_at: string
+          customer_impact: string | null
+          description: string
+          id: string
+          incident_commander: string | null
+          incident_id: string
+          lessons_learned: Json | null
+          metrics: Json | null
+          post_mortem_url: string | null
+          resolution_summary: string | null
+          resolved_at: string | null
+          root_cause: string | null
+          severity: string
+          status: string
+          timeline: Json | null
+          title: string
+        }
+        Insert: {
+          action_items?: Json | null
+          affected_services?: Json | null
+          assigned_team?: Json | null
+          category: string
+          closed_at?: string | null
+          communication_log?: Json | null
+          created_at?: string
+          customer_impact?: string | null
+          description: string
+          id?: string
+          incident_commander?: string | null
+          incident_id: string
+          lessons_learned?: Json | null
+          metrics?: Json | null
+          post_mortem_url?: string | null
+          resolution_summary?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          severity: string
+          status?: string
+          timeline?: Json | null
+          title: string
+        }
+        Update: {
+          action_items?: Json | null
+          affected_services?: Json | null
+          assigned_team?: Json | null
+          category?: string
+          closed_at?: string | null
+          communication_log?: Json | null
+          created_at?: string
+          customer_impact?: string | null
+          description?: string
+          id?: string
+          incident_commander?: string | null
+          incident_id?: string
+          lessons_learned?: Json | null
+          metrics?: Json | null
+          post_mortem_url?: string | null
+          resolution_summary?: string | null
+          resolved_at?: string | null
+          root_cause?: string | null
+          severity?: string
+          status?: string
+          timeline?: Json | null
+          title?: string
+        }
+        Relationships: []
+      }
+      incident_response_plans: {
+        Row: {
+          communication_templates: Json | null
+          created_at: string
+          created_by: string | null
+          escalation_matrix: Json
+          external_contacts: Json | null
+          id: string
+          incident_category: string
+          is_active: boolean | null
+          plan_name: string
+          required_roles: Json | null
+          response_procedures: Json
+          runbook_links: Json | null
+          severity_levels: Json
+          sla_targets: Json | null
+          updated_at: string
+          version: string | null
+        }
+        Insert: {
+          communication_templates?: Json | null
+          created_at?: string
+          created_by?: string | null
+          escalation_matrix: Json
+          external_contacts?: Json | null
+          id?: string
+          incident_category: string
+          is_active?: boolean | null
+          plan_name: string
+          required_roles?: Json | null
+          response_procedures: Json
+          runbook_links?: Json | null
+          severity_levels?: Json
+          sla_targets?: Json | null
+          updated_at?: string
+          version?: string | null
+        }
+        Update: {
+          communication_templates?: Json | null
+          created_at?: string
+          created_by?: string | null
+          escalation_matrix?: Json
+          external_contacts?: Json | null
+          id?: string
+          incident_category?: string
+          is_active?: boolean | null
+          plan_name?: string
+          required_roles?: Json | null
+          response_procedures?: Json
+          runbook_links?: Json | null
+          severity_levels?: Json
+          sla_targets?: Json | null
+          updated_at?: string
+          version?: string | null
         }
         Relationships: []
       }
@@ -7063,6 +7786,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      metrics_collection: {
+        Row: {
+          id: string
+          instance_id: string | null
+          labels: Json
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          retention_period: unknown | null
+          service_name: string
+          timestamp: string
+        }
+        Insert: {
+          id?: string
+          instance_id?: string | null
+          labels?: Json
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          retention_period?: unknown | null
+          service_name: string
+          timestamp?: string
+        }
+        Update: {
+          id?: string
+          instance_id?: string | null
+          labels?: Json
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          retention_period?: unknown | null
+          service_name?: string
+          timestamp?: string
+        }
+        Relationships: []
       }
       micro_payment_aggregations: {
         Row: {
@@ -13168,6 +13927,113 @@ export type Database = {
           },
         ]
       }
+      sla_configurations: {
+        Row: {
+          created_at: string
+          critical_threshold: number
+          escalation_policy: Json
+          evaluation_frequency: unknown
+          id: string
+          is_active: boolean | null
+          measurement_window: unknown
+          service_name: string
+          sla_type: string
+          target_value: number
+          updated_at: string
+          warning_threshold: number
+        }
+        Insert: {
+          created_at?: string
+          critical_threshold: number
+          escalation_policy?: Json
+          evaluation_frequency?: unknown
+          id?: string
+          is_active?: boolean | null
+          measurement_window?: unknown
+          service_name: string
+          sla_type: string
+          target_value: number
+          updated_at?: string
+          warning_threshold: number
+        }
+        Update: {
+          created_at?: string
+          critical_threshold?: number
+          escalation_policy?: Json
+          evaluation_frequency?: unknown
+          id?: string
+          is_active?: boolean | null
+          measurement_window?: unknown
+          service_name?: string
+          sla_type?: string
+          target_value?: number
+          updated_at?: string
+          warning_threshold?: number
+        }
+        Relationships: []
+      }
+      sla_violations: {
+        Row: {
+          acknowledged_at: string | null
+          acknowledged_by: string | null
+          created_at: string
+          current_value: number
+          duration_minutes: number
+          expected_value: number
+          id: string
+          impact_assessment: Json | null
+          mitigation_actions: Json | null
+          resolved_at: string | null
+          resolved_by: string | null
+          root_cause_analysis: Json | null
+          sla_config_id: string
+          status: string | null
+          violation_type: string
+        }
+        Insert: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          current_value: number
+          duration_minutes: number
+          expected_value: number
+          id?: string
+          impact_assessment?: Json | null
+          mitigation_actions?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          root_cause_analysis?: Json | null
+          sla_config_id: string
+          status?: string | null
+          violation_type: string
+        }
+        Update: {
+          acknowledged_at?: string | null
+          acknowledged_by?: string | null
+          created_at?: string
+          current_value?: number
+          duration_minutes?: number
+          expected_value?: number
+          id?: string
+          impact_assessment?: Json | null
+          mitigation_actions?: Json | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          root_cause_analysis?: Json | null
+          sla_config_id?: string
+          status?: string | null
+          violation_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "sla_violations_sla_config_id_fkey"
+            columns: ["sla_config_id"]
+            isOneToOne: false
+            referencedRelation: "sla_configurations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       smart_reorder_suggestions: {
         Row: {
           cost_analysis: Json | null
@@ -13715,6 +14581,48 @@ export type Database = {
           severity?: string
           status?: string
           title?: string
+        }
+        Relationships: []
+      }
+      system_health_checks: {
+        Row: {
+          check_type: string
+          checked_at: string
+          endpoint_url: string
+          error_message: string | null
+          health_score: number | null
+          id: string
+          metadata: Json | null
+          response_time_ms: number | null
+          service_name: string
+          status: string
+          status_code: number | null
+        }
+        Insert: {
+          check_type: string
+          checked_at?: string
+          endpoint_url: string
+          error_message?: string | null
+          health_score?: number | null
+          id?: string
+          metadata?: Json | null
+          response_time_ms?: number | null
+          service_name: string
+          status: string
+          status_code?: number | null
+        }
+        Update: {
+          check_type?: string
+          checked_at?: string
+          endpoint_url?: string
+          error_message?: string | null
+          health_score?: number | null
+          id?: string
+          metadata?: Json | null
+          response_time_ms?: number | null
+          service_name?: string
+          status?: string
+          status_code?: number | null
         }
         Relationships: []
       }

@@ -1,281 +1,350 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+};
+
+interface DatabaseConfig {
+  url: string;
+  key: string;
 }
+
+const supabaseUrl = Deno.env.get('SUPABASE_URL')!;
+const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!;
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        auth: {
-          autoRefreshToken: false,
-          persistSession: false
-        }
+    const supabase = createClient(supabaseUrl, supabaseServiceKey);
+    const url = new URL(req.url);
+    const path = url.pathname;
+    const method = req.method;
+
+    console.log(`Enhanced Products API: ${method} ${path}`);
+
+    // Product Search with AI Enhancement
+    if (path === '/enhanced-products-api/search' && method === 'GET') {
+      const query = url.searchParams.get('q') || '';
+      const category = url.searchParams.get('category');
+      const minPrice = url.searchParams.get('min_price');
+      const maxPrice = url.searchParams.get('max_price');
+      const sortBy = url.searchParams.get('sort_by') || 'relevance';
+      const page = parseInt(url.searchParams.get('page') || '1');
+      const limit = parseInt(url.searchParams.get('limit') || '20');
+      const offset = (page - 1) * limit;
+
+      let searchQuery = supabase
+        .from('products')
+        .select(`
+          *,
+          brands(name, logo_url),
+          product_reviews(rating, count)
+        `)
+        .eq('status', 'active');
+
+      // Apply filters
+      if (query) {
+        searchQuery = searchQuery.or(`name.ilike.%${query}%,description.ilike.%${query}%,tags.cs.{${query}}`);
       }
-    )
+      
+      if (category) {
+        searchQuery = searchQuery.eq('category_id', category);
+      }
+      
+      if (minPrice) {
+        searchQuery = searchQuery.gte('price', parseFloat(minPrice));
+      }
+      
+      if (maxPrice) {
+        searchQuery = searchQuery.lte('price', parseFloat(maxPrice));
+      }
 
-    const url = new URL(req.url)
-    const action = url.searchParams.get('action')
+      // Apply sorting
+      switch (sortBy) {
+        case 'price_low':
+          searchQuery = searchQuery.order('price', { ascending: true });
+          break;
+        case 'price_high':
+          searchQuery = searchQuery.order('price', { ascending: false });
+          break;
+        case 'rating':
+          searchQuery = searchQuery.order('rating_average', { ascending: false });
+          break;
+        case 'newest':
+          searchQuery = searchQuery.order('created_at', { ascending: false });
+          break;
+        case 'popularity':
+          searchQuery = searchQuery.order('sales_count', { ascending: false });
+          break;
+        default: // relevance
+          searchQuery = searchQuery.order('view_count', { ascending: false });
+      }
 
-    switch (action) {
-      case 'search':
-        return await handleProductSearch(supabaseClient, req)
-      case 'filters':
-        return await handleGetFilters(supabaseClient)
-      case 'comparison':
-        return await handleProductComparison(supabaseClient, req)
-      case 'track-view':
-        return await handleTrackView(supabaseClient, req)
-      case 'recently-viewed':
-        return await handleRecentlyViewed(supabaseClient, req)
-      default:
-        return new Response(JSON.stringify({ error: 'Invalid action' }), {
+      const { data: products, error, count } = await searchQuery
+        .range(offset, offset + limit - 1);
+
+      if (error) {
+        console.error('Product search error:', error);
+        return new Response(JSON.stringify({ error: error.message }), {
           status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Log search query for analytics
+      if (query) {
+        await supabase.from('search_queries').insert({
+          query,
+          results_count: count || 0,
+          filters: {
+            category,
+            min_price: minPrice,
+            max_price: maxPrice,
+            sort_by: sortBy
+          },
+          ip_address: req.headers.get('x-forwarded-for'),
+          user_agent: req.headers.get('user-agent')
+        });
+      }
+
+      return new Response(JSON.stringify({
+        products,
+        pagination: {
+          page,
+          limit,
+          total: count,
+          pages: Math.ceil((count || 0) / limit)
+        },
+        filters_applied: { query, category, minPrice, maxPrice, sortBy }
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Get Product Details with Recommendations
+    if (path.startsWith('/enhanced-products-api/products/') && method === 'GET') {
+      const productId = path.split('/')[3];
+      const userId = url.searchParams.get('user_id');
+
+      // Get product details
+      const { data: product, error: productError } = await supabase
+        .from('products')
+        .select(`
+          *,
+          brands(name, logo_url, description),
+          product_reviews(id, rating, title, content, user_id, verified_purchase, created_at)
+        `)
+        .eq('id', productId)
+        .single();
+
+      if (productError) {
+        return new Response(JSON.stringify({ error: 'Product not found' }), {
+          status: 404,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Get related products (same category, different product)
+      const { data: relatedProducts } = await supabase
+        .from('products')
+        .select('id, name, price, images, rating_average, sales_count')
+        .eq('category_id', product.category_id)
+        .neq('id', productId)
+        .eq('status', 'active')
+        .order('sales_count', { ascending: false })
+        .limit(8);
+
+      // Get frequently bought together (simplified)
+      const { data: frequentlyBought } = await supabase
+        .from('order_items')
+        .select(`
+          product_id,
+          products(id, name, price, images, rating_average)
+        `)
+        .neq('product_id', productId)
+        .limit(6);
+
+      // Update view count
+      await supabase
+        .from('products')
+        .update({ view_count: (product.view_count || 0) + 1 })
+        .eq('id', productId);
+
+      // Log user interaction
+      if (userId) {
+        await supabase.from('user_product_interactions').insert({
+          user_id: userId,
+          product_id: productId,
+          interaction_type: 'view',
+          interaction_metadata: {
+            timestamp: new Date().toISOString(),
+            source: 'product_detail_page'
+          }
+        });
+      }
+
+      return new Response(JSON.stringify({
+        product,
+        related_products: relatedProducts || [],
+        frequently_bought_together: frequentlyBought?.map(item => item.products) || [],
+        recommendations: {
+          similar_products: relatedProducts?.slice(0, 4) || [],
+          trending_in_category: relatedProducts?.slice(4, 8) || []
+        }
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    // Add Product Review
+    if (path === '/enhanced-products-api/reviews' && method === 'POST') {
+      const { product_id, user_id, order_id, rating, title, content, images } = await req.json();
+
+      // Verify user can review this product (has purchased it)
+      const { data: orderItem } = await supabase
+        .from('order_items')
+        .select('id')
+        .eq('order_id', order_id)
+        .eq('product_id', product_id)
+        .single();
+
+      const { data: review, error } = await supabase
+        .from('product_reviews')
+        .insert({
+          product_id,
+          user_id,
+          order_id,
+          rating,
+          title,
+          content,
+          images: images || [],
+          verified_purchase: !!orderItem,
+          status: 'pending'
         })
+        .select()
+        .single();
+
+      if (error) {
+        return new Response(JSON.stringify({ error: error.message }), {
+          status: 400,
+          headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+        });
+      }
+
+      // Update product rating average
+      const { data: reviews } = await supabase
+        .from('product_reviews')
+        .select('rating')
+        .eq('product_id', product_id)
+        .eq('status', 'approved');
+
+      if (reviews && reviews.length > 0) {
+        const avgRating = reviews.reduce((sum, r) => sum + r.rating, 0) / reviews.length;
+        await supabase
+          .from('products')
+          .update({
+            rating_average: Math.round(avgRating * 100) / 100,
+            rating_count: reviews.length
+          })
+          .eq('id', product_id);
+      }
+
+      return new Response(JSON.stringify({ review }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
     }
+
+    // Get Product Analytics (for vendors)
+    if (path.startsWith('/enhanced-products-api/analytics/') && method === 'GET') {
+      const productId = path.split('/')[3];
+      const days = parseInt(url.searchParams.get('days') || '30');
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - days);
+
+      // Get view analytics
+      const { data: viewStats } = await supabase
+        .from('user_product_interactions')
+        .select('created_at')
+        .eq('product_id', productId)
+        .eq('interaction_type', 'view')
+        .gte('created_at', startDate.toISOString());
+
+      // Get cart additions
+      const { data: cartStats } = await supabase
+        .from('user_product_interactions')
+        .select('created_at')
+        .eq('product_id', productId)
+        .eq('interaction_type', 'cart_add')
+        .gte('created_at', startDate.toISOString());
+
+      // Get purchases
+      const { data: purchaseStats } = await supabase
+        .from('order_items')
+        .select('created_at, quantity, total_price')
+        .eq('product_id', productId)
+        .gte('created_at', startDate.toISOString());
+
+      // Get search queries that led to this product
+      const { data: searchStats } = await supabase
+        .from('search_queries')
+        .select('query, created_at')
+        .eq('clicked_product_id', productId)
+        .gte('created_at', startDate.toISOString());
+
+      return new Response(JSON.stringify({
+        analytics: {
+          views: viewStats?.length || 0,
+          cart_additions: cartStats?.length || 0,
+          purchases: purchaseStats?.reduce((sum, p) => sum + p.quantity, 0) || 0,
+          revenue: purchaseStats?.reduce((sum, p) => sum + parseFloat(p.total_price), 0) || 0,
+          conversion_rate: viewStats?.length ? ((purchaseStats?.length || 0) / viewStats.length * 100) : 0,
+          search_terms: searchStats?.map(s => s.query) || []
+        },
+        daily_stats: generateDailyStats(viewStats, cartStats, purchaseStats, days)
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      });
+    }
+
+    return new Response(JSON.stringify({ error: 'Endpoint not found' }), {
+      status: 404,
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
+
   } catch (error) {
-    console.error('Error:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
+    console.error('Enhanced Products API Error:', error);
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+    });
   }
-})
+});
 
-async function handleProductSearch(supabaseClient: any, req: Request) {
-  const url = new URL(req.url)
-  const query = url.searchParams.get('q') || ''
-  const minPrice = url.searchParams.get('minPrice')
-  const maxPrice = url.searchParams.get('maxPrice')
-  const minRating = url.searchParams.get('minRating')
-  const sortBy = url.searchParams.get('sortBy') || 'popularity'
-  const inStock = url.searchParams.get('inStock') === 'true'
-  const page = parseInt(url.searchParams.get('page') || '1')
-  const limit = parseInt(url.searchParams.get('limit') || '20')
-  const offset = (page - 1) * limit
-
-  let queryBuilder = supabaseClient
-    .from('products')
-    .select(`
-      *,
-      product_reviews!inner(rating),
-      inventory!inner(current_stock)
-    `)
-
-  // Text search
-  if (query) {
-    queryBuilder = queryBuilder.ilike('name', `%${query}%`)
-  }
-
-  // Price range filter
-  if (minPrice) {
-    queryBuilder = queryBuilder.gte('price', parseFloat(minPrice))
-  }
-  if (maxPrice) {
-    queryBuilder = queryBuilder.lte('price', parseFloat(maxPrice))
-  }
-
-  // Stock filter
-  if (inStock) {
-    queryBuilder = queryBuilder.gt('inventory.current_stock', 0)
-  }
-
-  // Sorting
-  switch (sortBy) {
-    case 'price_low':
-      queryBuilder = queryBuilder.order('price', { ascending: true })
-      break
-    case 'price_high':
-      queryBuilder = queryBuilder.order('price', { ascending: false })
-      break
-    case 'rating':
-      queryBuilder = queryBuilder.order('product_reviews.rating', { ascending: false })
-      break
-    case 'newest':
-      queryBuilder = queryBuilder.order('created_at', { ascending: false })
-      break
-    default:
-      queryBuilder = queryBuilder.order('created_at', { ascending: false })
-  }
-
-  // Pagination
-  queryBuilder = queryBuilder.range(offset, offset + limit - 1)
-
-  const { data: products, error } = await queryBuilder
-
-  if (error) {
-    throw error
-  }
-
-  // Calculate average ratings
-  const processedProducts = products?.map(product => {
-    const reviews = product.product_reviews || []
-    const avgRating = reviews.length > 0 
-      ? reviews.reduce((sum: number, review: any) => sum + review.rating, 0) / reviews.length 
-      : 0
+function generateDailyStats(views: any[], carts: any[], purchases: any[], days: number) {
+  const dailyStats = [];
+  const today = new Date();
+  
+  for (let i = days - 1; i >= 0; i--) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split('T')[0];
     
-    return {
-      ...product,
-      avgRating: parseFloat(avgRating.toFixed(1)),
-      reviewCount: reviews.length,
-      inStock: product.inventory?.[0]?.current_stock > 0
-    }
-  })
-
-  return new Response(JSON.stringify({ 
-    products: processedProducts,
-    pagination: { page, limit, hasMore: products?.length === limit }
-  }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
-}
-
-async function handleGetFilters(supabaseClient: any) {
-  const { data: filters, error } = await supabaseClient
-    .from('product_filters')
-    .select('*')
-    .eq('is_active', true)
-    .order('sort_order')
-
-  if (error) {
-    throw error
+    const dayViews = views?.filter(v => v.created_at.startsWith(dateStr)).length || 0;
+    const dayCarts = carts?.filter(c => c.created_at.startsWith(dateStr)).length || 0;
+    const dayPurchases = purchases?.filter(p => p.created_at.startsWith(dateStr)).length || 0;
+    
+    dailyStats.push({
+      date: dateStr,
+      views: dayViews,
+      cart_additions: dayCarts,
+      purchases: dayPurchases
+    });
   }
-
-  return new Response(JSON.stringify({ filters }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
-}
-
-async function handleProductComparison(supabaseClient: any, req: Request) {
-  const authHeader = req.headers.get('Authorization')
-  if (!authHeader) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  const { data: { user } } = await supabaseClient.auth.getUser(
-    authHeader.replace('Bearer ', '')
-  )
-
-  if (!user) {
-    return new Response(JSON.stringify({ error: 'Unauthorized' }), {
-      status: 401,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  if (req.method === 'GET') {
-    const { data: comparisons, error } = await supabaseClient
-      .from('product_comparisons')
-      .select('*')
-      .eq('user_id', user.id)
-
-    if (error) throw error
-
-    return new Response(JSON.stringify({ comparisons }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  if (req.method === 'POST') {
-    const { product_ids, comparison_name } = await req.json()
-
-    const { data, error } = await supabaseClient
-      .from('product_comparisons')
-      .insert({
-        user_id: user.id,
-        product_ids,
-        comparison_name
-      })
-      .select()
-
-    if (error) throw error
-
-    return new Response(JSON.stringify({ comparison: data[0] }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-}
-
-async function handleTrackView(supabaseClient: any, req: Request) {
-  const authHeader = req.headers.get('Authorization')
-  if (!authHeader) {
-    return new Response(JSON.stringify({ success: false }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  const { data: { user } } = await supabaseClient.auth.getUser(
-    authHeader.replace('Bearer ', '')
-  )
-
-  if (!user) {
-    return new Response(JSON.stringify({ success: false }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  const { product_id, view_duration_seconds } = await req.json()
-
-  const { error } = await supabaseClient
-    .from('recently_viewed')
-    .upsert({
-      user_id: user.id,
-      product_id,
-      view_duration_seconds,
-      viewed_at: new Date().toISOString()
-    })
-
-  return new Response(JSON.stringify({ success: !error }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
-}
-
-async function handleRecentlyViewed(supabaseClient: any, req: Request) {
-  const authHeader = req.headers.get('Authorization')
-  if (!authHeader) {
-    return new Response(JSON.stringify({ products: [] }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  const { data: { user } } = await supabaseClient.auth.getUser(
-    authHeader.replace('Bearer ', '')
-  )
-
-  if (!user) {
-    return new Response(JSON.stringify({ products: [] }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
-  }
-
-  const { data: recentViews, error } = await supabaseClient
-    .from('recently_viewed')
-    .select(`
-      *,
-      products:product_id (*)
-    `)
-    .eq('user_id', user.id)
-    .order('viewed_at', { ascending: false })
-    .limit(10)
-
-  if (error) throw error
-
-  const products = recentViews?.map((view: any) => view.products).filter(Boolean) || []
-
-  return new Response(JSON.stringify({ products }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+  
+  return dailyStats;
 }

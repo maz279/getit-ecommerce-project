@@ -2038,6 +2038,59 @@ export type Database = {
           },
         ]
       }
+      inventory_alerts: {
+        Row: {
+          alert_type: string
+          created_at: string | null
+          current_value: number | null
+          id: string
+          is_resolved: boolean | null
+          message: string
+          product_id: string | null
+          resolved_at: string | null
+          resolved_by: string | null
+          severity: string | null
+          threshold_value: number | null
+          vendor_id: string
+        }
+        Insert: {
+          alert_type: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          is_resolved?: boolean | null
+          message: string
+          product_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          threshold_value?: number | null
+          vendor_id: string
+        }
+        Update: {
+          alert_type?: string
+          created_at?: string | null
+          current_value?: number | null
+          id?: string
+          is_resolved?: boolean | null
+          message?: string
+          product_id?: string | null
+          resolved_at?: string | null
+          resolved_by?: string | null
+          severity?: string | null
+          threshold_value?: number | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_alerts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventory_forecasting: {
         Row: {
           algorithm_version: string | null
@@ -2127,6 +2180,110 @@ export type Database = {
           },
         ]
       }
+      live_inventory_events: {
+        Row: {
+          created_at: string | null
+          difference: number | null
+          event_type: string
+          id: string
+          metadata: Json | null
+          new_quantity: number
+          old_quantity: number | null
+          product_id: string | null
+          reason: string | null
+          source: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          difference?: number | null
+          event_type: string
+          id?: string
+          metadata?: Json | null
+          new_quantity: number
+          old_quantity?: number | null
+          product_id?: string | null
+          reason?: string | null
+          source?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          difference?: number | null
+          event_type?: string
+          id?: string
+          metadata?: Json | null
+          new_quantity?: number
+          old_quantity?: number | null
+          product_id?: string | null
+          reason?: string | null
+          source?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_inventory_events_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_order_tracking: {
+        Row: {
+          carrier: string | null
+          coordinates: Json | null
+          created_at: string | null
+          current_location: string | null
+          delivery_attempts: number | null
+          estimated_delivery: string | null
+          id: string
+          is_active: boolean | null
+          last_update: string | null
+          order_id: string
+          status: string
+          status_description: string | null
+          tracking_events: Json | null
+          tracking_number: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          carrier?: string | null
+          coordinates?: Json | null
+          created_at?: string | null
+          current_location?: string | null
+          delivery_attempts?: number | null
+          estimated_delivery?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_update?: string | null
+          order_id: string
+          status: string
+          status_description?: string | null
+          tracking_events?: Json | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          carrier?: string | null
+          coordinates?: Json | null
+          created_at?: string | null
+          current_location?: string | null
+          delivery_attempts?: number | null
+          estimated_delivery?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_update?: string | null
+          order_id?: string
+          status?: string
+          status_description?: string | null
+          tracking_events?: Json | null
+          tracking_number?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ml_recommendations: {
         Row: {
           confidence_score: number | null
@@ -2190,6 +2347,99 @@ export type Database = {
           status?: string
           template?: string
           type?: string
+        }
+        Relationships: []
+      }
+      notification_preferences: {
+        Row: {
+          chat_messages: boolean | null
+          created_at: string | null
+          email_enabled: boolean | null
+          flash_sales: boolean | null
+          id: string
+          inventory_alerts: boolean | null
+          marketing: boolean | null
+          order_updates: boolean | null
+          price_alerts: boolean | null
+          push_enabled: boolean | null
+          sms_enabled: boolean | null
+          system_notifications: boolean | null
+          updated_at: string | null
+          user_id: string | null
+          vendor_updates: boolean | null
+        }
+        Insert: {
+          chat_messages?: boolean | null
+          created_at?: string | null
+          email_enabled?: boolean | null
+          flash_sales?: boolean | null
+          id?: string
+          inventory_alerts?: boolean | null
+          marketing?: boolean | null
+          order_updates?: boolean | null
+          price_alerts?: boolean | null
+          push_enabled?: boolean | null
+          sms_enabled?: boolean | null
+          system_notifications?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_updates?: boolean | null
+        }
+        Update: {
+          chat_messages?: boolean | null
+          created_at?: string | null
+          email_enabled?: boolean | null
+          flash_sales?: boolean | null
+          id?: string
+          inventory_alerts?: boolean | null
+          marketing?: boolean | null
+          order_updates?: boolean | null
+          price_alerts?: boolean | null
+          push_enabled?: boolean | null
+          sms_enabled?: boolean | null
+          system_notifications?: boolean | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_updates?: boolean | null
+        }
+        Relationships: []
+      }
+      notification_subscriptions: {
+        Row: {
+          auth_key: string | null
+          created_at: string | null
+          device_type: string | null
+          endpoint: string
+          id: string
+          is_active: boolean | null
+          p256dh: string | null
+          updated_at: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          auth_key?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          endpoint: string
+          id?: string
+          is_active?: boolean | null
+          p256dh?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          auth_key?: string | null
+          created_at?: string | null
+          device_type?: string | null
+          endpoint?: string
+          id?: string
+          is_active?: boolean | null
+          p256dh?: string | null
+          updated_at?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -2521,6 +2771,54 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      order_status_events: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          estimated_delivery: string | null
+          event_description: string | null
+          id: string
+          location_data: Json | null
+          metadata: Json | null
+          new_status: string
+          old_status: string | null
+          order_id: string
+          status_category: string | null
+          tracking_number: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          estimated_delivery?: string | null
+          event_description?: string | null
+          id?: string
+          location_data?: Json | null
+          metadata?: Json | null
+          new_status: string
+          old_status?: string | null
+          order_id: string
+          status_category?: string | null
+          tracking_number?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          estimated_delivery?: string | null
+          event_description?: string | null
+          id?: string
+          location_data?: Json | null
+          metadata?: Json | null
+          new_status?: string
+          old_status?: string | null
+          order_id?: string
+          status_category?: string | null
+          tracking_number?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
       }
       order_workflow_steps: {
         Row: {
@@ -4241,6 +4539,60 @@ export type Database = {
           phone?: string | null
           role?: Database["public"]["Enums"]["user_role"]
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      push_notifications: {
+        Row: {
+          body: string
+          created_at: string | null
+          data: Json | null
+          delivered_at: string | null
+          device_tokens: string[] | null
+          id: string
+          platform: string | null
+          priority: string | null
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string | null
+          title: string
+          type: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          body: string
+          created_at?: string | null
+          data?: Json | null
+          delivered_at?: string | null
+          device_tokens?: string[] | null
+          id?: string
+          platform?: string | null
+          priority?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          title: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          body?: string
+          created_at?: string | null
+          data?: Json | null
+          delivered_at?: string | null
+          device_tokens?: string[] | null
+          id?: string
+          platform?: string | null
+          priority?: string | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          title?: string
+          type?: string
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -6984,6 +7336,45 @@ export type Database = {
           status?: string | null
           updated_at?: string | null
           warehouse_type?: string | null
+        }
+        Relationships: []
+      }
+      websocket_connections: {
+        Row: {
+          channel_subscriptions: string[] | null
+          connected_at: string | null
+          connection_id: string
+          device_info: Json | null
+          id: string
+          ip_address: unknown | null
+          is_active: boolean | null
+          last_activity: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          channel_subscriptions?: string[] | null
+          connected_at?: string | null
+          connection_id: string
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          channel_subscriptions?: string[] | null
+          connected_at?: string | null
+          connection_id?: string
+          device_info?: Json | null
+          id?: string
+          ip_address?: unknown | null
+          is_active?: boolean | null
+          last_activity?: string | null
+          user_agent?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }

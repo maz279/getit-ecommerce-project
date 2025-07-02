@@ -828,6 +828,39 @@ export type Database = {
         }
         Relationships: []
       }
+      bengali_translations: {
+        Row: {
+          bengali_text: string
+          category: string
+          context: string | null
+          created_at: string | null
+          english_text: string
+          id: string
+          key: string
+          updated_at: string | null
+        }
+        Insert: {
+          bengali_text: string
+          category: string
+          context?: string | null
+          created_at?: string | null
+          english_text: string
+          id?: string
+          key: string
+          updated_at?: string | null
+        }
+        Update: {
+          bengali_text?: string
+          category?: string
+          context?: string | null
+          created_at?: string | null
+          english_text?: string
+          id?: string
+          key?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       borrowers: {
         Row: {
           created_at: string
@@ -864,6 +897,54 @@ export type Database = {
           score?: number | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      bulk_order_requests: {
+        Row: {
+          created_at: string | null
+          id: string
+          product_id: string | null
+          quantity: number
+          quote_valid_until: string | null
+          special_requirements: string | null
+          status: string | null
+          total_price: number | null
+          unit_price: number | null
+          updated_at: string | null
+          user_id: string | null
+          vendor_id: string | null
+          vendor_notes: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity: number
+          quote_valid_until?: string | null
+          special_requirements?: string | null
+          status?: string | null
+          total_price?: number | null
+          unit_price?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+          vendor_notes?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          product_id?: string | null
+          quantity?: number
+          quote_valid_until?: string | null
+          special_requirements?: string | null
+          status?: string | null
+          total_price?: number | null
+          unit_price?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+          vendor_notes?: string | null
         }
         Relationships: []
       }
@@ -1983,6 +2064,39 @@ export type Database = {
         }
         Relationships: []
       }
+      currency_rates: {
+        Row: {
+          created_at: string | null
+          from_currency: string
+          id: string
+          is_active: boolean | null
+          provider: string
+          rate: number
+          to_currency: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          from_currency: string
+          id?: string
+          is_active?: boolean | null
+          provider: string
+          rate: number
+          to_currency: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          from_currency?: string
+          id?: string
+          is_active?: boolean | null
+          provider?: string
+          rate?: number
+          to_currency?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       custom_report_templates: {
         Row: {
           created_at: string | null
@@ -2563,6 +2677,51 @@ export type Database = {
           },
         ]
       }
+      digital_wallets: {
+        Row: {
+          balance: number | null
+          created_at: string | null
+          currency: string | null
+          daily_limit: number | null
+          id: string
+          is_active: boolean | null
+          kyc_level: number | null
+          last_transaction_at: string | null
+          monthly_limit: number | null
+          pin_hash: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          balance?: number | null
+          created_at?: string | null
+          currency?: string | null
+          daily_limit?: number | null
+          id?: string
+          is_active?: boolean | null
+          kyc_level?: number | null
+          last_transaction_at?: string | null
+          monthly_limit?: number | null
+          pin_hash?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          balance?: number | null
+          created_at?: string | null
+          currency?: string | null
+          daily_limit?: number | null
+          id?: string
+          is_active?: boolean | null
+          kyc_level?: number | null
+          last_transaction_at?: string | null
+          monthly_limit?: number | null
+          pin_hash?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       dynamic_pricing_rules: {
         Row: {
           adjustment_factors: Json
@@ -2877,6 +3036,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      festival_configurations: {
+        Row: {
+          banner_config: Json | null
+          created_at: string | null
+          cultural_elements: Json | null
+          discount_config: Json | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          id: string
+          is_active: boolean | null
+          start_date: string
+          updated_at: string | null
+        }
+        Insert: {
+          banner_config?: Json | null
+          created_at?: string | null
+          cultural_elements?: Json | null
+          discount_config?: Json | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          id?: string
+          is_active?: boolean | null
+          start_date: string
+          updated_at?: string | null
+        }
+        Update: {
+          banner_config?: Json | null
+          created_at?: string | null
+          cultural_elements?: Json | null
+          discount_config?: Json | null
+          end_date?: string
+          festival_name?: string
+          festival_name_bn?: string
+          id?: string
+          is_active?: boolean | null
+          start_date?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       file_uploads: {
         Row: {
@@ -3458,6 +3659,54 @@ export type Database = {
         }
         Relationships: []
       }
+      installment_plans: {
+        Row: {
+          created_at: string | null
+          duration_months: number
+          eligibility_criteria: Json | null
+          id: string
+          interest_rate: number | null
+          is_active: boolean | null
+          maximum_amount: number | null
+          minimum_amount: number
+          partner_bank: string | null
+          plan_name: string
+          plan_name_bn: string
+          processing_fee: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          duration_months: number
+          eligibility_criteria?: Json | null
+          id?: string
+          interest_rate?: number | null
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount: number
+          partner_bank?: string | null
+          plan_name: string
+          plan_name_bn: string
+          processing_fee?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          duration_months?: number
+          eligibility_criteria?: Json | null
+          id?: string
+          interest_rate?: number | null
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount?: number
+          partner_bank?: string | null
+          plan_name?: string
+          plan_name_bn?: string
+          processing_fee?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       inventory: {
         Row: {
           available_stock: number | null
@@ -3802,6 +4051,54 @@ export type Database = {
         }
         Relationships: []
       }
+      kyc_documents: {
+        Row: {
+          created_at: string | null
+          document_back_url: string | null
+          document_front_url: string | null
+          document_number: string
+          document_type: string
+          expiry_date: string | null
+          id: string
+          rejection_reason: string | null
+          updated_at: string | null
+          user_id: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_back_url?: string | null
+          document_front_url?: string | null
+          document_number: string
+          document_type: string
+          expiry_date?: string | null
+          id?: string
+          rejection_reason?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_back_url?: string | null
+          document_front_url?: string | null
+          document_number?: string
+          document_type?: string
+          expiry_date?: string | null
+          id?: string
+          rejection_reason?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
       live_inventory_events: {
         Row: {
           created_at: string | null
@@ -3974,6 +4271,190 @@ export type Database = {
           recorded_at?: string | null
           time_period?: string | null
           vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      live_shopping_interactions: {
+        Row: {
+          content: string | null
+          created_at: string | null
+          id: string
+          interaction_type: string
+          metadata: Json | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          interaction_type: string
+          metadata?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          content?: string | null
+          created_at?: string | null
+          id?: string
+          interaction_type?: string
+          metadata?: Json | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_shopping_interactions_session_id_fkey"
+            columns: ["session_id"]
+            isOneToOne: false
+            referencedRelation: "live_shopping_sessions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_shopping_sessions: {
+        Row: {
+          actual_end: string | null
+          actual_start: string | null
+          analytics_data: Json | null
+          chat_room_id: string | null
+          created_at: string | null
+          description: string | null
+          featured_products: Json | null
+          host_id: string | null
+          id: string
+          recording_url: string | null
+          scheduled_end: string
+          scheduled_start: string
+          status: string | null
+          stream_url: string | null
+          title: string
+          updated_at: string | null
+          vendor_id: string
+          viewer_count: number | null
+        }
+        Insert: {
+          actual_end?: string | null
+          actual_start?: string | null
+          analytics_data?: Json | null
+          chat_room_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          featured_products?: Json | null
+          host_id?: string | null
+          id?: string
+          recording_url?: string | null
+          scheduled_end: string
+          scheduled_start: string
+          status?: string | null
+          stream_url?: string | null
+          title: string
+          updated_at?: string | null
+          vendor_id: string
+          viewer_count?: number | null
+        }
+        Update: {
+          actual_end?: string | null
+          actual_start?: string | null
+          analytics_data?: Json | null
+          chat_room_id?: string | null
+          created_at?: string | null
+          description?: string | null
+          featured_products?: Json | null
+          host_id?: string | null
+          id?: string
+          recording_url?: string | null
+          scheduled_end?: string
+          scheduled_start?: string
+          status?: string | null
+          stream_url?: string | null
+          title?: string
+          updated_at?: string | null
+          vendor_id?: string
+          viewer_count?: number | null
+        }
+        Relationships: []
+      }
+      loyalty_point_transactions: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          expires_at: string | null
+          id: string
+          points: number
+          program_id: string | null
+          reference_id: string | null
+          reference_type: string | null
+          transaction_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          points: number
+          program_id?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          expires_at?: string | null
+          id?: string
+          points?: number
+          program_id?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type?: string
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "loyalty_point_transactions_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      loyalty_programs: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          point_rules: Json
+          program_name: string
+          program_name_bn: string
+          redemption_rules: Json
+          tier_levels: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          point_rules: Json
+          program_name: string
+          program_name_bn: string
+          redemption_rules: Json
+          tier_levels: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          point_rules?: Json
+          program_name?: string
+          program_name_bn?: string
+          redemption_rules?: Json
+          tier_levels?: Json
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -4243,6 +4724,68 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_queue: {
+        Row: {
+          channel: string
+          content: string
+          created_at: string | null
+          error_message: string | null
+          id: string
+          priority: number | null
+          recipient: string
+          retry_count: number | null
+          scheduled_at: string | null
+          sent_at: string | null
+          status: string | null
+          subject: string | null
+          template_id: string | null
+          user_id: string | null
+          variables: Json | null
+        }
+        Insert: {
+          channel: string
+          content: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          priority?: number | null
+          recipient: string
+          retry_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          user_id?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          channel?: string
+          content?: string
+          created_at?: string | null
+          error_message?: string | null
+          id?: string
+          priority?: number | null
+          recipient?: string
+          retry_count?: number | null
+          scheduled_at?: string | null
+          sent_at?: string | null
+          status?: string | null
+          subject?: string | null
+          template_id?: string | null
+          user_id?: string | null
+          variables?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_queue_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "notification_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_subscriptions: {
         Row: {
           auth_key: string | null
@@ -4279,6 +4822,54 @@ export type Database = {
           updated_at?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      notification_templates: {
+        Row: {
+          channel_config: Json | null
+          content_bn: string
+          content_en: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          subject_bn: string | null
+          subject_en: string | null
+          template_name: string
+          template_type: string
+          trigger_event: string
+          updated_at: string | null
+          variables: Json | null
+        }
+        Insert: {
+          channel_config?: Json | null
+          content_bn: string
+          content_en: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject_bn?: string | null
+          subject_en?: string | null
+          template_name: string
+          template_type: string
+          trigger_event: string
+          updated_at?: string | null
+          variables?: Json | null
+        }
+        Update: {
+          channel_config?: Json | null
+          content_bn?: string
+          content_en?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          subject_bn?: string | null
+          subject_en?: string | null
+          template_name?: string
+          template_type?: string
+          trigger_event?: string
+          updated_at?: string | null
+          variables?: Json | null
         }
         Relationships: []
       }
@@ -6057,6 +6648,48 @@ export type Database = {
         }
         Relationships: []
       }
+      prayer_times: {
+        Row: {
+          asr: string
+          city: string
+          created_at: string | null
+          date: string
+          dhuhr: string
+          division: string
+          fajr: string
+          id: string
+          isha: string
+          maghrib: string
+          sunrise: string
+        }
+        Insert: {
+          asr: string
+          city: string
+          created_at?: string | null
+          date: string
+          dhuhr: string
+          division: string
+          fajr: string
+          id?: string
+          isha: string
+          maghrib: string
+          sunrise: string
+        }
+        Update: {
+          asr?: string
+          city?: string
+          created_at?: string | null
+          date?: string
+          dhuhr?: string
+          division?: string
+          fajr?: string
+          id?: string
+          isha?: string
+          maghrib?: string
+          sunrise?: string
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
           alert_type: string | null
@@ -6513,6 +7146,39 @@ export type Database = {
         }
         Relationships: []
       }
+      product_recommendations: {
+        Row: {
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          product_id: string
+          reasoning: Json | null
+          recommendation_type: string
+          score: number
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          product_id: string
+          reasoning?: Json | null
+          recommendation_type: string
+          score: number
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          product_id?: string
+          reasoning?: Json | null
+          recommendation_type?: string
+          score?: number
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           created_at: string | null
@@ -6553,6 +7219,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      product_shares: {
+        Row: {
+          click_count: number | null
+          conversion_count: number | null
+          created_at: string | null
+          id: string
+          platform: string
+          product_id: string
+          referral_earnings: number | null
+          shared_url: string | null
+          user_id: string | null
+        }
+        Insert: {
+          click_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          id?: string
+          platform: string
+          product_id: string
+          referral_earnings?: number | null
+          shared_url?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          click_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          id?: string
+          platform?: string
+          product_id?: string
+          referral_earnings?: number | null
+          shared_url?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       product_variants: {
         Row: {
@@ -7552,6 +8254,51 @@ export type Database = {
         }
         Relationships: []
       }
+      referral_programs: {
+        Row: {
+          completed_at: string | null
+          completion_criteria: Json | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          referee_id: string | null
+          referee_reward: Json | null
+          referral_code: string
+          referrer_id: string | null
+          referrer_reward: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          completion_criteria?: Json | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          referee_id?: string | null
+          referee_reward?: Json | null
+          referral_code: string
+          referrer_id?: string | null
+          referrer_reward?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          completion_criteria?: Json | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          referee_id?: string | null
+          referee_reward?: Json | null
+          referral_code?: string
+          referrer_id?: string | null
+          referrer_reward?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       report_executions: {
         Row: {
           created_at: string | null
@@ -8417,6 +9164,48 @@ export type Database = {
         }
         Relationships: []
       }
+      social_media_accounts: {
+        Row: {
+          access_token: string | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          platform: string
+          profile_data: Json | null
+          refresh_token: string | null
+          social_id: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          platform: string
+          profile_data?: Json | null
+          refresh_token?: string | null
+          social_id: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          platform?: string
+          profile_data?: Json | null
+          refresh_token?: string | null
+          social_id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       stock_alerts: {
         Row: {
           acknowledged_at: string | null
@@ -8898,6 +9687,54 @@ export type Database = {
         }
         Relationships: []
       }
+      tax_configurations: {
+        Row: {
+          applicable_categories: Json | null
+          calculation_method: string | null
+          created_at: string | null
+          effective_from: string
+          effective_to: string | null
+          id: string
+          is_active: boolean | null
+          minimum_threshold: number | null
+          rate: number
+          tax_name: string
+          tax_name_bn: string
+          tax_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          applicable_categories?: Json | null
+          calculation_method?: string | null
+          created_at?: string | null
+          effective_from: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          minimum_threshold?: number | null
+          rate: number
+          tax_name: string
+          tax_name_bn: string
+          tax_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          applicable_categories?: Json | null
+          calculation_method?: string | null
+          created_at?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          minimum_threshold?: number | null
+          rate?: number
+          tax_name?: string
+          tax_name_bn?: string
+          tax_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       traffic_monitoring: {
         Row: {
           bounce_rate: number | null
@@ -9063,6 +9900,56 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      user_loyalty_points: {
+        Row: {
+          created_at: string | null
+          current_tier: string | null
+          id: string
+          last_activity_at: string | null
+          points_earned_lifetime: number | null
+          points_redeemed_lifetime: number | null
+          program_id: string | null
+          tier_progress: Json | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          current_tier?: string | null
+          id?: string
+          last_activity_at?: string | null
+          points_earned_lifetime?: number | null
+          points_redeemed_lifetime?: number | null
+          program_id?: string | null
+          tier_progress?: Json | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          current_tier?: string | null
+          id?: string
+          last_activity_at?: string | null
+          points_earned_lifetime?: number | null
+          points_redeemed_lifetime?: number | null
+          program_id?: string | null
+          tier_progress?: Json | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "user_loyalty_points_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_programs"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       user_preferences: {
         Row: {
@@ -10098,6 +10985,56 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      wallet_transactions: {
+        Row: {
+          amount: number
+          balance_after: number
+          balance_before: number
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          reference_id: string | null
+          reference_type: string | null
+          transaction_type: string
+          wallet_id: string | null
+        }
+        Insert: {
+          amount: number
+          balance_after: number
+          balance_before: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type: string
+          wallet_id?: string | null
+        }
+        Update: {
+          amount?: number
+          balance_after?: number
+          balance_before?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          reference_id?: string | null
+          reference_type?: string | null
+          transaction_type?: string
+          wallet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "wallet_transactions_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "digital_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       warehouse_zones: {
         Row: {

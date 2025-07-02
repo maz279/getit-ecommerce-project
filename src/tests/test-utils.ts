@@ -1,6 +1,8 @@
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { render, screen, fireEvent, waitFor } from '@testing-library/react';
+import { render } from '@testing-library/react';
+import { screen, fireEvent, waitFor } from '@testing-library/dom';
 import userEvent from '@testing-library/user-event';
+import React from 'react';
 import { BrowserRouter } from 'react-router-dom';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
@@ -355,32 +357,32 @@ export class TestHelpers {
 
 // Common test patterns
 export const commonTestPatterns = {
-  async testComponentRenders(Component: React.ComponentType, props = {}) {
+  async testComponentRenders(Component: React.ComponentType<any>, props: any = {}) {
     const Wrapper = TestHelpers.createWrapper();
-    render(<Component {...props} />, { wrapper: Wrapper });
+    render(React.createElement(Component, props), { wrapper: Wrapper });
     
     expect(screen.getByTestId || screen.getByRole || screen.getByText).toBeDefined();
   },
 
-  async testLoadingState(Component: React.ComponentType, props = {}) {
+  async testLoadingState(Component: React.ComponentType<any>, props: any = {}) {
     const Wrapper = TestHelpers.createWrapper();
-    render(<Component {...props} />, { wrapper: Wrapper });
+    render(React.createElement(Component, props), { wrapper: Wrapper });
     
     expect(screen.getByText(/loading/i)).toBeInTheDocument();
   },
 
-  async testErrorState(Component: React.ComponentType, props = {}) {
+  async testErrorState(Component: React.ComponentType<any>, props: any = {}) {
     const Wrapper = TestHelpers.createWrapper();
-    render(<Component {...props} />, { wrapper: Wrapper });
+    render(React.createElement(Component, props), { wrapper: Wrapper });
     
     await TestHelpers.waitForError();
   },
 
-  async testFormSubmission(Component: React.ComponentType, formData: Record<string, string>) {
+  async testFormSubmission(Component: React.ComponentType<any>, formData: Record<string, string>) {
     const Wrapper = TestHelpers.createWrapper();
     const mockSubmit = vi.fn();
     
-    render(<Component onSubmit={mockSubmit} />, { wrapper: Wrapper });
+    render(React.createElement(Component, { onSubmit: mockSubmit }), { wrapper: Wrapper });
     
     await TestHelpers.fillForm(formData);
     await TestHelpers.clickButton('submit');

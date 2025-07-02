@@ -1620,6 +1620,54 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_agents: {
+        Row: {
+          agent_name: string
+          avatar_url: string | null
+          created_at: string | null
+          current_chat_count: number | null
+          id: string
+          is_online: boolean | null
+          languages: string[] | null
+          max_concurrent_chats: number | null
+          rating: number | null
+          specializations: string[] | null
+          total_chats: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          agent_name: string
+          avatar_url?: string | null
+          created_at?: string | null
+          current_chat_count?: number | null
+          id?: string
+          is_online?: boolean | null
+          languages?: string[] | null
+          max_concurrent_chats?: number | null
+          rating?: number | null
+          specializations?: string[] | null
+          total_chats?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          agent_name?: string
+          avatar_url?: string | null
+          created_at?: string | null
+          current_chat_count?: number | null
+          id?: string
+          is_online?: boolean | null
+          languages?: string[] | null
+          max_concurrent_chats?: number | null
+          rating?: number | null
+          specializations?: string[] | null
+          total_chats?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       chat_conversation_messages: {
         Row: {
           attachments: Json | null
@@ -1672,7 +1720,9 @@ export type Database = {
       }
       chat_conversations: {
         Row: {
+          agent_id: string | null
           assigned_agent: string | null
+          category: string | null
           closed_at: string | null
           conversation_type: string
           created_at: string | null
@@ -1680,12 +1730,16 @@ export type Database = {
           metadata: Json | null
           participants: Json
           priority: string | null
+          resolved_at: string | null
+          satisfaction_rating: number | null
           status: string | null
           subject: string | null
           updated_at: string | null
         }
         Insert: {
+          agent_id?: string | null
           assigned_agent?: string | null
+          category?: string | null
           closed_at?: string | null
           conversation_type: string
           created_at?: string | null
@@ -1693,12 +1747,16 @@ export type Database = {
           metadata?: Json | null
           participants?: Json
           priority?: string | null
+          resolved_at?: string | null
+          satisfaction_rating?: number | null
           status?: string | null
           subject?: string | null
           updated_at?: string | null
         }
         Update: {
+          agent_id?: string | null
           assigned_agent?: string | null
+          category?: string | null
           closed_at?: string | null
           conversation_type?: string
           created_at?: string | null
@@ -1706,11 +1764,21 @@ export type Database = {
           metadata?: Json | null
           participants?: Json
           priority?: string | null
+          resolved_at?: string | null
+          satisfaction_rating?: number | null
           status?: string | null
           subject?: string | null
           updated_at?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "chat_conversations_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "chat_agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_messages: {
         Row: {
@@ -4825,6 +4893,45 @@ export type Database = {
         }
         Relationships: []
       }
+      loyalty_point_history: {
+        Row: {
+          balance_after: number
+          created_at: string | null
+          description: string | null
+          id: string
+          metadata: Json | null
+          points_changed: number
+          source_id: string | null
+          source_type: string | null
+          transaction_type: string
+          user_id: string | null
+        }
+        Insert: {
+          balance_after: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          points_changed: number
+          source_id?: string | null
+          source_type?: string | null
+          transaction_type: string
+          user_id?: string | null
+        }
+        Update: {
+          balance_after?: number
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          metadata?: Json | null
+          points_changed?: number
+          source_id?: string | null
+          source_type?: string | null
+          transaction_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       loyalty_point_transactions: {
         Row: {
           created_at: string | null
@@ -4905,6 +5012,42 @@ export type Database = {
           redemption_rules?: Json
           tier_levels?: Json
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      loyalty_tiers: {
+        Row: {
+          benefits: Json | null
+          color_code: string | null
+          created_at: string | null
+          icon_url: string | null
+          id: string
+          minimum_points: number
+          name: string
+          name_bn: string | null
+          perks: Json | null
+        }
+        Insert: {
+          benefits?: Json | null
+          color_code?: string | null
+          created_at?: string | null
+          icon_url?: string | null
+          id?: string
+          minimum_points: number
+          name: string
+          name_bn?: string | null
+          perks?: Json | null
+        }
+        Update: {
+          benefits?: Json | null
+          color_code?: string | null
+          created_at?: string | null
+          icon_url?: string | null
+          id?: string
+          minimum_points?: number
+          name?: string
+          name_bn?: string | null
+          perks?: Json | null
         }
         Relationships: []
       }
@@ -7473,6 +7616,42 @@ export type Database = {
         }
         Relationships: []
       }
+      product_comparison_lists: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          id: string
+          is_public: boolean | null
+          name: string
+          shared_token: string | null
+          updated_at: string | null
+          user_id: string | null
+          view_count: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          shared_token?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          shared_token?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       product_comparisons: {
         Row: {
           comparison_name: string | null
@@ -8784,6 +8963,107 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      referral_campaigns: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          is_active: boolean | null
+          max_referrals_per_user: number | null
+          minimum_purchase_amount: number | null
+          name: string
+          referee_reward_amount: number | null
+          referee_reward_points: number | null
+          referrer_reward_amount: number | null
+          referrer_reward_points: number | null
+          start_date: string | null
+          terms_conditions: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_referrals_per_user?: number | null
+          minimum_purchase_amount?: number | null
+          name: string
+          referee_reward_amount?: number | null
+          referee_reward_points?: number | null
+          referrer_reward_amount?: number | null
+          referrer_reward_points?: number | null
+          start_date?: string | null
+          terms_conditions?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_referrals_per_user?: number | null
+          minimum_purchase_amount?: number | null
+          name?: string
+          referee_reward_amount?: number | null
+          referee_reward_points?: number | null
+          referrer_reward_amount?: number | null
+          referrer_reward_points?: number | null
+          start_date?: string | null
+          terms_conditions?: string | null
+        }
+        Relationships: []
+      }
+      referral_links: {
+        Row: {
+          campaign_id: string | null
+          click_count: number | null
+          conversion_count: number | null
+          created_at: string | null
+          custom_message: string | null
+          id: string
+          is_active: boolean | null
+          referral_code: string
+          total_earned_amount: number | null
+          total_earned_points: number | null
+          user_id: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          click_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          referral_code: string
+          total_earned_amount?: number | null
+          total_earned_points?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          click_count?: number | null
+          conversion_count?: number | null
+          created_at?: string | null
+          custom_message?: string | null
+          id?: string
+          is_active?: boolean | null
+          referral_code?: string
+          total_earned_amount?: number | null
+          total_earned_points?: number | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "referral_links_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "referral_campaigns"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       referral_programs: {
         Row: {
@@ -11782,26 +12062,75 @@ export type Database = {
         }
         Relationships: []
       }
-      wishlist_items: {
+      wishlist_collections: {
         Row: {
           created_at: string | null
+          description: string | null
           id: string
+          is_public: boolean | null
+          name: string
+          shared_token: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name: string
+          shared_token?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_public?: boolean | null
+          name?: string
+          shared_token?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      wishlist_items: {
+        Row: {
+          collection_id: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          priority: number | null
           product_id: string
           user_id: string
         }
         Insert: {
+          collection_id?: string | null
           created_at?: string | null
           id?: string
+          notes?: string | null
+          priority?: number | null
           product_id: string
           user_id: string
         }
         Update: {
+          collection_id?: string | null
           created_at?: string | null
           id?: string
+          notes?: string | null
+          priority?: number | null
           product_id?: string
           user_id?: string
         }
         Relationships: [
+          {
+            foreignKeyName: "wishlist_items_collection_id_fkey"
+            columns: ["collection_id"]
+            isOneToOne: false
+            referencedRelation: "wishlist_collections"
+            referencedColumns: ["id"]
+          },
           {
             foreignKeyName: "wishlist_items_product_id_fkey"
             columns: ["product_id"]
@@ -11931,6 +12260,7 @@ export type Database = {
         | "customer"
         | "user"
         | "super_admin"
+        | "agent"
       vendor_status: "pending" | "approved" | "suspended" | "rejected"
     }
     CompositeTypes: {
@@ -12071,6 +12401,7 @@ export const Constants = {
         "customer",
         "user",
         "super_admin",
+        "agent",
       ],
       vendor_status: ["pending", "approved", "suspended", "rejected"],
     },

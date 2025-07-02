@@ -1,137 +1,79 @@
 import React, { useState, useEffect } from 'react';
 import { Button } from '@/components/ui/button';
-import { 
-  DropdownMenu, 
-  DropdownMenuContent, 
-  DropdownMenuItem, 
-  DropdownMenuTrigger 
-} from '@/components/ui/dropdown-menu';
-import { Badge } from '@/components/ui/badge';
-import { supabase } from '@/integrations/supabase/client';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Globe } from 'lucide-react';
 
 interface LanguageSwitcherProps {
-  currentLanguage?: 'en' | 'bn';
-  onLanguageChange?: (language: 'en' | 'bn') => void;
-  variant?: 'button' | 'dropdown' | 'toggle';
-  size?: 'sm' | 'md' | 'lg';
+  onLanguageChange?: (language: string) => void;
+  showFullSelector?: boolean;
 }
 
 export const LanguageSwitcher: React.FC<LanguageSwitcherProps> = ({
-  currentLanguage = 'en',
   onLanguageChange,
-  variant = 'dropdown',
-  size = 'md'
+  showFullSelector = false
 }) => {
-  const [language, setLanguage] = useState<'en' | 'bn'>(currentLanguage);
-  const [translations, setTranslations] = useState<Record<string, string>>({});
+  const [currentLanguage, setCurrentLanguage] = useState<string>('en');
 
   useEffect(() => {
-    loadTranslations();
-  }, [language]);
+    // Load saved language preference
+    const savedLanguage = localStorage.getItem('preferred-language') || 'en';
+    setCurrentLanguage(savedLanguage);
+  }, []);
 
-  const loadTranslations = async () => {
-    try {
-      const { data, error } = await supabase.functions.invoke('bangladesh-localization', {
-        body: {
-          action: 'get_translations',
-          language,
-          category: 'ui'
-        }
-      });
-
-      if (error) throw error;
-      if (data?.success) {
-        setTranslations(data.data);
-      }
-    } catch (error) {
-      console.error('Failed to load translations:', error);
-    }
+  const handleLanguageChange = (language: string) => {
+    setCurrentLanguage(language);
+    localStorage.setItem('preferred-language', language);
+    
+    // Apply language to document
+    document.documentElement.lang = language;
+    
+    // Notify parent component
+    onLanguageChange?.(language);
   };
 
-  const handleLanguageChange = (newLanguage: 'en' | 'bn') => {
-    setLanguage(newLanguage);
-    onLanguageChange?.(newLanguage);
-    localStorage.setItem('preferred-language', newLanguage);
+  const toggleLanguage = () => {
+    const newLanguage = currentLanguage === 'en' ? 'bn' : 'en';
+    handleLanguageChange(newLanguage);
   };
 
-  const getLanguageLabel = (lang: 'en' | 'bn') => {
-    return lang === 'en' ? 'English' : 'বাংলা';
-  };
-
-  const getLanguageFlag = (lang: 'en' | 'bn') => {
-    return lang === 'en' ? '🇺🇸' : '🇧🇩';
-  };
-
-  if (variant === 'toggle') {
+  if (showFullSelector) {
     return (
-      <div className="flex items-center bg-muted rounded-lg p-1">
-        <Button
-          variant={language === 'en' ? 'default' : 'ghost'}
-          size={size === 'sm' ? 'sm' : 'default'}
-          onClick={() => handleLanguageChange('en')}
-          className="h-8 px-3 text-xs"
-        >
-          🇺🇸 EN
-        </Button>
-        <Button
-          variant={language === 'bn' ? 'default' : 'ghost'}
-          size={size === 'sm' ? 'sm' : 'default'}
-          onClick={() => handleLanguageChange('bn')}
-          className="h-8 px-3 text-xs"
-        >
-          🇧🇩 বাং
-        </Button>
+      <div className="flex items-center gap-2">
+        <Globe className="h-4 w-4" />
+        <Select value={currentLanguage} onValueChange={handleLanguageChange}>
+          <SelectTrigger className="w-[140px]">
+            <SelectValue />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="en">
+              <div className="flex items-center gap-2">
+                <span>🇺🇸</span>
+                <span>English</span>
+              </div>
+            </SelectItem>
+            <SelectItem value="bn">
+              <div className="flex items-center gap-2">
+                <span>🇧🇩</span>
+                <span>বাংলা</span>
+              </div>
+            </SelectItem>
+          </SelectContent>
+        </Select>
       </div>
     );
   }
 
-  if (variant === 'button') {
-    return (
-      <Button
-        variant="outline"
-        size={size === 'sm' ? 'sm' : 'default'}
-        onClick={() => handleLanguageChange(language === 'en' ? 'bn' : 'en')}
-        className="gap-2"
-      >
-        {getLanguageFlag(language)}
-        {getLanguageLabel(language)}
-      </Button>
-    );
-  }
-
   return (
-    <DropdownMenu>
-      <DropdownMenuTrigger asChild>
-        <Button 
-          variant="outline" 
-          size={size === 'sm' ? 'sm' : 'default'}
-          className="gap-2"
-        >
-          {getLanguageFlag(language)}
-          {getLanguageLabel(language)}
-          <span className="sr-only">Switch language</span>
-        </Button>
-      </DropdownMenuTrigger>
-      <DropdownMenuContent align="end" className="w-48">
-        <DropdownMenuItem
-          onClick={() => handleLanguageChange('en')}
-          className="flex items-center justify-between"
-        >
-          <div className="flex items-center gap-2">
-            🇺🇸 English
-          </div>
-          {language === 'en' && <Badge variant="secondary">Current</Badge>}
-        </DropdownMenuItem>
-        <DropdownMenuItem
-          onClick={() => handleLanguageChange('bn')}
-          className="flex items-center justify-between"
-        >
-          <div className="flex items-center gap-2">
-            🇧🇩 বাংলা
-          </div>
-          {language === 'bn' && <Badge variant="secondary">বর্তমান</Badge>}
-        </DropdownMenuItem>
-      </DropdownMenuContent>
-    </DropdownMenu>
+    <Button
+      variant="ghost"
+      size="sm"
+      onClick={toggleLanguage}
+      className="flex items-center gap-1 text-sm"
+    >
+      <Globe className="h-4 w-4" />
+      <span className="font-medium">
+        {currentLanguage === 'en' ? 'EN' : 'বং'}
+      </span>
+    </Button>
   );
 };

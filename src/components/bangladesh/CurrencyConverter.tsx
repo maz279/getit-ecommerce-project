@@ -1,139 +1,96 @@
 import React, { useState, useEffect } from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
-import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
-import { Badge } from '@/components/ui/badge';
-import { 
-  Select, 
-  SelectContent, 
-  SelectItem, 
-  SelectTrigger, 
-  SelectValue 
-} from '@/components/ui/select';
+import { Button } from '@/components/ui/button';
+import { ArrowRightLeft, DollarSign } from 'lucide-react';
 import { supabase } from '@/integrations/supabase/client';
-import { useToast } from '@/hooks/use-toast';
 
 interface CurrencyConverterProps {
-  initialAmount?: number;
-  fromCurrency?: string;
-  toCurrency?: string;
-  showCard?: boolean;
-  onConversionChange?: (result: ConversionResult) => void;
+  amount?: number;
+  onConvert?: (convertedAmount: number, fromCurrency: string, toCurrency: string) => void;
+  compact?: boolean;
 }
-
-interface ConversionResult {
-  fromAmount: number;
-  toAmount: number;
-  fromCurrency: string;
-  toCurrency: string;
-  rate: number;
-  lastUpdated: string;
-}
-
-const currencies = [
-  { code: 'BDT', name: 'Bangladeshi Taka', symbol: '৳', flag: '🇧🇩' },
-  { code: 'USD', name: 'US Dollar', symbol: '$', flag: '🇺🇸' },
-  { code: 'EUR', name: 'Euro', symbol: '€', flag: '🇪🇺' },
-  { code: 'GBP', name: 'British Pound', symbol: '£', flag: '🇬🇧' },
-  { code: 'INR', name: 'Indian Rupee', symbol: '₹', flag: '🇮🇳' },
-  { code: 'SAR', name: 'Saudi Riyal', symbol: 'SR', flag: '🇸🇦' },
-  { code: 'AED', name: 'UAE Dirham', symbol: 'AED', flag: '🇦🇪' },
-  { code: 'MYR', name: 'Malaysian Ringgit', symbol: 'RM', flag: '🇲🇾' }
-];
 
 export const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
-  initialAmount = 1,
-  fromCurrency = 'USD',
-  toCurrency = 'BDT',
-  showCard = true,
-  onConversionChange
+  amount: initialAmount = 0,
+  onConvert,
+  compact = false
 }) => {
-  const [amount, setAmount] = useState(initialAmount);
-  const [from, setFrom] = useState(fromCurrency);
-  const [to, setTo] = useState(toCurrency);
-  const [result, setResult] = useState<ConversionResult | null>(null);
+  const [amount, setAmount] = useState<number>(initialAmount);
+  const [fromCurrency, setFromCurrency] = useState<string>('USD');
+  const [toCurrency, setToCurrency] = useState<string>('BDT');
+  const [convertedAmount, setConvertedAmount] = useState<number>(0);
+  const [exchangeRate, setExchangeRate] = useState<number>(110); // Default rate
   const [loading, setLoading] = useState(false);
-  const { toast } = useToast();
+
+  useEffect(() => {
+    fetchExchangeRate();
+  }, [fromCurrency, toCurrency]);
 
   useEffect(() => {
     if (amount > 0) {
-      convertCurrency();
+      performConversion();
     }
-  }, [amount, from, to]);
+  }, [amount, exchangeRate]);
 
-  const convertCurrency = async () => {
-    if (from === to) {
-      const sameResult: ConversionResult = {
-        fromAmount: amount,
-        toAmount: amount,
-        fromCurrency: from,
-        toCurrency: to,
-        rate: 1,
-        lastUpdated: new Date().toISOString()
-      };
-      setResult(sameResult);
-      onConversionChange?.(sameResult);
-      return;
-    }
-
-    setLoading(true);
+  const fetchExchangeRate = async () => {
     try {
-      const { data, error } = await supabase.functions.invoke('bangladesh-localization', {
-        body: {
-          action: 'get_currency_rate',
-          fromCurrency: from,
-          toCurrency: to
-        }
-      });
+      const { data, error } = await supabase
+        .from('bd_currency_rates')
+        .select('rate')
+        .eq('from_currency', fromCurrency)
+        .eq('to_currency', toCurrency)
+        .eq('is_active', true)
+        .order('last_updated', { ascending: false })
+        .limit(1)
+        .single();
 
-      if (error) throw error;
-
-      if (data?.success) {
-        const rate = data.data.rate;
-        const convertedAmount = amount * rate;
-        
-        const conversionResult: ConversionResult = {
-          fromAmount: amount,
-          toAmount: Number(convertedAmount.toFixed(2)),
-          fromCurrency: from,
-          toCurrency: to,
-          rate,
-          lastUpdated: data.data.last_updated
-        };
-
-        setResult(conversionResult);
-        onConversionChange?.(conversionResult);
+      if (data && !error) {
+        setExchangeRate(data.rate);
       }
     } catch (error) {
-      console.error('Currency conversion error:', error);
-      toast({
-        title: "Conversion Failed",
-        description: "Unable to fetch current exchange rates",
-        variant: "destructive"
-      });
-    } finally {
-      setLoading(false);
+      console.error('Failed to fetch exchange rate:', error);
     }
+  };
+
+  const performConversion = () => {
+    setLoading(true);
+    setTimeout(() => {
+      const converted = amount * exchangeRate;
+      setConvertedAmount(converted);
+      onConvert?.(converted, fromCurrency, toCurrency);
+      setLoading(false);
+    }, 300);
   };
 
   const swapCurrencies = () => {
-    setFrom(to);
-    setTo(from);
+    setFromCurrency(toCurrency);
+    setToCurrency(fromCurrency);
+    setExchangeRate(1 / exchangeRate);
   };
 
-  const getCurrencyInfo = (code: string) => {
-    return currencies.find(c => c.code === code) || currencies[0];
-  };
+  if (compact) {
+    return (
+      <div className="flex items-center gap-2 text-sm">
+        <DollarSign className="h-4 w-4" />
+        <span>
+          {fromCurrency} {amount.toFixed(2)} = {toCurrency} {convertedAmount.toFixed(2)}
+        </span>
+      </div>
+    );
+  }
 
-  const formatAmount = (amount: number, currency: string) => {
-    const currencyInfo = getCurrencyInfo(currency);
-    return `${currencyInfo.symbol}${amount.toLocaleString()}`;
-  };
-
-  const content = (
-    <div className="space-y-6">
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end">
+  return (
+    <Card className="w-full max-w-md">
+      <CardHeader>
+        <CardTitle className="flex items-center gap-2">
+          <DollarSign className="h-5 w-5" />
+          Currency Converter
+        </CardTitle>
+      </CardHeader>
+      
+      <CardContent className="space-y-4">
         <div className="space-y-2">
           <Label htmlFor="amount">Amount</Label>
           <Input
@@ -142,118 +99,63 @@ export const CurrencyConverter: React.FC<CurrencyConverterProps> = ({
             value={amount}
             onChange={(e) => setAmount(Number(e.target.value))}
             placeholder="Enter amount"
-            min="0"
-            step="0.01"
           />
         </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="from">From</Label>
-          <Select value={from} onValueChange={setFrom}>
-            <SelectTrigger>
-              <SelectValue />
-            </SelectTrigger>
-            <SelectContent>
-              {currencies.map((currency) => (
-                <SelectItem key={currency.code} value={currency.code}>
-                  <div className="flex items-center gap-2">
-                    <span>{currency.flag}</span>
-                    <span>{currency.code}</span>
-                    <span className="text-sm text-gray-500">- {currency.name}</span>
-                  </div>
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="to">To</Label>
-          <div className="flex gap-2">
-            <Select value={to} onValueChange={setTo}>
-              <SelectTrigger>
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                {currencies.map((currency) => (
-                  <SelectItem key={currency.code} value={currency.code}>
-                    <div className="flex items-center gap-2">
-                      <span>{currency.flag}</span>
-                      <span>{currency.code}</span>
-                      <span className="text-sm text-gray-500">- {currency.name}</span>
-                    </div>
-                  </SelectItem>
-                ))}
-              </SelectContent>
-            </Select>
-            <Button
-              variant="outline"
-              size="icon"
-              onClick={swapCurrencies}
-              title="Swap currencies"
+        
+        <div className="flex items-center gap-2">
+          <div className="flex-1 space-y-2">
+            <Label>From</Label>
+            <select 
+              value={fromCurrency}
+              onChange={(e) => setFromCurrency(e.target.value)}
+              className="w-full p-2 border rounded-md"
             >
-              ⇄
-            </Button>
+              <option value="USD">USD ($)</option>
+              <option value="BDT">BDT (৳)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
+          </div>
+          
+          <Button
+            variant="outline"
+            size="sm"
+            onClick={swapCurrencies}
+            className="mt-6"
+          >
+            <ArrowRightLeft className="h-4 w-4" />
+          </Button>
+          
+          <div className="flex-1 space-y-2">
+            <Label>To</Label>
+            <select 
+              value={toCurrency}
+              onChange={(e) => setToCurrency(e.target.value)}
+              className="w-full p-2 border rounded-md"
+            >
+              <option value="BDT">BDT (৳)</option>
+              <option value="USD">USD ($)</option>
+              <option value="EUR">EUR (€)</option>
+              <option value="GBP">GBP (£)</option>
+            </select>
           </div>
         </div>
-      </div>
-
-      {result && (
-        <Card className="bg-gradient-to-r from-green-50 to-blue-50 border-green-200">
-          <CardContent className="p-4">
-            <div className="text-center space-y-2">
-              <div className="text-lg">
-                <span className="font-medium">{formatAmount(result.fromAmount, result.fromCurrency)}</span>
-                <span className="mx-2 text-gray-500">=</span>
-                <span className="font-bold text-green-600 text-xl">
-                  {formatAmount(result.toAmount, result.toCurrency)}
-                </span>
-              </div>
-              
-              <div className="flex items-center justify-center gap-4 text-sm text-gray-600">
-                <Badge variant="secondary">
-                  Rate: 1 {result.fromCurrency} = {result.rate.toFixed(4)} {result.toCurrency}
-                </Badge>
-                {loading && (
-                  <div className="flex items-center gap-1">
-                    <div className="animate-spin h-3 w-3 border border-gray-400 border-t-transparent rounded-full"></div>
-                    <span>Updating...</span>
-                  </div>
-                )}
-              </div>
-              
-              <div className="text-xs text-gray-500">
-                Last updated: {new Date(result.lastUpdated).toLocaleString()}
-              </div>
+        
+        <div className="p-4 bg-muted rounded-lg">
+          <div className="text-center">
+            <div className="text-sm text-muted-foreground">Converted Amount</div>
+            <div className="text-2xl font-bold">
+              {loading ? '...' : `${toCurrency} ${convertedAmount.toFixed(2)}`}
             </div>
-          </CardContent>
-        </Card>
-      )}
-
-      {to === 'BDT' && (
-        <div className="text-center text-sm text-gray-600 space-y-1">
-          <p>💡 <strong>Bangladesh Banking Hours:</strong> 9:00 AM - 5:00 PM (Sat-Thu)</p>
-          <p>🏦 <strong>Popular Banks:</strong> Dutch Bangla, Brac, City Bank, Standard Chartered</p>
+            <div className="text-xs text-muted-foreground mt-1">
+              Rate: 1 {fromCurrency} = {exchangeRate.toFixed(4)} {toCurrency}
+            </div>
+          </div>
         </div>
-      )}
-    </div>
-  );
-
-  if (!showCard) {
-    return content;
-  }
-
-  return (
-    <Card className="w-full max-w-2xl mx-auto">
-      <CardHeader>
-        <CardTitle className="flex items-center gap-2">
-          <span className="text-2xl">💱</span>
-          Currency Converter
-          <Badge variant="outline">Live Rates</Badge>
-        </CardTitle>
-      </CardHeader>
-      <CardContent>
-        {content}
+        
+        <Button onClick={performConversion} className="w-full" disabled={loading}>
+          {loading ? 'Converting...' : 'Convert'}
+        </Button>
       </CardContent>
     </Card>
   );

@@ -774,6 +774,132 @@ export type Database = {
         }
         Relationships: []
       }
+      bd_currency_rates: {
+        Row: {
+          created_at: string | null
+          from_currency: string
+          id: string
+          is_active: boolean | null
+          last_updated: string | null
+          rate: number
+          source: string | null
+          to_currency: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          from_currency: string
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          rate: number
+          source?: string | null
+          to_currency: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          from_currency?: string
+          id?: string
+          is_active?: boolean | null
+          last_updated?: string | null
+          rate?: number
+          source?: string | null
+          to_currency?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      bd_delivery_zones: {
+        Row: {
+          additional_charge: number | null
+          courier_partners: string[] | null
+          created_at: string | null
+          delivery_time_hours: number | null
+          districts: string[] | null
+          id: string
+          is_active: boolean | null
+          postal_codes: string[] | null
+          updated_at: string | null
+          zone_name: string
+          zone_name_bn: string | null
+          zone_type: string
+        }
+        Insert: {
+          additional_charge?: number | null
+          courier_partners?: string[] | null
+          created_at?: string | null
+          delivery_time_hours?: number | null
+          districts?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: string[] | null
+          updated_at?: string | null
+          zone_name: string
+          zone_name_bn?: string | null
+          zone_type: string
+        }
+        Update: {
+          additional_charge?: number | null
+          courier_partners?: string[] | null
+          created_at?: string | null
+          delivery_time_hours?: number | null
+          districts?: string[] | null
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: string[] | null
+          updated_at?: string | null
+          zone_name?: string
+          zone_name_bn?: string | null
+          zone_type?: string
+        }
+        Relationships: []
+      }
+      bd_festival_configs: {
+        Row: {
+          banner_config: Json | null
+          created_at: string | null
+          cultural_elements: Json | null
+          discount_config: Json | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          festival_type: string
+          id: string
+          is_active: boolean | null
+          start_date: string
+          updated_at: string | null
+        }
+        Insert: {
+          banner_config?: Json | null
+          created_at?: string | null
+          cultural_elements?: Json | null
+          discount_config?: Json | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          festival_type: string
+          id?: string
+          is_active?: boolean | null
+          start_date: string
+          updated_at?: string | null
+        }
+        Update: {
+          banner_config?: Json | null
+          created_at?: string | null
+          cultural_elements?: Json | null
+          discount_config?: Json | null
+          end_date?: string
+          festival_name?: string
+          festival_name_bn?: string
+          festival_type?: string
+          id?: string
+          is_active?: boolean | null
+          start_date?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       bd_kyc_verifications: {
         Row: {
           api_response: Json | null
@@ -822,6 +948,45 @@ export type Database = {
         }
         Relationships: []
       }
+      bd_localization_content: {
+        Row: {
+          bengali_content: string | null
+          category: string
+          content_key: string
+          content_type: string
+          context_data: Json | null
+          created_at: string | null
+          english_content: string | null
+          id: string
+          is_verified: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          bengali_content?: string | null
+          category: string
+          content_key: string
+          content_type: string
+          context_data?: Json | null
+          created_at?: string | null
+          english_content?: string | null
+          id?: string
+          is_verified?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          bengali_content?: string | null
+          category?: string
+          content_key?: string
+          content_type?: string
+          context_data?: Json | null
+          created_at?: string | null
+          english_content?: string | null
+          id?: string
+          is_verified?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       bd_payment_gateways: {
         Row: {
           api_config: Json
@@ -851,6 +1016,45 @@ export type Database = {
           id?: string
           is_active?: boolean | null
           transaction_limits?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      bd_payment_method_configs: {
+        Row: {
+          created_at: string | null
+          fees_structure: Json | null
+          id: string
+          is_active: boolean | null
+          method_name: string
+          method_type: string
+          provider_config: Json
+          supported_currencies: string[] | null
+          transaction_limits: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          fees_structure?: Json | null
+          id?: string
+          is_active?: boolean | null
+          method_name: string
+          method_type: string
+          provider_config: Json
+          supported_currencies?: string[] | null
+          transaction_limits?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          fees_structure?: Json | null
+          id?: string
+          is_active?: boolean | null
+          method_name?: string
+          method_type?: string
+          provider_config?: Json
+          supported_currencies?: string[] | null
+          transaction_limits?: Json | null
           updated_at?: string | null
         }
         Relationships: []
@@ -897,6 +1101,39 @@ export type Database = {
           processed_at?: string | null
           status?: string
           transaction_id?: string
+        }
+        Relationships: []
+      }
+      bd_sms_configs: {
+        Row: {
+          api_config: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          message_types: Json | null
+          provider_name: string
+          rate_limits: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          api_config: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message_types?: Json | null
+          provider_name: string
+          rate_limits?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          api_config?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          message_types?: Json | null
+          provider_name?: string
+          rate_limits?: Json | null
+          updated_at?: string | null
         }
         Relationships: []
       }

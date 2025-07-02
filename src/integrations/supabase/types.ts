@@ -1575,6 +1575,48 @@ export type Database = {
           },
         ]
       }
+      conversion_tracking: {
+        Row: {
+          conversion_type: string
+          conversion_value: number | null
+          created_at: string
+          id: string
+          products_viewed: Json | null
+          search_query: string | null
+          session_id: string
+          source_page: string | null
+          target_action: string | null
+          time_to_conversion: number | null
+          user_id: string | null
+        }
+        Insert: {
+          conversion_type: string
+          conversion_value?: number | null
+          created_at?: string
+          id?: string
+          products_viewed?: Json | null
+          search_query?: string | null
+          session_id: string
+          source_page?: string | null
+          target_action?: string | null
+          time_to_conversion?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          conversion_type?: string
+          conversion_value?: number | null
+          created_at?: string
+          id?: string
+          products_viewed?: Json | null
+          search_query?: string | null
+          session_id?: string
+          source_page?: string | null
+          target_action?: string | null
+          time_to_conversion?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       custom_report_templates: {
         Row: {
           created_at: string | null
@@ -3705,6 +3747,42 @@ export type Database = {
           id?: string
           recommendation_type?: string
           recommendations?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      mobile_performance_metrics: {
+        Row: {
+          created_at: string
+          device_type: string
+          id: string
+          network_type: string | null
+          page_load_time: number | null
+          page_url: string | null
+          performance_score: number | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          device_type: string
+          id?: string
+          network_type?: string | null
+          page_load_time?: number | null
+          page_url?: string | null
+          performance_score?: number | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          device_type?: string
+          id?: string
+          network_type?: string | null
+          page_load_time?: number | null
+          page_url?: string | null
+          performance_score?: number | null
+          user_agent?: string | null
           user_id?: string | null
         }
         Relationships: []
@@ -6848,6 +6926,36 @@ export type Database = {
         }
         Relationships: []
       }
+      realtime_feature_usage: {
+        Row: {
+          created_at: string
+          feature_name: string
+          id: string
+          interaction_count: number | null
+          session_id: string | null
+          usage_duration: number | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          feature_name: string
+          id?: string
+          interaction_count?: number | null
+          session_id?: string | null
+          usage_duration?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          feature_name?: string
+          id?: string
+          interaction_count?: number | null
+          session_id?: string | null
+          usage_duration?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       recently_viewed: {
         Row: {
           id: string
@@ -7936,6 +8044,48 @@ export type Database = {
         }
         Relationships: []
       }
+      success_metrics: {
+        Row: {
+          additional_data: Json | null
+          created_at: string
+          id: string
+          measurement_date: string
+          metric_category: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          target_value: number
+          user_id: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          additional_data?: Json | null
+          created_at?: string
+          id?: string
+          measurement_date?: string
+          metric_category: string
+          metric_name: string
+          metric_unit: string
+          metric_value: number
+          target_value: number
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          additional_data?: Json | null
+          created_at?: string
+          id?: string
+          measurement_date?: string
+          metric_category?: string
+          metric_name?: string
+          metric_unit?: string
+          metric_value?: number
+          target_value?: number
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
       suppliers: {
         Row: {
           certifications: Json | null
@@ -8313,6 +8463,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_engagement_metrics: {
+        Row: {
+          action_type: string
+          conversion_value: number | null
+          created_at: string
+          engagement_duration: number | null
+          feature_used: string | null
+          id: string
+          page_type: string
+          session_id: string
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          conversion_value?: number | null
+          created_at?: string
+          engagement_duration?: number | null
+          feature_used?: string | null
+          id?: string
+          page_type: string
+          session_id: string
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          conversion_value?: number | null
+          created_at?: string
+          engagement_duration?: number | null
+          feature_used?: string | null
+          id?: string
+          page_type?: string
+          session_id?: string
+          user_id?: string
+        }
+        Relationships: []
       }
       user_interactions: {
         Row: {

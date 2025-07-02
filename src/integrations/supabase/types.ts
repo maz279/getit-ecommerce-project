@@ -3039,6 +3039,66 @@ export type Database = {
           },
         ]
       }
+      ci_cd_pipelines: {
+        Row: {
+          branch_name: string
+          created_at: string | null
+          environment_variables: Json | null
+          id: string
+          is_active: boolean | null
+          last_run_at: string | null
+          last_run_duration: number | null
+          notification_settings: Json | null
+          pipeline_config: Json
+          pipeline_metrics: Json | null
+          pipeline_name: string
+          pipeline_type: string
+          repository_url: string
+          status: string
+          success_rate: number | null
+          trigger_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          branch_name?: string
+          created_at?: string | null
+          environment_variables?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_run_at?: string | null
+          last_run_duration?: number | null
+          notification_settings?: Json | null
+          pipeline_config?: Json
+          pipeline_metrics?: Json | null
+          pipeline_name: string
+          pipeline_type: string
+          repository_url: string
+          status?: string
+          success_rate?: number | null
+          trigger_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          branch_name?: string
+          created_at?: string | null
+          environment_variables?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_run_at?: string | null
+          last_run_duration?: number | null
+          notification_settings?: Json | null
+          pipeline_config?: Json
+          pipeline_metrics?: Json | null
+          pipeline_name?: string
+          pipeline_type?: string
+          repository_url?: string
+          status?: string
+          success_rate?: number | null
+          trigger_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       commission_adjustments: {
         Row: {
           adjustment_amount: number
@@ -3678,6 +3738,54 @@ export type Database = {
           min_size_threshold?: number | null
           performance_metrics?: Json | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      container_registries: {
+        Row: {
+          access_policies: Json | null
+          authentication_config: Json
+          created_at: string | null
+          id: string
+          image_scanning_enabled: boolean | null
+          is_active: boolean | null
+          registry_name: string
+          registry_type: string
+          registry_url: string
+          retention_policies: Json | null
+          storage_usage_gb: number | null
+          updated_at: string | null
+          vulnerability_policies: Json | null
+        }
+        Insert: {
+          access_policies?: Json | null
+          authentication_config?: Json
+          created_at?: string | null
+          id?: string
+          image_scanning_enabled?: boolean | null
+          is_active?: boolean | null
+          registry_name: string
+          registry_type: string
+          registry_url: string
+          retention_policies?: Json | null
+          storage_usage_gb?: number | null
+          updated_at?: string | null
+          vulnerability_policies?: Json | null
+        }
+        Update: {
+          access_policies?: Json | null
+          authentication_config?: Json
+          created_at?: string | null
+          id?: string
+          image_scanning_enabled?: boolean | null
+          is_active?: boolean | null
+          registry_name?: string
+          registry_type?: string
+          registry_url?: string
+          retention_policies?: Json | null
+          storage_usage_gb?: number | null
+          updated_at?: string | null
+          vulnerability_policies?: Json | null
         }
         Relationships: []
       }
@@ -6642,6 +6750,57 @@ export type Database = {
         }
         Relationships: []
       }
+      infrastructure_deployments: {
+        Row: {
+          configuration: Json
+          created_at: string | null
+          deployed_at: string | null
+          deployed_by: string | null
+          deployment_logs: Json | null
+          deployment_name: string
+          deployment_status: string
+          environment: string
+          health_status: string | null
+          id: string
+          infrastructure_type: string
+          resource_utilization: Json | null
+          rollback_version: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string | null
+          deployed_at?: string | null
+          deployed_by?: string | null
+          deployment_logs?: Json | null
+          deployment_name: string
+          deployment_status?: string
+          environment: string
+          health_status?: string | null
+          id?: string
+          infrastructure_type: string
+          resource_utilization?: Json | null
+          rollback_version?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string | null
+          deployed_at?: string | null
+          deployed_by?: string | null
+          deployment_logs?: Json | null
+          deployment_name?: string
+          deployment_status?: string
+          environment?: string
+          health_status?: string | null
+          id?: string
+          infrastructure_type?: string
+          resource_utilization?: Json | null
+          rollback_version?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       installment_payment_plans: {
         Row: {
           created_at: string | null
@@ -7186,6 +7345,63 @@ export type Database = {
           trend_factor?: number | null
           valid_until?: string
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      kubernetes_clusters: {
+        Row: {
+          auto_scaling_enabled: boolean | null
+          backup_enabled: boolean | null
+          cluster_config: Json
+          cluster_endpoint: string | null
+          cluster_name: string
+          cluster_status: string
+          cluster_version: string | null
+          created_at: string | null
+          environment: string
+          id: string
+          kubeconfig_encrypted: string | null
+          monitoring_enabled: boolean | null
+          node_pools: Json
+          provider: string
+          region: string
+          updated_at: string | null
+        }
+        Insert: {
+          auto_scaling_enabled?: boolean | null
+          backup_enabled?: boolean | null
+          cluster_config?: Json
+          cluster_endpoint?: string | null
+          cluster_name: string
+          cluster_status?: string
+          cluster_version?: string | null
+          created_at?: string | null
+          environment: string
+          id?: string
+          kubeconfig_encrypted?: string | null
+          monitoring_enabled?: boolean | null
+          node_pools?: Json
+          provider: string
+          region: string
+          updated_at?: string | null
+        }
+        Update: {
+          auto_scaling_enabled?: boolean | null
+          backup_enabled?: boolean | null
+          cluster_config?: Json
+          cluster_endpoint?: string | null
+          cluster_name?: string
+          cluster_status?: string
+          cluster_version?: string | null
+          created_at?: string | null
+          environment?: string
+          id?: string
+          kubeconfig_encrypted?: string | null
+          monitoring_enabled?: boolean | null
+          node_pools?: Json
+          provider?: string
+          region?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -14794,6 +15010,60 @@ export type Database = {
           tax_name_bn?: string
           tax_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      terraform_states: {
+        Row: {
+          applied_by: string | null
+          backup_states: Json | null
+          created_at: string | null
+          environment: string
+          id: string
+          is_locked: boolean | null
+          last_applied_at: string | null
+          lock_info: Json | null
+          resources_count: number | null
+          state_checksum: string
+          state_data: Json
+          state_version: number
+          terraform_version: string
+          updated_at: string | null
+          workspace_name: string
+        }
+        Insert: {
+          applied_by?: string | null
+          backup_states?: Json | null
+          created_at?: string | null
+          environment: string
+          id?: string
+          is_locked?: boolean | null
+          last_applied_at?: string | null
+          lock_info?: Json | null
+          resources_count?: number | null
+          state_checksum: string
+          state_data: Json
+          state_version?: number
+          terraform_version: string
+          updated_at?: string | null
+          workspace_name: string
+        }
+        Update: {
+          applied_by?: string | null
+          backup_states?: Json | null
+          created_at?: string | null
+          environment?: string
+          id?: string
+          is_locked?: boolean | null
+          last_applied_at?: string | null
+          lock_info?: Json | null
+          resources_count?: number | null
+          state_checksum?: string
+          state_data?: Json
+          state_version?: number
+          terraform_version?: string
+          updated_at?: string | null
+          workspace_name?: string
         }
         Relationships: []
       }

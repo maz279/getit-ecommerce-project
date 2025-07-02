@@ -1,18 +1,17 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2';
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-interface SearchRequest {
-  query: string;
-  type?: 'text' | 'voice' | 'image' | 'ai';
-  filters?: Record<string, any>;
-  page?: number;
-  limit?: number;
-}
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
+
+const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -20,180 +19,355 @@ serve(async (req) => {
   }
 
   try {
-    const supabase = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? ''
-    );
-
-    const {
-      query,
-      type = 'text',
+    const { 
+      query, 
+      searchType = 'semantic',
+      userId,
       filters = {},
-      page = 1,
-      limit = 20
-    }: SearchRequest = await req.json();
+      limit = 20 
+    } = await req.json();
 
-    const startTime = Date.now();
-    const sessionId = crypto.randomUUID();
+    console.log('Enhanced search request:', { query, searchType, userId });
 
-    // Check AI cache first
-    const queryHash = await crypto.subtle.digest(
-      'SHA-256',
-      new TextEncoder().encode(query.toLowerCase())
-    );
-    const hashArray = Array.from(new Uint8Array(queryHash));
-    const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+    let results = [];
+    let searchTimeStart = Date.now();
 
-    let enhancedQuery = query;
-    let aiSuggestions: string[] = [];
-
-    // Check cache
+    // Check cache first
+    const queryHash = await generateQueryHash(query + JSON.stringify(filters));
     const { data: cachedResult } = await supabase
       .from('ai_search_cache')
       .select('*')
-      .eq('query_hash', hashHex)
+      .eq('query_hash', queryHash)
       .gt('expires_at', new Date().toISOString())
       .single();
 
     if (cachedResult) {
-      enhancedQuery = cachedResult.enhanced_query;
-      aiSuggestions = cachedResult.ai_suggestions;
+      console.log('Returning cached search results');
+      await updateCacheUsage(cachedResult.id);
       
-      // Update usage count
-      await supabase
-        .from('ai_search_cache')
-        .update({ usage_count: cachedResult.usage_count + 1 })
-        .eq('id', cachedResult.id);
-    } else if (type === 'ai' || query.length > 50) {
-      // Enhanced AI processing for complex queries
-      try {
-        const openAIKey = Deno.env.get('OPENAI_API_KEY');
-        if (openAIKey) {
-          const aiResponse = await fetch('https://api.openai.com/v1/chat/completions', {
-            method: 'POST',
-            headers: {
-              'Authorization': `Bearer ${openAIKey}`,
-              'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-              model: 'gpt-4o-mini',
-              messages: [
-                {
-                  role: 'system',
-                  content: 'You are a search query optimizer for an e-commerce platform. Transform user queries into optimized search terms and suggest related keywords. Return JSON with "enhanced_query" and "suggestions" array.'
-                },
-                {
-                  role: 'user',
-                  content: `Optimize this search query: "${query}"`
-                }
-              ],
-              max_tokens: 300,
-              temperature: 0.3
-            })
-          });
-
-          if (aiResponse.ok) {
-            const aiData = await aiResponse.json();
-            const aiResult = JSON.parse(aiData.choices[0].message.content);
-            enhancedQuery = aiResult.enhanced_query || query;
-            aiSuggestions = aiResult.suggestions || [];
-
-            // Cache the result
-            await supabase.from('ai_search_cache').insert({
-              query_hash: hashHex,
-              original_query: query,
-              enhanced_query: enhancedQuery,
-              ai_suggestions: aiSuggestions,
-              expires_at: new Date(Date.now() + 24 * 60 * 60 * 1000).toISOString()
-            });
-          }
-        }
-      } catch (error) {
-        console.error('AI enhancement failed:', error);
-      }
+      return new Response(JSON.stringify({
+        success: true,
+        results: cachedResult.ai_suggestions,
+        search_type: searchType,
+        cached: true,
+        search_time_ms: Date.now() - searchTimeStart
+      }), {
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
+      });
     }
 
-    // Perform the actual search with enhanced query
-    const searchTerms = enhancedQuery.toLowerCase().split(' ').filter(term => term.length > 2);
+    // Enhance query with AI if semantic search
+    let enhancedQuery = query;
+    let semanticTokens = [];
     
-    let searchQuery = supabase
-      .from('products')
-      .select(`
-        *,
-        categories(name, slug),
-        vendors(business_name, rating)
-      `);
-
-    // Apply text search
-    if (searchTerms.length > 0) {
-      const searchCondition = searchTerms
-        .map(term => `name.ilike.%${term}%,description.ilike.%${term}%,tags.cs.{${term}}`)
-        .join(',');
-      searchQuery = searchQuery.or(searchCondition);
+    if (searchType === 'semantic' && openAIApiKey) {
+      const aiEnhancement = await enhanceQueryWithAI(query);
+      enhancedQuery = aiEnhancement.enhanced_query;
+      semanticTokens = aiEnhancement.tokens;
     }
 
-    // Apply filters
-    if (filters.category) {
-      searchQuery = searchQuery.eq('category_id', filters.category);
-    }
-    if (filters.priceMin) {
-      searchQuery = searchQuery.gte('price', filters.priceMin);
-    }
-    if (filters.priceMax) {
-      searchQuery = searchQuery.lte('price', filters.priceMax);
-    }
-    if (filters.vendor) {
-      searchQuery = searchQuery.eq('vendor_id', filters.vendor);
-    }
-
-    // Apply pagination
-    const offset = (page - 1) * limit;
-    searchQuery = searchQuery
-      .range(offset, offset + limit - 1)
-      .order('created_at', { ascending: false });
-
-    const { data: products, error } = await searchQuery;
-
-    if (error) {
-      throw error;
+    // Perform different types of search
+    switch (searchType) {
+      case 'semantic':
+        results = await performSemanticSearch(enhancedQuery, filters, limit);
+        break;
+      case 'visual':
+        results = await performVisualSearch(query, filters, limit);
+        break;
+      case 'voice':
+        results = await performVoiceSearch(query, filters, limit);
+        break;
+      default:
+        results = await performTextSearch(enhancedQuery, filters, limit);
     }
 
-    const searchDuration = Date.now() - startTime;
+    // Apply ML ranking
+    if (results.length > 0 && userId) {
+      results = await applyMLRanking(results, userId);
+    }
+
+    const searchTimeMs = Date.now() - searchTimeStart;
+
+    // Cache results
+    await cacheSearchResults(queryHash, query, enhancedQuery, semanticTokens, results);
 
     // Log search analytics
-    await supabase.from('search_analytics').insert({
-      session_id: sessionId,
-      search_query: query,
-      search_type: type,
-      filters_applied: filters,
-      results_count: products?.length || 0,
-      search_duration_ms: searchDuration,
-      ai_enhancement_used: type === 'ai' || !!cachedResult,
-      ai_suggestions: aiSuggestions
-    });
+    await logSearchQuery(userId, query, searchType, results.length, searchTimeMs);
 
     return new Response(JSON.stringify({
-      results: products || [],
-      total: products?.length || 0,
-      page,
-      limit,
-      search_duration_ms: searchDuration,
-      enhanced_query: enhancedQuery !== query ? enhancedQuery : undefined,
-      ai_suggestions: aiSuggestions.length > 0 ? aiSuggestions : undefined,
-      session_id: sessionId
+      success: true,
+      results: results.slice(0, limit),
+      enhanced_query: enhancedQuery,
+      semantic_tokens: semanticTokens,
+      search_type: searchType,
+      total_results: results.length,
+      search_time_ms: searchTimeMs,
+      cached: false
     }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
 
   } catch (error) {
-    console.error('Search error:', error);
+    console.error('Error in enhanced search:', error);
     return new Response(JSON.stringify({ 
-      error: error.message,
-      results: [],
-      total: 0
+      error: 'Search failed',
+      details: error.message 
     }), {
       status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' },
+      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
     });
   }
 });
+
+async function enhanceQueryWithAI(query) {
+  if (!openAIApiKey) return { enhanced_query: query, tokens: [] };
+
+  try {
+    const response = await fetch('https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Authorization': `Bearer ${openAIApiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: 'gpt-4.1-2025-04-14',
+        messages: [
+          {
+            role: 'system',
+            content: 'You are a search query enhancement AI. Transform user queries into better search terms and extract semantic tokens. Return JSON with enhanced_query and tokens array.'
+          },
+          {
+            role: 'user',
+            content: `Enhance this search query for an e-commerce platform: "${query}"`
+          }
+        ],
+        max_tokens: 200
+      })
+    });
+
+    const result = await response.json();
+    const enhancement = JSON.parse(result.choices[0]?.message?.content || '{}');
+    
+    return {
+      enhanced_query: enhancement.enhanced_query || query,
+      tokens: enhancement.tokens || []
+    };
+  } catch (error) {
+    console.error('AI query enhancement failed:', error);
+    return { enhanced_query: query, tokens: [] };
+  }
+}
+
+async function performSemanticSearch(query, filters, limit) {
+  console.log('Performing semantic search for:', query);
+  
+  // Full-text search on products with ranking
+  let searchQuery = supabase
+    .from('products')
+    .select(`
+      *,
+      categories(name),
+      vendors(name, rating)
+    `)
+    .eq('is_active', true)
+    .textSearch('searchable_content', query, { config: 'english' })
+    .order('rating', { ascending: false })
+    .limit(limit);
+
+  // Apply filters
+  if (filters.category_id) {
+    searchQuery = searchQuery.eq('category_id', filters.category_id);
+  }
+  if (filters.price_min) {
+    searchQuery = searchQuery.gte('price', filters.price_min);
+  }
+  if (filters.price_max) {
+    searchQuery = searchQuery.lte('price', filters.price_max);
+  }
+  if (filters.vendor_id) {
+    searchQuery = searchQuery.eq('vendor_id', filters.vendor_id);
+  }
+
+  const { data, error } = await searchQuery;
+  
+  if (error) {
+    console.error('Semantic search error:', error);
+    return [];
+  }
+
+  return data || [];
+}
+
+async function performVisualSearch(imageData, filters, limit) {
+  console.log('Performing visual search');
+  
+  // For visual search, we would typically use an AI vision model
+  // For now, return products from similar categories based on image analysis
+  
+  try {
+    if (openAIApiKey && imageData.startsWith('data:image')) {
+      const response = await fetch('https://api.openai.com/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${openAIApiKey}`,
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          model: 'gpt-4.1-2025-04-14',
+          messages: [
+            {
+              role: 'system',
+              content: 'Analyze this image and return relevant product search terms as JSON array.'
+            },
+            {
+              role: 'user',
+              content: [
+                { type: 'text', text: 'What products are shown in this image?' },
+                { type: 'image_url', image_url: { url: imageData } }
+              ]
+            }
+          ],
+          max_tokens: 100
+        })
+      });
+
+      const result = await response.json();
+      const searchTerms = JSON.parse(result.choices[0]?.message?.content || '[]');
+      
+      if (searchTerms.length > 0) {
+        return await performSemanticSearch(searchTerms.join(' '), filters, limit);
+      }
+    }
+  } catch (error) {
+    console.error('Visual search AI failed:', error);
+  }
+
+  // Fallback to popular products
+  const { data } = await supabase
+    .from('products')
+    .select('*, categories(name), vendors(name, rating)')
+    .eq('is_active', true)
+    .order('view_count', { ascending: false })
+    .limit(limit);
+
+  return data || [];
+}
+
+async function performVoiceSearch(audioQuery, filters, limit) {
+  console.log('Performing voice search');
+  
+  // For voice search, audioQuery would be transcribed text
+  // Use the same semantic search with the transcribed text
+  return await performSemanticSearch(audioQuery, filters, limit);
+}
+
+async function performTextSearch(query, filters, limit) {
+  console.log('Performing text search for:', query);
+  
+  const { data } = await supabase
+    .from('products')
+    .select(`
+      *,
+      categories(name),
+      vendors(name, rating)
+    `)
+    .eq('is_active', true)
+    .ilike('name', `%${query}%`)
+    .order('created_at', { ascending: false })
+    .limit(limit);
+
+  return data || [];
+}
+
+async function applyMLRanking(results, userId) {
+  // Get user preferences from behavior data
+  const { data: userBehaviors } = await supabase
+    .from('user_behaviors')
+    .select('*')
+    .eq('user_id', userId)
+    .order('timestamp', { ascending: false })
+    .limit(50);
+
+  if (!userBehaviors?.length) return results;
+
+  // Extract user preferences
+  const viewedCategories = userBehaviors
+    .filter(b => b.event_type === 'product_view')
+    .map(b => b.event_data?.category_id)
+    .filter(Boolean);
+
+  const preferredVendors = userBehaviors
+    .filter(b => b.vendor_id)
+    .map(b => b.vendor_id);
+
+  // Score and rerank results
+  return results
+    .map(product => ({
+      ...product,
+      ml_score: calculateMLScore(product, viewedCategories, preferredVendors)
+    }))
+    .sort((a, b) => b.ml_score - a.ml_score);
+}
+
+function calculateMLScore(product, userCategories, userVendors) {
+  let score = 0;
+  
+  // Category preference boost
+  if (userCategories.includes(product.category_id)) {
+    score += 0.3;
+  }
+  
+  // Vendor preference boost
+  if (userVendors.includes(product.vendor_id)) {
+    score += 0.2;
+  }
+  
+  // Rating boost
+  score += (product.rating || 0) * 0.1;
+  
+  // Popularity boost
+  score += Math.min((product.view_count || 0) / 1000, 0.2);
+  
+  return score;
+}
+
+async function generateQueryHash(input) {
+  const encoder = new TextEncoder();
+  const data = encoder.encode(input);
+  const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  return hashArray.map(b => b.toString(16).padStart(2, '0')).join('');
+}
+
+async function cacheSearchResults(queryHash, originalQuery, enhancedQuery, semanticTokens, results) {
+  const expiresAt = new Date();
+  expiresAt.setHours(expiresAt.getHours() + 2); // 2 hour cache
+
+  await supabase
+    .from('ai_search_cache')
+    .upsert({
+      query_hash: queryHash,
+      original_query: originalQuery,
+      enhanced_query: enhancedQuery,
+      semantic_tokens: semanticTokens,
+      ai_suggestions: results,
+      expires_at: expiresAt.toISOString()
+    });
+}
+
+async function updateCacheUsage(cacheId) {
+  await supabase.rpc('increment_cache_usage', { cache_id: cacheId });
+}
+
+async function logSearchQuery(userId, query, queryType, resultsCount, searchTimeMs) {
+  await supabase
+    .from('search_queries')
+    .insert({
+      user_id: userId,
+      query: query,
+      query_type: queryType,
+      results_count: resultsCount,
+      search_time_ms: searchTimeMs,
+      session_id: `session_${Date.now()}`
+    });
+}

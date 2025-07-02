@@ -1,0 +1,233 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: recommendation-service-deployment
+  namespace: getit-production
+  labels:
+    app: recommendation-service
+    tier: business-service
+    component: ai-ml
+    version: v1.0.0
+    environment: production
+    managed-by: kubernetes
+spec:
+  replicas: 5
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxUnavailable: 25%
+      maxSurge: 25%
+  selector:
+    matchLabels:
+      app: recommendation-service
+  template:
+    metadata:
+      labels:
+        app: recommendation-service
+        tier: business-service
+        component: ai-ml
+        version: v1.0.0
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9090"
+        prometheus.io/path: "/metrics"
+        linkerd.io/inject: enabled
+    spec:
+      serviceAccountName: recommendation-service-sa
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 2000
+      containers:
+      - name: recommendation-service
+        image: getit/recommendation-service:v1.0.0
+        ports:
+        - containerPort: 8080
+          name: http
+          protocol: TCP
+        - containerPort: 9090
+          name: metrics
+          protocol: TCP
+        - containerPort: 8081
+          name: health
+          protocol: TCP
+        env:
+        - name: NODE_ENV
+          value: "production"
+        - name: PORT
+          value: "8080"
+        - name: METRICS_PORT
+          value: "9090"
+        - name: HEALTH_PORT
+          value: "8081"
+        - name: LOG_LEVEL
+          value: "info"
+        - name: JAEGER_ENDPOINT
+          value: "http://jaeger-collector:14268"
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: redis-secrets
+              key: url
+        - name: ELASTICSEARCH_URL
+          valueFrom:
+            secretKeyRef:
+              name: elasticsearch-secrets
+              key: url
+        - name: ML_MODEL_ENDPOINT
+          valueFrom:
+            configMapKeyRef:
+              name: ml-config
+              key: model-endpoint
+        - name: FEATURE_STORE_URL
+          valueFrom:
+            configMapKeyRef:
+              name: ml-config
+              key: feature-store-url
+        - name: A_B_TESTING_ENABLED
+          value: "true"
+        - name: RECOMMENDATION_CACHE_TTL
+          value: "300"
+        - name: BATCH_SIZE
+          value: "100"
+        - name: MAX_RECOMMENDATIONS
+          value: "50"
+        envFrom:
+        - configMapRef:
+            name: recommendation-service-config
+        - secretRef:
+            name: recommendation-service-secrets
+        resources:
+          requests:
+            memory: "512Mi"
+            cpu: "250m"
+          limits:
+            memory: "2Gi"
+            cpu: "1000m"
+        livenessProbe:
+          httpGet:
+            path: /health/live
+            port: health
+          initialDelaySeconds: 30
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 3
+        readinessProbe:
+          httpGet:
+            path: /health/ready
+            port: health
+          initialDelaySeconds: 10
+          periodSeconds: 5
+          timeoutSeconds: 3
+          failureThreshold: 3
+        startupProbe:
+          httpGet:
+            path: /health/startup
+            port: health
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          timeoutSeconds: 5
+          failureThreshold: 30
+        volumeMounts:
+        - name: config-volume
+          mountPath: /app/config
+          readOnly: true
+        - name: ml-models-cache
+          mountPath: /app/models
+        - name: logs-volume
+          mountPath: /app/logs
+        - name: tmp-volume
+          mountPath: /tmp
+      - name: ml-model-sidecar
+        image: getit/ml-model-server:v1.0.0
+        ports:
+        - containerPort: 8082
+          name: ml-api
+        env:
+        - name: MODEL_PATH
+          value: "/models"
+        - name: GPU_ENABLED
+          value: "false"
+        - name: BATCH_INFERENCE
+          value: "true"
+        resources:
+          requests:
+            memory: "1Gi"
+            cpu: "500m"
+          limits:
+            memory: "4Gi"
+            cpu: "2000m"
+        volumeMounts:
+        - name: ml-models-cache
+          mountPath: /models
+      - name: fluent-bit
+        image: fluent/fluent-bit:1.9.3
+        ports:
+        - containerPort: 2020
+          name: metrics
+        env:
+        - name: FLUENT_CONF
+          value: fluent-bit.conf
+        - name: FLUENT_OPT
+          value: ""
+        resources:
+          requests:
+            memory: "64Mi"
+            cpu: "50m"
+          limits:
+            memory: "128Mi"
+            cpu: "100m"
+        volumeMounts:
+        - name: fluent-bit-config
+          mountPath: /fluent-bit/etc/
+        - name: logs-volume
+          mountPath: /app/logs
+          readOnly: true
+      volumes:
+      - name: config-volume
+        configMap:
+          name: recommendation-service-config
+      - name: ml-models-cache
+        persistentVolumeClaim:
+          claimName: ml-models-pvc
+      - name: logs-volume
+        emptyDir: {}
+      - name: tmp-volume
+        emptyDir: {}
+      - name: fluent-bit-config
+        configMap:
+          name: fluent-bit-config
+      nodeSelector:
+        kubernetes.io/arch: amd64
+        node-type: compute-optimized
+        ml-capable: "true"
+      tolerations:
+      - key: "ml-workload"
+        operator: Equal
+        value: "true"
+        effect: NoSchedule
+      affinity:
+        podAntiAffinity:
+          preferredDuringSchedulingIgnoredDuringExecution:
+          - weight: 100
+            podAffinityTerm:
+              labelSelector:
+                matchExpressions:
+                - key: app
+                  operator: In
+                  values:
+                  - recommendation-service
+              topologyKey: kubernetes.io/hostname
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+            - matchExpressions:
+              - key: kubernetes.io/arch
+                operator: In
+                values:
+                - amd64
+              - key: node-type
+                operator: In
+                values:
+                - compute-optimized
+                - ml-optimized

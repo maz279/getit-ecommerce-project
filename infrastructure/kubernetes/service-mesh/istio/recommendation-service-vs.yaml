@@ -1,0 +1,254 @@
+apiVersion: networking.istio.io/v1beta1
+kind: VirtualService
+metadata:
+  name: recommendation-service-vs
+  namespace: getit-production
+  labels:
+    app: recommendation-service
+    tier: business-service
+    component: ai-ml
+spec:
+  hosts:
+  - recommendation-service
+  - recommendations.getit.com
+  gateways:
+  - recommendation-gateway
+  - mesh
+  http:
+  - match:
+    - headers:
+        x-api-version:
+          exact: v2
+    route:
+    - destination:
+        host: recommendation-service
+        subset: v2
+      weight: 100
+    fault:
+      delay:
+        percentage:
+          value: 0.1
+        fixedDelay: 5s
+    retries:
+      attempts: 3
+      perTryTimeout: 2s
+      retryOn: 5xx,reset,connect-failure,refused-stream
+    timeout: 10s
+  - match:
+    - headers:
+        x-canary:
+          exact: "true"
+    route:
+    - destination:
+        host: recommendation-service
+        subset: canary
+      weight: 100
+    fault:
+      abort:
+        percentage:
+          value: 0.01
+        httpStatus: 500
+  - match:
+    - uri:
+        prefix: "/api/v1/recommendations"
+    route:
+    - destination:
+        host: recommendation-service
+        subset: stable
+      weight: 95
+    - destination:
+        host: recommendation-service
+        subset: canary
+      weight: 5
+    corsPolicy:
+      allowOrigins:
+      - exact: https://getit.com
+      - exact: https://www.getit.com
+      - regex: "https://.*\\.getit\\.com"
+      allowMethods:
+      - GET
+      - POST
+      - OPTIONS
+      allowHeaders:
+      - content-type
+      - authorization
+      - x-api-key
+      - x-user-id
+      - x-session-id
+      allowCredentials: true
+      maxAge: 86400s
+    headers:
+      request:
+        set:
+          x-forwarded-proto: https
+          x-service-name: recommendation-service
+        add:
+          x-trace-id: "%REQ(x-trace-id)%"
+        remove:
+        - x-internal-auth
+      response:
+        set:
+          x-content-type-options: nosniff
+          x-frame-options: DENY
+          strict-transport-security: max-age=31536000; includeSubDomains
+        add:
+          cache-control: "public, max-age=300"
+    retries:
+      attempts: 3
+      perTryTimeout: 3s
+      retryOn: 5xx,reset,connect-failure,refused-stream
+    timeout: 15s
+  - match:
+    - uri:
+        prefix: "/api/v1/recommendations/real-time"
+    route:
+    - destination:
+        host: recommendation-service
+        subset: stable
+      weight: 100
+    headers:
+      request:
+        set:
+          x-priority: high
+          x-cache-control: no-cache
+    retries:
+      attempts: 2
+      perTryTimeout: 1s
+    timeout: 5s
+  - match:
+    - uri:
+        prefix: "/api/v1/recommendations/batch"
+    route:
+    - destination:
+        host: recommendation-service
+        subset: stable
+      weight: 100
+    headers:
+      request:
+        set:
+          x-priority: low
+    retries:
+      attempts: 1
+      perTryTimeout: 30s
+    timeout: 60s
+---
+apiVersion: networking.istio.io/v1beta1
+kind: DestinationRule
+metadata:
+  name: recommendation-service-dr
+  namespace: getit-production
+  labels:
+    app: recommendation-service
+    tier: business-service
+spec:
+  host: recommendation-service
+  trafficPolicy:
+    connectionPool:
+      tcp:
+        maxConnections: 100
+        connectTimeout: 30s
+        tcpKeepalive:
+          time: 7200s
+          interval: 75s
+      http:
+        http1MaxPendingRequests: 50
+        http2MaxRequests: 100
+        maxRequestsPerConnection: 10
+        maxRetries: 3
+        consecutiveGatewayErrors: 5
+        interval: 30s
+        baseEjectionTime: 30s
+        maxEjectionPercent: 50
+    loadBalancer:
+      simple: LEAST_CONN
+      consistentHash:
+        httpHeaderName: "x-user-id"
+    outlierDetection:
+      consecutiveGatewayErrors: 3
+      consecutive5xxErrors: 3
+      interval: 30s
+      baseEjectionTime: 30s
+      maxEjectionPercent: 30
+      minHealthPercent: 70
+  subsets:
+  - name: stable
+    labels:
+      version: v1.0.0
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 80
+        http:
+          http1MaxPendingRequests: 40
+          maxRequestsPerConnection: 8
+  - name: canary
+    labels:
+      version: v1.1.0
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 20
+        http:
+          http1MaxPendingRequests: 10
+          maxRequestsPerConnection: 5
+  - name: v2
+    labels:
+      version: v2.0.0
+    trafficPolicy:
+      connectionPool:
+        tcp:
+          maxConnections: 50
+        http:
+          http1MaxPendingRequests: 25
+---
+apiVersion: security.istio.io/v1beta1
+kind: AuthorizationPolicy
+metadata:
+  name: recommendation-service-authz
+  namespace: getit-production
+spec:
+  selector:
+    matchLabels:
+      app: recommendation-service
+  rules:
+  - from:
+    - source:
+        principals: ["cluster.local/ns/getit-production/sa/api-gateway-sa"]
+    - source:
+        principals: ["cluster.local/ns/getit-production/sa/customer-web-sa"]
+    to:
+    - operation:
+        methods: ["GET", "POST"]
+        paths: ["/api/v1/recommendations/*"]
+    when:
+    - key: request.headers[x-api-key]
+      values: ["*"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/getit-production/sa/admin-panel-sa"]
+    to:
+    - operation:
+        methods: ["GET", "POST", "PUT", "DELETE"]
+        paths: ["/api/v1/admin/recommendations/*"]
+    when:
+    - key: request.headers[x-admin-token]
+      values: ["*"]
+  - from:
+    - source:
+        principals: ["cluster.local/ns/getit-production/sa/prometheus-sa"]
+    to:
+    - operation:
+        methods: ["GET"]
+        paths: ["/metrics", "/health/*"]
+---
+apiVersion: security.istio.io/v1beta1
+kind: PeerAuthentication
+metadata:
+  name: recommendation-service-peer-auth
+  namespace: getit-production
+spec:
+  selector:
+    matchLabels:
+      app: recommendation-service
+  mtls:
+    mode: STRICT

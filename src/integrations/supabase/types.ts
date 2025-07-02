@@ -169,6 +169,135 @@ export type Database = {
           },
         ]
       }
+      advanced_caching_config: {
+        Row: {
+          cache_layer: string
+          cache_strategy: string
+          cdn_config: Json | null
+          compression_enabled: boolean | null
+          created_at: string | null
+          encryption_enabled: boolean | null
+          eviction_policy: string | null
+          geo_distribution: Json | null
+          hit_rate_threshold: number | null
+          id: string
+          invalidation_rules: Json | null
+          is_active: boolean | null
+          max_memory_mb: number | null
+          monitoring_config: Json | null
+          performance_metrics: Json | null
+          replication_config: Json | null
+          sharding_config: Json | null
+          ttl_seconds: number | null
+          updated_at: string | null
+          warming_strategies: Json | null
+        }
+        Insert: {
+          cache_layer: string
+          cache_strategy: string
+          cdn_config?: Json | null
+          compression_enabled?: boolean | null
+          created_at?: string | null
+          encryption_enabled?: boolean | null
+          eviction_policy?: string | null
+          geo_distribution?: Json | null
+          hit_rate_threshold?: number | null
+          id?: string
+          invalidation_rules?: Json | null
+          is_active?: boolean | null
+          max_memory_mb?: number | null
+          monitoring_config?: Json | null
+          performance_metrics?: Json | null
+          replication_config?: Json | null
+          sharding_config?: Json | null
+          ttl_seconds?: number | null
+          updated_at?: string | null
+          warming_strategies?: Json | null
+        }
+        Update: {
+          cache_layer?: string
+          cache_strategy?: string
+          cdn_config?: Json | null
+          compression_enabled?: boolean | null
+          created_at?: string | null
+          encryption_enabled?: boolean | null
+          eviction_policy?: string | null
+          geo_distribution?: Json | null
+          hit_rate_threshold?: number | null
+          id?: string
+          invalidation_rules?: Json | null
+          is_active?: boolean | null
+          max_memory_mb?: number | null
+          monitoring_config?: Json | null
+          performance_metrics?: Json | null
+          replication_config?: Json | null
+          sharding_config?: Json | null
+          ttl_seconds?: number | null
+          updated_at?: string | null
+          warming_strategies?: Json | null
+        }
+        Relationships: []
+      }
+      advanced_monitoring_config: {
+        Row: {
+          alert_rules: Json
+          anomaly_detection_rules: Json
+          auto_remediation_rules: Json
+          availability_targets: Json
+          compliance_configs: Json
+          configuration: Json
+          created_at: string | null
+          dashboard_configs: Json
+          data_retention_days: number
+          id: string
+          is_active: boolean | null
+          monitoring_type: string
+          notification_channels: Json
+          performance_baselines: Json
+          scrape_intervals: string
+          sla_configs: Json
+          updated_at: string | null
+        }
+        Insert: {
+          alert_rules?: Json
+          anomaly_detection_rules?: Json
+          auto_remediation_rules?: Json
+          availability_targets?: Json
+          compliance_configs?: Json
+          configuration?: Json
+          created_at?: string | null
+          dashboard_configs?: Json
+          data_retention_days?: number
+          id?: string
+          is_active?: boolean | null
+          monitoring_type: string
+          notification_channels?: Json
+          performance_baselines?: Json
+          scrape_intervals?: string
+          sla_configs?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          alert_rules?: Json
+          anomaly_detection_rules?: Json
+          auto_remediation_rules?: Json
+          availability_targets?: Json
+          compliance_configs?: Json
+          configuration?: Json
+          created_at?: string | null
+          dashboard_configs?: Json
+          data_retention_days?: number
+          id?: string
+          is_active?: boolean | null
+          monitoring_type?: string
+          notification_channels?: Json
+          performance_baselines?: Json
+          scrape_intervals?: string
+          sla_configs?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ai_analytics: {
         Row: {
           analysis_type: string
@@ -5204,6 +5333,84 @@ export type Database = {
         }
         Relationships: []
       }
+      enterprise_features: {
+        Row: {
+          actual_completion_date: string | null
+          amazon_equivalent: string | null
+          assigned_team: string | null
+          business_impact_score: number | null
+          business_requirements: Json | null
+          created_at: string | null
+          dependencies: string[] | null
+          description: string | null
+          estimated_effort_days: number | null
+          feature_name: string
+          feature_type: string
+          id: string
+          implementation_plan: Json | null
+          implementation_status: string
+          priority_level: string
+          roi_estimate: number | null
+          shopee_equivalent: string | null
+          start_date: string | null
+          success_metrics: Json | null
+          target_completion_date: string | null
+          technical_complexity_score: number | null
+          technical_requirements: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          actual_completion_date?: string | null
+          amazon_equivalent?: string | null
+          assigned_team?: string | null
+          business_impact_score?: number | null
+          business_requirements?: Json | null
+          created_at?: string | null
+          dependencies?: string[] | null
+          description?: string | null
+          estimated_effort_days?: number | null
+          feature_name: string
+          feature_type: string
+          id?: string
+          implementation_plan?: Json | null
+          implementation_status?: string
+          priority_level?: string
+          roi_estimate?: number | null
+          shopee_equivalent?: string | null
+          start_date?: string | null
+          success_metrics?: Json | null
+          target_completion_date?: string | null
+          technical_complexity_score?: number | null
+          technical_requirements?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          actual_completion_date?: string | null
+          amazon_equivalent?: string | null
+          assigned_team?: string | null
+          business_impact_score?: number | null
+          business_requirements?: Json | null
+          created_at?: string | null
+          dependencies?: string[] | null
+          description?: string | null
+          estimated_effort_days?: number | null
+          feature_name?: string
+          feature_type?: string
+          id?: string
+          implementation_plan?: Json | null
+          implementation_status?: string
+          priority_level?: string
+          roi_estimate?: number | null
+          shopee_equivalent?: string | null
+          start_date?: string | null
+          success_metrics?: Json | null
+          target_completion_date?: string | null
+          technical_complexity_score?: number | null
+          technical_requirements?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       error_tracking: {
         Row: {
           created_at: string
@@ -7401,6 +7608,84 @@ export type Database = {
           node_pools?: Json
           provider?: string
           region?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      kubernetes_deployments: {
+        Row: {
+          auto_scaling_config: Json | null
+          config_maps: string[] | null
+          cpu_limit: string | null
+          cpu_request: string | null
+          created_at: string | null
+          deployed_at: string | null
+          deployed_by: string | null
+          deployment_type: string
+          environment_variables: Json | null
+          health_check_config: Json | null
+          id: string
+          image_name: string
+          image_tag: string
+          memory_limit: string | null
+          memory_request: string | null
+          name: string
+          namespace: string
+          network_policies: string[] | null
+          replicas: number
+          secrets: string[] | null
+          service_mesh_config: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_scaling_config?: Json | null
+          config_maps?: string[] | null
+          cpu_limit?: string | null
+          cpu_request?: string | null
+          created_at?: string | null
+          deployed_at?: string | null
+          deployed_by?: string | null
+          deployment_type: string
+          environment_variables?: Json | null
+          health_check_config?: Json | null
+          id?: string
+          image_name: string
+          image_tag: string
+          memory_limit?: string | null
+          memory_request?: string | null
+          name: string
+          namespace: string
+          network_policies?: string[] | null
+          replicas?: number
+          secrets?: string[] | null
+          service_mesh_config?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_scaling_config?: Json | null
+          config_maps?: string[] | null
+          cpu_limit?: string | null
+          cpu_request?: string | null
+          created_at?: string | null
+          deployed_at?: string | null
+          deployed_by?: string | null
+          deployment_type?: string
+          environment_variables?: Json | null
+          health_check_config?: Json | null
+          id?: string
+          image_name?: string
+          image_tag?: string
+          memory_limit?: string | null
+          memory_request?: string | null
+          name?: string
+          namespace?: string
+          network_policies?: string[] | null
+          replicas?: number
+          secrets?: string[] | null
+          service_mesh_config?: Json | null
+          status?: string | null
           updated_at?: string | null
         }
         Relationships: []
@@ -14033,6 +14318,66 @@ export type Database = {
           response_time_avg?: number
           service_name?: string
           throughput_rps?: number
+        }
+        Relationships: []
+      }
+      service_mesh_config: {
+        Row: {
+          authentication_policy: Json
+          authorization_policy: Json
+          circuit_breaker_config: Json
+          created_at: string | null
+          destination_rules: Json
+          gateway_config: Json
+          id: string
+          is_active: boolean | null
+          load_balancing_config: Json
+          observability_config: Json
+          retry_policy: Json
+          service_name: string
+          timeout_config: Json
+          tls_config: Json
+          traffic_policy: Json
+          updated_at: string | null
+          virtual_service_config: Json
+        }
+        Insert: {
+          authentication_policy?: Json
+          authorization_policy?: Json
+          circuit_breaker_config?: Json
+          created_at?: string | null
+          destination_rules?: Json
+          gateway_config?: Json
+          id?: string
+          is_active?: boolean | null
+          load_balancing_config?: Json
+          observability_config?: Json
+          retry_policy?: Json
+          service_name: string
+          timeout_config?: Json
+          tls_config?: Json
+          traffic_policy?: Json
+          updated_at?: string | null
+          virtual_service_config?: Json
+        }
+        Update: {
+          authentication_policy?: Json
+          authorization_policy?: Json
+          circuit_breaker_config?: Json
+          created_at?: string | null
+          destination_rules?: Json
+          gateway_config?: Json
+          id?: string
+          is_active?: boolean | null
+          load_balancing_config?: Json
+          observability_config?: Json
+          retry_policy?: Json
+          service_name?: string
+          timeout_config?: Json
+          tls_config?: Json
+          traffic_policy?: Json
+          updated_at?: string | null
+          virtual_service_config?: Json
         }
         Relationships: []
       }

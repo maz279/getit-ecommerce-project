@@ -1,0 +1,288 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "GetIt AI/ML Services Dashboard",
+    "tags": ["ai", "ml", "recommendations", "fraud-detection", "business-intelligence"],
+    "style": "dark",
+    "timezone": "browser",
+    "refresh": "30s",
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "panels": [
+      {
+        "id": 1,
+        "title": "AI/ML Services Overview",
+        "type": "stat",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "up{job=~\"recommendation-service|fraud-detection-service|dynamic-pricing-service\"}",
+            "legendFormat": "{{job}} - {{instance}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "mappings": [
+              {"options": {"0": {"text": "DOWN"}}, "type": "value"},
+              {"options": {"1": {"text": "UP"}}, "type": "value"}
+            ],
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        }
+      },
+      {
+        "id": 2,
+        "title": "Recommendation Service - Request Rate",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(http_requests_total{service=\"recommendation-service\"}[5m])",
+            "legendFormat": "{{method}} {{status}}"
+          }
+        ],
+        "yAxes": [
+          {"label": "Requests/sec", "logBase": 1, "max": null, "min": 0}
+        ]
+      },
+      {
+        "id": 3,
+        "title": "Recommendation Service - Response Time",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8},
+        "targets": [
+          {
+            "expr": "histogram_quantile(0.95, rate(http_request_duration_seconds_bucket{service=\"recommendation-service\"}[5m]))",
+            "legendFormat": "95th percentile"
+          },
+          {
+            "expr": "histogram_quantile(0.50, rate(http_request_duration_seconds_bucket{service=\"recommendation-service\"}[5m]))",
+            "legendFormat": "50th percentile"
+          }
+        ],
+        "yAxes": [
+          {"label": "Seconds", "logBase": 1, "max": null, "min": 0}
+        ]
+      },
+      {
+        "id": 4,
+        "title": "ML Model Performance",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "ml_model_accuracy{service=~\"recommendation-service|fraud-detection-service\"}",
+            "format": "table",
+            "instant": true
+          },
+          {
+            "expr": "ml_model_inference_time_seconds{service=~\"recommendation-service|fraud-detection-service\"}",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "transformations": [
+          {
+            "id": "merge",
+            "options": {}
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Fraud Detection - Risk Score Distribution",
+        "type": "heatmap",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "increase(fraud_risk_score_bucket{service=\"fraud-detection-service\"}[5m])",
+            "legendFormat": "{{le}}"
+          }
+        ],
+        "heatmap": {
+          "yAxis": {
+            "min": 0,
+            "max": 1,
+            "unit": "short"
+          },
+          "xAxis": {
+            "show": true
+          }
+        }
+      },
+      {
+        "id": 6,
+        "title": "AI/ML Resource Utilization",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24},
+        "targets": [
+          {
+            "expr": "rate(container_cpu_usage_seconds_total{container=~\"recommendation-service|fraud-detection-service\"}[5m]) * 100",
+            "legendFormat": "CPU {{container}}"
+          },
+          {
+            "expr": "container_memory_usage_bytes{container=~\"recommendation-service|fraud-detection-service\"} / 1024 / 1024 / 1024",
+            "legendFormat": "Memory {{container}}"
+          }
+        ],
+        "yAxes": [
+          {"label": "CPU % / Memory GB", "logBase": 1, "max": null, "min": 0}
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Recommendation Engine Metrics",
+        "type": "singlestat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 32},
+        "targets": [
+          {
+            "expr": "rate(recommendation_requests_total[5m])",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "reqps",
+        "postfix": " req/s",
+        "thresholds": "100,500"
+      },
+      {
+        "id": 8,
+        "title": "Recommendation Click-Through Rate",
+        "type": "singlestat",
+        "gridPos": {"h": 4, "w": 6, "x": 6, "y": 32},
+        "targets": [
+          {
+            "expr": "rate(recommendation_clicks_total[5m]) / rate(recommendation_impressions_total[5m]) * 100",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "percent",
+        "postfix": "%",
+        "thresholds": "2,5"
+      },
+      {
+        "id": 9,
+        "title": "Fraud Detection Accuracy",
+        "type": "singlestat",
+        "gridPos": {"h": 4, "w": 6, "x": 12, "y": 32},
+        "targets": [
+          {
+            "expr": "fraud_detection_accuracy_ratio",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "percentunit",
+        "thresholds": "0.9,0.95"
+      },
+      {
+        "id": 10,
+        "title": "False Positive Rate",
+        "type": "singlestat",
+        "gridPos": {"h": 4, "w": 6, "x": 18, "y": 32},
+        "targets": [
+          {
+            "expr": "fraud_false_positive_ratio",
+            "refId": "A"
+          }
+        ],
+        "valueName": "current",
+        "format": "percentunit",
+        "thresholds": "0.05,0.02"
+      },
+      {
+        "id": 11,
+        "title": "ML Model Training Status",
+        "type": "table",
+        "gridPos": {"h": 6, "w": 24, "x": 0, "y": 36},
+        "targets": [
+          {
+            "expr": "ml_model_training_status",
+            "format": "table",
+            "instant": true
+          }
+        ],
+        "columns": [
+          {"text": "Model", "value": "model_name"},
+          {"text": "Status", "value": "training_status"},
+          {"text": "Accuracy", "value": "accuracy"},
+          {"text": "Last Trained", "value": "last_training_time"}
+        ]
+      },
+      {
+        "id": 12,
+        "title": "A/B Testing Results",
+        "type": "bargauge",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 42},
+        "targets": [
+          {
+            "expr": "ab_test_conversion_rate{service=\"recommendation-service\"}",
+            "legendFormat": "{{variant}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "max": 1,
+            "min": 0,
+            "unit": "percentunit"
+          }
+        }
+      },
+      {
+        "id": 13,
+        "title": "Cache Hit Rate - ML Features",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 42},
+        "targets": [
+          {
+            "expr": "rate(cache_hits_total{cache_type=\"ml_features\"}[5m]) / (rate(cache_hits_total{cache_type=\"ml_features\"}[5m]) + rate(cache_misses_total{cache_type=\"ml_features\"}[5m])) * 100",
+            "legendFormat": "Hit Rate %"
+          }
+        ],
+        "yAxes": [
+          {"label": "Percentage", "logBase": 1, "max": 100, "min": 0}
+        ]
+      }
+    ],
+    "templating": {
+      "list": [
+        {
+          "name": "service",
+          "type": "query",
+          "query": "label_values(up{job=~\".*-service\"}, job)",
+          "refresh": 1,
+          "includeAll": true,
+          "multi": true
+        },
+        {
+          "name": "instance",
+          "type": "query",
+          "query": "label_values(up{job=\"$service\"}, instance)",
+          "refresh": 1,
+          "includeAll": true,
+          "multi": true
+        }
+      ]
+    },
+    "annotations": {
+      "list": [
+        {
+          "name": "Deployments",
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "changes(up{job=~\".*-service\"}[1m]) > 0",
+          "iconColor": "blue",
+          "titleFormat": "Deployment: {{job}}"
+        }
+      ]
+    }
+  }
+}

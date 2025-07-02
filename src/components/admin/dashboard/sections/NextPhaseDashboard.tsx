@@ -35,7 +35,6 @@ interface OptimizationResult {
   optimization_reason: string;
   confidence_score: number;
   status: string;
-  products?: { name: string } | null;
 }
 
 interface RegionData {
@@ -94,8 +93,13 @@ const NextPhaseDashboard: React.FC = () => {
     const { data, error } = await supabase
       .from('price_optimization_results')
       .select(`
-        *,
-        products(name)
+        id,
+        product_id,
+        current_price,
+        suggested_price,
+        optimization_reason,
+        confidence_score,
+        status
       `)
       .order('created_at', { ascending: false })
       .limit(10);
@@ -328,7 +332,7 @@ const NextPhaseDashboard: React.FC = () => {
               {optimizationResults.map((result) => (
                 <div key={result.id} className="p-3 border rounded-lg">
                   <div className="flex items-center justify-between mb-2">
-                    <h4 className="font-medium text-sm">{result.products?.name || 'Unknown Product'}</h4>
+                    <h4 className="font-medium text-sm">Product ID: {result.product_id}</h4>
                     <Badge variant={result.status === 'pending' ? "secondary" : "default"}>
                       {result.status}
                     </Badge>

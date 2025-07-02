@@ -9,7 +9,8 @@ import PerformanceMonitoring from './PerformanceMonitoring';
 import { CustomReportBuilder } from './core/CustomReportBuilder';
 import { AutomatedReports } from './reports/AutomatedReports';
 import { ReportExporter } from './reports/ReportExporter';
-import { BarChart3, TrendingUp, Globe, Activity, FileText, Clock, Download } from 'lucide-react';
+import { AmazonLevelFeatures } from './AmazonLevelFeatures';
+import { BarChart3, TrendingUp, Globe, Activity, FileText, Clock, Download, Brain } from 'lucide-react';
 
 const AdvancedAnalyticsDashboard: React.FC = () => {
   const [activeTab, setActiveTab] = useState('overview');
@@ -24,7 +25,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
       </div>
 
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-        <TabsList className="grid w-full grid-cols-8">
+        <TabsList className="grid w-full grid-cols-9">
           <TabsTrigger value="overview">Overview</TabsTrigger>
           <TabsTrigger value="bi">BI Insights</TabsTrigger>
           <TabsTrigger value="kpi">KPI Metrics</TabsTrigger>
@@ -33,6 +34,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
           <TabsTrigger value="performance">Performance</TabsTrigger>
           <TabsTrigger value="reports">Reports</TabsTrigger>
           <TabsTrigger value="automation">Automation</TabsTrigger>
+          <TabsTrigger value="amazon">AI Features</TabsTrigger>
         </TabsList>
 
         <TabsContent value="overview" className="mt-6">
@@ -108,6 +110,16 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
                     <div className="font-medium">Custom Reports</div>
                     <div className="text-sm text-muted-foreground">Build custom reports</div>
                   </button>
+                  <button 
+                    onClick={() => setActiveTab('amazon')}
+                    className="p-3 text-left border rounded hover:bg-accent transition-colors"
+                  >
+                    <div className="font-medium flex items-center gap-2">
+                      <Brain className="h-4 w-4" />
+                      AI Features
+                    </div>
+                    <div className="text-sm text-muted-foreground">Amazon-level AI analytics</div>
+                  </button>
                 </div>
               </CardContent>
             </Card>
@@ -162,6 +174,7 @@ const AdvancedAnalyticsDashboard: React.FC = () => {
             <TabsContent value="export"><ReportExporter /></TabsContent>
           </Tabs>
         </TabsContent>
+        <TabsContent value="amazon"><AmazonLevelFeatures /></TabsContent>
       </Tabs>
     </div>
   );

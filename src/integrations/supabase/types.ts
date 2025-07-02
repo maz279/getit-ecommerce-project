@@ -134,6 +134,33 @@ export type Database = {
         }
         Relationships: []
       }
+      analytics_cache: {
+        Row: {
+          analytics_type: string
+          data: Json
+          date_range: Json
+          generated_at: string | null
+          id: string
+          vendor_id: string | null
+        }
+        Insert: {
+          analytics_type: string
+          data: Json
+          date_range: Json
+          generated_at?: string | null
+          id?: string
+          vendor_id?: string | null
+        }
+        Update: {
+          analytics_type?: string
+          data?: Json
+          date_range?: Json
+          generated_at?: string | null
+          id?: string
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
       analytics_events: {
         Row: {
           created_at: string | null
@@ -1394,6 +1421,39 @@ export type Database = {
         }
         Relationships: []
       }
+      fraud_detection_logs: {
+        Row: {
+          approved: boolean
+          created_at: string | null
+          id: string
+          order_id: string
+          risk_factors: Json | null
+          risk_level: string
+          risk_score: number
+          vendor_id: string
+        }
+        Insert: {
+          approved: boolean
+          created_at?: string | null
+          id?: string
+          order_id: string
+          risk_factors?: Json | null
+          risk_level: string
+          risk_score: number
+          vendor_id: string
+        }
+        Update: {
+          approved?: boolean
+          created_at?: string | null
+          id?: string
+          order_id?: string
+          risk_factors?: Json | null
+          risk_level?: string
+          risk_score?: number
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       fraud_detection_rules: {
         Row: {
           action_threshold: number | null
@@ -1549,6 +1609,39 @@ export type Database = {
           id?: string
           response_time?: number
           status?: string
+        }
+        Relationships: []
+      }
+      in_app_notifications: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          id: string
+          message: string
+          read: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          message: string
+          read?: boolean | null
+          title: string
+          type: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          id?: string
+          message?: string
+          read?: boolean | null
+          title?: string
+          type?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -1777,6 +1870,42 @@ export type Database = {
           recommendation_type?: string
           recommendations?: Json
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      notification_logs: {
+        Row: {
+          created_at: string | null
+          data: Json | null
+          error_message: string | null
+          external_id: string | null
+          id: string
+          recipient: string
+          status: string
+          template: string
+          type: string
+        }
+        Insert: {
+          created_at?: string | null
+          data?: Json | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          recipient: string
+          status: string
+          template: string
+          type: string
+        }
+        Update: {
+          created_at?: string | null
+          data?: Json | null
+          error_message?: string | null
+          external_id?: string | null
+          id?: string
+          recipient?: string
+          status?: string
+          template?: string
+          type?: string
         }
         Relationships: []
       }

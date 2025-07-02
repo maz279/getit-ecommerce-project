@@ -20,7 +20,10 @@ export const QuickActionsSection: React.FC = () => {
     { icon: DollarSign, label: 'Process Payout', color: 'bg-purple-500 hover:bg-purple-600' },
     { icon: FileText, label: 'Generate Report', color: 'bg-orange-500 hover:bg-orange-600' },
     { icon: Settings, label: 'System Maintenance', color: 'bg-gray-500 hover:bg-gray-600' },
-    { icon: AlertTriangle, label: 'Emergency Alert', color: 'bg-red-500 hover:bg-red-600' }
+    { icon: AlertTriangle, label: 'Emergency Alert', color: 'bg-red-500 hover:bg-red-600' },
+    { icon: Settings, label: 'Enterprise Monitoring', color: 'bg-emerald-500 hover:bg-emerald-600' },
+    { icon: FileText, label: 'Enterprise Analytics', color: 'bg-teal-500 hover:bg-teal-600' },
+    { icon: Play, label: 'Live Dashboard', color: 'bg-orange-500 hover:bg-orange-600' }
   ];
 
   return (

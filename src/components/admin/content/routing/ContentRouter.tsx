@@ -14,6 +14,9 @@ import { PaymentManagementContent } from '../PaymentManagementContent';
 import { CommunicationsContent } from '../CommunicationsContent';
 import { SecurityContent } from '../SecurityContent';
 import { SettingsContent } from '../SettingsContent';
+import { EnterpriseMonitoringDashboard } from '../../../admin/dashboard/sections/EnterpriseMonitoringDashboard';
+import { EnterpriseAnalyticsDashboard } from '../../../admin/dashboard/sections/EnterpriseAnalyticsDashboard';
+import { LiveDashboard } from '../../../admin/dashboard/sections/LiveDashboard';
 
 interface ContentRouterProps {
   selectedMenu: string;
@@ -89,6 +92,18 @@ export const ContentRouter: React.FC<ContentRouterProps> = ({ selectedMenu, sele
     case 'settings':
       console.log('➡️ ContentRouter routing to SettingsContent');
       return <SettingsContent selectedSubmenu={normalizedSubmenu} />;
+    
+    case 'enterprise-monitoring':
+      console.log('➡️ ContentRouter routing to EnterpriseMonitoringDashboard');
+      return <EnterpriseMonitoringDashboard />;
+    
+    case 'enterprise-analytics':
+      console.log('➡️ ContentRouter routing to EnterpriseAnalyticsDashboard');
+      return <EnterpriseAnalyticsDashboard />;
+    
+    case 'live-dashboard':
+      console.log('➡️ ContentRouter routing to LiveDashboard');
+      return <LiveDashboard />;
     
     default:
       console.log('⚠️ ContentRouter - Unknown menu:', normalizedMenu, '- falling back to dashboard');

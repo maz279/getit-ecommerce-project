@@ -1100,6 +1100,45 @@ export type Database = {
           },
         ]
       }
+      bandwidth_adaptation_profiles: {
+        Row: {
+          adaptation_rules: Json
+          bandwidth_estimate: number
+          connection_type: string
+          created_at: string | null
+          id: string
+          last_updated: string | null
+          latency_ms: number | null
+          packet_loss_rate: number | null
+          quality_preferences: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          adaptation_rules?: Json
+          bandwidth_estimate: number
+          connection_type: string
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          latency_ms?: number | null
+          packet_loss_rate?: number | null
+          quality_preferences?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          adaptation_rules?: Json
+          bandwidth_estimate?: number
+          connection_type?: string
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          latency_ms?: number | null
+          packet_loss_rate?: number | null
+          quality_preferences?: Json | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       bandwidth_optimization_settings: {
         Row: {
           cache_strategy: Json | null
@@ -2055,6 +2094,42 @@ export type Database = {
           key?: string
           type?: string
           value?: Json
+        }
+        Relationships: []
+      }
+      cache_optimization_metrics: {
+        Row: {
+          access_pattern: Json
+          analysis_date: string | null
+          cache_key: string
+          created_at: string | null
+          hit_rate: number
+          id: string
+          miss_rate: number
+          optimization_score: number
+          recommendations: Json | null
+        }
+        Insert: {
+          access_pattern?: Json
+          analysis_date?: string | null
+          cache_key: string
+          created_at?: string | null
+          hit_rate?: number
+          id?: string
+          miss_rate?: number
+          optimization_score?: number
+          recommendations?: Json | null
+        }
+        Update: {
+          access_pattern?: Json
+          analysis_date?: string | null
+          cache_key?: string
+          created_at?: string | null
+          hit_rate?: number
+          id?: string
+          miss_rate?: number
+          optimization_score?: number
+          recommendations?: Json | null
         }
         Relationships: []
       }
@@ -3191,6 +3266,48 @@ export type Database = {
           remediation_actions?: Json
           updated_at?: string
           violations_detected?: Json
+        }
+        Relationships: []
+      }
+      compression_optimization_rules: {
+        Row: {
+          bandwidth_threshold: string | null
+          compression_algorithm: string
+          compression_level: number | null
+          content_type: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          max_compression_time_ms: number | null
+          min_size_threshold: number | null
+          performance_metrics: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          bandwidth_threshold?: string | null
+          compression_algorithm: string
+          compression_level?: number | null
+          content_type: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_compression_time_ms?: number | null
+          min_size_threshold?: number | null
+          performance_metrics?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          bandwidth_threshold?: string | null
+          compression_algorithm?: string
+          compression_level?: number | null
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_compression_time_ms?: number | null
+          min_size_threshold?: number | null
+          performance_metrics?: Json | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -5954,6 +6071,54 @@ export type Database = {
           last_accessed?: string
           ttl_seconds?: number
           user_segment_affinity?: Json
+        }
+        Relationships: []
+      }
+      intelligent_cache_entries: {
+        Row: {
+          access_frequency: number | null
+          cache_key: string
+          cache_type: string
+          cache_value: Json
+          created_at: string | null
+          expires_at: string
+          geographic_region: string | null
+          id: string
+          last_accessed_at: string | null
+          metadata: Json | null
+          prediction_score: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_frequency?: number | null
+          cache_key: string
+          cache_type: string
+          cache_value: Json
+          created_at?: string | null
+          expires_at: string
+          geographic_region?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          prediction_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_frequency?: number | null
+          cache_key?: string
+          cache_type?: string
+          cache_value?: Json
+          created_at?: string | null
+          expires_at?: string
+          geographic_region?: string | null
+          id?: string
+          last_accessed_at?: string | null
+          metadata?: Json | null
+          prediction_score?: number | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -9136,6 +9301,45 @@ export type Database = {
         }
         Relationships: []
       }
+      predictive_cache_models: {
+        Row: {
+          accuracy_score: number | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_trained: string | null
+          model_config: Json
+          model_name: string
+          model_type: string
+          training_data_size: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          model_name: string
+          model_type: string
+          training_data_size?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          model_name?: string
+          model_type?: string
+          training_data_size?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       predictive_scaling_metrics: {
         Row: {
           confidence_level: number
@@ -11317,6 +11521,123 @@ export type Database = {
           },
         ]
       }
+      request_batching_queues: {
+        Row: {
+          batch_id: string
+          batch_size: number | null
+          created_at: string | null
+          id: string
+          priority: number | null
+          processed_at: string | null
+          processing_delay_ms: number | null
+          request_data: Json
+          request_type: string
+          status: string | null
+          user_id: string | null
+        }
+        Insert: {
+          batch_id: string
+          batch_size?: number | null
+          created_at?: string | null
+          id?: string
+          priority?: number | null
+          processed_at?: string | null
+          processing_delay_ms?: number | null
+          request_data: Json
+          request_type: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          batch_id?: string
+          batch_size?: number | null
+          created_at?: string | null
+          id?: string
+          priority?: number | null
+          processed_at?: string | null
+          processing_delay_ms?: number | null
+          request_data?: Json
+          request_type?: string
+          status?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      request_deduplication_cache: {
+        Row: {
+          created_at: string | null
+          expires_at: string
+          id: string
+          last_accessed: string | null
+          request_count: number | null
+          request_hash: string
+          response_data: Json
+        }
+        Insert: {
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          last_accessed?: string | null
+          request_count?: number | null
+          request_hash: string
+          response_data: Json
+        }
+        Update: {
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          last_accessed?: string | null
+          request_count?: number | null
+          request_hash?: string
+          response_data?: Json
+        }
+        Relationships: []
+      }
+      request_optimization_logs: {
+        Row: {
+          bandwidth_saved: number | null
+          compression_ratio: number
+          created_at: string | null
+          endpoint: string | null
+          id: string
+          optimization_type: string
+          optimized_size: number
+          original_size: number
+          processing_time_ms: number
+          request_id: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          bandwidth_saved?: number | null
+          compression_ratio: number
+          created_at?: string | null
+          endpoint?: string | null
+          id?: string
+          optimization_type: string
+          optimized_size: number
+          original_size: number
+          processing_time_ms: number
+          request_id: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          bandwidth_saved?: number | null
+          compression_ratio?: number
+          created_at?: string | null
+          endpoint?: string | null
+          id?: string
+          optimization_type?: string
+          optimized_size?: number
+          original_size?: number
+          processing_time_ms?: number
+          request_id?: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       revenue_analytics_summary: {
         Row: {
           analytics_date: string
@@ -13043,6 +13364,42 @@ export type Database = {
           secret_key?: string | null
           user_id?: string
           verified_at?: string | null
+        }
+        Relationships: []
+      }
+      user_behavior_cache_profiles: {
+        Row: {
+          access_frequency_map: Json
+          behavior_patterns: Json
+          cache_preferences: Json
+          created_at: string | null
+          geographic_preferences: Json | null
+          id: string
+          last_updated: string | null
+          prediction_accuracy: number | null
+          user_id: string
+        }
+        Insert: {
+          access_frequency_map?: Json
+          behavior_patterns?: Json
+          cache_preferences?: Json
+          created_at?: string | null
+          geographic_preferences?: Json | null
+          id?: string
+          last_updated?: string | null
+          prediction_accuracy?: number | null
+          user_id: string
+        }
+        Update: {
+          access_frequency_map?: Json
+          behavior_patterns?: Json
+          cache_preferences?: Json
+          created_at?: string | null
+          geographic_preferences?: Json | null
+          id?: string
+          last_updated?: string | null
+          prediction_accuracy?: number | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -14939,6 +15296,14 @@ export type Database = {
         Args: { p_request_id: string }
         Returns: boolean
       }
+      calculate_cache_optimization_score: {
+        Args: {
+          p_cache_key: string
+          p_hit_rate: number
+          p_access_frequency: number
+        }
+        Returns: number
+      }
       calculate_edge_node_load: {
         Args: { p_node_id: string }
         Returns: number
@@ -14976,6 +15341,10 @@ export type Database = {
         Returns: undefined
       }
       cleanup_expired_graphql_cache: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_expired_intelligent_cache: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -15018,6 +15387,10 @@ export type Database = {
           p_endpoint?: string
         }
         Returns: undefined
+      }
+      optimize_request_batching: {
+        Args: { p_user_id: string; p_request_type: string }
+        Returns: Json
       }
       process_micro_payment_aggregation: {
         Args: { p_user_id: string }

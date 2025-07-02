@@ -134,6 +134,69 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_sales_forecasts: {
+        Row: {
+          algorithm_used: string
+          confidence_interval: Json
+          created_at: string | null
+          forecast_date: string
+          forecast_period: string
+          id: string
+          model_accuracy: number | null
+          predicted_sales: number
+          predicted_units: number
+          product_id: string | null
+          seasonality_factors: Json | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          algorithm_used: string
+          confidence_interval?: Json
+          created_at?: string | null
+          forecast_date: string
+          forecast_period: string
+          id?: string
+          model_accuracy?: number | null
+          predicted_sales: number
+          predicted_units: number
+          product_id?: string | null
+          seasonality_factors?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          algorithm_used?: string
+          confidence_interval?: Json
+          created_at?: string | null
+          forecast_date?: string
+          forecast_period?: string
+          id?: string
+          model_accuracy?: number | null
+          predicted_sales?: number
+          predicted_units?: number
+          product_id?: string | null
+          seasonality_factors?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ai_sales_forecasts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "ai_sales_forecasts_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ai_search_cache: {
         Row: {
           ai_suggestions: Json
@@ -584,6 +647,53 @@ export type Database = {
           },
         ]
       }
+      category_growth_insights: {
+        Row: {
+          analysis_date: string | null
+          category_id: string
+          competitive_intensity: number | null
+          growth_barriers: Json | null
+          growth_drivers: Json | null
+          growth_period: string
+          growth_rate: number
+          id: string
+          market_size: number | null
+          opportunity_score: number | null
+        }
+        Insert: {
+          analysis_date?: string | null
+          category_id: string
+          competitive_intensity?: number | null
+          growth_barriers?: Json | null
+          growth_drivers?: Json | null
+          growth_period: string
+          growth_rate: number
+          id?: string
+          market_size?: number | null
+          opportunity_score?: number | null
+        }
+        Update: {
+          analysis_date?: string | null
+          category_id?: string
+          competitive_intensity?: number | null
+          growth_barriers?: Json | null
+          growth_drivers?: Json | null
+          growth_period?: string
+          growth_rate?: number
+          id?: string
+          market_size?: number | null
+          opportunity_score?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "category_growth_insights_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       chat_conversation_messages: {
         Row: {
           attachments: Json | null
@@ -779,6 +889,59 @@ export type Database = {
           user_id?: string
         }
         Relationships: []
+      }
+      churn_predictions_detailed: {
+        Row: {
+          churn_probability: number
+          churn_risk_level: string
+          created_at: string | null
+          customer_id: string
+          id: string
+          intervention_impact: Json | null
+          intervention_recommendations: Json | null
+          next_predicted_purchase: string | null
+          prediction_date: string | null
+          retention_strategies: Json | null
+          risk_factors: Json | null
+          vendor_id: string | null
+        }
+        Insert: {
+          churn_probability: number
+          churn_risk_level: string
+          created_at?: string | null
+          customer_id: string
+          id?: string
+          intervention_impact?: Json | null
+          intervention_recommendations?: Json | null
+          next_predicted_purchase?: string | null
+          prediction_date?: string | null
+          retention_strategies?: Json | null
+          risk_factors?: Json | null
+          vendor_id?: string | null
+        }
+        Update: {
+          churn_probability?: number
+          churn_risk_level?: string
+          created_at?: string | null
+          customer_id?: string
+          id?: string
+          intervention_impact?: Json | null
+          intervention_recommendations?: Json | null
+          next_predicted_purchase?: string | null
+          prediction_date?: string | null
+          retention_strategies?: Json | null
+          risk_factors?: Json | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "churn_predictions_detailed_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       commission_adjustments: {
         Row: {
@@ -1219,6 +1382,109 @@ export type Database = {
         }
         Relationships: []
       }
+      competitive_pricing_analysis: {
+        Row: {
+          competitor_name: string
+          competitor_price: number
+          data_source: string | null
+          id: string
+          last_updated: string | null
+          market_position: string | null
+          our_price: number
+          price_difference: number
+          price_trend: Json | null
+          product_id: string
+        }
+        Insert: {
+          competitor_name: string
+          competitor_price: number
+          data_source?: string | null
+          id?: string
+          last_updated?: string | null
+          market_position?: string | null
+          our_price: number
+          price_difference: number
+          price_trend?: Json | null
+          product_id: string
+        }
+        Update: {
+          competitor_name?: string
+          competitor_price?: number
+          data_source?: string | null
+          id?: string
+          last_updated?: string | null
+          market_position?: string | null
+          our_price?: number
+          price_difference?: number
+          price_trend?: Json | null
+          product_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "competitive_pricing_analysis_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      custom_report_templates: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          data_sources: Json
+          id: string
+          is_public: boolean | null
+          report_configuration: Json
+          report_type: string
+          template_description: string | null
+          template_name: string
+          template_version: number | null
+          updated_at: string | null
+          vendor_id: string | null
+          visualization_config: Json | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          data_sources?: Json
+          id?: string
+          is_public?: boolean | null
+          report_configuration?: Json
+          report_type: string
+          template_description?: string | null
+          template_name: string
+          template_version?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          visualization_config?: Json | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          data_sources?: Json
+          id?: string
+          is_public?: boolean | null
+          report_configuration?: Json
+          report_type?: string
+          template_description?: string | null
+          template_name?: string
+          template_version?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          visualization_config?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "custom_report_templates_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       customer_analytics: {
         Row: {
           analytics_date: string
@@ -1311,6 +1577,59 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      customer_lifetime_value_predictions: {
+        Row: {
+          clv_factors: Json | null
+          confidence_interval: Json
+          created_at: string | null
+          customer_id: string
+          expires_at: string | null
+          id: string
+          opportunity_factors: Json | null
+          predicted_clv: number
+          prediction_horizon: number
+          risk_factors: Json | null
+          segment_classification: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          clv_factors?: Json | null
+          confidence_interval?: Json
+          created_at?: string | null
+          customer_id: string
+          expires_at?: string | null
+          id?: string
+          opportunity_factors?: Json | null
+          predicted_clv: number
+          prediction_horizon: number
+          risk_factors?: Json | null
+          segment_classification?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          clv_factors?: Json | null
+          confidence_interval?: Json
+          created_at?: string | null
+          customer_id?: string
+          expires_at?: string | null
+          id?: string
+          opportunity_factors?: Json | null
+          predicted_clv?: number
+          prediction_horizon?: number
+          risk_factors?: Json | null
+          segment_classification?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_lifetime_value_predictions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       dashboard_kpi_metrics: {
         Row: {
@@ -1488,6 +1807,60 @@ export type Database = {
           },
         ]
       }
+      demand_predictions: {
+        Row: {
+          confidence_score: number | null
+          created_at: string | null
+          demand_factors: Json | null
+          external_factors: Json | null
+          historical_patterns: Json | null
+          id: string
+          predicted_demand: number
+          prediction_date: string
+          product_id: string
+          vendor_id: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          created_at?: string | null
+          demand_factors?: Json | null
+          external_factors?: Json | null
+          historical_patterns?: Json | null
+          id?: string
+          predicted_demand: number
+          prediction_date: string
+          product_id: string
+          vendor_id: string
+        }
+        Update: {
+          confidence_score?: number | null
+          created_at?: string | null
+          demand_factors?: Json | null
+          external_factors?: Json | null
+          historical_patterns?: Json | null
+          id?: string
+          predicted_demand?: number
+          prediction_date?: string
+          product_id?: string
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "demand_predictions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "demand_predictions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       enhanced_rate_limits: {
         Row: {
           created_at: string
@@ -1551,6 +1924,57 @@ export type Database = {
           service_name?: string
           stack_trace?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      executive_kpi_dashboard: {
+        Row: {
+          benchmark_value: number | null
+          created_at: string | null
+          current_value: number
+          id: string
+          metadata: Json | null
+          metric_category: string
+          metric_name: string
+          performance_status: string | null
+          previous_period_value: number | null
+          recorded_date: string | null
+          target_value: number | null
+          time_period: string
+          trend_direction: string | null
+          trend_percentage: number | null
+        }
+        Insert: {
+          benchmark_value?: number | null
+          created_at?: string | null
+          current_value: number
+          id?: string
+          metadata?: Json | null
+          metric_category: string
+          metric_name: string
+          performance_status?: string | null
+          previous_period_value?: number | null
+          recorded_date?: string | null
+          target_value?: number | null
+          time_period: string
+          trend_direction?: string | null
+          trend_percentage?: number | null
+        }
+        Update: {
+          benchmark_value?: number | null
+          created_at?: string | null
+          current_value?: number
+          id?: string
+          metadata?: Json | null
+          metric_category?: string
+          metric_name?: string
+          performance_status?: string | null
+          previous_period_value?: number | null
+          recorded_date?: string | null
+          target_value?: number | null
+          time_period?: string
+          trend_direction?: string | null
+          trend_percentage?: number | null
         }
         Relationships: []
       }
@@ -2027,6 +2451,78 @@ export type Database = {
           },
         ]
       }
+      growth_opportunity_mapping: {
+        Row: {
+          category_id: string | null
+          competitive_intensity: number | null
+          created_at: string | null
+          entry_barriers: Json | null
+          expected_roi: number | null
+          growth_potential: number
+          id: string
+          investment_required: number | null
+          market_size: number | null
+          opportunity_name: string
+          opportunity_type: string
+          risk_assessment: Json | null
+          status: string | null
+          success_probability: number | null
+          timeline_to_market: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          category_id?: string | null
+          competitive_intensity?: number | null
+          created_at?: string | null
+          entry_barriers?: Json | null
+          expected_roi?: number | null
+          growth_potential: number
+          id?: string
+          investment_required?: number | null
+          market_size?: number | null
+          opportunity_name: string
+          opportunity_type: string
+          risk_assessment?: Json | null
+          status?: string | null
+          success_probability?: number | null
+          timeline_to_market?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          category_id?: string | null
+          competitive_intensity?: number | null
+          created_at?: string | null
+          entry_barriers?: Json | null
+          expected_roi?: number | null
+          growth_potential?: number
+          id?: string
+          investment_required?: number | null
+          market_size?: number | null
+          opportunity_name?: string
+          opportunity_type?: string
+          risk_assessment?: Json | null
+          status?: string | null
+          success_probability?: number | null
+          timeline_to_market?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "growth_opportunity_mapping_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "growth_opportunity_mapping_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_checks: {
         Row: {
           checks_data: Json | null
@@ -2324,6 +2820,63 @@ export type Database = {
         }
         Relationships: []
       }
+      inventory_forecasts: {
+        Row: {
+          created_at: string | null
+          forecast_date: string
+          id: string
+          lead_time_forecast: number | null
+          optimal_stock_level: number | null
+          predicted_stock_level: number
+          product_id: string
+          reorder_recommendation: number | null
+          seasonal_adjustment: number | null
+          stockout_probability: number | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          forecast_date: string
+          id?: string
+          lead_time_forecast?: number | null
+          optimal_stock_level?: number | null
+          predicted_stock_level: number
+          product_id: string
+          reorder_recommendation?: number | null
+          seasonal_adjustment?: number | null
+          stockout_probability?: number | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          forecast_date?: string
+          id?: string
+          lead_time_forecast?: number | null
+          optimal_stock_level?: number | null
+          predicted_stock_level?: number
+          product_id?: string
+          reorder_recommendation?: number | null
+          seasonal_adjustment?: number | null
+          stockout_probability?: number | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_forecasts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "inventory_forecasts_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventory_movements: {
         Row: {
           cost_per_unit: number | null
@@ -2548,6 +3101,116 @@ export type Database = {
           vendor_id?: string | null
         }
         Relationships: []
+      }
+      market_share_analysis: {
+        Row: {
+          analysis_date: string | null
+          analysis_period: string
+          category_id: string | null
+          competitor_shares: Json | null
+          growth_opportunities: Json | null
+          id: string
+          market_growth_rate: number | null
+          market_position: number | null
+          our_market_share: number
+          share_growth_rate: number | null
+          share_trend: Json | null
+          total_market_size: number
+          vendor_id: string | null
+        }
+        Insert: {
+          analysis_date?: string | null
+          analysis_period: string
+          category_id?: string | null
+          competitor_shares?: Json | null
+          growth_opportunities?: Json | null
+          id?: string
+          market_growth_rate?: number | null
+          market_position?: number | null
+          our_market_share: number
+          share_growth_rate?: number | null
+          share_trend?: Json | null
+          total_market_size: number
+          vendor_id?: string | null
+        }
+        Update: {
+          analysis_date?: string | null
+          analysis_period?: string
+          category_id?: string | null
+          competitor_shares?: Json | null
+          growth_opportunities?: Json | null
+          id?: string
+          market_growth_rate?: number | null
+          market_position?: number | null
+          our_market_share?: number
+          share_growth_rate?: number | null
+          share_trend?: Json | null
+          total_market_size?: number
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_share_analysis_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "market_share_analysis_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      market_trends: {
+        Row: {
+          category_id: string | null
+          confidence_score: number | null
+          detection_date: string | null
+          id: string
+          market_impact: string | null
+          trend_data: Json
+          trend_direction: string
+          trend_name: string
+          trend_period: string | null
+          trend_strength: number | null
+        }
+        Insert: {
+          category_id?: string | null
+          confidence_score?: number | null
+          detection_date?: string | null
+          id?: string
+          market_impact?: string | null
+          trend_data?: Json
+          trend_direction: string
+          trend_name: string
+          trend_period?: string | null
+          trend_strength?: number | null
+        }
+        Update: {
+          category_id?: string | null
+          confidence_score?: number | null
+          detection_date?: string | null
+          id?: string
+          market_impact?: string | null
+          trend_data?: Json
+          trend_direction?: string
+          trend_name?: string
+          trend_period?: string | null
+          trend_strength?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "market_trends_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       ml_recommendations: {
         Row: {
@@ -4177,6 +4840,72 @@ export type Database = {
         }
         Relationships: []
       }
+      personalized_pricing_strategies: {
+        Row: {
+          base_price: number
+          created_at: string | null
+          customer_id: string
+          customer_segment: string | null
+          discount_percentage: number | null
+          id: string
+          personalized_price: number
+          price_sensitivity: number | null
+          pricing_strategy: string
+          product_id: string
+          purchase_probability: number | null
+          valid_from: string | null
+          valid_until: string | null
+          vendor_id: string
+        }
+        Insert: {
+          base_price: number
+          created_at?: string | null
+          customer_id: string
+          customer_segment?: string | null
+          discount_percentage?: number | null
+          id?: string
+          personalized_price: number
+          price_sensitivity?: number | null
+          pricing_strategy: string
+          product_id: string
+          purchase_probability?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+          vendor_id: string
+        }
+        Update: {
+          base_price?: number
+          created_at?: string | null
+          customer_id?: string
+          customer_segment?: string | null
+          discount_percentage?: number | null
+          id?: string
+          personalized_price?: number
+          price_sensitivity?: number | null
+          pricing_strategy?: string
+          product_id?: string
+          purchase_probability?: number | null
+          valid_from?: string | null
+          valid_until?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "personalized_pricing_strategies_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "personalized_pricing_strategies_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       pick_list_items: {
         Row: {
           created_at: string
@@ -4441,6 +5170,123 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      price_optimizations: {
+        Row: {
+          competitor_prices: Json | null
+          created_at: string | null
+          current_price: number
+          demand_sensitivity: number | null
+          id: string
+          optimization_strategy: string | null
+          price_elasticity: number | null
+          product_id: string
+          profit_impact: number | null
+          recommended_price: number
+          valid_until: string | null
+          vendor_id: string
+        }
+        Insert: {
+          competitor_prices?: Json | null
+          created_at?: string | null
+          current_price: number
+          demand_sensitivity?: number | null
+          id?: string
+          optimization_strategy?: string | null
+          price_elasticity?: number | null
+          product_id: string
+          profit_impact?: number | null
+          recommended_price: number
+          valid_until?: string | null
+          vendor_id: string
+        }
+        Update: {
+          competitor_prices?: Json | null
+          created_at?: string | null
+          current_price?: number
+          demand_sensitivity?: number | null
+          id?: string
+          optimization_strategy?: string | null
+          price_elasticity?: number | null
+          product_id?: string
+          profit_impact?: number | null
+          recommended_price?: number
+          valid_until?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_optimizations_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "price_optimizations_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_benchmarks: {
+        Row: {
+          benchmark_date: string | null
+          benchmark_type: string
+          category_comparison: Json | null
+          id: string
+          improvement_potential: number | null
+          market_average: number
+          our_metric: number
+          percentile_rank: number | null
+          product_id: string
+          top_performer: number
+          vendor_id: string
+        }
+        Insert: {
+          benchmark_date?: string | null
+          benchmark_type: string
+          category_comparison?: Json | null
+          id?: string
+          improvement_potential?: number | null
+          market_average: number
+          our_metric: number
+          percentile_rank?: number | null
+          product_id: string
+          top_performer: number
+          vendor_id: string
+        }
+        Update: {
+          benchmark_date?: string | null
+          benchmark_type?: string
+          category_comparison?: Json | null
+          id?: string
+          improvement_potential?: number | null
+          market_average?: number
+          our_metric?: number
+          percentile_rank?: number | null
+          product_id?: string
+          top_performer?: number
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_benchmarks_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "product_benchmarks_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
             referencedColumns: ["id"]
           },
         ]
@@ -5559,6 +6405,59 @@ export type Database = {
         }
         Relationships: []
       }
+      recommendation_engine_data: {
+        Row: {
+          campaign_id: string | null
+          conversion_probability: number | null
+          created_at: string | null
+          customer_id: string
+          expected_revenue: number | null
+          expires_at: string | null
+          id: string
+          reasoning: Json | null
+          recommendation_score: number
+          recommendation_type: string
+          recommended_products: Json
+          vendor_id: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          customer_id: string
+          expected_revenue?: number | null
+          expires_at?: string | null
+          id?: string
+          reasoning?: Json | null
+          recommendation_score: number
+          recommendation_type: string
+          recommended_products?: Json
+          vendor_id?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          customer_id?: string
+          expected_revenue?: number | null
+          expires_at?: string | null
+          id?: string
+          reasoning?: Json | null
+          recommendation_score?: number
+          recommendation_type?: string
+          recommended_products?: Json
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "recommendation_engine_data_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       recommendation_models: {
         Row: {
           accuracy_metrics: Json | null
@@ -5597,6 +6496,129 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      report_executions: {
+        Row: {
+          created_at: string | null
+          delivery_status: Json | null
+          error_message: string | null
+          execution_end: string | null
+          execution_start: string | null
+          execution_status: string
+          file_path: string | null
+          file_size: number | null
+          generation_time_ms: number | null
+          id: string
+          recipients_sent: Json | null
+          report_data: Json | null
+          scheduled_report_id: string | null
+          template_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          delivery_status?: Json | null
+          error_message?: string | null
+          execution_end?: string | null
+          execution_start?: string | null
+          execution_status?: string
+          file_path?: string | null
+          file_size?: number | null
+          generation_time_ms?: number | null
+          id?: string
+          recipients_sent?: Json | null
+          report_data?: Json | null
+          scheduled_report_id?: string | null
+          template_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          delivery_status?: Json | null
+          error_message?: string | null
+          execution_end?: string | null
+          execution_start?: string | null
+          execution_status?: string
+          file_path?: string | null
+          file_size?: number | null
+          generation_time_ms?: number | null
+          id?: string
+          recipients_sent?: Json | null
+          report_data?: Json | null
+          scheduled_report_id?: string | null
+          template_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_executions_scheduled_report_id_fkey"
+            columns: ["scheduled_report_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_executions_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "custom_report_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      report_subscriptions: {
+        Row: {
+          created_at: string | null
+          delivery_count: number | null
+          delivery_preferences: Json | null
+          id: string
+          is_active: boolean | null
+          last_delivered: string | null
+          scheduled_report_id: string | null
+          subscription_type: string
+          updated_at: string | null
+          user_id: string
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          delivery_count?: number | null
+          delivery_preferences?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_delivered?: string | null
+          scheduled_report_id?: string | null
+          subscription_type: string
+          updated_at?: string | null
+          user_id: string
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          delivery_count?: number | null
+          delivery_preferences?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_delivered?: string | null
+          scheduled_report_id?: string | null
+          subscription_type?: string
+          updated_at?: string | null
+          user_id?: string
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "report_subscriptions_scheduled_report_id_fkey"
+            columns: ["scheduled_report_id"]
+            isOneToOne: false
+            referencedRelation: "scheduled_reports"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "report_subscriptions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       revenue_analytics_summary: {
         Row: {
@@ -6014,6 +7036,75 @@ export type Database = {
         }
         Relationships: []
       }
+      scheduled_reports: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          error_log: Json | null
+          generation_status: string | null
+          id: string
+          is_active: boolean | null
+          last_generated: string | null
+          next_generation: string | null
+          recipients: Json
+          report_format: string
+          report_name: string
+          schedule_config: Json
+          template_id: string | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          error_log?: Json | null
+          generation_status?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_generated?: string | null
+          next_generation?: string | null
+          recipients?: Json
+          report_format?: string
+          report_name: string
+          schedule_config?: Json
+          template_id?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          error_log?: Json | null
+          generation_status?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_generated?: string | null
+          next_generation?: string | null
+          recipients?: Json
+          report_format?: string
+          report_name?: string
+          schedule_config?: Json
+          template_id?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "scheduled_reports_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "custom_report_templates"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "scheduled_reports_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       search_analytics: {
         Row: {
           click_through_rate: number | null
@@ -6324,6 +7415,57 @@ export type Database = {
           reference_id?: string | null
           reference_type?: string | null
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      strategic_planning_insights: {
+        Row: {
+          business_impact: number | null
+          created_at: string | null
+          created_by: string | null
+          id: string
+          implementation_complexity: number | null
+          insight_category: string
+          insight_description: string
+          insight_title: string
+          resource_requirements: Json | null
+          risk_factors: Json | null
+          status: string | null
+          strategic_priority: string | null
+          success_metrics: Json | null
+          timeline_estimate: string | null
+        }
+        Insert: {
+          business_impact?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          implementation_complexity?: number | null
+          insight_category: string
+          insight_description: string
+          insight_title: string
+          resource_requirements?: Json | null
+          risk_factors?: Json | null
+          status?: string | null
+          strategic_priority?: string | null
+          success_metrics?: Json | null
+          timeline_estimate?: string | null
+        }
+        Update: {
+          business_impact?: number | null
+          created_at?: string | null
+          created_by?: string | null
+          id?: string
+          implementation_complexity?: number | null
+          insight_category?: string
+          insight_description?: string
+          insight_title?: string
+          resource_requirements?: Json | null
+          risk_factors?: Json | null
+          status?: string | null
+          strategic_priority?: string | null
+          success_metrics?: Json | null
+          timeline_estimate?: string | null
         }
         Relationships: []
       }

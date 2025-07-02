@@ -352,6 +352,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_behavior_predictions: {
+        Row: {
+          confidence_score: number
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          model_version: string
+          predicted_action: string | null
+          prediction_data: Json
+          prediction_type: string
+          probability_score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          confidence_score?: number
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          model_version?: string
+          predicted_action?: string | null
+          prediction_data?: Json
+          prediction_type: string
+          probability_score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          model_version?: string
+          predicted_action?: string | null
+          prediction_data?: Json
+          prediction_type?: string
+          probability_score?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_chatbot_conversations: {
         Row: {
           context_data: Json | null
@@ -1292,6 +1331,60 @@ export type Database = {
           metadata?: Json | null
           resource_type?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      automated_inventory_management: {
+        Row: {
+          algorithm_version: string | null
+          auto_reorder_enabled: boolean | null
+          created_at: string | null
+          demand_forecast: Json | null
+          id: string
+          last_reorder_date: string | null
+          lead_time_days: number | null
+          next_predicted_reorder: string | null
+          optimal_stock_level: number
+          product_id: string | null
+          reorder_point: number
+          safety_stock: number | null
+          seasonal_factors: Json | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          algorithm_version?: string | null
+          auto_reorder_enabled?: boolean | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          last_reorder_date?: string | null
+          lead_time_days?: number | null
+          next_predicted_reorder?: string | null
+          optimal_stock_level: number
+          product_id?: string | null
+          reorder_point: number
+          safety_stock?: number | null
+          seasonal_factors?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          algorithm_version?: string | null
+          auto_reorder_enabled?: boolean | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          last_reorder_date?: string | null
+          lead_time_days?: number | null
+          next_predicted_reorder?: string | null
+          optimal_stock_level?: number
+          product_id?: string | null
+          reorder_point?: number
+          safety_stock?: number | null
+          seasonal_factors?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -2437,6 +2530,51 @@ export type Database = {
           updated_at?: string | null
           user_role?: string
           widget_config?: Json
+        }
+        Relationships: []
+      }
+      business_intelligence_reports: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          data_sources: Json
+          filters: Json | null
+          generated_at: string | null
+          id: string
+          report_category: string
+          report_data: Json | null
+          report_name: string
+          report_type: string
+          scheduled_frequency: string | null
+          status: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          data_sources?: Json
+          filters?: Json | null
+          generated_at?: string | null
+          id?: string
+          report_category: string
+          report_data?: Json | null
+          report_name: string
+          report_type: string
+          scheduled_frequency?: string | null
+          status?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          data_sources?: Json
+          filters?: Json | null
+          generated_at?: string | null
+          id?: string
+          report_category?: string
+          report_data?: Json | null
+          report_name?: string
+          report_type?: string
+          scheduled_frequency?: string | null
+          status?: string | null
         }
         Relationships: []
       }
@@ -4627,6 +4765,54 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_lifetime_value: {
+        Row: {
+          average_order_value: number | null
+          calculation_factors: Json | null
+          churn_probability: number | null
+          clv_segment: string
+          created_at: string | null
+          current_clv: number
+          customer_lifespan_months: number | null
+          id: string
+          last_calculated: string | null
+          predicted_clv: number
+          purchase_frequency: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          average_order_value?: number | null
+          calculation_factors?: Json | null
+          churn_probability?: number | null
+          clv_segment?: string
+          created_at?: string | null
+          current_clv?: number
+          customer_lifespan_months?: number | null
+          id?: string
+          last_calculated?: string | null
+          predicted_clv?: number
+          purchase_frequency?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          average_order_value?: number | null
+          calculation_factors?: Json | null
+          churn_probability?: number | null
+          clv_segment?: string
+          created_at?: string | null
+          current_clv?: number
+          customer_lifespan_months?: number | null
+          id?: string
+          last_calculated?: string | null
+          predicted_clv?: number
+          purchase_frequency?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       customer_lifetime_value_predictions: {
         Row: {
           clv_factors: Json | null
@@ -5713,6 +5899,48 @@ export type Database = {
           retry_count?: number
           routing_key?: string | null
           source_service?: string
+        }
+        Relationships: []
+      }
+      executive_dashboards: {
+        Row: {
+          created_at: string | null
+          created_by: string | null
+          dashboard_name: string
+          dashboard_type: string
+          executive_level: string
+          filters: Json | null
+          id: string
+          is_active: boolean | null
+          refresh_interval: number | null
+          updated_at: string | null
+          widgets: Json
+        }
+        Insert: {
+          created_at?: string | null
+          created_by?: string | null
+          dashboard_name: string
+          dashboard_type: string
+          executive_level: string
+          filters?: Json | null
+          id?: string
+          is_active?: boolean | null
+          refresh_interval?: number | null
+          updated_at?: string | null
+          widgets?: Json
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string | null
+          dashboard_name?: string
+          dashboard_type?: string
+          executive_level?: string
+          filters?: Json | null
+          id?: string
+          is_active?: boolean | null
+          refresh_interval?: number | null
+          updated_at?: string | null
+          widgets?: Json
         }
         Relationships: []
       }
@@ -8381,6 +8609,54 @@ export type Database = {
           redemption_rules?: Json
           tier_levels?: Json
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      loyalty_rewards_system: {
+        Row: {
+          anniversary_date: string | null
+          available_points: number | null
+          created_at: string | null
+          id: string
+          lifetime_spending: number | null
+          loyalty_tier: string
+          next_tier_requirements: Json | null
+          points_history: Json | null
+          special_offers: Json | null
+          tier_benefits: Json | null
+          total_points: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          anniversary_date?: string | null
+          available_points?: number | null
+          created_at?: string | null
+          id?: string
+          lifetime_spending?: number | null
+          loyalty_tier?: string
+          next_tier_requirements?: Json | null
+          points_history?: Json | null
+          special_offers?: Json | null
+          tier_benefits?: Json | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          anniversary_date?: string | null
+          available_points?: number | null
+          created_at?: string | null
+          id?: string
+          lifetime_spending?: number | null
+          loyalty_tier?: string
+          next_tier_requirements?: Json | null
+          points_history?: Json | null
+          special_offers?: Json | null
+          tier_benefits?: Json | null
+          total_points?: number | null
+          updated_at?: string | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -12622,6 +12898,51 @@ export type Database = {
           },
         ]
       }
+      quality_assurance_checks: {
+        Row: {
+          auto_resolution_applied: boolean | null
+          check_type: string
+          content_id: string
+          content_type: string
+          created_at: string | null
+          id: string
+          issues_detected: Json | null
+          manual_review_required: boolean | null
+          quality_score: number | null
+          resolution_status: string | null
+          resolved_at: string | null
+          reviewed_by: string | null
+        }
+        Insert: {
+          auto_resolution_applied?: boolean | null
+          check_type: string
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          id?: string
+          issues_detected?: Json | null
+          manual_review_required?: boolean | null
+          quality_score?: number | null
+          resolution_status?: string | null
+          resolved_at?: string | null
+          reviewed_by?: string | null
+        }
+        Update: {
+          auto_resolution_applied?: boolean | null
+          check_type?: string
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          issues_detected?: Json | null
+          manual_review_required?: boolean | null
+          quality_score?: number | null
+          resolution_status?: string | null
+          resolved_at?: string | null
+          reviewed_by?: string | null
+        }
+        Relationships: []
+      }
       query_performance_logs: {
         Row: {
           cache_hit: boolean | null
@@ -15034,6 +15355,51 @@ export type Database = {
         }
         Relationships: []
       }
+      sla_tracking: {
+        Row: {
+          actual_value: number | null
+          breach_count: number | null
+          breach_details: Json | null
+          compliance_status: string | null
+          created_at: string | null
+          id: string
+          measurement_period: unknown
+          period_end: string
+          period_start: string
+          service_name: string
+          sla_type: string
+          target_value: number
+        }
+        Insert: {
+          actual_value?: number | null
+          breach_count?: number | null
+          breach_details?: Json | null
+          compliance_status?: string | null
+          created_at?: string | null
+          id?: string
+          measurement_period: unknown
+          period_end: string
+          period_start: string
+          service_name: string
+          sla_type: string
+          target_value: number
+        }
+        Update: {
+          actual_value?: number | null
+          breach_count?: number | null
+          breach_details?: Json | null
+          compliance_status?: string | null
+          created_at?: string | null
+          id?: string
+          measurement_period?: unknown
+          period_end?: string
+          period_start?: string
+          service_name?: string
+          sla_type?: string
+          target_value?: number
+        }
+        Relationships: []
+      }
       sla_violations: {
         Row: {
           acknowledged_at: string | null
@@ -15138,6 +15504,45 @@ export type Database = {
           supplier_lead_time?: number | null
           updated_at?: string | null
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      social_commerce_features: {
+        Row: {
+          content_data: Json
+          created_at: string | null
+          engagement_metrics: Json | null
+          expires_at: string | null
+          feature_type: string
+          id: string
+          influence_network: Json | null
+          social_proof_indicators: Json | null
+          user_id: string | null
+          virality_score: number | null
+        }
+        Insert: {
+          content_data?: Json
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          expires_at?: string | null
+          feature_type: string
+          id?: string
+          influence_network?: Json | null
+          social_proof_indicators?: Json | null
+          user_id?: string | null
+          virality_score?: number | null
+        }
+        Update: {
+          content_data?: Json
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          expires_at?: string | null
+          feature_type?: string
+          id?: string
+          influence_network?: Json | null
+          social_proof_indicators?: Json | null
+          user_id?: string | null
+          virality_score?: number | null
         }
         Relationships: []
       }
@@ -15607,6 +16012,51 @@ export type Database = {
           location?: Json | null
           status_details?: Json | null
           tracking_number?: string | null
+        }
+        Relationships: []
+      }
+      supply_chain_optimization: {
+        Row: {
+          cost_savings: number | null
+          created_at: string | null
+          current_metrics: Json
+          efficiency_gains: Json | null
+          id: string
+          implementation_status: string | null
+          implemented_at: string | null
+          improvement_percentage: number | null
+          optimization_type: string
+          optimized_metrics: Json
+          product_id: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          cost_savings?: number | null
+          created_at?: string | null
+          current_metrics?: Json
+          efficiency_gains?: Json | null
+          id?: string
+          implementation_status?: string | null
+          implemented_at?: string | null
+          improvement_percentage?: number | null
+          optimization_type: string
+          optimized_metrics?: Json
+          product_id?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          cost_savings?: number | null
+          created_at?: string | null
+          current_metrics?: Json
+          efficiency_gains?: Json | null
+          id?: string
+          implementation_status?: string | null
+          implemented_at?: string | null
+          improvement_percentage?: number | null
+          optimization_type?: string
+          optimized_metrics?: Json
+          product_id?: string | null
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -17517,6 +17967,42 @@ export type Database = {
           results_count?: number | null
           search_query?: string | null
           transcription?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      voice_search_queries: {
+        Row: {
+          audio_url: string | null
+          confidence_score: number | null
+          created_at: string | null
+          detected_language: string | null
+          id: string
+          search_intent: string | null
+          search_results: Json | null
+          transcribed_text: string | null
+          user_id: string | null
+        }
+        Insert: {
+          audio_url?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          detected_language?: string | null
+          id?: string
+          search_intent?: string | null
+          search_results?: Json | null
+          transcribed_text?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          audio_url?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          detected_language?: string | null
+          id?: string
+          search_intent?: string | null
+          search_results?: Json | null
+          transcribed_text?: string | null
           user_id?: string | null
         }
         Relationships: []

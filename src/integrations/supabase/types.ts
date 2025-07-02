@@ -3995,6 +3995,90 @@ export type Database = {
         }
         Relationships: []
       }
+      event_processing_queue: {
+        Row: {
+          completed_at: string | null
+          error_details: Json | null
+          event_id: string
+          id: string
+          priority: number
+          processing_status: string
+          processor_name: string
+          retry_count: number
+          scheduled_at: string
+          started_at: string | null
+        }
+        Insert: {
+          completed_at?: string | null
+          error_details?: Json | null
+          event_id: string
+          id?: string
+          priority?: number
+          processing_status?: string
+          processor_name: string
+          retry_count?: number
+          scheduled_at?: string
+          started_at?: string | null
+        }
+        Update: {
+          completed_at?: string | null
+          error_details?: Json | null
+          event_id?: string
+          id?: string
+          priority?: number
+          processing_status?: string
+          processor_name?: string
+          retry_count?: number
+          scheduled_at?: string
+          started_at?: string | null
+        }
+        Relationships: []
+      }
+      event_streams: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          event_id: string
+          event_payload: Json
+          event_timestamp: string
+          event_type: string
+          id: string
+          processed_at: string | null
+          processing_status: string
+          retry_count: number
+          routing_key: string | null
+          source_service: string
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          event_id: string
+          event_payload?: Json
+          event_timestamp?: string
+          event_type: string
+          id?: string
+          processed_at?: string | null
+          processing_status?: string
+          retry_count?: number
+          routing_key?: string | null
+          source_service: string
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          event_id?: string
+          event_payload?: Json
+          event_timestamp?: string
+          event_type?: string
+          id?: string
+          processed_at?: string | null
+          processing_status?: string
+          retry_count?: number
+          routing_key?: string | null
+          source_service?: string
+        }
+        Relationships: []
+      }
       executive_kpi_dashboard: {
         Row: {
           benchmark_value: number | null
@@ -9579,6 +9663,48 @@ export type Database = {
         }
         Relationships: []
       }
+      realtime_business_metrics: {
+        Row: {
+          aggregation_type: string
+          created_at: string
+          customer_segment: string | null
+          dimensions: Json
+          geographic_region: string | null
+          id: string
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          time_window: string
+          vendor_id: string | null
+        }
+        Insert: {
+          aggregation_type?: string
+          created_at?: string
+          customer_segment?: string | null
+          dimensions?: Json
+          geographic_region?: string | null
+          id?: string
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          time_window: string
+          vendor_id?: string | null
+        }
+        Update: {
+          aggregation_type?: string
+          created_at?: string
+          customer_segment?: string | null
+          dimensions?: Json
+          geographic_region?: string | null
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          time_window?: string
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
       realtime_events: {
         Row: {
           broadcasted_at: string | null
@@ -13142,6 +13268,84 @@ export type Database = {
           is_active?: boolean | null
           last_activity?: string | null
           user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      websocket_message_logs: {
+        Row: {
+          direction: string
+          error_message: string | null
+          id: string
+          message_payload: Json
+          message_type: string
+          processed_at: string
+          processing_time_ms: number | null
+          session_id: string
+          status: string
+        }
+        Insert: {
+          direction: string
+          error_message?: string | null
+          id?: string
+          message_payload?: Json
+          message_type: string
+          processed_at?: string
+          processing_time_ms?: number | null
+          session_id: string
+          status?: string
+        }
+        Update: {
+          direction?: string
+          error_message?: string | null
+          id?: string
+          message_payload?: Json
+          message_type?: string
+          processed_at?: string
+          processing_time_ms?: number | null
+          session_id?: string
+          status?: string
+        }
+        Relationships: []
+      }
+      websocket_sessions: {
+        Row: {
+          channel_subscriptions: Json
+          connected_at: string
+          connection_id: string
+          connection_status: string
+          gateway_node: string
+          id: string
+          last_activity: string
+          message_count: number
+          metadata: Json
+          session_id: string
+          user_id: string | null
+        }
+        Insert: {
+          channel_subscriptions?: Json
+          connected_at?: string
+          connection_id: string
+          connection_status?: string
+          gateway_node: string
+          id?: string
+          last_activity?: string
+          message_count?: number
+          metadata?: Json
+          session_id: string
+          user_id?: string | null
+        }
+        Update: {
+          channel_subscriptions?: Json
+          connected_at?: string
+          connection_id?: string
+          connection_status?: string
+          gateway_node?: string
+          id?: string
+          last_activity?: string
+          message_count?: number
+          metadata?: Json
+          session_id?: string
           user_id?: string | null
         }
         Relationships: []

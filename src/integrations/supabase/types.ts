@@ -134,6 +134,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_search_cache: {
+        Row: {
+          ai_suggestions: Json
+          created_at: string | null
+          enhanced_query: string
+          expires_at: string
+          id: string
+          original_query: string
+          query_hash: string
+          semantic_tokens: Json | null
+          updated_at: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          ai_suggestions?: Json
+          created_at?: string | null
+          enhanced_query: string
+          expires_at: string
+          id?: string
+          original_query: string
+          query_hash: string
+          semantic_tokens?: Json | null
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          ai_suggestions?: Json
+          created_at?: string | null
+          enhanced_query?: string
+          expires_at?: string
+          id?: string
+          original_query?: string
+          query_hash?: string
+          semantic_tokens?: Json | null
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       analytics_cache: {
         Row: {
           analytics_type: string
@@ -2014,6 +2053,51 @@ export type Database = {
         }
         Relationships: []
       }
+      offline_sync_queue: {
+        Row: {
+          action_type: string
+          attempts: number | null
+          created_at: string | null
+          data: Json
+          error_message: string | null
+          id: string
+          max_attempts: number | null
+          resource_id: string | null
+          resource_type: string
+          sync_status: string | null
+          synced_at: string | null
+          user_id: string
+        }
+        Insert: {
+          action_type: string
+          attempts?: number | null
+          created_at?: string | null
+          data: Json
+          error_message?: string | null
+          id?: string
+          max_attempts?: number | null
+          resource_id?: string | null
+          resource_type: string
+          sync_status?: string | null
+          synced_at?: string | null
+          user_id: string
+        }
+        Update: {
+          action_type?: string
+          attempts?: number | null
+          created_at?: string | null
+          data?: Json
+          error_message?: string | null
+          id?: string
+          max_attempts?: number | null
+          resource_id?: string | null
+          resource_type?: string
+          sync_status?: string | null
+          synced_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       order_analytics: {
         Row: {
           analytics_date: string
@@ -3718,6 +3802,42 @@ export type Database = {
         }
         Relationships: []
       }
+      pwa_installations: {
+        Row: {
+          browser: string
+          created_at: string | null
+          device_type: string
+          id: string
+          installation_source: string | null
+          is_active: boolean | null
+          last_active_at: string | null
+          platform: string
+          user_id: string | null
+        }
+        Insert: {
+          browser: string
+          created_at?: string | null
+          device_type: string
+          id?: string
+          installation_source?: string | null
+          is_active?: boolean | null
+          last_active_at?: string | null
+          platform: string
+          user_id?: string | null
+        }
+        Update: {
+          browser?: string
+          created_at?: string | null
+          device_type?: string
+          id?: string
+          installation_source?: string | null
+          is_active?: boolean | null
+          last_active_at?: string | null
+          platform?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       qualitative_assessments: {
         Row: {
           approved_at: string | null
@@ -4577,6 +4697,45 @@ export type Database = {
         }
         Relationships: []
       }
+      search_indexes: {
+        Row: {
+          created_at: string | null
+          elasticsearch_index: string
+          id: string
+          index_name: string
+          index_type: string
+          is_active: boolean | null
+          last_sync_at: string | null
+          mapping_config: Json
+          settings_config: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          elasticsearch_index: string
+          id?: string
+          index_name: string
+          index_type: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          mapping_config?: Json
+          settings_config?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          elasticsearch_index?: string
+          id?: string
+          index_name?: string
+          index_type?: string
+          is_active?: boolean | null
+          last_sync_at?: string | null
+          mapping_config?: Json
+          settings_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       search_queries: {
         Row: {
           clicked_product_id: string | null
@@ -4816,6 +4975,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      supply_chain_events: {
+        Row: {
+          actual_arrival: string | null
+          carrier_info: Json | null
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          estimated_arrival: string | null
+          event_type: string
+          id: string
+          location: Json | null
+          status_details: Json | null
+          tracking_number: string | null
+        }
+        Insert: {
+          actual_arrival?: string | null
+          carrier_info?: Json | null
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          estimated_arrival?: string | null
+          event_type: string
+          id?: string
+          location?: Json | null
+          status_details?: Json | null
+          tracking_number?: string | null
+        }
+        Update: {
+          actual_arrival?: string | null
+          carrier_info?: Json | null
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          estimated_arrival?: string | null
+          event_type?: string
+          id?: string
+          location?: Json | null
+          status_details?: Json | null
+          tracking_number?: string | null
+        }
+        Relationships: []
       }
       system_alerts: {
         Row: {
@@ -5922,6 +6123,104 @@ export type Database = {
           search_query?: string | null
           transcription?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      warehouse_zones: {
+        Row: {
+          capacity: number | null
+          coordinates: Json | null
+          created_at: string | null
+          current_utilization: number | null
+          id: string
+          security_level: string | null
+          temperature_controlled: boolean | null
+          updated_at: string | null
+          warehouse_id: string
+          zone_name: string
+          zone_type: string
+        }
+        Insert: {
+          capacity?: number | null
+          coordinates?: Json | null
+          created_at?: string | null
+          current_utilization?: number | null
+          id?: string
+          security_level?: string | null
+          temperature_controlled?: boolean | null
+          updated_at?: string | null
+          warehouse_id: string
+          zone_name: string
+          zone_type: string
+        }
+        Update: {
+          capacity?: number | null
+          coordinates?: Json | null
+          created_at?: string | null
+          current_utilization?: number | null
+          id?: string
+          security_level?: string | null
+          temperature_controlled?: boolean | null
+          updated_at?: string | null
+          warehouse_id?: string
+          zone_name?: string
+          zone_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "warehouse_zones_warehouse_id_fkey"
+            columns: ["warehouse_id"]
+            isOneToOne: false
+            referencedRelation: "warehouses"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      warehouses: {
+        Row: {
+          address: Json
+          automation_level: string | null
+          capacity_cubic_meters: number | null
+          code: string
+          contact_info: Json | null
+          created_at: string | null
+          id: string
+          manager_id: string | null
+          name: string
+          operational_hours: Json | null
+          status: string | null
+          updated_at: string | null
+          warehouse_type: string | null
+        }
+        Insert: {
+          address: Json
+          automation_level?: string | null
+          capacity_cubic_meters?: number | null
+          code: string
+          contact_info?: Json | null
+          created_at?: string | null
+          id?: string
+          manager_id?: string | null
+          name: string
+          operational_hours?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          warehouse_type?: string | null
+        }
+        Update: {
+          address?: Json
+          automation_level?: string | null
+          capacity_cubic_meters?: number | null
+          code?: string
+          contact_info?: Json | null
+          created_at?: string | null
+          id?: string
+          manager_id?: string | null
+          name?: string
+          operational_hours?: Json | null
+          status?: string | null
+          updated_at?: string | null
+          warehouse_type?: string | null
         }
         Relationships: []
       }

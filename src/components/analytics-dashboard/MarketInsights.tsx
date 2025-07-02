@@ -30,15 +30,35 @@ const MarketInsights: React.FC = () => {
 
   const fetchInsights = async () => {
     try {
-      const { data, error } = await supabase
-        .from('market_insights')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-      setInsights(data || []);
+      // Mock data until database tables are created
+      const mockInsights: MarketInsight[] = [
+        {
+          id: '1',
+          insight_type: 'trends',
+          title: 'E-commerce Growth Acceleration',
+          description: 'Mobile commerce is showing 25% month-over-month growth',
+          data: { growth_rate: 25, mobile_percentage: 68 },
+          trend_direction: 'up',
+          confidence_score: 0.92,
+          created_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          metadata: {}
+        },
+        {
+          id: '2',
+          insight_type: 'competition',
+          title: 'Competitive Pricing Opportunity',
+          description: 'Electronics category shows 15% pricing advantage opportunity',
+          data: { price_advantage: 15, category: 'electronics' },
+          trend_direction: 'stable',
+          confidence_score: 0.78,
+          created_at: new Date().toISOString(),
+          expires_at: new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString(),
+          metadata: {}
+        }
+      ];
+      
+      setInsights(mockInsights);
     } catch (error) {
       console.error('Error fetching market insights:', error);
     } finally {

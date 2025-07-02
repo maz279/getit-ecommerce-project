@@ -31,15 +31,37 @@ const BusinessIntelligence: React.FC = () => {
 
   const fetchInsights = async () => {
     try {
-      const { data, error } = await supabase
-        .from('bi_insights')
-        .select('*')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-      setInsights(data || []);
+      // Mock data until database tables are created
+      const mockInsights: BIInsight[] = [
+        {
+          id: '1',
+          insight_category: 'revenue',
+          insight_title: 'Revenue Spike Detected',
+          insight_description: 'Unusual 40% revenue increase in fashion category this month',
+          insight_type: 'anomaly',
+          priority: 'high',
+          data_points: { revenue_increase: 40, category: 'fashion' },
+          confidence_score: 0.95,
+          impact_score: 0.88,
+          action_items: ['Investigate supply chain', 'Scale marketing efforts', 'Monitor inventory levels'],
+          created_at: new Date().toISOString()
+        },
+        {
+          id: '2',
+          insight_category: 'customers',
+          insight_title: 'Customer Acquisition Trend',
+          insight_description: 'Mobile app downloads increased by 25% week-over-week',
+          insight_type: 'trend',
+          priority: 'medium',
+          data_points: { download_increase: 25, platform: 'mobile' },
+          confidence_score: 0.82,
+          impact_score: 0.71,
+          action_items: ['Optimize mobile onboarding', 'Launch mobile-specific campaigns'],
+          created_at: new Date().toISOString()
+        }
+      ];
+      
+      setInsights(mockInsights);
     } catch (error) {
       console.error('Error fetching BI insights:', error);
     } finally {

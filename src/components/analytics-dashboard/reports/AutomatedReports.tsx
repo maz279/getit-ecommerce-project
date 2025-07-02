@@ -35,14 +35,25 @@ const AutomatedReports: React.FC = () => {
 
   const fetchScheduledReports = async () => {
     try {
-      const { data, error } = await supabase
-        .from('custom_reports')
-        .select('*')
-        .eq('is_scheduled', true)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
-      setReports(data || []);
+      // Mock data until database tables are created
+      const mockReports: ScheduledReport[] = [
+        {
+          id: '1',
+          report_name: 'Daily Sales Report',
+          report_description: 'Daily overview of sales performance',
+          schedule_config: {
+            frequency: 'daily',
+            time: '09:00',
+            recipients: ['admin@example.com'],
+            format: 'pdf'
+          },
+          is_scheduled: true,
+          last_generated: new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString(),
+          created_at: new Date().toISOString()
+        }
+      ];
+      
+      setReports(mockReports);
     } catch (error) {
       console.error('Error fetching scheduled reports:', error);
     } finally {
@@ -52,13 +63,7 @@ const AutomatedReports: React.FC = () => {
 
   const toggleReportSchedule = async (reportId: string, enabled: boolean) => {
     try {
-      const { error } = await supabase
-        .from('custom_reports')
-        .update({ is_scheduled: enabled })
-        .eq('id', reportId);
-
-      if (error) throw error;
-      
+      // Mock function until database tables are created
       setReports(prev => prev.map(report => 
         report.id === reportId 
           ? { ...report, is_scheduled: enabled }
@@ -71,13 +76,7 @@ const AutomatedReports: React.FC = () => {
 
   const updateScheduleConfig = async (reportId: string, config: any) => {
     try {
-      const { error } = await supabase
-        .from('custom_reports')
-        .update({ schedule_config: config })
-        .eq('id', reportId);
-
-      if (error) throw error;
-      
+      // Mock function until database tables are created
       setReports(prev => prev.map(report => 
         report.id === reportId 
           ? { ...report, schedule_config: config }

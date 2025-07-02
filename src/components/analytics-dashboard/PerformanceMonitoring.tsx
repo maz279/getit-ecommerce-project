@@ -33,14 +33,37 @@ const PerformanceMonitoring: React.FC = () => {
 
   const fetchMetrics = async () => {
     try {
-      const { data, error } = await supabase
-        .from('performance_metrics')
-        .select('*')
-        .order('recorded_at', { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
-      setMetrics(data || []);
+      // Mock data until database tables are created
+      const mockMetrics: PerformanceMetric[] = [
+        {
+          id: '1',
+          metric_category: 'system',
+          metric_name: 'CPU Usage',
+          metric_value: 65.2,
+          metric_unit: '%',
+          target_value: 70,
+          threshold_warning: 80,
+          threshold_critical: 90,
+          status: 'healthy',
+          recorded_at: new Date().toISOString(),
+          metadata: {}
+        },
+        {
+          id: '2',
+          metric_category: 'database',
+          metric_name: 'Query Response Time',
+          metric_value: 125,
+          metric_unit: 'ms',
+          target_value: 100,
+          threshold_warning: 200,
+          threshold_critical: 500,
+          status: 'warning',
+          recorded_at: new Date().toISOString(),
+          metadata: {}
+        }
+      ];
+      
+      setMetrics(mockMetrics);
     } catch (error) {
       console.error('Error fetching performance metrics:', error);
     } finally {

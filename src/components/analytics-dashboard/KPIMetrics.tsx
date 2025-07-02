@@ -33,14 +33,37 @@ const KPIMetrics: React.FC = () => {
 
   const fetchKPIMetrics = async () => {
     try {
-      const { data, error } = await supabase
-        .from('dashboard_kpi_metrics')
-        .select('*')
-        .order('recorded_date', { ascending: false })
-        .limit(50);
-
-      if (error) throw error;
-      setMetrics(data || []);
+      // Mock data until database tables are created
+      const mockMetrics: KPIMetric[] = [
+        {
+          id: '1',
+          metric_name: 'Monthly Revenue',
+          metric_category: 'sales',
+          metric_value: 2400000,
+          metric_unit: 'BDT',
+          comparison_value: 2100000,
+          percentage_change: 14.3,
+          trend_direction: 'up',
+          time_period: 'monthly',
+          recorded_date: new Date().toISOString(),
+          metadata: {}
+        },
+        {
+          id: '2',
+          metric_name: 'Active Customers',
+          metric_category: 'customers',
+          metric_value: 12500,
+          metric_unit: 'count',
+          comparison_value: 11800,
+          percentage_change: 5.9,
+          trend_direction: 'up',
+          time_period: 'monthly',
+          recorded_date: new Date().toISOString(),
+          metadata: {}
+        }
+      ];
+      
+      setMetrics(mockMetrics);
     } catch (error) {
       console.error('Error fetching KPI metrics:', error);
     } finally {

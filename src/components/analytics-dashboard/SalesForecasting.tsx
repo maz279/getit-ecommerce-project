@@ -31,16 +31,29 @@ const SalesForecasting: React.FC = () => {
 
   const fetchForecasts = async () => {
     try {
-      const { data, error } = await supabase
-        .from('sales_forecasts')
-        .select('*')
-        .eq('forecast_type', selectedPeriod)
-        .eq('is_active', true)
-        .order('forecast_period_start', { ascending: true })
-        .limit(12);
-
-      if (error) throw error;
-      setForecasts(data || []);
+      // Mock data until database tables are created
+      const mockForecasts: SalesForecast[] = [];
+      const today = new Date();
+      
+      for (let i = 1; i <= 6; i++) {
+        const futureDate = new Date(today);
+        futureDate.setMonth(futureDate.getMonth() + i);
+        
+        mockForecasts.push({
+          id: `${i}`,
+          forecast_type: selectedPeriod,
+          forecast_period_start: futureDate.toISOString().split('T')[0],
+          forecast_period_end: new Date(futureDate.getTime() + 30 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+          predicted_sales: Math.round(50000 + Math.random() * 100000),
+          predicted_units: Math.round(100 + Math.random() * 500),
+          confidence_interval: { lower: 45000 + Math.random() * 20000, upper: 120000 + Math.random() * 30000 },
+          model_accuracy: 85 + Math.random() * 10,
+          algorithm_used: selectedAlgorithm,
+          created_at: new Date().toISOString()
+        });
+      }
+      
+      setForecasts(mockForecasts);
     } catch (error) {
       console.error('Error fetching forecasts:', error);
     } finally {

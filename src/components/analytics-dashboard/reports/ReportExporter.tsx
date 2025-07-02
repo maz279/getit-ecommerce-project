@@ -49,22 +49,23 @@ const ReportExporter: React.FC = () => {
 
   const fetchReports = async () => {
     try {
-      const { data, error } = await supabase
-        .from('custom_reports')
-        .select('id, report_name, report_type, report_description')
-        .eq('is_active', true)
-        .order('created_at', { ascending: false });
-
-      if (error) throw error;
+      // Mock data until database tables are created
+      const mockReports: ReportTemplate[] = [
+        {
+          id: '1',
+          name: 'Sales Report',
+          type: 'table',
+          description: 'Comprehensive sales analysis'
+        },
+        {
+          id: '2',
+          name: 'Customer Analytics',
+          type: 'dashboard',
+          description: 'Customer behavior insights'
+        }
+      ];
       
-      const reportTemplates = data?.map(report => ({
-        id: report.id,
-        name: report.report_name,
-        type: report.report_type,
-        description: report.report_description
-      })) || [];
-      
-      setReports(reportTemplates);
+      setReports(mockReports);
     } catch (error) {
       console.error('Error fetching reports:', error);
     }
@@ -72,14 +73,23 @@ const ReportExporter: React.FC = () => {
 
   const fetchExportJobs = async () => {
     try {
-      const { data, error } = await supabase
-        .from('report_executions')
-        .select('*')
-        .order('started_at', { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-      setExportJobs(data || []);
+      // Mock data until database tables are created
+      const mockJobs: ExportJob[] = [
+        {
+          id: '1',
+          report_id: '1',
+          export_format: 'pdf',
+          status: 'completed',
+          started_at: new Date(Date.now() - 60 * 60 * 1000).toISOString(),
+          completed_at: new Date().toISOString(),
+          file_path: '/exports/sales-report.pdf',
+          file_size_bytes: 1024000,
+          row_count: 1250,
+          error_message: ''
+        }
+      ];
+      
+      setExportJobs(mockJobs);
     } catch (error) {
       console.error('Error fetching export jobs:', error);
     }

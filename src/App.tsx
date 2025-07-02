@@ -96,6 +96,11 @@ const EidSale = lazy(() => import("./pages/EidSale"));
 const Offers = lazy(() => import("./pages/Offers"));
 const Recommendations = lazy(() => import("./pages/Recommendations"));
 
+// New missing pages
+const StoreLocatorPage = lazy(() => import("./pages/StoreLocator"));
+const MobileAppPage = lazy(() => import("./pages/MobileApp"));
+const ReviewsPage = lazy(() => import("./pages/Reviews"));
+
 const queryClient = new QueryClient();
 
 const App = () => (
@@ -184,6 +189,11 @@ const App = () => (
                 <Route path="/eid-sale" element={<EidSale />} />
                 <Route path="/offers" element={<Offers />} />
                 <Route path="/recommendations" element={<Recommendations />} />
+                
+                {/* New missing pages */}
+                <Route path="/store-locator" element={<StoreLocatorPage />} />
+                <Route path="/mobile-app" element={<MobileAppPage />} />
+                <Route path="/reviews" element={<ReviewsPage />} />
                 
                 {/* Customer & User Dashboard Routes */}
                 <Route path="/customer/dashboard" element={<CustomerDashboard />} />

@@ -26,12 +26,12 @@ export const FooterMainSection: React.FC = () => {
         <div className="space-y-2">
           <Link to="/categories" className="text-sm text-gray-300 hover:text-white transition-colors block">Browse Categories</Link>
           <Link to="/offers" className="text-sm text-gray-300 hover:text-white transition-colors block">Today's Deals</Link>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Mobile App Download</a>
+          <Link to="/mobile-app" className="text-sm text-gray-300 hover:text-white transition-colors block">Mobile App Download</Link>
           <Link to="/order-tracking" className="text-sm text-gray-300 hover:text-white transition-colors block">Track Your Order</Link>
           <Link to="/returns-refunds" className="text-sm text-gray-300 hover:text-white transition-colors block">Return & Refund Policy</Link>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Customer Reviews</a>
+          <Link to="/reviews" className="text-sm text-gray-300 hover:text-white transition-colors block">Customer Reviews</Link>
           <Link to="/wishlist" className="text-sm text-gray-300 hover:text-white transition-colors block">Wishlist & Favorites</Link>
-          <a href="#" className="text-sm text-gray-300 hover:text-white transition-colors block">Gift Cards & Vouchers</a>
+          <Link to="/gift-cards" className="text-sm text-gray-300 hover:text-white transition-colors block">Gift Cards & Vouchers</Link>
         </div>
       </div>
 

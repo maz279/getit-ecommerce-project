@@ -1,5 +1,6 @@
 
 import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import { Menu, X, ChevronRight, User, Heart, ShoppingCart, Bell, MessageSquare, Search, Home, Tag, Zap, Gift, TrendingUp, Star, Package, Headphones, MapPin, LogIn, UserPlus, Globe } from 'lucide-react';
 
 export const MobileMenu: React.FC = () => {
@@ -80,14 +81,14 @@ export const MobileMenu: React.FC = () => {
             {/* Sign In/Sign Up Section */}
             <div className="p-4 border-b">
               <div className="grid grid-cols-2 gap-3">
-                <button className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-all">
+                <Link to="/auth/login" className="flex items-center justify-center gap-2 bg-blue-500 text-white px-4 py-3 rounded-lg hover:bg-blue-600 transition-all">
                   <LogIn className="w-4 h-4" />
                   <span className="text-sm font-medium">Sign In</span>
-                </button>
-                <button className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-all">
+                </Link>
+                <Link to="/auth/register" className="flex items-center justify-center gap-2 bg-green-500 text-white px-4 py-3 rounded-lg hover:bg-green-600 transition-all">
                   <UserPlus className="w-4 h-4" />
                   <span className="text-sm font-medium">Sign Up</span>
-                </button>
+                </Link>
               </div>
               
               {/* Language Choice */}
@@ -105,15 +106,19 @@ export const MobileMenu: React.FC = () => {
               <h3 className="font-semibold text-gray-800 mb-3">Quick Access</h3>
               <div className="grid grid-cols-2 gap-3">
                 {quickActions.map((action, index) => (
-                  <button
+                  <Link
                     key={index}
+                    to={action.name === 'Flash Sale' ? '/flash-sale' : 
+                        action.name === 'Daily Deals' ? '/daily-deals' :
+                        action.name === 'New Arrivals' ? '/new-arrivals' :
+                        action.name === 'Top Rated' ? '/best-sellers' : '/'}
                     className="flex items-center gap-2 p-3 rounded-lg border hover:bg-gray-50 transition-all"
                   >
                     <div className={`${action.color} p-2 rounded-full`}>
                       <action.icon className="w-4 h-4 text-white" />
                     </div>
                     <span className="text-sm font-medium">{action.name}</span>
-                  </button>
+                  </Link>
                 ))}
               </div>
             </div>
@@ -124,21 +129,22 @@ export const MobileMenu: React.FC = () => {
               <div className="space-y-1">
                 {menuCategories.map((category, index) => (
                   <div key={index} className="border-b border-gray-100 last:border-b-0">
-                    <button className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-all">
+                    <Link to="/categories" className="w-full flex items-center justify-between p-3 hover:bg-gray-50 transition-all">
                       <div className="flex items-center gap-3">
                         <category.icon className="w-5 h-5 text-gray-600" />
                         <span className="font-medium">{category.name}</span>
                       </div>
                       <ChevronRight className="w-4 h-4 text-gray-400" />
-                    </button>
+                    </Link>
                     <div className="pl-11 pb-2">
                       {category.items.map((item, itemIndex) => (
-                        <button
+                        <Link
                           key={itemIndex}
+                          to="/categories"
                           className="block w-full text-left py-1 text-sm text-gray-600 hover:text-blue-600 transition-colors"
                         >
                           {item}
-                        </button>
+                        </Link>
                       ))}
                     </div>
                   </div>
@@ -150,22 +156,22 @@ export const MobileMenu: React.FC = () => {
             <div className="p-4 border-b">
               <h3 className="font-semibold text-gray-800 mb-3">Account</h3>
               <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                <Link to="/wishlist" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <Heart className="w-5 h-5 text-gray-600" />
                   <span>Wishlist</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                </Link>
+                <Link to="/cart" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <ShoppingCart className="w-5 h-5 text-gray-600" />
                   <span>Cart (3)</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                </Link>
+                <Link to="/orders" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <Package className="w-5 h-5 text-gray-600" />
                   <span>Orders</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                </Link>
+                <Link to="/notifications" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <Bell className="w-5 h-5 text-gray-600" />
                   <span>Notifications</span>
-                </button>
+                </Link>
               </div>
             </div>
 
@@ -173,18 +179,18 @@ export const MobileMenu: React.FC = () => {
             <div className="p-4">
               <h3 className="font-semibold text-gray-800 mb-3">Support</h3>
               <div className="space-y-2">
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                <Link to="/help" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <MessageSquare className="w-5 h-5 text-gray-600" />
                   <span>Help Center</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                </Link>
+                <Link to="/contact" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <Headphones className="w-5 h-5 text-gray-600" />
                   <span>Contact Us</span>
-                </button>
-                <button className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
+                </Link>
+                <Link to="/store-locator" className="w-full flex items-center gap-3 p-3 rounded-lg hover:bg-gray-50 transition-all">
                   <MapPin className="w-5 h-5 text-gray-600" />
                   <span>Store Locator</span>
-                </button>
+                </Link>
               </div>
             </div>
           </div>

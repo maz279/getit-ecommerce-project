@@ -7111,6 +7111,99 @@ export type Database = {
           },
         ]
       }
+      microservice_configs: {
+        Row: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at: string
+          created_by: string | null
+          environment: string
+          id: string
+          is_encrypted: boolean
+          is_sensitive: boolean
+          service_name: string
+          updated_at: string
+          version: number
+        }
+        Insert: {
+          config_key: string
+          config_type: string
+          config_value: Json
+          created_at?: string
+          created_by?: string | null
+          environment: string
+          id?: string
+          is_encrypted?: boolean
+          is_sensitive?: boolean
+          service_name: string
+          updated_at?: string
+          version?: number
+        }
+        Update: {
+          config_key?: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string
+          created_by?: string | null
+          environment?: string
+          id?: string
+          is_encrypted?: boolean
+          is_sensitive?: boolean
+          service_name?: string
+          updated_at?: string
+          version?: number
+        }
+        Relationships: []
+      }
+      microservices_registry: {
+        Row: {
+          configuration: Json
+          created_at: string
+          dependencies: Json
+          endpoint_url: string
+          health_check_url: string
+          id: string
+          last_health_check: string | null
+          resource_limits: Json
+          service_name: string
+          service_type: string
+          status: string
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string
+          dependencies?: Json
+          endpoint_url: string
+          health_check_url: string
+          id?: string
+          last_health_check?: string | null
+          resource_limits?: Json
+          service_name: string
+          service_type: string
+          status?: string
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string
+          dependencies?: Json
+          endpoint_url?: string
+          health_check_url?: string
+          id?: string
+          last_health_check?: string | null
+          resource_limits?: Json
+          service_name?: string
+          service_type?: string
+          status?: string
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
       ml_recommendations: {
         Row: {
           confidence_score: number | null
@@ -7373,6 +7466,87 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      notification_service_channels: {
+        Row: {
+          channel_name: string
+          channel_type: string
+          configuration: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          priority: number
+          provider_name: string
+          rate_limits: Json
+          updated_at: string
+        }
+        Insert: {
+          channel_name: string
+          channel_type: string
+          configuration?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          provider_name: string
+          rate_limits?: Json
+          updated_at?: string
+        }
+        Update: {
+          channel_name?: string
+          channel_type?: string
+          configuration?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          priority?: number
+          provider_name?: string
+          rate_limits?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      notification_service_templates: {
+        Row: {
+          channel_type: string
+          content: string
+          created_at: string
+          id: string
+          is_active: boolean
+          language: string
+          subject: string | null
+          template_name: string
+          template_type: string
+          updated_at: string
+          variables: Json
+        }
+        Insert: {
+          channel_type: string
+          content: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          language?: string
+          subject?: string | null
+          template_name: string
+          template_type: string
+          updated_at?: string
+          variables?: Json
+        }
+        Update: {
+          channel_type?: string
+          content?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          language?: string
+          subject?: string | null
+          template_name?: string
+          template_type?: string
+          updated_at?: string
+          variables?: Json
+        }
+        Relationships: []
       }
       notification_subscriptions: {
         Row: {
@@ -7849,6 +8023,128 @@ export type Database = {
         }
         Relationships: []
       }
+      order_service_items: {
+        Row: {
+          created_at: string
+          id: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          status: string
+          total_price: number
+          unit_price: number
+          variant_sku: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          order_id: string
+          product_id: string
+          product_name: string
+          quantity: number
+          status?: string
+          total_price: number
+          unit_price: number
+          variant_sku?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          order_id?: string
+          product_id?: string
+          product_name?: string
+          quantity?: number
+          status?: string
+          total_price?: number
+          unit_price?: number
+          variant_sku?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_service_items_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "order_service_orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      order_service_orders: {
+        Row: {
+          billing_address: Json
+          created_at: string
+          currency: string
+          customer_id: string
+          customer_notes: string | null
+          discount_amount: number
+          fulfillment_status: string
+          id: string
+          metadata: Json
+          order_number: string
+          order_type: string
+          payment_status: string
+          shipping_address: Json
+          shipping_amount: number
+          status: string
+          subtotal: number
+          tax_amount: number
+          total_amount: number
+          updated_at: string
+          vendor_id: string
+          vendor_notes: string | null
+        }
+        Insert: {
+          billing_address: Json
+          created_at?: string
+          currency?: string
+          customer_id: string
+          customer_notes?: string | null
+          discount_amount?: number
+          fulfillment_status?: string
+          id?: string
+          metadata?: Json
+          order_number: string
+          order_type?: string
+          payment_status?: string
+          shipping_address: Json
+          shipping_amount?: number
+          status?: string
+          subtotal: number
+          tax_amount?: number
+          total_amount: number
+          updated_at?: string
+          vendor_id: string
+          vendor_notes?: string | null
+        }
+        Update: {
+          billing_address?: Json
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          customer_notes?: string | null
+          discount_amount?: number
+          fulfillment_status?: string
+          id?: string
+          metadata?: Json
+          order_number?: string
+          order_type?: string
+          payment_status?: string
+          shipping_address?: Json
+          shipping_amount?: number
+          status?: string
+          subtotal?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string
+          vendor_id?: string
+          vendor_notes?: string | null
+        }
+        Relationships: []
+      }
       order_status_events: {
         Row: {
           created_at: string | null
@@ -8136,6 +8432,87 @@ export type Database = {
           name?: string
           type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      payment_service_transactions: {
+        Row: {
+          amount: number
+          created_at: string
+          currency: string
+          customer_id: string
+          failure_reason: string | null
+          fees: number
+          gateway_name: string
+          gateway_response: Json | null
+          gateway_transaction_id: string | null
+          id: string
+          metadata: Json
+          net_amount: number
+          order_id: string | null
+          payment_method: string
+          platform_fee: number
+          processed_at: string | null
+          processing_fee: number
+          refund_amount: number
+          refund_status: string | null
+          status: string
+          transaction_id: string
+          updated_at: string
+          vendor_id: string | null
+          vendor_payout: number
+        }
+        Insert: {
+          amount: number
+          created_at?: string
+          currency?: string
+          customer_id: string
+          failure_reason?: string | null
+          fees?: number
+          gateway_name: string
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          metadata?: Json
+          net_amount: number
+          order_id?: string | null
+          payment_method: string
+          platform_fee?: number
+          processed_at?: string | null
+          processing_fee?: number
+          refund_amount?: number
+          refund_status?: string | null
+          status?: string
+          transaction_id: string
+          updated_at?: string
+          vendor_id?: string | null
+          vendor_payout?: number
+        }
+        Update: {
+          amount?: number
+          created_at?: string
+          currency?: string
+          customer_id?: string
+          failure_reason?: string | null
+          fees?: number
+          gateway_name?: string
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          metadata?: Json
+          net_amount?: number
+          order_id?: string | null
+          payment_method?: string
+          platform_fee?: number
+          processed_at?: string | null
+          processing_fee?: number
+          refund_amount?: number
+          refund_status?: string | null
+          status?: string
+          transaction_id?: string
+          updated_at?: string
+          vendor_id?: string | null
+          vendor_payout?: number
         }
         Relationships: []
       }
@@ -10010,6 +10387,122 @@ export type Database = {
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_service_catalog: {
+        Row: {
+          attributes: Json
+          category_path: string
+          created_at: string
+          description: string | null
+          id: string
+          is_featured: boolean | null
+          media: Json
+          name: string
+          seo_data: Json
+          sku: string
+          status: string
+          tags: string[] | null
+          updated_at: string
+          variants: Json
+          vendor_id: string
+        }
+        Insert: {
+          attributes?: Json
+          category_path: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_featured?: boolean | null
+          media?: Json
+          name: string
+          seo_data?: Json
+          sku: string
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          variants?: Json
+          vendor_id: string
+        }
+        Update: {
+          attributes?: Json
+          category_path?: string
+          created_at?: string
+          description?: string | null
+          id?: string
+          is_featured?: boolean | null
+          media?: Json
+          name?: string
+          seo_data?: Json
+          sku?: string
+          status?: string
+          tags?: string[] | null
+          updated_at?: string
+          variants?: Json
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      product_service_inventory: {
+        Row: {
+          available_quantity: number
+          cost_price: number | null
+          created_at: string
+          discount_price: number | null
+          id: string
+          last_restocked_at: string | null
+          minimum_stock_level: number
+          price_history: Json
+          product_id: string
+          reorder_point: number
+          reserved_quantity: number
+          selling_price: number
+          updated_at: string
+          variant_sku: string | null
+          warehouse_location: string | null
+        }
+        Insert: {
+          available_quantity?: number
+          cost_price?: number | null
+          created_at?: string
+          discount_price?: number | null
+          id?: string
+          last_restocked_at?: string | null
+          minimum_stock_level?: number
+          price_history?: Json
+          product_id: string
+          reorder_point?: number
+          reserved_quantity?: number
+          selling_price: number
+          updated_at?: string
+          variant_sku?: string | null
+          warehouse_location?: string | null
+        }
+        Update: {
+          available_quantity?: number
+          cost_price?: number | null
+          created_at?: string
+          discount_price?: number | null
+          id?: string
+          last_restocked_at?: string | null
+          minimum_stock_level?: number
+          price_history?: Json
+          product_id?: string
+          reorder_point?: number
+          reserved_quantity?: number
+          selling_price?: number
+          updated_at?: string
+          variant_sku?: string | null
+          warehouse_location?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_service_inventory_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "product_service_catalog"
             referencedColumns: ["id"]
           },
         ]
@@ -12475,6 +12968,48 @@ export type Database = {
           },
         ]
       }
+      service_communication_logs: {
+        Row: {
+          correlation_id: string | null
+          created_at: string
+          error_message: string | null
+          execution_time_ms: number | null
+          id: string
+          operation: string
+          request_data: Json | null
+          response_data: Json | null
+          source_service: string
+          status_code: number | null
+          target_service: string
+        }
+        Insert: {
+          correlation_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          operation: string
+          request_data?: Json | null
+          response_data?: Json | null
+          source_service: string
+          status_code?: number | null
+          target_service: string
+        }
+        Update: {
+          correlation_id?: string | null
+          created_at?: string
+          error_message?: string | null
+          execution_time_ms?: number | null
+          id?: string
+          operation?: string
+          request_data?: Json | null
+          response_data?: Json | null
+          source_service?: string
+          status_code?: number | null
+          target_service?: string
+        }
+        Relationships: []
+      }
       service_health_metrics: {
         Row: {
           active_connections: number
@@ -12525,6 +13060,113 @@ export type Database = {
           throughput_rps?: number
         }
         Relationships: []
+      }
+      shipping_service_partners: {
+        Row: {
+          api_config: Json
+          capabilities: Json
+          created_at: string
+          id: string
+          is_active: boolean
+          partner_code: string
+          partner_name: string
+          partner_type: string
+          pricing_structure: Json
+          service_areas: Json
+          sla_metrics: Json
+          updated_at: string
+        }
+        Insert: {
+          api_config?: Json
+          capabilities?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          partner_code: string
+          partner_name: string
+          partner_type: string
+          pricing_structure?: Json
+          service_areas?: Json
+          sla_metrics?: Json
+          updated_at?: string
+        }
+        Update: {
+          api_config?: Json
+          capabilities?: Json
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          partner_code?: string
+          partner_name?: string
+          partner_type?: string
+          pricing_structure?: Json
+          service_areas?: Json
+          sla_metrics?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      shipping_service_shipments: {
+        Row: {
+          actual_delivery: string | null
+          created_at: string
+          destination_address: Json
+          estimated_delivery: string | null
+          id: string
+          order_id: string
+          origin_address: Json
+          package_details: Json
+          partner_id: string
+          shipment_number: string
+          shipping_cost: number
+          status: string
+          tracking_events: Json
+          tracking_number: string | null
+          updated_at: string
+        }
+        Insert: {
+          actual_delivery?: string | null
+          created_at?: string
+          destination_address: Json
+          estimated_delivery?: string | null
+          id?: string
+          order_id: string
+          origin_address: Json
+          package_details?: Json
+          partner_id: string
+          shipment_number: string
+          shipping_cost: number
+          status?: string
+          tracking_events?: Json
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Update: {
+          actual_delivery?: string | null
+          created_at?: string
+          destination_address?: Json
+          estimated_delivery?: string | null
+          id?: string
+          order_id?: string
+          origin_address?: Json
+          package_details?: Json
+          partner_id?: string
+          shipment_number?: string
+          shipping_cost?: number
+          status?: string
+          tracking_events?: Json
+          tracking_number?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_service_shipments_partner_id_fkey"
+            columns: ["partner_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_service_partners"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       smart_reorder_suggestions: {
         Row: {
@@ -13808,6 +14450,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      user_service_profiles: {
+        Row: {
+          account_status: string | null
+          avatar_url: string | null
+          bio: string | null
+          created_at: string
+          display_name: string | null
+          id: string
+          kyc_status: string | null
+          last_active_at: string | null
+          notification_settings: Json
+          preferences: Json
+          privacy_settings: Json
+          updated_at: string
+          user_id: string
+          username: string | null
+        }
+        Insert: {
+          account_status?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          kyc_status?: string | null
+          last_active_at?: string | null
+          notification_settings?: Json
+          preferences?: Json
+          privacy_settings?: Json
+          updated_at?: string
+          user_id: string
+          username?: string | null
+        }
+        Update: {
+          account_status?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          kyc_status?: string | null
+          last_active_at?: string | null
+          notification_settings?: Json
+          preferences?: Json
+          privacy_settings?: Json
+          updated_at?: string
+          user_id?: string
+          username?: string | null
+        }
+        Relationships: []
       }
       user_sessions: {
         Row: {

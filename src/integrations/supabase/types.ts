@@ -1184,6 +1184,42 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_behavior_analytics: {
+        Row: {
+          behavior_data: Json | null
+          behavior_type: string
+          created_at: string
+          customer_id: string
+          id: string
+          product_id: string | null
+          recorded_at: string
+          session_id: string | null
+          vendor_id: string
+        }
+        Insert: {
+          behavior_data?: Json | null
+          behavior_type: string
+          created_at?: string
+          customer_id: string
+          id?: string
+          product_id?: string | null
+          recorded_at?: string
+          session_id?: string | null
+          vendor_id: string
+        }
+        Update: {
+          behavior_data?: Json | null
+          behavior_type?: string
+          created_at?: string
+          customer_id?: string
+          id?: string
+          product_id?: string | null
+          recorded_at?: string
+          session_id?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       dashboard_kpi_metrics: {
         Row: {
           comparison_value: number | null
@@ -1753,6 +1789,50 @@ export type Database = {
           },
         ]
       }
+      generated_reports: {
+        Row: {
+          expires_at: string | null
+          file_path: string | null
+          generated_at: string
+          id: string
+          report_data: Json
+          report_name: string
+          status: string
+          template_id: string | null
+          vendor_id: string
+        }
+        Insert: {
+          expires_at?: string | null
+          file_path?: string | null
+          generated_at?: string
+          id?: string
+          report_data: Json
+          report_name: string
+          status?: string
+          template_id?: string | null
+          vendor_id: string
+        }
+        Update: {
+          expires_at?: string | null
+          file_path?: string | null
+          generated_at?: string
+          id?: string
+          report_data?: Json
+          report_name?: string
+          status?: string
+          template_id?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "generated_reports_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_report_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       health_checks: {
         Row: {
           checks_data: Json | null
@@ -1957,6 +2037,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      inventory_forecasting: {
+        Row: {
+          algorithm_version: string | null
+          confidence_score: number | null
+          created_at: string
+          factors_considered: Json | null
+          forecast_date: string
+          forecast_period: string
+          id: string
+          predicted_demand: number
+          product_id: string
+          vendor_id: string
+        }
+        Insert: {
+          algorithm_version?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          factors_considered?: Json | null
+          forecast_date: string
+          forecast_period: string
+          id?: string
+          predicted_demand: number
+          product_id: string
+          vendor_id: string
+        }
+        Update: {
+          algorithm_version?: string | null
+          confidence_score?: number | null
+          created_at?: string
+          factors_considered?: Json | null
+          forecast_date?: string
+          forecast_period?: string
+          id?: string
+          predicted_demand?: number
+          product_id?: string
+          vendor_id?: string
+        }
+        Relationships: []
       }
       inventory_movements: {
         Row: {
@@ -2402,6 +2521,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      order_workflow_steps: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string
+          estimated_completion: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          order_id: string
+          started_at: string | null
+          step_name: string
+          step_status: string
+          updated_at: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_completion?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id: string
+          started_at?: string | null
+          step_name: string
+          step_status?: string
+          updated_at?: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string
+          estimated_completion?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id?: string
+          started_at?: string | null
+          step_name?: string
+          step_status?: string
+          updated_at?: string
+        }
+        Relationships: []
       }
       orders: {
         Row: {
@@ -3618,6 +3782,74 @@ export type Database = {
         }
         Relationships: []
       }
+      product_bundle_items: {
+        Row: {
+          bundle_id: string
+          created_at: string
+          id: string
+          product_id: string
+          quantity: number
+        }
+        Insert: {
+          bundle_id: string
+          created_at?: string
+          id?: string
+          product_id: string
+          quantity?: number
+        }
+        Update: {
+          bundle_id?: string
+          created_at?: string
+          id?: string
+          product_id?: string
+          quantity?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_bundle_items_bundle_id_fkey"
+            columns: ["bundle_id"]
+            isOneToOne: false
+            referencedRelation: "product_bundles"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_bundles: {
+        Row: {
+          bundle_description: string | null
+          bundle_name: string
+          bundle_price: number
+          created_at: string
+          discount_percentage: number | null
+          id: string
+          is_active: boolean | null
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          bundle_description?: string | null
+          bundle_name: string
+          bundle_price: number
+          created_at?: string
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          bundle_description?: string | null
+          bundle_name?: string
+          bundle_price?: number
+          created_at?: string
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       product_comparisons: {
         Row: {
           comparison_name: string | null
@@ -4368,6 +4600,39 @@ export type Database = {
           policy_name?: string
           policy_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      real_time_metrics: {
+        Row: {
+          created_at: string
+          expires_at: string | null
+          id: string
+          metric_key: string
+          metric_type: string
+          metric_value: Json
+          recorded_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metric_key: string
+          metric_type: string
+          metric_value: Json
+          recorded_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          expires_at?: string | null
+          id?: string
+          metric_key?: string
+          metric_type?: string
+          metric_value?: Json
+          recorded_at?: string
+          vendor_id?: string
         }
         Relationships: []
       }
@@ -6031,6 +6296,48 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_dashboard_widgets: {
+        Row: {
+          created_at: string
+          height: number
+          id: string
+          is_visible: boolean
+          position_x: number
+          position_y: number
+          updated_at: string
+          vendor_id: string
+          widget_config: Json
+          widget_type: string
+          width: number
+        }
+        Insert: {
+          created_at?: string
+          height?: number
+          id?: string
+          is_visible?: boolean
+          position_x?: number
+          position_y?: number
+          updated_at?: string
+          vendor_id: string
+          widget_config?: Json
+          widget_type: string
+          width?: number
+        }
+        Update: {
+          created_at?: string
+          height?: number
+          id?: string
+          is_visible?: boolean
+          position_x?: number
+          position_y?: number
+          updated_at?: string
+          vendor_id?: string
+          widget_config?: Json
+          widget_type?: string
+          width?: number
+        }
+        Relationships: []
+      }
       vendor_invoices: {
         Row: {
           billing_address: Json | null
@@ -6087,6 +6394,51 @@ export type Database = {
           tax_amount?: number | null
           total_amount?: number
           updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_notifications: {
+        Row: {
+          action_required: boolean | null
+          action_url: string | null
+          created_at: string
+          id: string
+          is_read: boolean | null
+          message: string
+          metadata: Json | null
+          notification_type: string
+          priority: string
+          read_at: string | null
+          title: string
+          vendor_id: string
+        }
+        Insert: {
+          action_required?: boolean | null
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message: string
+          metadata?: Json | null
+          notification_type: string
+          priority?: string
+          read_at?: string | null
+          title: string
+          vendor_id: string
+        }
+        Update: {
+          action_required?: boolean | null
+          action_url?: string | null
+          created_at?: string
+          id?: string
+          is_read?: boolean | null
+          message?: string
+          metadata?: Json | null
+          notification_type?: string
+          priority?: string
+          read_at?: string | null
+          title?: string
           vendor_id?: string
         }
         Relationships: []
@@ -6414,6 +6766,39 @@ export type Database = {
           product_quality_rating?: number | null
           total_reviews?: number | null
           updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_report_templates: {
+        Row: {
+          created_at: string
+          id: string
+          is_default: boolean | null
+          report_type: string
+          template_config: Json
+          template_name: string
+          updated_at: string
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          report_type: string
+          template_config?: Json
+          template_name: string
+          updated_at?: string
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          is_default?: boolean | null
+          report_type?: string
+          template_config?: Json
+          template_name?: string
+          updated_at?: string
           vendor_id?: string
         }
         Relationships: []

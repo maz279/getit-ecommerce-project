@@ -1,360 +1,340 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
-import { Resend } from "npm:resend@2.0.0"
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2.39.3";
+import { Resend } from "npm:resend@2.0.0";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-}
+};
+
+const supabase = createClient(
+  Deno.env.get('SUPABASE_URL') ?? '',
+  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+);
+
+const resend = new Resend(Deno.env.get('RESEND_API_KEY'));
 
 interface NotificationRequest {
-  type: 'email' | 'sms' | 'push' | 'in-app'
-  recipients: string[]
-  subject?: string
-  message: string
-  template?: string
-  data?: any
-  priority?: 'low' | 'normal' | 'high' | 'urgent'
+  type: 'email' | 'sms' | 'push' | 'in_app';
+  recipient: string;
+  template: string;
+  data: any;
+  priority?: 'low' | 'medium' | 'high';
 }
 
-interface EmailTemplate {
-  id: string
-  name: string
-  subject: string
-  html_content: string
-  variables: string[]
-}
-
-serve(async (req) => {
-  if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+// Email Templates
+const emailTemplates = {
+  order_confirmation: {
+    subject: 'Order Confirmed - #{orderId}',
+    html: `
+      <h1>Order Confirmation</h1>
+      <p>Dear {{customerName}},</p>
+      <p>Your order #{{orderId}} has been confirmed.</p>
+      <p>Total Amount: {{amount}} {{currency}}</p>
+      <p>Expected Delivery: {{deliveryDate}}</p>
+      <p>Thank you for shopping with us!</p>
+    `
+  },
+  vendor_payout: {
+    subject: 'Payout Processed - {{amount}} {{currency}}',
+    html: `
+      <h1>Payout Processed</h1>
+      <p>Dear {{vendorName}},</p>
+      <p>Your payout of {{amount}} {{currency}} has been processed.</p>
+      <p>Transaction ID: {{transactionId}}</p>
+      <p>Processing Date: {{processedDate}}</p>
+    `
+  },
+  payment_failed: {
+    subject: 'Payment Failed - Order #{{orderId}}',
+    html: `
+      <h1>Payment Failed</h1>
+      <p>Dear {{customerName}},</p>
+      <p>We couldn't process your payment for order #{{orderId}}.</p>
+      <p>Please try again or contact support.</p>
+    `
+  },
+  low_stock_alert: {
+    subject: 'Low Stock Alert - {{productName}}',
+    html: `
+      <h1>Low Stock Alert</h1>
+      <p>Dear {{vendorName}},</p>
+      <p>Your product "{{productName}}" is running low on stock.</p>
+      <p>Current Stock: {{currentStock}}</p>
+      <p>Minimum Level: {{minimumLevel}}</p>
+      <p>Please restock soon to avoid stockouts.</p>
+    `
   }
+};
 
+// SMS Templates
+const smsTemplates = {
+  order_otp: 'Your order OTP is: {{otp}}. Valid for 10 minutes.',
+  delivery_update: 'Your order #{{orderId}} is {{status}}. Track: {{trackingUrl}}',
+  payment_reminder: 'Payment pending for order #{{orderId}}. Amount: {{amount}} {{currency}}',
+  vendor_alert: 'Urgent: {{message}}. Login to dashboard for details.'
+};
+
+// Email Service
+async function sendEmail(recipient: string, template: string, data: any): Promise<any> {
+  const emailTemplate = emailTemplates[template as keyof typeof emailTemplates];
+  if (!emailTemplate) {
+    throw new Error(`Email template '${template}' not found`);
+  }
+  
+  let subject = emailTemplate.subject;
+  let html = emailTemplate.html;
+  
+  // Replace template variables
+  Object.keys(data).forEach(key => {
+    const placeholder = new RegExp(`{{${key}}}`, 'g');
+    subject = subject.replace(placeholder, data[key]);
+    html = html.replace(placeholder, data[key]);
+  });
+  
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
-
-    const url = new URL(req.url)
-    const action = url.pathname.split('/').pop()
-
-    switch (action) {
-      case 'send-notification':
-        return await sendNotification(req, supabaseClient)
-      case 'send-email':
-        return await sendEmail(req, supabaseClient)
-      case 'send-sms':
-        return await sendSMS(req, supabaseClient)
-      case 'send-push':
-        return await sendPushNotification(req, supabaseClient)
-      case 'create-template':
-        return await createTemplate(req, supabaseClient)
-      case 'bulk-notify':
-        return await bulkNotify(req, supabaseClient)
-      default:
-        return new Response(JSON.stringify({ error: 'Invalid action' }), {
-          status: 400,
-          headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-        })
-    }
+    const result = await resend.emails.send({
+      from: 'BDCommerce <noreply@bdcommerce.com>',
+      to: [recipient],
+      subject,
+      html
+    });
+    
+    // Log email
+    await supabase.from('notification_logs').insert({
+      type: 'email',
+      recipient,
+      template,
+      status: 'sent',
+      data,
+      external_id: result.data?.id
+    });
+    
+    return result;
   } catch (error) {
-    console.error('Notification system error:', error)
-    return new Response(JSON.stringify({ error: error.message }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    })
+    await supabase.from('notification_logs').insert({
+      type: 'email',
+      recipient,
+      template,
+      status: 'failed',
+      data,
+      error_message: error.message
+    });
+    throw error;
   }
-})
+}
 
-async function sendNotification(req: Request, supabaseClient: any) {
-  const notificationData: NotificationRequest = await req.json()
-  
-  const results = []
-  
-  switch (notificationData.type) {
-    case 'email':
-      const emailResult = await processEmailNotification(notificationData, supabaseClient)
-      results.push(emailResult)
-      break
-    case 'sms':
-      const smsResult = await processSMSNotification(notificationData, supabaseClient)
-      results.push(smsResult)
-      break
-    case 'push':
-      const pushResult = await processPushNotification(notificationData, supabaseClient)
-      results.push(pushResult)
-      break
-    case 'in-app':
-      const inAppResult = await processInAppNotification(notificationData, supabaseClient)
-      results.push(inAppResult)
-      break
-    default:
-      return new Response(JSON.stringify({ error: 'Invalid notification type' }), {
-        status: 400,
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-      })
+// SMS Service (Mock - replace with actual SMS provider)
+async function sendSMS(recipient: string, template: string, data: any): Promise<any> {
+  const smsTemplate = smsTemplates[template as keyof typeof smsTemplates];
+  if (!smsTemplate) {
+    throw new Error(`SMS template '${template}' not found`);
   }
-
-  // Log notification
-  await supabaseClient.from('notification_logs').insert({
-    type: notificationData.type,
-    recipients: notificationData.recipients,
-    subject: notificationData.subject,
-    message: notificationData.message,
-    template: notificationData.template,
-    priority: notificationData.priority || 'normal',
-    status: 'sent',
-    sent_at: new Date().toISOString()
-  })
-
-  return new Response(JSON.stringify({
+  
+  let message = smsTemplate;
+  
+  // Replace template variables
+  Object.keys(data).forEach(key => {
+    const placeholder = new RegExp(`{{${key}}}`, 'g');
+    message = message.replace(placeholder, data[key]);
+  });
+  
+  // Mock SMS sending - replace with actual provider (Twilio, etc.)
+  const mockResult = {
     success: true,
-    results
-  }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
-}
-
-async function processEmailNotification(notificationData: NotificationRequest, supabaseClient: any) {
-  const resend = new Resend(Deno.env.get('RESEND_API_KEY'))
+    messageId: `sms_${Date.now()}`,
+    status: 'sent'
+  };
   
-  let emailContent = notificationData.message
-  let emailSubject = notificationData.subject || 'Notification'
-
-  // If template is specified, load and process it
-  if (notificationData.template) {
-    const { data: template } = await supabaseClient
-      .from('email_templates')
-      .select('*')
-      .eq('name', notificationData.template)
-      .single()
-
-    if (template) {
-      emailContent = processTemplate(template.html_content, notificationData.data || {})
-      emailSubject = processTemplate(template.subject, notificationData.data || {})
-    }
-  }
-
-  const emailResults = []
-  
-  for (const recipient of notificationData.recipients) {
-    try {
-      const result = await resend.emails.send({
-        from: 'GetIt Platform <notifications@resend.dev>',
-        to: [recipient],
-        subject: emailSubject,
-        html: emailContent
-      })
-      
-      emailResults.push({ recipient, success: true, result })
-    } catch (error) {
-      emailResults.push({ recipient, success: false, error: error.message })
-    }
-  }
-
-  return { type: 'email', results: emailResults }
-}
-
-async function processSMSNotification(notificationData: NotificationRequest, supabaseClient: any) {
-  // Mock SMS integration for Bangladesh providers
-  // In production, integrate with SSL Wireless, Banglalink, Robi, etc.
-  
-  const smsResults = []
-  
-  for (const recipient of notificationData.recipients) {
-    try {
-      // Mock SMS sending
-      const result = await sendSMSViaBangladeshProvider(recipient, notificationData.message)
-      smsResults.push({ recipient, success: true, result })
-    } catch (error) {
-      smsResults.push({ recipient, success: false, error: error.message })
-    }
-  }
-
-  return { type: 'sms', results: smsResults }
-}
-
-async function processPushNotification(notificationData: NotificationRequest, supabaseClient: any) {
-  // Mock push notification using FCM
-  const pushResults = []
-  
-  for (const recipient of notificationData.recipients) {
-    try {
-      // Get user's FCM token
-      const { data: userDevice } = await supabaseClient
-        .from('user_devices')
-        .select('fcm_token')
-        .eq('user_id', recipient)
-        .single()
-
-      if (userDevice?.fcm_token) {
-        const result = await sendFCMNotification(userDevice.fcm_token, {
-          title: notificationData.subject || 'Notification',
-          body: notificationData.message,
-          data: notificationData.data
-        })
-        pushResults.push({ recipient, success: true, result })
-      } else {
-        pushResults.push({ recipient, success: false, error: 'No FCM token found' })
-      }
-    } catch (error) {
-      pushResults.push({ recipient, success: false, error: error.message })
-    }
-  }
-
-  return { type: 'push', results: pushResults }
-}
-
-async function processInAppNotification(notificationData: NotificationRequest, supabaseClient: any) {
-  const inAppResults = []
-  
-  for (const recipient of notificationData.recipients) {
-    try {
-      await supabaseClient.from('notifications').insert({
-        user_id: recipient,
-        title: notificationData.subject || 'Notification',
-        message: notificationData.message,
-        type: 'info',
-        metadata: notificationData.data || {},
-        read: false
-      })
-      
-      inAppResults.push({ recipient, success: true })
-    } catch (error) {
-      inAppResults.push({ recipient, success: false, error: error.message })
-    }
-  }
-
-  return { type: 'in-app', results: inAppResults }
-}
-
-function processTemplate(template: string, data: any): string {
-  let processed = template
-  
-  for (const [key, value] of Object.entries(data)) {
-    const regex = new RegExp(`{{\\s*${key}\\s*}}`, 'g')
-    processed = processed.replace(regex, String(value))
-  }
-  
-  return processed
-}
-
-async function sendSMSViaBangladeshProvider(phone: string, message: string) {
-  // Mock implementation for Bangladesh SMS providers
-  // In production, integrate with:
-  // - SSL Wireless
-  // - Banglalink
-  // - Robi
-  // - Grameenphone
-  
-  return {
-    message_id: `sms_${Date.now()}`,
-    status: 'sent',
-    provider: 'ssl_wireless',
-    phone,
-    message
-  }
-}
-
-async function sendFCMNotification(fcmToken: string, payload: any) {
-  // Mock FCM implementation
-  // In production, use Firebase Admin SDK
-  
-  return {
-    message_id: `fcm_${Date.now()}`,
-    status: 'sent',
-    token: fcmToken,
-    payload
-  }
-}
-
-async function sendEmail(req: Request, supabaseClient: any) {
-  const { to, subject, html, template, data } = await req.json()
-  
-  const notificationData: NotificationRequest = {
-    type: 'email',
-    recipients: Array.isArray(to) ? to : [to],
-    subject,
-    message: html,
-    template,
-    data
-  }
-  
-  return await processEmailNotification(notificationData, supabaseClient)
-}
-
-async function sendSMS(req: Request, supabaseClient: any) {
-  const { to, message } = await req.json()
-  
-  const notificationData: NotificationRequest = {
+  await supabase.from('notification_logs').insert({
     type: 'sms',
-    recipients: Array.isArray(to) ? to : [to],
-    message
-  }
+    recipient,
+    template,
+    status: 'sent',
+    data: { ...data, message },
+    external_id: mockResult.messageId
+  });
   
-  return await processSMSNotification(notificationData, supabaseClient)
+  return mockResult;
 }
 
-async function sendPushNotification(req: Request, supabaseClient: any) {
-  const { to, title, body, data } = await req.json()
+// Push Notification Service
+async function sendPushNotification(recipient: string, template: string, data: any): Promise<any> {
+  // Mock push notification - replace with actual service (FCM, APNS)
+  const notification = {
+    title: data.title || 'BDCommerce Notification',
+    body: data.message || 'You have a new notification',
+    data: data
+  };
   
-  const notificationData: NotificationRequest = {
-    type: 'push',
-    recipients: Array.isArray(to) ? to : [to],
-    subject: title,
-    message: body,
-    data
-  }
-  
-  return await processPushNotification(notificationData, supabaseClient)
-}
-
-async function createTemplate(req: Request, supabaseClient: any) {
-  const { name, subject, html_content, variables } = await req.json()
-  
-  const { data: template } = await supabaseClient.from('email_templates').insert({
-    name,
-    subject,
-    html_content,
-    variables: variables || [],
-    created_at: new Date().toISOString()
-  }).select().single()
-  
-  return new Response(JSON.stringify({
+  const mockResult = {
     success: true,
-    template
-  }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+    notificationId: `push_${Date.now()}`,
+    status: 'sent'
+  };
+  
+  await supabase.from('notification_logs').insert({
+    type: 'push',
+    recipient,
+    template,
+    status: 'sent',
+    data: notification,
+    external_id: mockResult.notificationId
+  });
+  
+  return mockResult;
 }
 
-async function bulkNotify(req: Request, supabaseClient: any) {
-  const { notifications } = await req.json()
+// In-App Notification Service
+async function sendInAppNotification(recipient: string, template: string, data: any): Promise<any> {
+  const notification = {
+    user_id: recipient,
+    type: template,
+    title: data.title,
+    message: data.message,
+    data: data,
+    read: false
+  };
   
-  const results = []
+  const { data: result, error } = await supabase
+    .from('in_app_notifications')
+    .insert(notification)
+    .select()
+    .single();
+    
+  if (error) {
+    throw error;
+  }
+  
+  // Send real-time notification
+  await supabase
+    .channel(`user_${recipient}`)
+    .send({
+      type: 'broadcast',
+      event: 'new_notification',
+      payload: result
+    });
+  
+  await supabase.from('notification_logs').insert({
+    type: 'in_app',
+    recipient,
+    template,
+    status: 'sent',
+    data: notification,
+    external_id: result.id
+  });
+  
+  return result;
+}
+
+// Bulk Notification Service
+async function sendBulkNotifications(notifications: NotificationRequest[]): Promise<any> {
+  const results = [];
   
   for (const notification of notifications) {
     try {
-      const result = await sendNotification(
-        new Request(req.url, {
-          method: 'POST',
-          body: JSON.stringify(notification),
-          headers: req.headers
-        }),
-        supabaseClient
-      )
+      let result;
+      switch (notification.type) {
+        case 'email':
+          result = await sendEmail(notification.recipient, notification.template, notification.data);
+          break;
+        case 'sms':
+          result = await sendSMS(notification.recipient, notification.template, notification.data);
+          break;
+        case 'push':
+          result = await sendPushNotification(notification.recipient, notification.template, notification.data);
+          break;
+        case 'in_app':
+          result = await sendInAppNotification(notification.recipient, notification.template, notification.data);
+          break;
+        default:
+          throw new Error(`Unsupported notification type: ${notification.type}`);
+      }
       
-      results.push({ success: true, result: await result.json() })
+      results.push({ ...notification, result, status: 'success' });
     } catch (error) {
-      results.push({ success: false, error: error.message })
+      results.push({ ...notification, error: error.message, status: 'failed' });
     }
   }
   
-  return new Response(JSON.stringify({
-    success: true,
-    results
-  }), {
-    headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-  })
+  return results;
 }
+
+const handler = async (req: Request): Promise<Response> => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: corsHeaders });
+  }
+
+  try {
+    const { action, ...data } = await req.json();
+    
+    switch (action) {
+      case 'send_single':
+        const { type, recipient, template, data: notificationData } = data;
+        let result;
+        
+        switch (type) {
+          case 'email':
+            result = await sendEmail(recipient, template, notificationData);
+            break;
+          case 'sms':
+            result = await sendSMS(recipient, template, notificationData);
+            break;
+          case 'push':
+            result = await sendPushNotification(recipient, template, notificationData);
+            break;
+          case 'in_app':
+            result = await sendInAppNotification(recipient, template, notificationData);
+            break;
+          default:
+            throw new Error(`Unsupported notification type: ${type}`);
+        }
+        
+        return new Response(JSON.stringify({
+          success: true,
+          result,
+          message: 'Notification sent successfully'
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+        
+      case 'send_bulk':
+        const bulkResults = await sendBulkNotifications(data.notifications);
+        return new Response(JSON.stringify({
+          success: true,
+          results: bulkResults,
+          message: 'Bulk notifications processed'
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+        
+      case 'get_templates':
+        return new Response(JSON.stringify({
+          email_templates: Object.keys(emailTemplates),
+          sms_templates: Object.keys(smsTemplates)
+        }), {
+          status: 200,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+        
+      default:
+        return new Response(JSON.stringify({ error: 'Invalid action' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        });
+    }
+  } catch (error) {
+    console.error('Notification service error:', error);
+    return new Response(JSON.stringify({ 
+      error: error.message,
+      success: false 
+    }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    });
+  }
+};
+
+serve(handler);

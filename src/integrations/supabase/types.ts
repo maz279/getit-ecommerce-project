@@ -134,6 +134,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_insights: {
+        Row: {
+          actionable_recommendations: Json | null
+          business_value_estimate: number | null
+          confidence_score: number
+          created_at: string | null
+          description: string
+          expires_at: string | null
+          generated_by: string
+          id: string
+          impact_level: string
+          insight_data: Json
+          insight_type: string
+          related_entities: Json | null
+          status: string | null
+          title: string
+        }
+        Insert: {
+          actionable_recommendations?: Json | null
+          business_value_estimate?: number | null
+          confidence_score: number
+          created_at?: string | null
+          description: string
+          expires_at?: string | null
+          generated_by: string
+          id?: string
+          impact_level: string
+          insight_data?: Json
+          insight_type: string
+          related_entities?: Json | null
+          status?: string | null
+          title: string
+        }
+        Update: {
+          actionable_recommendations?: Json | null
+          business_value_estimate?: number | null
+          confidence_score?: number
+          created_at?: string | null
+          description?: string
+          expires_at?: string | null
+          generated_by?: string
+          id?: string
+          impact_level?: string
+          insight_data?: Json
+          insight_type?: string
+          related_entities?: Json | null
+          status?: string | null
+          title?: string
+        }
+        Relationships: []
+      }
       ai_sales_forecasts: {
         Row: {
           algorithm_used: string
@@ -313,6 +364,101 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      anomaly_detection_rules: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          id: string
+          is_active: boolean | null
+          metric_type: string
+          rule_name: string
+          rule_type: string
+          severity_level: string
+          threshold_config: Json
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          id?: string
+          is_active?: boolean | null
+          metric_type: string
+          rule_name: string
+          rule_type: string
+          severity_level: string
+          threshold_config?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          id?: string
+          is_active?: boolean | null
+          metric_type?: string
+          rule_name?: string
+          rule_type?: string
+          severity_level?: string
+          threshold_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      anomaly_detections: {
+        Row: {
+          actual_value: number
+          anomaly_type: string
+          context_data: Json | null
+          detected_at: string | null
+          deviation_percentage: number | null
+          expected_value: number | null
+          id: string
+          metric_name: string
+          resolved_at: string | null
+          resolved_by: string | null
+          rule_id: string | null
+          severity_score: number
+          status: string | null
+        }
+        Insert: {
+          actual_value: number
+          anomaly_type: string
+          context_data?: Json | null
+          detected_at?: string | null
+          deviation_percentage?: number | null
+          expected_value?: number | null
+          id?: string
+          metric_name: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          rule_id?: string | null
+          severity_score: number
+          status?: string | null
+        }
+        Update: {
+          actual_value?: number
+          anomaly_type?: string
+          context_data?: Json | null
+          detected_at?: string | null
+          deviation_percentage?: number | null
+          expected_value?: number | null
+          id?: string
+          metric_name?: string
+          resolved_at?: string | null
+          resolved_by?: string | null
+          rule_id?: string | null
+          severity_score?: number
+          status?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "anomaly_detections_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "anomaly_detection_rules"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       api_gateway_logs: {
         Row: {
@@ -1578,6 +1724,154 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_journey_analytics: {
+        Row: {
+          churn_risk_score: number | null
+          conversion_events: Json | null
+          conversion_probability: number | null
+          created_at: string | null
+          current_stage_id: string | null
+          customer_id: string
+          customer_value_score: number | null
+          engagement_score: number | null
+          id: string
+          journey_end: string | null
+          journey_start: string
+          last_interaction: string | null
+          next_best_action: Json | null
+          stages_completed: Json | null
+          total_interactions: number | null
+          total_time_spent_minutes: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          churn_risk_score?: number | null
+          conversion_events?: Json | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          current_stage_id?: string | null
+          customer_id: string
+          customer_value_score?: number | null
+          engagement_score?: number | null
+          id?: string
+          journey_end?: string | null
+          journey_start: string
+          last_interaction?: string | null
+          next_best_action?: Json | null
+          stages_completed?: Json | null
+          total_interactions?: number | null
+          total_time_spent_minutes?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          churn_risk_score?: number | null
+          conversion_events?: Json | null
+          conversion_probability?: number | null
+          created_at?: string | null
+          current_stage_id?: string | null
+          customer_id?: string
+          customer_value_score?: number | null
+          engagement_score?: number | null
+          id?: string
+          journey_end?: string | null
+          journey_start?: string
+          last_interaction?: string | null
+          next_best_action?: Json | null
+          stages_completed?: Json | null
+          total_interactions?: number | null
+          total_time_spent_minutes?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_journey_analytics_current_stage_id_fkey"
+            columns: ["current_stage_id"]
+            isOneToOne: false
+            referencedRelation: "customer_journey_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_journey_events: {
+        Row: {
+          customer_id: string
+          device_info: Json | null
+          event_name: string
+          event_properties: Json | null
+          event_type: string
+          id: string
+          location_data: Json | null
+          processing_status: string | null
+          session_id: string | null
+          stage_id: string | null
+          timestamp: string | null
+        }
+        Insert: {
+          customer_id: string
+          device_info?: Json | null
+          event_name: string
+          event_properties?: Json | null
+          event_type: string
+          id?: string
+          location_data?: Json | null
+          processing_status?: string | null
+          session_id?: string | null
+          stage_id?: string | null
+          timestamp?: string | null
+        }
+        Update: {
+          customer_id?: string
+          device_info?: Json | null
+          event_name?: string
+          event_properties?: Json | null
+          event_type?: string
+          id?: string
+          location_data?: Json | null
+          processing_status?: string | null
+          session_id?: string | null
+          stage_id?: string | null
+          timestamp?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_journey_events_stage_id_fkey"
+            columns: ["stage_id"]
+            isOneToOne: false
+            referencedRelation: "customer_journey_stages"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_journey_stages: {
+        Row: {
+          conversion_goals: Json | null
+          created_at: string | null
+          description: string | null
+          expected_duration_days: number | null
+          id: string
+          stage_name: string
+          stage_order: number
+        }
+        Insert: {
+          conversion_goals?: Json | null
+          created_at?: string | null
+          description?: string | null
+          expected_duration_days?: number | null
+          id?: string
+          stage_name: string
+          stage_order: number
+        }
+        Update: {
+          conversion_goals?: Json | null
+          created_at?: string | null
+          description?: string | null
+          expected_duration_days?: number | null
+          id?: string
+          stage_name?: string
+          stage_order?: number
+        }
+        Relationships: []
+      }
       customer_lifetime_value_predictions: {
         Row: {
           clv_factors: Json | null
@@ -1857,6 +2151,125 @@ export type Database = {
             columns: ["vendor_id"]
             isOneToOne: false
             referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      dynamic_pricing_rules: {
+        Row: {
+          adjustment_factors: Json
+          base_price: number
+          category_id: string | null
+          competition_weight: number | null
+          created_at: string | null
+          created_by: string
+          demand_weight: number | null
+          id: string
+          inventory_weight: number | null
+          is_active: boolean | null
+          max_price: number
+          min_price: number
+          pricing_strategy: string
+          product_id: string | null
+          rule_name: string
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          adjustment_factors?: Json
+          base_price: number
+          category_id?: string | null
+          competition_weight?: number | null
+          created_at?: string | null
+          created_by: string
+          demand_weight?: number | null
+          id?: string
+          inventory_weight?: number | null
+          is_active?: boolean | null
+          max_price: number
+          min_price: number
+          pricing_strategy: string
+          product_id?: string | null
+          rule_name: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          adjustment_factors?: Json
+          base_price?: number
+          category_id?: string | null
+          competition_weight?: number | null
+          created_at?: string | null
+          created_by?: string
+          demand_weight?: number | null
+          id?: string
+          inventory_weight?: number | null
+          is_active?: boolean | null
+          max_price?: number
+          min_price?: number
+          pricing_strategy?: string
+          product_id?: string | null
+          rule_name?: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      dynamic_pricing_suggestions: {
+        Row: {
+          applied_at: string | null
+          applied_by: string | null
+          confidence_score: number
+          created_at: string | null
+          current_price: number
+          estimated_impact: Json | null
+          id: string
+          price_change_percentage: number
+          product_id: string
+          reasoning: Json
+          rule_id: string | null
+          status: string | null
+          suggested_price: number
+          valid_until: string
+        }
+        Insert: {
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence_score: number
+          created_at?: string | null
+          current_price: number
+          estimated_impact?: Json | null
+          id?: string
+          price_change_percentage: number
+          product_id: string
+          reasoning?: Json
+          rule_id?: string | null
+          status?: string | null
+          suggested_price: number
+          valid_until: string
+        }
+        Update: {
+          applied_at?: string | null
+          applied_by?: string | null
+          confidence_score?: number
+          created_at?: string | null
+          current_price?: number
+          estimated_impact?: Json | null
+          id?: string
+          price_change_percentage?: number
+          product_id?: string
+          reasoning?: Json
+          rule_id?: string | null
+          status?: string | null
+          suggested_price?: number
+          valid_until?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "dynamic_pricing_suggestions_rule_id_fkey"
+            columns: ["rule_id"]
+            isOneToOne: false
+            referencedRelation: "dynamic_pricing_rules"
             referencedColumns: ["id"]
           },
         ]
@@ -2926,6 +3339,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      inventory_predictions: {
+        Row: {
+          confidence_score: number
+          created_at: string | null
+          external_factors: Json | null
+          id: string
+          lead_time_days: number
+          predicted_demand: number
+          prediction_horizon: number
+          prediction_model: string
+          product_id: string
+          recommended_stock_level: number
+          reorder_point: number
+          seasonality_factor: number | null
+          trend_factor: number | null
+          valid_until: string
+          vendor_id: string
+        }
+        Insert: {
+          confidence_score: number
+          created_at?: string | null
+          external_factors?: Json | null
+          id?: string
+          lead_time_days: number
+          predicted_demand: number
+          prediction_horizon: number
+          prediction_model: string
+          product_id: string
+          recommended_stock_level: number
+          reorder_point: number
+          seasonality_factor?: number | null
+          trend_factor?: number | null
+          valid_until: string
+          vendor_id: string
+        }
+        Update: {
+          confidence_score?: number
+          created_at?: string | null
+          external_factors?: Json | null
+          id?: string
+          lead_time_days?: number
+          predicted_demand?: number
+          prediction_horizon?: number
+          prediction_model?: string
+          product_id?: string
+          recommended_stock_level?: number
+          reorder_point?: number
+          seasonality_factor?: number | null
+          trend_factor?: number | null
+          valid_until?: string
+          vendor_id?: string
+        }
+        Relationships: []
       }
       live_inventory_events: {
         Row: {

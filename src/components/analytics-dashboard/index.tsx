@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import BusinessIntelligence from './BusinessIntelligence';
+import BusinessIntelligence from './EnterpriseAnalyticsDashboard';
 import KPIMetrics from './KPIMetrics';
 import SalesForecasting from './SalesForecasting';
 import MarketInsights from './MarketInsights';
 import PerformanceMonitoring from './PerformanceMonitoring';
-import CustomReportBuilder from './reports/CustomReportBuilder';
-import AutomatedReports from './reports/AutomatedReports';
-import ReportExporter from './reports/ReportExporter';
+import { CustomReportBuilder } from './core/CustomReportBuilder';
+import { AutomatedReports } from './reports/AutomatedReports';
+import { ReportExporter } from './reports/ReportExporter';
 import { BarChart3, TrendingUp, Globe, Activity, FileText, Clock, Download } from 'lucide-react';
 
 const AdvancedAnalyticsDashboard: React.FC = () => {

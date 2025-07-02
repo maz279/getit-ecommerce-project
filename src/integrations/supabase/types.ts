@@ -3714,6 +3714,51 @@ export type Database = {
           },
         ]
       }
+      competitor_price_tracking: {
+        Row: {
+          competitor_availability: boolean | null
+          competitor_name: string
+          competitor_price: number
+          competitor_url: string | null
+          confidence_score: number | null
+          created_at: string | null
+          data_source: string | null
+          id: string
+          price_change_amount: number | null
+          price_change_percentage: number | null
+          product_id: string | null
+          tracking_date: string | null
+        }
+        Insert: {
+          competitor_availability?: boolean | null
+          competitor_name: string
+          competitor_price: number
+          competitor_url?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          price_change_amount?: number | null
+          price_change_percentage?: number | null
+          product_id?: string | null
+          tracking_date?: string | null
+        }
+        Update: {
+          competitor_availability?: boolean | null
+          competitor_name?: string
+          competitor_price?: number
+          competitor_url?: string | null
+          confidence_score?: number | null
+          created_at?: string | null
+          data_source?: string | null
+          id?: string
+          price_change_amount?: number | null
+          price_change_percentage?: number | null
+          product_id?: string | null
+          tracking_date?: string | null
+        }
+        Relationships: []
+      }
       compliance_frameworks: {
         Row: {
           audit_requirements: Json
@@ -3917,6 +3962,62 @@ export type Database = {
           vulnerability_policies?: Json | null
         }
         Relationships: []
+      }
+      content_localization: {
+        Row: {
+          content_id: string
+          content_type: string
+          created_at: string | null
+          human_reviewed: boolean | null
+          id: string
+          language_code: string
+          localized_content: Json
+          original_content: Json
+          region_id: string | null
+          reviewer_id: string | null
+          translation_confidence: number | null
+          translation_status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          content_id: string
+          content_type: string
+          created_at?: string | null
+          human_reviewed?: boolean | null
+          id?: string
+          language_code: string
+          localized_content: Json
+          original_content: Json
+          region_id?: string | null
+          reviewer_id?: string | null
+          translation_confidence?: number | null
+          translation_status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          content_id?: string
+          content_type?: string
+          created_at?: string | null
+          human_reviewed?: boolean | null
+          id?: string
+          language_code?: string
+          localized_content?: Json
+          original_content?: Json
+          region_id?: string | null
+          reviewer_id?: string | null
+          translation_confidence?: number | null
+          translation_status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_localization_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "geo_regions"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       content_optimization_cache: {
         Row: {
@@ -4749,6 +4850,54 @@ export type Database = {
         }
         Relationships: []
       }
+      demand_analytics: {
+        Row: {
+          analytics_date: string | null
+          cart_additions: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          demand_score: number | null
+          demand_trend: string | null
+          id: string
+          product_id: string | null
+          purchase_count: number | null
+          search_frequency: number | null
+          time_period: string | null
+          view_count: number | null
+          wishlist_additions: number | null
+        }
+        Insert: {
+          analytics_date?: string | null
+          cart_additions?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          demand_score?: number | null
+          demand_trend?: string | null
+          id?: string
+          product_id?: string | null
+          purchase_count?: number | null
+          search_frequency?: number | null
+          time_period?: string | null
+          view_count?: number | null
+          wishlist_additions?: number | null
+        }
+        Update: {
+          analytics_date?: string | null
+          cart_additions?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          demand_score?: number | null
+          demand_trend?: string | null
+          id?: string
+          product_id?: string | null
+          purchase_count?: number | null
+          search_frequency?: number | null
+          time_period?: string | null
+          view_count?: number | null
+          wishlist_additions?: number | null
+        }
+        Relationships: []
+      }
       demand_forecasts: {
         Row: {
           algorithm_version: string | null
@@ -4992,6 +5141,48 @@ export type Database = {
           status?: string | null
           tags?: Json | null
           trace_id?: string
+        }
+        Relationships: []
+      }
+      dynamic_pricing_models: {
+        Row: {
+          configuration: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          max_price_change_percent: number | null
+          min_margin: number | null
+          model_name: string
+          model_type: string
+          pricing_frequency: string | null
+          target_margin: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_price_change_percent?: number | null
+          min_margin?: number | null
+          model_name: string
+          model_type: string
+          pricing_frequency?: string | null
+          target_margin?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_price_change_percent?: number | null
+          min_margin?: number | null
+          model_name?: string
+          model_type?: string
+          pricing_frequency?: string | null
+          target_margin?: number | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -6383,6 +6574,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      geo_regions: {
+        Row: {
+          continent: string
+          country_code: string
+          created_at: string | null
+          currency_code: string
+          id: string
+          is_active: boolean | null
+          primary_language: string | null
+          region_code: string
+          region_name: string
+          regulatory_requirements: Json
+          shipping_zones: Json
+          supported_languages: Json
+          tax_configuration: Json
+          timezone: string
+        }
+        Insert: {
+          continent: string
+          country_code: string
+          created_at?: string | null
+          currency_code?: string
+          id?: string
+          is_active?: boolean | null
+          primary_language?: string | null
+          region_code: string
+          region_name: string
+          regulatory_requirements?: Json
+          shipping_zones?: Json
+          supported_languages?: Json
+          tax_configuration?: Json
+          timezone: string
+        }
+        Update: {
+          continent?: string
+          country_code?: string
+          created_at?: string | null
+          currency_code?: string
+          id?: string
+          is_active?: boolean | null
+          primary_language?: string | null
+          region_code?: string
+          region_name?: string
+          regulatory_requirements?: Json
+          shipping_zones?: Json
+          supported_languages?: Json
+          tax_configuration?: Json
+          timezone?: string
+        }
+        Relationships: []
       }
       geographic_routing_rules: {
         Row: {
@@ -11122,6 +11364,77 @@ export type Database = {
           },
         ]
       }
+      price_optimization_results: {
+        Row: {
+          applied_at: string | null
+          approved_by: string | null
+          competitor_price_factor: number | null
+          confidence_score: number | null
+          created_at: string | null
+          current_price: number
+          demand_factor: number | null
+          expected_conversion_impact: number | null
+          expected_revenue_impact: number | null
+          expires_at: string | null
+          id: string
+          inventory_factor: number | null
+          optimization_reason: string
+          pricing_model_id: string | null
+          product_id: string | null
+          seasonality_factor: number | null
+          status: string | null
+          suggested_price: number
+        }
+        Insert: {
+          applied_at?: string | null
+          approved_by?: string | null
+          competitor_price_factor?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          current_price: number
+          demand_factor?: number | null
+          expected_conversion_impact?: number | null
+          expected_revenue_impact?: number | null
+          expires_at?: string | null
+          id?: string
+          inventory_factor?: number | null
+          optimization_reason: string
+          pricing_model_id?: string | null
+          product_id?: string | null
+          seasonality_factor?: number | null
+          status?: string | null
+          suggested_price: number
+        }
+        Update: {
+          applied_at?: string | null
+          approved_by?: string | null
+          competitor_price_factor?: number | null
+          confidence_score?: number | null
+          created_at?: string | null
+          current_price?: number
+          demand_factor?: number | null
+          expected_conversion_impact?: number | null
+          expected_revenue_impact?: number | null
+          expires_at?: string | null
+          id?: string
+          inventory_factor?: number | null
+          optimization_reason?: string
+          pricing_model_id?: string | null
+          product_id?: string | null
+          seasonality_factor?: number | null
+          status?: string | null
+          suggested_price?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_optimization_results_pricing_model_id_fkey"
+            columns: ["pricing_model_id"]
+            isOneToOne: false
+            referencedRelation: "dynamic_pricing_models"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       price_optimizations: {
         Row: {
           competitor_prices: Json | null
@@ -13151,6 +13464,68 @@ export type Database = {
         }
         Relationships: []
       }
+      regional_inventory: {
+        Row: {
+          available_stock: number | null
+          created_at: string | null
+          current_stock: number
+          id: string
+          last_restocked: string | null
+          lead_time_days: number | null
+          max_stock_level: number | null
+          product_id: string | null
+          region_id: string | null
+          regional_pricing: Json
+          reorder_point: number | null
+          reserved_stock: number
+          shipping_options: Json
+          updated_at: string | null
+          warehouse_id: string | null
+        }
+        Insert: {
+          available_stock?: number | null
+          created_at?: string | null
+          current_stock?: number
+          id?: string
+          last_restocked?: string | null
+          lead_time_days?: number | null
+          max_stock_level?: number | null
+          product_id?: string | null
+          region_id?: string | null
+          regional_pricing?: Json
+          reorder_point?: number | null
+          reserved_stock?: number
+          shipping_options?: Json
+          updated_at?: string | null
+          warehouse_id?: string | null
+        }
+        Update: {
+          available_stock?: number | null
+          created_at?: string | null
+          current_stock?: number
+          id?: string
+          last_restocked?: string | null
+          lead_time_days?: number | null
+          max_stock_level?: number | null
+          product_id?: string | null
+          region_id?: string | null
+          regional_pricing?: Json
+          reorder_point?: number | null
+          reserved_stock?: number
+          shipping_options?: Json
+          updated_at?: string | null
+          warehouse_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "regional_inventory_region_id_fkey"
+            columns: ["region_id"]
+            isOneToOne: false
+            referencedRelation: "geo_regions"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       report_executions: {
         Row: {
           created_at: string | null
@@ -14067,6 +14442,45 @@ export type Database = {
         }
         Relationships: []
       }
+      search_personalization: {
+        Row: {
+          brand_preferences: Json
+          category_weights: Json
+          created_at: string | null
+          id: string
+          last_updated: string | null
+          personalization_score: number | null
+          price_sensitivity: number | null
+          quality_preference: number | null
+          search_preferences: Json
+          user_id: string | null
+        }
+        Insert: {
+          brand_preferences?: Json
+          category_weights?: Json
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          personalization_score?: number | null
+          price_sensitivity?: number | null
+          quality_preference?: number | null
+          search_preferences?: Json
+          user_id?: string | null
+        }
+        Update: {
+          brand_preferences?: Json
+          category_weights?: Json
+          created_at?: string | null
+          id?: string
+          last_updated?: string | null
+          personalization_score?: number | null
+          price_sensitivity?: number | null
+          quality_preference?: number | null
+          search_preferences?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       search_queries: {
         Row: {
           clicked_product_id: string | null
@@ -14101,6 +14515,57 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      search_result_optimization: {
+        Row: {
+          clicked_results: Json
+          device_type: string | null
+          geo_location: Json | null
+          id: string
+          optimization_score: number | null
+          personalization_applied: boolean | null
+          purchased_results: Json
+          relevance_feedback: Json | null
+          result_ranking_algorithm: string | null
+          results_shown: Json
+          search_query: string
+          search_timestamp: string | null
+          session_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          clicked_results?: Json
+          device_type?: string | null
+          geo_location?: Json | null
+          id?: string
+          optimization_score?: number | null
+          personalization_applied?: boolean | null
+          purchased_results?: Json
+          relevance_feedback?: Json | null
+          result_ranking_algorithm?: string | null
+          results_shown?: Json
+          search_query: string
+          search_timestamp?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          clicked_results?: Json
+          device_type?: string | null
+          geo_location?: Json | null
+          id?: string
+          optimization_score?: number | null
+          personalization_applied?: boolean | null
+          purchased_results?: Json
+          relevance_feedback?: Json | null
+          result_ranking_algorithm?: string | null
+          results_shown?: Json
+          search_query?: string
+          search_timestamp?: string | null
+          session_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       security_context_analysis: {
         Row: {
@@ -14227,6 +14692,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      semantic_search_vectors: {
+        Row: {
+          content_id: string
+          content_text: string
+          content_type: string
+          created_at: string | null
+          id: string
+          language: string | null
+          model_version: string | null
+          updated_at: string | null
+          vector_embedding: string | null
+        }
+        Insert: {
+          content_id: string
+          content_text: string
+          content_type: string
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          model_version?: string | null
+          updated_at?: string | null
+          vector_embedding?: string | null
+        }
+        Update: {
+          content_id?: string
+          content_text?: string
+          content_type?: string
+          created_at?: string | null
+          id?: string
+          language?: string | null
+          model_version?: string | null
+          updated_at?: string | null
+          vector_embedding?: string | null
+        }
+        Relationships: []
       }
       service_communication_logs: {
         Row: {
@@ -16938,6 +17439,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      visual_search_index: {
+        Row: {
+          category_predictions: Json
+          color_palette: Json
+          created_at: string | null
+          id: string
+          image_hash: string
+          image_url: string
+          processing_status: string | null
+          product_id: string | null
+          similarity_vectors: string | null
+          style_tags: Json
+          updated_at: string | null
+          visual_features: Json
+        }
+        Insert: {
+          category_predictions?: Json
+          color_palette?: Json
+          created_at?: string | null
+          id?: string
+          image_hash: string
+          image_url: string
+          processing_status?: string | null
+          product_id?: string | null
+          similarity_vectors?: string | null
+          style_tags?: Json
+          updated_at?: string | null
+          visual_features?: Json
+        }
+        Update: {
+          category_predictions?: Json
+          color_palette?: Json
+          created_at?: string | null
+          id?: string
+          image_hash?: string
+          image_url?: string
+          processing_status?: string | null
+          product_id?: string | null
+          similarity_vectors?: string | null
+          style_tags?: Json
+          updated_at?: string | null
+          visual_features?: Json
+        }
+        Relationships: []
       }
       voice_search_logs: {
         Row: {

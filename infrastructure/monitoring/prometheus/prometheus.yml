@@ -1,9 +1,13 @@
 global:
   scrape_interval: 15s
   evaluation_interval: 15s
+  external_labels:
+    cluster: 'getit-production'
+    region: 'ap-southeast-1'
 
 rule_files:
-  - "alert-rules.yml"
+  - "alert-rules/*.yml"
+  - "recording-rules/*.yml"
 
 alerting:
   alertmanagers:
@@ -12,35 +16,27 @@ alerting:
           - alertmanager:9093
 
 scrape_configs:
-  - job_name: 'prometheus'
-    static_configs:
-      - targets: ['localhost:9090']
-
-  - job_name: 'node-exporter'
-    static_configs:
-      - targets: ['node-exporter:9100']
-
-  - job_name: 'redis-exporter'
-    static_configs:
-      - targets: ['redis-exporter:9121']
-
-  - job_name: 'bdcommerce-api'
-    static_configs:
-      - targets: ['host.docker.internal:3000']
-    metrics_path: '/metrics'
-    scrape_interval: 30s
-
-  - job_name: 'supabase-edge-functions'
-    static_configs:
-      - targets: ['bbgppsjmspimrfowytf.supabase.co']
-    metrics_path: '/rest/v1/health'
+  # Kubernetes API Server
+  - job_name: 'kubernetes-apiservers'
+    kubernetes_sd_configs:
+    - role: endpoints
     scheme: https
-    bearer_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZ3Bwc2ptc3BteW1yZm93eXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTUzNTcsImV4cCI6MjA2NTY3MTM1N30.qk_wrVRHkJh-oXBbxFWnZwfGoZmdBK35Ce7bBoRQ0To'
+    tls_config:
+      ca_file: /var/run/secrets/kubernetes.io/serviceaccount/ca.crt
+    bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
 
-  - job_name: 'platform-monitoring'
+  # Core Services
+  - job_name: 'api-gateway'
+    kubernetes_sd_configs:
+    - role: endpoints
+    relabel_configs:
+    - source_labels: [__meta_kubernetes_service_name]
+      action: keep
+      regex: api-gateway-service
+
+  # Bangladesh Payment Gateways
+  - job_name: 'bkash-monitoring'
     static_configs:
-      - targets: ['bbgppsjmspimrfowytf.supabase.co']
-    metrics_path: '/functions/v1/platform-monitoring'
-    scheme: https
-    bearer_token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZ3Bwc2ptc3BteW1yZm93eXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTUzNTcsImV4cCI6MjA2NTY3MTM1N30.qk_wrVRHkJh-oXBbxFWnZwfGoZmdBK35Ce7bBoRQ0To'
+    - targets: ['bkash-monitor:8080']
     scrape_interval: 60s
+    metrics_path: '/metrics/bkash'

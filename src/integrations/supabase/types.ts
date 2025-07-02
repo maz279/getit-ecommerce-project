@@ -1174,6 +1174,39 @@ export type Database = {
         }
         Relationships: []
       }
+      db_connection_pool_stats: {
+        Row: {
+          active_connections: number
+          avg_response_time_ms: number
+          id: string
+          idle_connections: number
+          last_updated: string
+          max_connections: number
+          pool_name: string
+          total_requests: number
+        }
+        Insert: {
+          active_connections?: number
+          avg_response_time_ms?: number
+          id?: string
+          idle_connections?: number
+          last_updated?: string
+          max_connections?: number
+          pool_name: string
+          total_requests?: number
+        }
+        Update: {
+          active_connections?: number
+          avg_response_time_ms?: number
+          id?: string
+          idle_connections?: number
+          last_updated?: string
+          max_connections?: number
+          pool_name?: string
+          total_requests?: number
+        }
+        Relationships: []
+      }
       demand_forecasts: {
         Row: {
           algorithm_version: string | null
@@ -1230,6 +1263,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      enhanced_rate_limits: {
+        Row: {
+          created_at: string
+          endpoint: string
+          id: string
+          key_type: string
+          key_value: string
+          max_requests: number
+          requests_count: number
+          window_size_ms: number
+          window_start: string
+        }
+        Insert: {
+          created_at?: string
+          endpoint: string
+          id?: string
+          key_type: string
+          key_value: string
+          max_requests?: number
+          requests_count?: number
+          window_size_ms?: number
+          window_start?: string
+        }
+        Update: {
+          created_at?: string
+          endpoint?: string
+          id?: string
+          key_type?: string
+          key_value?: string
+          max_requests?: number
+          requests_count?: number
+          window_size_ms?: number
+          window_start?: string
+        }
+        Relationships: []
       }
       error_tracking: {
         Row: {
@@ -3752,6 +3821,42 @@ export type Database = {
           },
         ]
       }
+      query_performance_logs: {
+        Row: {
+          cache_hit: boolean | null
+          created_at: string
+          endpoint: string | null
+          execution_time_ms: number
+          id: string
+          query_hash: string
+          query_type: string
+          rows_affected: number | null
+          user_id: string | null
+        }
+        Insert: {
+          cache_hit?: boolean | null
+          created_at?: string
+          endpoint?: string | null
+          execution_time_ms: number
+          id?: string
+          query_hash: string
+          query_type: string
+          rows_affected?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          cache_hit?: boolean | null
+          created_at?: string
+          endpoint?: string | null
+          execution_time_ms?: number
+          id?: string
+          query_hash?: string
+          query_type?: string
+          rows_affected?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       quick_actions_log: {
         Row: {
           action_name: string
@@ -5899,6 +6004,16 @@ export type Database = {
           net_commission: number
         }[]
       }
+      check_enhanced_rate_limit: {
+        Args: {
+          p_key_type: string
+          p_key_value: string
+          p_endpoint: string
+          p_max_requests?: number
+          p_window_size_ms?: number
+        }
+        Returns: Json
+      }
       clean_expired_data: {
         Args: Record<PropertyKey, never>
         Returns: undefined
@@ -5907,9 +6022,25 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      database_health_check: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       is_admin_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      log_query_performance: {
+        Args: {
+          p_query_hash: string
+          p_query_type: string
+          p_execution_time_ms: number
+          p_rows_affected?: number
+          p_cache_hit?: boolean
+          p_user_id?: string
+          p_endpoint?: string
+        }
+        Returns: undefined
       }
       process_payout_batch: {
         Args: { p_batch_id: string; p_processor_id: string }

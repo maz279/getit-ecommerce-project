@@ -584,6 +584,98 @@ export type Database = {
           },
         ]
       }
+      chat_conversation_messages: {
+        Row: {
+          attachments: Json | null
+          conversation_id: string | null
+          created_at: string | null
+          id: string
+          is_read: boolean | null
+          message_content: string
+          message_type: string | null
+          metadata: Json | null
+          read_at: string | null
+          sender_id: string | null
+          sender_type: string
+        }
+        Insert: {
+          attachments?: Json | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message_content: string
+          message_type?: string | null
+          metadata?: Json | null
+          read_at?: string | null
+          sender_id?: string | null
+          sender_type: string
+        }
+        Update: {
+          attachments?: Json | null
+          conversation_id?: string | null
+          created_at?: string | null
+          id?: string
+          is_read?: boolean | null
+          message_content?: string
+          message_type?: string | null
+          metadata?: Json | null
+          read_at?: string | null
+          sender_id?: string | null
+          sender_type?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_conversation_messages_conversation_id_fkey"
+            columns: ["conversation_id"]
+            isOneToOne: false
+            referencedRelation: "chat_conversations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chat_conversations: {
+        Row: {
+          assigned_agent: string | null
+          closed_at: string | null
+          conversation_type: string
+          created_at: string | null
+          id: string
+          metadata: Json | null
+          participants: Json
+          priority: string | null
+          status: string | null
+          subject: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          assigned_agent?: string | null
+          closed_at?: string | null
+          conversation_type: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          participants?: Json
+          priority?: string | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          assigned_agent?: string | null
+          closed_at?: string | null
+          conversation_type?: string
+          created_at?: string | null
+          id?: string
+          metadata?: Json | null
+          participants?: Json
+          priority?: string | null
+          status?: string | null
+          subject?: string | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       chat_messages: {
         Row: {
           created_at: string
@@ -1580,6 +1672,108 @@ export type Database = {
         }
         Relationships: []
       }
+      flash_sale_products: {
+        Row: {
+          created_at: string | null
+          flash_sale_id: string | null
+          id: string
+          original_price: number
+          product_id: string | null
+          quantity_limit: number | null
+          sale_price: number
+          sold_quantity: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          flash_sale_id?: string | null
+          id?: string
+          original_price: number
+          product_id?: string | null
+          quantity_limit?: number | null
+          sale_price: number
+          sold_quantity?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          flash_sale_id?: string | null
+          id?: string
+          original_price?: number
+          product_id?: string | null
+          quantity_limit?: number | null
+          sale_price?: number
+          sold_quantity?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "flash_sale_products_flash_sale_id_fkey"
+            columns: ["flash_sale_id"]
+            isOneToOne: false
+            referencedRelation: "flash_sales"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "flash_sale_products_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      flash_sales: {
+        Row: {
+          created_at: string | null
+          created_by: string
+          description: string | null
+          discount_amount: number | null
+          discount_percentage: number | null
+          end_time: string
+          id: string
+          max_discount_amount: number | null
+          min_order_amount: number | null
+          sold_quantity: number | null
+          start_time: string
+          status: string | null
+          title: string
+          total_quantity: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          created_by: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          end_time: string
+          id?: string
+          max_discount_amount?: number | null
+          min_order_amount?: number | null
+          sold_quantity?: number | null
+          start_time: string
+          status?: string | null
+          title: string
+          total_quantity?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          created_by?: string
+          description?: string | null
+          discount_amount?: number | null
+          discount_percentage?: number | null
+          end_time?: string
+          id?: string
+          max_discount_amount?: number | null
+          min_order_amount?: number | null
+          sold_quantity?: number | null
+          start_time?: string
+          status?: string | null
+          title?: string
+          total_quantity?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       fraud_alerts: {
         Row: {
           alert_type: string
@@ -2281,6 +2475,77 @@ export type Database = {
           tracking_events?: Json | null
           tracking_number?: string | null
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      live_product_views: {
+        Row: {
+          current_viewers: number | null
+          id: string
+          last_updated: string | null
+          peak_concurrent_viewers: number | null
+          product_id: string | null
+          total_views_today: number | null
+          total_views_week: number | null
+        }
+        Insert: {
+          current_viewers?: number | null
+          id?: string
+          last_updated?: string | null
+          peak_concurrent_viewers?: number | null
+          product_id?: string | null
+          total_views_today?: number | null
+          total_views_week?: number | null
+        }
+        Update: {
+          current_viewers?: number | null
+          id?: string
+          last_updated?: string | null
+          peak_concurrent_viewers?: number | null
+          product_id?: string | null
+          total_views_today?: number | null
+          total_views_week?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "live_product_views_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: true
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      live_sales_metrics: {
+        Row: {
+          id: string
+          metric_data: Json | null
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          recorded_at: string | null
+          time_period: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          id?: string
+          metric_data?: Json | null
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          recorded_at?: string | null
+          time_period?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          id?: string
+          metric_data?: Json | null
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          recorded_at?: string | null
+          time_period?: string | null
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -4080,6 +4345,106 @@ export type Database = {
         }
         Relationships: []
       }
+      price_alerts: {
+        Row: {
+          alert_type: string | null
+          created_at: string | null
+          current_price: number
+          expires_at: string | null
+          id: string
+          is_active: boolean | null
+          notification_sent: boolean | null
+          product_id: string | null
+          target_price: number
+          triggered_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          alert_type?: string | null
+          created_at?: string | null
+          current_price: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          notification_sent?: boolean | null
+          product_id?: string | null
+          target_price: number
+          triggered_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          alert_type?: string | null
+          created_at?: string | null
+          current_price?: number
+          expires_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          notification_sent?: boolean | null
+          product_id?: string | null
+          target_price?: number
+          triggered_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_alerts_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      price_change_history: {
+        Row: {
+          change_percentage: number | null
+          change_reason: string | null
+          created_at: string | null
+          created_by: string | null
+          effective_from: string | null
+          effective_to: string | null
+          id: string
+          new_price: number
+          old_price: number | null
+          product_id: string | null
+          vendor_id: string
+        }
+        Insert: {
+          change_percentage?: number | null
+          change_reason?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          new_price: number
+          old_price?: number | null
+          product_id?: string | null
+          vendor_id: string
+        }
+        Update: {
+          change_percentage?: number | null
+          change_reason?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          new_price?: number
+          old_price?: number | null
+          product_id?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_change_history_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_bundle_items: {
         Row: {
           bundle_id: string
@@ -4397,6 +4762,50 @@ export type Database = {
         Relationships: [
           {
             foreignKeyName: "product_variants_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_view_tracking: {
+        Row: {
+          created_at: string | null
+          id: string
+          ip_address: unknown | null
+          product_id: string | null
+          referrer: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          view_duration: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          product_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          view_duration?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          product_id?: string | null
+          referrer?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          view_duration?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_view_tracking_product_id_fkey"
             columns: ["product_id"]
             isOneToOne: false
             referencedRelation: "products"
@@ -4952,6 +5361,99 @@ export type Database = {
           policy_name?: string
           policy_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      real_time_analytics_events: {
+        Row: {
+          event_category: string
+          event_data: Json
+          event_type: string
+          id: string
+          ip_address: unknown | null
+          order_id: string | null
+          product_id: string | null
+          recorded_at: string | null
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          event_category: string
+          event_data?: Json
+          event_type: string
+          id?: string
+          ip_address?: unknown | null
+          order_id?: string | null
+          product_id?: string | null
+          recorded_at?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          event_category?: string
+          event_data?: Json
+          event_type?: string
+          id?: string
+          ip_address?: unknown | null
+          order_id?: string | null
+          product_id?: string | null
+          recorded_at?: string | null
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      real_time_fraud_alerts: {
+        Row: {
+          alert_type: string
+          assigned_to: string | null
+          created_at: string | null
+          detection_rules: Json | null
+          entity_id: string
+          entity_type: string
+          id: string
+          resolution_notes: string | null
+          resolved_at: string | null
+          risk_factors: Json | null
+          risk_score: number
+          severity: string | null
+          status: string | null
+        }
+        Insert: {
+          alert_type: string
+          assigned_to?: string | null
+          created_at?: string | null
+          detection_rules?: Json | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          risk_factors?: Json | null
+          risk_score: number
+          severity?: string | null
+          status?: string | null
+        }
+        Update: {
+          alert_type?: string
+          assigned_to?: string | null
+          created_at?: string | null
+          detection_rules?: Json | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          risk_factors?: Json | null
+          risk_score?: number
+          severity?: string | null
+          status?: string | null
         }
         Relationships: []
       }
@@ -6109,6 +6611,42 @@ export type Database = {
           service_name?: string | null
           tags?: Json | null
           timestamp?: string
+        }
+        Relationships: []
+      }
+      traffic_monitoring: {
+        Row: {
+          bounce_rate: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          page_url: string
+          recorded_hour: string | null
+          session_duration: number | null
+          unique_visitors: number | null
+          visitor_count: number | null
+        }
+        Insert: {
+          bounce_rate?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          page_url: string
+          recorded_hour?: string | null
+          session_duration?: number | null
+          unique_visitors?: number | null
+          visitor_count?: number | null
+        }
+        Update: {
+          bounce_rate?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          page_url?: string
+          recorded_hour?: string | null
+          session_duration?: number | null
+          unique_visitors?: number | null
+          visitor_count?: number | null
         }
         Relationships: []
       }

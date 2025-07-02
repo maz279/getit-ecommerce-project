@@ -185,6 +185,45 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_recommendation_models: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          last_trained: string | null
+          model_config: Json
+          model_name: string
+          model_type: string
+          performance_metrics: Json | null
+          updated_at: string | null
+          version: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          model_name: string
+          model_type: string
+          performance_metrics?: Json | null
+          updated_at?: string | null
+          version: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          model_name?: string
+          model_type?: string
+          performance_metrics?: Json | null
+          updated_at?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       ai_sales_forecasts: {
         Row: {
           algorithm_used: string
@@ -627,6 +666,168 @@ export type Database = {
           },
         ]
       }
+      bd_courier_partners: {
+        Row: {
+          api_config: Json
+          courier_name: string
+          coverage_areas: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          pricing_structure: Json
+          service_types: Json
+          updated_at: string | null
+        }
+        Insert: {
+          api_config?: Json
+          courier_name: string
+          coverage_areas?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          pricing_structure?: Json
+          service_types?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          api_config?: Json
+          courier_name?: string
+          coverage_areas?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          pricing_structure?: Json
+          service_types?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      bd_kyc_verifications: {
+        Row: {
+          api_response: Json | null
+          created_at: string | null
+          document_data: Json
+          document_number: string
+          expiry_date: string | null
+          id: string
+          rejection_reason: string | null
+          updated_at: string | null
+          vendor_id: string
+          verification_status: string
+          verification_type: string
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          api_response?: Json | null
+          created_at?: string | null
+          document_data?: Json
+          document_number: string
+          expiry_date?: string | null
+          id?: string
+          rejection_reason?: string | null
+          updated_at?: string | null
+          vendor_id: string
+          verification_status?: string
+          verification_type: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          api_response?: Json | null
+          created_at?: string | null
+          document_data?: Json
+          document_number?: string
+          expiry_date?: string | null
+          id?: string
+          rejection_reason?: string | null
+          updated_at?: string | null
+          vendor_id?: string
+          verification_status?: string
+          verification_type?: string
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: []
+      }
+      bd_payment_gateways: {
+        Row: {
+          api_config: Json
+          created_at: string | null
+          fee_structure: Json
+          gateway_name: string
+          id: string
+          is_active: boolean | null
+          transaction_limits: Json
+          updated_at: string | null
+        }
+        Insert: {
+          api_config?: Json
+          created_at?: string | null
+          fee_structure?: Json
+          gateway_name: string
+          id?: string
+          is_active?: boolean | null
+          transaction_limits?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          api_config?: Json
+          created_at?: string | null
+          fee_structure?: Json
+          gateway_name?: string
+          id?: string
+          is_active?: boolean | null
+          transaction_limits?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      bd_payment_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          customer_phone: string | null
+          gateway_name: string
+          gateway_response: Json | null
+          id: string
+          merchant_transaction_id: string
+          order_id: string | null
+          processed_at: string | null
+          status: string
+          transaction_id: string
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          customer_phone?: string | null
+          gateway_name: string
+          gateway_response?: Json | null
+          id?: string
+          merchant_transaction_id: string
+          order_id?: string | null
+          processed_at?: string | null
+          status: string
+          transaction_id: string
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          customer_phone?: string | null
+          gateway_name?: string
+          gateway_response?: Json | null
+          id?: string
+          merchant_transaction_id?: string
+          order_id?: string | null
+          processed_at?: string | null
+          status?: string
+          transaction_id?: string
+        }
+        Relationships: []
+      }
       borrowers: {
         Row: {
           created_at: string
@@ -663,6 +864,84 @@ export type Database = {
           score?: number | null
           status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      business_intelligence_dashboards: {
+        Row: {
+          access_permissions: Json | null
+          created_at: string | null
+          created_by: string
+          dashboard_name: string
+          dashboard_type: string
+          id: string
+          is_real_time: boolean | null
+          refresh_interval: number | null
+          updated_at: string | null
+          user_role: string
+          widget_config: Json
+        }
+        Insert: {
+          access_permissions?: Json | null
+          created_at?: string | null
+          created_by: string
+          dashboard_name: string
+          dashboard_type: string
+          id?: string
+          is_real_time?: boolean | null
+          refresh_interval?: number | null
+          updated_at?: string | null
+          user_role: string
+          widget_config?: Json
+        }
+        Update: {
+          access_permissions?: Json | null
+          created_at?: string | null
+          created_by?: string
+          dashboard_name?: string
+          dashboard_type?: string
+          id?: string
+          is_real_time?: boolean | null
+          refresh_interval?: number | null
+          updated_at?: string | null
+          user_role?: string
+          widget_config?: Json
+        }
+        Relationships: []
+      }
+      cache_configurations: {
+        Row: {
+          cache_key: string
+          cache_strategy: string
+          cache_type: string
+          created_at: string | null
+          id: string
+          invalidation_rules: Json | null
+          is_active: boolean | null
+          ttl_seconds: number
+          updated_at: string | null
+        }
+        Insert: {
+          cache_key: string
+          cache_strategy: string
+          cache_type: string
+          created_at?: string | null
+          id?: string
+          invalidation_rules?: Json | null
+          is_active?: boolean | null
+          ttl_seconds: number
+          updated_at?: string | null
+        }
+        Update: {
+          cache_key?: string
+          cache_strategy?: string
+          cache_type?: string
+          created_at?: string | null
+          id?: string
+          invalidation_rules?: Json | null
+          is_active?: boolean | null
+          ttl_seconds?: number
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -839,6 +1118,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cdn_configurations: {
+        Row: {
+          caching_rules: Json | null
+          cdn_provider: string
+          created_at: string | null
+          distribution_settings: Json
+          geographic_restrictions: Json | null
+          id: string
+          is_active: boolean | null
+          resource_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          caching_rules?: Json | null
+          cdn_provider: string
+          created_at?: string | null
+          distribution_settings?: Json
+          geographic_restrictions?: Json | null
+          id?: string
+          is_active?: boolean | null
+          resource_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          caching_rules?: Json | null
+          cdn_provider?: string
+          created_at?: string | null
+          distribution_settings?: Json
+          geographic_restrictions?: Json | null
+          id?: string
+          is_active?: boolean | null
+          resource_type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       chat_conversation_messages: {
         Row: {
@@ -1614,6 +1929,57 @@ export type Database = {
           target_action?: string | null
           time_to_conversion?: number | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      courier_shipments: {
+        Row: {
+          actual_delivery_date: string | null
+          courier_name: string
+          courier_response: Json | null
+          created_at: string | null
+          delivery_address: Json
+          delivery_attempts: number | null
+          estimated_delivery: string | null
+          id: string
+          order_id: string
+          package_details: Json
+          pickup_address: Json
+          status: string
+          tracking_id: string
+          updated_at: string | null
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          courier_name: string
+          courier_response?: Json | null
+          created_at?: string | null
+          delivery_address: Json
+          delivery_attempts?: number | null
+          estimated_delivery?: string | null
+          id?: string
+          order_id: string
+          package_details: Json
+          pickup_address: Json
+          status?: string
+          tracking_id: string
+          updated_at?: string | null
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          courier_name?: string
+          courier_response?: Json | null
+          created_at?: string | null
+          delivery_address?: Json
+          delivery_attempts?: number | null
+          estimated_delivery?: string | null
+          id?: string
+          order_id?: string
+          package_details?: Json
+          pickup_address?: Json
+          status?: string
+          tracking_id?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -4245,6 +4611,42 @@ export type Database = {
           },
         ]
       }
+      order_orchestration_logs: {
+        Row: {
+          completed_at: string | null
+          current_step: string
+          error_details: string | null
+          executed_at: string | null
+          id: string
+          order_id: string
+          step_data: Json | null
+          step_status: string
+          workflow_id: string
+        }
+        Insert: {
+          completed_at?: string | null
+          current_step: string
+          error_details?: string | null
+          executed_at?: string | null
+          id?: string
+          order_id: string
+          step_data?: Json | null
+          step_status: string
+          workflow_id: string
+        }
+        Update: {
+          completed_at?: string | null
+          current_step?: string
+          error_details?: string | null
+          executed_at?: string | null
+          id?: string
+          order_id?: string
+          step_data?: Json | null
+          step_status?: string
+          workflow_id?: string
+        }
+        Relationships: []
+      }
       order_status_events: {
         Row: {
           created_at: string | null
@@ -4335,6 +4737,42 @@ export type Database = {
           step_name?: string
           step_status?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      order_workflows: {
+        Row: {
+          automation_rules: Json | null
+          conditions: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+          workflow_name: string
+          workflow_steps: Json
+          workflow_type: string
+        }
+        Insert: {
+          automation_rules?: Json | null
+          conditions?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          workflow_name: string
+          workflow_steps?: Json
+          workflow_type: string
+        }
+        Update: {
+          automation_rules?: Json | null
+          conditions?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+          workflow_name?: string
+          workflow_steps?: Json
+          workflow_type?: string
         }
         Relationships: []
       }
@@ -6848,6 +7286,48 @@ export type Database = {
         }
         Relationships: []
       }
+      real_time_kpis: {
+        Row: {
+          calculation_method: string
+          created_at: string | null
+          current_value: number | null
+          data_sources: Json | null
+          id: string
+          kpi_category: string
+          kpi_name: string
+          last_calculated: string | null
+          target_value: number | null
+          trend_direction: string | null
+          unit: string | null
+        }
+        Insert: {
+          calculation_method: string
+          created_at?: string | null
+          current_value?: number | null
+          data_sources?: Json | null
+          id?: string
+          kpi_category: string
+          kpi_name: string
+          last_calculated?: string | null
+          target_value?: number | null
+          trend_direction?: string | null
+          unit?: string | null
+        }
+        Update: {
+          calculation_method?: string
+          created_at?: string | null
+          current_value?: number | null
+          data_sources?: Json | null
+          id?: string
+          kpi_category?: string
+          kpi_name?: string
+          last_calculated?: string | null
+          target_value?: number | null
+          trend_direction?: string | null
+          unit?: string | null
+        }
+        Relationships: []
+      }
       real_time_metrics: {
         Row: {
           created_at: string
@@ -7891,6 +8371,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      smart_reorder_suggestions: {
+        Row: {
+          cost_analysis: Json | null
+          created_at: string | null
+          demand_forecast: Json | null
+          id: string
+          priority_score: number | null
+          product_id: string
+          status: string | null
+          suggested_quantity: number
+          suggested_reorder_date: string
+          supplier_lead_time: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          cost_analysis?: Json | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          priority_score?: number | null
+          product_id: string
+          status?: string | null
+          suggested_quantity: number
+          suggested_reorder_date: string
+          supplier_lead_time?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          cost_analysis?: Json | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          priority_score?: number | null
+          product_id?: string
+          status?: string | null
+          suggested_quantity?: number
+          suggested_reorder_date?: string
+          supplier_lead_time?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
       }
       stock_alerts: {
         Row: {

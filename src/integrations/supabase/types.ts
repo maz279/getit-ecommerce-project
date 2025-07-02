@@ -4897,6 +4897,8 @@ export type Database = {
           featured_products: Json | null
           host_id: string | null
           id: string
+          interaction_metrics: Json | null
+          monetization_data: Json | null
           recording_url: string | null
           scheduled_end: string
           scheduled_start: string
@@ -4917,6 +4919,8 @@ export type Database = {
           featured_products?: Json | null
           host_id?: string | null
           id?: string
+          interaction_metrics?: Json | null
+          monetization_data?: Json | null
           recording_url?: string | null
           scheduled_end: string
           scheduled_start: string
@@ -4937,6 +4941,8 @@ export type Database = {
           featured_products?: Json | null
           host_id?: string | null
           id?: string
+          interaction_metrics?: Json | null
+          monetization_data?: Json | null
           recording_url?: string | null
           scheduled_end?: string
           scheduled_start?: string
@@ -8232,10 +8238,14 @@ export type Database = {
       }
       push_notifications: {
         Row: {
+          action_buttons: Json | null
+          analytics_data: Json | null
           body: string
           created_at: string | null
           data: Json | null
+          deep_link: string | null
           delivered_at: string | null
+          delivery_status: string | null
           device_tokens: string[] | null
           id: string
           platform: string | null
@@ -8249,10 +8259,14 @@ export type Database = {
           user_id: string | null
         }
         Insert: {
+          action_buttons?: Json | null
+          analytics_data?: Json | null
           body: string
           created_at?: string | null
           data?: Json | null
+          deep_link?: string | null
           delivered_at?: string | null
+          delivery_status?: string | null
           device_tokens?: string[] | null
           id?: string
           platform?: string | null
@@ -8266,10 +8280,14 @@ export type Database = {
           user_id?: string | null
         }
         Update: {
+          action_buttons?: Json | null
+          analytics_data?: Json | null
           body?: string
           created_at?: string | null
           data?: Json | null
+          deep_link?: string | null
           delivered_at?: string | null
+          delivery_status?: string | null
           device_tokens?: string[] | null
           id?: string
           platform?: string | null
@@ -8885,6 +8903,36 @@ export type Database = {
           referrer?: string | null
           session_id?: string | null
           timestamp_recorded?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      realtime_events: {
+        Row: {
+          broadcasted_at: string | null
+          event_data: Json
+          event_type: string
+          expires_at: string | null
+          id: string
+          room_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          broadcasted_at?: string | null
+          event_data: Json
+          event_type: string
+          expires_at?: string | null
+          id?: string
+          room_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          broadcasted_at?: string | null
+          event_data?: Json
+          event_type?: string
+          expires_at?: string | null
+          id?: string
+          room_id?: string | null
           user_id?: string | null
         }
         Relationships: []
@@ -10078,6 +10126,69 @@ export type Database = {
         }
         Relationships: []
       }
+      social_feeds: {
+        Row: {
+          content_data: Json
+          content_type: string
+          created_at: string | null
+          engagement_metrics: Json | null
+          id: string
+          updated_at: string | null
+          user_id: string | null
+          visibility: string | null
+        }
+        Insert: {
+          content_data: Json
+          content_type: string
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string | null
+          visibility?: string | null
+        }
+        Update: {
+          content_data?: Json
+          content_type?: string
+          created_at?: string | null
+          engagement_metrics?: Json | null
+          id?: string
+          updated_at?: string | null
+          user_id?: string | null
+          visibility?: string | null
+        }
+        Relationships: []
+      }
+      social_interactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          interaction_data: Json | null
+          interaction_type: string
+          target_id: string
+          target_type: string
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          interaction_type: string
+          target_id: string
+          target_type: string
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          interaction_data?: Json | null
+          interaction_type?: string
+          target_id?: string
+          target_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       social_media_accounts: {
         Row: {
           access_token: string | null
@@ -10115,6 +10226,48 @@ export type Database = {
           profile_data?: Json | null
           refresh_token?: string | null
           social_id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      social_media_integrations: {
+        Row: {
+          access_token: string | null
+          created_at: string | null
+          id: string
+          integration_settings: Json | null
+          is_active: boolean | null
+          platform: string
+          platform_user_id: string
+          refresh_token: string | null
+          token_expires_at: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          access_token?: string | null
+          created_at?: string | null
+          id?: string
+          integration_settings?: Json | null
+          is_active?: boolean | null
+          platform: string
+          platform_user_id: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          access_token?: string | null
+          created_at?: string | null
+          id?: string
+          integration_settings?: Json | null
+          is_active?: boolean | null
+          platform?: string
+          platform_user_id?: string
+          refresh_token?: string | null
+          token_expires_at?: string | null
           updated_at?: string | null
           user_id?: string | null
         }
@@ -10951,6 +11104,9 @@ export type Database = {
       }
       user_presence: {
         Row: {
+          activity_data: Json | null
+          current_room: string | null
+          device_info: Json | null
           id: string
           last_seen: string
           metadata: Json | null
@@ -10959,6 +11115,9 @@ export type Database = {
           user_id: string
         }
         Insert: {
+          activity_data?: Json | null
+          current_room?: string | null
+          device_info?: Json | null
           id?: string
           last_seen?: string
           metadata?: Json | null
@@ -10967,6 +11126,9 @@ export type Database = {
           user_id: string
         }
         Update: {
+          activity_data?: Json | null
+          current_room?: string | null
+          device_info?: Json | null
           id?: string
           last_seen?: string
           metadata?: Json | null
@@ -12164,6 +12326,56 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      whatsapp_integrations: {
+        Row: {
+          access_token: string
+          business_account_id: string
+          created_at: string | null
+          id: string
+          integration_config: Json | null
+          message_templates: Json | null
+          phone_number_id: string
+          status: string | null
+          updated_at: string | null
+          vendor_id: string | null
+          webhook_verify_token: string
+        }
+        Insert: {
+          access_token: string
+          business_account_id: string
+          created_at?: string | null
+          id?: string
+          integration_config?: Json | null
+          message_templates?: Json | null
+          phone_number_id: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          webhook_verify_token: string
+        }
+        Update: {
+          access_token?: string
+          business_account_id?: string
+          created_at?: string | null
+          id?: string
+          integration_config?: Json | null
+          message_templates?: Json | null
+          phone_number_id?: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          webhook_verify_token?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "whatsapp_integrations_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       wishlist_collections: {
         Row: {

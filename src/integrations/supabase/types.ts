@@ -49,6 +49,9 @@ export type Database = {
       }
       ab_experiments: {
         Row: {
+          auto_winner_selection: boolean | null
+          confidence_level: number | null
+          conversion_goals: Json | null
           created_at: string | null
           created_by: string
           description: string | null
@@ -56,16 +59,21 @@ export type Database = {
           experiment_name: string
           experiment_type: string
           id: string
+          minimum_sample_size: number | null
           start_date: string | null
           statistical_significance: number | null
           status: string | null
           success_metrics: Json | null
           target_audience: Json | null
           traffic_allocation: Json | null
+          traffic_split: Json | null
           updated_at: string | null
           variants: Json
         }
         Insert: {
+          auto_winner_selection?: boolean | null
+          confidence_level?: number | null
+          conversion_goals?: Json | null
           created_at?: string | null
           created_by: string
           description?: string | null
@@ -73,16 +81,21 @@ export type Database = {
           experiment_name: string
           experiment_type: string
           id?: string
+          minimum_sample_size?: number | null
           start_date?: string | null
           statistical_significance?: number | null
           status?: string | null
           success_metrics?: Json | null
           target_audience?: Json | null
           traffic_allocation?: Json | null
+          traffic_split?: Json | null
           updated_at?: string | null
           variants?: Json
         }
         Update: {
+          auto_winner_selection?: boolean | null
+          confidence_level?: number | null
+          conversion_goals?: Json | null
           created_at?: string | null
           created_by?: string
           description?: string | null
@@ -90,14 +103,123 @@ export type Database = {
           experiment_name?: string
           experiment_type?: string
           id?: string
+          minimum_sample_size?: number | null
           start_date?: string | null
           statistical_significance?: number | null
           status?: string | null
           success_metrics?: Json | null
           target_audience?: Json | null
           traffic_allocation?: Json | null
+          traffic_split?: Json | null
           updated_at?: string | null
           variants?: Json
+        }
+        Relationships: []
+      }
+      ab_test_results: {
+        Row: {
+          analysis_date: string | null
+          confidence_interval: Json | null
+          conversion_rate: number | null
+          experiment_id: string | null
+          id: string
+          is_winner: boolean | null
+          metric_name: string
+          metric_value: number
+          p_value: number | null
+          sample_size: number
+          statistical_significance: number | null
+          variant_id: string
+        }
+        Insert: {
+          analysis_date?: string | null
+          confidence_interval?: Json | null
+          conversion_rate?: number | null
+          experiment_id?: string | null
+          id?: string
+          is_winner?: boolean | null
+          metric_name: string
+          metric_value: number
+          p_value?: number | null
+          sample_size: number
+          statistical_significance?: number | null
+          variant_id: string
+        }
+        Update: {
+          analysis_date?: string | null
+          confidence_interval?: Json | null
+          conversion_rate?: number | null
+          experiment_id?: string | null
+          id?: string
+          is_winner?: boolean | null
+          metric_name?: string
+          metric_value?: number
+          p_value?: number | null
+          sample_size?: number
+          statistical_significance?: number | null
+          variant_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ab_test_results_experiment_id_fkey"
+            columns: ["experiment_id"]
+            isOneToOne: false
+            referencedRelation: "ab_experiments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      ai_analytics: {
+        Row: {
+          analysis_type: string
+          confidence_score: number
+          created_at: string | null
+          execution_time_ms: number
+          feedback_data: Json | null
+          feedback_score: number | null
+          id: string
+          input_data: Json
+          model_name: string
+          model_version: string
+          prediction_result: Json
+          processed_at: string | null
+          session_id: string | null
+          user_id: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analysis_type: string
+          confidence_score?: number
+          created_at?: string | null
+          execution_time_ms?: number
+          feedback_data?: Json | null
+          feedback_score?: number | null
+          id?: string
+          input_data?: Json
+          model_name: string
+          model_version: string
+          prediction_result?: Json
+          processed_at?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analysis_type?: string
+          confidence_score?: number
+          created_at?: string | null
+          execution_time_ms?: number
+          feedback_data?: Json | null
+          feedback_score?: number | null
+          id?: string
+          input_data?: Json
+          model_name?: string
+          model_version?: string
+          prediction_result?: Json
+          processed_at?: string | null
+          session_id?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -206,6 +328,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_fraud_rules: {
+        Row: {
+          accuracy_score: number | null
+          created_at: string | null
+          false_negative_rate: number | null
+          false_positive_rate: number | null
+          feature_weights: Json | null
+          id: string
+          is_active: boolean | null
+          last_trained: string | null
+          model_config: Json
+          rule_name: string
+          rule_type: string
+          threshold_config: Json
+          updated_at: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          false_negative_rate?: number | null
+          false_positive_rate?: number | null
+          feature_weights?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          rule_name: string
+          rule_type: string
+          threshold_config?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          false_negative_rate?: number | null
+          false_positive_rate?: number | null
+          feature_weights?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_trained?: string | null
+          model_config?: Json
+          rule_name?: string
+          rule_type?: string
+          threshold_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ai_insights: {
         Row: {
           actionable_recommendations: Json | null
@@ -254,6 +424,54 @@ export type Database = {
           related_entities?: Json | null
           status?: string | null
           title?: string
+        }
+        Relationships: []
+      }
+      ai_model_performance: {
+        Row: {
+          accuracy_score: number | null
+          created_at: string | null
+          deployment_status: string | null
+          evaluation_date: string | null
+          f1_score: number | null
+          id: string
+          inference_time_ms: number | null
+          memory_usage_mb: number | null
+          model_name: string
+          model_version: string
+          precision_score: number | null
+          recall_score: number | null
+          training_data_size: number | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          deployment_status?: string | null
+          evaluation_date?: string | null
+          f1_score?: number | null
+          id?: string
+          inference_time_ms?: number | null
+          memory_usage_mb?: number | null
+          model_name: string
+          model_version: string
+          precision_score?: number | null
+          recall_score?: number | null
+          training_data_size?: number | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          created_at?: string | null
+          deployment_status?: string | null
+          evaluation_date?: string | null
+          f1_score?: number | null
+          id?: string
+          inference_time_ms?: number | null
+          memory_usage_mb?: number | null
+          model_name?: string
+          model_version?: string
+          precision_score?: number | null
+          recall_score?: number | null
+          training_data_size?: number | null
         }
         Relationships: []
       }
@@ -1209,6 +1427,59 @@ export type Database = {
         }
         Relationships: []
       }
+      biometric_auth_sessions: {
+        Row: {
+          auth_type: string
+          challenge: string
+          challenge_expires_at: string
+          created_at: string | null
+          device_fingerprint: string | null
+          id: string
+          ip_address: unknown | null
+          registration_id: string | null
+          user_agent: string | null
+          user_id: string
+          verification_data: Json | null
+          verified_at: string | null
+        }
+        Insert: {
+          auth_type: string
+          challenge: string
+          challenge_expires_at: string
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: unknown | null
+          registration_id?: string | null
+          user_agent?: string | null
+          user_id: string
+          verification_data?: Json | null
+          verified_at?: string | null
+        }
+        Update: {
+          auth_type?: string
+          challenge?: string
+          challenge_expires_at?: string
+          created_at?: string | null
+          device_fingerprint?: string | null
+          id?: string
+          ip_address?: unknown | null
+          registration_id?: string | null
+          user_agent?: string | null
+          user_id?: string
+          verification_data?: Json | null
+          verified_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "biometric_auth_sessions_registration_id_fkey"
+            columns: ["registration_id"]
+            isOneToOne: false
+            referencedRelation: "biometric_auth_registrations"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       borrowers: {
         Row: {
           created_at: string
@@ -1391,6 +1662,48 @@ export type Database = {
           updated_at?: string | null
           user_role?: string
           widget_config?: Json
+        }
+        Relationships: []
+      }
+      cache_analytics: {
+        Row: {
+          cache_key: string
+          cache_size_bytes: number | null
+          cache_type: string
+          created_at: string | null
+          hit_rate: number | null
+          id: string
+          operation: string
+          response_time_ms: number | null
+          session_id: string | null
+          ttl_seconds: number | null
+          user_id: string | null
+        }
+        Insert: {
+          cache_key: string
+          cache_size_bytes?: number | null
+          cache_type: string
+          created_at?: string | null
+          hit_rate?: number | null
+          id?: string
+          operation: string
+          response_time_ms?: number | null
+          session_id?: string | null
+          ttl_seconds?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          cache_key?: string
+          cache_size_bytes?: number | null
+          cache_type?: string
+          created_at?: string | null
+          hit_rate?: number | null
+          id?: string
+          operation?: string
+          response_time_ms?: number | null
+          session_id?: string | null
+          ttl_seconds?: number | null
+          user_id?: string | null
         }
         Relationships: []
       }
@@ -3414,6 +3727,63 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      enhanced_performance_metrics: {
+        Row: {
+          additional_metadata: Json | null
+          connection_type: string | null
+          device_type: string | null
+          geographic_region: string | null
+          id: string
+          is_slow_performance: boolean | null
+          measurement_unit: string
+          metric_category: string
+          metric_name: string
+          metric_value: number
+          performance_grade: string | null
+          resource_identifier: string | null
+          session_id: string | null
+          timestamp: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          additional_metadata?: Json | null
+          connection_type?: string | null
+          device_type?: string | null
+          geographic_region?: string | null
+          id?: string
+          is_slow_performance?: boolean | null
+          measurement_unit: string
+          metric_category: string
+          metric_name: string
+          metric_value: number
+          performance_grade?: string | null
+          resource_identifier?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          additional_metadata?: Json | null
+          connection_type?: string | null
+          device_type?: string | null
+          geographic_region?: string | null
+          id?: string
+          is_slow_performance?: boolean | null
+          measurement_unit?: string
+          metric_category?: string
+          metric_name?: string
+          metric_value?: number
+          performance_grade?: string | null
+          resource_identifier?: string | null
+          session_id?: string | null
+          timestamp?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       enhanced_rate_limits: {
         Row: {
@@ -5568,13 +5938,18 @@ export type Database = {
         Row: {
           action_type: string
           attempts: number | null
+          batch_id: string | null
+          conflict_resolution: string | null
           created_at: string | null
           data: Json
+          dependency_id: string | null
           error_message: string | null
           id: string
           max_attempts: number | null
+          priority: number | null
           resource_id: string | null
           resource_type: string
+          retry_strategy: Json | null
           sync_status: string | null
           synced_at: string | null
           user_id: string
@@ -5582,13 +5957,18 @@ export type Database = {
         Insert: {
           action_type: string
           attempts?: number | null
+          batch_id?: string | null
+          conflict_resolution?: string | null
           created_at?: string | null
           data: Json
+          dependency_id?: string | null
           error_message?: string | null
           id?: string
           max_attempts?: number | null
+          priority?: number | null
           resource_id?: string | null
           resource_type: string
+          retry_strategy?: Json | null
           sync_status?: string | null
           synced_at?: string | null
           user_id: string
@@ -5596,18 +5976,31 @@ export type Database = {
         Update: {
           action_type?: string
           attempts?: number | null
+          batch_id?: string | null
+          conflict_resolution?: string | null
           created_at?: string | null
           data?: Json
+          dependency_id?: string | null
           error_message?: string | null
           id?: string
           max_attempts?: number | null
+          priority?: number | null
           resource_id?: string | null
           resource_type?: string
+          retry_strategy?: Json | null
           sync_status?: string | null
           synced_at?: string | null
           user_id?: string
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "offline_sync_queue_dependency_id_fkey"
+            columns: ["dependency_id"]
+            isOneToOne: false
+            referencedRelation: "offline_sync_queue"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_analytics: {
         Row: {
@@ -8302,6 +8695,48 @@ export type Database = {
         }
         Relationships: []
       }
+      pwa_analytics: {
+        Row: {
+          app_version: string | null
+          cache_performance: Json | null
+          created_at: string | null
+          device_info: Json
+          event_type: string
+          id: string
+          network_status: string | null
+          offline_duration: number | null
+          service_worker_version: string | null
+          sync_queue_size: number | null
+          user_id: string | null
+        }
+        Insert: {
+          app_version?: string | null
+          cache_performance?: Json | null
+          created_at?: string | null
+          device_info?: Json
+          event_type: string
+          id?: string
+          network_status?: string | null
+          offline_duration?: number | null
+          service_worker_version?: string | null
+          sync_queue_size?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          app_version?: string | null
+          cache_performance?: Json | null
+          created_at?: string | null
+          device_info?: Json
+          event_type?: string
+          id?: string
+          network_status?: string | null
+          offline_duration?: number | null
+          service_worker_version?: string | null
+          sync_queue_size?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       pwa_installations: {
         Row: {
           browser: string
@@ -10020,6 +10455,8 @@ export type Database = {
       }
       security_events: {
         Row: {
+          ai_risk_score: number | null
+          automated_response: string | null
           created_at: string
           event_details: Json
           event_type: string
@@ -10027,14 +10464,18 @@ export type Database = {
           ip_address: unknown
           is_blocked: boolean | null
           location_data: Json | null
+          ml_model_version: string | null
           resolution_status: string | null
           resolved_at: string | null
           resolved_by: string | null
           severity_level: string
+          threat_category: string | null
           user_agent: string | null
           user_id: string | null
         }
         Insert: {
+          ai_risk_score?: number | null
+          automated_response?: string | null
           created_at?: string
           event_details?: Json
           event_type: string
@@ -10042,14 +10483,18 @@ export type Database = {
           ip_address: unknown
           is_blocked?: boolean | null
           location_data?: Json | null
+          ml_model_version?: string | null
           resolution_status?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
           severity_level?: string
+          threat_category?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
         Update: {
+          ai_risk_score?: number | null
+          automated_response?: string | null
           created_at?: string
           event_details?: Json
           event_type?: string
@@ -10057,10 +10502,12 @@ export type Database = {
           ip_address?: unknown
           is_blocked?: boolean | null
           location_data?: Json | null
+          ml_model_version?: string | null
           resolution_status?: string | null
           resolved_at?: string | null
           resolved_by?: string | null
           severity_level?: string
+          threat_category?: string | null
           user_agent?: string | null
           user_id?: string | null
         }
@@ -10835,6 +11282,48 @@ export type Database = {
           session_duration?: number | null
           unique_visitors?: number | null
           visitor_count?: number | null
+        }
+        Relationships: []
+      }
+      two_factor_auth: {
+        Row: {
+          backup_codes: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          is_primary_method: boolean | null
+          last_used_at: string | null
+          method_type: string
+          phone_number: string | null
+          secret_key: string | null
+          user_id: string
+          verified_at: string | null
+        }
+        Insert: {
+          backup_codes?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_primary_method?: boolean | null
+          last_used_at?: string | null
+          method_type: string
+          phone_number?: string | null
+          secret_key?: string | null
+          user_id: string
+          verified_at?: string | null
+        }
+        Update: {
+          backup_codes?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          is_primary_method?: boolean | null
+          last_used_at?: string | null
+          method_type?: string
+          phone_number?: string | null
+          secret_key?: string | null
+          user_id?: string
+          verified_at?: string | null
         }
         Relationships: []
       }

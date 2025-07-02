@@ -82,19 +82,21 @@ export const ComprehensiveAdminSidebar: React.FC<ComprehensiveAdminSidebarProps>
   };
 
   const menuItems: MenuItem[] = [
-    {
-      id: 'dashboard',
-      label: 'Dashboard',
-      icon: LayoutDashboard,
-      color: 'text-blue-600',
-      children: [
-        { id: 'overview', label: 'Overview' },
-        { id: 'analytics', label: 'Analytics Dashboard' },
-        { id: 'real-time-metrics', label: 'Real-time Metrics' },
-        { id: 'kpi-monitoring', label: 'KPI Monitoring' },
-        { id: 'performance-insights', label: 'Performance Insights' }
-      ]
-    },
+        {
+          id: 'dashboard',
+          label: 'Dashboard',
+          icon: LayoutDashboard,
+          color: 'text-blue-600',
+          children: [
+            { id: 'overview', label: 'Overview' },
+            { id: 'analytics', label: 'Analytics Dashboard' },
+            { id: 'enterprise-monitoring', label: 'Enterprise Monitoring' },
+            { id: 'live-dashboard', label: 'Live Dashboard' },
+            { id: 'real-time-metrics', label: 'Real-time Metrics' },
+            { id: 'kpi-monitoring', label: 'KPI Monitoring' },
+            { id: 'performance-insights', label: 'Performance Insights' }
+          ]
+        },
     {
       id: 'user-management',
       label: 'User Management',

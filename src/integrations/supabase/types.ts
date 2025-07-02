@@ -376,6 +376,54 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_gateway_models: {
+        Row: {
+          accuracy_score: number
+          created_at: string
+          deployment_status: string
+          feedback_score: number | null
+          id: string
+          last_trained_at: string
+          model_config: Json
+          model_name: string
+          model_type: string
+          performance_metrics: Json
+          training_data_size: number
+          updated_at: string
+          version: string
+        }
+        Insert: {
+          accuracy_score?: number
+          created_at?: string
+          deployment_status?: string
+          feedback_score?: number | null
+          id?: string
+          last_trained_at?: string
+          model_config?: Json
+          model_name: string
+          model_type: string
+          performance_metrics?: Json
+          training_data_size?: number
+          updated_at?: string
+          version?: string
+        }
+        Update: {
+          accuracy_score?: number
+          created_at?: string
+          deployment_status?: string
+          feedback_score?: number | null
+          id?: string
+          last_trained_at?: string
+          model_config?: Json
+          model_name?: string
+          model_type?: string
+          performance_metrics?: Json
+          training_data_size?: number
+          updated_at?: string
+          version?: string
+        }
+        Relationships: []
+      }
       ai_insights: {
         Row: {
           actionable_recommendations: Json | null
@@ -511,6 +559,48 @@ export type Database = {
           performance_metrics?: Json | null
           updated_at?: string | null
           version?: string
+        }
+        Relationships: []
+      }
+      ai_routing_analytics: {
+        Row: {
+          actual_performance: Json
+          ai_decision_data: Json
+          confidence_score: number
+          created_at: string
+          id: string
+          load_score: number
+          request_id: string
+          response_time_ms: number
+          route_path: string
+          selected_service: string
+          success_rate: number
+        }
+        Insert: {
+          actual_performance?: Json
+          ai_decision_data?: Json
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          load_score?: number
+          request_id: string
+          response_time_ms: number
+          route_path: string
+          selected_service: string
+          success_rate?: number
+        }
+        Update: {
+          actual_performance?: Json
+          ai_decision_data?: Json
+          confidence_score?: number
+          created_at?: string
+          id?: string
+          load_score?: number
+          request_id?: string
+          response_time_ms?: number
+          route_path?: string
+          selected_service?: string
+          success_rate?: number
         }
         Relationships: []
       }
@@ -691,6 +781,60 @@ export type Database = {
           session_id?: string | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      anomaly_detection_events: {
+        Row: {
+          affected_endpoint: string | null
+          affected_service: string | null
+          anomaly_score: number
+          behavior_indicators: Json
+          created_at: string
+          event_type: string
+          false_positive: boolean | null
+          id: string
+          investigated_at: string | null
+          investigated_by: string | null
+          mitigation_actions: Json
+          request_pattern: Json
+          resolution_notes: string | null
+          severity_level: string
+          threat_classification: string | null
+        }
+        Insert: {
+          affected_endpoint?: string | null
+          affected_service?: string | null
+          anomaly_score?: number
+          behavior_indicators?: Json
+          created_at?: string
+          event_type: string
+          false_positive?: boolean | null
+          id?: string
+          investigated_at?: string | null
+          investigated_by?: string | null
+          mitigation_actions?: Json
+          request_pattern?: Json
+          resolution_notes?: string | null
+          severity_level?: string
+          threat_classification?: string | null
+        }
+        Update: {
+          affected_endpoint?: string | null
+          affected_service?: string | null
+          anomaly_score?: number
+          behavior_indicators?: Json
+          created_at?: string
+          event_type?: string
+          false_positive?: boolean | null
+          id?: string
+          investigated_at?: string | null
+          investigated_by?: string | null
+          mitigation_actions?: Json
+          request_pattern?: Json
+          resolution_notes?: string | null
+          severity_level?: string
+          threat_classification?: string | null
         }
         Relationships: []
       }
@@ -4651,6 +4795,54 @@ export type Database = {
         }
         Relationships: []
       }
+      intelligent_cache_analytics: {
+        Row: {
+          access_frequency: number
+          ai_optimization_applied: boolean
+          cache_key: string
+          cache_strategy: string
+          cost_effectiveness: number
+          created_at: string
+          data_size_bytes: number
+          geographic_affinity: Json
+          hit_rate: number
+          id: string
+          last_accessed: string
+          ttl_seconds: number
+          user_segment_affinity: Json
+        }
+        Insert: {
+          access_frequency?: number
+          ai_optimization_applied?: boolean
+          cache_key: string
+          cache_strategy: string
+          cost_effectiveness?: number
+          created_at?: string
+          data_size_bytes?: number
+          geographic_affinity?: Json
+          hit_rate?: number
+          id?: string
+          last_accessed?: string
+          ttl_seconds?: number
+          user_segment_affinity?: Json
+        }
+        Update: {
+          access_frequency?: number
+          ai_optimization_applied?: boolean
+          cache_key?: string
+          cache_strategy?: string
+          cost_effectiveness?: number
+          created_at?: string
+          data_size_bytes?: number
+          geographic_affinity?: Json
+          hit_rate?: number
+          id?: string
+          last_accessed?: string
+          ttl_seconds?: number
+          user_segment_affinity?: Json
+        }
+        Relationships: []
+      }
       inventory: {
         Row: {
           available_stock: number | null
@@ -7738,6 +7930,51 @@ export type Database = {
         }
         Relationships: []
       }
+      predictive_scaling_metrics: {
+        Row: {
+          confidence_level: number
+          cost_implications: Json
+          created_at: string
+          current_instances: number
+          effectiveness_score: number | null
+          id: string
+          implemented_at: string | null
+          predicted_demand: number
+          recommended_instances: number
+          resource_utilization: Json
+          scaling_trigger_reason: string
+          service_name: string
+        }
+        Insert: {
+          confidence_level?: number
+          cost_implications?: Json
+          created_at?: string
+          current_instances?: number
+          effectiveness_score?: number | null
+          id?: string
+          implemented_at?: string | null
+          predicted_demand?: number
+          recommended_instances?: number
+          resource_utilization?: Json
+          scaling_trigger_reason: string
+          service_name: string
+        }
+        Update: {
+          confidence_level?: number
+          cost_implications?: Json
+          created_at?: string
+          current_instances?: number
+          effectiveness_score?: number | null
+          id?: string
+          implemented_at?: string | null
+          predicted_demand?: number
+          recommended_instances?: number
+          resource_utilization?: Json
+          scaling_trigger_reason?: string
+          service_name?: string
+        }
+        Relationships: []
+      }
       price_alerts: {
         Row: {
           alert_type: string | null
@@ -10528,6 +10765,57 @@ export type Database = {
           },
         ]
       }
+      service_health_metrics: {
+        Row: {
+          active_connections: number
+          alert_thresholds: Json
+          availability_percentage: number
+          circuit_breaker_state: string
+          cpu_utilization: number
+          created_at: string
+          error_rate: number
+          health_score: number
+          id: string
+          last_health_check: string
+          memory_utilization: number
+          response_time_avg: number
+          service_name: string
+          throughput_rps: number
+        }
+        Insert: {
+          active_connections?: number
+          alert_thresholds?: Json
+          availability_percentage?: number
+          circuit_breaker_state?: string
+          cpu_utilization?: number
+          created_at?: string
+          error_rate?: number
+          health_score?: number
+          id?: string
+          last_health_check?: string
+          memory_utilization?: number
+          response_time_avg?: number
+          service_name: string
+          throughput_rps?: number
+        }
+        Update: {
+          active_connections?: number
+          alert_thresholds?: Json
+          availability_percentage?: number
+          circuit_breaker_state?: string
+          cpu_utilization?: number
+          created_at?: string
+          error_rate?: number
+          health_score?: number
+          id?: string
+          last_health_check?: string
+          memory_utilization?: number
+          response_time_avg?: number
+          service_name?: string
+          throughput_rps?: number
+        }
+        Relationships: []
+      }
       smart_reorder_suggestions: {
         Row: {
           cost_analysis: Json | null
@@ -11282,6 +11570,48 @@ export type Database = {
           session_duration?: number | null
           unique_visitors?: number | null
           visitor_count?: number | null
+        }
+        Relationships: []
+      }
+      traffic_patterns: {
+        Row: {
+          avg_response_time: number
+          created_at: string
+          endpoint_path: string
+          error_rate: number
+          geographic_distribution: Json
+          id: string
+          peak_load_indicator: boolean
+          request_count: number
+          seasonal_pattern: Json
+          time_window: string
+          user_behavior_metrics: Json
+        }
+        Insert: {
+          avg_response_time?: number
+          created_at?: string
+          endpoint_path: string
+          error_rate?: number
+          geographic_distribution?: Json
+          id?: string
+          peak_load_indicator?: boolean
+          request_count?: number
+          seasonal_pattern?: Json
+          time_window: string
+          user_behavior_metrics?: Json
+        }
+        Update: {
+          avg_response_time?: number
+          created_at?: string
+          endpoint_path?: string
+          error_rate?: number
+          geographic_distribution?: Json
+          id?: string
+          peak_load_indicator?: boolean
+          request_count?: number
+          seasonal_pattern?: Json
+          time_window?: string
+          user_behavior_metrics?: Json
         }
         Relationships: []
       }
@@ -13039,6 +13369,16 @@ export type Database = {
       update_commission_analytics: {
         Args: { p_vendor_id?: string; p_analytics_date?: string }
         Returns: undefined
+      }
+      update_service_health_score: {
+        Args: {
+          p_service_name: string
+          p_response_time: number
+          p_error_rate: number
+          p_cpu_utilization: number
+          p_memory_utilization: number
+        }
+        Returns: number
       }
     }
     Enums: {

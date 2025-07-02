@@ -1,0 +1,608 @@
+openapi: 3.0.3
+info:
+  title: BDCommerce Platform API
+  description: |
+    Comprehensive API documentation for the BDCommerce e-commerce platform.
+    
+    ## Authentication
+    All endpoints require authentication via Bearer token in the Authorization header:
+    ```
+    Authorization: Bearer your_jwt_token_here
+    ```
+    
+    ## Rate Limiting
+    - 1000 requests per hour for authenticated users
+    - 100 requests per hour for anonymous users
+    
+    ## Error Handling
+    All errors follow the same format:
+    ```json
+    {
+      "error": {
+        "code": "ERROR_CODE",
+        "message": "Human readable error message",
+        "details": {}
+      }
+    }
+    ```
+    
+  version: 2.0.0
+  contact:
+    name: BDCommerce API Support
+    email: api-support@bdcommerce.com
+    url: https://docs.bdcommerce.com
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  
+servers:
+  - url: https://bbgppsjmspimrfowytf.supabase.co
+    description: Production server
+  - url: https://staging.bdcommerce.com
+    description: Staging server
+  - url: http://localhost:3000
+    description: Local development server
+
+security:
+  - BearerAuth: []
+
+components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      
+  schemas:
+    Product:
+      type: object
+      required:
+        - id
+        - name
+        - price
+        - vendor_id
+        - category_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: Unique product identifier
+        name:
+          type: string
+          description: Product name
+          example: "iPhone 14 Pro"
+        description:
+          type: string
+          description: Product description
+        price:
+          type: number
+          format: decimal
+          description: Product price in BDT
+          example: 45000.00
+        vendor_id:
+          type: string
+          format: uuid
+          description: Vendor identifier
+        category_id:
+          type: string
+          format: uuid
+          description: Category identifier
+        images:
+          type: array
+          items:
+            type: string
+            format: uri
+          description: Product image URLs
+        tags:
+          type: array
+          items:
+            type: string
+          description: Product tags
+        is_active:
+          type: boolean
+          description: Product availability status
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+          
+    Vendor:
+      type: object
+      required:
+        - id
+        - name
+        - email
+        - phone
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        name:
+          type: string
+          description: Vendor business name
+        email:
+          type: string
+          format: email
+        phone:
+          type: string
+          description: Contact phone number
+        status:
+          type: string
+          enum: [pending, approved, rejected, suspended]
+        business_type:
+          type: string
+          description: Type of business
+        address:
+          type: object
+          description: Business address
+        bank_details:
+          type: object
+          description: Banking information for payouts
+        created_at:
+          type: string
+          format: date-time
+          
+    Order:
+      type: object
+      required:
+        - id
+        - user_id
+        - total_amount
+        - status
+      properties:
+        id:
+          type: string
+          format: uuid
+        user_id:
+          type: string
+          format: uuid
+        order_number:
+          type: string
+          description: Human-readable order number
+        total_amount:
+          type: number
+          format: decimal
+        status:
+          type: string
+          enum: [pending, confirmed, processing, shipped, delivered, cancelled]
+        items:
+          type: array
+          items:
+            $ref: '#/components/schemas/OrderItem'
+        shipping_address:
+          type: object
+          description: Delivery address
+        payment_method:
+          type: string
+          description: Payment method used
+        created_at:
+          type: string
+          format: date-time
+          
+    OrderItem:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        product_id:
+          type: string
+          format: uuid
+        quantity:
+          type: integer
+          minimum: 1
+        unit_price:
+          type: number
+          format: decimal
+        total_price:
+          type: number
+          format: decimal
+          
+    Error:
+      type: object
+      required:
+        - error
+      properties:
+        error:
+          type: object
+          required:
+            - code
+            - message
+          properties:
+            code:
+              type: string
+              description: Error code
+            message:
+              type: string
+              description: Human readable error message
+            details:
+              type: object
+              description: Additional error details
+              
+    PaginationMeta:
+      type: object
+      properties:
+        page:
+          type: integer
+          description: Current page number
+        limit:
+          type: integer
+          description: Items per page
+        total:
+          type: integer
+          description: Total number of items
+        total_pages:
+          type: integer
+          description: Total number of pages
+          
+  parameters:
+    PageParam:
+      name: page
+      in: query
+      description: Page number
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+    LimitParam:
+      name: limit
+      in: query
+      description: Number of items per page
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+        
+  responses:
+    UnauthorizedError:
+      description: Authentication required
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ForbiddenError:
+      description: Insufficient permissions
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    NotFoundError:
+      description: Resource not found
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+    ValidationError:
+      description: Request validation failed
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+
+paths:
+  /rest/v1/products:
+    get:
+      tags:
+        - Products
+      summary: List products
+      description: Retrieve a paginated list of products with optional filtering
+      parameters:
+        - $ref: '#/components/parameters/PageParam'
+        - $ref: '#/components/parameters/LimitParam'
+        - name: category_id
+          in: query
+          description: Filter by category
+          schema:
+            type: string
+            format: uuid
+        - name: vendor_id
+          in: query
+          description: Filter by vendor
+          schema:
+            type: string
+            format: uuid
+        - name: search
+          in: query
+          description: Search in product name and description
+          schema:
+            type: string
+        - name: min_price
+          in: query
+          description: Minimum price filter
+          schema:
+            type: number
+        - name: max_price
+          in: query
+          description: Maximum price filter
+          schema:
+            type: number
+      responses:
+        '200':
+          description: Products retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Product'
+                  meta:
+                    $ref: '#/components/schemas/PaginationMeta'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+          
+    post:
+      tags:
+        - Products
+      summary: Create product
+      description: Create a new product (vendors only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - name
+                - price
+                - category_id
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                  format: decimal
+                category_id:
+                  type: string
+                  format: uuid
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+                tags:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '201':
+          description: Product created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+  /rest/v1/products/{id}:
+    get:
+      tags:
+        - Products
+      summary: Get product
+      description: Retrieve a specific product by ID
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Product ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '200':
+          description: Product retrieved successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          
+    put:
+      tags:
+        - Products
+      summary: Update product
+      description: Update a product (vendor must own the product)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                name:
+                  type: string
+                description:
+                  type: string
+                price:
+                  type: number
+                  format: decimal
+                category_id:
+                  type: string
+                  format: uuid
+                images:
+                  type: array
+                  items:
+                    type: string
+                    format: uri
+      responses:
+        '200':
+          description: Product updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Product'
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+          
+    delete:
+      tags:
+        - Products
+      summary: Delete product
+      description: Delete a product (vendor must own the product)
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        '204':
+          description: Product deleted successfully
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+        '404':
+          $ref: '#/components/responses/NotFoundError'
+
+  /functions/v1/enhanced-payment-processing:
+    post:
+      tags:
+        - Payments
+      summary: Process payment
+      description: Process a payment with fraud detection and commission calculation
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - amount
+                - vendor_id
+                - payment_method
+              properties:
+                amount:
+                  type: number
+                  format: decimal
+                  description: Payment amount in BDT
+                vendor_id:
+                  type: string
+                  format: uuid
+                payment_method:
+                  type: string
+                  enum: [bkash, nagad, rocket, card, bank_transfer]
+                order_id:
+                  type: string
+                  format: uuid
+                customer_details:
+                  type: object
+                  description: Customer information for fraud detection
+      responses:
+        '200':
+          description: Payment processed successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                  payment_id:
+                    type: string
+                    format: uuid
+                  commission_details:
+                    type: object
+                  fraud_check:
+                    type: object
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+
+  /functions/v1/business-analytics:
+    post:
+      tags:
+        - Analytics
+      summary: Get business analytics
+      description: Retrieve comprehensive business analytics data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - type
+                - period
+              properties:
+                type:
+                  type: string
+                  enum: [sales_summary, vendor_performance, customer_analytics, executive_report]
+                period:
+                  type: string
+                  enum: [today, this_week, this_month, last_30_days, this_year]
+                vendor_id:
+                  type: string
+                  format: uuid
+                  description: Optional vendor filter
+                include_charts:
+                  type: boolean
+                  default: false
+      responses:
+        '200':
+          description: Analytics data retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  type:
+                    type: string
+                  period:
+                    type: string
+                  data:
+                    type: object
+                    description: Analytics data
+                  charts:
+                    type: object
+                    description: Chart data (if requested)
+        '400':
+          $ref: '#/components/responses/ValidationError'
+        '401':
+          $ref: '#/components/responses/UnauthorizedError'
+        '403':
+          $ref: '#/components/responses/ForbiddenError'
+
+tags:
+  - name: Products
+    description: Product management operations
+  - name: Vendors
+    description: Vendor management operations
+  - name: Orders
+    description: Order processing operations
+  - name: Payments
+    description: Payment processing operations
+  - name: Analytics
+    description: Business analytics and reporting
+  - name: Authentication
+    description: User authentication operations

@@ -1127,6 +1127,63 @@ export type Database = {
         }
         Relationships: []
       }
+      customer_analytics: {
+        Row: {
+          analytics_date: string
+          average_order_value: number | null
+          churn_risk_score: number | null
+          created_at: string | null
+          customer_id: string
+          customer_lifetime_value: number | null
+          engagement_score: number | null
+          favorite_categories: Json | null
+          id: string
+          last_purchase_date: string | null
+          preferred_payment_methods: Json | null
+          purchase_frequency: number | null
+          total_orders: number | null
+          total_spent: number | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analytics_date?: string
+          average_order_value?: number | null
+          churn_risk_score?: number | null
+          created_at?: string | null
+          customer_id: string
+          customer_lifetime_value?: number | null
+          engagement_score?: number | null
+          favorite_categories?: Json | null
+          id?: string
+          last_purchase_date?: string | null
+          preferred_payment_methods?: Json | null
+          purchase_frequency?: number | null
+          total_orders?: number | null
+          total_spent?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analytics_date?: string
+          average_order_value?: number | null
+          churn_risk_score?: number | null
+          created_at?: string | null
+          customer_id?: string
+          customer_lifetime_value?: number | null
+          engagement_score?: number | null
+          favorite_categories?: Json | null
+          id?: string
+          last_purchase_date?: string | null
+          preferred_payment_methods?: Json | null
+          purchase_frequency?: number | null
+          total_orders?: number | null
+          total_spent?: number | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
       dashboard_kpi_metrics: {
         Row: {
           comparison_value: number | null
@@ -2235,6 +2292,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      order_fulfillment_workflow: {
+        Row: {
+          actual_completion: string | null
+          assigned_to: string | null
+          created_at: string | null
+          estimated_completion: string | null
+          id: string
+          metadata: Json | null
+          notes: string | null
+          order_id: string
+          updated_at: string | null
+          vendor_id: string
+          workflow_stage: string
+        }
+        Insert: {
+          actual_completion?: string | null
+          assigned_to?: string | null
+          created_at?: string | null
+          estimated_completion?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id: string
+          updated_at?: string | null
+          vendor_id: string
+          workflow_stage?: string
+        }
+        Update: {
+          actual_completion?: string | null
+          assigned_to?: string | null
+          created_at?: string | null
+          estimated_completion?: string | null
+          id?: string
+          metadata?: Json | null
+          notes?: string | null
+          order_id?: string
+          updated_at?: string | null
+          vendor_id?: string
+          workflow_stage?: string
+        }
+        Relationships: []
       }
       order_items: {
         Row: {
@@ -3579,6 +3678,117 @@ export type Database = {
         }
         Relationships: []
       }
+      product_inventory: {
+        Row: {
+          created_at: string | null
+          current_stock: number
+          id: string
+          last_restocked_at: string | null
+          maximum_stock_level: number
+          minimum_stock_level: number
+          product_id: string
+          reorder_point: number
+          reserved_stock: number
+          selling_price: number | null
+          sku: string
+          unit_cost: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_stock?: number
+          id?: string
+          last_restocked_at?: string | null
+          maximum_stock_level?: number
+          minimum_stock_level?: number
+          product_id: string
+          reorder_point?: number
+          reserved_stock?: number
+          selling_price?: number | null
+          sku: string
+          unit_cost?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_stock?: number
+          id?: string
+          last_restocked_at?: string | null
+          maximum_stock_level?: number
+          minimum_stock_level?: number
+          product_id?: string
+          reorder_point?: number
+          reserved_stock?: number
+          selling_price?: number | null
+          sku?: string
+          unit_cost?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      product_performance_analytics: {
+        Row: {
+          analytics_date: string
+          average_rating: number | null
+          cart_additions: number | null
+          category_ranking: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          id: string
+          product_id: string
+          profit_margin: number | null
+          purchases_count: number | null
+          return_rate: number | null
+          revenue: number | null
+          review_count: number | null
+          search_ranking: number | null
+          updated_at: string | null
+          vendor_id: string
+          views_count: number | null
+        }
+        Insert: {
+          analytics_date?: string
+          average_rating?: number | null
+          cart_additions?: number | null
+          category_ranking?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          product_id: string
+          profit_margin?: number | null
+          purchases_count?: number | null
+          return_rate?: number | null
+          revenue?: number | null
+          review_count?: number | null
+          search_ranking?: number | null
+          updated_at?: string | null
+          vendor_id: string
+          views_count?: number | null
+        }
+        Update: {
+          analytics_date?: string
+          average_rating?: number | null
+          cart_additions?: number | null
+          category_ranking?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          id?: string
+          product_id?: string
+          profit_margin?: number | null
+          purchases_count?: number | null
+          return_rate?: number | null
+          revenue?: number | null
+          review_count?: number | null
+          search_ranking?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+          views_count?: number | null
+        }
+        Relationships: []
+      }
       product_reviews: {
         Row: {
           created_at: string | null
@@ -4622,6 +4832,69 @@ export type Database = {
           },
         ]
       }
+      sales_analytics: {
+        Row: {
+          analytics_date: string
+          analytics_period: string
+          average_order_value: number | null
+          conversion_rate: number | null
+          created_at: string | null
+          growth_metrics: Json | null
+          id: string
+          new_customers: number | null
+          peak_hours: Json | null
+          return_rate: number | null
+          returning_customers: number | null
+          revenue_by_category: Json | null
+          top_selling_products: Json | null
+          total_orders: number | null
+          total_profit: number | null
+          total_revenue: number | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          analytics_date?: string
+          analytics_period?: string
+          average_order_value?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          growth_metrics?: Json | null
+          id?: string
+          new_customers?: number | null
+          peak_hours?: Json | null
+          return_rate?: number | null
+          returning_customers?: number | null
+          revenue_by_category?: Json | null
+          top_selling_products?: Json | null
+          total_orders?: number | null
+          total_profit?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          analytics_date?: string
+          analytics_period?: string
+          average_order_value?: number | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          growth_metrics?: Json | null
+          id?: string
+          new_customers?: number | null
+          peak_hours?: Json | null
+          return_rate?: number | null
+          returning_customers?: number | null
+          revenue_by_category?: Json | null
+          top_selling_products?: Json | null
+          total_orders?: number | null
+          total_profit?: number | null
+          total_revenue?: number | null
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       search_analytics: {
         Row: {
           click_through_rate: number | null
@@ -4889,6 +5162,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      stock_movements: {
+        Row: {
+          created_at: string | null
+          id: string
+          movement_type: string
+          new_stock: number
+          performed_by: string | null
+          previous_stock: number
+          product_id: string
+          quantity: number
+          reason: string | null
+          reference_id: string | null
+          reference_type: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          movement_type: string
+          new_stock: number
+          performed_by?: string | null
+          previous_stock: number
+          product_id: string
+          quantity: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          movement_type?: string
+          new_stock?: number
+          performed_by?: string | null
+          previous_stock?: number
+          product_id?: string
+          quantity?: number
+          reason?: string | null
+          reference_id?: string | null
+          reference_type?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
       }
       suppliers: {
         Row: {
@@ -5708,6 +6026,66 @@ export type Database = {
           tax_amount?: number | null
           transaction_date?: string
           transaction_id?: string
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
+      vendor_invoices: {
+        Row: {
+          billing_address: Json | null
+          created_at: string | null
+          discount_amount: number | null
+          due_date: string | null
+          id: string
+          invoice_number: string
+          invoice_type: string
+          line_items: Json
+          net_amount: number
+          notes: string | null
+          paid_date: string | null
+          payment_terms: string | null
+          status: string
+          tax_amount: number | null
+          total_amount: number
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          billing_address?: Json | null
+          created_at?: string | null
+          discount_amount?: number | null
+          due_date?: string | null
+          id?: string
+          invoice_number: string
+          invoice_type?: string
+          line_items?: Json
+          net_amount: number
+          notes?: string | null
+          paid_date?: string | null
+          payment_terms?: string | null
+          status?: string
+          tax_amount?: number | null
+          total_amount: number
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          billing_address?: Json | null
+          created_at?: string | null
+          discount_amount?: number | null
+          due_date?: string | null
+          id?: string
+          invoice_number?: string
+          invoice_type?: string
+          line_items?: Json
+          net_amount?: number
+          notes?: string | null
+          paid_date?: string | null
+          payment_terms?: string | null
+          status?: string
+          tax_amount?: number | null
+          total_amount?: number
           updated_at?: string | null
           vendor_id?: string
         }

@@ -1100,6 +1100,69 @@ export type Database = {
           },
         ]
       }
+      bangladesh_compliance_tracking: {
+        Row: {
+          compliance_officer_id: string | null
+          compliance_status: string
+          compliance_type: string
+          created_at: string
+          data_localization_status: Json
+          documentation_links: Json
+          financial_reporting_status: Json
+          id: string
+          last_audit_date: string | null
+          license_number: string | null
+          local_representative_info: Json | null
+          next_audit_date: string | null
+          penalty_risks: Json
+          regulatory_body: string
+          requirements_checklist: Json
+          submission_deadlines: Json
+          tax_compliance_status: Json
+          updated_at: string
+        }
+        Insert: {
+          compliance_officer_id?: string | null
+          compliance_status?: string
+          compliance_type: string
+          created_at?: string
+          data_localization_status?: Json
+          documentation_links?: Json
+          financial_reporting_status?: Json
+          id?: string
+          last_audit_date?: string | null
+          license_number?: string | null
+          local_representative_info?: Json | null
+          next_audit_date?: string | null
+          penalty_risks?: Json
+          regulatory_body: string
+          requirements_checklist?: Json
+          submission_deadlines?: Json
+          tax_compliance_status?: Json
+          updated_at?: string
+        }
+        Update: {
+          compliance_officer_id?: string | null
+          compliance_status?: string
+          compliance_type?: string
+          created_at?: string
+          data_localization_status?: Json
+          documentation_links?: Json
+          financial_reporting_status?: Json
+          id?: string
+          last_audit_date?: string | null
+          license_number?: string | null
+          local_representative_info?: Json | null
+          next_audit_date?: string | null
+          penalty_risks?: Json
+          regulatory_body?: string
+          requirements_checklist?: Json
+          submission_deadlines?: Json
+          tax_compliance_status?: Json
+          updated_at?: string
+        }
+        Relationships: []
+      }
       bd_courier_partners: {
         Row: {
           api_config: Json
@@ -2936,6 +2999,120 @@ export type Database = {
           },
         ]
       }
+      compliance_frameworks: {
+        Row: {
+          audit_requirements: Json
+          compliance_rules: Json
+          created_at: string
+          data_sovereignty_rules: Json
+          effective_from: string
+          effective_to: string | null
+          framework_name: string
+          framework_type: string
+          id: string
+          implementation_guidelines: Json
+          is_mandatory: boolean
+          jurisdiction: string
+          regulatory_body: string
+          reporting_requirements: Json
+          updated_at: string
+          version: string
+          violation_penalties: Json
+        }
+        Insert: {
+          audit_requirements?: Json
+          compliance_rules?: Json
+          created_at?: string
+          data_sovereignty_rules?: Json
+          effective_from: string
+          effective_to?: string | null
+          framework_name: string
+          framework_type: string
+          id?: string
+          implementation_guidelines?: Json
+          is_mandatory?: boolean
+          jurisdiction?: string
+          regulatory_body: string
+          reporting_requirements?: Json
+          updated_at?: string
+          version?: string
+          violation_penalties?: Json
+        }
+        Update: {
+          audit_requirements?: Json
+          compliance_rules?: Json
+          created_at?: string
+          data_sovereignty_rules?: Json
+          effective_from?: string
+          effective_to?: string | null
+          framework_name?: string
+          framework_type?: string
+          id?: string
+          implementation_guidelines?: Json
+          is_mandatory?: boolean
+          jurisdiction?: string
+          regulatory_body?: string
+          reporting_requirements?: Json
+          updated_at?: string
+          version?: string
+          violation_penalties?: Json
+        }
+        Relationships: []
+      }
+      compliance_monitoring: {
+        Row: {
+          audit_trail: Json
+          automated_fixes_applied: Json
+          check_frequency: string
+          compliance_check_type: string
+          compliance_status: string
+          created_at: string
+          data_sovereignty_compliance: Json
+          framework_id: string
+          id: string
+          last_check_at: string
+          manual_review_required: boolean
+          next_check_at: string
+          remediation_actions: Json
+          updated_at: string
+          violations_detected: Json
+        }
+        Insert: {
+          audit_trail?: Json
+          automated_fixes_applied?: Json
+          check_frequency: string
+          compliance_check_type: string
+          compliance_status?: string
+          created_at?: string
+          data_sovereignty_compliance?: Json
+          framework_id: string
+          id?: string
+          last_check_at?: string
+          manual_review_required?: boolean
+          next_check_at: string
+          remediation_actions?: Json
+          updated_at?: string
+          violations_detected?: Json
+        }
+        Update: {
+          audit_trail?: Json
+          automated_fixes_applied?: Json
+          check_frequency?: string
+          compliance_check_type?: string
+          compliance_status?: string
+          created_at?: string
+          data_sovereignty_compliance?: Json
+          framework_id?: string
+          id?: string
+          last_check_at?: string
+          manual_review_required?: boolean
+          next_check_at?: string
+          remediation_actions?: Json
+          updated_at?: string
+          violations_detected?: Json
+        }
+        Relationships: []
+      }
       conversion_funnels: {
         Row: {
           created_at: string | null
@@ -3872,6 +4049,84 @@ export type Database = {
           },
         ]
       }
+      enhanced_audit_trails: {
+        Row: {
+          action_performed: string
+          audit_id: string
+          blockchain_reference: string | null
+          business_context: Json
+          compliance_tags: Json
+          created_at: string
+          data_after: Json | null
+          data_before: Json | null
+          data_sensitivity_level: string
+          event_type: string
+          geographic_location: string | null
+          id: string
+          immutable_hash: string
+          ip_address: unknown | null
+          regulatory_classification: string | null
+          request_headers: Json | null
+          resource_id: string | null
+          resource_type: string
+          retention_period: unknown
+          security_context: Json
+          session_id: string | null
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          action_performed: string
+          audit_id: string
+          blockchain_reference?: string | null
+          business_context?: Json
+          compliance_tags?: Json
+          created_at?: string
+          data_after?: Json | null
+          data_before?: Json | null
+          data_sensitivity_level?: string
+          event_type: string
+          geographic_location?: string | null
+          id?: string
+          immutable_hash: string
+          ip_address?: unknown | null
+          regulatory_classification?: string | null
+          request_headers?: Json | null
+          resource_id?: string | null
+          resource_type: string
+          retention_period?: unknown
+          security_context?: Json
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          action_performed?: string
+          audit_id?: string
+          blockchain_reference?: string | null
+          business_context?: Json
+          compliance_tags?: Json
+          created_at?: string
+          data_after?: Json | null
+          data_before?: Json | null
+          data_sensitivity_level?: string
+          event_type?: string
+          geographic_location?: string | null
+          id?: string
+          immutable_hash?: string
+          ip_address?: unknown | null
+          regulatory_classification?: string | null
+          request_headers?: Json | null
+          resource_id?: string | null
+          resource_type?: string
+          retention_period?: unknown
+          security_context?: Json
+          session_id?: string | null
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       enhanced_performance_metrics: {
         Row: {
           additional_metadata: Json | null
@@ -4434,6 +4689,69 @@ export type Database = {
         }
         Relationships: []
       }
+      fraud_detection_events: {
+        Row: {
+          bangladesh_specific_flags: Json
+          behavioral_anomalies: Json
+          created_at: string
+          detection_model: string
+          event_data: Json
+          event_id: string
+          event_type: string
+          false_positive: boolean | null
+          fraud_score: number
+          id: string
+          investigated_at: string | null
+          investigated_by: string | null
+          investigation_status: string
+          mitigation_actions: Json
+          resolution_notes: string | null
+          risk_level: string
+          triggered_rules: Json
+          user_id: string | null
+        }
+        Insert: {
+          bangladesh_specific_flags?: Json
+          behavioral_anomalies?: Json
+          created_at?: string
+          detection_model: string
+          event_data?: Json
+          event_id: string
+          event_type: string
+          false_positive?: boolean | null
+          fraud_score?: number
+          id?: string
+          investigated_at?: string | null
+          investigated_by?: string | null
+          investigation_status?: string
+          mitigation_actions?: Json
+          resolution_notes?: string | null
+          risk_level?: string
+          triggered_rules?: Json
+          user_id?: string | null
+        }
+        Update: {
+          bangladesh_specific_flags?: Json
+          behavioral_anomalies?: Json
+          created_at?: string
+          detection_model?: string
+          event_data?: Json
+          event_id?: string
+          event_type?: string
+          false_positive?: boolean | null
+          fraud_score?: number
+          id?: string
+          investigated_at?: string | null
+          investigated_by?: string | null
+          investigation_status?: string
+          mitigation_actions?: Json
+          resolution_notes?: string | null
+          risk_level?: string
+          triggered_rules?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       fraud_detection_logs: {
         Row: {
           approved: boolean
@@ -4464,6 +4782,69 @@ export type Database = {
           risk_level?: string
           risk_score?: number
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      fraud_detection_models: {
+        Row: {
+          accuracy_score: number
+          algorithm_config: Json
+          bangladesh_specific_rules: Json
+          created_at: string
+          false_negative_rate: number
+          false_positive_rate: number
+          feature_weights: Json
+          fraud_patterns: Json
+          id: string
+          is_active: boolean
+          last_trained: string
+          model_name: string
+          model_type: string
+          model_version: string
+          performance_metrics: Json
+          threshold_config: Json
+          training_data_stats: Json
+          updated_at: string
+        }
+        Insert: {
+          accuracy_score?: number
+          algorithm_config?: Json
+          bangladesh_specific_rules?: Json
+          created_at?: string
+          false_negative_rate?: number
+          false_positive_rate?: number
+          feature_weights?: Json
+          fraud_patterns?: Json
+          id?: string
+          is_active?: boolean
+          last_trained?: string
+          model_name: string
+          model_type: string
+          model_version?: string
+          performance_metrics?: Json
+          threshold_config?: Json
+          training_data_stats?: Json
+          updated_at?: string
+        }
+        Update: {
+          accuracy_score?: number
+          algorithm_config?: Json
+          bangladesh_specific_rules?: Json
+          created_at?: string
+          false_negative_rate?: number
+          false_positive_rate?: number
+          feature_weights?: Json
+          fraud_patterns?: Json
+          id?: string
+          is_active?: boolean
+          last_trained?: string
+          model_name?: string
+          model_type?: string
+          model_version?: string
+          performance_metrics?: Json
+          threshold_config?: Json
+          training_data_stats?: Json
+          updated_at?: string
         }
         Relationships: []
       }
@@ -10816,6 +11197,57 @@ export type Database = {
           },
         ]
       }
+      security_context_analysis: {
+        Row: {
+          analysis_timestamp: string
+          anomaly_scores: Json
+          behavioral_context: Json
+          confidence_score: number
+          context_type: string
+          device_context: Json
+          expires_at: string
+          geolocation_context: Json
+          id: string
+          network_context: Json
+          recommended_actions: Json
+          risk_assessment: Json
+          session_id: string
+          threat_indicators: Json
+        }
+        Insert: {
+          analysis_timestamp?: string
+          anomaly_scores?: Json
+          behavioral_context?: Json
+          confidence_score?: number
+          context_type: string
+          device_context?: Json
+          expires_at: string
+          geolocation_context?: Json
+          id?: string
+          network_context?: Json
+          recommended_actions?: Json
+          risk_assessment?: Json
+          session_id: string
+          threat_indicators?: Json
+        }
+        Update: {
+          analysis_timestamp?: string
+          anomaly_scores?: Json
+          behavioral_context?: Json
+          confidence_score?: number
+          context_type?: string
+          device_context?: Json
+          expires_at?: string
+          geolocation_context?: Json
+          id?: string
+          network_context?: Json
+          recommended_actions?: Json
+          risk_assessment?: Json
+          session_id?: string
+          threat_indicators?: Json
+        }
+        Relationships: []
+      }
       security_events: {
         Row: {
           ai_risk_score: number | null
@@ -11780,6 +12212,60 @@ export type Database = {
           secret_key?: string | null
           user_id?: string
           verified_at?: string | null
+        }
+        Relationships: []
+      }
+      user_behavioral_profiles: {
+        Row: {
+          anomaly_scores: Json
+          baseline_established_at: string | null
+          behavior_patterns: Json
+          created_at: string
+          device_patterns: Json
+          id: string
+          last_pattern_update: string
+          location_patterns: Json
+          profile_confidence: number
+          profile_version: number
+          risk_indicators: Json
+          time_patterns: Json
+          transaction_patterns: Json
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          anomaly_scores?: Json
+          baseline_established_at?: string | null
+          behavior_patterns?: Json
+          created_at?: string
+          device_patterns?: Json
+          id?: string
+          last_pattern_update?: string
+          location_patterns?: Json
+          profile_confidence?: number
+          profile_version?: number
+          risk_indicators?: Json
+          time_patterns?: Json
+          transaction_patterns?: Json
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          anomaly_scores?: Json
+          baseline_established_at?: string | null
+          behavior_patterns?: Json
+          created_at?: string
+          device_patterns?: Json
+          id?: string
+          last_pattern_update?: string
+          location_patterns?: Json
+          profile_confidence?: number
+          profile_version?: number
+          risk_indicators?: Json
+          time_patterns?: Json
+          transaction_patterns?: Json
+          updated_at?: string
+          user_id?: string
         }
         Relationships: []
       }
@@ -13505,6 +13991,114 @@ export type Database = {
         }
         Relationships: []
       }
+      zero_trust_policies: {
+        Row: {
+          applies_to_roles: Json
+          conditions: Json
+          created_at: string
+          enforcement_actions: Json
+          id: string
+          is_active: boolean
+          policy_name: string
+          policy_type: string
+          priority: number
+          risk_thresholds: Json
+          trust_requirements: Json
+          updated_at: string
+          verification_requirements: Json
+        }
+        Insert: {
+          applies_to_roles?: Json
+          conditions?: Json
+          created_at?: string
+          enforcement_actions?: Json
+          id?: string
+          is_active?: boolean
+          policy_name: string
+          policy_type: string
+          priority?: number
+          risk_thresholds?: Json
+          trust_requirements?: Json
+          updated_at?: string
+          verification_requirements?: Json
+        }
+        Update: {
+          applies_to_roles?: Json
+          conditions?: Json
+          created_at?: string
+          enforcement_actions?: Json
+          id?: string
+          is_active?: boolean
+          policy_name?: string
+          policy_type?: string
+          priority?: number
+          risk_thresholds?: Json
+          trust_requirements?: Json
+          updated_at?: string
+          verification_requirements?: Json
+        }
+        Relationships: []
+      }
+      zero_trust_sessions: {
+        Row: {
+          context_analysis: Json
+          continuous_checks: Json
+          created_at: string
+          device_fingerprint: string
+          expires_at: string
+          id: string
+          ip_address: unknown
+          last_verification: string
+          location_data: Json
+          risk_factors: Json
+          session_id: string
+          status: string
+          trust_score: number
+          updated_at: string
+          user_id: string
+          verification_level: string
+          verification_methods: Json
+        }
+        Insert: {
+          context_analysis?: Json
+          continuous_checks?: Json
+          created_at?: string
+          device_fingerprint: string
+          expires_at: string
+          id?: string
+          ip_address: unknown
+          last_verification?: string
+          location_data?: Json
+          risk_factors?: Json
+          session_id: string
+          status?: string
+          trust_score?: number
+          updated_at?: string
+          user_id: string
+          verification_level?: string
+          verification_methods?: Json
+        }
+        Update: {
+          context_analysis?: Json
+          continuous_checks?: Json
+          created_at?: string
+          device_fingerprint?: string
+          expires_at?: string
+          id?: string
+          ip_address?: unknown
+          last_verification?: string
+          location_data?: Json
+          risk_factors?: Json
+          session_id?: string
+          status?: string
+          trust_score?: number
+          updated_at?: string
+          user_id?: string
+          verification_level?: string
+          verification_methods?: Json
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
@@ -13513,6 +14107,10 @@ export type Database = {
       auto_approve_payout_request: {
         Args: { p_request_id: string }
         Returns: boolean
+      }
+      calculate_trust_score: {
+        Args: { p_user_id: string; p_session_id: string; p_context_data: Json }
+        Returns: number
       }
       calculate_vendor_commission: {
         Args: {
@@ -13550,9 +14148,25 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: Json
       }
+      detect_fraud_patterns: {
+        Args: { p_user_id: string; p_transaction_data: Json }
+        Returns: Json
+      }
       is_admin_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean
+      }
+      log_enhanced_audit_event: {
+        Args: {
+          p_event_type: string
+          p_user_id: string
+          p_resource_type: string
+          p_action: string
+          p_data_before?: Json
+          p_data_after?: Json
+          p_context?: Json
+        }
+        Returns: string
       }
       log_query_performance: {
         Args: {

@@ -1100,6 +1100,87 @@ export type Database = {
           },
         ]
       }
+      bandwidth_optimization_settings: {
+        Row: {
+          cache_strategy: Json | null
+          compression_algorithms: Json | null
+          created_at: string | null
+          id: string
+          image_quality_reduction: number | null
+          is_active: boolean | null
+          lazy_loading_aggressive: boolean | null
+          prefetch_disabled: boolean | null
+          setting_name: string
+          target_bandwidth_range: string
+          video_streaming_disabled: boolean | null
+        }
+        Insert: {
+          cache_strategy?: Json | null
+          compression_algorithms?: Json | null
+          created_at?: string | null
+          id?: string
+          image_quality_reduction?: number | null
+          is_active?: boolean | null
+          lazy_loading_aggressive?: boolean | null
+          prefetch_disabled?: boolean | null
+          setting_name: string
+          target_bandwidth_range: string
+          video_streaming_disabled?: boolean | null
+        }
+        Update: {
+          cache_strategy?: Json | null
+          compression_algorithms?: Json | null
+          created_at?: string | null
+          id?: string
+          image_quality_reduction?: number | null
+          is_active?: boolean | null
+          lazy_loading_aggressive?: boolean | null
+          prefetch_disabled?: boolean | null
+          setting_name?: string
+          target_bandwidth_range?: string
+          video_streaming_disabled?: boolean | null
+        }
+        Relationships: []
+      }
+      bangla_nlp_processing: {
+        Row: {
+          categories: Json | null
+          confidence_score: number | null
+          created_at: string | null
+          id: string
+          input_text: string
+          keywords: Json | null
+          language_detected: string | null
+          processed_text: string
+          processing_type: string
+          sentiment_score: number | null
+        }
+        Insert: {
+          categories?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          input_text: string
+          keywords?: Json | null
+          language_detected?: string | null
+          processed_text: string
+          processing_type: string
+          sentiment_score?: number | null
+        }
+        Update: {
+          categories?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          id?: string
+          input_text?: string
+          keywords?: Json | null
+          language_detected?: string | null
+          processed_text?: string
+          processing_type?: string
+          sentiment_score?: number | null
+        }
+        Relationships: []
+      }
       bangladesh_compliance_tracking: {
         Row: {
           compliance_officer_id: string | null
@@ -3113,6 +3194,56 @@ export type Database = {
         }
         Relationships: []
       }
+      content_optimization_cache: {
+        Row: {
+          compression_ratio: number
+          content_key: string
+          content_type: string
+          created_at: string | null
+          edge_node_id: string | null
+          expires_at: string
+          geographic_region: string
+          id: string
+          optimized_size_bytes: number
+          original_size_bytes: number
+          rural_optimized: boolean | null
+        }
+        Insert: {
+          compression_ratio: number
+          content_key: string
+          content_type: string
+          created_at?: string | null
+          edge_node_id?: string | null
+          expires_at: string
+          geographic_region: string
+          id?: string
+          optimized_size_bytes: number
+          original_size_bytes: number
+          rural_optimized?: boolean | null
+        }
+        Update: {
+          compression_ratio?: number
+          content_key?: string
+          content_type?: string
+          created_at?: string | null
+          edge_node_id?: string | null
+          expires_at?: string
+          geographic_region?: string
+          id?: string
+          optimized_size_bytes?: number
+          original_size_bytes?: number
+          rural_optimized?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "content_optimization_cache_edge_node_id_fkey"
+            columns: ["edge_node_id"]
+            isOneToOne: false
+            referencedRelation: "edge_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       conversion_funnels: {
         Row: {
           created_at: string | null
@@ -3230,6 +3361,114 @@ export type Database = {
           status?: string
           tracking_id?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cross_wallet_transfers: {
+        Row: {
+          amount: number
+          completed_at: string | null
+          created_at: string | null
+          from_wallet_id: string | null
+          gateway_response: Json | null
+          gateway_transaction_id: string | null
+          id: string
+          scheduled_at: string | null
+          status: string | null
+          to_wallet_id: string | null
+          transfer_fee: number | null
+          transfer_type: string | null
+        }
+        Insert: {
+          amount: number
+          completed_at?: string | null
+          created_at?: string | null
+          from_wallet_id?: string | null
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          scheduled_at?: string | null
+          status?: string | null
+          to_wallet_id?: string | null
+          transfer_fee?: number | null
+          transfer_type?: string | null
+        }
+        Update: {
+          amount?: number
+          completed_at?: string | null
+          created_at?: string | null
+          from_wallet_id?: string | null
+          gateway_response?: Json | null
+          gateway_transaction_id?: string | null
+          id?: string
+          scheduled_at?: string | null
+          status?: string | null
+          to_wallet_id?: string | null
+          transfer_fee?: number | null
+          transfer_type?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "cross_wallet_transfers_from_wallet_id_fkey"
+            columns: ["from_wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_money_wallets"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "cross_wallet_transfers_to_wallet_id_fkey"
+            columns: ["to_wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_money_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      cultural_preferences: {
+        Row: {
+          calendar_type: string | null
+          created_at: string | null
+          currency_display: string | null
+          date_format: string | null
+          festival_notifications: boolean | null
+          id: string
+          number_format: string | null
+          prayer_time_integration: boolean | null
+          preferred_language: string | null
+          region_specific_content: boolean | null
+          time_format: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          calendar_type?: string | null
+          created_at?: string | null
+          currency_display?: string | null
+          date_format?: string | null
+          festival_notifications?: boolean | null
+          id?: string
+          number_format?: string | null
+          prayer_time_integration?: boolean | null
+          preferred_language?: string | null
+          region_specific_content?: boolean | null
+          time_format?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          calendar_type?: string | null
+          created_at?: string | null
+          currency_display?: string | null
+          date_format?: string | null
+          festival_notifications?: boolean | null
+          id?: string
+          number_format?: string | null
+          prayer_time_integration?: boolean | null
+          preferred_language?: string | null
+          region_specific_content?: boolean | null
+          time_format?: string | null
+          updated_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }
@@ -4049,6 +4288,54 @@ export type Database = {
           },
         ]
       }
+      edge_nodes: {
+        Row: {
+          city: string
+          coordinates: Json
+          country_code: string
+          created_at: string | null
+          current_load: number | null
+          geographic_region: string
+          health_status: string | null
+          id: string
+          node_capacity: Json | null
+          node_name: string
+          optimization_config: Json | null
+          rural_optimization_enabled: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          city: string
+          coordinates: Json
+          country_code: string
+          created_at?: string | null
+          current_load?: number | null
+          geographic_region: string
+          health_status?: string | null
+          id?: string
+          node_capacity?: Json | null
+          node_name: string
+          optimization_config?: Json | null
+          rural_optimization_enabled?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          city?: string
+          coordinates?: Json
+          country_code?: string
+          created_at?: string | null
+          current_load?: number | null
+          geographic_region?: string
+          health_status?: string | null
+          id?: string
+          node_capacity?: Json | null
+          node_name?: string
+          optimization_config?: Json | null
+          rural_optimization_enabled?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       enhanced_audit_trails: {
         Row: {
           action_performed: string
@@ -4503,6 +4790,54 @@ export type Database = {
           is_active?: boolean | null
           start_date?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      festival_optimizations: {
+        Row: {
+          created_at: string | null
+          cultural_content_boost: boolean | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          festival_type: string
+          id: string
+          is_active: boolean | null
+          optimization_config: Json
+          server_scaling_factor: number | null
+          special_offers_enabled: boolean | null
+          start_date: string
+          traffic_multiplier: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          cultural_content_boost?: boolean | null
+          end_date: string
+          festival_name: string
+          festival_name_bn: string
+          festival_type: string
+          id?: string
+          is_active?: boolean | null
+          optimization_config: Json
+          server_scaling_factor?: number | null
+          special_offers_enabled?: boolean | null
+          start_date: string
+          traffic_multiplier?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          cultural_content_boost?: boolean | null
+          end_date?: string
+          festival_name?: string
+          festival_name_bn?: string
+          festival_type?: string
+          id?: string
+          is_active?: boolean | null
+          optimization_config?: Json
+          server_scaling_factor?: number | null
+          special_offers_enabled?: boolean | null
+          start_date?: string
+          traffic_multiplier?: number | null
         }
         Relationships: []
       }
@@ -5026,6 +5361,149 @@ export type Database = {
           },
         ]
       }
+      geographic_routing_rules: {
+        Row: {
+          bangladesh_specific: boolean | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          priority: number | null
+          routing_criteria: Json
+          rule_name: string
+          source_region: string
+          target_edge_node_id: string | null
+        }
+        Insert: {
+          bangladesh_specific?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          routing_criteria: Json
+          rule_name: string
+          source_region: string
+          target_edge_node_id?: string | null
+        }
+        Update: {
+          bangladesh_specific?: boolean | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          priority?: number | null
+          routing_criteria?: Json
+          rule_name?: string
+          source_region?: string
+          target_edge_node_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "geographic_routing_rules_target_edge_node_id_fkey"
+            columns: ["target_edge_node_id"]
+            isOneToOne: false
+            referencedRelation: "edge_nodes"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      graphql_federation_metrics: {
+        Row: {
+          cache_hit: boolean | null
+          created_at: string | null
+          error_count: number | null
+          execution_time_ms: number
+          id: string
+          operation_type: string
+          query_complexity: number | null
+          service_name: string
+        }
+        Insert: {
+          cache_hit?: boolean | null
+          created_at?: string | null
+          error_count?: number | null
+          execution_time_ms: number
+          id?: string
+          operation_type: string
+          query_complexity?: number | null
+          service_name: string
+        }
+        Update: {
+          cache_hit?: boolean | null
+          created_at?: string | null
+          error_count?: number | null
+          execution_time_ms?: number
+          id?: string
+          operation_type?: string
+          query_complexity?: number | null
+          service_name?: string
+        }
+        Relationships: []
+      }
+      graphql_query_cache: {
+        Row: {
+          access_count: number | null
+          cached_result: Json
+          created_at: string | null
+          expires_at: string
+          id: string
+          query_hash: string
+          query_text: string
+          ttl_seconds: number | null
+        }
+        Insert: {
+          access_count?: number | null
+          cached_result: Json
+          created_at?: string | null
+          expires_at: string
+          id?: string
+          query_hash: string
+          query_text: string
+          ttl_seconds?: number | null
+        }
+        Update: {
+          access_count?: number | null
+          cached_result?: Json
+          created_at?: string | null
+          expires_at?: string
+          id?: string
+          query_hash?: string
+          query_text?: string
+          ttl_seconds?: number | null
+        }
+        Relationships: []
+      }
+      graphql_schemas: {
+        Row: {
+          created_at: string | null
+          federation_config: Json | null
+          id: string
+          is_active: boolean | null
+          schema_definition: string
+          service_name: string
+          updated_at: string | null
+          version: string
+        }
+        Insert: {
+          created_at?: string | null
+          federation_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          schema_definition: string
+          service_name: string
+          updated_at?: string | null
+          version?: string
+        }
+        Update: {
+          created_at?: string | null
+          federation_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          schema_definition?: string
+          service_name?: string
+          updated_at?: string | null
+          version?: string
+        }
+        Relationships: []
+      }
       growth_opportunity_mapping: {
         Row: {
           category_id: string | null
@@ -5097,6 +5575,118 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      grpc_health_checks: {
+        Row: {
+          checked_at: string | null
+          error_message: string | null
+          id: string
+          response_time_ms: number
+          service_id: string | null
+          status: string
+        }
+        Insert: {
+          checked_at?: string | null
+          error_message?: string | null
+          id?: string
+          response_time_ms: number
+          service_id?: string | null
+          status: string
+        }
+        Update: {
+          checked_at?: string | null
+          error_message?: string | null
+          id?: string
+          response_time_ms?: number
+          service_id?: string | null
+          status?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grpc_health_checks_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "grpc_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grpc_load_balancing_metrics: {
+        Row: {
+          avg_response_time_ms: number | null
+          created_at: string | null
+          current_load_score: number | null
+          endpoint_url: string
+          id: string
+          request_count: number | null
+          service_id: string | null
+          success_rate: number | null
+        }
+        Insert: {
+          avg_response_time_ms?: number | null
+          created_at?: string | null
+          current_load_score?: number | null
+          endpoint_url: string
+          id?: string
+          request_count?: number | null
+          service_id?: string | null
+          success_rate?: number | null
+        }
+        Update: {
+          avg_response_time_ms?: number | null
+          created_at?: string | null
+          current_load_score?: number | null
+          endpoint_url?: string
+          id?: string
+          request_count?: number | null
+          service_id?: string | null
+          success_rate?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "grpc_load_balancing_metrics_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "grpc_services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      grpc_services: {
+        Row: {
+          created_at: string | null
+          endpoint_url: string
+          health_check_config: Json | null
+          id: string
+          is_active: boolean | null
+          load_balancing_config: Json | null
+          proto_definition: string
+          service_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          endpoint_url: string
+          health_check_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          load_balancing_config?: Json | null
+          proto_definition: string
+          service_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          endpoint_url?: string
+          health_check_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          load_balancing_config?: Json | null
+          proto_definition?: string
+          service_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       health_checks: {
         Row: {
@@ -5211,6 +5801,65 @@ export type Database = {
           updated_at?: string | null
         }
         Relationships: []
+      }
+      installment_payment_plans: {
+        Row: {
+          created_at: string | null
+          customer_id: string
+          down_payment: number | null
+          id: string
+          installment_amount: number
+          installment_count: number
+          interest_rate: number | null
+          mobile_money_wallet_id: string | null
+          next_payment_date: string
+          order_id: string
+          payment_frequency: string | null
+          status: string | null
+          total_amount: number
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id: string
+          down_payment?: number | null
+          id?: string
+          installment_amount: number
+          installment_count: number
+          interest_rate?: number | null
+          mobile_money_wallet_id?: string | null
+          next_payment_date: string
+          order_id: string
+          payment_frequency?: string | null
+          status?: string | null
+          total_amount: number
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string
+          down_payment?: number | null
+          id?: string
+          installment_amount?: number
+          installment_count?: number
+          interest_rate?: number | null
+          mobile_money_wallet_id?: string | null
+          next_payment_date?: string
+          order_id?: string
+          payment_frequency?: string | null
+          status?: string | null
+          total_amount?: number
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "installment_payment_plans_mobile_money_wallet_id_fkey"
+            columns: ["mobile_money_wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_money_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       installment_plans: {
         Row: {
@@ -6250,6 +6899,53 @@ export type Database = {
           },
         ]
       }
+      micro_payment_aggregations: {
+        Row: {
+          aggregation_period: string | null
+          auto_process: boolean | null
+          created_at: string | null
+          id: string
+          min_amount_threshold: number | null
+          processed_at: string | null
+          total_micro_amount: number | null
+          transaction_count: number | null
+          user_id: string
+          wallet_id: string | null
+        }
+        Insert: {
+          aggregation_period?: string | null
+          auto_process?: boolean | null
+          created_at?: string | null
+          id?: string
+          min_amount_threshold?: number | null
+          processed_at?: string | null
+          total_micro_amount?: number | null
+          transaction_count?: number | null
+          user_id: string
+          wallet_id?: string | null
+        }
+        Update: {
+          aggregation_period?: string | null
+          auto_process?: boolean | null
+          created_at?: string | null
+          id?: string
+          min_amount_threshold?: number | null
+          processed_at?: string | null
+          total_micro_amount?: number | null
+          transaction_count?: number | null
+          user_id?: string
+          wallet_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "micro_payment_aggregations_wallet_id_fkey"
+            columns: ["wallet_id"]
+            isOneToOne: false
+            referencedRelation: "mobile_money_wallets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       ml_recommendations: {
         Row: {
           confidence_score: number | null
@@ -6277,6 +6973,51 @@ export type Database = {
           recommendation_type?: string
           recommendations?: Json
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      mobile_money_wallets: {
+        Row: {
+          balance_cache: number | null
+          created_at: string | null
+          daily_limit: number | null
+          id: string
+          is_primary: boolean | null
+          last_sync_at: string | null
+          monthly_limit: number | null
+          updated_at: string | null
+          user_id: string
+          verification_status: string | null
+          wallet_number: string
+          wallet_provider: string
+        }
+        Insert: {
+          balance_cache?: number | null
+          created_at?: string | null
+          daily_limit?: number | null
+          id?: string
+          is_primary?: boolean | null
+          last_sync_at?: string | null
+          monthly_limit?: number | null
+          updated_at?: string | null
+          user_id: string
+          verification_status?: string | null
+          wallet_number: string
+          wallet_provider: string
+        }
+        Update: {
+          balance_cache?: number | null
+          created_at?: string | null
+          daily_limit?: number | null
+          id?: string
+          is_primary?: boolean | null
+          last_sync_at?: string | null
+          monthly_limit?: number | null
+          updated_at?: string | null
+          user_id?: string
+          verification_status?: string | null
+          wallet_number?: string
+          wallet_provider?: string
         }
         Relationships: []
       }
@@ -10408,6 +11149,51 @@ export type Database = {
         }
         Relationships: []
       }
+      regional_business_hours: {
+        Row: {
+          business_type: string
+          created_at: string | null
+          district: string | null
+          friday_hours: Json | null
+          holiday_schedule: Json | null
+          id: string
+          is_active: boolean | null
+          ramadan_hours: Json | null
+          region_name: string
+          updated_at: string | null
+          weekday_hours: Json
+          weekend_hours: Json | null
+        }
+        Insert: {
+          business_type: string
+          created_at?: string | null
+          district?: string | null
+          friday_hours?: Json | null
+          holiday_schedule?: Json | null
+          id?: string
+          is_active?: boolean | null
+          ramadan_hours?: Json | null
+          region_name: string
+          updated_at?: string | null
+          weekday_hours: Json
+          weekend_hours?: Json | null
+        }
+        Update: {
+          business_type?: string
+          created_at?: string | null
+          district?: string | null
+          friday_hours?: Json | null
+          holiday_schedule?: Json | null
+          id?: string
+          is_active?: boolean | null
+          ramadan_hours?: Json | null
+          region_name?: string
+          updated_at?: string | null
+          weekday_hours?: Json
+          weekend_hours?: Json | null
+        }
+        Relationships: []
+      }
       report_executions: {
         Row: {
           created_at: string | null
@@ -10915,6 +11701,51 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      rural_connectivity_profiles: {
+        Row: {
+          average_bandwidth_kbps: number | null
+          compression_level: string | null
+          connection_stability_score: number | null
+          created_at: string | null
+          district: string
+          id: string
+          offline_sync_enabled: boolean | null
+          preferred_data_mode: string | null
+          sms_fallback_enabled: boolean | null
+          upazila: string | null
+          updated_at: string | null
+          user_id: string
+        }
+        Insert: {
+          average_bandwidth_kbps?: number | null
+          compression_level?: string | null
+          connection_stability_score?: number | null
+          created_at?: string | null
+          district: string
+          id?: string
+          offline_sync_enabled?: boolean | null
+          preferred_data_mode?: string | null
+          sms_fallback_enabled?: boolean | null
+          upazila?: string | null
+          updated_at?: string | null
+          user_id: string
+        }
+        Update: {
+          average_bandwidth_kbps?: number | null
+          compression_level?: string | null
+          connection_stability_score?: number | null
+          created_at?: string | null
+          district?: string
+          id?: string
+          offline_sync_enabled?: boolean | null
+          preferred_data_mode?: string | null
+          sms_fallback_enabled?: boolean | null
+          upazila?: string | null
+          updated_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
       }
       sales_analytics: {
         Row: {
@@ -14108,6 +14939,10 @@ export type Database = {
         Args: { p_request_id: string }
         Returns: boolean
       }
+      calculate_edge_node_load: {
+        Args: { p_node_id: string }
+        Returns: number
+      }
       calculate_trust_score: {
         Args: { p_user_id: string; p_session_id: string; p_context_data: Json }
         Returns: number
@@ -14137,6 +14972,10 @@ export type Database = {
         Returns: Json
       }
       clean_expired_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
+      cleanup_expired_graphql_cache: {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
@@ -14179,6 +15018,10 @@ export type Database = {
           p_endpoint?: string
         }
         Returns: undefined
+      }
+      process_micro_payment_aggregation: {
+        Args: { p_user_id: string }
+        Returns: Json
       }
       process_payout_batch: {
         Args: { p_batch_id: string; p_processor_id: string }

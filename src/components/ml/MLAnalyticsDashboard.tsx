@@ -1,264 +1,214 @@
-
-import React, { useEffect, useState } from 'react';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
+import React, { useState, useEffect } from 'react';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
-import { 
-  Brain, 
-  TrendingUp, 
-  AlertTriangle, 
-  Target, 
-  Users, 
-  DollarSign,
-  ShoppingCart,
-  Eye,
-  Lightbulb,
-  Zap
-} from 'lucide-react';
-import { analyticsEngine, MLInsight, CustomerSegment } from '@/services/ml/AnalyticsEngine';
+import { LineChart, Line, AreaChart, Area, BarChart, Bar, PieChart, Pie, Cell, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { TrendingUp, TrendingDown, Users, ShoppingCart, Target, Brain, Eye, Zap } from 'lucide-react';
+import { supabase } from '@/integrations/supabase/client';
 
-export const MLAnalyticsDashboard: React.FC = () => {
-  const [insights, setInsights] = useState<MLInsight[]>([]);
-  const [customerSegments, setCustomerSegments] = useState<CustomerSegment[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+interface MLAnalyticsData {
+  overview?: any;
+  predictive?: any;
+  behavioral?: any;
+  marketIntelligence?: any;
+}
+
+export default function MLAnalyticsDashboard() {
+  const [activeTab, setActiveTab] = useState('overview');
+  const [data, setData] = useState<MLAnalyticsData>({});
+  const [loading, setLoading] = useState(true);
+  const [timeRange, setTimeRange] = useState('7d');
 
   useEffect(() => {
-    loadAnalytics();
-  }, []);
+    fetchAnalyticsData();
+  }, [activeTab, timeRange]);
 
-  const loadAnalytics = async () => {
+  const fetchAnalyticsData = async () => {
     try {
-      setIsLoading(true);
-      
-      const [businessInsights, segments] = await Promise.all([
-        analyticsEngine.generateBusinessInsights(),
-        analyticsEngine.analyzeCustomerSegments()
-      ]);
-      
-      setInsights(businessInsights);
-      setCustomerSegments(segments);
-      
+      setLoading(true);
+      const { data: response, error } = await supabase.functions.invoke('ml-analytics-dashboard', {
+        body: { type: activeTab, timeRange }
+      });
+
+      if (error) throw error;
+
+      setData(prev => ({
+        ...prev,
+        [activeTab]: response.data
+      }));
     } catch (error) {
-      console.error('Error loading ML analytics:', error);
+      console.error('Error fetching ML analytics:', error);
     } finally {
-      setIsLoading(false);
+      setLoading(false);
     }
   };
 
-  const getInsightIcon = (type: string) => {
-    switch (type) {
-      case 'trend': return <TrendingUp className="w-5 h-5" />;
-      case 'opportunity': return <Lightbulb className="w-5 h-5" />;
-      case 'warning': return <AlertTriangle className="w-5 h-5" />;
-      case 'anomaly': return <Zap className="w-5 h-5" />;
-      default: return <Brain className="w-5 h-5" />;
-    }
-  };
+  const StatCard = ({ title, value, change, icon: Icon, trend }: any) => (
+    <Card className="hover-scale">
+      <CardContent className="p-6">
+        <div className="flex items-center justify-between">
+          <div>
+            <p className="text-sm font-medium text-muted-foreground">{title}</p>
+            <p className="text-2xl font-bold">{value}</p>
+            {change && (
+              <p className={`text-sm flex items-center gap-1 ${trend === 'up' ? 'text-green-600' : 'text-red-600'}`}>
+                {trend === 'up' ? <TrendingUp className="w-4 h-4" /> : <TrendingDown className="w-4 h-4" />}
+                {change}%
+              </p>
+            )}
+          </div>
+          <Icon className="w-8 h-8 text-primary" />
+        </div>
+      </CardContent>
+    </Card>
+  );
 
-  const getInsightColor = (type: string) => {
-    switch (type) {
-      case 'trend': return 'bg-blue-100 text-blue-800 border-blue-200';
-      case 'opportunity': return 'bg-green-100 text-green-800 border-green-200';
-      case 'warning': return 'bg-red-100 text-red-800 border-red-200';
-      case 'anomaly': return 'bg-orange-100 text-orange-800 border-orange-200';
-      default: return 'bg-purple-100 text-purple-800 border-purple-200';
-    }
-  };
-
-  if (isLoading) {
+  const OverviewDashboard = () => {
+    const overviewData = data.overview || {};
+    
     return (
-      <div className="space-y-6">
-        <div className="flex items-center gap-3">
-          <Brain className="w-8 h-8 text-purple-600 animate-pulse" />
-          <h1 className="text-2xl font-bold">ML Analytics Dashboard</h1>
+      <div className="space-y-6 animate-fade-in">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+          <StatCard
+            title="Total Users"
+            value={overviewData.totalUsers?.toLocaleString() || '0'}
+            change={15.2}
+            trend="up"
+            icon={Users}
+          />
+          <StatCard
+            title="ML Recommendations"
+            value={overviewData.totalRecommendations?.toLocaleString() || '0'}
+            change={23.1}
+            trend="up"
+            icon={Brain}
+          />
+          <StatCard
+            title="Conversion Rate"
+            value={`${overviewData.conversionRate || 0}%`}
+            change={8.5}
+            trend="up"
+            icon={Target}
+          />
+          <StatCard
+            title="Avg Session Duration"
+            value={`${Math.floor((overviewData.avgSessionDuration || 0) / 60)}:${(overviewData.avgSessionDuration || 0) % 60}`}
+            change={12.3}
+            trend="up"
+            icon={Eye}
+          />
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {Array.from({ length: 6 }).map((_, i) => (
-            <Card key={i} className="p-6">
-              <div className="bg-gray-100 rounded h-32 animate-pulse" />
-            </Card>
-          ))}
-        </div>
+
+        <Card>
+          <CardHeader>
+            <CardTitle>ML Performance Overview</CardTitle>
+            <CardDescription>Real-time analytics powered by machine learning</CardDescription>
+          </CardHeader>
+          <CardContent>
+            <div className="h-[300px]">
+              <ResponsiveContainer width="100%" height="100%">
+                <AreaChart data={[
+                  { name: 'Mon', recommendations: 120, conversions: 32 },
+                  { name: 'Tue', recommendations: 145, conversions: 41 },
+                  { name: 'Wed', recommendations: 132, conversions: 38 },
+                  { name: 'Thu', recommendations: 168, conversions: 52 },
+                  { name: 'Fri', recommendations: 195, conversions: 63 },
+                  { name: 'Sat', recommendations: 210, conversions: 71 },
+                  { name: 'Sun', recommendations: 189, conversions: 58 },
+                ]}>
+                  <CartesianGrid strokeDasharray="3 3" />
+                  <XAxis dataKey="name" />
+                  <YAxis />
+                  <Tooltip />
+                  <Legend />
+                  <Area type="monotone" dataKey="recommendations" stackId="1" stroke="hsl(var(--primary))" fill="hsl(var(--primary))" fillOpacity={0.6} />
+                  <Area type="monotone" dataKey="conversions" stackId="1" stroke="hsl(var(--secondary))" fill="hsl(var(--secondary))" fillOpacity={0.6} />
+                </AreaChart>
+              </ResponsiveContainer>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
-  }
+  };
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
+    <div className="space-y-6 p-6">
       <div className="flex items-center justify-between">
-        <div className="flex items-center gap-3">
-          <div className="p-2 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg">
-            <Brain className="w-8 h-8 text-white" />
-          </div>
-          <div>
-            <h1 className="text-2xl font-bold text-gray-900">ML Analytics Dashboard</h1>
-            <p className="text-gray-600">AI-powered business insights and predictions</p>
-          </div>
+        <div>
+          <h1 className="text-3xl font-bold">ML Analytics Dashboard</h1>
+          <p className="text-muted-foreground">AI-powered insights and predictions</p>
         </div>
-        
-        <Button onClick={loadAnalytics}>
-          <Brain className="w-4 h-4 mr-2" />
-          Refresh Insights
-        </Button>
+        <div className="flex gap-2">
+          <Button
+            variant={timeRange === '7d' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setTimeRange('7d')}
+          >
+            7 Days
+          </Button>
+          <Button
+            variant={timeRange === '30d' ? 'default' : 'outline'}
+            size="sm"
+            onClick={() => setTimeRange('30d')}
+          >
+            30 Days
+          </Button>
+        </div>
       </div>
 
-      {/* Key Metrics */}
-      <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-blue-100 rounded-lg">
-                <Eye className="w-5 h-5 text-blue-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">ML Accuracy</p>
-                <p className="text-xl font-bold text-blue-600">94.2%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-green-100 rounded-lg">
-                <Target className="w-5 h-5 text-green-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Conversion Boost</p>
-                <p className="text-xl font-bold text-green-600">+23%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-purple-100 rounded-lg">
-                <Users className="w-5 h-5 text-purple-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Segments</p>
-                <p className="text-xl font-bold text-purple-600">{customerSegments.length}</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-        
-        <Card>
-          <CardContent className="p-4">
-            <div className="flex items-center gap-3">
-              <div className="p-2 bg-orange-100 rounded-lg">
-                <DollarSign className="w-5 h-5 text-orange-600" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">Revenue Impact</p>
-                <p className="text-xl font-bold text-orange-600">+18.5%</p>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-      </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab}>
+        <TabsList className="grid w-full grid-cols-4">
+          <TabsTrigger value="overview">Overview</TabsTrigger>
+          <TabsTrigger value="predictive">Predictive</TabsTrigger>
+          <TabsTrigger value="behavioral">Behavioral</TabsTrigger>
+          <TabsTrigger value="marketIntelligence">Market Intelligence</TabsTrigger>
+        </TabsList>
 
-      {/* ML Insights */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Lightbulb className="w-5 h-5" />
-            AI Business Insights
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-            {insights.map((insight) => (
-              <div
-                key={insight.id}
-                className={`border rounded-lg p-4 ${getInsightColor(insight.type)}`}
-              >
-                <div className="flex items-start gap-3 mb-3">
-                  {getInsightIcon(insight.type)}
-                  <div className="flex-1">
-                    <h3 className="font-semibold text-sm">{insight.title}</h3>
-                    <p className="text-xs mt-1 opacity-90">{insight.description}</p>
-                  </div>
-                  <Badge variant="outline" className="text-xs">
-                    {Math.round(insight.confidence * 100)}%
-                  </Badge>
-                </div>
-                
-                {insight.recommendations && insight.recommendations.length > 0 && (
-                  <div className="mt-3">
-                    <p className="text-xs font-medium mb-2">AI Recommendations:</p>
-                    <ul className="text-xs space-y-1">
-                      {insight.recommendations.slice(0, 2).map((rec, index) => (
-                        <li key={index} className="flex items-center gap-1">
-                          <div className="w-1 h-1 bg-current rounded-full" />
-                          {rec}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <TabsContent value="overview">
+          {loading ? (
+            <div className="flex items-center justify-center h-64">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          ) : (
+            <OverviewDashboard />
+          )}
+        </TabsContent>
 
-      {/* Customer Segments */}
-      <Card>
-        <CardHeader>
-          <CardTitle className="flex items-center gap-2">
-            <Users className="w-5 h-5" />
-            ML Customer Segments
-          </CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {customerSegments.map((segment) => (
-              <div key={segment.segmentId} className="border rounded-lg p-4">
-                <div className="flex items-center justify-between mb-3">
-                  <h3 className="font-semibold">{segment.segmentName}</h3>
-                  <Badge variant="outline">
-                    {segment.size.toLocaleString()} users
-                  </Badge>
-                </div>
-                
-                <div className="space-y-2 text-sm">
-                  <div>
-                    <span className="text-gray-600">Lifetime Value:</span>
-                    <span className="font-semibold ml-2">
-                      ৳{segment.predictedLifetimeValue.toLocaleString()}
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-gray-600">Churn Risk:</span>
-                    <span className={`font-semibold ml-2 ${
-                      segment.churnRisk > 0.5 ? 'text-red-600' : 'text-green-600'
-                    }`}>
-                      {Math.round(segment.churnRisk * 100)}%
-                    </span>
-                  </div>
-                  
-                  <div>
-                    <span className="text-gray-600">Top Preferences:</span>
-                    <div className="flex flex-wrap gap-1 mt-1">
-                      {segment.preferences.slice(0, 3).map((pref, index) => (
-                        <Badge key={index} variant="secondary" className="text-xs">
-                          {pref}
-                        </Badge>
-                      ))}
-                    </div>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </CardContent>
-      </Card>
+        <TabsContent value="predictive">
+          <Card>
+            <CardHeader>
+              <CardTitle>Predictive Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">Predictive analytics dashboard coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="behavioral">
+          <Card>
+            <CardHeader>
+              <CardTitle>Behavioral Analytics</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">Behavioral analytics dashboard coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+
+        <TabsContent value="marketIntelligence">
+          <Card>
+            <CardHeader>
+              <CardTitle>Market Intelligence</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <p className="text-muted-foreground">Market intelligence dashboard coming soon...</p>
+            </CardContent>
+          </Card>
+        </TabsContent>
+      </Tabs>
     </div>
   );
-};
+}

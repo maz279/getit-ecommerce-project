@@ -7,7 +7,7 @@ import { useCart } from '@/context/CartContext';
 import { useAuth } from '@/context/AuthContext';
 import { UserProfileDropdown } from './UserProfileDropdown';
 import { LanguageSelector } from './LanguageSelector';
-import { NotificationCenter } from '@/components/realtime/NotificationCenter';
+import NotificationCenter from '@/components/realtime/NotificationCenter';
 
 interface ActionIconsProps {
   language: string;

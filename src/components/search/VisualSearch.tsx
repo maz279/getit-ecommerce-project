@@ -103,7 +103,7 @@ export default function VisualSearch({ onResult, onError, className = '' }: Visu
       }
     } catch (error) {
       console.error('Camera access error:', error);
-      onError?('Camera access denied. Please allow camera access or upload an image.');
+      onError?.('Camera access denied. Please allow camera access or upload an image.');
     }
   };
 

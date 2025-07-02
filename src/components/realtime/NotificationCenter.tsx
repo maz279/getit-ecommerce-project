@@ -1,256 +1,184 @@
-import React, { useState, useEffect } from 'react';
-import { Bell, X } from 'lucide-react';
+import React, { useState, useEffect, useRef } from 'react';
+import { Bell, X, Check, CheckCheck, AlertCircle, Info, ShoppingCart, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
+import { Card, CardContent, CardHeader } from '@/components/ui/card';
 import { ScrollArea } from '@/components/ui/scroll-area';
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from '@/components/ui/popover';
+import { Sheet, SheetContent, SheetHeader, SheetTitle, SheetTrigger } from '@/components/ui/sheet';
 import { supabase } from '@/integrations/supabase/client';
-import { useAuth } from '@/context/AuthContext';
-import { formatDistanceToNow } from 'date-fns';
+import { useAuth } from '@/hooks/useAuth';
 
 interface Notification {
   id: string;
-  user_id: string;
+  type: string;
   title: string;
   message: string;
-  type: string;
-  read: boolean;
-  metadata: Record<string, any>;
+  is_read: boolean;
   created_at: string;
-  read_at?: string;
+  metadata?: any;
 }
 
-export const NotificationCenter: React.FC = () => {
+export default function NotificationCenter() {
   const { user } = useAuth();
   const [notifications, setNotifications] = useState<Notification[]>([]);
   const [unreadCount, setUnreadCount] = useState(0);
   const [isOpen, setIsOpen] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const channelRef = useRef<any>(null);
 
-  // Load notifications
-  const loadNotifications = async () => {
-    if (!user) return;
-
-    try {
-      const { data, error } = await supabase
-        .from('notifications')
-        .select('*')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false })
-        .limit(20);
-
-      if (error) throw error;
-
-      const notificationsData = (data || []).map(notification => ({
-        ...notification,
-        metadata: typeof notification.metadata === 'string' 
-          ? JSON.parse(notification.metadata) 
-          : notification.metadata || {}
-      }));
-
-      setNotifications(notificationsData);
-      setUnreadCount(notificationsData.filter(n => !n.read).length);
-    } catch (error) {
-      console.error('Error loading notifications:', error);
-    }
-  };
-
-  // Mark notification as read
-  const markAsRead = async (notificationId: string) => {
-    try {
-      const { error } = await supabase
-        .from('notifications')
-        .update({ 
-          read: true,
-          read_at: new Date().toISOString()
-        })
-        .eq('id', notificationId);
-
-      if (error) throw error;
-
-      setNotifications(prev =>
-        prev.map(n =>
-          n.id === notificationId
-            ? { ...n, read: true, read_at: new Date().toISOString() }
-            : n
-        )
-      );
-      setUnreadCount(prev => Math.max(0, prev - 1));
-    } catch (error) {
-      console.error('Error marking notification as read:', error);
-    }
-  };
-
-  // Mark all as read
-  const markAllAsRead = async () => {
-    if (!user) return;
-
-    try {
-      const { error } = await supabase
-        .from('notifications')
-        .update({ 
-          read: true,
-          read_at: new Date().toISOString()
-        })
-        .eq('user_id', user.id)
-        .eq('read', false);
-
-      if (error) throw error;
-
-      setNotifications(prev =>
-        prev.map(n => ({ ...n, read: true, read_at: new Date().toISOString() }))
-      );
-      setUnreadCount(0);
-    } catch (error) {
-      console.error('Error marking all notifications as read:', error);
-    }
-  };
-
-  // Real-time subscription for new notifications
   useEffect(() => {
     if (!user) return;
-
-    const channel = supabase
-      .channel('notifications_changes')
-      .on(
-        'postgres_changes',
-        {
-          event: 'INSERT',
-          schema: 'public',
-          table: 'notifications',
-          filter: `user_id=eq.${user.id}`,
-        },
-        (payload) => {
-          const newNotification = payload.new as Notification;
-          setNotifications(prev => [newNotification, ...prev.slice(0, 19)]);
-          setUnreadCount(prev => prev + 1);
-        }
-      )
-      .subscribe();
-
+    
+    fetchNotifications();
+    setupRealtimeSubscription();
+    
     return () => {
-      supabase.removeChannel(channel);
+      if (channelRef.current) {
+        supabase.removeChannel(channelRef.current);
+      }
     };
   }, [user]);
 
-  // Load notifications on mount
-  useEffect(() => {
-    if (user) {
-      loadNotifications();
+  const fetchNotifications = async () => {
+    if (!user) return;
+    
+    try {
+      setLoading(true);
+      const { data, error } = await supabase.functions.invoke('notification-system', {
+        body: { action: 'get', userId: user.id }
+      });
+
+      if (error) throw error;
+      setNotifications(data.notifications || []);
+      setUnreadCount(data.notifications?.filter((n: Notification) => !n.is_read).length || 0);
+    } catch (error) {
+      console.error('Error fetching notifications:', error);
+    } finally {
+      setLoading(false);
     }
-  }, [user]);
+  };
+
+  const setupRealtimeSubscription = () => {
+    if (!user) return;
+
+    channelRef.current = supabase
+      .channel(`notifications:${user.id}`)
+      .on('broadcast', { event: 'new_notification' }, (payload) => {
+        const newNotification = payload.payload;
+        setNotifications(prev => [newNotification, ...prev]);
+        setUnreadCount(prev => prev + 1);
+      })
+      .subscribe();
+  };
 
   const getNotificationIcon = (type: string) => {
     switch (type) {
       case 'order':
-        return '📦';
-      case 'payment':
-        return '💳';
-      case 'message':
-        return '💬';
+        return <ShoppingCart className="w-5 h-5 text-blue-500" />;
+      case 'inventory_alert':
+        return <AlertCircle className="w-5 h-5 text-orange-500" />;
       case 'system':
-        return '⚙️';
+        return <Info className="w-5 h-5 text-gray-500" />;
+      case 'promotion':
+        return <Zap className="w-5 h-5 text-green-500" />;
       default:
-        return '🔔';
+        return <Bell className="w-5 h-5 text-primary" />;
     }
   };
 
-  const getNotificationColor = (type: string) => {
-    switch (type) {
-      case 'error':
-        return 'border-l-destructive';
-      case 'warning':
-        return 'border-l-yellow-500';
-      case 'success':
-        return 'border-l-green-500';
-      default:
-        return 'border-l-primary';
-    }
+  const formatTimeAgo = (timestamp: string) => {
+    const now = new Date();
+    const time = new Date(timestamp);
+    const diff = now.getTime() - time.getTime();
+    
+    const minutes = Math.floor(diff / 60000);
+    const hours = Math.floor(diff / 3600000);
+    const days = Math.floor(diff / 86400000);
+    
+    if (days > 0) return `${days}d ago`;
+    if (hours > 0) return `${hours}h ago`;
+    if (minutes > 0) return `${minutes}m ago`;
+    return 'Just now';
   };
-
-  if (!user) return null;
 
   return (
-    <Popover open={isOpen} onOpenChange={setIsOpen}>
-      <PopoverTrigger asChild>
-        <Button variant="ghost" size="icon" className="relative">
-          <Bell className="h-5 w-5" />
+    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+      <SheetTrigger asChild>
+        <Button variant="ghost" size="icon" className="relative hover-scale">
+          <Bell className="w-5 h-5" />
           {unreadCount > 0 && (
-            <Badge
-              variant="destructive"
-              className="absolute -top-1 -right-1 h-5 w-5 rounded-full p-0 flex items-center justify-center text-xs"
+            <Badge 
+              variant="destructive" 
+              className="absolute -top-1 -right-1 min-w-[20px] h-5 flex items-center justify-center p-0 text-xs"
             >
               {unreadCount > 99 ? '99+' : unreadCount}
             </Badge>
           )}
         </Button>
-      </PopoverTrigger>
-      <PopoverContent className="w-80 p-0" align="end">
-        <Card className="border-0 shadow-none">
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-lg">Notifications</CardTitle>
-            {unreadCount > 0 && (
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={markAllAsRead}
-                className="text-xs"
-              >
-                Mark all read
-              </Button>
-            )}
-          </CardHeader>
-          <CardContent className="p-0">
-            <ScrollArea className="h-96">
-              {notifications.length === 0 ? (
-                <div className="p-4 text-center text-muted-foreground">
-                  No notifications yet
-                </div>
-              ) : (
-                <div className="space-y-1">
-                  {notifications.map((notification) => (
-                    <div
-                      key={notification.id}
-                      className={`p-3 border-l-4 cursor-pointer hover:bg-muted/50 transition-colors ${
-                        !notification.read ? 'bg-muted/30' : ''
-                      } ${getNotificationColor(notification.type)}`}
-                      onClick={() => !notification.read && markAsRead(notification.id)}
-                    >
-                      <div className="flex items-start gap-3">
-                        <span className="text-lg flex-shrink-0">
-                          {getNotificationIcon(notification.type)}
-                        </span>
+      </SheetTrigger>
+      
+      <SheetContent className="w-[400px] sm:w-[540px]">
+        <SheetHeader>
+          <div className="flex items-center justify-between">
+            <SheetTitle className="flex items-center gap-2">
+              <Bell className="w-5 h-5" />
+              Notifications
+              {unreadCount > 0 && (
+                <Badge variant="secondary">{unreadCount} new</Badge>
+              )}
+            </SheetTitle>
+          </div>
+        </SheetHeader>
+
+        <ScrollArea className="h-[calc(100vh-120px)] mt-6">
+          {loading ? (
+            <div className="flex items-center justify-center h-32">
+              <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+            </div>
+          ) : notifications.length === 0 ? (
+            <div className="flex flex-col items-center justify-center h-32 text-center">
+              <Bell className="w-12 h-12 text-muted-foreground mb-2" />
+              <p className="text-muted-foreground">No notifications yet</p>
+              <p className="text-sm text-muted-foreground">We'll notify you when something important happens</p>
+            </div>
+          ) : (
+            <div className="space-y-3">
+              {notifications.map((notification) => (
+                <Card 
+                  key={notification.id} 
+                  className={`cursor-pointer transition-all hover-scale ${
+                    !notification.is_read ? 'border-primary/50 bg-primary/5' : 'border-border'
+                  }`}
+                >
+                  <CardHeader className="pb-2">
+                    <div className="flex items-start justify-between gap-3">
+                      <div className="flex items-start gap-3 flex-1">
+                        {getNotificationIcon(notification.type)}
                         <div className="flex-1 min-w-0">
-                          <div className="flex items-center justify-between gap-2">
-                            <h4 className="font-medium text-sm truncate">
+                          <div className="flex items-center gap-2">
+                            <h4 className="font-semibold text-sm truncate">
                               {notification.title}
                             </h4>
-                            {!notification.read && (
-                              <div className="h-2 w-2 bg-primary rounded-full flex-shrink-0" />
+                            {!notification.is_read && (
+                              <div className="w-2 h-2 rounded-full bg-primary flex-shrink-0" />
                             )}
                           </div>
-                          <p className="text-sm text-muted-foreground line-clamp-2 mt-1">
+                          <p className="text-sm text-muted-foreground mt-1">
                             {notification.message}
                           </p>
-                          <p className="text-xs text-muted-foreground mt-1">
-                            {formatDistanceToNow(new Date(notification.created_at), {
-                              addSuffix: true,
-                            })}
+                          <p className="text-xs text-muted-foreground mt-2">
+                            {formatTimeAgo(notification.created_at)}
                           </p>
                         </div>
                       </div>
                     </div>
-                  ))}
-                </div>
-              )}
-            </ScrollArea>
-          </CardContent>
-        </Card>
-      </PopoverContent>
-    </Popover>
+                  </CardHeader>
+                </Card>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
+      </SheetContent>
+    </Sheet>
   );
-};
+}

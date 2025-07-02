@@ -6,7 +6,7 @@ export interface User {
   phone?: string;
   full_name: string;
   avatar_url?: string;
-  role: 'customer' | 'vendor' | 'admin' | 'moderator' | 'user' | 'super_admin';
+  role: 'customer' | 'vendor' | 'admin' | 'moderator' | 'user' | 'super_admin' | 'agent';
   is_verified: boolean;
   created_at: string;
   updated_at: string;

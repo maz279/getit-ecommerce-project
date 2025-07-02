@@ -1248,15 +1248,53 @@ export type Database = {
         }
         Relationships: []
       }
-      bulk_order_requests: {
+      bulk_order_categories: {
         Row: {
           created_at: string | null
+          description: string | null
+          discount_percentage: number | null
+          id: string
+          is_active: boolean | null
+          minimum_quantity: number | null
+          name: string
+          name_bn: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          minimum_quantity?: number | null
+          name: string
+          name_bn?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          discount_percentage?: number | null
+          id?: string
+          is_active?: boolean | null
+          minimum_quantity?: number | null
+          name?: string
+          name_bn?: string | null
+        }
+        Relationships: []
+      }
+      bulk_order_requests: {
+        Row: {
+          business_license: string | null
+          category_id: string | null
+          created_at: string | null
+          delivery_address: Json | null
+          expected_delivery_date: string | null
           id: string
           product_id: string | null
           quantity: number
           quote_valid_until: string | null
           special_requirements: string | null
           status: string | null
+          tax_id: string | null
           total_price: number | null
           unit_price: number | null
           updated_at: string | null
@@ -1265,13 +1303,18 @@ export type Database = {
           vendor_notes: string | null
         }
         Insert: {
+          business_license?: string | null
+          category_id?: string | null
           created_at?: string | null
+          delivery_address?: Json | null
+          expected_delivery_date?: string | null
           id?: string
           product_id?: string | null
           quantity: number
           quote_valid_until?: string | null
           special_requirements?: string | null
           status?: string | null
+          tax_id?: string | null
           total_price?: number | null
           unit_price?: number | null
           updated_at?: string | null
@@ -1280,13 +1323,18 @@ export type Database = {
           vendor_notes?: string | null
         }
         Update: {
+          business_license?: string | null
+          category_id?: string | null
           created_at?: string | null
+          delivery_address?: Json | null
+          expected_delivery_date?: string | null
           id?: string
           product_id?: string | null
           quantity?: number
           quote_valid_until?: string | null
           special_requirements?: string | null
           status?: string | null
+          tax_id?: string | null
           total_price?: number | null
           unit_price?: number | null
           updated_at?: string | null
@@ -1294,7 +1342,15 @@ export type Database = {
           vendor_id?: string | null
           vendor_notes?: string | null
         }
-        Relationships: []
+        Relationships: [
+          {
+            foreignKeyName: "bulk_order_requests_category_id_fkey"
+            columns: ["category_id"]
+            isOneToOne: false
+            referencedRelation: "bulk_order_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       business_intelligence_dashboards: {
         Row: {
@@ -7858,34 +7914,49 @@ export type Database = {
       }
       product_reviews: {
         Row: {
+          cons: string[] | null
           created_at: string | null
+          helpful_count: number | null
           id: string
           is_verified_purchase: boolean | null
+          photos: Json | null
           product_id: string
+          pros: string[] | null
           rating: number
           review_text: string | null
           updated_at: string | null
           user_id: string
+          verified_purchase: boolean | null
         }
         Insert: {
+          cons?: string[] | null
           created_at?: string | null
+          helpful_count?: number | null
           id?: string
           is_verified_purchase?: boolean | null
+          photos?: Json | null
           product_id: string
+          pros?: string[] | null
           rating: number
           review_text?: string | null
           updated_at?: string | null
           user_id: string
+          verified_purchase?: boolean | null
         }
         Update: {
+          cons?: string[] | null
           created_at?: string | null
+          helpful_count?: number | null
           id?: string
           is_verified_purchase?: boolean | null
+          photos?: Json | null
           product_id?: string
+          pros?: string[] | null
           rating?: number
           review_text?: string | null
           updated_at?: string | null
           user_id?: string
+          verified_purchase?: boolean | null
         }
         Relationships: [
           {
@@ -9523,6 +9594,38 @@ export type Database = {
           vendor_tier_adjustments?: Json | null
         }
         Relationships: []
+      }
+      review_helpfulness: {
+        Row: {
+          created_at: string | null
+          id: string
+          is_helpful: boolean
+          review_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          is_helpful: boolean
+          review_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          is_helpful?: boolean
+          review_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_helpfulness_review_id_fkey"
+            columns: ["review_id"]
+            isOneToOne: false
+            referencedRelation: "product_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       review_moderation: {
         Row: {

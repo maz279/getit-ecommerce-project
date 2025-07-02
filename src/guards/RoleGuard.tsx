@@ -3,7 +3,7 @@ import { Navigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
-export type UserRole = 'admin' | 'vendor' | 'customer' | 'moderator' | 'user' | 'super_admin';
+export type UserRole = 'admin' | 'vendor' | 'customer' | 'moderator' | 'user' | 'super_admin' | 'agent';
 
 interface RoleGuardProps {
   children: React.ReactNode;

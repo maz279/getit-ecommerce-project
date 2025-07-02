@@ -24,6 +24,7 @@ const BestSellers = lazy(() => import("./pages/BestSellers"));
 const NewArrivals = lazy(() => import("./pages/NewArrivals"));
 const Wishlist = lazy(() => import("./pages/Wishlist"));
 const BulkOrders = lazy(() => import("./pages/BulkOrders"));
+const BulkOrderRequest = lazy(() => import("./pages/BulkOrderRequest"));
 const Cart = lazy(() => import("./pages/shop/Cart"));
 const GiftCards = lazy(() => import("./pages/shop/GiftCards"));
 const GroupBuy = lazy(() => import("./pages/shop/GroupBuy"));
@@ -107,6 +108,7 @@ const App = () => (
                 <Route path="/new-arrivals" element={<NewArrivals />} />
                 <Route path="/wishlist" element={<Wishlist />} />
                 <Route path="/bulk-orders" element={<BulkOrders />} />
+                <Route path="/bulk-order" element={<BulkOrderRequest />} />
                 <Route path="/cart" element={<Cart />} />
                 <Route path="/gift-cards" element={<GiftCards />} />
                 <Route path="/group-buy" element={<GroupBuy />} />

@@ -101,6 +101,78 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_chatbot_conversations: {
+        Row: {
+          context_data: Json | null
+          conversation_data: Json
+          created_at: string | null
+          id: string
+          satisfaction_rating: number | null
+          sentiment_score: number | null
+          session_id: string
+          status: string | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          context_data?: Json | null
+          conversation_data?: Json
+          created_at?: string | null
+          id?: string
+          satisfaction_rating?: number | null
+          sentiment_score?: number | null
+          session_id: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          context_data?: Json | null
+          conversation_data?: Json
+          created_at?: string | null
+          id?: string
+          satisfaction_rating?: number | null
+          sentiment_score?: number | null
+          session_id?: string
+          status?: string | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      ai_chatbot_intents: {
+        Row: {
+          confidence_threshold: number | null
+          created_at: string | null
+          id: string
+          intent_name: string
+          is_active: boolean | null
+          response_templates: Json
+          training_data: Json
+          updated_at: string | null
+        }
+        Insert: {
+          confidence_threshold?: number | null
+          created_at?: string | null
+          id?: string
+          intent_name: string
+          is_active?: boolean | null
+          response_templates?: Json
+          training_data?: Json
+          updated_at?: string | null
+        }
+        Update: {
+          confidence_threshold?: number | null
+          created_at?: string | null
+          id?: string
+          intent_name?: string
+          is_active?: boolean | null
+          response_templates?: Json
+          training_data?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       ai_detection_settings: {
         Row: {
           configuration: Json | null
@@ -861,6 +933,45 @@ export type Database = {
         }
         Relationships: []
       }
+      biometric_auth_registrations: {
+        Row: {
+          authenticator_data: Json
+          credential_id: string
+          device_name: string | null
+          device_type: string | null
+          id: string
+          is_active: boolean | null
+          last_used_at: string | null
+          public_key: string
+          registered_at: string | null
+          user_id: string
+        }
+        Insert: {
+          authenticator_data: Json
+          credential_id: string
+          device_name?: string | null
+          device_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          public_key: string
+          registered_at?: string | null
+          user_id: string
+        }
+        Update: {
+          authenticator_data?: Json
+          credential_id?: string
+          device_name?: string | null
+          device_type?: string | null
+          id?: string
+          is_active?: boolean | null
+          last_used_at?: string | null
+          public_key?: string
+          registered_at?: string | null
+          user_id?: string
+        }
+        Relationships: []
+      }
       borrowers: {
         Row: {
           created_at: string
@@ -1199,6 +1310,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      cdn_cache_rules: {
+        Row: {
+          cache_duration: number
+          cache_type: string
+          compression_enabled: boolean | null
+          created_at: string | null
+          headers: Json | null
+          id: string
+          is_active: boolean | null
+          resource_pattern: string
+          updated_at: string | null
+        }
+        Insert: {
+          cache_duration: number
+          cache_type: string
+          compression_enabled?: boolean | null
+          created_at?: string | null
+          headers?: Json | null
+          id?: string
+          is_active?: boolean | null
+          resource_pattern: string
+          updated_at?: string | null
+        }
+        Update: {
+          cache_duration?: number
+          cache_type?: string
+          compression_enabled?: boolean | null
+          created_at?: string | null
+          headers?: Json | null
+          id?: string
+          is_active?: boolean | null
+          resource_pattern?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       cdn_configurations: {
         Row: {
@@ -1971,6 +2118,33 @@ export type Database = {
           },
         ]
       }
+      conversion_funnels: {
+        Row: {
+          created_at: string | null
+          funnel_name: string
+          funnel_steps: Json
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          funnel_name: string
+          funnel_steps?: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          funnel_name?: string
+          funnel_steps?: Json
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       conversion_tracking: {
         Row: {
           conversion_type: string
@@ -2676,6 +2850,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      device_tracking: {
+        Row: {
+          device_fingerprint: string
+          device_info: Json
+          first_seen_at: string | null
+          id: string
+          ip_address: unknown | null
+          is_trusted: boolean | null
+          last_seen_at: string | null
+          location_data: Json | null
+          risk_score: number | null
+          user_id: string | null
+        }
+        Insert: {
+          device_fingerprint: string
+          device_info?: Json
+          first_seen_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          is_trusted?: boolean | null
+          last_seen_at?: string | null
+          location_data?: Json | null
+          risk_score?: number | null
+          user_id?: string | null
+        }
+        Update: {
+          device_fingerprint?: string
+          device_info?: Json
+          first_seen_at?: string | null
+          id?: string
+          ip_address?: unknown | null
+          is_trusted?: boolean | null
+          last_seen_at?: string | null
+          location_data?: Json | null
+          risk_score?: number | null
+          user_id?: string | null
+        }
+        Relationships: []
       }
       digital_wallets: {
         Row: {
@@ -6850,6 +7063,54 @@ export type Database = {
           },
         ]
       }
+      price_predictions: {
+        Row: {
+          algorithm_used: string
+          competitor_data: Json | null
+          created_at: string | null
+          current_price: number
+          expires_at: string
+          id: string
+          market_factors: Json | null
+          predicted_price: number
+          prediction_confidence: number | null
+          prediction_period: string
+          product_id: string
+          seasonal_factors: Json | null
+          vendor_id: string
+        }
+        Insert: {
+          algorithm_used: string
+          competitor_data?: Json | null
+          created_at?: string | null
+          current_price: number
+          expires_at: string
+          id?: string
+          market_factors?: Json | null
+          predicted_price: number
+          prediction_confidence?: number | null
+          prediction_period: string
+          product_id: string
+          seasonal_factors?: Json | null
+          vendor_id: string
+        }
+        Update: {
+          algorithm_used?: string
+          competitor_data?: Json | null
+          created_at?: string | null
+          current_price?: number
+          expires_at?: string
+          id?: string
+          market_factors?: Json | null
+          predicted_price?: number
+          prediction_confidence?: number | null
+          prediction_period?: string
+          product_id?: string
+          seasonal_factors?: Json | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       product_benchmarks: {
         Row: {
           benchmark_date: string | null
@@ -7568,6 +7829,39 @@ export type Database = {
           is_active?: boolean | null
           last_active_at?: string | null
           platform?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      pwa_push_subscriptions: {
+        Row: {
+          auth_key: string
+          created_at: string | null
+          endpoint: string
+          id: string
+          is_active: boolean | null
+          p256dh_key: string
+          user_agent: string | null
+          user_id: string | null
+        }
+        Insert: {
+          auth_key: string
+          created_at?: string | null
+          endpoint: string
+          id?: string
+          is_active?: boolean | null
+          p256dh_key: string
+          user_agent?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          auth_key?: string
+          created_at?: string | null
+          endpoint?: string
+          id?: string
+          is_active?: boolean | null
+          p256dh_key?: string
+          user_agent?: string | null
           user_id?: string | null
         }
         Relationships: []
@@ -9862,6 +10156,51 @@ export type Database = {
         }
         Relationships: []
       }
+      user_heatmaps: {
+        Row: {
+          device_type: string | null
+          element_selector: string
+          id: string
+          interaction_type: string
+          page_url: string
+          session_id: string | null
+          timestamp: string | null
+          user_id: string | null
+          viewport_height: number | null
+          viewport_width: number | null
+          x_coordinate: number | null
+          y_coordinate: number | null
+        }
+        Insert: {
+          device_type?: string | null
+          element_selector: string
+          id?: string
+          interaction_type: string
+          page_url: string
+          session_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+          viewport_height?: number | null
+          viewport_width?: number | null
+          x_coordinate?: number | null
+          y_coordinate?: number | null
+        }
+        Update: {
+          device_type?: string | null
+          element_selector?: string
+          id?: string
+          interaction_type?: string
+          page_url?: string
+          session_id?: string | null
+          timestamp?: string | null
+          user_id?: string | null
+          viewport_height?: number | null
+          viewport_width?: number | null
+          x_coordinate?: number | null
+          y_coordinate?: number | null
+        }
+        Relationships: []
+      }
       user_interactions: {
         Row: {
           category_id: string | null
@@ -10096,6 +10435,39 @@ export type Database = {
           session_data?: Json | null
           user_agent?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      user_two_factor_auth: {
+        Row: {
+          backup_codes: string[] | null
+          id: string
+          is_enabled: boolean | null
+          last_used_at: string | null
+          method: string | null
+          secret_key: string | null
+          setup_at: string | null
+          user_id: string
+        }
+        Insert: {
+          backup_codes?: string[] | null
+          id?: string
+          is_enabled?: boolean | null
+          last_used_at?: string | null
+          method?: string | null
+          secret_key?: string | null
+          setup_at?: string | null
+          user_id: string
+        }
+        Update: {
+          backup_codes?: string[] | null
+          id?: string
+          is_enabled?: boolean | null
+          last_used_at?: string | null
+          method?: string | null
+          secret_key?: string | null
+          setup_at?: string | null
+          user_id?: string
         }
         Relationships: []
       }

@@ -5,7 +5,7 @@ import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/homepage/ProductCard';
 
-export const FestivalSales: React.FC = () => {
+const FestivalSales: React.FC = () => {
   const festivals = [
     {
       id: 'eid',
@@ -272,3 +272,5 @@ export const FestivalSales: React.FC = () => {
     </div>
   );
 };
+
+export default FestivalSales;

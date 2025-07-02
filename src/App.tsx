@@ -73,6 +73,9 @@ const LiveChat = lazy(() => import("./pages/LiveChat"));
 
 // Company pages
 const AboutUs = lazy(() => import("./pages/AboutUs"));
+const Contact = lazy(() => import("./pages/Contact"));
+const Blog = lazy(() => import("./pages/Blog"));
+const Careers = lazy(() => import("./pages/Careers"));
 
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
@@ -80,6 +83,18 @@ const AdminDashboard = lazy(() => import("./pages/admin/AdminDashboard"));
 // Search and Notifications pages
 const SearchPage = lazy(() => import("./pages/SearchPage").then(module => ({ default: module.SearchPage })));
 const NotificationsPage = lazy(() => import("./pages/SearchPage").then(module => ({ default: module.NotificationsPage })));
+
+// Additional existing pages
+const TermsOfService = lazy(() => import("./pages/TermsOfService"));
+const PrivacyPolicy = lazy(() => import("./pages/PrivacyPolicy"));
+const ReturnsRefunds = lazy(() => import("./pages/ReturnsRefunds"));
+const DeliveryInfo = lazy(() => import("./pages/DeliveryInfo"));
+const MobileBanking = lazy(() => import("./pages/MobileBanking"));
+const NewUserOffer = lazy(() => import("./pages/NewUserOffer"));
+const FestivalSales = lazy(() => import("./pages/FestivalSales"));
+const EidSale = lazy(() => import("./pages/EidSale"));
+const Offers = lazy(() => import("./pages/Offers"));
+const Recommendations = lazy(() => import("./pages/Recommendations"));
 
 const queryClient = new QueryClient();
 
@@ -153,6 +168,22 @@ const App = () => (
                 
                 {/* Company */}
                 <Route path="/about" element={<AboutUs />} />
+                <Route path="/about-us" element={<AboutUs />} />
+                <Route path="/contact" element={<Contact />} />
+                <Route path="/blog" element={<Blog />} />
+                <Route path="/careers" element={<Careers />} />
+                <Route path="/terms" element={<TermsOfService />} />
+                <Route path="/terms-of-service" element={<TermsOfService />} />
+                <Route path="/privacy" element={<PrivacyPolicy />} />
+                <Route path="/privacy-policy" element={<PrivacyPolicy />} />
+                <Route path="/returns-refunds" element={<ReturnsRefunds />} />
+                <Route path="/delivery-info" element={<DeliveryInfo />} />
+                <Route path="/mobile-banking" element={<MobileBanking />} />
+                <Route path="/new-user-offer" element={<NewUserOffer />} />
+                <Route path="/festival-sales" element={<FestivalSales />} />
+                <Route path="/eid-sale" element={<EidSale />} />
+                <Route path="/offers" element={<Offers />} />
+                <Route path="/recommendations" element={<Recommendations />} />
                 
                 {/* Customer & User Dashboard Routes */}
                 <Route path="/customer/dashboard" element={<CustomerDashboard />} />

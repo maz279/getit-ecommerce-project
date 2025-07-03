@@ -11,14 +11,14 @@ import { supabase } from '@/integrations/supabase/client';
 interface Order {
   id: string;
   order_number: string;
-  customer_id: string;
+  customer_id: string | null;
   customer_name: string;
-  status: 'pending' | 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled';
+  status: 'pending' | 'processing' | 'shipped' | 'delivered' | 'cancelled' | 'returned';
   total_amount: number;
   created_at: string;
   items: OrderItem[];
   shipping_address: any;
-  payment_status: 'pending' | 'paid' | 'failed' | 'refunded';
+  payment_status?: string;
 }
 
 interface OrderItem {
@@ -93,12 +93,11 @@ export const OrderManagementDashboard: React.FC = () => {
         .from('orders')
         .select(`
           *,
-          order_items!inner(
+          order_items(
             *,
-            products!inner(name),
-            vendors!inner(business_name)
-          ),
-          profiles!inner(full_name)
+            products(name),
+            vendors(business_name)
+          )
         `)
         .order('created_at', { ascending: false });
 
@@ -106,7 +105,7 @@ export const OrderManagementDashboard: React.FC = () => {
 
       const formattedOrders = data?.map(order => ({
         ...order,
-        customer_name: order.profiles?.full_name || 'Unknown Customer',
+        customer_name: order.customer_id || 'Guest Customer',
         items: order.order_items?.map((item: any) => ({
           ...item,
           product_name: item.products?.name || 'Unknown Product',
@@ -132,7 +131,7 @@ export const OrderManagementDashboard: React.FC = () => {
 
       const totalOrders = ordersData.length;
       const pendingOrders = ordersData.filter(o => o.status === 'pending').length;
-      const processingOrders = ordersData.filter(o => ['confirmed', 'processing', 'shipped'].includes(o.status)).length;
+      const processingOrders = ordersData.filter(o => ['processing', 'shipped'].includes(o.status)).length;
       const completedOrders = ordersData.filter(o => o.status === 'delivered').length;
       
       const totalRevenue = ordersData
@@ -166,7 +165,7 @@ export const OrderManagementDashboard: React.FC = () => {
     try {
       await supabase
         .from('orders')
-        .update({ status: newStatus })
+        .update({ status: newStatus as any })
         .eq('id', orderId);
 
       // Send real-time update
@@ -313,7 +312,7 @@ export const OrderManagementDashboard: React.FC = () => {
         >
           <option value="all">All Status</option>
           <option value="pending">Pending</option>
-          <option value="confirmed">Confirmed</option>
+          <option value="returned">Returned</option>
           <option value="processing">Processing</option>
           <option value="shipped">Shipped</option>
           <option value="delivered">Delivered</option>
@@ -366,16 +365,6 @@ export const OrderManagementDashboard: React.FC = () => {
                     <Button 
                       variant="default" 
                       size="sm"
-                      onClick={() => handleStatusUpdate(order.id, 'confirmed')}
-                    >
-                      Confirm
-                    </Button>
-                  )}
-                  
-                  {order.status === 'confirmed' && (
-                    <Button 
-                      variant="default" 
-                      size="sm"
                       onClick={() => handleStatusUpdate(order.id, 'processing')}
                     >
                       Process
@@ -401,6 +390,7 @@ export const OrderManagementDashboard: React.FC = () => {
                       Deliver
                     </Button>
                   )}
+                  
                 </div>
               </div>
             ))}

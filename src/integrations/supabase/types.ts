@@ -18795,6 +18795,92 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_orders: {
+        Row: {
+          actual_delivery_date: string | null
+          admin_notes: string | null
+          commission_amount: number
+          commission_rate: number
+          created_at: string | null
+          discount_amount: number
+          estimated_delivery_date: string | null
+          id: string
+          metadata: Json | null
+          order_id: string
+          order_number: string | null
+          processing_fee: number
+          shipping_amount: number
+          shipping_carrier: string | null
+          shipping_tracking_number: string | null
+          status: string
+          subtotal_amount: number
+          tax_amount: number
+          total_amount: number
+          updated_at: string | null
+          vendor_earnings: number
+          vendor_id: string
+          vendor_notes: string | null
+        }
+        Insert: {
+          actual_delivery_date?: string | null
+          admin_notes?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          discount_amount?: number
+          estimated_delivery_date?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id: string
+          order_number?: string | null
+          processing_fee?: number
+          shipping_amount?: number
+          shipping_carrier?: string | null
+          shipping_tracking_number?: string | null
+          status?: string
+          subtotal_amount?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string | null
+          vendor_earnings?: number
+          vendor_id: string
+          vendor_notes?: string | null
+        }
+        Update: {
+          actual_delivery_date?: string | null
+          admin_notes?: string | null
+          commission_amount?: number
+          commission_rate?: number
+          created_at?: string | null
+          discount_amount?: number
+          estimated_delivery_date?: string | null
+          id?: string
+          metadata?: Json | null
+          order_id?: string
+          order_number?: string | null
+          processing_fee?: number
+          shipping_amount?: number
+          shipping_carrier?: string | null
+          shipping_tracking_number?: string | null
+          status?: string
+          subtotal_amount?: number
+          tax_amount?: number
+          total_amount?: number
+          updated_at?: string | null
+          vendor_earnings?: number
+          vendor_id?: string
+          vendor_notes?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_orders_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vendor_performance_alerts: {
         Row: {
           alert_message: string

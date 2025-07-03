@@ -48,10 +48,8 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
     // Listen for auth changes
     const { data: { subscription } } = supabase.auth.onAuthStateChange(async (event, session) => {
       setUser(session?.user ?? null);
-      if (session?.user) {
-        setTimeout(() => {
-          fetchUserProfile(session.user.id);
-        }, 0);
+      if (session?.user && event === 'SIGNED_IN') {
+        fetchUserProfile(session.user.id);
       } else {
         setUserProfile(null);
       }
@@ -68,7 +66,7 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         .from('profiles')
         .select('*')
         .eq('id', userId)
-        .single();
+        .maybeSingle();
 
       if (profileData && !profileError) {
         // Convert profiles data to AppUser format
@@ -94,27 +92,35 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         return;
       }
 
-      // Fallback: try users table and create profile if needed
-      const { data: userData, error: userError } = await supabase
-        .from('users')
-        .select('*')
-        .eq('id', userId)
-        .single();
+      // If no profile exists, create one with minimal data
+      if (!profileError || profileError.code === 'PGRST116') {
+        const { data: { user } } = await supabase.auth.getUser();
+        const newProfile = {
+          id: userId,
+          full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User',
+          role: 'user' as const,
+          phone: user?.user_metadata?.phone || null
+        };
 
-      if (userData && !userError) {
-        // Create profile entry if it doesn't exist
-        const { error: insertError } = await supabase
+        const { data: insertedProfile, error: insertError } = await supabase
           .from('profiles')
-          .insert({
-            id: userData.id,
-            full_name: userData.full_name,
-            phone: userData.phone,
-            role: 'user' // Default role
-          });
+          .insert(newProfile)
+          .select()
+          .single();
 
-        if (!insertError) {
-          // Fetch the newly created profile
-          await fetchUserProfile(userId);
+        if (insertedProfile && !insertError) {
+          const appUser: AppUser = {
+            id: insertedProfile.id,
+            email: user?.email || '',
+            full_name: insertedProfile.full_name,
+            phone: insertedProfile.phone,
+            avatar_url: insertedProfile.avatar_url,
+            role: insertedProfile.role,
+            is_verified: true,
+            created_at: insertedProfile.created_at,
+            updated_at: insertedProfile.updated_at
+          };
+          setUserProfile(appUser);
         }
       }
     } catch (error) {

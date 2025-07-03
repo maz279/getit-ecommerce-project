@@ -9773,6 +9773,53 @@ export type Database = {
           },
         ]
       }
+      media_processing_jobs: {
+        Row: {
+          created_at: string | null
+          error_details: string | null
+          id: string
+          optimization_metrics: Json | null
+          original_url: string
+          processed_urls: Json | null
+          processing_config: Json | null
+          processing_status: string | null
+          product_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          error_details?: string | null
+          id?: string
+          optimization_metrics?: Json | null
+          original_url: string
+          processed_urls?: Json | null
+          processing_config?: Json | null
+          processing_status?: string | null
+          product_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          error_details?: string | null
+          id?: string
+          optimization_metrics?: Json | null
+          original_url?: string
+          processed_urls?: Json | null
+          processing_config?: Json | null
+          processing_status?: string | null
+          product_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "media_processing_jobs_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       metrics_collection: {
         Row: {
           id: string
@@ -13328,6 +13375,62 @@ export type Database = {
           },
         ]
       }
+      price_management_rules: {
+        Row: {
+          created_at: string | null
+          current_price: number | null
+          effective_dates: Json | null
+          id: string
+          is_active: boolean | null
+          maximum_price: number | null
+          minimum_price: number | null
+          pricing_algorithm: string
+          product_id: string | null
+          rule_config: Json
+          rule_type: string
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          current_price?: number | null
+          effective_dates?: Json | null
+          id?: string
+          is_active?: boolean | null
+          maximum_price?: number | null
+          minimum_price?: number | null
+          pricing_algorithm?: string
+          product_id?: string | null
+          rule_config?: Json
+          rule_type: string
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          current_price?: number | null
+          effective_dates?: Json | null
+          id?: string
+          is_active?: boolean | null
+          maximum_price?: number | null
+          minimum_price?: number | null
+          pricing_algorithm?: string
+          product_id?: string | null
+          rule_config?: Json
+          rule_type?: string
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "price_management_rules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       price_optimization_results: {
         Row: {
           applied_at: string | null
@@ -16483,6 +16586,53 @@ export type Database = {
             columns: ["review_id"]
             isOneToOne: false
             referencedRelation: "product_reviews"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      review_management_queue: {
+        Row: {
+          created_at: string | null
+          flagged_reasons: Json | null
+          id: string
+          moderation_status: string | null
+          moderation_type: string
+          moderator_notes: string | null
+          processed_at: string | null
+          processed_by: string | null
+          product_id: string | null
+          review_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          flagged_reasons?: Json | null
+          id?: string
+          moderation_status?: string | null
+          moderation_type: string
+          moderator_notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          product_id?: string | null
+          review_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          flagged_reasons?: Json | null
+          id?: string
+          moderation_status?: string | null
+          moderation_type?: string
+          moderator_notes?: string | null
+          processed_at?: string | null
+          processed_by?: string | null
+          product_id?: string | null
+          review_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "review_management_queue_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]

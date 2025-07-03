@@ -760,6 +760,48 @@ export type Database = {
         }
         Relationships: []
       }
+      ai_product_recommendations: {
+        Row: {
+          clicked: boolean | null
+          confidence_score: number
+          conversion_tracked: boolean | null
+          created_at: string | null
+          expires_at: string | null
+          id: string
+          product_id: string
+          purchased: boolean | null
+          recommendation_data: Json
+          recommendation_type: string
+          user_id: string | null
+        }
+        Insert: {
+          clicked?: boolean | null
+          confidence_score: number
+          conversion_tracked?: boolean | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          product_id: string
+          purchased?: boolean | null
+          recommendation_data?: Json
+          recommendation_type: string
+          user_id?: string | null
+        }
+        Update: {
+          clicked?: boolean | null
+          confidence_score?: number
+          conversion_tracked?: boolean | null
+          created_at?: string | null
+          expires_at?: string | null
+          id?: string
+          product_id?: string
+          purchased?: boolean | null
+          recommendation_data?: Json
+          recommendation_type?: string
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       ai_recommendation_models: {
         Row: {
           created_at: string | null
@@ -10550,6 +10592,98 @@ export type Database = {
         }
         Relationships: []
       }
+      order_analytics_cache: {
+        Row: {
+          analytics_type: string
+          cache_key: string
+          category_id: string | null
+          created_at: string | null
+          data: Json
+          date_range: Json
+          expires_at: string | null
+          id: string
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analytics_type: string
+          cache_key: string
+          category_id?: string | null
+          created_at?: string | null
+          data?: Json
+          date_range?: Json
+          expires_at?: string | null
+          id?: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analytics_type?: string
+          cache_key?: string
+          category_id?: string | null
+          created_at?: string | null
+          data?: Json
+          date_range?: Json
+          expires_at?: string | null
+          id?: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      order_communications: {
+        Row: {
+          communication_type: string
+          created_at: string | null
+          delivery_status: string | null
+          delivery_time: string | null
+          id: string
+          message_content: string
+          metadata: Json | null
+          order_id: string
+          recipient_id: string
+          recipient_type: string
+          subject: string | null
+          template_id: string | null
+        }
+        Insert: {
+          communication_type: string
+          created_at?: string | null
+          delivery_status?: string | null
+          delivery_time?: string | null
+          id?: string
+          message_content: string
+          metadata?: Json | null
+          order_id: string
+          recipient_id: string
+          recipient_type: string
+          subject?: string | null
+          template_id?: string | null
+        }
+        Update: {
+          communication_type?: string
+          created_at?: string | null
+          delivery_status?: string | null
+          delivery_time?: string | null
+          id?: string
+          message_content?: string
+          metadata?: Json | null
+          order_id?: string
+          recipient_id?: string
+          recipient_type?: string
+          subject?: string | null
+          template_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_communications_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       order_fulfillment: {
         Row: {
           allocated_at: string | null
@@ -10952,6 +11086,72 @@ export type Database = {
           vendor_id?: string | null
         }
         Relationships: []
+      }
+      order_tracking_events: {
+        Row: {
+          actual_delivery: string | null
+          created_at: string | null
+          created_by: string | null
+          delivery_agent_id: string | null
+          delivery_agent_name: string | null
+          delivery_agent_phone: string | null
+          estimated_delivery: string | null
+          event_data: Json
+          event_type: string
+          id: string
+          location_data: Json | null
+          order_id: string
+          tracking_number: string | null
+          vendor_order_id: string | null
+        }
+        Insert: {
+          actual_delivery?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          delivery_agent_id?: string | null
+          delivery_agent_name?: string | null
+          delivery_agent_phone?: string | null
+          estimated_delivery?: string | null
+          event_data?: Json
+          event_type: string
+          id?: string
+          location_data?: Json | null
+          order_id: string
+          tracking_number?: string | null
+          vendor_order_id?: string | null
+        }
+        Update: {
+          actual_delivery?: string | null
+          created_at?: string | null
+          created_by?: string | null
+          delivery_agent_id?: string | null
+          delivery_agent_name?: string | null
+          delivery_agent_phone?: string | null
+          estimated_delivery?: string | null
+          event_data?: Json
+          event_type?: string
+          id?: string
+          location_data?: Json | null
+          order_id?: string
+          tracking_number?: string | null
+          vendor_order_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "order_tracking_events_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "order_tracking_events_vendor_order_id_fkey"
+            columns: ["vendor_order_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_orders"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       order_workflow_steps: {
         Row: {
@@ -17463,6 +17663,33 @@ export type Database = {
           service_name?: string | null
           tags?: Json | null
           timestamp?: string
+        }
+        Relationships: []
+      }
+      system_performance_metrics: {
+        Row: {
+          id: string
+          metadata: Json | null
+          metric_type: string
+          metric_value: number
+          recorded_at: string | null
+          service_name: string
+        }
+        Insert: {
+          id?: string
+          metadata?: Json | null
+          metric_type: string
+          metric_value: number
+          recorded_at?: string | null
+          service_name: string
+        }
+        Update: {
+          id?: string
+          metadata?: Json | null
+          metric_type?: string
+          metric_value?: number
+          recorded_at?: string | null
+          service_name?: string
         }
         Relationships: []
       }

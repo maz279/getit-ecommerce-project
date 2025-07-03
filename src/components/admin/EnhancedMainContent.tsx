@@ -94,6 +94,46 @@ export const EnhancedMainContent: React.FC<EnhancedMainContentProps> = ({ active
           { id: 'analytics', label: 'Analytics' }
         ]
       },
+      'ai-services': {
+        title: 'AI Services',
+        breadcrumb: 'Home > AI Services > Overview',
+        tabs: [
+          { id: 'overview', label: 'Overview', active: true },
+          { id: 'models', label: 'Models' },
+          { id: 'performance', label: 'Performance' },
+          { id: 'training', label: 'Training' }
+        ]
+      },
+      'infrastructure': {
+        title: 'Infrastructure Management',
+        breadcrumb: 'Home > Infrastructure > Overview',
+        tabs: [
+          { id: 'overview', label: 'Overview', active: true },
+          { id: 'servers', label: 'Servers' },
+          { id: 'databases', label: 'Databases' },
+          { id: 'scaling', label: 'Auto-Scaling' }
+        ]
+      },
+      'business-intelligence': {
+        title: 'Business Intelligence',
+        breadcrumb: 'Home > BI > Overview',
+        tabs: [
+          { id: 'overview', label: 'Overview', active: true },
+          { id: 'customers', label: 'Customer Analytics' },
+          { id: 'sales', label: 'Sales Intelligence' },
+          { id: 'predictive', label: 'Predictive Analytics' }
+        ]
+      },
+      'logs': {
+        title: 'Log Management',
+        breadcrumb: 'Home > Logs > Recent',
+        tabs: [
+          { id: 'recent', label: 'Recent Logs', active: true },
+          { id: 'errors', label: 'Error Analysis' },
+          { id: 'performance', label: 'Performance Logs' },
+          { id: 'security', label: 'Security Logs' }
+        ]
+      },
       'order-management': {
         title: 'Order Management',
         breadcrumb: 'Home > Order Management > Overview',
@@ -763,7 +803,17 @@ export const EnhancedMainContent: React.FC<EnhancedMainContentProps> = ({ active
   );
 
   const renderContent = () => {
-    if (activeTab.includes('dashboard') || activeTab === 'overview') {
+    if (activeTab === 'ai-services') {
+      return <div className="p-6"><h2 className="text-2xl font-bold mb-4">AI Services Dashboard</h2><p>AI Services management interface - Component loading...</p></div>;
+    } else if (activeTab === 'financials') {
+      return <div className="p-6"><h2 className="text-2xl font-bold mb-4">Financial Management</h2><p>Financial dashboard interface - Component loading...</p></div>;
+    } else if (activeTab === 'infrastructure') {
+      return <div className="p-6"><h2 className="text-2xl font-bold mb-4">Infrastructure Management</h2><p>Infrastructure monitoring interface - Component loading...</p></div>;
+    } else if (activeTab === 'business-intelligence') {
+      return <div className="p-6"><h2 className="text-2xl font-bold mb-4">Business Intelligence</h2><p>BI analytics interface - Component loading...</p></div>;
+    } else if (activeTab === 'logs') {
+      return <div className="p-6"><h2 className="text-2xl font-bold mb-4">Log Management</h2><p>Log management interface - Component loading...</p></div>;
+    } else if (activeTab.includes('dashboard') || activeTab === 'overview') {
       return renderDashboardContent();
     } else if (activeTab.includes('vendor') || activeTab.includes('directory')) {
       return renderVendorContent();

@@ -39,6 +39,10 @@ export const AdminSidebar: React.FC<AdminSidebarProps> = ({
     { id: 'orders', label: 'Orders', icon: ShoppingCart, color: 'text-orange-500' },
     { id: 'users', label: 'Users', icon: Users, color: 'text-cyan-500' },
     { id: 'financials', label: 'Financials', icon: DollarSign, color: 'text-emerald-500' },
+    { id: 'ai-services', label: 'AI Services', icon: TrendingUp, color: 'text-violet-500' },
+    { id: 'infrastructure', label: 'Infrastructure', icon: Settings, color: 'text-amber-500' },
+    { id: 'business-intelligence', label: 'BI Dashboard', icon: BarChart3, color: 'text-indigo-500' },
+    { id: 'logs', label: 'Log Management', icon: FileText, color: 'text-slate-500' },
     { id: 'reports', label: 'Reports', icon: BarChart3, color: 'text-indigo-500' },
     { id: 'notifications', label: 'Notifications', icon: Bell, color: 'text-red-500' },
     { id: 'settings', label: 'Settings', icon: Settings, color: 'text-gray-500' }

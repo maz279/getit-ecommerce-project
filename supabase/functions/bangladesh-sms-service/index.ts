@@ -1,345 +1,478 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+import { serve } from "https://deno.land/std@0.190.0/http/server.ts";
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
+  'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+};
+
+interface SMSRequest {
+  action: 'send' | 'send_otp' | 'verify_otp' | 'send_bulk';
+  phone: string;
+  message?: string;
+  otp_code?: string;
+  provider?: 'ssl_wireless' | 'banglalink' | 'robi' | 'grameenphone' | 'auto';
+  bulk_messages?: Array<{
+    phone: string;
+    message: string;
+    variables?: Record<string, any>;
+  }>;
 }
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders })
+    return new Response(null, { headers: corsHeaders });
   }
 
   try {
     const supabase = createClient(
       Deno.env.get('SUPABASE_URL') ?? '',
       Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-    )
+    );
 
-    const { action, ...params } = await req.json()
+    const { action, phone, message, otp_code, provider = 'auto', bulk_messages }: SMSRequest = await req.json();
 
     switch (action) {
+      case 'send':
+        return await handleSendSMS(supabase, phone, message!, provider);
       case 'send_otp':
-        return await handleSendOTP(supabase, params)
+        return await handleSendOTP(supabase, phone, provider);
       case 'verify_otp':
-        return await handleVerifyOTP(supabase, params)
-      case 'send_promotional':
-        return await handlePromotionalSMS(supabase, params)
-      case 'send_transactional':
-        return await handleTransactionalSMS(supabase, params)
-      case 'get_delivery_notification':
-        return await handleDeliveryNotification(supabase, params)
+        return await handleVerifyOTP(supabase, phone, otp_code!);
+      case 'send_bulk':
+        return await handleBulkSMS(supabase, bulk_messages!, provider);
       default:
-        throw new Error('Invalid action')
+        throw new Error('Invalid action');
     }
-  } catch (error) {
-    console.error('Bangladesh SMS service error:', error)
-    return new Response(
-      JSON.stringify({ success: false, error: error.message }),
-      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-    )
-  }
-})
 
-async function handleSendOTP(supabase: any, params: any) {
-  const { phoneNumber, language = 'en', purpose = 'login' } = params
+  } catch (error) {
+    console.error('Bangladesh SMS service error:', error);
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: error.message,
+        timestamp: new Date().toISOString()
+      }),
+      { 
+        status: 500, 
+        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      }
+    );
+  }
+});
+
+async function handleSendSMS(supabase: any, phone: string, message: string, provider: string) {
+  console.log('Sending SMS:', { phone, provider });
+
+  // Validate Bangladesh phone number
+  if (!isValidBangladeshPhone(phone)) {
+    throw new Error('Invalid Bangladesh phone number format');
+  }
+
+  // Get SMS provider configuration
+  const smsProvider = await getSMSProvider(supabase, provider, phone);
   
-  // Validate Bangladesh phone number format
-  const bdPhoneRegex = /^(\+88|0088|88)?01[3-9]\d{8}$/
-  if (!bdPhoneRegex.test(phoneNumber)) {
-    throw new Error('Invalid Bangladesh phone number format')
+  // Send SMS
+  const result = await sendSMSViaProvider(smsProvider, phone, message);
+
+  // Log SMS history
+  await logSMSHistory(supabase, {
+    phone,
+    message,
+    provider: smsProvider.name,
+    status: result.success ? 'sent' : 'failed',
+    response: result.response,
+    error: result.error
+  });
+
+  return new Response(
+    JSON.stringify({ 
+      success: result.success,
+      message_id: result.message_id,
+      provider: smsProvider.name,
+      cost: result.cost || 0.02, // Typical SMS cost in BDT
+      timestamp: new Date().toISOString()
+    }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  );
+}
+
+async function handleSendOTP(supabase: any, phone: string, provider: string) {
+  console.log('Sending OTP to:', phone);
+
+  if (!isValidBangladeshPhone(phone)) {
+    throw new Error('Invalid Bangladesh phone number format');
   }
 
   // Generate 6-digit OTP
-  const otp = Math.floor(100000 + Math.random() * 900000).toString()
-  const expiryTime = new Date(Date.now() + 5 * 60 * 1000) // 5 minutes
+  const otpCode = Math.floor(100000 + Math.random() * 900000).toString();
+  const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
 
   // Store OTP in database
-  await supabase
+  const { error: otpError } = await supabase
     .from('otp_verifications')
-    .upsert({
-      phone_number: phoneNumber,
-      otp_code: otp,
-      purpose: purpose,
-      expires_at: expiryTime.toISOString(),
-      is_verified: false,
-      attempts: 0
-    })
+    .upsert([{
+      phone,
+      otp_code: otpCode,
+      expires_at: expiresAt.toISOString(),
+      attempts: 0,
+      verified: false,
+      created_at: new Date().toISOString()
+    }], { onConflict: 'phone' });
 
-  // Get SMS configuration
-  const { data: smsConfig } = await supabase
-    .from('bd_sms_configs')
-    .select('*')
-    .eq('is_active', true)
-    .contains('message_types', ['otp'])
-    .limit(1)
-    .single()
-
-  // Prepare message
-  const messages = {
-    en: `Your GetIt verification code is: ${otp}. This code will expire in 5 minutes. Do not share this code with anyone.`,
-    bn: `আপনার GetIt যাচাইকরণ কোড: ${otp}। এই কোডটি ৫ মিনিটে মেয়াদ শেষ হবে। এই কোড কারো সাথে শেয়ার করবেন না।`
+  if (otpError) {
+    throw new Error(`Failed to store OTP: ${otpError.message}`);
   }
 
-  const message = messages[language as keyof typeof messages] || messages.en
+  // Prepare OTP message in both languages
+  const message = `Your GetIt verification code is: ${otpCode}. Do not share this with anyone. Valid for 5 minutes.\n\nআপনার গেটইট ভেরিফিকেশন কোড: ${otpCode}। এটি কারো সাথে শেয়ার করবেন না। ৫ মিনিটের জন্য বৈধ।`;
 
-  // Mock SMS sending (replace with actual SMS provider integration)
-  const smsResponse = await mockSendSMS(phoneNumber, message, smsConfig)
+  // Send OTP SMS
+  const smsProvider = await getSMSProvider(supabase, provider, phone);
+  const result = await sendSMSViaProvider(smsProvider, phone, message);
 
-  console.log(`SMS sent to ${phoneNumber}: ${message}`)
+  await logSMSHistory(supabase, {
+    phone,
+    message: 'OTP verification code',
+    provider: smsProvider.name,
+    status: result.success ? 'sent' : 'failed',
+    response: result.response,
+    error: result.error,
+    message_type: 'otp'
+  });
 
   return new Response(
-    JSON.stringify({
-      success: true,
-      data: {
-        reference_id: `OTP_${Date.now()}`,
-        expires_at: expiryTime.toISOString(),
-        message: 'OTP sent successfully'
-      }
+    JSON.stringify({ 
+      success: result.success,
+      message_id: result.message_id,
+      expires_at: expiresAt.toISOString(),
+      provider: smsProvider.name,
+      timestamp: new Date().toISOString()
     }),
     { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
+  );
 }
 
-async function handleVerifyOTP(supabase: any, params: any) {
-  const { phoneNumber, otpCode, purpose = 'login' } = params
+async function handleVerifyOTP(supabase: any, phone: string, otpCode: string) {
+  console.log('Verifying OTP for:', phone);
 
-  // Get stored OTP
   const { data: otpRecord, error } = await supabase
     .from('otp_verifications')
     .select('*')
-    .eq('phone_number', phoneNumber)
-    .eq('purpose', purpose)
-    .eq('is_verified', false)
-    .order('created_at', { ascending: false })
-    .limit(1)
-    .single()
+    .eq('phone', phone)
+    .eq('verified', false)
+    .single();
 
   if (error || !otpRecord) {
-    throw new Error('No valid OTP found for this phone number')
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'No pending OTP verification found',
+        timestamp: new Date().toISOString()
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
-  // Check if OTP is expired
+  // Check if OTP has expired
   if (new Date() > new Date(otpRecord.expires_at)) {
-    throw new Error('OTP has expired')
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'OTP has expired',
+        timestamp: new Date().toISOString()
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
-  // Check attempt limit
+  // Check if too many attempts
   if (otpRecord.attempts >= 3) {
-    throw new Error('Maximum verification attempts exceeded')
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Too many attempts. Please request a new OTP',
+        timestamp: new Date().toISOString()
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
-  // Verify OTP
+  // Verify OTP code
   if (otpRecord.otp_code !== otpCode) {
     // Increment attempts
     await supabase
       .from('otp_verifications')
       .update({ attempts: otpRecord.attempts + 1 })
-      .eq('id', otpRecord.id)
+      .eq('phone', phone);
 
-    throw new Error('Invalid OTP code')
+    return new Response(
+      JSON.stringify({ 
+        success: false, 
+        error: 'Invalid OTP code',
+        remaining_attempts: 3 - (otpRecord.attempts + 1),
+        timestamp: new Date().toISOString()
+      }),
+      { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 
   // Mark as verified
   await supabase
     .from('otp_verifications')
     .update({ 
-      is_verified: true,
-      verified_at: new Date().toISOString()
+      verified: true, 
+      verified_at: new Date().toISOString() 
     })
-    .eq('id', otpRecord.id)
+    .eq('phone', phone);
 
   return new Response(
-    JSON.stringify({
+    JSON.stringify({ 
       success: true,
-      data: {
-        verified: true,
-        message: 'OTP verified successfully'
-      }
+      message: 'Phone number verified successfully',
+      timestamp: new Date().toISOString()
     }),
     { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
+  );
 }
 
-async function handlePromotionalSMS(supabase: any, params: any) {
-  const { phoneNumbers, message, language = 'en', campaignId } = params
+async function handleBulkSMS(supabase: any, messages: any[], provider: string) {
+  console.log('Sending bulk SMS:', messages.length);
 
-  // Check rate limits
-  const rateLimit = await checkRateLimit(supabase, 'promotional')
-  if (!rateLimit.allowed) {
-    throw new Error('Rate limit exceeded for promotional SMS')
-  }
+  const results = [];
+  const batchSize = 50; // Process in batches to avoid rate limits
 
-  const results = []
-  for (const phoneNumber of phoneNumbers) {
-    try {
-      const response = await mockSendSMS(phoneNumber, message)
-      results.push({
-        phoneNumber,
-        status: 'sent',
-        messageId: `PROMO_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`
-      })
-    } catch (error) {
-      results.push({
-        phoneNumber,
-        status: 'failed',
-        error: error.message
-      })
+  for (let i = 0; i < messages.length; i += batchSize) {
+    const batch = messages.slice(i, i + batchSize);
+    const batchPromises = batch.map(async (msg) => {
+      try {
+        if (!isValidBangladeshPhone(msg.phone)) {
+          throw new Error('Invalid phone number format');
+        }
+
+        const smsProvider = await getSMSProvider(supabase, provider, msg.phone);
+        const result = await sendSMSViaProvider(smsProvider, msg.phone, msg.message);
+        
+        await logSMSHistory(supabase, {
+          phone: msg.phone,
+          message: msg.message,
+          provider: smsProvider.name,
+          status: result.success ? 'sent' : 'failed',
+          response: result.response,
+          error: result.error,
+          message_type: 'bulk'
+        });
+
+        return { 
+          phone: msg.phone, 
+          success: result.success, 
+          message_id: result.message_id,
+          provider: smsProvider.name
+        };
+      } catch (error) {
+        return { 
+          phone: msg.phone, 
+          success: false, 
+          error: error.message 
+        };
+      }
+    });
+
+    const batchResults = await Promise.all(batchPromises);
+    results.push(...batchResults);
+
+    // Add delay between batches to respect rate limits
+    if (i + batchSize < messages.length) {
+      await new Promise(resolve => setTimeout(resolve, 1000));
     }
   }
 
-  // Log campaign results
-  await supabase
-    .from('sms_campaign_logs')
-    .insert({
-      campaign_id: campaignId,
-      message_type: 'promotional',
-      total_sent: results.filter(r => r.status === 'sent').length,
-      total_failed: results.filter(r => r.status === 'failed').length,
-      results: results
-    })
+  const successful = results.filter(r => r.success).length;
+  const failed = results.filter(r => !r.success).length;
 
   return new Response(
-    JSON.stringify({
+    JSON.stringify({ 
       success: true,
-      data: {
-        totalSent: results.filter(r => r.status === 'sent').length,
-        totalFailed: results.filter(r => r.status === 'failed').length,
-        results
-      }
+      total_messages: messages.length,
+      successful,
+      failed,
+      results,
+      timestamp: new Date().toISOString()
     }),
     { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
+  );
 }
 
-async function handleTransactionalSMS(supabase: any, params: any) {
-  const { phoneNumber, messageType, orderData, language = 'en' } = params
-
-  const templates = {
-    order_confirmation: {
-      en: `Order confirmed! Your order #${orderData.orderNumber} for ৳${orderData.amount} will be delivered by ${orderData.deliveryDate}. Track: ${orderData.trackingUrl}`,
-      bn: `অর্ডার নিশ্চিত! আপনার অর্ডার #${orderData.orderNumber} ৳${orderData.amount} এর জন্য ${orderData.deliveryDate} এর মধ্যে ডেলিভার হবে। ট্র্যাক: ${orderData.trackingUrl}`
-    },
-    payment_success: {
-      en: `Payment successful! ৳${orderData.amount} paid for order #${orderData.orderNumber}. Reference: ${orderData.transactionId}`,
-      bn: `পেমেন্ট সফল! অর্ডার #${orderData.orderNumber} এর জন্য ৳${orderData.amount} পেমেন্ট করা হয়েছে। রেফারেন্স: ${orderData.transactionId}`
-    },
-    delivery_update: {
-      en: `Delivery Update: Your order #${orderData.orderNumber} is ${orderData.status}. Expected delivery: ${orderData.deliveryDate}`,
-      bn: `ডেলিভারি আপডেট: আপনার অর্ডার #${orderData.orderNumber} ${orderData.status}। প্রত্যাশিত ডেলিভারি: ${orderData.deliveryDate}`
-    }
-  }
-
-  const template = templates[messageType as keyof typeof templates]
-  if (!template) {
-    throw new Error('Invalid message type')
-  }
-
-  const message = template[language as keyof typeof template] || template.en
-
-  const response = await mockSendSMS(phoneNumber, message)
-
-  // Log transactional SMS
-  await supabase
-    .from('sms_transaction_logs')
-    .insert({
-      phone_number: phoneNumber,
-      message_type: messageType,
-      order_id: orderData.orderNumber,
-      message_content: message,
-      status: 'sent'
-    })
-
-  return new Response(
-    JSON.stringify({
-      success: true,
-      data: {
-        messageId: response.messageId,
-        status: 'sent'
-      }
-    }),
-    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
+function isValidBangladeshPhone(phone: string): boolean {
+  // Bangladesh phone number formats:
+  // +8801XXXXXXXXX, 8801XXXXXXXXX, 01XXXXXXXXX
+  const phoneRegex = /^(\+88|88)?01[3-9]\d{8}$/;
+  return phoneRegex.test(phone.replace(/\s+/g, ''));
 }
 
-async function handleDeliveryNotification(supabase: any, params: any) {
-  const { orderId, status, language = 'en' } = params
+function normalizePhoneNumber(phone: string): string {
+  // Convert to international format
+  phone = phone.replace(/\s+/g, '');
+  if (phone.startsWith('01')) {
+    return '+88' + phone;
+  }
+  if (phone.startsWith('88')) {
+    return '+' + phone;
+  }
+  return phone;
+}
 
-  // Get order details
-  const { data: order } = await supabase
-    .from('orders')
+async function getSMSProvider(supabase: any, provider: string, phone: string) {
+  if (provider === 'auto') {
+    // Auto-select provider based on phone number carrier
+    const carrier = detectCarrier(phone);
+    provider = getOptimalProvider(carrier);
+  }
+
+  const { data: providerConfig, error } = await supabase
+    .from('notification_channels')
     .select('*')
-    .eq('id', orderId)
-    .single()
+    .eq('type', 'sms')
+    .eq('name', provider)
+    .eq('is_active', true)
+    .single();
 
-  if (!order) {
-    throw new Error('Order not found')
+  if (error || !providerConfig) {
+    // Fallback to SSL Wireless as default
+    const { data: fallbackProvider } = await supabase
+      .from('notification_channels')
+      .select('*')
+      .eq('type', 'sms')
+      .eq('is_active', true)
+      .order('priority')
+      .limit(1)
+      .single();
+
+    return fallbackProvider || {
+      name: 'ssl_wireless',
+      provider: 'ssl_wireless',
+      configuration: { api_url: 'https://sms.sslwireless.com/pushapi/dynamic/server.php' }
+    };
   }
 
-  const statusMessages = {
-    processing: {
-      en: `Your order #${order.order_number} is being processed. We'll notify you once it's ready for delivery.`,
-      bn: `আপনার অর্ডার #${order.order_number} প্রক্রিয়াধীন। ডেলিভারির জন্য প্রস্তুত হলে আমরা আপনাকে জানাব।`
-    },
-    shipped: {
-      en: `Great news! Your order #${order.order_number} has been shipped and will arrive by ${order.estimated_delivery}.`,
-      bn: `সুখবর! আপনার অর্ডার #${order.order_number} পাঠানো হয়েছে এবং ${order.estimated_delivery} এর মধ্যে পৌঁছাবে।`
-    },
-    delivered: {
-      en: `Your order #${order.order_number} has been delivered successfully. Thank you for shopping with GetIt!`,
-      bn: `আপনার অর্ডার #${order.order_number} সফলভাবে ডেলিভার হয়েছে। GetIt এর সাথে কেনাকাটার জন্য ধন্যবাদ!`
+  return providerConfig;
+}
+
+function detectCarrier(phone: string): string {
+  const normalizedPhone = normalizePhoneNumber(phone);
+  const number = normalizedPhone.slice(-11); // Get last 11 digits
+
+  // Bangladesh mobile operator prefixes
+  if (number.match(/^017/)) return 'grameenphone';
+  if (number.match(/^013|014/)) return 'grameenphone';
+  if (number.match(/^019/)) return 'banglalink';
+  if (number.match(/^018/)) return 'robi';
+  if (number.match(/^016/)) return 'robi';
+  if (number.match(/^015/)) return 'teletalk';
+
+  return 'grameenphone'; // Default
+}
+
+function getOptimalProvider(carrier: string): string {
+  // Map carriers to optimal SMS providers
+  const providerMap: Record<string, string> = {
+    'grameenphone': 'ssl_wireless',
+    'banglalink': 'banglalink',
+    'robi': 'robi',
+    'teletalk': 'ssl_wireless'
+  };
+
+  return providerMap[carrier] || 'ssl_wireless';
+}
+
+async function sendSMSViaProvider(provider: any, phone: string, message: string) {
+  const normalizedPhone = normalizePhoneNumber(phone);
+  
+  try {
+    // Simulate different provider APIs
+    switch (provider.provider) {
+      case 'ssl_wireless':
+        return await sendViaSSLWireless(provider.configuration, normalizedPhone, message);
+      case 'banglalink':
+        return await sendViaBanglalink(provider.configuration, normalizedPhone, message);
+      case 'robi':
+        return await sendViaRobi(provider.configuration, normalizedPhone, message);
+      case 'grameenphone':
+        return await sendViaGrameenphone(provider.configuration, normalizedPhone, message);
+      default:
+        throw new Error(`Unsupported SMS provider: ${provider.provider}`);
     }
+  } catch (error) {
+    return {
+      success: false,
+      error: error.message,
+      message_id: null
+    };
   }
+}
 
-  const message = statusMessages[status as keyof typeof statusMessages]?.[language as 'en' | 'bn']
-  if (!message) {
-    throw new Error('Invalid status or language')
-  }
+async function sendViaSSLWireless(config: any, phone: string, message: string) {
+  // SSL Wireless API simulation
+  console.log('Sending via SSL Wireless:', { phone, message: message.substring(0, 50) + '...' });
+  
+  // In production, integrate with actual SSL Wireless API
+  return {
+    success: true,
+    message_id: 'ssl_' + crypto.randomUUID(),
+    cost: 0.02,
+    response: { status: 'sent', provider: 'ssl_wireless' }
+  };
+}
 
-  await mockSendSMS(order.customer_phone, message)
+async function sendViaBanglalink(config: any, phone: string, message: string) {
+  console.log('Sending via Banglalink:', { phone, message: message.substring(0, 50) + '...' });
+  
+  return {
+    success: true,
+    message_id: 'bl_' + crypto.randomUUID(),
+    cost: 0.015,
+    response: { status: 'sent', provider: 'banglalink' }
+  };
+}
 
-  return new Response(
-    JSON.stringify({
-      success: true,
-      data: {
-        message: 'Delivery notification sent successfully'
+async function sendViaRobi(config: any, phone: string, message: string) {
+  console.log('Sending via Robi:', { phone, message: message.substring(0, 50) + '...' });
+  
+  return {
+    success: true,
+    message_id: 'robi_' + crypto.randomUUID(),
+    cost: 0.018,
+    response: { status: 'sent', provider: 'robi' }
+  };
+}
+
+async function sendViaGrameenphone(config: any, phone: string, message: string) {
+  console.log('Sending via Grameenphone:', { phone, message: message.substring(0, 50) + '...' });
+  
+  return {
+    success: true,
+    message_id: 'gp_' + crypto.randomUUID(),
+    cost: 0.02,
+    response: { status: 'sent', provider: 'grameenphone' }
+  };
+}
+
+async function logSMSHistory(supabase: any, logData: any) {
+  await supabase
+    .from('notification_history')
+    .insert([{
+      channel: 'sms',
+      recipient: logData.phone,
+      content: logData.message,
+      status: logData.status,
+      provider_response: logData.response,
+      error_details: logData.error ? { error: logData.error } : null,
+      sent_at: new Date().toISOString(),
+      metadata: {
+        provider: logData.provider,
+        message_type: logData.message_type || 'transactional',
+        cost: logData.cost || 0.02
       }
-    }),
-    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
-  )
-}
-
-async function mockSendSMS(phoneNumber: string, message: string, config?: any) {
-  // Mock SMS API integration
-  console.log(`[SMS] To: ${phoneNumber}, Message: ${message}`)
-  
-  // Simulate API delay
-  await new Promise(resolve => setTimeout(resolve, 100))
-  
-  return {
-    messageId: `SMS_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-    status: 'sent',
-    timestamp: new Date().toISOString()
-  }
-}
-
-async function checkRateLimit(supabase: any, messageType: string) {
-  // Check rate limits for SMS sending
-  const now = new Date()
-  const hourAgo = new Date(now.getTime() - 60 * 60 * 1000)
-
-  const { count } = await supabase
-    .from('sms_rate_limits')
-    .select('*', { count: 'exact', head: true })
-    .eq('message_type', messageType)
-    .gte('created_at', hourAgo.toISOString())
-
-  const limit = messageType === 'promotional' ? 100 : 1000 // per hour
-  
-  return {
-    allowed: (count || 0) < limit,
-    remaining: limit - (count || 0),
-    resetTime: new Date(Math.ceil(now.getTime() / (60 * 60 * 1000)) * (60 * 60 * 1000))
-  }
+    }]);
 }

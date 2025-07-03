@@ -9878,6 +9878,194 @@ export type Database = {
         }
         Relationships: []
       }
+      notification_campaigns: {
+        Row: {
+          analytics: Json | null
+          campaign_type: string
+          channels: string[]
+          created_at: string | null
+          created_by: string | null
+          description: string | null
+          end_date: string | null
+          id: string
+          name: string
+          scheduled_at: string | null
+          sending_options: Json | null
+          start_date: string | null
+          status: string | null
+          target_audience: Json
+          template_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          analytics?: Json | null
+          campaign_type: string
+          channels?: string[]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name: string
+          scheduled_at?: string | null
+          sending_options?: Json | null
+          start_date?: string | null
+          status?: string | null
+          target_audience?: Json
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          analytics?: Json | null
+          campaign_type?: string
+          channels?: string[]
+          created_at?: string | null
+          created_by?: string | null
+          description?: string | null
+          end_date?: string | null
+          id?: string
+          name?: string
+          scheduled_at?: string | null
+          sending_options?: Json | null
+          start_date?: string | null
+          status?: string | null
+          target_audience?: Json
+          template_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_campaigns_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "notification_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      notification_channels: {
+        Row: {
+          configuration: Json
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          name: string
+          priority: number | null
+          provider: string
+          rate_limit_per_day: number | null
+          rate_limit_per_hour: number | null
+          rate_limit_per_minute: number | null
+          type: string
+          updated_at: string | null
+        }
+        Insert: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          priority?: number | null
+          provider: string
+          rate_limit_per_day?: number | null
+          rate_limit_per_hour?: number | null
+          rate_limit_per_minute?: number | null
+          type: string
+          updated_at?: string | null
+        }
+        Update: {
+          configuration?: Json
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          priority?: number | null
+          provider?: string
+          rate_limit_per_day?: number | null
+          rate_limit_per_hour?: number | null
+          rate_limit_per_minute?: number | null
+          type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      notification_history: {
+        Row: {
+          campaign_id: string | null
+          channel: string
+          clicked_at: string | null
+          content: string | null
+          created_at: string | null
+          delivered_at: string | null
+          error_details: Json | null
+          id: string
+          metadata: Json | null
+          notification_id: string | null
+          opened_at: string | null
+          provider_response: Json | null
+          recipient: string
+          sent_at: string | null
+          status: string
+          subject: string | null
+          template_id: string | null
+          user_id: string | null
+        }
+        Insert: {
+          campaign_id?: string | null
+          channel: string
+          clicked_at?: string | null
+          content?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          error_details?: Json | null
+          id?: string
+          metadata?: Json | null
+          notification_id?: string | null
+          opened_at?: string | null
+          provider_response?: Json | null
+          recipient: string
+          sent_at?: string | null
+          status: string
+          subject?: string | null
+          template_id?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          campaign_id?: string | null
+          channel?: string
+          clicked_at?: string | null
+          content?: string | null
+          created_at?: string | null
+          delivered_at?: string | null
+          error_details?: Json | null
+          id?: string
+          metadata?: Json | null
+          notification_id?: string | null
+          opened_at?: string | null
+          provider_response?: Json | null
+          recipient?: string
+          sent_at?: string | null
+          status?: string
+          subject?: string | null
+          template_id?: string | null
+          user_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "notification_history_campaign_id_fkey"
+            columns: ["campaign_id"]
+            isOneToOne: false
+            referencedRelation: "notification_campaigns"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "notification_history_template_id_fkey"
+            columns: ["template_id"]
+            isOneToOne: false
+            referencedRelation: "notification_templates"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       notification_logs: {
         Row: {
           created_at: string | null
@@ -10115,10 +10303,13 @@ export type Database = {
         Row: {
           auth_key: string | null
           created_at: string | null
+          device_info: Json | null
           device_type: string | null
           endpoint: string
+          expires_at: string | null
           id: string
           is_active: boolean | null
+          last_used_at: string | null
           p256dh: string | null
           updated_at: string | null
           user_agent: string | null
@@ -10127,10 +10318,13 @@ export type Database = {
         Insert: {
           auth_key?: string | null
           created_at?: string | null
+          device_info?: Json | null
           device_type?: string | null
           endpoint: string
+          expires_at?: string | null
           id?: string
           is_active?: boolean | null
+          last_used_at?: string | null
           p256dh?: string | null
           updated_at?: string | null
           user_agent?: string | null
@@ -10139,10 +10333,13 @@ export type Database = {
         Update: {
           auth_key?: string | null
           created_at?: string | null
+          device_info?: Json | null
           device_type?: string | null
           endpoint?: string
+          expires_at?: string | null
           id?: string
           is_active?: boolean | null
+          last_used_at?: string | null
           p256dh?: string | null
           updated_at?: string | null
           user_agent?: string | null

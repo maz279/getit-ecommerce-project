@@ -33,7 +33,7 @@ export const LiveOrderTracking: React.FC<LiveOrderTrackingProps> = ({
   customerId 
 }) => {
   const { toast } = useToast();
-  const { subscribe, unsubscribe, addMessageListener, isConnected } = useWebSocket();
+  const { subscribe, isConnected } = useWebSocket();
   const [trackingData, setTrackingData] = useState<OrderTrackingData | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -74,25 +74,19 @@ export const LiveOrderTracking: React.FC<LiveOrderTrackingProps> = ({
   useEffect(() => {
     if (!isConnected) return;
 
-    const channel = `order_tracking_${orderId}`;
-    subscribe(channel);
-
-    const cleanup = addMessageListener('order_status_update', (data) => {
-      if (data.orderId === orderId) {
-        setTrackingData(prev => prev ? { ...prev, ...data.tracking } : data.tracking);
+    const cleanup = subscribe('order_status_update', (data) => {
+      if (data.payload.orderId === orderId) {
+        setTrackingData(prev => prev ? { ...prev, ...data.payload.tracking } : data.payload.tracking);
         
         toast({
           title: "Order Update",
-          description: data.tracking.status_description || `Order status updated to ${data.tracking.status}`,
+          description: data.payload.tracking.status_description || `Order status updated to ${data.payload.tracking.status}`,
         });
       }
     });
 
-    return () => {
-      unsubscribe(channel);
-      cleanup();
-    };
-  }, [orderId, subscribe, unsubscribe, addMessageListener, isConnected, toast]);
+    return cleanup;
+  }, [orderId, subscribe, isConnected, toast]);
 
   const getStatusIcon = (status: string) => {
     const iconMap: { [key: string]: React.ReactNode } = {

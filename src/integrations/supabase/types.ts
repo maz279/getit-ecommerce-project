@@ -2033,6 +2033,45 @@ export type Database = {
         }
         Relationships: []
       }
+      bangladesh_support_config: {
+        Row: {
+          config_name: string
+          config_type: string
+          config_value: Json
+          created_at: string | null
+          created_by: string | null
+          effective_from: string | null
+          effective_to: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          config_name: string
+          config_type: string
+          config_value: Json
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          config_name?: string
+          config_type?: string
+          config_value?: Json
+          created_at?: string | null
+          created_by?: string | null
+          effective_from?: string | null
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       bangladesh_tax_config: {
         Row: {
           created_at: string | null
@@ -3688,6 +3727,143 @@ export type Database = {
         }
         Relationships: []
       }
+      chat_sessions_enhanced: {
+        Row: {
+          agent_id: string | null
+          agent_notes: string | null
+          chat_duration: unknown | null
+          created_at: string | null
+          customer_feedback: string | null
+          customer_id: string | null
+          customer_satisfaction_rating: number | null
+          department: string | null
+          ended_at: string | null
+          id: string
+          initial_message: string | null
+          language: string | null
+          last_activity_at: string | null
+          message_count: number | null
+          metadata: Json | null
+          priority: string | null
+          queue_position: number | null
+          session_id: string
+          session_type: string | null
+          started_at: string | null
+          status: string | null
+          tags: string[] | null
+          wait_time: unknown | null
+        }
+        Insert: {
+          agent_id?: string | null
+          agent_notes?: string | null
+          chat_duration?: unknown | null
+          created_at?: string | null
+          customer_feedback?: string | null
+          customer_id?: string | null
+          customer_satisfaction_rating?: number | null
+          department?: string | null
+          ended_at?: string | null
+          id?: string
+          initial_message?: string | null
+          language?: string | null
+          last_activity_at?: string | null
+          message_count?: number | null
+          metadata?: Json | null
+          priority?: string | null
+          queue_position?: number | null
+          session_id: string
+          session_type?: string | null
+          started_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          wait_time?: unknown | null
+        }
+        Update: {
+          agent_id?: string | null
+          agent_notes?: string | null
+          chat_duration?: unknown | null
+          created_at?: string | null
+          customer_feedback?: string | null
+          customer_id?: string | null
+          customer_satisfaction_rating?: number | null
+          department?: string | null
+          ended_at?: string | null
+          id?: string
+          initial_message?: string | null
+          language?: string | null
+          last_activity_at?: string | null
+          message_count?: number | null
+          metadata?: Json | null
+          priority?: string | null
+          queue_position?: number | null
+          session_id?: string
+          session_type?: string | null
+          started_at?: string | null
+          status?: string | null
+          tags?: string[] | null
+          wait_time?: unknown | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chat_sessions_enhanced_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "support_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      chatbot_training_data: {
+        Row: {
+          confidence_score: number | null
+          context_data: Json | null
+          created_at: string | null
+          created_by: string | null
+          entity_type: string | null
+          id: string
+          intent: string
+          is_active: boolean | null
+          language: string
+          response_template: string
+          success_rate: number | null
+          training_phrase: string
+          updated_at: string | null
+          usage_count: number | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          context_data?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          entity_type?: string | null
+          id?: string
+          intent: string
+          is_active?: boolean | null
+          language?: string
+          response_template: string
+          success_rate?: number | null
+          training_phrase: string
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Update: {
+          confidence_score?: number | null
+          context_data?: Json | null
+          created_at?: string | null
+          created_by?: string | null
+          entity_type?: string | null
+          id?: string
+          intent?: string
+          is_active?: boolean | null
+          language?: string
+          response_template?: string
+          success_rate?: number | null
+          training_phrase?: string
+          updated_at?: string | null
+          usage_count?: number | null
+        }
+        Relationships: []
+      }
       churn_predictions: {
         Row: {
           churn_probability: number
@@ -5184,6 +5360,75 @@ export type Database = {
           recorded_at?: string
           session_id?: string | null
           vendor_id?: string
+        }
+        Relationships: []
+      }
+      customer_feedback: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          feedback_type: string
+          id: string
+          message: string
+          metadata: Json | null
+          order_id: string | null
+          rating: number | null
+          responded_at: string | null
+          responded_by: string | null
+          response_message: string | null
+          sentiment_label: string | null
+          sentiment_score: number | null
+          session_id: string | null
+          status: string | null
+          subject: string | null
+          tags: string[] | null
+          ticket_id: string | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          feedback_type: string
+          id?: string
+          message: string
+          metadata?: Json | null
+          order_id?: string | null
+          rating?: number | null
+          responded_at?: string | null
+          responded_by?: string | null
+          response_message?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          session_id?: string | null
+          status?: string | null
+          subject?: string | null
+          tags?: string[] | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          feedback_type?: string
+          id?: string
+          message?: string
+          metadata?: Json | null
+          order_id?: string | null
+          rating?: number | null
+          responded_at?: string | null
+          responded_by?: string | null
+          response_message?: string | null
+          sentiment_label?: string | null
+          sentiment_score?: number | null
+          session_id?: string | null
+          status?: string | null
+          subject?: string | null
+          tags?: string[] | null
+          ticket_id?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
         }
         Relationships: []
       }
@@ -6910,6 +7155,60 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      faqs: {
+        Row: {
+          answer: string
+          category: string
+          created_at: string | null
+          created_by: string | null
+          helpful_count: number | null
+          id: string
+          is_featured: boolean | null
+          language: string
+          not_helpful_count: number | null
+          priority: number | null
+          question: string
+          related_articles: string[] | null
+          tags: string[] | null
+          updated_at: string | null
+          view_count: number | null
+        }
+        Insert: {
+          answer: string
+          category: string
+          created_at?: string | null
+          created_by?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_featured?: boolean | null
+          language?: string
+          not_helpful_count?: number | null
+          priority?: number | null
+          question: string
+          related_articles?: string[] | null
+          tags?: string[] | null
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          answer?: string
+          category?: string
+          created_at?: string | null
+          created_by?: string | null
+          helpful_count?: number | null
+          id?: string
+          is_featured?: boolean | null
+          language?: string
+          not_helpful_count?: number | null
+          priority?: number | null
+          question?: string
+          related_articles?: string[] | null
+          tags?: string[] | null
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
       }
       festival_configurations: {
         Row: {
@@ -9070,6 +9369,75 @@ export type Database = {
         }
         Relationships: []
       }
+      knowledge_base_articles: {
+        Row: {
+          author_id: string | null
+          category: string
+          content: string
+          created_at: string | null
+          featured: boolean | null
+          helpful_count: number | null
+          id: string
+          language: string
+          meta_description: string | null
+          meta_keywords: string[] | null
+          not_helpful_count: number | null
+          priority: number | null
+          published_at: string | null
+          status: string
+          subcategory: string | null
+          summary: string | null
+          tags: string[] | null
+          title: string
+          updated_at: string | null
+          view_count: number | null
+        }
+        Insert: {
+          author_id?: string | null
+          category: string
+          content: string
+          created_at?: string | null
+          featured?: boolean | null
+          helpful_count?: number | null
+          id?: string
+          language?: string
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          not_helpful_count?: number | null
+          priority?: number | null
+          published_at?: string | null
+          status?: string
+          subcategory?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title: string
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Update: {
+          author_id?: string | null
+          category?: string
+          content?: string
+          created_at?: string | null
+          featured?: boolean | null
+          helpful_count?: number | null
+          id?: string
+          language?: string
+          meta_description?: string | null
+          meta_keywords?: string[] | null
+          not_helpful_count?: number | null
+          priority?: number | null
+          published_at?: string | null
+          status?: string
+          subcategory?: string | null
+          summary?: string | null
+          tags?: string[] | null
+          title?: string
+          updated_at?: string | null
+          view_count?: number | null
+        }
+        Relationships: []
+      }
       kubernetes_clusters: {
         Row: {
           auto_scaling_enabled: boolean | null
@@ -10343,6 +10711,59 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      multichannel_conversations: {
+        Row: {
+          agent_id: string | null
+          channel_identifier: string
+          channel_type: string
+          conversation_id: string
+          created_at: string | null
+          customer_id: string | null
+          id: string
+          last_message_at: string | null
+          message_count: number | null
+          metadata: Json | null
+          status: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          agent_id?: string | null
+          channel_identifier: string
+          channel_type: string
+          conversation_id: string
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          message_count?: number | null
+          metadata?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          agent_id?: string | null
+          channel_identifier?: string
+          channel_type?: string
+          conversation_id?: string
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          last_message_at?: string | null
+          message_count?: number | null
+          metadata?: Json | null
+          status?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "multichannel_conversations_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "support_agents"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       notification_campaigns: {
         Row: {
@@ -16885,6 +17306,60 @@ export type Database = {
         }
         Relationships: []
       }
+      satisfaction_surveys: {
+        Row: {
+          agent_rating: number | null
+          areas_for_improvement: string[] | null
+          comments: string | null
+          completed_at: string | null
+          created_at: string | null
+          customer_id: string | null
+          id: string
+          language: string | null
+          likelihood_to_recommend: number | null
+          overall_satisfaction: number | null
+          positive_feedback: string[] | null
+          reference_id: string | null
+          resolution_quality_rating: number | null
+          response_time_rating: number | null
+          survey_type: string
+        }
+        Insert: {
+          agent_rating?: number | null
+          areas_for_improvement?: string[] | null
+          comments?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          language?: string | null
+          likelihood_to_recommend?: number | null
+          overall_satisfaction?: number | null
+          positive_feedback?: string[] | null
+          reference_id?: string | null
+          resolution_quality_rating?: number | null
+          response_time_rating?: number | null
+          survey_type: string
+        }
+        Update: {
+          agent_rating?: number | null
+          areas_for_improvement?: string[] | null
+          comments?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          language?: string | null
+          likelihood_to_recommend?: number | null
+          overall_satisfaction?: number | null
+          positive_feedback?: string[] | null
+          reference_id?: string | null
+          resolution_quality_rating?: number | null
+          response_time_rating?: number | null
+          survey_type?: string
+        }
+        Relationships: []
+      }
       scheduled_reports: {
         Row: {
           created_at: string | null
@@ -18616,6 +19091,219 @@ export type Database = {
         }
         Relationships: []
       }
+      support_agents: {
+        Row: {
+          agent_code: string
+          avatar_url: string | null
+          avg_resolution_time: unknown | null
+          avg_response_time: unknown | null
+          created_at: string | null
+          current_status: string | null
+          customer_satisfaction_score: number | null
+          department: string
+          email: string
+          full_name: string
+          hire_date: string
+          id: string
+          is_available: boolean | null
+          is_online: boolean | null
+          languages: string[]
+          last_active_at: string | null
+          max_concurrent_chats: number | null
+          max_concurrent_tickets: number | null
+          metadata: Json | null
+          performance_score: number | null
+          phone: string | null
+          shift_schedule: Json | null
+          specializations: string[] | null
+          total_chats_handled: number | null
+          total_tickets_handled: number | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          agent_code: string
+          avatar_url?: string | null
+          avg_resolution_time?: unknown | null
+          avg_response_time?: unknown | null
+          created_at?: string | null
+          current_status?: string | null
+          customer_satisfaction_score?: number | null
+          department?: string
+          email: string
+          full_name: string
+          hire_date: string
+          id?: string
+          is_available?: boolean | null
+          is_online?: boolean | null
+          languages?: string[]
+          last_active_at?: string | null
+          max_concurrent_chats?: number | null
+          max_concurrent_tickets?: number | null
+          metadata?: Json | null
+          performance_score?: number | null
+          phone?: string | null
+          shift_schedule?: Json | null
+          specializations?: string[] | null
+          total_chats_handled?: number | null
+          total_tickets_handled?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          agent_code?: string
+          avatar_url?: string | null
+          avg_resolution_time?: unknown | null
+          avg_response_time?: unknown | null
+          created_at?: string | null
+          current_status?: string | null
+          customer_satisfaction_score?: number | null
+          department?: string
+          email?: string
+          full_name?: string
+          hire_date?: string
+          id?: string
+          is_available?: boolean | null
+          is_online?: boolean | null
+          languages?: string[]
+          last_active_at?: string | null
+          max_concurrent_chats?: number | null
+          max_concurrent_tickets?: number | null
+          metadata?: Json | null
+          performance_score?: number | null
+          phone?: string | null
+          shift_schedule?: Json | null
+          specializations?: string[] | null
+          total_chats_handled?: number | null
+          total_tickets_handled?: number | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      support_analytics: {
+        Row: {
+          additional_data: Json | null
+          agent_id: string | null
+          category: string | null
+          created_at: string | null
+          department: string | null
+          id: string
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          time_period: string
+        }
+        Insert: {
+          additional_data?: Json | null
+          agent_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          department?: string | null
+          id?: string
+          metric_name: string
+          metric_type: string
+          metric_value: number
+          period_end: string
+          period_start: string
+          time_period: string
+        }
+        Update: {
+          additional_data?: Json | null
+          agent_id?: string | null
+          category?: string | null
+          created_at?: string | null
+          department?: string | null
+          id?: string
+          metric_name?: string
+          metric_type?: string
+          metric_value?: number
+          period_end?: string
+          period_start?: string
+          time_period?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_analytics_agent_id_fkey"
+            columns: ["agent_id"]
+            isOneToOne: false
+            referencedRelation: "support_agents"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_escalations: {
+        Row: {
+          created_at: string | null
+          escalated_from: string | null
+          escalated_to: string | null
+          escalation_level: number
+          escalation_notes: string | null
+          escalation_reason: string
+          escalation_type: string
+          id: string
+          new_agent_id: string | null
+          previous_agent_id: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          ticket_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          escalated_from?: string | null
+          escalated_to?: string | null
+          escalation_level?: number
+          escalation_notes?: string | null
+          escalation_reason: string
+          escalation_type: string
+          id?: string
+          new_agent_id?: string | null
+          previous_agent_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          ticket_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          escalated_from?: string | null
+          escalated_to?: string | null
+          escalation_level?: number
+          escalation_notes?: string | null
+          escalation_reason?: string
+          escalation_type?: string
+          id?: string
+          new_agent_id?: string | null
+          previous_agent_id?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_escalations_new_agent_id_fkey"
+            columns: ["new_agent_id"]
+            isOneToOne: false
+            referencedRelation: "support_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_escalations_previous_agent_id_fkey"
+            columns: ["previous_agent_id"]
+            isOneToOne: false
+            referencedRelation: "support_agents"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "support_escalations_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       support_messages: {
         Row: {
           attachments: Json | null
@@ -19040,6 +19728,65 @@ export type Database = {
           workspace_name?: string
         }
         Relationships: []
+      }
+      ticket_categories: {
+        Row: {
+          auto_assignment_rules: Json | null
+          created_at: string | null
+          default_priority: string | null
+          department: string
+          description: string | null
+          escalation_rules: Json | null
+          id: string
+          is_active: boolean | null
+          name: string
+          parent_category_id: string | null
+          sla_resolution_hours: number | null
+          sla_response_hours: number | null
+          sort_order: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          auto_assignment_rules?: Json | null
+          created_at?: string | null
+          default_priority?: string | null
+          department: string
+          description?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          name: string
+          parent_category_id?: string | null
+          sla_resolution_hours?: number | null
+          sla_response_hours?: number | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          auto_assignment_rules?: Json | null
+          created_at?: string | null
+          default_priority?: string | null
+          department?: string
+          description?: string | null
+          escalation_rules?: Json | null
+          id?: string
+          is_active?: boolean | null
+          name?: string
+          parent_category_id?: string | null
+          sla_resolution_hours?: number | null
+          sla_response_hours?: number | null
+          sort_order?: number | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ticket_categories_parent_category_id_fkey"
+            columns: ["parent_category_id"]
+            isOneToOne: false
+            referencedRelation: "ticket_categories"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       traffic_monitoring: {
         Row: {

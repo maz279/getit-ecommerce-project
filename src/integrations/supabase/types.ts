@@ -2765,6 +2765,66 @@ export type Database = {
           },
         ]
       }
+      bulk_upload_sessions: {
+        Row: {
+          created_at: string | null
+          error_log: Json | null
+          failed_records: number | null
+          file_name: string
+          file_path: string
+          file_size: number | null
+          id: string
+          processed_records: number | null
+          processing_completed_at: string | null
+          processing_started_at: string | null
+          session_type: string
+          status: string | null
+          successful_records: number | null
+          template_version: string | null
+          total_records: number | null
+          validation_rules: Json | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          error_log?: Json | null
+          failed_records?: number | null
+          file_name: string
+          file_path: string
+          file_size?: number | null
+          id?: string
+          processed_records?: number | null
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          session_type: string
+          status?: string | null
+          successful_records?: number | null
+          template_version?: string | null
+          total_records?: number | null
+          validation_rules?: Json | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          error_log?: Json | null
+          failed_records?: number | null
+          file_name?: string
+          file_path?: string
+          file_size?: number | null
+          id?: string
+          processed_records?: number | null
+          processing_completed_at?: string | null
+          processing_started_at?: string | null
+          session_type?: string
+          status?: string | null
+          successful_records?: number | null
+          template_version?: string | null
+          total_records?: number | null
+          validation_rules?: Json | null
+          vendor_id?: string
+        }
+        Relationships: []
+      }
       business_dashboards: {
         Row: {
           access_permissions: Json
@@ -8664,6 +8724,74 @@ export type Database = {
           },
         ]
       }
+      inventory_automation_rules: {
+        Row: {
+          auto_reorder_enabled: boolean | null
+          cost_thresholds: Json | null
+          created_at: string | null
+          demand_forecast: Json | null
+          id: string
+          last_reorder_date: string | null
+          lead_time_days: number | null
+          max_stock_level: number | null
+          next_predicted_reorder: string | null
+          product_id: string | null
+          reorder_point: number
+          reorder_quantity: number
+          safety_stock: number | null
+          seasonal_multipliers: Json | null
+          supplier_info: Json | null
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          auto_reorder_enabled?: boolean | null
+          cost_thresholds?: Json | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          last_reorder_date?: string | null
+          lead_time_days?: number | null
+          max_stock_level?: number | null
+          next_predicted_reorder?: string | null
+          product_id?: string | null
+          reorder_point: number
+          reorder_quantity: number
+          safety_stock?: number | null
+          seasonal_multipliers?: Json | null
+          supplier_info?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          auto_reorder_enabled?: boolean | null
+          cost_thresholds?: Json | null
+          created_at?: string | null
+          demand_forecast?: Json | null
+          id?: string
+          last_reorder_date?: string | null
+          lead_time_days?: number | null
+          max_stock_level?: number | null
+          next_predicted_reorder?: string | null
+          product_id?: string | null
+          reorder_point?: number
+          reorder_quantity?: number
+          safety_stock?: number | null
+          seasonal_multipliers?: Json | null
+          supplier_info?: Json | null
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "inventory_automation_rules_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       inventory_forecasting: {
         Row: {
           algorithm_version: string | null
@@ -13379,6 +13507,145 @@ export type Database = {
         }
         Relationships: []
       }
+      product_analytics_enhanced: {
+        Row: {
+          add_to_cart_count: number | null
+          analytics_date: string
+          analytics_period: string
+          average_rating: number | null
+          bounce_rate: number | null
+          competitor_price_analysis: Json | null
+          conversion_rate: number | null
+          created_at: string | null
+          geographic_performance: Json | null
+          id: string
+          product_id: string | null
+          purchase_count: number | null
+          revenue_generated: number | null
+          reviews_count: number | null
+          search_rank_average: number | null
+          seasonal_performance: Json | null
+          shares_count: number | null
+          unique_views: number | null
+          vendor_id: string | null
+          views_count: number | null
+          wishlist_additions: number | null
+        }
+        Insert: {
+          add_to_cart_count?: number | null
+          analytics_date: string
+          analytics_period: string
+          average_rating?: number | null
+          bounce_rate?: number | null
+          competitor_price_analysis?: Json | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          geographic_performance?: Json | null
+          id?: string
+          product_id?: string | null
+          purchase_count?: number | null
+          revenue_generated?: number | null
+          reviews_count?: number | null
+          search_rank_average?: number | null
+          seasonal_performance?: Json | null
+          shares_count?: number | null
+          unique_views?: number | null
+          vendor_id?: string | null
+          views_count?: number | null
+          wishlist_additions?: number | null
+        }
+        Update: {
+          add_to_cart_count?: number | null
+          analytics_date?: string
+          analytics_period?: string
+          average_rating?: number | null
+          bounce_rate?: number | null
+          competitor_price_analysis?: Json | null
+          conversion_rate?: number | null
+          created_at?: string | null
+          geographic_performance?: Json | null
+          id?: string
+          product_id?: string | null
+          purchase_count?: number | null
+          revenue_generated?: number | null
+          reviews_count?: number | null
+          search_rank_average?: number | null
+          seasonal_performance?: Json | null
+          shares_count?: number | null
+          unique_views?: number | null
+          vendor_id?: string | null
+          views_count?: number | null
+          wishlist_additions?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_analytics_enhanced_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      product_attributes_bd: {
+        Row: {
+          artisan_info: Json | null
+          certification: Json | null
+          created_at: string | null
+          festival_suitable: string[] | null
+          handicraft_type: string | null
+          id: string
+          local_measurements: Json | null
+          material_type: string | null
+          origin_tag: string | null
+          product_id: string | null
+          regional_variant: string | null
+          traditional_colors: Json | null
+          traditional_size: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          artisan_info?: Json | null
+          certification?: Json | null
+          created_at?: string | null
+          festival_suitable?: string[] | null
+          handicraft_type?: string | null
+          id?: string
+          local_measurements?: Json | null
+          material_type?: string | null
+          origin_tag?: string | null
+          product_id?: string | null
+          regional_variant?: string | null
+          traditional_colors?: Json | null
+          traditional_size?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          artisan_info?: Json | null
+          certification?: Json | null
+          created_at?: string | null
+          festival_suitable?: string[] | null
+          handicraft_type?: string | null
+          id?: string
+          local_measurements?: Json | null
+          material_type?: string | null
+          origin_tag?: string | null
+          product_id?: string | null
+          regional_variant?: string | null
+          traditional_colors?: Json | null
+          traditional_size?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_attributes_bd_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       product_benchmarks: {
         Row: {
           benchmark_date: string | null
@@ -13503,6 +13770,83 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      product_categories_enhanced: {
+        Row: {
+          bangladesh_specific: boolean | null
+          category_path: string
+          created_at: string | null
+          description: string | null
+          description_bn: string | null
+          festival_category: string | null
+          id: string
+          image_url: string | null
+          is_active: boolean | null
+          level: number
+          name: string
+          name_bn: string | null
+          parent_id: string | null
+          seasonal_category: boolean | null
+          seo_description: string | null
+          seo_title: string | null
+          slug: string
+          sort_order: number | null
+          traditional_category: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          bangladesh_specific?: boolean | null
+          category_path: string
+          created_at?: string | null
+          description?: string | null
+          description_bn?: string | null
+          festival_category?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          level?: number
+          name: string
+          name_bn?: string | null
+          parent_id?: string | null
+          seasonal_category?: boolean | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug: string
+          sort_order?: number | null
+          traditional_category?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          bangladesh_specific?: boolean | null
+          category_path?: string
+          created_at?: string | null
+          description?: string | null
+          description_bn?: string | null
+          festival_category?: string | null
+          id?: string
+          image_url?: string | null
+          is_active?: boolean | null
+          level?: number
+          name?: string
+          name_bn?: string | null
+          parent_id?: string | null
+          seasonal_category?: boolean | null
+          seo_description?: string | null
+          seo_title?: string | null
+          slug?: string
+          sort_order?: number | null
+          traditional_category?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_categories_enhanced_parent_id_fkey"
+            columns: ["parent_id"]
+            isOneToOne: false
+            referencedRelation: "product_categories_enhanced"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_comparison_lists: {
         Row: {
@@ -13650,6 +13994,74 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      product_media_enhanced: {
+        Row: {
+          accessibility_description: string | null
+          alt_text: string | null
+          alt_text_bn: string | null
+          cdn_urls: Json | null
+          created_at: string | null
+          display_order: number | null
+          id: string
+          is_primary: boolean | null
+          media_type: string
+          metadata: Json | null
+          optimized_urls: Json | null
+          original_url: string
+          processing_status: string | null
+          product_id: string | null
+          seo_filename: string | null
+          updated_at: string | null
+          watermark_applied: boolean | null
+        }
+        Insert: {
+          accessibility_description?: string | null
+          alt_text?: string | null
+          alt_text_bn?: string | null
+          cdn_urls?: Json | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_primary?: boolean | null
+          media_type: string
+          metadata?: Json | null
+          optimized_urls?: Json | null
+          original_url: string
+          processing_status?: string | null
+          product_id?: string | null
+          seo_filename?: string | null
+          updated_at?: string | null
+          watermark_applied?: boolean | null
+        }
+        Update: {
+          accessibility_description?: string | null
+          alt_text?: string | null
+          alt_text_bn?: string | null
+          cdn_urls?: Json | null
+          created_at?: string | null
+          display_order?: number | null
+          id?: string
+          is_primary?: boolean | null
+          media_type?: string
+          metadata?: Json | null
+          optimized_urls?: Json | null
+          original_url?: string
+          processing_status?: string | null
+          product_id?: string | null
+          seo_filename?: string | null
+          updated_at?: string | null
+          watermark_applied?: boolean | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "product_media_enhanced_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       product_performance_analytics: {
         Row: {
@@ -13799,6 +14211,45 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      product_search_config: {
+        Row: {
+          analyzer_config: Json
+          boost_settings: Json | null
+          created_at: string | null
+          filter_config: Json | null
+          id: string
+          is_active: boolean | null
+          phonetic_mappings: Json | null
+          search_type: string
+          stopwords: string[] | null
+          synonym_groups: Json | null
+        }
+        Insert: {
+          analyzer_config: Json
+          boost_settings?: Json | null
+          created_at?: string | null
+          filter_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          phonetic_mappings?: Json | null
+          search_type: string
+          stopwords?: string[] | null
+          synonym_groups?: Json | null
+        }
+        Update: {
+          analyzer_config?: Json
+          boost_settings?: Json | null
+          created_at?: string | null
+          filter_config?: Json | null
+          id?: string
+          is_active?: boolean | null
+          phonetic_mappings?: Json | null
+          search_type?: string
+          stopwords?: string[] | null
+          synonym_groups?: Json | null
+        }
+        Relationships: []
       }
       product_service_catalog: {
         Row: {
@@ -15150,6 +15601,72 @@ export type Database = {
           model_parameters?: Json
           model_type?: string
           training_data_config?: Json
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      recommendation_models_enhanced: {
+        Row: {
+          accuracy_score: number | null
+          algorithm_config: Json
+          bangladesh_context_weights: Json | null
+          created_at: string | null
+          demographic_factors: Json | null
+          feature_weights: Json | null
+          id: string
+          is_active: boolean | null
+          last_trained_at: string | null
+          model_name: string
+          model_type: string
+          model_version: string
+          next_training_scheduled: string | null
+          performance_metrics: Json | null
+          precision_score: number | null
+          recall_score: number | null
+          seasonal_adjustments: Json | null
+          training_data_config: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          accuracy_score?: number | null
+          algorithm_config: Json
+          bangladesh_context_weights?: Json | null
+          created_at?: string | null
+          demographic_factors?: Json | null
+          feature_weights?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_trained_at?: string | null
+          model_name: string
+          model_type: string
+          model_version: string
+          next_training_scheduled?: string | null
+          performance_metrics?: Json | null
+          precision_score?: number | null
+          recall_score?: number | null
+          seasonal_adjustments?: Json | null
+          training_data_config?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          accuracy_score?: number | null
+          algorithm_config?: Json
+          bangladesh_context_weights?: Json | null
+          created_at?: string | null
+          demographic_factors?: Json | null
+          feature_weights?: Json | null
+          id?: string
+          is_active?: boolean | null
+          last_trained_at?: string | null
+          model_name?: string
+          model_type?: string
+          model_version?: string
+          next_training_scheduled?: string | null
+          performance_metrics?: Json | null
+          precision_score?: number | null
+          recall_score?: number | null
+          seasonal_adjustments?: Json | null
+          training_data_config?: Json | null
           updated_at?: string | null
         }
         Relationships: []

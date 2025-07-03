@@ -40,3 +40,12 @@ verify_jwt = true
 
 [functions.ai-enhanced-search]
 verify_jwt = false
+
+[functions.product-management-enhanced]
+verify_jwt = false
+
+[functions.category-management-service]
+verify_jwt = false
+
+[functions.inventory-management-enhanced]
+verify_jwt = false

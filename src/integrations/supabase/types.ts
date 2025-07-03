@@ -1844,6 +1844,42 @@ export type Database = {
         }
         Relationships: []
       }
+      bangla_language_data: {
+        Row: {
+          bangla_word: string
+          context_tags: string[] | null
+          created_at: string | null
+          english_equivalent: string | null
+          id: string
+          phonetic_mapping: string | null
+          updated_at: string | null
+          word_frequency: number | null
+          word_type: string
+        }
+        Insert: {
+          bangla_word: string
+          context_tags?: string[] | null
+          created_at?: string | null
+          english_equivalent?: string | null
+          id?: string
+          phonetic_mapping?: string | null
+          updated_at?: string | null
+          word_frequency?: number | null
+          word_type: string
+        }
+        Update: {
+          bangla_word?: string
+          context_tags?: string[] | null
+          created_at?: string | null
+          english_equivalent?: string | null
+          id?: string
+          phonetic_mapping?: string | null
+          updated_at?: string | null
+          word_frequency?: number | null
+          word_type?: string
+        }
+        Relationships: []
+      }
       bangla_nlp_processing: {
         Row: {
           categories: Json | null
@@ -4924,6 +4960,48 @@ export type Database = {
           time_format?: string | null
           updated_at?: string | null
           user_id?: string
+        }
+        Relationships: []
+      }
+      cultural_search_context: {
+        Row: {
+          boost_categories: string[] | null
+          boost_factor: number | null
+          boost_keywords: string[] | null
+          context_name: string
+          context_type: string
+          created_at: string | null
+          cultural_metadata: Json | null
+          date_range: unknown | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          boost_categories?: string[] | null
+          boost_factor?: number | null
+          boost_keywords?: string[] | null
+          context_name: string
+          context_type: string
+          created_at?: string | null
+          cultural_metadata?: Json | null
+          date_range?: unknown | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          boost_categories?: string[] | null
+          boost_factor?: number | null
+          boost_keywords?: string[] | null
+          context_name?: string
+          context_type?: string
+          created_at?: string | null
+          cultural_metadata?: Json | null
+          date_range?: unknown | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -16915,6 +16993,87 @@ export type Database = {
         }
         Relationships: []
       }
+      search_analytics_aggregated: {
+        Row: {
+          average_results_per_search: number | null
+          conversion_metrics: Json | null
+          created_at: string | null
+          date_period: string
+          id: string
+          performance_metrics: Json | null
+          period_type: string
+          successful_searches: number | null
+          top_categories: Json | null
+          top_search_terms: Json | null
+          total_searches: number | null
+          unique_users: number | null
+          updated_at: string | null
+          zero_result_searches: number | null
+        }
+        Insert: {
+          average_results_per_search?: number | null
+          conversion_metrics?: Json | null
+          created_at?: string | null
+          date_period: string
+          id?: string
+          performance_metrics?: Json | null
+          period_type: string
+          successful_searches?: number | null
+          top_categories?: Json | null
+          top_search_terms?: Json | null
+          total_searches?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
+          zero_result_searches?: number | null
+        }
+        Update: {
+          average_results_per_search?: number | null
+          conversion_metrics?: Json | null
+          created_at?: string | null
+          date_period?: string
+          id?: string
+          performance_metrics?: Json | null
+          period_type?: string
+          successful_searches?: number | null
+          top_categories?: Json | null
+          top_search_terms?: Json | null
+          total_searches?: number | null
+          unique_users?: number | null
+          updated_at?: string | null
+          zero_result_searches?: number | null
+        }
+        Relationships: []
+      }
+      search_configurations: {
+        Row: {
+          config_data: Json
+          config_name: string
+          config_type: string
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          config_data?: Json
+          config_name: string
+          config_type: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          config_data?: Json
+          config_name?: string
+          config_type?: string
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       search_index: {
         Row: {
           created_at: string | null
@@ -17112,6 +17271,48 @@ export type Database = {
           search_timestamp?: string | null
           session_id?: string | null
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      search_suggestions: {
+        Row: {
+          conversion_rate: number | null
+          created_at: string | null
+          frequency_score: number | null
+          id: string
+          is_active: boolean | null
+          language: string | null
+          metadata: Json | null
+          related_products: string[] | null
+          suggestion_text: string
+          suggestion_type: string
+          updated_at: string | null
+        }
+        Insert: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          frequency_score?: number | null
+          id?: string
+          is_active?: boolean | null
+          language?: string | null
+          metadata?: Json | null
+          related_products?: string[] | null
+          suggestion_text: string
+          suggestion_type: string
+          updated_at?: string | null
+        }
+        Update: {
+          conversion_rate?: number | null
+          created_at?: string | null
+          frequency_score?: number | null
+          id?: string
+          is_active?: boolean | null
+          language?: string | null
+          metadata?: Json | null
+          related_products?: string[] | null
+          suggestion_text?: string
+          suggestion_type?: string
+          updated_at?: string | null
         }
         Relationships: []
       }
@@ -19402,6 +19603,51 @@ export type Database = {
           },
         ]
       }
+      user_search_profiles: {
+        Row: {
+          brand_preferences: Json | null
+          category_preferences: Json | null
+          created_at: string | null
+          cultural_context: Json | null
+          id: string
+          language_preference: string | null
+          last_search_at: string | null
+          price_preferences: Json | null
+          search_frequency: number | null
+          search_preferences: Json | null
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          brand_preferences?: Json | null
+          category_preferences?: Json | null
+          created_at?: string | null
+          cultural_context?: Json | null
+          id?: string
+          language_preference?: string | null
+          last_search_at?: string | null
+          price_preferences?: Json | null
+          search_frequency?: number | null
+          search_preferences?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          brand_preferences?: Json | null
+          category_preferences?: Json | null
+          created_at?: string | null
+          cultural_context?: Json | null
+          id?: string
+          language_preference?: string | null
+          last_search_at?: string | null
+          price_preferences?: Json | null
+          search_frequency?: number | null
+          search_preferences?: Json | null
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       user_service_profiles: {
         Row: {
           account_status: string | null
@@ -20622,6 +20868,56 @@ export type Database = {
             columns: ["user_id"]
             isOneToOne: false
             referencedRelation: "users"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      visual_search_features: {
+        Row: {
+          color_histogram: Json | null
+          confidence_score: number | null
+          created_at: string | null
+          deep_features: Json | null
+          extraction_model: string | null
+          feature_vector: number[]
+          id: string
+          image_url: string
+          product_id: string | null
+          shape_descriptors: Json | null
+          updated_at: string | null
+        }
+        Insert: {
+          color_histogram?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          deep_features?: Json | null
+          extraction_model?: string | null
+          feature_vector: number[]
+          id?: string
+          image_url: string
+          product_id?: string | null
+          shape_descriptors?: Json | null
+          updated_at?: string | null
+        }
+        Update: {
+          color_histogram?: Json | null
+          confidence_score?: number | null
+          created_at?: string | null
+          deep_features?: Json | null
+          extraction_model?: string | null
+          feature_vector?: number[]
+          id?: string
+          image_url?: string
+          product_id?: string | null
+          shape_descriptors?: Json | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "visual_search_features_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
             referencedColumns: ["id"]
           },
         ]

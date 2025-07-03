@@ -1,379 +1,284 @@
-import React, { useState, useEffect } from 'react';
+/**
+ * Microservices Dashboard - Real-time monitoring and management
+ */
+
+import React from 'react';
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
-import { 
-  Activity, 
-  Server, 
-  Settings, 
-  BarChart3, 
-  RefreshCw, 
+import { Progress } from '@/components/ui/progress';
+import {
+  Activity,
+  Server,
   AlertTriangle,
   CheckCircle,
   XCircle,
-  Clock
+  Clock,
+  Cpu,
+  MemoryStick,
+  Network,
+  TrendingUp,
+  TrendingDown
 } from 'lucide-react';
-import { configManager, userService, productService, orderService, paymentService } from '@/services/microservices/ServiceClient';
-
-interface ServiceHealth {
-  service_name: string;
-  status: string;
-  last_health_check?: string;
-  response_time?: number;
-  error?: string;
-}
-
-interface ServiceMetrics {
-  service_name: string;
-  requests_count: number;
-  avg_response_time: number;
-  error_rate: number;
-  uptime_percentage: number;
-}
+import useMicroservices from '@/hooks/useMicroservices';
 
 export const MicroservicesDashboard: React.FC = () => {
-  const [services, setServices] = useState<any[]>([]);
-  const [healthStatus, setHealthStatus] = useState<Record<string, ServiceHealth>>({});
-  const [metrics, setMetrics] = useState<Record<string, ServiceMetrics>>({});
-  const [configs, setConfigs] = useState<any[]>([]);
-  const [loading, setLoading] = useState(true);
-  const [refreshing, setRefreshing] = useState(false);
+  const { 
+    services, 
+    healthStatus, 
+    systemHealth, 
+    loading, 
+    error,
+    loadServices 
+  } = useMicroservices();
 
-  useEffect(() => {
-    loadDashboardData();
-  }, []);
-
-  const loadDashboardData = async () => {
-    setLoading(true);
-    try {
-      // Load services
-      const servicesResponse = await configManager.getServices();
-      if (servicesResponse.success && Array.isArray(servicesResponse.data)) {
-        setServices(servicesResponse.data);
-        
-        // Check health for each service
-        await checkAllServicesHealth(servicesResponse.data);
-      }
-
-      // Load configurations
-      const configsResponse = await configManager.getConfigs({ environment: 'production' });
-      if (configsResponse.success && Array.isArray(configsResponse.data)) {
-        setConfigs(configsResponse.data);
-      }
-    } catch (error) {
-      console.error('Failed to load dashboard data:', error);
-    } finally {
-      setLoading(false);
+  const getStatusColor = (status: string) => {
+    switch (status) {
+      case 'healthy': return 'text-green-600 bg-green-100';
+      case 'degraded': return 'text-yellow-600 bg-yellow-100';
+      case 'down': return 'text-red-600 bg-red-100';
+      default: return 'text-gray-600 bg-gray-100';
     }
-  };
-
-  const checkAllServicesHealth = async (servicesList: any[]) => {
-    const healthChecks = await Promise.allSettled(
-      servicesList.map(async (service) => {
-        const startTime = Date.now();
-        try {
-          const client = getServiceClient(service.service_name);
-          const response = await client.healthCheck();
-          const responseTime = Date.now() - startTime;
-          
-          return {
-            service_name: service.service_name,
-            status: response.success ? 'healthy' : 'unhealthy',
-            response_time: responseTime,
-            error: response.error
-          };
-        } catch (error) {
-          return {
-            service_name: service.service_name,
-            status: 'unhealthy',
-            response_time: Date.now() - startTime,
-            error: error instanceof Error ? error.message : 'Health check failed'
-          };
-        }
-      })
-    );
-
-    const healthResults: Record<string, ServiceHealth> = {};
-    healthChecks.forEach((result, index) => {
-      if (result.status === 'fulfilled') {
-        healthResults[servicesList[index].service_name] = result.value;
-      } else {
-        healthResults[servicesList[index].service_name] = {
-          service_name: servicesList[index].service_name,
-          status: 'unhealthy',
-          error: 'Health check failed'
-        };
-      }
-    });
-
-    setHealthStatus(healthResults);
-  };
-
-  const getServiceClient = (serviceName: string) => {
-    switch (serviceName) {
-      case 'user-service': return userService;
-      case 'product-service': return productService;
-      case 'order-service': return orderService;
-      case 'payment-service': return paymentService;
-      default: return configManager;
-    }
-  };
-
-  const refreshServices = async () => {
-    setRefreshing(true);
-    await checkAllServicesHealth(services);
-    setRefreshing(false);
   };
 
   const getStatusIcon = (status: string) => {
     switch (status) {
-      case 'healthy':
-      case 'active':
-        return <CheckCircle className="w-4 h-4 text-success" />;
-      case 'unhealthy':
-      case 'inactive':
-        return <XCircle className="w-4 h-4 text-destructive" />;
-      case 'degraded':
-      case 'maintenance':
-        return <AlertTriangle className="w-4 h-4 text-warning" />;
-      default:
-        return <Clock className="w-4 h-4 text-muted-foreground" />;
+      case 'healthy': return <CheckCircle className="w-4 h-4" />;
+      case 'degraded': return <AlertTriangle className="w-4 h-4" />;
+      case 'down': return <XCircle className="w-4 h-4" />;
+      default: return <Clock className="w-4 h-4" />;
     }
   };
-
-  const getStatusBadgeVariant = (status: string) => {
-    switch (status) {
-      case 'healthy':
-      case 'active':
-        return 'default';
-      case 'unhealthy':
-      case 'inactive':
-        return 'destructive';
-      case 'degraded':
-      case 'maintenance':
-        return 'secondary';
-      default:
-        return 'outline';
-    }
-  };
-
-  const healthyServices = Object.values(healthStatus).filter(h => h.status === 'healthy').length;
-  const totalServices = services.length;
-  const systemHealth = totalServices > 0 ? Math.round((healthyServices / totalServices) * 100) : 0;
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center h-64">
-        <RefreshCw className="w-8 h-8 animate-spin text-primary" />
+      <div className="flex items-center justify-center p-8">
+        <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-primary"></div>
       </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <Card className="border-red-200 bg-red-50">
+        <CardContent className="p-6">
+          <div className="flex items-center space-x-2 text-red-600">
+            <XCircle className="w-5 h-5" />
+            <span>Error loading microservices: {error}</span>
+          </div>
+          <Button onClick={loadServices} className="mt-4" variant="outline">
+            Retry
+          </Button>
+        </CardContent>
+      </Card>
     );
   }
 
   return (
     <div className="space-y-6">
-      {/* Overview Stats */}
+      {/* System Overview */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
         <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">System Health</CardTitle>
-            <Activity className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{systemHealth}%</div>
-            <p className="text-xs text-muted-foreground">
-              {healthyServices} of {totalServices} services healthy
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Active Services</CardTitle>
-            <Server className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{services.filter(s => s.status === 'active').length}</div>
-            <p className="text-xs text-muted-foreground">
-              Total: {totalServices} services
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Configurations</CardTitle>
-            <Settings className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">{configs.length}</div>
-            <p className="text-xs text-muted-foreground">
-              Production environment
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-            <CardTitle className="text-sm font-medium">Avg Response Time</CardTitle>
-            <BarChart3 className="h-4 w-4 text-muted-foreground" />
-          </CardHeader>
-          <CardContent>
-            <div className="text-2xl font-bold">
-              {Object.values(healthStatus).reduce((acc, h) => acc + (h.response_time || 0), 0) / Object.keys(healthStatus).length || 0}ms
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Total Services</p>
+                <p className="text-2xl font-bold">{systemHealth.totalServices}</p>
+              </div>
+              <Server className="w-8 h-8 text-blue-600" />
             </div>
-            <p className="text-xs text-muted-foreground">
-              Across all services
-            </p>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Healthy</p>
+                <p className="text-2xl font-bold text-green-600">{systemHealth.healthyServices}</p>
+              </div>
+              <CheckCircle className="w-8 h-8 text-green-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Avg Response</p>
+                <p className="text-2xl font-bold">{Math.round(systemHealth.averageResponseTime)}ms</p>
+              </div>
+              <Activity className="w-8 h-8 text-blue-600" />
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card>
+          <CardContent className="p-6">
+            <div className="flex items-center justify-between">
+              <div>
+                <p className="text-sm text-muted-foreground">Error Rate</p>
+                <p className="text-2xl font-bold text-red-600">
+                  {(systemHealth.totalErrorRate * 100).toFixed(2)}%
+                </p>
+              </div>
+              <TrendingDown className="w-8 h-8 text-red-600" />
+            </div>
           </CardContent>
         </Card>
       </div>
 
       <Tabs defaultValue="services" className="space-y-4">
-        <div className="flex items-center justify-between">
-          <TabsList>
-            <TabsTrigger value="services">Services</TabsTrigger>
-            <TabsTrigger value="health">Health Status</TabsTrigger>
-            <TabsTrigger value="configs">Configurations</TabsTrigger>
-          </TabsList>
-          
-          <Button 
-            onClick={refreshServices} 
-            disabled={refreshing}
-            size="sm"
-            variant="outline"
-          >
-            <RefreshCw className={`w-4 h-4 mr-2 ${refreshing ? 'animate-spin' : ''}`} />
-            Refresh
-          </Button>
-        </div>
+        <TabsList>
+          <TabsTrigger value="services">Services</TabsTrigger>
+          <TabsTrigger value="health">Health Monitoring</TabsTrigger>
+          <TabsTrigger value="logs">Communication Logs</TabsTrigger>
+        </TabsList>
 
         <TabsContent value="services" className="space-y-4">
           <div className="grid gap-4">
-            {services.map((service) => (
-              <Card key={service.id}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      {getStatusIcon(service.status)}
-                      <CardTitle className="text-lg">{service.service_name}</CardTitle>
-                      <Badge variant={getStatusBadgeVariant(service.status)}>
-                        {service.status}
-                      </Badge>
+            {services.map((service) => {
+              const health = healthStatus[service.service_name];
+              return (
+                <Card key={service.id} className="overflow-hidden">
+                  <CardHeader className="pb-3">
+                    <div className="flex items-center justify-between">
+                      <div className="flex items-center space-x-3">
+                        <div className="flex items-center space-x-2">
+                          {getStatusIcon(service.status)}
+                          <CardTitle className="text-lg">{service.service_name}</CardTitle>
+                        </div>
+                        <Badge className={getStatusColor(service.status)}>
+                          {service.status}
+                        </Badge>
+                      </div>
+                      <div className="text-sm text-muted-foreground">
+                        v{service.version}
+                      </div>
                     </div>
-                    <Badge variant="outline">{service.service_type}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 text-sm">
-                    <div>
-                      <p className="font-medium text-muted-foreground">Endpoint</p>
-                      <p className="font-mono text-xs">{service.endpoint_url}</p>
+                  </CardHeader>
+                  <CardContent>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1">
+                          <Activity className="w-4 h-4" />
+                          <span className="text-sm text-muted-foreground">Response Time</span>
+                        </div>
+                        <p className="text-lg font-semibold">
+                          {health ? `${health.response_time_ms}ms` : 'N/A'}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1">
+                          <TrendingUp className="w-4 h-4" />
+                          <span className="text-sm text-muted-foreground">Error Rate</span>
+                        </div>
+                        <p className="text-lg font-semibold">
+                          {health ? `${(health.error_rate * 100).toFixed(2)}%` : 'N/A'}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1">
+                          <Cpu className="w-4 h-4" />
+                          <span className="text-sm text-muted-foreground">CPU Usage</span>
+                        </div>
+                        <p className="text-lg font-semibold">
+                          {health ? `${Math.round(health.cpu_usage * 100)}%` : 'N/A'}
+                        </p>
+                      </div>
+
+                      <div className="space-y-1">
+                        <div className="flex items-center space-x-1">
+                          <MemoryStick className="w-4 h-4" />
+                          <span className="text-sm text-muted-foreground">Memory</span>
+                        </div>
+                        <p className="text-lg font-semibold">
+                          {health ? `${Math.round(health.memory_usage * 100)}%` : 'N/A'}
+                        </p>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-muted-foreground">Version</p>
-                      <p>{service.version}</p>
+
+                    <div className="mt-4 pt-4 border-t">
+                      <div className="flex items-center justify-between text-sm">
+                        <span className="text-muted-foreground">Endpoint:</span>
+                        <code className="bg-muted px-2 py-1 rounded text-xs">
+                          {service.endpoint_url}
+                        </code>
+                      </div>
+                      <div className="flex items-center justify-between text-sm mt-2">
+                        <span className="text-muted-foreground">Last Check:</span>
+                        <span>{health ? new Date(health.last_check).toLocaleTimeString() : 'Never'}</span>
+                      </div>
                     </div>
-                    <div>
-                      <p className="font-medium text-muted-foreground">Last Health Check</p>
-                      <p>{service.last_health_check ? new Date(service.last_health_check).toLocaleString() : 'Never'}</p>
-                    </div>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
+                  </CardContent>
+                </Card>
+              );
+            })}
           </div>
         </TabsContent>
 
         <TabsContent value="health" className="space-y-4">
-          <div className="grid gap-4">
-            {Object.values(healthStatus).map((health) => (
-              <Card key={health.service_name}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center space-x-2">
-                      {getStatusIcon(health.status)}
-                      <CardTitle className="text-lg">{health.service_name}</CardTitle>
-                      <Badge variant={getStatusBadgeVariant(health.status)}>
-                        {health.status}
-                      </Badge>
-                    </div>
-                    {health.response_time && (
-                      <Badge variant="outline">{health.response_time}ms</Badge>
-                    )}
+          <Card>
+            <CardHeader>
+              <CardTitle>System Health Overview</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="space-y-6">
+                <div>
+                  <div className="flex justify-between text-sm mb-2">
+                    <span>Overall System Health</span>
+                    <span>{Math.round((systemHealth.healthyServices / systemHealth.totalServices) * 100)}%</span>
                   </div>
-                </CardHeader>
-                {health.error && (
-                  <CardContent>
-                    <div className="text-sm text-destructive">
-                      <p className="font-medium">Error:</p>
-                      <p className="font-mono text-xs">{health.error}</p>
-                    </div>
-                  </CardContent>
-                )}
-              </Card>
-            ))}
-          </div>
+                  <Progress 
+                    value={(systemHealth.healthyServices / systemHealth.totalServices) * 100}
+                    className="h-2"
+                  />
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                  <div className="text-center p-4 bg-green-50 rounded-lg">
+                    <CheckCircle className="w-8 h-8 text-green-600 mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-green-600">{systemHealth.healthyServices}</p>
+                    <p className="text-sm text-green-700">Healthy Services</p>
+                  </div>
+
+                  <div className="text-center p-4 bg-yellow-50 rounded-lg">
+                    <AlertTriangle className="w-8 h-8 text-yellow-600 mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-yellow-600">{systemHealth.degradedServices}</p>
+                    <p className="text-sm text-yellow-700">Degraded Services</p>
+                  </div>
+
+                  <div className="text-center p-4 bg-red-50 rounded-lg">
+                    <XCircle className="w-8 h-8 text-red-600 mx-auto mb-2" />
+                    <p className="text-2xl font-bold text-red-600">{systemHealth.downServices}</p>
+                    <p className="text-sm text-red-700">Down Services</p>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
 
-        <TabsContent value="configs" className="space-y-4">
-          <div className="grid gap-4">
-            {configs.reduce((acc, config) => {
-              const key = `${config.service_name}-${config.config_type}`;
-              if (!acc[key]) {
-                acc[key] = {
-                  service_name: config.service_name,
-                  config_type: config.config_type,
-                  configs: []
-                };
-              }
-              acc[key].configs.push(config);
-              return acc;
-            }, {} as Record<string, any>)}
-            {Object.values(configs.reduce((acc, config) => {
-              const key = `${config.service_name}-${config.config_type}`;
-              if (!acc[key]) {
-                acc[key] = {
-                  service_name: config.service_name,
-                  config_type: config.config_type,
-                  configs: []
-                };
-              }
-              acc[key].configs.push(config);
-              return acc;
-            }, {} as Record<string, any>)).map((group: any) => (
-              <Card key={`${group.service_name}-${group.config_type}`}>
-                <CardHeader>
-                  <div className="flex items-center justify-between">
-                    <CardTitle className="text-lg">{group.service_name}</CardTitle>
-                    <Badge variant="outline">{group.config_type}</Badge>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <div className="space-y-2">
-                    {group.configs.map((config: any) => (
-                      <div key={config.id} className="flex items-center justify-between py-2 border-b border-border last:border-0">
-                        <div className="flex items-center space-x-2">
-                          <span className="font-medium text-sm">{config.config_key}</span>
-                          {config.is_sensitive && (
-                            <Badge variant="secondary" className="text-xs">Sensitive</Badge>
-                          )}
-                        </div>
-                        <div className="text-sm text-muted-foreground font-mono">
-                          {typeof config.config_value === 'object' 
-                            ? JSON.stringify(config.config_value).substring(0, 50) + '...'
-                            : String(config.config_value).substring(0, 50)
-                          }
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
+        <TabsContent value="logs" className="space-y-4">
+          <Card>
+            <CardHeader>
+              <CardTitle>Recent Communication Logs</CardTitle>
+            </CardHeader>
+            <CardContent>
+              <div className="text-center py-8 text-muted-foreground">
+                <Network className="w-12 h-12 mx-auto mb-4 opacity-50" />
+                <p>Communication logs will appear here as services interact</p>
+              </div>
+            </CardContent>
+          </Card>
         </TabsContent>
       </Tabs>
     </div>
   );
 };
+
+export default MicroservicesDashboard;

@@ -1,115 +1,78 @@
-import { createClient } from '@supabase/supabase-js'
-import { useAuth } from '@/hooks/useAuth'
+// Use the centralized microservice client instead of direct calls
+import { microserviceClient } from './microserviceClient';
+import { supabase } from '@/integrations/supabase/client';
 
-const supabaseUrl = 'https://bbgppsjmspmymrfowytf.supabase.co'
-const supabaseAnonKey = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJiZ3Bwc2ptc3BteW1yZm93eXRmIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTAwOTUzNTcsImV4cCI6MjA2NTY3MTM1N30.qk_wrVRHkJh-oXBbxFWnZwfGoZmdBK35Ce7bBoRQ0To'
+// Export supabase for backward compatibility
+export { supabase };
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey)
-
-// Enhanced Products API
+// Enhanced Products API using microservice client
 export const productsApi = {
   getAll: async (filters = {}) => {
-    const params = new URLSearchParams(filters).toString()
-    const response = await supabase.functions.invoke('products-api', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-    return response
+    const params = new URLSearchParams(filters).toString();
+    return await microserviceClient.productService(`catalog?${params}`);
   },
 
   getById: async (id: string) => {
-    const response = await supabase.functions.invoke('products-api', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-      }
-    })
-    return response
+    return await microserviceClient.productService(`catalog/${id}`);
   },
 
   create: async (product: any) => {
-    const response = await supabase.functions.invoke('products-api', {
+    return await microserviceClient.productService('products', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(product)
-    })
-    return response
+      body: product
+    });
   },
 
   update: async (id: string, updates: any) => {
-    const response = await supabase.functions.invoke('products-api', {
+    return await microserviceClient.productService(`products/${id}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updates)
-    })
-    return response
+      body: updates
+    });
+  },
+
+  updateInventory: async (productId: string, inventory: any) => {
+    return await microserviceClient.productService('inventory', {
+      method: 'PUT',
+      body: { product_id: productId, ...inventory }
+    });
   },
 
   delete: async (id: string) => {
-    const response = await supabase.functions.invoke('products-api', {
-      method: 'DELETE',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-      }
-    })
-    return response
+    return await microserviceClient.productService(`products/${id}`, {
+      method: 'DELETE'
+    });
   }
 }
 
-// Vendor Management API
+// Vendor Management API using microservice client
 export const vendorApi = {
   getAll: async (filters = {}) => {
-    const params = new URLSearchParams(filters).toString()
-    const response = await supabase.functions.invoke('vendor-management-api', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-      }
-    })
-    return response
+    const params = new URLSearchParams(filters).toString();
+    return await microserviceClient.vendorService(`vendors?${params}`);
   },
 
   getById: async (id: string) => {
-    const response = await supabase.functions.invoke('vendor-management-api', {
-      method: 'GET',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-      }
-    })
-    return response
+    return await microserviceClient.vendorService(`vendor/${id}`);
   },
 
   create: async (vendor: any) => {
-    const response = await supabase.functions.invoke('vendor-management-api', {
+    return await microserviceClient.vendorService('vendors', {
       method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(vendor)
-    })
-    return response
+      body: vendor
+    });
   },
 
   update: async (id: string, updates: any) => {
-    const response = await supabase.functions.invoke('vendor-management-api', {
+    return await microserviceClient.vendorService(`vendor/${id}`, {
       method: 'PUT',
-      headers: {
-        'Authorization': `Bearer ${(await supabase.auth.getSession()).data.session?.access_token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updates)
-    })
-    return response
+      body: updates
+    });
+  },
+
+  delete: async (id: string) => {
+    return await microserviceClient.vendorService(`vendor/${id}`, {
+      method: 'DELETE'
+    });
   }
 }
 
@@ -148,38 +111,29 @@ export const userApi = {
   }
 }
 
-// Orders API
+// Orders API using microservice client
 export const ordersApi = {
   getAll: async (filters = {}) => {
-    const response = await supabase.functions.invoke('orders-api', {
-      method: 'GET',
-      body: null
-    })
-    return response
+    const params = new URLSearchParams(filters).toString();
+    return await microserviceClient.orderService(`orders?${params}`);
   },
 
   getById: async (id: string) => {
-    const response = await supabase.functions.invoke('orders-api', {
-      method: 'GET',
-      body: null
-    })
-    return response
+    return await microserviceClient.orderService(`orders/${id}`);
   },
 
   create: async (orderData: any) => {
-    const response = await supabase.functions.invoke('orders-api', {
+    return await microserviceClient.orderService('orders', {
       method: 'POST',
-      body: JSON.stringify(orderData)
-    })
-    return response
+      body: orderData
+    });
   },
 
   updateStatus: async (id: string, status: any) => {
-    const response = await supabase.functions.invoke('orders-api', {
+    return await microserviceClient.orderService(`orders/${id}`, {
       method: 'PUT',
-      body: JSON.stringify(status)
-    })
-    return response
+      body: { status }
+    });
   }
 }
 

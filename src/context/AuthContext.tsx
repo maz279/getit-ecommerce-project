@@ -2,6 +2,8 @@ import React, { createContext, useContext, useEffect, useState } from 'react';
 import { supabase } from '@/integrations/supabase/client';
 import type { User } from '@supabase/supabase-js';
 import type { User as AppUser } from '@/types';
+// Import microservice client for fallback API access
+import { microserviceClient } from '@/services/microserviceClient';
 
 interface AuthContextType {
   user: User | null;
@@ -61,44 +63,57 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
 
   const fetchUserProfile = async (userId: string) => {
     try {
-      // First try to get from profiles table (which has role)
-      const { data: profileData, error: profileError } = await supabase
+      // Use microservice client for consistent API access
+      const profileData = await microserviceClient.userService(`user/${userId}`)
+        .catch(() => null);
+
+      if (profileData?.data) {
+        const appUser: AppUser = {
+          id: profileData.data.id,
+          email: profileData.data.email || '',
+          full_name: profileData.data.full_name,
+          phone: profileData.data.phone,
+          avatar_url: profileData.data.avatar_url,
+          role: profileData.data.role,
+          is_verified: profileData.data.is_verified || true,
+          created_at: profileData.data.created_at,
+          updated_at: profileData.data.updated_at
+        };
+        setUserProfile(appUser);
+        return;
+      }
+
+      // Fallback to direct database access if microservice is unavailable
+      const { data: directProfileData, error: profileError } = await supabase
         .from('profiles')
         .select('*')
         .eq('id', userId)
         .maybeSingle();
 
-      if (profileData && !profileError) {
-        // Convert profiles data to AppUser format
-        const appUser: AppUser = {
-          id: profileData.id,
-          email: profileData.id, // We'll get email from auth user
-          full_name: profileData.full_name,
-          phone: profileData.phone,
-          avatar_url: profileData.avatar_url,
-          role: profileData.role,
-          is_verified: true, // Default for authenticated users
-          created_at: profileData.created_at,
-          updated_at: profileData.updated_at
-        };
-
-        // Get email from auth user
+      if (directProfileData && !profileError) {
         const { data: { user } } = await supabase.auth.getUser();
-        if (user?.email) {
-          appUser.email = user.email;
-        }
-
+        const appUser: AppUser = {
+          id: directProfileData.id,
+          email: user?.email || '',
+          full_name: directProfileData.full_name,
+          phone: directProfileData.phone,
+          avatar_url: directProfileData.avatar_url,
+          role: directProfileData.role,
+          is_verified: true,
+          created_at: directProfileData.created_at,
+          updated_at: directProfileData.updated_at
+        };
         setUserProfile(appUser);
         return;
       }
 
-      // If no profile exists, create one with minimal data
+      // Create profile if none exists
       if (!profileError || profileError.code === 'PGRST116') {
         const { data: { user } } = await supabase.auth.getUser();
         const newProfile = {
           id: userId,
           full_name: user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'User',
-          role: 'user' as const,
+          role: 'customer' as const,
           phone: user?.user_metadata?.phone || null
         };
 

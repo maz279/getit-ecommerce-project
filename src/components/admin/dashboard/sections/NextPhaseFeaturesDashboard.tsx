@@ -18,10 +18,10 @@ export const NextPhaseFeaturesDashboard: React.FC = () => {
     try {
       // Load metrics for all next phase features
       const [supplyChain, fraudDetection, voiceSearch, arVr, mobileAnalytics] = await Promise.all([
-        supabase.functions.invoke('supply-chain-optimizer', { action: 'get_metrics' }),
-        supabase.functions.invoke('advanced-fraud-prevention', { action: 'get_metrics' }),
-        supabase.functions.invoke('voice-search-engine', { action: 'get_metrics' }),
-        supabase.functions.invoke('ar-vr-engine', { action: 'get_metrics' }),
+        supabase.functions.invoke('supply-chain-optimizer', { body: { action: 'get_metrics' } }),
+        supabase.functions.invoke('advanced-fraud-prevention', { body: { action: 'get_metrics' } }),
+        supabase.functions.invoke('voice-search-engine', { body: { action: 'get_metrics' } }),
+        supabase.functions.invoke('ar-vr-engine', { body: { action: 'get_metrics' } }),
         supabase.from('mobile_app_analytics').select('count').limit(1)
       ]);
 
@@ -145,7 +145,7 @@ export const NextPhaseFeaturesDashboard: React.FC = () => {
                   </div>
                   <div className="flex justify-between">
                     <span>Processing Time</span>
-                    <Badge variant="secondary">< 100ms</Badge>
+                    <Badge variant="secondary">&lt; 100ms</Badge>
                   </div>
                 </div>
               </CardContent>

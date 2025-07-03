@@ -1,1 +1,15 @@
 project_id = "bbgppsjmspmymrfowytf"
+
+[api]
+enabled = true
+port = 54321
+
+[auth]
+enabled = true
+port = 54322
+
+[db]
+port = 54322
+
+[functions.api-gateway]
+verify_jwt = false

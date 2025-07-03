@@ -20701,6 +20701,39 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_categories: {
+        Row: {
+          category_code: string
+          category_name: string
+          commission_rate: number | null
+          created_at: string | null
+          description: string | null
+          id: string
+          is_active: boolean | null
+          updated_at: string | null
+        }
+        Insert: {
+          category_code: string
+          category_name: string
+          commission_rate?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Update: {
+          category_code?: string
+          category_name?: string
+          commission_rate?: number | null
+          created_at?: string | null
+          description?: string | null
+          id?: string
+          is_active?: boolean | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       vendor_commission_rates: {
         Row: {
           base_rate: number
@@ -20863,6 +20896,59 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_compliance: {
+        Row: {
+          compliance_date: string | null
+          compliance_type: string
+          created_at: string | null
+          expiry_date: string | null
+          id: string
+          last_checked: string | null
+          next_check_due: string | null
+          reference_number: string | null
+          status: string | null
+          updated_at: string | null
+          vendor_id: string | null
+          verification_details: Json | null
+        }
+        Insert: {
+          compliance_date?: string | null
+          compliance_type: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_checked?: string | null
+          next_check_due?: string | null
+          reference_number?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          verification_details?: Json | null
+        }
+        Update: {
+          compliance_date?: string | null
+          compliance_type?: string
+          created_at?: string | null
+          expiry_date?: string | null
+          id?: string
+          last_checked?: string | null
+          next_check_due?: string | null
+          reference_number?: string | null
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          verification_details?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_compliance_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vendor_dashboard_widgets: {
         Row: {
           created_at: string
@@ -20902,6 +20988,42 @@ export type Database = {
           widget_config?: Json
           widget_type?: string
           width?: number
+        }
+        Relationships: []
+      }
+      vendor_document_templates: {
+        Row: {
+          created_at: string | null
+          document_type: string
+          id: string
+          is_active: boolean | null
+          is_bangladesh_specific: boolean | null
+          template_fields: Json
+          template_name: string
+          updated_at: string | null
+          validation_rules: Json
+        }
+        Insert: {
+          created_at?: string | null
+          document_type: string
+          id?: string
+          is_active?: boolean | null
+          is_bangladesh_specific?: boolean | null
+          template_fields?: Json
+          template_name: string
+          updated_at?: string | null
+          validation_rules?: Json
+        }
+        Update: {
+          created_at?: string | null
+          document_type?: string
+          id?: string
+          is_active?: boolean | null
+          is_bangladesh_specific?: boolean | null
+          template_fields?: Json
+          template_name?: string
+          updated_at?: string | null
+          validation_rules?: Json
         }
         Relationships: []
       }
@@ -20964,6 +21086,71 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      vendor_kyc_documents: {
+        Row: {
+          created_at: string | null
+          document_number: string | null
+          document_type: string
+          expiry_date: string | null
+          file_name: string | null
+          file_path: string | null
+          file_size: number | null
+          id: string
+          metadata: Json | null
+          mime_type: string | null
+          rejection_reason: string | null
+          updated_at: string | null
+          vendor_id: string | null
+          verification_status: string | null
+          verified_at: string | null
+          verified_by: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          document_number?: string | null
+          document_type: string
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          rejection_reason?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          document_number?: string | null
+          document_type?: string
+          expiry_date?: string | null
+          file_name?: string | null
+          file_path?: string | null
+          file_size?: number | null
+          id?: string
+          metadata?: Json | null
+          mime_type?: string | null
+          rejection_reason?: string | null
+          updated_at?: string | null
+          vendor_id?: string | null
+          verification_status?: string | null
+          verified_at?: string | null
+          verified_by?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_kyc_documents_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendor_marketplace_tools: {
         Row: {
@@ -21253,6 +21440,78 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      vendor_performance_analytics: {
+        Row: {
+          active_products: number | null
+          analytics_date: string | null
+          average_rating: number | null
+          created_at: string | null
+          customer_satisfaction: number | null
+          fulfillment_rate: number | null
+          id: string
+          performance_score: number | null
+          response_time_hours: number | null
+          return_rate: number | null
+          tier_id: string | null
+          total_orders: number | null
+          total_products: number | null
+          total_revenue: number | null
+          total_reviews: number | null
+          vendor_id: string | null
+        }
+        Insert: {
+          active_products?: number | null
+          analytics_date?: string | null
+          average_rating?: number | null
+          created_at?: string | null
+          customer_satisfaction?: number | null
+          fulfillment_rate?: number | null
+          id?: string
+          performance_score?: number | null
+          response_time_hours?: number | null
+          return_rate?: number | null
+          tier_id?: string | null
+          total_orders?: number | null
+          total_products?: number | null
+          total_revenue?: number | null
+          total_reviews?: number | null
+          vendor_id?: string | null
+        }
+        Update: {
+          active_products?: number | null
+          analytics_date?: string | null
+          average_rating?: number | null
+          created_at?: string | null
+          customer_satisfaction?: number | null
+          fulfillment_rate?: number | null
+          id?: string
+          performance_score?: number | null
+          response_time_hours?: number | null
+          return_rate?: number | null
+          tier_id?: string | null
+          total_orders?: number | null
+          total_products?: number | null
+          total_revenue?: number | null
+          total_reviews?: number | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_performance_analytics_tier_id_fkey"
+            columns: ["tier_id"]
+            isOneToOne: false
+            referencedRelation: "vendor_tiers"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vendor_performance_analytics_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendor_performance_metrics: {
         Row: {
@@ -21568,6 +21827,172 @@ export type Database = {
           vendor_id?: string
         }
         Relationships: []
+      }
+      vendor_stores: {
+        Row: {
+          business_hours: Json | null
+          contact_email: string | null
+          contact_phone: string | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          physical_address: string | null
+          pickup_address: string | null
+          return_policy: string | null
+          shipping_policy: string | null
+          social_media_links: Json | null
+          store_banner: string | null
+          store_description: string | null
+          store_logo: string | null
+          store_name: string
+          store_settings: Json | null
+          store_slug: string
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          business_hours?: Json | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          physical_address?: string | null
+          pickup_address?: string | null
+          return_policy?: string | null
+          shipping_policy?: string | null
+          social_media_links?: Json | null
+          store_banner?: string | null
+          store_description?: string | null
+          store_logo?: string | null
+          store_name: string
+          store_settings?: Json | null
+          store_slug: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          business_hours?: Json | null
+          contact_email?: string | null
+          contact_phone?: string | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          physical_address?: string | null
+          pickup_address?: string | null
+          return_policy?: string | null
+          shipping_policy?: string | null
+          social_media_links?: Json | null
+          store_banner?: string | null
+          store_description?: string | null
+          store_logo?: string | null
+          store_name?: string
+          store_settings?: Json | null
+          store_slug?: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_stores_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      vendor_tiers: {
+        Row: {
+          benefits: Json | null
+          commission_discount: number | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          max_monthly_sales: number | null
+          min_monthly_sales: number | null
+          requirements: Json | null
+          tier_level: number
+          tier_name: string
+        }
+        Insert: {
+          benefits?: Json | null
+          commission_discount?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_monthly_sales?: number | null
+          min_monthly_sales?: number | null
+          requirements?: Json | null
+          tier_level: number
+          tier_name: string
+        }
+        Update: {
+          benefits?: Json | null
+          commission_discount?: number | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_monthly_sales?: number | null
+          min_monthly_sales?: number | null
+          requirements?: Json | null
+          tier_level?: number
+          tier_name?: string
+        }
+        Relationships: []
+      }
+      vendor_verification_workflow: {
+        Row: {
+          assigned_to: string | null
+          completed_at: string | null
+          created_at: string | null
+          id: string
+          notes: string | null
+          started_at: string | null
+          status: string | null
+          step_data: Json | null
+          step_order: number
+          updated_at: string | null
+          vendor_id: string | null
+          workflow_step: string
+        }
+        Insert: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          started_at?: string | null
+          status?: string | null
+          step_data?: Json | null
+          step_order: number
+          updated_at?: string | null
+          vendor_id?: string | null
+          workflow_step: string
+        }
+        Update: {
+          assigned_to?: string | null
+          completed_at?: string | null
+          created_at?: string | null
+          id?: string
+          notes?: string | null
+          started_at?: string | null
+          status?: string | null
+          step_data?: Json | null
+          step_order?: number
+          updated_at?: string | null
+          vendor_id?: string | null
+          workflow_step?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_verification_workflow_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendors: {
         Row: {

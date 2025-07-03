@@ -1883,6 +1883,57 @@ export type Database = {
         }
         Relationships: []
       }
+      bangladesh_compliance: {
+        Row: {
+          compliance_deadline: string | null
+          compliance_officer_id: string | null
+          compliance_status: string | null
+          compliance_type: string
+          created_at: string | null
+          entity_id: string
+          entity_type: string
+          id: string
+          last_reviewed_at: string | null
+          required_documents: Json | null
+          review_notes: string | null
+          submitted_documents: Json | null
+          updated_at: string | null
+          verification_details: Json | null
+        }
+        Insert: {
+          compliance_deadline?: string | null
+          compliance_officer_id?: string | null
+          compliance_status?: string | null
+          compliance_type: string
+          created_at?: string | null
+          entity_id: string
+          entity_type: string
+          id?: string
+          last_reviewed_at?: string | null
+          required_documents?: Json | null
+          review_notes?: string | null
+          submitted_documents?: Json | null
+          updated_at?: string | null
+          verification_details?: Json | null
+        }
+        Update: {
+          compliance_deadline?: string | null
+          compliance_officer_id?: string | null
+          compliance_status?: string | null
+          compliance_type?: string
+          created_at?: string | null
+          entity_id?: string
+          entity_type?: string
+          id?: string
+          last_reviewed_at?: string | null
+          required_documents?: Json | null
+          review_notes?: string | null
+          submitted_documents?: Json | null
+          updated_at?: string | null
+          verification_details?: Json | null
+        }
+        Relationships: []
+      }
       bangladesh_compliance_tracking: {
         Row: {
           compliance_officer_id: string | null
@@ -3684,6 +3735,66 @@ export type Database = {
           success_rate?: number | null
           trigger_type?: string
           updated_at?: string | null
+        }
+        Relationships: []
+      }
+      cod_transactions: {
+        Row: {
+          cod_amount: number
+          collected_at: string | null
+          collection_fee: number | null
+          created_at: string | null
+          customer_id: string | null
+          customer_phone: string
+          delivery_address: Json
+          delivery_agent_id: string | null
+          delivery_instructions: string | null
+          deposit_reference: string | null
+          deposited_at: string | null
+          id: string
+          notes: string | null
+          order_id: string
+          status: string | null
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          cod_amount: number
+          collected_at?: string | null
+          collection_fee?: number | null
+          created_at?: string | null
+          customer_id?: string | null
+          customer_phone: string
+          delivery_address: Json
+          delivery_agent_id?: string | null
+          delivery_instructions?: string | null
+          deposit_reference?: string | null
+          deposited_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          cod_amount?: number
+          collected_at?: string | null
+          collection_fee?: number | null
+          created_at?: string | null
+          customer_id?: string | null
+          customer_phone?: string
+          delivery_address?: Json
+          delivery_agent_id?: string | null
+          delivery_instructions?: string | null
+          deposit_reference?: string | null
+          deposited_at?: string | null
+          id?: string
+          notes?: string | null
+          order_id?: string
+          status?: string | null
+          updated_at?: string | null
+          vendor_id?: string
         }
         Relationships: []
       }
@@ -9839,6 +9950,66 @@ export type Database = {
         }
         Relationships: []
       }
+      mobile_banking_transactions: {
+        Row: {
+          amount: number
+          created_at: string | null
+          currency: string | null
+          failure_reason: string | null
+          gateway_name: string
+          gateway_reference: string | null
+          gateway_response: Json | null
+          id: string
+          mobile_number: string
+          order_id: string | null
+          processed_at: string | null
+          status: string | null
+          transaction_id: string
+          transaction_type: string
+          updated_at: string | null
+          user_id: string | null
+          verification_code: string | null
+        }
+        Insert: {
+          amount: number
+          created_at?: string | null
+          currency?: string | null
+          failure_reason?: string | null
+          gateway_name: string
+          gateway_reference?: string | null
+          gateway_response?: Json | null
+          id?: string
+          mobile_number: string
+          order_id?: string | null
+          processed_at?: string | null
+          status?: string | null
+          transaction_id: string
+          transaction_type: string
+          updated_at?: string | null
+          user_id?: string | null
+          verification_code?: string | null
+        }
+        Update: {
+          amount?: number
+          created_at?: string | null
+          currency?: string | null
+          failure_reason?: string | null
+          gateway_name?: string
+          gateway_reference?: string | null
+          gateway_response?: Json | null
+          id?: string
+          mobile_number?: string
+          order_id?: string | null
+          processed_at?: string | null
+          status?: string | null
+          transaction_id?: string
+          transaction_type?: string
+          updated_at?: string | null
+          user_id?: string | null
+          verification_code?: string | null
+        }
+        Relationships: []
+      }
       mobile_money_wallets: {
         Row: {
           balance_cache: number | null
@@ -11311,6 +11482,66 @@ export type Database = {
           },
         ]
       }
+      payment_fraud_detection: {
+        Row: {
+          behavioral_analysis: Json | null
+          created_at: string | null
+          detection_algorithm: string
+          device_fingerprint: Json | null
+          final_decision: string | null
+          fraud_indicators: Json | null
+          geolocation_data: Json | null
+          id: string
+          manual_review_required: boolean | null
+          ml_model_version: string | null
+          review_notes: string | null
+          reviewed_by: string | null
+          risk_level: string
+          risk_score: number
+          transaction_id: string
+          updated_at: string | null
+          user_id: string | null
+        }
+        Insert: {
+          behavioral_analysis?: Json | null
+          created_at?: string | null
+          detection_algorithm: string
+          device_fingerprint?: Json | null
+          final_decision?: string | null
+          fraud_indicators?: Json | null
+          geolocation_data?: Json | null
+          id?: string
+          manual_review_required?: boolean | null
+          ml_model_version?: string | null
+          review_notes?: string | null
+          reviewed_by?: string | null
+          risk_level: string
+          risk_score?: number
+          transaction_id: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Update: {
+          behavioral_analysis?: Json | null
+          created_at?: string | null
+          detection_algorithm?: string
+          device_fingerprint?: Json | null
+          final_decision?: string | null
+          fraud_indicators?: Json | null
+          geolocation_data?: Json | null
+          id?: string
+          manual_review_required?: boolean | null
+          ml_model_version?: string | null
+          review_notes?: string | null
+          reviewed_by?: string | null
+          risk_level?: string
+          risk_score?: number
+          transaction_id?: string
+          updated_at?: string | null
+          user_id?: string | null
+        }
+        Relationships: []
+      }
       payment_gateways: {
         Row: {
           configuration: Json
@@ -11359,6 +11590,54 @@ export type Database = {
         }
         Relationships: []
       }
+      payment_method_config: {
+        Row: {
+          compliance_rules: Json | null
+          country_code: string | null
+          created_at: string | null
+          currency: string | null
+          fees_config: Json | null
+          gateway_config: Json | null
+          gateway_name: string
+          id: string
+          is_active: boolean | null
+          max_amount: number | null
+          method_name: string
+          min_amount: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          compliance_rules?: Json | null
+          country_code?: string | null
+          created_at?: string | null
+          currency?: string | null
+          fees_config?: Json | null
+          gateway_config?: Json | null
+          gateway_name: string
+          id?: string
+          is_active?: boolean | null
+          max_amount?: number | null
+          method_name: string
+          min_amount?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          compliance_rules?: Json | null
+          country_code?: string | null
+          created_at?: string | null
+          currency?: string | null
+          fees_config?: Json | null
+          gateway_config?: Json | null
+          gateway_name?: string
+          id?: string
+          is_active?: boolean | null
+          max_amount?: number | null
+          method_name?: string
+          min_amount?: number | null
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
       payment_methods: {
         Row: {
           configuration: Json | null
@@ -11391,6 +11670,63 @@ export type Database = {
           method_id?: string
           name?: string
           type?: string
+          updated_at?: string | null
+        }
+        Relationships: []
+      }
+      payment_reconciliation: {
+        Row: {
+          created_at: string | null
+          discrepancy_amount: number | null
+          discrepancy_count: number | null
+          gateway_amount: number | null
+          gateway_name: string
+          gateway_transactions: number | null
+          id: string
+          platform_amount: number | null
+          platform_transactions: number | null
+          reconciled_by: string | null
+          reconciliation_date: string
+          reconciliation_report: Json | null
+          status: string | null
+          total_amount: number | null
+          total_transactions: number | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          discrepancy_amount?: number | null
+          discrepancy_count?: number | null
+          gateway_amount?: number | null
+          gateway_name: string
+          gateway_transactions?: number | null
+          id?: string
+          platform_amount?: number | null
+          platform_transactions?: number | null
+          reconciled_by?: string | null
+          reconciliation_date: string
+          reconciliation_report?: Json | null
+          status?: string | null
+          total_amount?: number | null
+          total_transactions?: number | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          discrepancy_amount?: number | null
+          discrepancy_count?: number | null
+          gateway_amount?: number | null
+          gateway_name?: string
+          gateway_transactions?: number | null
+          id?: string
+          platform_amount?: number | null
+          platform_transactions?: number | null
+          reconciled_by?: string | null
+          reconciliation_date?: string
+          reconciliation_report?: Json | null
+          status?: string | null
+          total_amount?: number | null
+          total_transactions?: number | null
           updated_at?: string | null
         }
         Relationships: []
@@ -11616,6 +11952,48 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      payment_webhook_logs: {
+        Row: {
+          created_at: string | null
+          gateway_name: string
+          id: string
+          last_retry_at: string | null
+          processed: boolean | null
+          processing_result: Json | null
+          retry_count: number | null
+          signature: string | null
+          signature_verified: boolean | null
+          webhook_payload: Json
+          webhook_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          gateway_name: string
+          id?: string
+          last_retry_at?: string | null
+          processed?: boolean | null
+          processing_result?: Json | null
+          retry_count?: number | null
+          signature?: string | null
+          signature_verified?: boolean | null
+          webhook_payload: Json
+          webhook_type: string
+        }
+        Update: {
+          created_at?: string | null
+          gateway_name?: string
+          id?: string
+          last_retry_at?: string | null
+          processed?: boolean | null
+          processing_result?: Json | null
+          retry_count?: number | null
+          signature?: string | null
+          signature_verified?: boolean | null
+          webhook_payload?: Json
+          webhook_type?: string
+        }
+        Relationships: []
       }
       payments: {
         Row: {
@@ -19107,6 +19485,69 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      vendor_payouts: {
+        Row: {
+          adjustment_amount: number | null
+          created_at: string | null
+          gross_sales: number
+          id: string
+          net_payout_amount: number
+          payout_details: Json | null
+          payout_method: string
+          payout_period_end: string
+          payout_period_start: string
+          payout_reference: string | null
+          platform_commission: number
+          platform_fees: number
+          processed_at: string | null
+          processor_id: string | null
+          status: string | null
+          tax_deduction: number
+          updated_at: string | null
+          vendor_id: string
+        }
+        Insert: {
+          adjustment_amount?: number | null
+          created_at?: string | null
+          gross_sales?: number
+          id?: string
+          net_payout_amount: number
+          payout_details?: Json | null
+          payout_method: string
+          payout_period_end: string
+          payout_period_start: string
+          payout_reference?: string | null
+          platform_commission?: number
+          platform_fees?: number
+          processed_at?: string | null
+          processor_id?: string | null
+          status?: string | null
+          tax_deduction?: number
+          updated_at?: string | null
+          vendor_id: string
+        }
+        Update: {
+          adjustment_amount?: number | null
+          created_at?: string | null
+          gross_sales?: number
+          id?: string
+          net_payout_amount?: number
+          payout_details?: Json | null
+          payout_method?: string
+          payout_period_end?: string
+          payout_period_start?: string
+          payout_reference?: string | null
+          platform_commission?: number
+          platform_fees?: number
+          processed_at?: string | null
+          processor_id?: string | null
+          status?: string | null
+          tax_deduction?: number
+          updated_at?: string | null
+          vendor_id?: string
+        }
+        Relationships: []
       }
       vendor_performance_alerts: {
         Row: {

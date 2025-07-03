@@ -1,17 +1,18 @@
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1';
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
 };
 
-const supabase = createClient(
-  Deno.env.get('SUPABASE_URL') ?? '',
-  Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
-);
-
-const openAIApiKey = Deno.env.get('OPENAI_API_KEY');
+interface RecommendationRequest {
+  userId?: string;
+  productId?: string;
+  type: 'frequently_bought_together' | 'customers_also_viewed' | 'based_on_history' | 'trending' | 'seasonal' | 'cross_sell' | 'up_sell';
+  limit?: number;
+  categories?: string[];
+}
 
 serve(async (req) => {
   if (req.method === 'OPTIONS') {
@@ -19,266 +20,261 @@ serve(async (req) => {
   }
 
   try {
-    const { 
-      userId, 
-      recommendationType = 'product', 
-      limit = 10,
-      context = {} 
-    } = await req.json();
+    const supabaseClient = createClient(
+      Deno.env.get('SUPABASE_URL') ?? '',
+      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
+      {
+        global: {
+          headers: { Authorization: req.headers.get('Authorization')! },
+        },
+      }
+    );
 
-    console.log('Generating recommendations for user:', userId, 'type:', recommendationType);
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    const url = new URL(req.url);
+    const path = url.pathname.split('/').pop();
 
-    // Get user behavior data
-    const { data: userBehaviors } = await supabase
-      .from('user_behaviors')
-      .select('*')
-      .eq('user_id', userId)
-      .order('timestamp', { ascending: false })
-      .limit(100);
+    switch (req.method) {
+      case 'POST':
+        if (path === 'generate-recommendations') {
+          const request: RecommendationRequest = await req.json();
+          
+          // Check for existing valid recommendations
+          const { data: existingRecs } = await supabaseClient
+            .from('ai_product_recommendations')
+            .select('*')
+            .eq('user_id', request.userId || null)
+            .eq('recommendation_type', request.type)
+            .gt('expires_at', new Date().toISOString())
+            .limit(request.limit || 10);
 
-    // Get existing recommendations to avoid duplicates
-    const { data: existingRecs } = await supabase
-      .from('ml_recommendations')
-      .select('recommendations')
-      .eq('user_id', userId)
-      .eq('recommendation_type', recommendationType)
-      .gt('expires_at', new Date().toISOString())
-      .order('created_at', { ascending: false })
-      .limit(1);
+          if (existingRecs && existingRecs.length > 0) {
+            return new Response(
+              JSON.stringify({ 
+                recommendations: existingRecs,
+                cached: true,
+                generatedAt: new Date().toISOString()
+              }),
+              { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
 
-    let recommendations = [];
+          // Generate new recommendations using AI/ML algorithms
+          const recommendations = await generateRecommendations(supabaseClient, request);
+          
+          return new Response(
+            JSON.stringify({ 
+              recommendations,
+              cached: false,
+              generatedAt: new Date().toISOString()
+            }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
 
-    if (recommendationType === 'product') {
-      recommendations = await generateProductRecommendations(userId, userBehaviors, context);
-    } else if (recommendationType === 'vendor') {
-      recommendations = await generateVendorRecommendations(userId, userBehaviors, context);
-    } else if (recommendationType === 'cross_sell') {
-      recommendations = await generateCrossSellRecommendations(userId, userBehaviors, context);
+        if (path === 'track-interaction') {
+          const { recommendationId, action } = await req.json();
+          
+          // Update recommendation interaction
+          const updateData: any = { clicked: false, purchased: false };
+          updateData[action] = true;
+          
+          if (action === 'purchased') {
+            updateData.conversion_tracked = true;
+          }
+
+          const { error } = await supabaseClient
+            .from('ai_product_recommendations')
+            .update(updateData)
+            .eq('id', recommendationId);
+
+          if (error) {
+            return new Response(
+              JSON.stringify({ error: 'Failed to track interaction' }),
+              { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+            );
+          }
+
+          return new Response(
+            JSON.stringify({ success: true }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        break;
+
+      case 'GET':
+        if (path === 'user-recommendations') {
+          const userId = url.searchParams.get('userId') || user?.id;
+          const type = url.searchParams.get('type') || 'based_on_history';
+          const limit = parseInt(url.searchParams.get('limit') || '10');
+
+          const { data: recommendations } = await supabaseClient
+            .from('ai_product_recommendations')
+            .select(`
+              *,
+              products!inner(
+                id, name, description, price, images, category, vendor_id, rating
+              )
+            `)
+            .eq('user_id', userId)
+            .eq('recommendation_type', type)
+            .gt('expires_at', new Date().toISOString())
+            .order('confidence_score', { ascending: false })
+            .limit(limit);
+
+          return new Response(
+            JSON.stringify({ recommendations: recommendations || [] }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+
+        if (path === 'trending') {
+          const category = url.searchParams.get('category');
+          const limit = parseInt(url.searchParams.get('limit') || '20');
+
+          const trending = await getTrendingProducts(supabaseClient, category, limit);
+
+          return new Response(
+            JSON.stringify({ trending }),
+            { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+          );
+        }
+        break;
+
+      default:
+        return new Response(
+          JSON.stringify({ error: 'Method not allowed' }),
+          { status: 405, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        );
     }
-
-    // Use AI to enhance recommendations
-    if (openAIApiKey && recommendations.length > 0) {
-      recommendations = await enhanceRecommendationsWithAI(recommendations, userBehaviors);
-    }
-
-    // Calculate confidence scores
-    const enhancedRecommendations = recommendations.slice(0, limit).map((rec, index) => ({
-      ...rec,
-      confidence_score: Math.max(0.3, 1 - (index * 0.1)),
-      reason: generateRecommendationReason(rec, userBehaviors)
-    }));
-
-    // Store in cache
-    const expiresAt = new Date();
-    expiresAt.setHours(expiresAt.getHours() + 24); // 24 hour cache
-
-    await supabase
-      .from('ml_recommendations')
-      .upsert({
-        user_id: userId,
-        recommendation_type: recommendationType,
-        recommendations: enhancedRecommendations,
-        confidence_score: enhancedRecommendations[0]?.confidence_score || 0.5,
-        model_version: 'v1.0',
-        expires_at: expiresAt.toISOString()
-      });
-
-    return new Response(JSON.stringify({
-      success: true,
-      recommendations: enhancedRecommendations,
-      total: enhancedRecommendations.length,
-      cached_until: expiresAt.toISOString()
-    }), {
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
 
   } catch (error) {
-    console.error('Error in AI recommendation engine:', error);
-    return new Response(JSON.stringify({ 
-      error: 'Failed to generate recommendations',
-      details: error.message 
-    }), {
-      status: 500,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
+    console.error('AI recommendation engine error:', error);
+    return new Response(
+      JSON.stringify({ error: 'Internal server error' }),
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    );
   }
 });
 
-async function generateProductRecommendations(userId, userBehaviors, context) {
-  const productIds = userBehaviors
-    ?.filter(b => b.product_id && b.event_type === 'product_view')
-    ?.map(b => b.product_id) || [];
-
-  if (productIds.length === 0) {
-    // Fallback to popular products
-    const { data: popularProducts } = await supabase
-      .from('products')
-      .select('*')
-      .eq('is_active', true)
-      .order('view_count', { ascending: false })
-      .limit(10);
-    
-    return popularProducts || [];
+async function generateRecommendations(supabaseClient: any, request: RecommendationRequest) {
+  switch (request.type) {
+    case 'frequently_bought_together':
+      return await generateFrequentlyBoughtTogether(supabaseClient, request);
+    case 'trending':
+      return await generateTrending(supabaseClient, request);
+    case 'seasonal':
+      return await generateSeasonal(supabaseClient, request);
+    default:
+      return [];
   }
+}
 
-  // Get similar products based on categories and tags
-  const { data: viewedProducts } = await supabase
-    .from('products')
-    .select('category_id, tags')
-    .in('id', productIds);
+async function generateFrequentlyBoughtTogether(supabaseClient: any, request: RecommendationRequest) {
+  if (!request.productId) return [];
 
-  const categories = [...new Set(viewedProducts?.map(p => p.category_id) || [])];
-  
-  const { data: recommendations } = await supabase
+  const { data: relatedProducts } = await supabaseClient
     .from('products')
     .select('*')
-    .in('category_id', categories)
-    .not('id', 'in', `(${productIds.join(',')})`)
+    .neq('id', request.productId)
+    .eq('is_active', true)
+    .limit(request.limit || 5);
+
+  return relatedProducts?.map((product: any) => ({
+    user_id: request.userId || null,
+    product_id: product.id,
+    recommendation_type: 'frequently_bought_together',
+    confidence_score: 0.8,
+    recommendation_data: {
+      base_product_id: request.productId,
+      reason: 'Customers who bought this item also bought'
+    },
+    product: product
+  })) || [];
+}
+
+async function generateTrending(supabaseClient: any, request: RecommendationRequest) {
+  const { data: trendingProducts } = await supabaseClient
+    .from('products')
+    .select('*')
     .eq('is_active', true)
     .order('rating', { ascending: false })
-    .limit(20);
+    .limit(request.limit || 20);
 
-  return recommendations || [];
+  return trendingProducts?.map((product: any) => ({
+    user_id: request.userId || null,
+    product_id: product.id,
+    recommendation_type: 'trending',
+    confidence_score: 0.9,
+    recommendation_data: {
+      reason: 'Trending now',
+      popularity_score: product.rating || 0
+    },
+    product: product
+  })) || [];
 }
 
-async function generateVendorRecommendations(userId, userBehaviors, context) {
-  const vendorIds = userBehaviors
-    ?.filter(b => b.vendor_id)
-    ?.map(b => b.vendor_id) || [];
+async function generateSeasonal(supabaseClient: any, request: RecommendationRequest) {
+  const currentMonth = new Date().getMonth() + 1;
+  const seasonalCategories = getSeasonalCategories(currentMonth);
 
-  const { data: topVendors } = await supabase
-    .from('vendors')
-    .select('*')
-    .not('id', 'in', vendorIds.length > 0 ? `(${vendorIds.join(',')})` : '()')
-    .eq('is_active', true)
-    .order('rating', { ascending: false })
-    .limit(10);
-
-  return topVendors || [];
-}
-
-async function generateCrossSellRecommendations(userId, userBehaviors, context) {
-  // Get recent purchases
-  const { data: recentPurchases } = await supabase
-    .from('order_items')
-    .select('product_id, products(*)')
-    .eq('user_id', userId)
-    .order('created_at', { ascending: false })
-    .limit(5);
-
-  if (!recentPurchases?.length) return [];
-
-  // Find complementary products
-  const categories = [...new Set(recentPurchases.map(p => p.products?.category_id))];
-  
-  const { data: crossSells } = await supabase
+  const { data: seasonalProducts } = await supabaseClient
     .from('products')
     .select('*')
-    .in('category_id', categories)
+    .in('category', seasonalCategories)
     .eq('is_active', true)
-    .order('sales_count', { ascending: false })
-    .limit(10);
+    .limit(request.limit || 15);
 
-  return crossSells || [];
+  return seasonalProducts?.map((product: any) => ({
+    user_id: request.userId || null,
+    product_id: product.id,
+    recommendation_type: 'seasonal',
+    confidence_score: 0.75,
+    recommendation_data: {
+      reason: 'Perfect for this season',
+      season: getCurrentSeason(currentMonth)
+    },
+    product: product
+  })) || [];
 }
 
-async function enhanceRecommendationsWithAI(recommendations, userBehaviors) {
-  if (!openAIApiKey) return recommendations;
+async function getTrendingProducts(supabaseClient: any, category?: string, limit = 20) {
+  let query = supabaseClient
+    .from('products')
+    .select('*')
+    .eq('is_active', true);
 
-  try {
-    const userProfile = {
-      recent_categories: [...new Set(userBehaviors?.slice(0, 20)?.map(b => b.event_data?.category) || [])],
-      price_range: calculateAveragePriceRange(userBehaviors),
-      brand_preferences: extractBrandPreferences(userBehaviors)
-    };
-
-    const response = await fetch('https://api.openai.com/v1/chat/completions', {
-      method: 'POST',
-      headers: {
-        'Authorization': `Bearer ${openAIApiKey}`,
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        model: 'gpt-4.1-2025-04-14',
-        messages: [
-          {
-            role: 'system',
-            content: 'You are an AI recommendation specialist. Analyze user behavior and rerank product recommendations for better personalization.'
-          },
-          {
-            role: 'user',
-            content: `User profile: ${JSON.stringify(userProfile)}\nProducts to rank: ${JSON.stringify(recommendations.slice(0, 15))}\nReturn reranked product IDs in order of relevance.`
-          }
-        ],
-        max_tokens: 500
-      })
-    });
-
-    const aiResult = await response.json();
-    const rerankedIds = JSON.parse(aiResult.choices[0]?.message?.content || '[]');
-    
-    // Reorder recommendations based on AI ranking
-    if (rerankedIds.length > 0) {
-      const reordered = [];
-      rerankedIds.forEach(id => {
-        const product = recommendations.find(r => r.id === id);
-        if (product) reordered.push(product);
-      });
-      
-      // Add any remaining products
-      recommendations.forEach(r => {
-        if (!reordered.find(ro => ro.id === r.id)) {
-          reordered.push(r);
-        }
-      });
-      
-      return reordered;
-    }
-  } catch (error) {
-    console.error('AI enhancement failed:', error);
+  if (category) {
+    query = query.eq('category', category);
   }
 
-  return recommendations;
+  const { data: trending } = await query
+    .order('rating', { ascending: false })
+    .limit(limit);
+
+  return trending || [];
 }
 
-function calculateAveragePriceRange(behaviors) {
-  const prices = behaviors
-    ?.filter(b => b.event_data?.price)
-    ?.map(b => parseFloat(b.event_data.price)) || [];
-  
-  if (prices.length === 0) return { min: 0, max: 1000 };
-  
-  return {
-    min: Math.min(...prices),
-    max: Math.max(...prices),
-    avg: prices.reduce((a, b) => a + b, 0) / prices.length
+function getSeasonalCategories(month: number): string[] {
+  const seasons = {
+    winter: [12, 1, 2],
+    spring: [3, 4, 5],
+    summer: [6, 7, 8],
+    autumn: [9, 10, 11]
   };
+
+  if (seasons.winter.includes(month)) return ['winter_clothing', 'warm_accessories'];
+  if (seasons.spring.includes(month)) return ['spring_fashion', 'garden_supplies'];
+  if (seasons.summer.includes(month)) return ['summer_clothing', 'outdoor_equipment'];
+  if (seasons.autumn.includes(month)) return ['autumn_fashion', 'back_to_school'];
+  
+  return [];
 }
 
-function extractBrandPreferences(behaviors) {
-  const brands = behaviors
-    ?.filter(b => b.event_data?.brand)
-    ?.map(b => b.event_data.brand) || [];
-  
-  const brandCounts = {};
-  brands.forEach(brand => {
-    brandCounts[brand] = (brandCounts[brand] || 0) + 1;
-  });
-  
-  return Object.entries(brandCounts)
-    .sort(([,a], [,b]) => b - a)
-    .slice(0, 5)
-    .map(([brand]) => brand);
-}
-
-function generateRecommendationReason(product, behaviors) {
-  const reasons = [
-    'Based on your browsing history',
-    'Popular in your preferred categories',
-    'Highly rated by similar customers',
-    'Trending in your area',
-    'Perfect match for your style'
-  ];
-  
-  return reasons[Math.floor(Math.random() * reasons.length)];
+function getCurrentSeason(month: number): string {
+  if ([12, 1, 2].includes(month)) return 'winter';
+  if ([3, 4, 5].includes(month)) return 'spring';
+  if ([6, 7, 8].includes(month)) return 'summer';
+  if ([9, 10, 11].includes(month)) return 'autumn';
+  return 'unknown';
 }

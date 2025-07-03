@@ -13,3 +13,24 @@ port = 54322
 
 [functions.api-gateway]
 verify_jwt = false
+
+[functions.user-management-api]
+verify_jwt = true
+
+[functions.vendor-management-api]
+verify_jwt = true
+
+[functions.product-service]
+verify_jwt = true
+
+[functions.payment-processing]
+verify_jwt = true
+
+[functions.orders-api]
+verify_jwt = true
+
+[functions.notification-system]
+verify_jwt = true
+
+[functions.ai-enhanced-search]
+verify_jwt = false

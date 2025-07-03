@@ -1782,6 +1782,48 @@ export type Database = {
         }
         Relationships: []
       }
+      bangladesh_tax_config: {
+        Row: {
+          created_at: string | null
+          description: string | null
+          effective_from: string
+          effective_to: string | null
+          id: string
+          is_active: boolean | null
+          maximum_amount: number | null
+          minimum_amount: number | null
+          product_category: string | null
+          tax_rate: number
+          tax_type: string
+        }
+        Insert: {
+          created_at?: string | null
+          description?: string | null
+          effective_from: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          product_category?: string | null
+          tax_rate: number
+          tax_type: string
+        }
+        Update: {
+          created_at?: string | null
+          description?: string | null
+          effective_from?: string
+          effective_to?: string | null
+          id?: string
+          is_active?: boolean | null
+          maximum_amount?: number | null
+          minimum_amount?: number | null
+          product_category?: string | null
+          tax_rate?: number
+          tax_type?: string
+        }
+        Relationships: []
+      }
       bd_courier_partners: {
         Row: {
           api_config: Json
@@ -2344,6 +2386,65 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      budget_plans: {
+        Row: {
+          account_id: string | null
+          actual_amount: number | null
+          approved_by: string | null
+          budget_name: string
+          budgeted_amount: number
+          created_at: string | null
+          created_by: string | null
+          department: string | null
+          fiscal_year: number
+          id: string
+          period_type: string | null
+          status: string | null
+          variance: number | null
+          variance_percentage: number | null
+        }
+        Insert: {
+          account_id?: string | null
+          actual_amount?: number | null
+          approved_by?: string | null
+          budget_name: string
+          budgeted_amount: number
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          fiscal_year: number
+          id?: string
+          period_type?: string | null
+          status?: string | null
+          variance?: number | null
+          variance_percentage?: number | null
+        }
+        Update: {
+          account_id?: string | null
+          actual_amount?: number | null
+          approved_by?: string | null
+          budget_name?: string
+          budgeted_amount?: number
+          created_at?: string | null
+          created_by?: string | null
+          department?: string | null
+          fiscal_year?: number
+          id?: string
+          period_type?: string | null
+          status?: string | null
+          variance?: number | null
+          variance_percentage?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "budget_plans_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       bulk_order_categories: {
         Row: {
@@ -2997,6 +3098,53 @@ export type Database = {
           user_id?: string | null
         }
         Relationships: []
+      }
+      chart_of_accounts: {
+        Row: {
+          account_code: string
+          account_name: string
+          account_type: string
+          created_at: string | null
+          currency: string | null
+          id: string
+          is_active: boolean | null
+          normal_balance: string | null
+          parent_account_id: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          account_code: string
+          account_name: string
+          account_type: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_active?: boolean | null
+          normal_balance?: string | null
+          parent_account_id?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          account_code?: string
+          account_name?: string
+          account_type?: string
+          created_at?: string | null
+          currency?: string | null
+          id?: string
+          is_active?: boolean | null
+          normal_balance?: string | null
+          parent_account_id?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "chart_of_accounts_parent_account_id_fkey"
+            columns: ["parent_account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       chat_agents: {
         Row: {
@@ -6026,6 +6174,39 @@ export type Database = {
         }
         Relationships: []
       }
+      exchange_rates: {
+        Row: {
+          base_currency: string
+          created_at: string | null
+          exchange_rate: number
+          id: string
+          is_official: boolean | null
+          rate_date: string
+          rate_source: string | null
+          target_currency: string
+        }
+        Insert: {
+          base_currency?: string
+          created_at?: string | null
+          exchange_rate: number
+          id?: string
+          is_official?: boolean | null
+          rate_date: string
+          rate_source?: string | null
+          target_currency: string
+        }
+        Update: {
+          base_currency?: string
+          created_at?: string | null
+          exchange_rate?: number
+          id?: string
+          is_official?: boolean | null
+          rate_date?: string
+          rate_source?: string | null
+          target_currency?: string
+        }
+        Relationships: []
+      }
       executive_dashboards: {
         Row: {
           created_at: string | null
@@ -6443,6 +6624,159 @@ export type Database = {
           metadata?: Json | null
           updated_at?: string
           user_id?: string | null
+        }
+        Relationships: []
+      }
+      financial_invoices: {
+        Row: {
+          created_at: string | null
+          currency: string | null
+          due_date: string
+          id: string
+          invoice_number: string
+          invoice_type: string
+          issue_date: string
+          notes: string | null
+          order_id: string | null
+          paid_at: string | null
+          payment_terms: string | null
+          status: string | null
+          subtotal: number
+          tax_amount: number | null
+          total_amount: number
+          vat_amount: number | null
+          vendor_id: string
+        }
+        Insert: {
+          created_at?: string | null
+          currency?: string | null
+          due_date: string
+          id?: string
+          invoice_number: string
+          invoice_type: string
+          issue_date: string
+          notes?: string | null
+          order_id?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          status?: string | null
+          subtotal: number
+          tax_amount?: number | null
+          total_amount: number
+          vat_amount?: number | null
+          vendor_id: string
+        }
+        Update: {
+          created_at?: string | null
+          currency?: string | null
+          due_date?: string
+          id?: string
+          invoice_number?: string
+          invoice_type?: string
+          issue_date?: string
+          notes?: string | null
+          order_id?: string | null
+          paid_at?: string | null
+          payment_terms?: string | null
+          status?: string | null
+          subtotal?: number
+          tax_amount?: number | null
+          total_amount?: number
+          vat_amount?: number | null
+          vendor_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "financial_invoices_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "financial_invoices_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      financial_periods: {
+        Row: {
+          closed_at: string | null
+          created_at: string | null
+          end_date: string
+          fiscal_year: number
+          id: string
+          period_name: string
+          start_date: string
+          status: string | null
+        }
+        Insert: {
+          closed_at?: string | null
+          created_at?: string | null
+          end_date: string
+          fiscal_year: number
+          id?: string
+          period_name: string
+          start_date: string
+          status?: string | null
+        }
+        Update: {
+          closed_at?: string | null
+          created_at?: string | null
+          end_date?: string
+          fiscal_year?: number
+          id?: string
+          period_name?: string
+          start_date?: string
+          status?: string | null
+        }
+        Relationships: []
+      }
+      financial_reconciliation: {
+        Row: {
+          created_at: string | null
+          external_balance: number
+          id: string
+          reconciled_at: string | null
+          reconciled_by: string | null
+          reconciliation_notes: string | null
+          reconciliation_type: string
+          reference_date: string
+          status: string | null
+          supporting_documents: Json | null
+          system_balance: number
+          variance: number | null
+        }
+        Insert: {
+          created_at?: string | null
+          external_balance: number
+          id?: string
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          reconciliation_notes?: string | null
+          reconciliation_type: string
+          reference_date: string
+          status?: string | null
+          supporting_documents?: Json | null
+          system_balance: number
+          variance?: number | null
+        }
+        Update: {
+          created_at?: string | null
+          external_balance?: number
+          id?: string
+          reconciled_at?: string | null
+          reconciled_by?: string | null
+          reconciliation_notes?: string | null
+          reconciliation_type?: string
+          reference_date?: string
+          status?: string | null
+          supporting_documents?: Json | null
+          system_balance?: number
+          variance?: number | null
         }
         Relationships: []
       }
@@ -6879,6 +7213,56 @@ export type Database = {
             columns: ["order_fulfillment_id"]
             isOneToOne: false
             referencedRelation: "order_fulfillment"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      general_ledger: {
+        Row: {
+          account_id: string
+          created_at: string | null
+          created_by: string | null
+          credit_amount: number | null
+          debit_amount: number | null
+          description: string | null
+          id: string
+          reference_number: string | null
+          source_document: string | null
+          transaction_date: string
+          transaction_id: string
+        }
+        Insert: {
+          account_id: string
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          debit_amount?: number | null
+          description?: string | null
+          id?: string
+          reference_number?: string | null
+          source_document?: string | null
+          transaction_date: string
+          transaction_id: string
+        }
+        Update: {
+          account_id?: string
+          created_at?: string | null
+          created_by?: string | null
+          credit_amount?: number | null
+          debit_amount?: number | null
+          description?: string | null
+          id?: string
+          reference_number?: string | null
+          source_document?: string | null
+          transaction_date?: string
+          transaction_id?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "general_ledger_account_id_fkey"
+            columns: ["account_id"]
+            isOneToOne: false
+            referencedRelation: "chart_of_accounts"
             referencedColumns: ["id"]
           },
         ]
@@ -7550,6 +7934,62 @@ export type Database = {
           version?: string | null
         }
         Relationships: []
+      }
+      income_tax_records: {
+        Row: {
+          advance_tax_paid: number | null
+          created_at: string | null
+          due_date: string
+          filing_status: string | null
+          final_tax_liability: number
+          gross_income: number
+          id: string
+          tax_amount: number
+          tax_rate: number
+          tax_year: number
+          taxable_income: number
+          vendor_id: string
+          withholding_tax: number | null
+        }
+        Insert: {
+          advance_tax_paid?: number | null
+          created_at?: string | null
+          due_date: string
+          filing_status?: string | null
+          final_tax_liability: number
+          gross_income: number
+          id?: string
+          tax_amount: number
+          tax_rate: number
+          tax_year: number
+          taxable_income: number
+          vendor_id: string
+          withholding_tax?: number | null
+        }
+        Update: {
+          advance_tax_paid?: number | null
+          created_at?: string | null
+          due_date?: string
+          filing_status?: string | null
+          final_tax_liability?: number
+          gross_income?: number
+          id?: string
+          tax_amount?: number
+          tax_rate?: number
+          tax_year?: number
+          taxable_income?: number
+          vendor_id?: string
+          withholding_tax?: number | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "income_tax_records_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       infrastructure_deployments: {
         Row: {
@@ -17415,6 +17855,66 @@ export type Database = {
           updated_at?: string
         }
         Relationships: []
+      }
+      vat_transactions: {
+        Row: {
+          created_at: string | null
+          id: string
+          input_vat_credit: number | null
+          order_id: string | null
+          status: string | null
+          taxable_amount: number
+          transaction_date: string
+          transaction_id: string
+          vat_amount: number
+          vat_rate: number
+          vat_registration_number: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          input_vat_credit?: number | null
+          order_id?: string | null
+          status?: string | null
+          taxable_amount: number
+          transaction_date: string
+          transaction_id: string
+          vat_amount: number
+          vat_rate?: number
+          vat_registration_number?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          input_vat_credit?: number | null
+          order_id?: string | null
+          status?: string | null
+          taxable_amount?: number
+          transaction_date?: string
+          transaction_id?: string
+          vat_amount?: number
+          vat_rate?: number
+          vat_registration_number?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vat_transactions_order_id_fkey"
+            columns: ["order_id"]
+            isOneToOne: false
+            referencedRelation: "orders"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "vat_transactions_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       vendor_analytics: {
         Row: {

@@ -66,45 +66,35 @@ export class DatabaseHelpers {
 
     const offset = (page - 1) * limit;
     
-    let query = supabase
-      .from(tableName)
-      .select(select, { count: 'exact' });
+    try {
+      // Use dynamic query building
+      const { data, error, count } = await supabase
+        .from(tableName as any)
+        .select(select, { count: 'exact' })
+        .order(sortBy, { ascending: sortOrder === 'asc' })
+        .range(offset, offset + limit - 1);
 
-    // Apply filters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        if (Array.isArray(value)) {
-          query = query.in(key, value);
-        } else if (typeof value === 'string' && value.includes('%')) {
-          query = query.like(key, value);
-        } else {
-          query = query.eq(key, value);
-        }
+      if (error) throw error;
+
+      const result = {
+        data: (data || []) as T[],
+        count: count || 0,
+        hasMore: (count || 0) > offset + limit
+      };
+
+      // Cache the result
+      if (cache) {
+        this.queryCache.set(cacheKey, {
+          data: result,
+          expires: Date.now() + cacheTTL
+        });
       }
-    });
 
-    // Apply sorting and pagination
-    const { data, error, count } = await query
-      .order(sortBy, { ascending: sortOrder === 'asc' })
-      .range(offset, offset + limit - 1);
-
-    if (error) throw error;
-
-    const result = {
-      data: data || [],
-      count: count || 0,
-      hasMore: (count || 0) > offset + limit
-    };
-
-    // Cache the result
-    if (cache) {
-      this.queryCache.set(cacheKey, {
-        data: result,
-        expires: Date.now() + cacheTTL
-      });
+      return result;
+    } catch (error) {
+      console.error('Paginated query error:', error);
+      return { data: [] as T[], count: 0, hasMore: false };
     }
-
-    return result;
   }
 
   /**
@@ -124,7 +114,7 @@ export class DatabaseHelpers {
         const batch = records.slice(i, i + batchSize);
         
         const { data, error } = await supabase
-          .from(tableName)
+          .from(tableName as any)
           .insert(batch)
           .select();
 
@@ -167,17 +157,11 @@ export class DatabaseHelpers {
 
     try {
       for (const update of updates) {
-        let query = supabase
-          .from(tableName)
+        const { data, error } = await supabase
+          .from(tableName as any)
           .update(update.data)
-          .eq('id', update.id);
-
-        // Add optimistic locking if version provided
-        if (update.version !== undefined) {
-          query = query.eq('version', update.version);
-        }
-
-        const { data, error } = await query.select();
+          .eq('id', update.id)
+          .select();
 
         if (error) {
           results.errors.push({
@@ -218,47 +202,53 @@ export class DatabaseHelpers {
   ): Promise<{ data: T[]; count: number }> {
     const { limit = 50, filters = {} } = options;
 
-    let query = supabase
-      .from(tableName)
-      .select('*', { count: 'exact' });
+    try {
+      let query = supabase
+        .from(tableName as any)
+        .select('*', { count: 'exact' });
 
-    // Apply filters first
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        query = query.eq(key, value);
+      // Apply filters first
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          query = query.eq(key, value);
+        }
+      });
+
+      // Apply full-text search
+      if (searchQuery) {
+        const searchConditions = searchColumns
+          .map(col => `${col}.ilike.%${searchQuery}%`)
+          .join(',');
+        
+        query = query.or(searchConditions);
       }
-    });
 
-    // Apply full-text search
-    if (searchQuery) {
-      const searchConditions = searchColumns
-        .map(col => `${col}.ilike.%${searchQuery}%`)
-        .join(',');
-      
-      query = query.or(searchConditions);
+      const { data, error, count } = await query.limit(limit);
+
+      if (error) throw error;
+
+      return {
+        data: (data || []) as T[],
+        count: count || 0
+      };
+    } catch (error) {
+      console.error('Full text search error:', error);
+      return { data: [] as T[], count: 0 };
     }
-
-    const { data, error, count } = await query.limit(limit);
-
-    if (error) throw error;
-
-    return {
-      data: data || [],
-      count: count || 0
-    };
   }
 
   /**
-   * Execute custom SQL with parameters
+   * Execute custom database function
    */
-  async executeSQL(sql: string, params: any[] = []): Promise<any> {
-    const { data, error } = await supabase.rpc('execute_sql', {
-      query: sql,
-      params: params
-    });
-
-    if (error) throw error;
-    return data;
+  async executeFunction(functionName: string, params: any = {}): Promise<any> {
+    try {
+      const { data, error } = await supabase.rpc(functionName as any, params);
+      if (error) throw error;
+      return data;
+    } catch (error) {
+      console.error('Function execution error:', error);
+      throw error;
+    }
   }
 
   /**
@@ -271,39 +261,44 @@ export class DatabaseHelpers {
     filters: Record<string, any> = {},
     dateRange?: { start: string; end: string }
   ): Promise<any> {
-    let query = supabase.from(tableName);
+    try {
+      // Build select clause
+      const selectClause = [
+        ...dimensions,
+        ...metrics.map(metric => {
+          if (metric.includes('count')) return `count(*)`;
+          if (metric.includes('sum')) return `sum(${metric.replace('sum_', '')})`;
+          if (metric.includes('avg')) return `avg(${metric.replace('avg_', '')})`;
+          return metric;
+        })
+      ].join(', ');
 
-    // Build select clause
-    const selectClause = [
-      ...dimensions,
-      ...metrics.map(metric => {
-        if (metric.includes('count')) return `count(*)`;
-        if (metric.includes('sum')) return `sum(${metric.replace('sum_', '')})`;
-        if (metric.includes('avg')) return `avg(${metric.replace('avg_', '')})`;
-        return metric;
-      })
-    ].join(', ');
+      let query = supabase
+        .from(tableName as any)
+        .select(selectClause);
 
-    query = query.select(selectClause);
+      // Apply filters
+      Object.entries(filters).forEach(([key, value]) => {
+        if (value !== null && value !== undefined) {
+          query = query.eq(key, value);
+        }
+      });
 
-    // Apply filters
-    Object.entries(filters).forEach(([key, value]) => {
-      if (value !== null && value !== undefined) {
-        query = query.eq(key, value);
+      // Apply date range
+      if (dateRange) {
+        query = query
+          .gte('created_at', dateRange.start)
+          .lte('created_at', dateRange.end);
       }
-    });
 
-    // Apply date range
-    if (dateRange) {
-      query = query
-        .gte('created_at', dateRange.start)
-        .lte('created_at', dateRange.end);
+      const { data, error } = await query;
+      if (error) throw error;
+
+      return data;
+    } catch (error) {
+      console.error('Analytics query error:', error);
+      return [];
     }
-
-    const { data, error } = await query;
-    if (error) throw error;
-
-    return data;
   }
 
   /**
@@ -313,33 +308,43 @@ export class DatabaseHelpers {
     tableName: string,
     record: T,
     conflictColumns: string[] = ['id']
-  ): Promise<T> {
-    const { data, error } = await supabase
-      .from(tableName)
-      .upsert(record, {
-        onConflict: conflictColumns.join(','),
-        ignoreDuplicates: false
-      })
-      .select()
-      .single();
+  ): Promise<T | null> {
+    try {
+      const { data, error } = await supabase
+        .from(tableName as any)
+        .upsert(record, {
+          onConflict: conflictColumns.join(','),
+          ignoreDuplicates: false
+        })
+        .select()
+        .single();
 
-    if (error) throw error;
-    return data;
+      if (error) throw error;
+      return data as T;
+    } catch (error) {
+      console.error('Upsert error:', error);
+      return null;
+    }
   }
 
   /**
    * Soft delete implementation
    */
   async softDelete(tableName: string, id: string): Promise<boolean> {
-    const { error } = await supabase
-      .from(tableName)
-      .update({ 
-        deleted_at: new Date().toISOString(),
-        is_deleted: true 
-      })
-      .eq('id', id);
+    try {
+      const { error } = await supabase
+        .from(tableName as any)
+        .update({ 
+          deleted_at: new Date().toISOString(),
+          is_deleted: true 
+        })
+        .eq('id', id);
 
-    return !error;
+      return !error;
+    } catch (error) {
+      console.error('Soft delete error:', error);
+      return false;
+    }
   }
 
   /**

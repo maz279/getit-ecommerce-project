@@ -37,24 +37,28 @@ export const LiveDashboard: React.FC = () => {
   const { systemHealth, servicesHealth } = useServiceHealth(10000); // 10 second refresh
 
   useEffect(() => {
-    // Subscribe to real-time metrics
-    const metricsUnsubscribe = subscribe('system-metrics', (data: any) => {
+    // Subscribe to real-time metrics using addEventListener
+    const metricsHandler = (data: any) => {
       if (data.type === 'metrics-update') {
         setLiveMetrics(data.metrics);
       }
-    });
+    };
 
     // Subscribe to real-time events
-    const eventsUnsubscribe = subscribe('system-events', (data: any) => {
+    const eventsHandler = (data: any) => {
       if (data.type === 'system-event') {
         setRealtimeEvents(prev => [data.event, ...prev.slice(0, 99)]); // Keep last 100 events
       }
-    });
+    };
 
     // Subscribe to connection status
-    const statusUnsubscribe = subscribe('connection-status', (data: any) => {
+    const statusHandler = (data: any) => {
       setIsConnected(data.connected);
-    });
+    };
+
+    addEventListener('system-metrics', metricsHandler);
+    addEventListener('system-events', eventsHandler);
+    addEventListener('connection-status', statusHandler);
 
     // Generate mock real-time data
     const mockDataInterval = setInterval(() => {
@@ -65,12 +69,12 @@ export const LiveDashboard: React.FC = () => {
     setIsConnected(true);
 
     return () => {
-      metricsUnsubscribe();
-      eventsUnsubscribe();
-      statusUnsubscribe();
+      removeEventListener('system-metrics', metricsHandler);
+      removeEventListener('system-events', eventsHandler);
+      removeEventListener('connection-status', statusHandler);
       clearInterval(mockDataInterval);
     };
-  }, [subscribe, unsubscribe]);
+  }, [addEventListener, removeEventListener]);
 
   const generateMockMetrics = () => {
     const mockMetrics: LiveMetric[] = [

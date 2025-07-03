@@ -238,6 +238,75 @@ export type Database = {
         }
         Relationships: []
       }
+      advanced_fraud_detection: {
+        Row: {
+          analyst_notes: string | null
+          behavioral_analysis: Json | null
+          created_at: string | null
+          detection_model: string
+          device_fingerprint: Json | null
+          false_positive: boolean | null
+          fraud_indicators: Json | null
+          fraud_score: number
+          geolocation_data: Json | null
+          id: string
+          investigation_status: string | null
+          mitigation_actions: Json | null
+          ml_predictions: Json | null
+          payment_patterns: Json | null
+          resolved_at: string | null
+          risk_level: string
+          session_id: string | null
+          transaction_id: string | null
+          user_id: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          analyst_notes?: string | null
+          behavioral_analysis?: Json | null
+          created_at?: string | null
+          detection_model?: string
+          device_fingerprint?: Json | null
+          false_positive?: boolean | null
+          fraud_indicators?: Json | null
+          fraud_score?: number
+          geolocation_data?: Json | null
+          id?: string
+          investigation_status?: string | null
+          mitigation_actions?: Json | null
+          ml_predictions?: Json | null
+          payment_patterns?: Json | null
+          resolved_at?: string | null
+          risk_level?: string
+          session_id?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          analyst_notes?: string | null
+          behavioral_analysis?: Json | null
+          created_at?: string | null
+          detection_model?: string
+          device_fingerprint?: Json | null
+          false_positive?: boolean | null
+          fraud_indicators?: Json | null
+          fraud_score?: number
+          geolocation_data?: Json | null
+          id?: string
+          investigation_status?: string | null
+          mitigation_actions?: Json | null
+          ml_predictions?: Json | null
+          payment_patterns?: Json | null
+          resolved_at?: string | null
+          risk_level?: string
+          session_id?: string | null
+          transaction_id?: string | null
+          user_id?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
       advanced_monitoring_config: {
         Row: {
           alert_rules: Json
@@ -1252,6 +1321,59 @@ export type Database = {
           key?: string
         }
         Relationships: []
+      }
+      ar_vr_interactions: {
+        Row: {
+          ar_session_data: Json | null
+          conversion_outcome: boolean | null
+          created_at: string | null
+          device_capabilities: Json | null
+          engagement_metrics: Json | null
+          id: string
+          interaction_type: string
+          product_id: string | null
+          session_duration: number | null
+          session_id: string | null
+          user_id: string | null
+          vr_session_data: Json | null
+        }
+        Insert: {
+          ar_session_data?: Json | null
+          conversion_outcome?: boolean | null
+          created_at?: string | null
+          device_capabilities?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          interaction_type: string
+          product_id?: string | null
+          session_duration?: number | null
+          session_id?: string | null
+          user_id?: string | null
+          vr_session_data?: Json | null
+        }
+        Update: {
+          ar_session_data?: Json | null
+          conversion_outcome?: boolean | null
+          created_at?: string | null
+          device_capabilities?: Json | null
+          engagement_metrics?: Json | null
+          id?: string
+          interaction_type?: string
+          product_id?: string | null
+          session_duration?: number | null
+          session_id?: string | null
+          user_id?: string | null
+          vr_session_data?: Json | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "ar_vr_interactions_product_id_fkey"
+            columns: ["product_id"]
+            isOneToOne: false
+            referencedRelation: "products"
+            referencedColumns: ["id"]
+          },
+        ]
       }
       assessment_documents: {
         Row: {
@@ -9546,6 +9668,57 @@ export type Database = {
         }
         Relationships: []
       }
+      ml_model_performance_tracking: {
+        Row: {
+          created_at: string | null
+          deployment_status: string | null
+          f1_score: number | null
+          id: string
+          last_evaluation: string | null
+          model_name: string
+          model_type: string
+          performance_metrics: Json
+          precision_score: number | null
+          recall_score: number | null
+          test_accuracy: number | null
+          training_data_size: number | null
+          validation_accuracy: number | null
+          version: string
+        }
+        Insert: {
+          created_at?: string | null
+          deployment_status?: string | null
+          f1_score?: number | null
+          id?: string
+          last_evaluation?: string | null
+          model_name: string
+          model_type: string
+          performance_metrics?: Json
+          precision_score?: number | null
+          recall_score?: number | null
+          test_accuracy?: number | null
+          training_data_size?: number | null
+          validation_accuracy?: number | null
+          version: string
+        }
+        Update: {
+          created_at?: string | null
+          deployment_status?: string | null
+          f1_score?: number | null
+          id?: string
+          last_evaluation?: string | null
+          model_name?: string
+          model_type?: string
+          performance_metrics?: Json
+          precision_score?: number | null
+          recall_score?: number | null
+          test_accuracy?: number | null
+          training_data_size?: number | null
+          validation_accuracy?: number | null
+          version?: string
+        }
+        Relationships: []
+      }
       ml_recommendations: {
         Row: {
           confidence_score: number | null
@@ -9572,6 +9745,54 @@ export type Database = {
           id?: string
           recommendation_type?: string
           recommendations?: Json
+          user_id?: string | null
+        }
+        Relationships: []
+      }
+      mobile_app_analytics: {
+        Row: {
+          app_version: string | null
+          crash_reports: Json | null
+          created_at: string | null
+          device_id: string | null
+          id: string
+          offline_usage: Json | null
+          performance_metrics: Json | null
+          platform: string
+          push_notification_interactions: Json | null
+          screen_views: Json | null
+          session_duration: number | null
+          user_actions: Json | null
+          user_id: string | null
+        }
+        Insert: {
+          app_version?: string | null
+          crash_reports?: Json | null
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          offline_usage?: Json | null
+          performance_metrics?: Json | null
+          platform: string
+          push_notification_interactions?: Json | null
+          screen_views?: Json | null
+          session_duration?: number | null
+          user_actions?: Json | null
+          user_id?: string | null
+        }
+        Update: {
+          app_version?: string | null
+          crash_reports?: Json | null
+          created_at?: string | null
+          device_id?: string | null
+          id?: string
+          offline_usage?: Json | null
+          performance_metrics?: Json | null
+          platform?: string
+          push_notification_interactions?: Json | null
+          screen_views?: Json | null
+          session_duration?: number | null
+          user_actions?: Json | null
           user_id?: string | null
         }
         Relationships: []
@@ -18282,6 +18503,56 @@ export type Database = {
         }
         Relationships: []
       }
+      vendor_marketplace_tools: {
+        Row: {
+          configuration: Json | null
+          created_at: string | null
+          id: string
+          last_accessed: string | null
+          performance_metrics: Json | null
+          subscription_status: string | null
+          tool_category: string
+          tool_name: string
+          updated_at: string | null
+          usage_analytics: Json | null
+          vendor_id: string | null
+        }
+        Insert: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          performance_metrics?: Json | null
+          subscription_status?: string | null
+          tool_category: string
+          tool_name: string
+          updated_at?: string | null
+          usage_analytics?: Json | null
+          vendor_id?: string | null
+        }
+        Update: {
+          configuration?: Json | null
+          created_at?: string | null
+          id?: string
+          last_accessed?: string | null
+          performance_metrics?: Json | null
+          subscription_status?: string | null
+          tool_category?: string
+          tool_name?: string
+          updated_at?: string | null
+          usage_analytics?: Json | null
+          vendor_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "vendor_marketplace_tools_vendor_id_fkey"
+            columns: ["vendor_id"]
+            isOneToOne: false
+            referencedRelation: "vendors"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       vendor_notifications: {
         Row: {
           action_required: boolean | null
@@ -18779,6 +19050,51 @@ export type Database = {
           style_tags?: Json
           updated_at?: string | null
           visual_features?: Json
+        }
+        Relationships: []
+      }
+      voice_search_analytics: {
+        Row: {
+          confidence_score: number | null
+          conversion_data: Json | null
+          created_at: string | null
+          id: string
+          intent_classification: Json | null
+          language_detected: string | null
+          search_results: Json | null
+          session_id: string | null
+          transcribed_text: string | null
+          user_id: string | null
+          user_interaction: Json | null
+          voice_query: string
+        }
+        Insert: {
+          confidence_score?: number | null
+          conversion_data?: Json | null
+          created_at?: string | null
+          id?: string
+          intent_classification?: Json | null
+          language_detected?: string | null
+          search_results?: Json | null
+          session_id?: string | null
+          transcribed_text?: string | null
+          user_id?: string | null
+          user_interaction?: Json | null
+          voice_query: string
+        }
+        Update: {
+          confidence_score?: number | null
+          conversion_data?: Json | null
+          created_at?: string | null
+          id?: string
+          intent_classification?: Json | null
+          language_detected?: string | null
+          search_results?: Json | null
+          session_id?: string | null
+          transcribed_text?: string | null
+          user_id?: string | null
+          user_interaction?: Json | null
+          voice_query?: string
         }
         Relationships: []
       }

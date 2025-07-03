@@ -35,6 +35,7 @@ interface RoutingConfig {
 }
 
 // Global service registry
+const serviceStartTime = Date.now();
 const serviceRegistry: ServiceRegistry = {};
 const routingConfig: RoutingConfig = {
   '/products': {
@@ -292,7 +293,7 @@ async function handleHealthCheck(): Promise<Response> {
     status: 'healthy',
     timestamp: new Date().toISOString(),
     services: serviceRegistry,
-    uptime: process.uptime?.() || 0,
+    uptime: Math.floor((Date.now() - serviceStartTime) / 1000),
     version: '1.0.0'
   };
 

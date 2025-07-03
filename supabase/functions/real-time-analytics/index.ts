@@ -1,218 +1,327 @@
-import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
-import { createClient } from "https://esm.sh/@supabase/supabase-js@2";
+import { serve } from "https://deno.land/std@0.168.0/http/server.ts"
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2.7.1'
 
 const corsHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Allow-Headers': 'authorization, x-client-info, apikey, content-type',
-};
-
-interface RealTimeMetricsRequest {
-  action: 'get_metrics' | 'update_metric' | 'subscribe_metrics';
-  vendorId?: string;
-  metricType?: 'sales' | 'inventory' | 'orders' | 'customers';
-  timeframe?: 'realtime' | 'hourly' | 'daily';
-  filters?: Record<string, any>;
 }
 
 serve(async (req) => {
+  // Handle CORS preflight requests
   if (req.method === 'OPTIONS') {
-    return new Response(null, { headers: corsHeaders });
+    return new Response(null, { headers: corsHeaders })
   }
+
+  const supabaseClient = createClient(
+    Deno.env.get('SUPABASE_URL') ?? '',
+    Deno.env.get('SUPABASE_SERVICE_ROLE_KEY') ?? ''
+  )
 
   try {
-    const supabaseClient = createClient(
-      Deno.env.get('SUPABASE_URL') ?? '',
-      Deno.env.get('SUPABASE_ANON_KEY') ?? '',
-      {
-        global: {
-          headers: { Authorization: req.headers.get('Authorization')! },
-        },
-      }
-    );
+    const { type, data } = await req.json()
 
-    // Get the current user
-    const { data: { user }, error: userError } = await supabaseClient.auth.getUser();
-    if (userError || !user) {
-      throw new Error('Unauthorized');
-    }
-
-    const { action, vendorId, metricType, timeframe = 'realtime', filters = {} }: RealTimeMetricsRequest = await req.json();
-
-    switch (action) {
-      case 'get_metrics':
-        return await getMetrics(supabaseClient, user.id, metricType, timeframe, filters);
-      
-      case 'update_metric':
-        return await updateMetric(supabaseClient, user.id, filters);
-      
-      case 'subscribe_metrics':
-        return await getSubscriptionData(supabaseClient, user.id, metricType);
-      
+    switch (type) {
+      case 'track_event':
+        return await trackEvent(supabaseClient, data)
+      case 'get_analytics':
+        return await getAnalytics(supabaseClient, data)
+      case 'get_real_time_metrics':
+        return await getRealTimeMetrics(supabaseClient, data)
+      case 'customer_journey':
+        return await trackCustomerJourney(supabaseClient, data)
       default:
-        throw new Error('Invalid action');
+        return new Response(
+          JSON.stringify({ error: 'Invalid request type' }),
+          { status: 400, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+        )
     }
-
   } catch (error) {
-    console.error('Realtime Analytics Error:', error);
+    console.error('Real-time analytics error:', error)
     return new Response(
       JSON.stringify({ error: error.message }),
-      { 
-        status: 400, 
-        headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
+      { status: 500, headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+    )
+  }
+})
+
+async function trackEvent(supabase: any, eventData: any) {
+  // Enhanced event tracking with real-time processing
+  const event = {
+    event_name: eventData.event_name,
+    event_category: eventData.event_category,
+    event_action: eventData.event_action,
+    event_label: eventData.event_label,
+    event_value: eventData.event_value,
+    user_id: eventData.user_id,
+    session_id: eventData.session_id,
+    page_url: eventData.page_url,
+    referrer: eventData.referrer,
+    user_agent: eventData.user_agent,
+    ip_address: eventData.ip_address,
+    custom_properties: eventData.custom_properties || {}
+  }
+
+  // Store in analytics_events table
+  const { data: storedEvent, error } = await supabase
+    .from('analytics_events')
+    .insert(event)
+    .select()
+    .single()
+
+  if (error) {
+    throw new Error(`Failed to store event: ${error.message}`)
+  }
+
+  // Process real-time aggregations
+  await processRealTimeAggregations(supabase, event)
+
+  // Trigger ML analysis for user behavior
+  if (event.user_id) {
+    await triggerBehaviorAnalysis(supabase, event)
+  }
+
+  return new Response(
+    JSON.stringify({ success: true, eventId: storedEvent.id }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
+}
+
+async function processRealTimeAggregations(supabase: any, event: any) {
+  const today = new Date().toISOString().split('T')[0]
+  const currentHour = new Date().getHours()
+
+  // Update real-time metrics
+  await supabase
+    .from('real_time_metrics')
+    .upsert({
+      metric_type: 'user_activity',
+      metric_key: event.event_category,
+      metric_value: { count: 1, event_name: event.event_name },
+      date: today,
+      hour: currentHour
+    }, {
+      onConflict: 'metric_type,metric_key,date,hour',
+      ignoreDuplicates: false
+    })
+
+  // Product-specific metrics
+  if (event.custom_properties?.product_id) {
+    await supabase
+      .from('real_time_metrics')
+      .upsert({
+        metric_type: 'product_activity',
+        metric_key: event.custom_properties.product_id,
+        metric_value: { 
+          event_type: event.event_name,
+          count: 1,
+          user_id: event.user_id 
+        },
+        date: today,
+        hour: currentHour
+      })
+  }
+
+  // Revenue tracking
+  if (event.event_name === 'purchase' && event.event_value) {
+    await supabase
+      .from('real_time_metrics')
+      .upsert({
+        metric_type: 'revenue',
+        metric_key: 'total_revenue',
+        metric_value: { amount: event.event_value, currency: 'BDT' },
+        date: today,
+        hour: currentHour
+      })
+  }
+}
+
+async function triggerBehaviorAnalysis(supabase: any, event: any) {
+  // Update user behavioral profile
+  const behaviorData = {
+    user_id: event.user_id,
+    activity_type: event.event_name,
+    page_category: event.event_category,
+    session_id: event.session_id,
+    timestamp: new Date().toISOString(),
+    context_data: {
+      page_url: event.page_url,
+      referrer: event.referrer,
+      custom_properties: event.custom_properties
+    }
+  }
+
+  await supabase
+    .from('user_behaviors')
+    .insert(behaviorData)
+
+  // Trigger AI analysis for personalization
+  if (shouldTriggerAIAnalysis(event)) {
+    await supabase.functions.invoke('ai-behavior-analysis', {
+      body: { userId: event.user_id, recentEvent: event }
+    })
+  }
+}
+
+function shouldTriggerAIAnalysis(event: any): boolean {
+  // Trigger AI analysis for high-value events
+  const highValueEvents = ['purchase', 'add_to_cart', 'product_view', 'search']
+  return highValueEvents.includes(event.event_name)
+}
+
+async function getAnalytics(supabase: any, params: any) {
+  const { type, timeRange, filters } = params
+
+  let query = supabase.from('analytics_events').select('*')
+
+  // Apply time range filter
+  if (timeRange?.start) {
+    query = query.gte('created_at', timeRange.start)
+  }
+  if (timeRange?.end) {
+    query = query.lte('created_at', timeRange.end)
+  }
+
+  // Apply additional filters
+  if (filters?.event_category) {
+    query = query.eq('event_category', filters.event_category)
+  }
+  if (filters?.user_id) {
+    query = query.eq('user_id', filters.user_id)
+  }
+
+  const { data, error } = await query.limit(1000)
+
+  if (error) {
+    throw new Error(`Failed to fetch analytics: ${error.message}`)
+  }
+
+  // Process and aggregate data based on type
+  const processedData = await processAnalyticsData(data, type)
+
+  return new Response(
+    JSON.stringify({ data: processedData }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
+}
+
+async function processAnalyticsData(rawData: any[], type: string) {
+  switch (type) {
+    case 'pageviews':
+      return aggregatePageViews(rawData)
+    case 'user_engagement':
+      return aggregateUserEngagement(rawData)
+    case 'conversion_funnel':
+      return buildConversionFunnel(rawData)
+    case 'real_time_activity':
+      return getRealTimeActivity(rawData)
+    default:
+      return rawData
+  }
+}
+
+function aggregatePageViews(data: any[]) {
+  const pageViews = data
+    .filter(event => event.event_name === 'page_view')
+    .reduce((acc: any, event) => {
+      const page = event.page_url
+      acc[page] = (acc[page] || 0) + 1
+      return acc
+    }, {})
+
+  return Object.entries(pageViews).map(([page, views]) => ({ page, views }))
+}
+
+function aggregateUserEngagement(data: any[]) {
+  const userSessions = data.reduce((acc: any, event) => {
+    const sessionId = event.session_id
+    if (!acc[sessionId]) {
+      acc[sessionId] = {
+        sessionId,
+        userId: event.user_id,
+        events: [],
+        startTime: event.created_at,
+        endTime: event.created_at
       }
-    );
-  }
-});
+    }
+    acc[sessionId].events.push(event)
+    if (event.created_at > acc[sessionId].endTime) {
+      acc[sessionId].endTime = event.created_at
+    }
+    return acc
+  }, {})
 
-async function getMetrics(supabaseClient: any, vendorId: string, metricType?: string, timeframe: string = 'realtime', filters: Record<string, any> = {}) {
-  const now = new Date();
-  let timeFilter = '';
-  
-  switch (timeframe) {
-    case 'realtime':
-      timeFilter = `recorded_at >= '${new Date(now.getTime() - 5 * 60 * 1000).toISOString()}'`;
-      break;
-    case 'hourly':
-      timeFilter = `recorded_at >= '${new Date(now.getTime() - 60 * 60 * 1000).toISOString()}'`;
-      break;
-    case 'daily':
-      timeFilter = `recorded_at >= '${new Date(now.getTime() - 24 * 60 * 60 * 1000).toISOString()}'`;
-      break;
-  }
+  return Object.values(userSessions).map((session: any) => ({
+    ...session,
+    duration: new Date(session.endTime).getTime() - new Date(session.startTime).getTime(),
+    eventCount: session.events.length
+  }))
+}
 
-  // Get real-time metrics
-  let query = supabaseClient
+function buildConversionFunnel(data: any[]) {
+  const funnelSteps = ['page_view', 'product_view', 'add_to_cart', 'checkout', 'purchase']
+  const userJourneys = new Map()
+
+  data.forEach(event => {
+    if (!userJourneys.has(event.user_id)) {
+      userJourneys.set(event.user_id, new Set())
+    }
+    userJourneys.get(event.user_id).add(event.event_name)
+  })
+
+  const funnelData = funnelSteps.map(step => {
+    const usersAtStep = Array.from(userJourneys.values())
+      .filter((userEvents: any) => userEvents.has(step)).length
+    return { step, userCount: usersAtStep }
+  })
+
+  return funnelData
+}
+
+function getRealTimeActivity(data: any[]) {
+  const now = new Date()
+  const lastHour = new Date(now.getTime() - 60 * 60 * 1000)
+
+  return data
+    .filter(event => new Date(event.created_at) > lastHour)
+    .sort((a, b) => new Date(b.created_at).getTime() - new Date(a.created_at).getTime())
+}
+
+async function getRealTimeMetrics(supabase: any, params: any) {
+  const { data, error } = await supabase
     .from('real_time_metrics')
     .select('*')
-    .eq('vendor_id', vendorId)
-    .order('recorded_at', { ascending: false })
-    .limit(100);
-
-  if (metricType) {
-    query = query.eq('metric_type', metricType);
-  }
-
-  const { data: metrics, error } = await query;
-  if (error) throw error;
-
-  // Get current dashboard KPIs
-  const { data: kpis, error: kpiError } = await supabaseClient
-    .from('dashboard_kpi_metrics')
-    .select('*')
-    .eq('created_by', vendorId)
-    .order('recorded_date', { ascending: false })
-    .limit(20);
-
-  if (kpiError) throw kpiError;
-
-  // Aggregate metrics by type
-  const aggregatedMetrics = aggregateMetrics(metrics, timeframe);
-  
-  // Get live notifications
-  const { data: notifications, error: notifError } = await supabaseClient
-    .from('vendor_notifications')
-    .select('*')
-    .eq('vendor_id', vendorId)
-    .eq('is_read', false)
+    .gte('created_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
     .order('created_at', { ascending: false })
-    .limit(10);
 
-  if (notifError) throw notifError;
+  if (error) {
+    throw new Error(`Failed to fetch real-time metrics: ${error.message}`)
+  }
 
   return new Response(
-    JSON.stringify({
-      success: true,
-      metrics: aggregatedMetrics,
-      kpis: kpis || [],
-      notifications: notifications || [],
-      timestamp: now.toISOString()
-    }),
-    { 
-      status: 200, 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-    }
-  );
+    JSON.stringify({ metrics: data }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
 }
 
-async function updateMetric(supabaseClient: any, vendorId: string, data: Record<string, any>) {
-  const { metricType, metricKey, metricValue } = data;
-
-  const { error } = await supabaseClient
-    .from('real_time_metrics')
+async function trackCustomerJourney(supabase: any, journeyData: any) {
+  const { data, error } = await supabase
+    .from('customer_journey_events')
     .insert({
-      vendor_id: vendorId,
-      metric_type: metricType,
-      metric_key: metricKey,
-      metric_value: metricValue,
-      recorded_at: new Date().toISOString()
-    });
+      customer_id: journeyData.customer_id,
+      event_type: journeyData.event_type,
+      event_data: journeyData.event_data,
+      stage_id: journeyData.stage_id,
+      timestamp: new Date().toISOString()
+    })
+    .select()
+    .single()
 
-  if (error) throw error;
-
-  return new Response(
-    JSON.stringify({ success: true }),
-    { 
-      status: 200, 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-    }
-  );
-}
-
-async function getSubscriptionData(supabaseClient: any, vendorId: string, metricType?: string) {
-  // Get the latest subscription-ready data
-  const { data: widgets, error: widgetError } = await supabaseClient
-    .from('vendor_dashboard_widgets')
-    .select('*')
-    .eq('vendor_id', vendorId)
-    .eq('is_active', true)
-    .order('display_order');
-
-  if (widgetError) throw widgetError;
-
-  // Get live sales metrics
-  const { data: salesMetrics, error: salesError } = await supabaseClient
-    .from('live_sales_metrics')
-    .select('*')
-    .eq('vendor_id', vendorId)
-    .gte('recorded_at', new Date(Date.now() - 24 * 60 * 60 * 1000).toISOString())
-    .order('recorded_at', { ascending: false })
-    .limit(50);
-
-  if (salesError) throw salesError;
+  if (error) {
+    throw new Error(`Failed to track journey: ${error.message}`)
+  }
 
   return new Response(
-    JSON.stringify({
-      success: true,
-      widgets: widgets || [],
-      liveMetrics: salesMetrics || []
-    }),
-    { 
-      status: 200, 
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' } 
-    }
-  );
-}
-
-function aggregateMetrics(metrics: any[], timeframe: string) {
-  if (!metrics || metrics.length === 0) return {};
-  
-  const aggregated: Record<string, any> = {};
-  
-  metrics.forEach(metric => {
-    const key = metric.metric_key;
-    if (!aggregated[key]) {
-      aggregated[key] = {
-        type: metric.metric_type,
-        values: [],
-        latest: metric.metric_value,
-        timestamp: metric.recorded_at
-      };
-    }
-    aggregated[key].values.push({
-      value: metric.metric_value,
-      timestamp: metric.recorded_at
-    });
-  });
-
-  return aggregated;
+    JSON.stringify({ success: true, journeyEventId: data.id }),
+    { headers: { ...corsHeaders, 'Content-Type': 'application/json' } }
+  )
 }

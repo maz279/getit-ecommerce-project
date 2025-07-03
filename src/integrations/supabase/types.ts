@@ -2780,30 +2780,39 @@ export type Database = {
       }
       categories: {
         Row: {
+          category_path: string[] | null
+          commission_rate: number | null
           created_at: string
           id: string
           image_url: string | null
           is_active: boolean | null
+          is_featured: boolean | null
           name: string
           name_bn: string | null
           parent_id: string | null
           slug: string
         }
         Insert: {
+          category_path?: string[] | null
+          commission_rate?: number | null
           created_at?: string
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_featured?: boolean | null
           name: string
           name_bn?: string | null
           parent_id?: string | null
           slug: string
         }
         Update: {
+          category_path?: string[] | null
+          commission_rate?: number | null
           created_at?: string
           id?: string
           image_url?: string | null
           is_active?: boolean | null
+          is_featured?: boolean | null
           name?: string
           name_bn?: string | null
           parent_id?: string | null
@@ -4865,6 +4874,121 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      customer_loyalty_points: {
+        Row: {
+          created_at: string | null
+          customer_id: string | null
+          id: string
+          last_activity_at: string | null
+          lifetime_points: number | null
+          points_balance: number | null
+          program_id: string | null
+          tier_benefits: Json | null
+          tier_level: string | null
+          updated_at: string | null
+        }
+        Insert: {
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          last_activity_at?: string | null
+          lifetime_points?: number | null
+          points_balance?: number | null
+          program_id?: string | null
+          tier_benefits?: Json | null
+          tier_level?: string | null
+          updated_at?: string | null
+        }
+        Update: {
+          created_at?: string | null
+          customer_id?: string | null
+          id?: string
+          last_activity_at?: string | null
+          lifetime_points?: number | null
+          points_balance?: number | null
+          program_id?: string | null
+          tier_benefits?: Json | null
+          tier_level?: string | null
+          updated_at?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_loyalty_points_program_id_fkey"
+            columns: ["program_id"]
+            isOneToOne: false
+            referencedRelation: "loyalty_programs"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_segment_memberships: {
+        Row: {
+          confidence_score: number | null
+          customer_id: string | null
+          id: string
+          joined_at: string | null
+          segment_id: string | null
+        }
+        Insert: {
+          confidence_score?: number | null
+          customer_id?: string | null
+          id?: string
+          joined_at?: string | null
+          segment_id?: string | null
+        }
+        Update: {
+          confidence_score?: number | null
+          customer_id?: string | null
+          id?: string
+          joined_at?: string | null
+          segment_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "customer_segment_memberships_segment_id_fkey"
+            columns: ["segment_id"]
+            isOneToOne: false
+            referencedRelation: "customer_segments"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      customer_segments: {
+        Row: {
+          avg_order_value: number | null
+          created_at: string | null
+          criteria: Json
+          customer_count: number | null
+          id: string
+          is_active: boolean | null
+          lifetime_value: number | null
+          segment_name: string
+          updated_at: string | null
+        }
+        Insert: {
+          avg_order_value?: number | null
+          created_at?: string | null
+          criteria: Json
+          customer_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          lifetime_value?: number | null
+          segment_name: string
+          updated_at?: string | null
+        }
+        Update: {
+          avg_order_value?: number | null
+          created_at?: string | null
+          criteria?: Json
+          customer_count?: number | null
+          id?: string
+          is_active?: boolean | null
+          lifetime_value?: number | null
+          segment_name?: string
+          updated_at?: string | null
+        }
+        Relationships: []
       }
       dashboard_kpi_metrics: {
         Row: {
@@ -15203,6 +15327,53 @@ export type Database = {
         }
         Relationships: []
       }
+      shipping_rates: {
+        Row: {
+          base_rate: number
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          max_delivery_days: number | null
+          method_name: string
+          min_delivery_days: number | null
+          volume_rate: number | null
+          weight_rate: number | null
+          zone_id: string | null
+        }
+        Insert: {
+          base_rate?: number
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_delivery_days?: number | null
+          method_name: string
+          min_delivery_days?: number | null
+          volume_rate?: number | null
+          weight_rate?: number | null
+          zone_id?: string | null
+        }
+        Update: {
+          base_rate?: number
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          max_delivery_days?: number | null
+          method_name?: string
+          min_delivery_days?: number | null
+          volume_rate?: number | null
+          weight_rate?: number | null
+          zone_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "shipping_rates_zone_id_fkey"
+            columns: ["zone_id"]
+            isOneToOne: false
+            referencedRelation: "shipping_zones"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       shipping_service_partners: {
         Row: {
           api_config: Json
@@ -15309,6 +15480,42 @@ export type Database = {
             referencedColumns: ["id"]
           },
         ]
+      }
+      shipping_zones: {
+        Row: {
+          countries: Json | null
+          created_at: string | null
+          id: string
+          is_active: boolean | null
+          postal_codes: Json | null
+          shipping_methods: Json | null
+          states_provinces: Json | null
+          updated_at: string | null
+          zone_name: string
+        }
+        Insert: {
+          countries?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: Json | null
+          shipping_methods?: Json | null
+          states_provinces?: Json | null
+          updated_at?: string | null
+          zone_name: string
+        }
+        Update: {
+          countries?: Json | null
+          created_at?: string | null
+          id?: string
+          is_active?: boolean | null
+          postal_codes?: Json | null
+          shipping_methods?: Json | null
+          states_provinces?: Json | null
+          updated_at?: string | null
+          zone_name?: string
+        }
+        Relationships: []
       }
       sla_configurations: {
         Row: {
@@ -16056,6 +16263,101 @@ export type Database = {
           optimization_type?: string
           optimized_metrics?: Json
           product_id?: string | null
+          vendor_id?: string | null
+        }
+        Relationships: []
+      }
+      support_messages: {
+        Row: {
+          attachments: Json | null
+          created_at: string | null
+          id: string
+          is_internal: boolean | null
+          message_text: string
+          sender_id: string | null
+          ticket_id: string | null
+        }
+        Insert: {
+          attachments?: Json | null
+          created_at?: string | null
+          id?: string
+          is_internal?: boolean | null
+          message_text: string
+          sender_id?: string | null
+          ticket_id?: string | null
+        }
+        Update: {
+          attachments?: Json | null
+          created_at?: string | null
+          id?: string
+          is_internal?: boolean | null
+          message_text?: string
+          sender_id?: string | null
+          ticket_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "support_messages_ticket_id_fkey"
+            columns: ["ticket_id"]
+            isOneToOne: false
+            referencedRelation: "support_tickets"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      support_tickets: {
+        Row: {
+          assigned_to: string | null
+          category: string
+          created_at: string | null
+          customer_id: string | null
+          description: string
+          id: string
+          order_id: string | null
+          priority: string | null
+          resolution_notes: string | null
+          resolved_at: string | null
+          satisfaction_rating: number | null
+          status: string | null
+          subject: string
+          ticket_number: string
+          updated_at: string | null
+          vendor_id: string | null
+        }
+        Insert: {
+          assigned_to?: string | null
+          category: string
+          created_at?: string | null
+          customer_id?: string | null
+          description: string
+          id?: string
+          order_id?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          satisfaction_rating?: number | null
+          status?: string | null
+          subject: string
+          ticket_number: string
+          updated_at?: string | null
+          vendor_id?: string | null
+        }
+        Update: {
+          assigned_to?: string | null
+          category?: string
+          created_at?: string | null
+          customer_id?: string | null
+          description?: string
+          id?: string
+          order_id?: string | null
+          priority?: string | null
+          resolution_notes?: string | null
+          resolved_at?: string | null
+          satisfaction_rating?: number | null
+          status?: string | null
+          subject?: string
+          ticket_number?: string
+          updated_at?: string | null
           vendor_id?: string | null
         }
         Relationships: []

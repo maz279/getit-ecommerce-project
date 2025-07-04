@@ -17,6 +17,7 @@ import { SettingsContent } from '../SettingsContent';
 import { EnterpriseMonitoringDashboard } from '../../../admin/dashboard/sections/EnterpriseMonitoringDashboard';
 import { EnterpriseAnalyticsDashboard } from '../../../admin/dashboard/sections/EnterpriseAnalyticsDashboard';
 import { LiveDashboard } from '../../../admin/dashboard/sections/LiveDashboard';
+import { InfrastructureManager } from '../../../admin/infrastructure/InfrastructureManager';
 
 interface ContentRouterProps {
   selectedMenu: string;

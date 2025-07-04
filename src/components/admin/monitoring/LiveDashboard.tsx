@@ -33,32 +33,26 @@ export const LiveDashboard: React.FC = () => {
   const [realtimeEvents, setRealtimeEvents] = useState<RealtimeEvent[]>([]);
   const [isConnected, setIsConnected] = useState(false);
 
-  const { addEventListener, removeEventListener } = useRealtime();
+  const { subscribe, unsubscribe, isConnected: realtimeConnected, metrics } = useRealtime({
+    channels: ['live-metrics', 'system-events'],
+    autoConnect: true
+  });
   const { systemHealth, servicesHealth } = useServiceHealth(10000); // 10 second refresh
 
   useEffect(() => {
-    // Subscribe to real-time metrics using addEventListener
-    const metricsHandler = (data: any) => {
-      if (data.type === 'metrics-update') {
+    // Subscribe to real-time metrics
+    const metricsChannel = subscribe('live-metrics', 'metrics-update', (data: any) => {
+      if (data.metrics) {
         setLiveMetrics(data.metrics);
       }
-    };
+    });
 
     // Subscribe to real-time events
-    const eventsHandler = (data: any) => {
-      if (data.type === 'system-event') {
+    const eventsChannel = subscribe('system-events', 'system-event', (data: any) => {
+      if (data.event) {
         setRealtimeEvents(prev => [data.event, ...prev.slice(0, 99)]); // Keep last 100 events
       }
-    };
-
-    // Subscribe to connection status
-    const statusHandler = (data: any) => {
-      setIsConnected(data.connected);
-    };
-
-    addEventListener('system-metrics', metricsHandler);
-    addEventListener('system-events', eventsHandler);
-    addEventListener('connection-status', statusHandler);
+    });
 
     // Generate mock real-time data
     const mockDataInterval = setInterval(() => {
@@ -66,15 +60,14 @@ export const LiveDashboard: React.FC = () => {
       generateMockEvents();
     }, 5000);
 
-    setIsConnected(true);
+    setIsConnected(realtimeConnected);
 
     return () => {
-      removeEventListener('system-metrics', metricsHandler);
-      removeEventListener('system-events', eventsHandler);
-      removeEventListener('connection-status', statusHandler);
+      if (metricsChannel) unsubscribe(metricsChannel);
+      if (eventsChannel) unsubscribe(eventsChannel);
       clearInterval(mockDataInterval);
     };
-  }, [addEventListener, removeEventListener]);
+  }, [subscribe, unsubscribe, realtimeConnected]);
 
   const generateMockMetrics = () => {
     const mockMetrics: LiveMetric[] = [

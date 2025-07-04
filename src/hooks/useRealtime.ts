@@ -1,147 +1,174 @@
-/**
- * Real-time WebSocket Hook
- * Manages WebSocket connections for live data
- */
-
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { supabase } from '@/integrations/supabase/client';
+import { wsManager } from '@/services/websocket/WebSocketManager';
+import { serviceIntegration } from '@/services/integration/ServiceIntegrationLayer';
 
-export interface RealtimeMessage {
-  type: string;
-  data: any;
-  timestamp: string;
-}
-
-export interface RealtimeEvent {
-  type: string;
-  payload: any;
-  timestamp: string;
-}
-
-export interface UseRealtimeOptions {
-  userId?: string;
+interface RealtimeConfig {
   channels?: string[];
+  events?: string[];
   autoConnect?: boolean;
-  metadata?: Record<string, any>;
 }
 
-export const useRealtime = (options: UseRealtimeOptions = {}) => {
+interface RealtimeMetrics {
+  activeConnections: number;
+  messagesSent: number;
+  messagesReceived: number;
+  lastUpdate: string;
+}
+
+export const useRealtime = (config: RealtimeConfig = {}) => {
   const [isConnected, setIsConnected] = useState(false);
-  const [connectionState, setConnectionState] = useState<'disconnected' | 'connecting' | 'connected'>('disconnected');
-  const [lastMessage, setLastMessage] = useState<RealtimeMessage | null>(null);
+  const [channels, setChannels] = useState<any[]>([]);
+  const [metrics, setMetrics] = useState<RealtimeMetrics>({
+    activeConnections: 0,
+    messagesSent: 0,
+    messagesReceived: 0,
+    lastUpdate: new Date().toISOString()
+  });
   const [error, setError] = useState<string | null>(null);
 
-  const channelRef = useRef<any>(null);
-  const listenersRef = useRef<Map<string, ((data: any) => void)[]>>(new Map());
+  const { 
+    channels: configChannels = [], 
+    events = [], 
+    autoConnect = true 
+  } = config;
 
-  // Connect to real-time
-  const connect = useCallback(() => {
-    if (channelRef.current) {
-      return;
-    }
-
-    setConnectionState('connecting');
-    setError(null);
-
+  // Subscribe to realtime channel
+  const subscribe = useCallback((channelName: string, eventName: string, callback: (payload: any) => void) => {
     try {
-      channelRef.current = supabase.channel('realtime-dashboard', {
-        config: {
-          broadcast: { self: true },
-          presence: { key: 'user_id' }
-        }
-      });
-
-      channelRef.current
-        .on('broadcast', { event: '*' }, (payload: any) => {
-          const message: RealtimeMessage = {
-            type: payload.event,
-            data: payload.payload,
-            timestamp: new Date().toISOString()
-          };
-
-          setLastMessage(message);
-
-          // Notify listeners
-          const listeners = listenersRef.current.get(payload.event) || [];
-          listeners.forEach(listener => listener(payload.payload));
-        })
-        .subscribe((status: string) => {
+      const channel = supabase
+        .channel(channelName)
+        .on('broadcast', { event: eventName }, callback)
+        .subscribe((status) => {
           if (status === 'SUBSCRIBED') {
             setIsConnected(true);
-            setConnectionState('connected');
-          } else if (status === 'CHANNEL_ERROR') {
-            setIsConnected(false);
-            setConnectionState('disconnected');
-            setError('Connection failed');
+            setChannels(prev => [...prev.filter(c => c.name !== channelName), { name: channelName, status }]);
           }
         });
 
+      return channel;
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Connection failed');
-      setConnectionState('disconnected');
+      setError(err instanceof Error ? err.message : 'Failed to subscribe to channel');
+      return null;
     }
   }, []);
 
-  // Disconnect from real-time
-  const disconnect = useCallback(() => {
-    if (channelRef.current) {
-      channelRef.current.unsubscribe();
-      channelRef.current = null;
-    }
-
-    setIsConnected(false);
-    setConnectionState('disconnected');
-  }, []);
-
-  // Add event listener
-  const addEventListener = useCallback((event: string, listener: (data: any) => void) => {
-    const currentListeners = listenersRef.current.get(event) || [];
-    listenersRef.current.set(event, [...currentListeners, listener]);
-  }, []);
-
-  // Remove event listener
-  const removeEventListener = useCallback((event: string, listener: (data: any) => void) => {
-    const currentListeners = listenersRef.current.get(event) || [];
-    const filteredListeners = currentListeners.filter(l => l !== listener);
-    
-    if (filteredListeners.length === 0) {
-      listenersRef.current.delete(event);
-    } else {
-      listenersRef.current.set(event, filteredListeners);
+  // Unsubscribe from channel
+  const unsubscribe = useCallback((channel: any) => {
+    if (channel) {
+      supabase.removeChannel(channel);
+      setChannels(prev => prev.filter(c => c.name !== channel.topic));
     }
   }, []);
 
-  // Send message
-  const sendMessage = useCallback((event: string, data: any) => {
-    if (channelRef.current && isConnected) {
-      channelRef.current.send({
+  // Send realtime message
+  const sendMessage = useCallback(async (channelName: string, event: string, payload: any) => {
+    try {
+      const channel = supabase.channel(channelName);
+      await channel.send({
         type: 'broadcast',
         event,
-        payload: data
+        payload
       });
+      
+      setMetrics(prev => ({
+        ...prev,
+        messagesSent: prev.messagesSent + 1,
+        lastUpdate: new Date().toISOString()
+      }));
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to send message');
     }
-  }, [isConnected]);
+  }, []);
 
-  // Auto-connect on mount
+  // Get live data from specific table
+  const getLiveData = useCallback(async (table: string, filters?: Record<string, any>) => {
+    try {
+      const response = await serviceIntegration.callService('realtime-analytics', '/live-data', {
+        method: 'POST',
+        body: JSON.stringify({ table, filters })
+      });
+      
+      return response.data;
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'Failed to get live data');
+      return null;
+    }
+  }, []);
+
+  // Subscribe to live inventory updates
+  const subscribeToInventory = useCallback((callback: (data: any) => void) => {
+    return subscribe('inventory-updates', 'UPDATE', callback);
+  }, [subscribe]);
+
+  // Subscribe to live order updates
+  const subscribeToOrders = useCallback((callback: (data: any) => void) => {
+    return subscribe('order-updates', 'INSERT', callback);
+  }, [subscribe]);
+
+  // Subscribe to live analytics
+  const subscribeToAnalytics = useCallback((callback: (data: any) => void) => {
+    return subscribe('analytics-updates', '*', callback);
+  }, [subscribe]);
+
+  // Get realtime metrics
+  const getMetrics = useCallback(async () => {
+    try {
+      const response = await serviceIntegration.callService('realtime-analytics', '/metrics');
+      if (response.success && response.data) {
+        const data = response.data as any;
+        setMetrics(prev => ({
+          ...prev,
+          activeConnections: data.activeConnections || prev.activeConnections,
+          messagesSent: data.messagesSent || prev.messagesSent,
+          messagesReceived: data.messagesReceived || prev.messagesReceived,
+          lastUpdate: new Date().toISOString()
+        }));
+      }
+    } catch (err) {
+      console.error('Failed to fetch metrics:', err);
+    }
+  }, []);
+
+  // Auto-connect to configured channels
   useEffect(() => {
-    if (options.autoConnect !== false) {
-      connect();
-    }
+    if (autoConnect && configChannels.length > 0) {
+      const activeChannels = configChannels.map(channelName => {
+        return subscribe(channelName, '*', (payload) => {
+          setMetrics(prev => ({
+            ...prev,
+            messagesReceived: prev.messagesReceived + 1,
+            lastUpdate: new Date().toISOString()
+          }));
+        });
+      });
 
-    return () => {
-      disconnect();
-    };
-  }, [options.autoConnect, connect, disconnect]);
+      return () => {
+        activeChannels.forEach(channel => {
+          if (channel) unsubscribe(channel);
+        });
+      };
+    }
+  }, [autoConnect, configChannels, subscribe, unsubscribe]);
+
+  // Periodic metrics update
+  useEffect(() => {
+    const interval = setInterval(getMetrics, 10000); // Update every 10 seconds
+    return () => clearInterval(interval);
+  }, [getMetrics]);
 
   return {
     isConnected,
-    connectionState,
-    lastMessage,
+    channels,
+    metrics,
     error,
-    connect,
-    disconnect,
-    addEventListener,
-    removeEventListener,
-    sendMessage
+    subscribe,
+    unsubscribe,
+    sendMessage,
+    getLiveData,
+    subscribeToInventory,
+    subscribeToOrders,
+    subscribeToAnalytics,
+    getMetrics
   };
 };

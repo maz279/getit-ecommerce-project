@@ -22857,6 +22857,10 @@ export type Database = {
         Args: { p_user_id: string; p_transaction_data: Json }
         Returns: Json
       }
+      get_database_health_metrics: {
+        Args: Record<PropertyKey, never>
+        Returns: Json
+      }
       is_admin_user: {
         Args: Record<PropertyKey, never>
         Returns: boolean

@@ -22837,6 +22837,10 @@ export type Database = {
         Args: Record<PropertyKey, never>
         Returns: undefined
       }
+      cleanup_expired_data: {
+        Args: Record<PropertyKey, never>
+        Returns: undefined
+      }
       cleanup_expired_graphql_cache: {
         Args: Record<PropertyKey, never>
         Returns: undefined

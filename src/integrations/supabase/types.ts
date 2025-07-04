@@ -13,28 +13,28 @@ export type Database = {
         Row: {
           assigned_at: string | null
           conversion_events: Json | null
-          experiment_id: string | null
+          experiment_id: string
           id: string
           session_id: string | null
-          user_id: string | null
+          user_id: string
           variant_id: string
         }
         Insert: {
           assigned_at?: string | null
           conversion_events?: Json | null
-          experiment_id?: string | null
+          experiment_id: string
           id?: string
           session_id?: string | null
-          user_id?: string | null
+          user_id: string
           variant_id: string
         }
         Update: {
           assigned_at?: string | null
           conversion_events?: Json | null
-          experiment_id?: string | null
+          experiment_id?: string
           id?: string
           session_id?: string | null
-          user_id?: string | null
+          user_id?: string
           variant_id?: string
         }
         Relationships: [

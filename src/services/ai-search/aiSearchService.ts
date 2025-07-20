@@ -5,6 +5,7 @@ import { MediaProcessor } from './mediaProcessor';
 import { RecommendationEngine } from './recommendationEngine';
 import { ConversationalProcessor } from './conversationalProcessor';
 import { AISearchQuery, AISearchSuggestion, PersonalizedRecommendation } from './types';
+import { supabase } from '@/integrations/supabase/client';
 
 class AISearchService {
   private queryAnalyzer: QueryAnalyzer;
@@ -52,6 +53,25 @@ class AISearchService {
   // Conversational Processing
   async processConversationalQuery(query: string, context: any[]): Promise<string> {
     return this.conversationalProcessor.processConversationalQuery(query, context);
+  }
+
+  // DeepSeek AI Search Enhancement
+  async enhanceSearchWithDeepSeek(query: string, searchContext?: any): Promise<any> {
+    try {
+      const { data, error } = await supabase.functions.invoke('deepseek-search', {
+        body: { query, searchContext }
+      });
+
+      if (error) {
+        console.error('DeepSeek search enhancement error:', error);
+        return null;
+      }
+
+      return data;
+    } catch (error) {
+      console.error('DeepSeek integration error:', error);
+      return null;
+    }
   }
 }
 
